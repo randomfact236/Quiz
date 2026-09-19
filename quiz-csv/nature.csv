@@ -1,0 +1,504 @@
+# Subject: Nature
+
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,The human heart pumps blood around the body.,True,False,,,A,easy,Human Body & Biology
+2,Water covers most of the Earth's surface.,False,True,,,B,easy,Earth & Weather
+3,Penguins can fly.,False,True,,,A,easy,Plants & Animals
+4,Blood is blue inside the human body.,True,False,,,B,easy,Human Body & Biology
+5,Lightning never strikes the same place twice.,False,True,,,A,easy,Earth & Weather
+6,Fish breathe underwater using gills.,False,True,,,B,easy,Plants & Animals
+7,Babies are born with more bones than adults.,False,True,,,B,easy,Human Body & Biology
+8,Deserts are always hot places.,False,True,,,A,easy,Earth & Weather
+9,A baby frog is called a tadpole.,True,False,,,A,easy,Plants & Animals
+10,The adult human body has 500 bones.,False,True,,,A,easy,Human Body & Biology
+11,The Pacific Ocean is the largest ocean on Earth.,False,True,,,B,easy,Earth & Weather
+12,Spiders are insects.,False,True,,,A,easy,Plants & Animals
+13,Humans can survive for months without drinking water.,False,True,,,A,easy,Human Body & Biology
+14,Earth has more land surface than ocean.,False,True,,,A,easy,Earth & Weather
+15,Whales are mammals.,False,True,,,B,easy,Plants & Animals
+16,Red blood cells carry oxygen.,False,True,,,B,easy,Human Body & Biology
+17,Antarctica is the coldest continent.,True,False,,,A,easy,Earth & Weather
+18,Sharks are mammals.,True,False,,,B,easy,Plants & Animals
+19,White blood cells help the body fight infection.,True,False,,,A,easy,Human Body & Biology
+20,Fog is a cloud made of smoke.,True,False,,,B,easy,Earth & Weather
+21,Butterflies begin life as caterpillars.,True,False,,,A,easy,Plants & Animals
+22,Sweating helps cool the human body.,True,False,,,A,easy,Human Body & Biology
+23,The Amazon rainforest is in Africa.,False,True,,,A,easy,Earth & Weather
+24,Cactus plants store water in their stems.,True,False,,,A,easy,Plants & Animals
+25,The heart is the largest bone in the human body.,True,False,,,B,easy,Human Body & Biology
+26,Glaciers are made of ice.,False,True,,,B,easy,Earth & Weather
+27,Snakes have four legs.,True,False,,,B,easy,Plants & Animals
+28,The lungs pump blood through the body.,True,False,,,B,easy,Human Body & Biology
+29,Earthquakes never happen under the sea.,True,False,,,B,easy,Earth & Weather
+30,Dolphins breathe air using lungs.,False,True,,,B,easy,Plants & Animals
+31,Genes are passed from parents to their children.,True,False,,,A,easy,Human Body & Biology
+32,Underwater earthquakes can cause tsunamis.,True,False,,,A,easy,Earth & Weather
+33,Bats are completely blind.,False,True,,,A,easy,Plants & Animals
+34,The appendix is the largest human organ.,False,True,,,A,easy,Human Body & Biology
+35,Wind is caused by the movement of clouds.,False,True,,,A,easy,Earth & Weather
+36,Worms help enrich garden soil.,False,True,,,B,easy,Plants & Animals
+37,The body makes vitamin D from sunlight.,False,True,,,B,easy,Human Body & Biology
+38,Snow is made of tiny grains of sand.,True,False,,,B,easy,Earth & Weather
+39,Ladybugs are a type of beetle.,False,True,,,B,easy,Plants & Animals
+40,Hair and nails keep growing after a person dies.,False,True,,,A,easy,Human Body & Biology
+41,Mount Everest is the tallest mountain above sea level.,False,True,,,B,easy,Earth & Weather
+42,Bats lay eggs.,False,True,,,A,easy,Plants & Animals
+43,Toenails grow faster than fingernails.,True,False,,,B,easy,Human Body & Biology
+44,Thunder usually arrives before the lightning that causes it.,False,True,,,A,easy,Earth & Weather
+45,Kangaroos carry their young in a pouch.,False,True,,,B,easy,Plants & Animals
+46,The immune system protects the body from germs.,False,True,,,B,easy,Human Body & Biology
+47,Rainbows form when sunlight shines through raindrops.,True,False,,,A,easy,Earth & Weather
+48,Owls hunt only during the day.,False,True,,,A,easy,Plants & Animals
+49,The human brain stops working during sleep.,False,True,,,A,easy,Human Body & Biology
+50,Volcanoes erupt with cold ice.,True,False,,,B,easy,Earth & Weather
+51,Bees collect nectar to make honey.,True,False,,,A,easy,Plants & Animals
+52,The liver helps filter the blood.,False,True,,,B,easy,Human Body & Biology
+53,Hailstones are made of hot ash.,True,False,,,B,easy,Earth & Weather
+54,A spider has eight legs.,False,True,,,B,easy,Plants & Animals
+55,Humans have two stomachs.,False,True,,,A,easy,Human Body & Biology
+56,Weather happens in the atmosphere.,True,False,,,A,easy,Earth & Weather
+57,All birds can fly.,False,True,,,A,easy,Plants & Animals
+58,The trachea is also called the windpipe.,True,False,,,A,easy,Human Body & Biology
+59,The Richter scale measures rainfall.,True,False,,,B,easy,Earth & Weather
+60,Great white sharks are fish.,False,True,,,B,easy,Plants & Animals
+61,An adult human has 32 teeth including wisdom teeth.,False,True,,,B,easy,Human Body & Biology
+62,Tsunamis are giant waves caused by wind.,False,True,,,A,easy,Earth & Weather
+63,A camel stores fat in its hump.,True,False,,,A,easy,Plants & Animals
+64,Arteries carry blood toward the heart.,True,False,,,B,easy,Human Body & Biology
+65,Rivers flow uphill.,True,False,,,B,easy,Earth & Weather
+66,Polar bears live in the Arctic region.,False,True,,,B,easy,Plants & Animals
+67,Broken bones can heal over time.,True,False,,,A,easy,Human Body & Biology
+68,The Great Barrier Reef is in the Atlantic Ocean.,True,False,,,B,easy,Earth & Weather
+69,Owls can turn their heads almost all the way around.,False,True,,,B,easy,Plants & Animals
+70,The human body contains no bacteria.,True,False,,,B,easy,Human Body & Biology
+71,Fossils are the preserved remains of ancient life.,True,False,,,A,easy,Earth & Weather
+72,Dolphins are a kind of fish.,False,True,,,A,easy,Plants & Animals
+73,The stomach is part of the nervous system.,False,True,,,A,easy,Human Body & Biology
+74,Caves can only form in ice.,False,True,,,A,easy,Earth & Weather
+75,Male seahorses carry the babies.,False,True,,,B,easy,Plants & Animals
+76,Muscles help the body move.,False,True,,,B,easy,Human Body & Biology
+77,The water cycle moves water between oceans and sky.,False,True,,,B,easy,Earth & Weather
+78,Crocodiles are mammals.,False,True,,,A,easy,Plants & Animals
+79,The smallest bone in the human body is the femur.,False,True,,,A,easy,Human Body & Biology
+80,Deserts receive heavy rainfall every day.,False,True,,,A,easy,Earth & Weather
+81,Honeybees live in colonies with a queen.,False,True,,,B,easy,Plants & Animals
+82,Regular exercise strengthens the heart.,False,True,,,B,easy,Human Body & Biology
+83,Mount Everest is located in Europe.,False,True,,,A,easy,Earth & Weather
+84,Bats hunt insects using echoes.,True,False,,,A,easy,Plants & Animals
+85,The human skeleton contains exactly ten bones.,False,True,,,A,easy,Human Body & Biology
+86,Seawater is salty.,False,True,,,B,easy,Earth & Weather
+87,Whales lay eggs on beaches.,False,True,,,A,easy,Plants & Animals
+88,The kidneys are located in the arms.,True,False,,,B,easy,Human Body & Biology
+89,The Sun never shines at the South Pole.,False,True,,,A,easy,Earth & Weather
+90,Ants live in organized colonies.,False,True,,,B,easy,Plants & Animals
+91,The lungs bring oxygen into the blood.,False,True,,,B,easy,Human Body & Biology
+92,The Rocky Mountains are in North America.,False,True,,,B,easy,Earth & Weather
+93,Slugs have large outer shells.,True,False,,,B,easy,Plants & Animals
+94,Human ears contain no bones.,True,False,,,B,easy,Human Body & Biology
+95,Hurricanes form over land.,False,True,,,A,easy,Earth & Weather
+96,Octopuses have eight arms.,True,False,,,A,easy,Plants & Animals
+97,The skin protects the body from germs.,True,False,,,A,easy,Human Body & Biology
+98,A peninsula is completely surrounded by water.,True,False,,,B,easy,Earth & Weather
+99,Reptiles are cold-blooded animals.,True,False,,,A,easy,Plants & Animals
+100,The human heart has five chambers.,False,True,,,A,easy,Human Body & Biology
+101,Which ocean is bigger: the Atlantic or the Pacific?,the Atlantic,the Pacific,,,B,medium,Earth & Weather
+102,Which is faster: a lion or a cheetah?,a cheetah,a lion,,,A,medium,Plants & Animals
+103,Which organ pumps blood: the heart or the kidney?,the heart,the kidney,,,A,medium,Human Body & Biology
+104,Which is the tallest mountain above sea level: K2 or Mount Everest?,K2,Mount Everest,,,A,medium,Earth & Weather
+105,Which bird cannot fly: the eagle or the penguin?,the eagle,the penguin,,,B,medium,Plants & Animals
+106,Which organs filter the blood: the lungs or the kidneys?,the lungs,the kidneys,,,B,medium,Human Body & Biology
+107,Which region is colder: the Arctic or the Sahara?,the Arctic,the Sahara,,,A,medium,Earth & Weather
+108,Which animal has eight arms: the squid or the octopus?,the squid,the octopus,,,B,medium,Plants & Animals
+109,Which body part contains the femur: the leg or the arm?,the arm,the leg,,,B,medium,Human Body & Biology
+110,Which is the largest hot desert?,the Kalahari,the Sahara,,,B,medium,Earth & Weather
+111,Which is the largest living ape: the gorilla or the chimpanzee?,the gorilla,the chimpanzee,,,A,medium,Plants & Animals
+112,Which is the largest human organ: the heart or the skin?,the skin,the heart,,,A,medium,Human Body & Biology
+113,Which continent is the coldest: Australia or Antarctica?,Antarctica,Australia,,,B,medium,Earth & Weather
+114,Which insect makes honey: the wasp or the honeybee?,the wasp,the honeybee,,,B,medium,Plants & Animals
+115,Which sense uses the ears: smell or hearing?,smell,hearing,,,B,medium,Human Body & Biology
+116,Which is deeper: the Baltic Sea or the Mariana Trench?,the Mariana Trench,the Baltic Sea,,,A,medium,Earth & Weather
+117,Which reptile has a shell: the lizard or the turtle?,the lizard,the turtle,,,A,medium,Plants & Animals
+118,Which eye part lets light enter: the retina or the pupil?,the pupil,the retina,,,A,medium,Human Body & Biology
+119,Which river is longer: the Thames or the Nile?,the Nile,the Thames,,,A,medium,Earth & Weather
+120,Which mammal lays eggs: the rabbit or the platypus?,the rabbit,the platypus,,,A,medium,Plants & Animals
+121,Which organ produces insulin: the liver or the pancreas?,the pancreas,the liver,,,A,medium,Human Body & Biology
+122,Which season follows winter: autumn or spring?,spring,autumn,,,B,medium,Earth & Weather
+123,Which big cat has stripes: the leopard or the tiger?,the leopard,the tiger,,,B,medium,Plants & Animals
+124,Which bone protects the brain: the ribs or the skull?,the ribs,the skull,,,B,medium,Human Body & Biology
+125,Which is the largest rainforest: the Black Forest or the Amazon?,the Black Forest,the Amazon,,,A,medium,Earth & Weather
+126,Which is the fastest land animal: the giraffe or the cheetah?,the giraffe,the cheetah,,,B,medium,Plants & Animals
+127,Which organ stores bile: the spleen or the gallbladder?,the spleen,the gallbladder,,,B,medium,Human Body & Biology
+128,Which disaster shakes the ground: a flood or an earthquake?,a flood,an earthquake,,,A,medium,Earth & Weather
+129,Which insect produces silk: the locust or the silkworm?,the silkworm,the locust,,,A,medium,Plants & Animals
+130,Which teeth tear food: the molars or the canines?,the canines,the molars,,,A,medium,Human Body & Biology
+131,Which is the largest coral reef system: the Belize Barrier Reef or the Great Barrier Reef?,the Great Barrier Reef,the Belize Barrier Reef,,,B,medium,Earth & Weather
+132,Which bird symbolizes peace: the crow or the dove?,the dove,the crow,,,B,medium,Plants & Animals
+133,Where is the smallest human bone: the foot or the ear?,the foot,the ear,,,B,medium,Human Body & Biology
+134,Which storm is a spinning funnel of wind: a monsoon or a tornado?,a monsoon,a tornado,,,A,medium,Earth & Weather
+135,Which reptile changes color: the iguana or the chameleon?,the chameleon,the iguana,,,A,medium,Plants & Animals
+136,Which organ produces bile: the gallbladder or the liver?,the liver,the gallbladder,,,A,medium,Human Body & Biology
+137,Which is the largest island: Iceland or Greenland?,Greenland,Iceland,,,B,medium,Earth & Weather
+138,Which penguin is the largest: the rockhopper penguin or the emperor penguin?,the emperor penguin,the rockhopper penguin,,,A,medium,Plants & Animals
+139,Which body system includes the lungs: the digestive system or the respiratory system?,the digestive system,the respiratory system,,,B,medium,Human Body & Biology
+140,Which mineral is table salt: quartz or halite?,quartz,halite,,,A,medium,Earth & Weather
+141,Which animal is called the ship of the desert: the horse or the camel?,the horse,the camel,,,B,medium,Plants & Animals
+142,Which vessels carry blood away from the heart: veins or arteries?,veins,arteries,,,B,medium,Human Body & Biology
+143,Which lake is famously salty: Lake Superior or the Dead Sea?,Lake Superior,the Dead Sea,,,A,medium,Earth & Weather
+144,Which spider is dangerously venomous: the house spider or the black widow?,the house spider,the black widow,,,B,medium,Plants & Animals
+145,Which brain part controls balance: the cerebrum or the cerebellum?,the cerebellum,the cerebrum,,,A,medium,Human Body & Biology
+146,Which waterfall is the tallest: Niagara Falls or Angel Falls?,Angel Falls,Niagara Falls,,,B,medium,Earth & Weather
+147,Which group includes frogs: mammals or amphibians?,amphibians,mammals,,,A,medium,Plants & Animals
+148,Which organ sits behind the ribs: the bladder or the heart?,the heart,the bladder,,,A,medium,Human Body & Biology
+149,Which climate is drier: a rainforest or a desert?,a desert,a rainforest,,,B,medium,Earth & Weather
+150,Which snake is longer: the garden snake or the reticulated python?,the garden snake,the reticulated python,,,B,medium,Plants & Animals
+151,Which vitamin do we make from sunlight: vitamin C or vitamin D?,vitamin C,vitamin D,,,B,medium,Human Body & Biology
+152,Which rock forms from cooling magma: sedimentary or igneous?,sedimentary,igneous,,,A,medium,Earth & Weather
+153,Which fish is the largest: the clownfish or the whale shark?,the whale shark,the clownfish,,,A,medium,Plants & Animals
+154,Which cells carry oxygen: white blood cells or red blood cells?,red blood cells,white blood cells,,,A,medium,Human Body & Biology
+155,Which process wears mountains down: eruption or erosion?,erosion,eruption,,,B,medium,Earth & Weather
+156,Which big cat swims well: the lynx or the tiger?,the lynx,the tiger,,,A,medium,Plants & Animals
+157,Which joint connects forearm to upper arm: the knee or the elbow?,the knee,the elbow,,,B,medium,Human Body & Biology
+158,Which pole has penguins in the wild: the North Pole or the South Pole?,the North Pole,the South Pole,,,A,medium,Earth & Weather
+159,Which whale is the largest animal ever: the orca or the blue whale?,the orca,the blue whale,,,B,medium,Plants & Animals
+160,Which organ stores urine: the small intestine or the bladder?,the bladder,the small intestine,,,A,medium,Human Body & Biology
+161,Which Earth layer is hottest: the crust or the inner core?,the inner core,the crust,,,B,medium,Earth & Weather
+162,Which rodent builds dams: the otter or the beaver?,the beaver,the otter,,,A,medium,Plants & Animals
+163,Which part of the eye focuses light: the cornea or the lens?,the cornea,the lens,,,B,medium,Human Body & Biology
+164,Which is the softest mineral: feldspar or talc?,talc,feldspar,,,B,medium,Earth & Weather
+165,Which snake is venomous: the python or the king cobra?,the python,the king cobra,,,B,medium,Plants & Animals
+166,Which hormone regulates blood sugar: adrenaline or insulin?,insulin,adrenaline,,,A,medium,Human Body & Biology
+167,Which ocean lies between Africa and Australia: the Arctic Ocean or the Indian Ocean?,the Arctic Ocean,the Indian Ocean,,,A,medium,Earth & Weather
+168,Which mammal truly flies: the flying squirrel or the bat?,the flying squirrel,the bat,,,B,medium,Plants & Animals
+169,Which tube carries food to the stomach: the trachea or the esophagus?,the esophagus,the trachea,,,A,medium,Human Body & Biology
+170,Which rock floats on water: granite or pumice?,pumice,granite,,,B,medium,Earth & Weather
+171,Which bird cannot fly: the ostrich or the swan?,the ostrich,the swan,,,A,medium,Plants & Animals
+172,Which is the largest artery: the vena cava or the aorta?,the vena cava,the aorta,,,B,medium,Human Body & Biology
+173,Which is a metamorphic rock: sandstone or marble?,sandstone,marble,,,A,medium,Earth & Weather
+174,Which insects live with a queen: butterflies or bees?,butterflies,bees,,,B,medium,Plants & Animals
+175,Which nutrient builds muscle: sugar or protein?,protein,sugar,,,A,medium,Human Body & Biology
+176,Which current warms Western Europe: the California Current or the Gulf Stream?,the Gulf Stream,the California Current,,,B,medium,Earth & Weather
+177,Which shark filter-feeds on plankton: the great white shark or the basking shark?,the basking shark,the great white shark,,,A,medium,Plants & Animals
+178,Which organ stores and churns food: the large intestine or the stomach?,the stomach,the large intestine,,,A,medium,Human Body & Biology
+179,What kind of rock is granite: metamorphic or igneous?,igneous,metamorphic,,,A,medium,Earth & Weather
+180,Which mammal wears quills: the hedgehog or the porcupine?,the hedgehog,the porcupine,,,B,medium,Plants & Animals
+181,Which sense detects chemicals in food: touch or taste?,touch,taste,,,B,medium,Human Body & Biology
+182,Which atmospheric layer holds most weather: the stratosphere or the troposphere?,the stratosphere,the troposphere,,,A,medium,Earth & Weather
+183,Which bird mimics sounds superbly: the penguin or the lyrebird?,the lyrebird,the penguin,,,A,medium,Plants & Animals
+184,Which cells defend against germs: red blood cells or white blood cells?,white blood cells,red blood cells,,,A,medium,Human Body & Biology
+185,Which desert is the driest: the Mojave or the Atacama?,the Atacama,the Mojave,,,B,medium,Earth & Weather
+186,Which marsupial rides in a pouch: the sloth or the koala?,the koala,the sloth,,,A,medium,Plants & Animals
+187,Which joint type is the shoulder: a hinge joint or a ball-and-socket joint?,a hinge joint,a ball-and-socket joint,,,B,medium,Human Body & Biology
+188,Which gas contributes to acid rain: oxygen or sulfur dioxide?,oxygen,sulfur dioxide,,,A,medium,Earth & Weather
+189,Which fish swims upstream to spawn: the tuna or the salmon?,the tuna,the salmon,,,B,medium,Plants & Animals
+190,Which mineral strengthens bones: potassium or calcium?,potassium,calcium,,,B,medium,Human Body & Biology
+191,Which current circles Antarctica: the Canary Current or the Antarctic Circumpolar Current?,the Antarctic Circumpolar Current,the Canary Current,,,A,medium,Earth & Weather
+192,Which insect transmits malaria: the housefly or the mosquito?,the mosquito,the housefly,,,A,medium,Plants & Animals
+193,Which organs remove urea: the stomach or the kidneys?,the stomach,the kidneys,,,B,medium,Human Body & Biology
+194,Which famous geyser erupts in Yellowstone: Angel Falls or Old Faithful?,Old Faithful,Angel Falls,,,B,medium,Earth & Weather
+195,Which animals have feathers: bats or birds?,birds,bats,,,A,medium,Plants & Animals
+196,Which tooth part sits above the gum: the root or the crown?,the crown,the root,,,A,medium,Human Body & Biology
+197,Which lake has the largest surface area of freshwater: Lake Baikal or Lake Superior?,Lake Superior,Lake Baikal,,,B,medium,Earth & Weather
+198,Which marsupial is a famous hopper: the wombat or the kangaroo?,the wombat,the kangaroo,,,B,medium,Plants & Animals
+199,Which is the hardest substance in the human body: bone or tooth enamel?,tooth enamel,bone,,,A,medium,Human Body & Biology
+200,Which monsoon brings summer rain to India: the northeast monsoon or the southwest monsoon?,the southwest monsoon,the northeast monsoon,,,B,medium,Earth & Weather
+201,Which land animal has the highest blood pressure?,the walrus,the hippopotamus,the giraffe,,C,hard,Plants & Animals
+202,Which nerve is the longest in the human body?,the optic nerve,the vagus nerve,the sciatic nerve,,C,hard,Human Body & Biology
+203,Which mineral is the main component of marble?,gypsum,calcite,quartz,,B,hard,Earth & Weather
+204,Which bird has the largest wingspan?,the wandering albatross,the Andean condor,the golden eagle,,A,hard,Plants & Animals
+205,How many chambers does the human heart have?,four,three,two,,A,hard,Human Body & Biology
+206,Which is the deepest lake in the world?,the Caspian Sea,Lake Baikal,Lake Tanganyika,,B,hard,Earth & Weather
+207,Which animal group has the most described species?,birds,insects,fish,,B,hard,Plants & Animals
+208,Where is the pituitary gland located?,at the base of the brain,behind the sternum,above the kidneys,,A,hard,Human Body & Biology
+209,Which atmospheric layer contains the ozone layer?,the mesosphere,the ionosphere,the stratosphere,,C,hard,Earth & Weather
+210,Which mammal has the longest pregnancy?,the blue whale,the African elephant,the orangutan,,B,hard,Plants & Animals
+211,How many pairs of ribs does a typical adult have?,fourteen pairs,twelve pairs,ten pairs,,B,hard,Human Body & Biology
+212,What is the most abundant gas in volcanic eruptions?,hydrogen sulfide,hydrogen chloride,water vapor,,C,hard,Earth & Weather
+213,Which bird lays the largest egg?,the albatross,the emu,the ostrich,,C,hard,Plants & Animals
+214,Which chamber pumps blood to the whole body?,the right ventricle,the left ventricle,the left atrium,,B,hard,Human Body & Biology
+215,Which is the largest desert on Earth?,the Antarctic Desert,the Taklamakan,the Arabian Desert,,A,hard,Earth & Weather
+216,Which big cat cannot roar?,the snow leopard,the jaguar,the cougar,,A,hard,Plants & Animals
+217,Which hormone does the pineal gland produce?,cortisol,dopamine,melatonin,,C,hard,Human Body & Biology
+218,What is the study of earthquakes called?,geodesy,seismology,vulcanology,,B,hard,Earth & Weather
+219,Which fish can deliver electric shocks?,the piranha,the anglerfish,the electric eel,,C,hard,Plants & Animals
+220,How many vertebrae are in the human neck?,seven,twelve,five,,A,hard,Human Body & Biology
+221,What causes the aurora borealis?,sound waves in the upper air,reflected moonlight,charged particles from the Sun,,C,hard,Earth & Weather
+222,Which animal has blue blood?,the horseshoe crab,the snapping turtle,the bullfrog,,A,hard,Plants & Animals
+223,Where does fertilization normally occur in humans?,in the uterus,in the ovary,in the fallopian tube,,C,hard,Human Body & Biology
+224,What is the main chemical component of limestone?,calcium carbonate,calcium sulfate,calcium silicate,,A,hard,Earth & Weather
+225,Which reptile commonly lives longest?,the saltwater crocodile,the Komodo dragon,the giant tortoise,,C,hard,Plants & Animals
+226,What is the scientific name of the windpipe?,the larynx,the trachea,the esophagus,,B,hard,Human Body & Biology
+227,About what percentage of Earth's surface do oceans cover?,about 50 percent,about 71 percent,about 85 percent,,B,hard,Earth & Weather
+228,Which snake has the longest fangs?,the black mamba,the gaboon viper,the king cobra,,B,hard,Plants & Animals
+229,What is normal human body temperature?,about 42 degrees Celsius,about 37 degrees Celsius,about 31 degrees Celsius,,B,hard,Human Body & Biology
+230,Which body has the greatest tidal effect on Earth?,Canopus,the Sun,the Moon,,C,hard,Earth & Weather
+231,Which animal has the largest eyes?,the colossal squid,the ostrich,the elephant seal,,A,hard,Plants & Animals
+232,How many bones are in the adult human ear?,three,eight,seven,,A,hard,Human Body & Biology
+233,Which is the largest ice sheet on Earth?,the Antarctic ice sheet,the Greenland ice sheet,the Patagonian ice field,,A,hard,Earth & Weather
+234,Which bird dives the fastest?,the peregrine falcon,the gyrfalcon,the common swift,,A,hard,Plants & Animals
+235,Which is the largest part of the human brain?,the cerebrum,the cerebellum,the brainstem,,A,hard,Human Body & Biology
+236,Which is the deepest ocean trench?,the Puerto Rico Trench,the Java Trench,the Mariana Trench,,C,hard,Earth & Weather
+237,Which mammal has the most teeth?,the rhinoceros,the giant armadillo,the sheep,,B,hard,Plants & Animals
+238,Which vitamin is made by gut bacteria?,vitamin A,vitamin K,vitamin E,,B,hard,Human Body & Biology
+239,What is molten rock underground called?,magma,obsidian,lava,,A,hard,Earth & Weather
+240,Which animal group do corals belong to?,mollusks,cnidarians,echinoderms,,B,hard,Plants & Animals
+241,What is the scientific name of the voice box?,the bronchus,the pharynx,the larynx,,C,hard,Human Body & Biology
+242,What is the largest cold desert on Earth?,Patagonian,Antarctica,Gobi,,B,hard,Earth & Weather
+243,Which insect is strongest for its body size?,the dung beetle,the rhinoceros beetle,the leafcutter ant,,A,hard,Plants & Animals
+244,Which pigment darkens skin and hair?,collagen,keratin,melanin,,C,hard,Human Body & Biology
+245,Which is the largest bay in the world?,the Bay of Bengal,Hudson Bay,the Bay of Biscay,,A,hard,Earth & Weather
+246,Which frog is the most poisonous?,the leopard frog,the golden poison frog,the cane toad,,B,hard,Plants & Animals
+247,Which gland is called the master gland?,the adrenal gland,the pituitary gland,the thyroid gland,,B,hard,Human Body & Biology
+248,What is the main component of natural gas?,butane,methane,propane,,B,hard,Earth & Weather
+249,Which whale has the longest tooth?,the narwhal,the sperm whale,the beluga,,A,hard,Plants & Animals
+250,What is the scientific name of the kneecap?,the patella,the tibia,the fibula,,A,hard,Human Body & Biology
+251,Which is the longest mountain range on land?,the Andes,the Rockies,the Himalayas,,A,hard,Earth & Weather
+252,Which fish is considered the fastest swimmer?,the bluefin tuna,the wahoo,the sailfish,,C,hard,Plants & Animals
+253,What is the most abundant protein in the human body?,collagen,myosin,hemoglobin,,A,hard,Human Body & Biology
+254,What causes the green flash at sunset?,atmospheric refraction,floating algae,lightning,,A,hard,Earth & Weather
+255,Which moth darkened in industrial England?,the atlas moth,the luna moth,the peppered moth,,C,hard,Plants & Animals
+256,What is the main function of hemoglobin?,fighting infection,carrying oxygen,clotting blood,,B,hard,Human Body & Biology
+257,What is the study of caves called?,hydrology,geology,speleology,,C,hard,Earth & Weather
+258,Which penguin breeds through the Antarctic winter?,the adelie penguin,the emperor penguin,the chinstrap penguin,,B,hard,Plants & Animals
+259,How many pairs of cranial nerves do humans have?,nine pairs,eleven pairs,twelve pairs,,C,hard,Human Body & Biology
+260,Which river carries the most water to the sea?,the Amazon,the Nile,the Yangtze,,A,hard,Earth & Weather
+261,Which insect can live for decades?,the mayfly,the queen termite,the periodical cicada,,B,hard,Plants & Animals
+262,What is the largest internal organ in the human body?,the liver,the skin,the colon,,A,hard,Human Body & Biology
+263,What is a space rock that reaches the ground called?,a meteoroid,a meteorite,a meteor,,B,hard,Earth & Weather
+264,Which seabird can sleep on the wing?,the frigatebird,the gannet,the puffin,,A,hard,Plants & Animals
+265,Which glands sit on top of the kidneys?,the thymus,the adrenal glands,the pancreas,,B,hard,Human Body & Biology
+266,Which warm alpine wind melts mountain snow?,the sirocco,the mistral,the foehn,,C,hard,Earth & Weather
+267,Which mammal has no teeth at all?,the giant anteater,the manatee,the aardvark,,A,hard,Plants & Animals
+268,What is the largest part of the hindbrain?,the medulla oblongata,the pons,the cerebellum,,C,hard,Human Body & Biology
+269,Which mineral is most common in beach sand?,mica,olivine,quartz,,C,hard,Earth & Weather
+270,Which animal famously has three hearts?,the jellyfish,the sea star,the octopus,,C,hard,Plants & Animals
+271,Which muscle is strongest for its size?,the tongue,the biceps,the masseter,,C,hard,Human Body & Biology
+272,What is the deepest point in the Mariana Trench called?,Horizon Deep,Challenger Deep,the Milne Deep,,B,hard,Earth & Weather
+273,Which insect navigates by the Milky Way?,the monarch butterfly,the honeybee,the dung beetle,,C,hard,Plants & Animals
+274,What is a normal adult resting heart rate?,120 to 150 beats per minute,20 to 40 beats per minute,60 to 100 beats per minute,,C,hard,Human Body & Biology
+275,Which delta is the largest in the world?,the Ganges Delta,the Nile Delta,the Mekong Delta,,A,hard,Earth & Weather
+276,Which fish can walk on land?,the mudskipper,the catfish,the guppy,,A,hard,Plants & Animals
+277,How many pairs of chromosomes do humans have?,twenty-three pairs,twenty-two pairs,twenty-four pairs,,A,hard,Human Body & Biology
+278,Which sea has unusually high salinity?,the Black Sea,the Red Sea,the Aral Sea,,B,hard,Earth & Weather
+279,Which mammal sleeps the most hours per day?,the elephant,the dolphin,the koala,,C,hard,Plants & Animals
+280,Which eye cells detect color?,cones,rods,ganglion cells,,A,hard,Human Body & Biology
+281,Which scale rates tornado intensity?,the Saffir-Simpson scale,the Fujita scale,the Beaufort scale,,B,hard,Earth & Weather
+282,Which animal makes the longest migration?,the caribou,the Arctic tern,the humpback whale,,B,hard,Plants & Animals
+283,Which is the longest bone in the human body?,the humerus,the ulna,the femur,,C,hard,Human Body & Biology
+284,What is permanently frozen ground called?,permafrost,loess,taiga,,A,hard,Earth & Weather
+285,Which rodent is the largest?,the beaver,the capybara,the porcupine,,B,hard,Plants & Animals
+286,Which brain region regulates body temperature?,the thalamus,the hypothalamus,the hippocampus,,B,hard,Human Body & Biology
+287,Which country has the most natural lakes?,Russia,Finland,Canada,,C,hard,Earth & Weather
+288,Which bird lays the smallest egg?,the bee hummingbird,the wren,the sparrow,,A,hard,Plants & Animals
+289,What is the main job of the spleen?,producing bile,absorbing nutrients,filtering blood and storing immune cells,,C,hard,Human Body & Biology
+290,What is a dry desert riverbed called?,a playa,a wadi,an alluvial fan,,B,hard,Earth & Weather
+291,Which marsupial has cube-shaped droppings?,the wombat,the koala,the wallaby,,A,hard,Plants & Animals
+292,What is the medical name of the collarbone?,the clavicle,the scapula,the sternum,,A,hard,Human Body & Biology
+293,What causes the Coriolis effect?,Earth's rotation,the Moon's pull,ocean currents,,A,hard,Earth & Weather
+294,Which shark was found to produce its own light?,the whale shark,the kitefin shark,the hammerhead,,B,hard,Plants & Animals
+295,Which artery is felt at the wrist?,the carotid artery,the radial artery,the femoral artery,,B,hard,Human Body & Biology
+296,Which volcano is the tallest known on Mars?,Tharsis Montes,Elysium Mons,Olympus Mons,,C,hard,Earth & Weather
+297,Which bird has the longest beak for its body size?,the toucan,the pelican,the sword-billed hummingbird,,C,hard,Plants & Animals
+298,What is the final section of the large intestine?,the duodenum,the rectum,the cecum,,B,hard,Human Body & Biology
+299,What is the study of fossils called?,stratigraphy,archaeology,paleontology,,C,hard,Earth & Weather
+300,Which mammal has the shortest pregnancy?,the rabbit,the mouse,the opossum,,C,hard,Plants & Animals
+301,About how many neurons are in the adult human brain?,about 860 million,about 86 billion,about 8.6 billion,about 860 billion,B,expert,Human Body & Biology
+302,What is the physical state of Earth's inner core?,gaseous hydrogen,liquid iron and sulfur,solid iron and nickel,molten silicate rock,C,expert,Earth & Weather
+303,How many compartments does a cow's stomach have?,fifty,ten,four,nine,C,expert,Plants & Animals
+304,Which tissue connects muscle to bone?,fascia,a ligament,a tendon,cartilage,C,expert,Human Body & Biology
+305,What is the Mohs hardness of topaz?,8,11,12,3.5,A,expert,Earth & Weather
+306,What is the scientific name of the housefly?,Apis mellifera,Mus musculus,Drosophila melanogaster,Musca domestica,D,expert,Plants & Animals
+307,What is the resting potential of a typical neuron?,about -70 millivolts,about -200 millivolts,about -7 millivolts,about +30 millivolts,A,expert,Human Body & Biology
+308,Which supercontinent broke apart roughly 200 million years ago?,Laurasia,Gondwana,Rodinia,Pangaea,D,expert,Earth & Weather
+309,How long does an adult mayfly usually live?,about one week,about 24 hours,about one month,about one year,B,expert,Plants & Animals
+310,About how long are all blood vessels in an adult laid end to end?,about 10000 kilometers,about 100000 kilometers,about 50000 kilometers,about 1000 kilometers,B,expert,Human Body & Biology
+311,Which is the deepest known cave?,Lamprechtsofen,Veryovkina Cave,Optimisticheskaya,Gouffre Jean-Bernard,B,expert,Earth & Weather
+312,Which bat has the largest wingspan?,the giant golden-crowned flying fox,the common vampire bat,the Indian flying fox,the hammer-headed bat,A,expert,Plants & Animals
+313,How many basic taste qualities do humans recognize?,four,twenty,five,sixteen,C,expert,Human Body & Biology
+314,How old are the Acasta Gneiss rocks among Earth's oldest?,about 600 million years,about 4 billion years,about 500000 years,about 2 billion years,B,expert,Earth & Weather
+315,How long is an elephant's pregnancy?,about 12 months,about 30 months,about 22 months,about 6 months,C,expert,Plants & Animals
+316,What is the scientific name of the shoulder blade?,the manubrium,the scapula,the acromion,the clavicle,B,expert,Human Body & Biology
+317,What do geologists call rock that stores and transmits groundwater?,an aquiclude,an aquitard,an artesian well,an aquifer,D,expert,Earth & Weather
+318,Which snake is the fastest on land?,the black mamba,the puff adder,the rattlesnake,the inland taipan,A,expert,Plants & Animals
+319,Which nerve innervates the diaphragm?,the radial nerve,the trigeminal nerve,the sciatic nerve,the phrenic nerve,D,expert,Human Body & Biology
+320,What is the highest air temperature officially recorded on Earth?,about 44 degrees Celsius,about 61 degrees Celsius,about 56.7 degrees Celsius,about 49 degrees Celsius,C,expert,Earth & Weather
+321,Which fish family holds the deep-sea depth record?,the lanternfish family,the snailfish family,the cusk-eel family,the anglerfish family,B,expert,Plants & Animals
+322,Which protein stores oxygen inside muscle cells?,troponin,actin,myoglobin,tropomyosin,C,expert,Human Body & Biology
+323,What is the gradual downhill movement of soil called?,soil creep,a mudflow,slumping,a landslide,A,expert,Earth & Weather
+324,How long is a house mouse's pregnancy?,about 20 days,about 70 days,about 10 days,about 40 days,C,expert,Plants & Animals
+325,What does the corpus callosum do?,connects the brain hemispheres,produces cerebrospinal fluid,regulates heartbeat,stores long-term memory,A,expert,Human Body & Biology
+326,What are wind-carved snow ridges on ice fields called?,a moraine,an avalanche,sastrugi,an esker,C,expert,Earth & Weather
+327,What is the scientific name of the gray wolf?,Canis mesomelas,Canis lupus,Canis aureus,Canis latrans,B,expert,Plants & Animals
+328,About how long is the adult small intestine?,about 1 meter,about 15 meters,about 2 meters,about 6 meters,D,expert,Human Body & Biology
+329,Which minerals dominate basalt?,amphibole and talc,pyroxene and plagioclase,quartz and mica,calcite and gypsum,B,expert,Earth & Weather
+330,Which mammal has the most chromosomes?,the capybara,the bonobo,the gorilla,the red viscacha rat,D,expert,Plants & Animals
+331,What cushions the ends of bones in joints?,a bursa,the periosteum,synovial fluid,cartilage,D,expert,Human Body & Biology
+332,Which weathering process dissolves limestone?,reduction,oxidation,hydrolysis,carbonation,D,expert,Earth & Weather
+333,Which is the heaviest spider?,the goliath birdeater,the huntsman spider,the Brazilian wandering spider,the camel spider,A,expert,Plants & Animals
+334,Which is the heaviest muscle in the human body?,the latissimus dorsi,the gluteus maximus,the gluteus medius,the quadriceps femoris,B,expert,Human Body & Biology
+335,What is a round lake left by a melting ice block called?,a kettle lake,a tarn,a cirque,a fiord,A,expert,Earth & Weather
+336,How long can a queen honeybee live?,a few months,up to five years,one season,a few weeks,B,expert,Plants & Animals
+337,Where does gas exchange happen in the lungs?,the pleura,the diaphragm,the bronchioles,the alveoli,D,expert,Human Body & Biology
+338,Which is the largest salt flat on Earth?,the Bonneville Salt Flats,Lake Assal,the Salar de Uyuni,the Atacama Salt Flat,C,expert,Earth & Weather
+339,Which continent has no native ants?,Antarctica,Australia,South America,Europe,A,expert,Plants & Animals
+340,About how many bones does a newborn human have?,about 300,about 250,about 400,about 350,A,expert,Human Body & Biology
+341,What is a crescent-shaped sand dune called?,a star dune,a parabolic dune,a seif dune,a barchan,D,expert,Earth & Weather
+342,Which bat has the longest tongue for its size?,the giant anteater,the vampire bat,the tube-lipped nectar bat,the honey possum,D,expert,Plants & Animals
+343,Which enzyme is found in saliva?,pepsin,amylase,lipase,trypsin,B,expert,Human Body & Biology
+344,What is a volcanic mudflow called?,a pyroclastic flow,a lahar,a fumarole,a caldera,B,expert,Earth & Weather
+345,Which is the largest octopus species?,the mimic octopus,the common octopus,the giant Pacific octopus,the blue-ringed octopus,C,expert,Plants & Animals
+346,Which is the smallest muscle in the human body?,the tensor tympani,the risorius,the stapedius,the buccinator,C,expert,Human Body & Biology
+347,Which epoch are we officially living in?,the Holocene,the Pleistocene,the Pliocene,the Anthropocene,A,expert,Earth & Weather
+348,What is the butterfly's full transformation called?,incomplete metamorphosis,regeneration,complete metamorphosis,hibernation,C,expert,Plants & Animals
+349,Which brain area drives speech production?,Broca's area,the angular gyrus,Wernicke's area,the motor cortex,A,expert,Human Body & Biology
+350,Which is the longest known cave system?,Jewel Cave,Wind Cave,Mammoth Cave,Lechuguilla Cave,C,expert,Earth & Weather
+351,Which insect performs the waggle dance?,the honeybee,the hornet,the bumblebee,the ant,A,expert,Plants & Animals
+352,Which condition thins and weakens bones?,osteoarthritis,rickets,scoliosis,osteoporosis,D,expert,Human Body & Biology
+353,Which is the largest active volcano on Earth by volume?,Hualalai,Mauna Kea,Kilauea,Mauna Loa,D,expert,Earth & Weather
+354,Which fish is called a living fossil with lobed fins?,the coelacanth,the sturgeon,the gar,the lungfish,A,expert,Plants & Animals
+355,Which hormone triggers the fight-or-flight response?,estrogen,adrenaline,serotonin,thyroxine,B,expert,Human Body & Biology
+356,What is the deepest ocean zone called?,the hadal zone,the midnight zone,the bathyal zone,the abyssal zone,A,expert,Earth & Weather
+357,Which is the largest jellyfish?,the moon jellyfish,the box jellyfish,the Portuguese man o war,the lion's mane jellyfish,D,expert,Plants & Animals
+358,Which blood type is the universal donor?,O negative,AB positive,B positive,A negative,A,expert,Human Body & Biology
+359,Which Pacific warming disrupts world weather?,El Nino,the Kuroshio Current,the Humboldt Current,La Nina,A,expert,Earth & Weather
+360,Which is the largest salamander?,the hellbender,the Japanese giant salamander,the Chinese giant salamander,the axolotl,C,expert,Plants & Animals
+361,Which is the longest muscle in the human body?,the sartorius,the adductor longus,the rectus femoris,the gracilis,A,expert,Human Body & Biology
+362,Which is the longest river in Asia?,the Amur,the Mekong,the Ob,the Yangtze,D,expert,Earth & Weather
+363,Which bird lays eggs in other birds' nests?,the nightingale,the starling,the robin,the cuckoo,D,expert,Plants & Animals
+364,What is the medical name of the jaw joint?,the sacroiliac joint,the atlantoaxial joint,the temporomandibular joint,the acromioclavicular joint,C,expert,Human Body & Biology
+365,Which warm wind descends the Rocky Mountains?,the chinook,the bora,the zonda,the harmattan,A,expert,Earth & Weather
+366,Which is the largest toad species?,the Surinam toad,the fire-bellied toad,the oak toad,the cane toad,D,expert,Plants & Animals
+367,Which condition means too few red blood cells?,thrombosis,leukemia,hemophilia,anemia,D,expert,Human Body & Biology
+368,Which is the deepest river-carved canyon on Earth?,the Copper Canyon,the Yarlung Tsangpo Grand Canyon,the Fish River Canyon,the Grand Canyon,B,expert,Earth & Weather
+369,What is a plant's growth toward light called?,thigmotropism,phototropism,geotropism,hydrotropism,B,expert,Plants & Animals
+370,Which is the largest organ of the lymphatic system?,the lymph nodes,the marrow,the tonsils,the spleen,D,expert,Human Body & Biology
+371,Which iceberg was the world's largest tracked in the 2020s?,D-28,A-23a,B-15,C-19,B,expert,Earth & Weather
+372,Which whale holds the diving depth record?,the fin whale,the gray whale,the narwhal,the right whale,C,expert,Plants & Animals
+373,Which eye cells detect dim light?,cones,the fovea,rods,the optic disc,C,expert,Human Body & Biology
+374,Which climate zone circles the equator?,continental,arid,tropical,temperate,C,expert,Earth & Weather
+375,Which tree lives the longest?,the sequoia,the bristlecone pine,the yew,the baobab,B,expert,Plants & Animals
+376,What is the waxy substance inside the ear called?,plasma,sebum,cerumen,sweat,C,expert,Human Body & Biology
+377,Which is the longest fjord in the world?,the Sognefjord,the Hardangerfjord,the Geirangerfjord,the Scoresby Sund,D,expert,Earth & Weather
+378,Which moth's long tongue was predicted by Darwin?,the death's-head hawkmoth,the hummingbird hawkmoth,the emperor moth,Wallace's sphinx moth,D,expert,Plants & Animals
+379,Which cells insulate neurons in the brain and spinal cord?,the Schwann cell,the oligodendrocyte,the astrocyte,the microglia,B,expert,Human Body & Biology
+380,Which is the highest navigable lake in the world?,Lake Tahoe,Lake Toba,Lake Van,Lake Titicaca,D,expert,Earth & Weather
+381,What is the beetle order called?,Coleoptera,Lepidoptera,Hymenoptera,Diptera,A,expert,Plants & Animals
+382,Which intestinal cells absorb most nutrients?,the enterocytes,the villi,the parietal cells,the goblet cells,A,expert,Human Body & Biology
+383,Which is the deepest mine in the world?,the Bingham Canyon mine,the Kola Superdeep Borehole,the Mponeng mine,the TauTona mine,C,expert,Earth & Weather
+384,Which is the heaviest insect adult?,the goliath beetle,the titan beetle,the atlas beetle,the hercules beetle,A,expert,Plants & Animals
+385,What is the fatty sheath around nerve fibers called?,the myelin sheath,the neurilemma,the endoneurium,the perineurium,A,expert,Human Body & Biology
+386,Which is the tallest known tree?,Menara,Hyperion,Centurion,General Sherman,B,expert,Earth & Weather
+387,Which shark tolerates fresh water far up rivers?,the tiger shark,the bull shark,the mako shark,the reef shark,B,expert,Plants & Animals
+388,Which liver cells perform most detoxification?,the beta cell,the hepatocyte,the Kupffer cell,the alpha cell,B,expert,Human Body & Biology
+389,Which is the largest tropical wetland?,the Everglades,the Pantanal,the Sundarbans,the Okavango Delta,B,expert,Earth & Weather
+390,Which is the heaviest flying bird?,the great bustard,the kori bustard,the snowy owl,the wandering albatross,B,expert,Plants & Animals
+391,Which muscle separates the chest from the abdomen?,the diaphragm,the rectus abdominis,the intercostals,the obliques,A,expert,Human Body & Biology
+392,What is the fastest surface wind ever recorded?,231 kilometers per hour,512 kilometers per hour,408 kilometers per hour,331 kilometers per hour,C,expert,Earth & Weather
+393,Which frog brooded its young in its stomach?,the poison dart frog,the wood frog,the gastric brooding frog,the glass frog,C,expert,Plants & Animals
+394,What is the eye chamber between cornea and lens called?,the vitreous chamber,the anterior chamber,the conjunctival sac,the posterior chamber,B,expert,Human Body & Biology
+395,Which dusty wind carries Sahara sand across the Atlantic?,the harmattan,the pampero,the leveche,the etesian,A,expert,Earth & Weather
+396,Which is the largest ray species?,the giant oceanic manta ray,the devil ray,the eagle ray,the blue spotted stingray,A,expert,Plants & Animals
+397,Which is the largest white blood cell?,the lymphocyte,the eosinophil,the basophil,the monocyte,D,expert,Human Body & Biology
+398,What is the ocean's deep conveyor circulation called?,the thermohaline circulation,the Ekman transport,the Coriolis circulation,the gyre circulation,A,expert,Earth & Weather
+399,Which plant hormone stretches growing cells?,ethylene,gibberellin,cytokinin,auxin,D,expert,Plants & Animals
+400,Which condition means an underactive thyroid?,hyperthyroidism,thyroiditis,hypothyroidism,goiter,C,expert,Human Body & Biology
+401,What is the smallest ocean on Earth?,,,,,Arctic,extreme,Earth & Weather
+402,What is the fastest land animal?,,,,,Cheetah,extreme,Plants & Animals
+403,What is the largest artery in the human body?,,,,,Aorta,extreme,Human Body & Biology
+404,What is the largest ocean on Earth?,,,,,Pacific,extreme,Earth & Weather
+405,What is the largest animal that has ever lived?,,,,,Blue whale,extreme,Plants & Animals
+406,Which organ produces insulin?,,,,,Pancreas,extreme,Human Body & Biology
+407,What is the tallest mountain on land?,,,,,Everest,extreme,Earth & Weather
+408,What is the largest living bird?,,,,,Ostrich,extreme,Plants & Animals
+409,How many bones are in the adult human body?,,,,,206,extreme,Human Body & Biology
+410,What is the world's highest mountain range?,,,,,Himalayas,extreme,Earth & Weather
+411,What is the largest of the big cats?,,,,,Tiger,extreme,Plants & Animals
+412,Which organelle is the powerhouse of the cell?,,,,,Mitochondria,extreme,Human Body & Biology
+413,What mainly causes ocean tides?,,,,,The Moon,extreme,Earth & Weather
+414,What is the tallest animal on Earth?,,,,,Giraffe,extreme,Plants & Animals
+415,Which organ pumps the blood?,,,,,The heart,extreme,Human Body & Biology
+416,What is frozen rain called?,,,,,Hail,extreme,Earth & Weather
+417,Which arachnid has eight legs?,,,,,Spider,extreme,Plants & Animals
+418,Which bone encases the brain?,,,,,The skull,extreme,Human Body & Biology
+419,What is the largest continent?,,,,,Asia,extreme,Earth & Weather
+420,What is the largest fish in the sea?,,,,,Whale shark,extreme,Plants & Animals
+421,Which blood protein transports oxygen?,,,,,Hemoglobin,extreme,Human Body & Biology
+422,Which continent is the coldest?,,,,,Antarctica,extreme,Earth & Weather
+423,Which is the largest penguin species?,,,,,Emperor penguin,extreme,Plants & Animals
+424,How many teeth does a healthy adult have?,,,,,32,extreme,Human Body & Biology
+425,What is the windless equatorial belt sailors called?,,,,,Doldrums,extreme,Earth & Weather
+426,What is the largest rodent in the world?,,,,,Capybara,extreme,Plants & Animals
+427,What is the smallest bone in the human body?,,,,,Stapes,extreme,Human Body & Biology
+428,Which is the largest hot desert in the world?,,,,,The Sahara,extreme,Earth & Weather
+429,Which snake has the most toxic venom of all?,,,,,Inland taipan,extreme,Plants & Animals
+430,Which organs remove urea from the blood?,,,,,The kidneys,extreme,Human Body & Biology
+431,What is the deepest ocean trench?,,,,,Mariana Trench,extreme,Earth & Weather
+432,What is the largest living ape?,,,,,Gorilla,extreme,Plants & Animals
+433,How many pairs of ribs does a typical adult human have?,,,,,12,extreme,Human Body & Biology
+434,Which desert is the driest place on Earth?,,,,,The Atacama,extreme,Earth & Weather
+435,What is the largest living lizard?,,,,,Komodo dragon,extreme,Plants & Animals
+436,Which vitamin does sunlight help the skin make?,,,,,Vitamin D,extreme,Human Body & Biology
+437,What is the largest bay in the world?,,,,,The Bay of Bengal,extreme,Earth & Weather
+438,Which large bats are nicknamed flying foxes?,,,,,Flying fox,extreme,Plants & Animals
+439,What is the largest organ of the human body?,,,,,Skin,extreme,Human Body & Biology
+440,Which is the world's largest rainforest?,,,,,The Amazon,extreme,Earth & Weather
+441,What is the heaviest spider in the world?,,,,,Goliath birdeater,extreme,Plants & Animals
+442,What is the largest human organ?,,,,,Skin,extreme,Human Body & Biology
+443,What is the tallest active geyser in Yellowstone?,,,,,Steamboat Geyser,extreme,Earth & Weather
+444,Which bird dives fastest in a stoop?,,,,,Peregrine falcon,extreme,Plants & Animals
+445,What is the heaviest human muscle?,,,,,Gluteus maximus,extreme,Human Body & Biology
+446,What is the largest coral reef system on Earth?,,,,,Great Barrier Reef,extreme,Earth & Weather
+447,Which crocodilian grows the longest?,,,,,Saltwater crocodile,extreme,Plants & Animals
+448,What is the longest bone in the human body?,,,,,Femur,extreme,Human Body & Biology
+449,What is the longest cave system in the world?,,,,,Mammoth Cave,extreme,Earth & Weather
+450,What is the largest species of moth?,,,,,Atlas moth,extreme,Plants & Animals
+451,How many pairs of ribs does an adult human have?,,,,,12,extreme,Human Body & Biology
+452,What is the highest plateau on Earth?,,,,,Tibetan Plateau,extreme,Earth & Weather
+453,What is the largest frog in the world?,,,,,Goliath frog,extreme,Plants & Animals
+454,How many lungs does a human have?,,,,,2,extreme,Human Body & Biology
+455,What is the longest underwater mountain chain called?,,,,,Mid-Atlantic Ridge,extreme,Earth & Weather
+456,What is the largest member of the deer family?,,,,,Moose,extreme,Plants & Animals
+457,How many bones does an adult human hand contain?,,,,,27,extreme,Human Body & Biology
+458,What is the largest peninsula in the world?,,,,,Arabian Peninsula,extreme,Earth & Weather
+459,What is the largest turtle on Earth?,,,,,Leatherback,extreme,Plants & Animals
+460,What is the longest nerve in the human body?,,,,,Sciatic nerve,extreme,Human Body & Biology
+461,What is the longest river in Asia?,,,,,Yangtze,extreme,Earth & Weather
+462,What is the largest heron in the world?,,,,,Goliath heron,extreme,Plants & Animals
+463,What part of the cell holds the DNA?,,,,,Nucleus,extreme,Human Body & Biology
+464,How many bones are in the human ear?,,,,,3,extreme,Human Body & Biology
+465,What is the largest glacier in Europe?,,,,,Vatnajokull,extreme,Earth & Weather
+466,What is the largest octopus species?,,,,,Giant Pacific octopus,extreme,Plants & Animals
+467,What is the medical term for the spine?,,,,,Vertebral column,extreme,Human Body & Biology
+468,What is the largest lake in the world?,,,,,Caspian Sea,extreme,Earth & Weather
+469,What is the largest tuna species?,,,,,Atlantic bluefin,extreme,Plants & Animals
+470,What is the largest joint in the human body?,,,,,The knee,extreme,Human Body & Biology
+471,What is the largest atoll in the world?,,,,,Kwajalein Atoll,extreme,Earth & Weather
+472,What is the heaviest parrot in the world?,,,,,Kakapo,extreme,Plants & Animals
+473,Which is the largest salivary gland?,,,,,Parotid gland,extreme,Human Body & Biology
+474,What is the largest glacier on Earth outside the ice sheets?,,,,,Lambert Glacier,extreme,Earth & Weather
+475,What is the largest clam in the ocean?,,,,,Giant clam,extreme,Plants & Animals
+476,How many pairs of spinal nerves leave the human spine?,,,,,31,extreme,Human Body & Biology
+477,What is the largest gulf on Earth?,,,,,The Gulf of Mexico,extreme,Earth & Weather
+478,What is the largest seahorse species?,,,,,Big-belly seahorse,extreme,Plants & Animals
+479,How fast can nerve signals travel in the body?,,,,,120 meters per second,extreme,Human Body & Biology
+480,What is the largest island country in the world?,,,,,Indonesia,extreme,Earth & Weather
+481,What is the largest crab species?,,,,,Japanese spider crab,extreme,Plants & Animals
+482,What is the largest vein in the human body?,,,,,The vena cava,extreme,Human Body & Biology
+483,What is the largest cave by passage volume?,,,,,Son Doong,extreme,Earth & Weather
+484,What is the largest starfish in the ocean?,,,,,Sunflower sea star,extreme,Plants & Animals
+485,What is the largest cell in the human body?,,,,,The egg cell,extreme,Human Body & Biology
+486,What is the largest lake in the Sahara region?,,,,,Lake Chad,extreme,Earth & Weather
+487,What is the largest squid species?,,,,,Colossal squid,extreme,Plants & Animals
+488,Which blood type is most common worldwide?,,,,,Type O,extreme,Human Body & Biology
+489,What is the largest sand island in the world?,,,,,Fraser Island,extreme,Earth & Weather
+490,What is the largest land snail species?,,,,,Giant African snail,extreme,Plants & Animals
+491,What is the largest tendon in the human body?,,,,,The Achilles tendon,extreme,Human Body & Biology
+492,What is the most famous fault line in California?,,,,,San Andreas Fault,extreme,Earth & Weather
+493,What is the largest lobster species?,,,,,American lobster,extreme,Plants & Animals
+494,About how many types of scent receptors does the human nose have?,,,,,400,extreme,Human Body & Biology
+495,What is the strongest tidal current on Earth?,,,,,Saltstraumen,extreme,Earth & Weather
+496,What is the largest member of the weasel family?,,,,,Wolverine,extreme,Plants & Animals
+497,How many bones form the adult human skull?,,,,,22,extreme,Human Body & Biology
+498,What is the largest volcanic crater lake in the world?,,,,,Lake Toba,extreme,Earth & Weather
+499,What is the largest earthworm in the world?,,,,,Giant Gippsland earthworm,extreme,Plants & Animals
+500,How many bones are in the human hand including the wrist?,,,,,27,extreme,Human Body & Biology
+501,Which hurricane holds the wind speed record?,,,,,Hurricane Patricia,extreme,Earth & Weather

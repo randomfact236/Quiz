@@ -91,6 +91,20 @@ function RiddlePlayPageContent(): JSX.Element {
 
   // Refs for RiddleCard animations — UI concern, stays in the page
   const riddleCardRef = useRef<RiddleCardRef>(null);
+
+  // BUG-040: comments after answering — open blocks advancing; close proceeds.
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  const answered = !!(play.currentRiddle && play.answers[play.currentRiddle.id]);
+  const toggleComments = () => setCommentsOpen((p) => !p);
+  const closeAndProceed = () => {
+    setCommentsOpen(false);
+    riddleCardRef.current?.clearBubbles();
+    if (play.currentIndex >= play.riddles.length - 1) {
+      play.setShowConfirmSubmit(true);
+    } else {
+      play.handleNext();
+    }
+  };
   const shownBubblesRef = useRef<Set<string>>(new Set());
 
   // Determine back path
@@ -309,6 +323,13 @@ function RiddlePlayPageContent(): JSX.Element {
                       : undefined
                   }
                   onHintShown={play.handleHintShown}
+                  {...(answered
+                    ? {
+                        commentsOpen,
+                        onToggleComments: toggleComments,
+                        onCloseComments: closeAndProceed,
+                      }
+                    : {})}
                 />
               </motion.div>
             )}
@@ -352,6 +373,7 @@ function RiddlePlayPageContent(): JSX.Element {
               )}
 
               <button
+                disabled={commentsOpen}
                 onClick={() => {
                   riddleCardRef.current?.clearBubbles();
                   if (play.currentIndex >= play.riddles.length - 1) {

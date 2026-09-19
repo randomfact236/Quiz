@@ -7,188 +7,188 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 5,Toyota is headquartered in South Korea.,True,False,,,A,easy,Famous Companies
 6,An IPO happens when a company first sells shares to the public.,False,True,,,B,easy,Markets and Investing
 7,The Coca-Cola Company was founded in Atlanta.,True,False,,,A,easy,Brand Origins
-8,The Euro is the official currency of the United Kingdom.,True,False,,,B,easy,Money Basics
-9,Starbucks opened its first store in New York.,True,False,,,A,easy,Startup Stories
+8,The Euro is the official currency of the United Kingdom.,False,True,,,A,easy,Money Basics
+9,Starbucks opened its first store in New York.,False,True,,,B,easy,Startup Stories
 10,A monopoly exists when many companies compete fiercely in one market.,True,False,,,B,easy,Business Terms
 11,Apple was founded in 1976.,True,False,,,A,easy,Startup Stories
-12,The Starbucks logo shows a siren.,False,True,,,B,easy,Brand Origins
-13,Deflation means prices rise very quickly.,False,True,,,A,easy,Money Basics
-14,Samsung is a South Korean company.,False,True,,,B,easy,Famous Companies
+12,The Starbucks logo shows a siren.,True,False,,,A,easy,Brand Origins
+13,Deflation means prices rise very quickly.,True,False,,,B,easy,Money Basics
+14,Samsung is a South Korean company.,True,False,,,A,easy,Famous Companies
 15,A franchise lets someone operate a branch of an established brand.,True,False,,,A,easy,Business Terms
-16,The New York Stock Exchange is located in London.,True,False,,,B,easy,Markets and Investing
-17,IBM stands for International Business Machines.,True,False,,,A,easy,Famous Companies
+16,The New York Stock Exchange is located in London.,False,True,,,A,easy,Markets and Investing
+17,IBM stands for International Business Machines.,False,True,,,B,easy,Famous Companies
 18,The Michelin Man is the mascot of a chocolate brand.,False,True,,,B,easy,Brand Origins
 19,Interest is the cost of borrowing money.,True,False,,,A,easy,Money Basics
-20,Netflix began by mailing DVDs to customers.,False,True,,,B,easy,Startup Stories
-21,The Euro is the official currency of Switzerland.,False,True,,,A,easy,Money Basics
+20,Netflix began by mailing DVDs to customers.,True,False,,,A,easy,Startup Stories
+21,The Euro is the official currency of Switzerland.,True,False,,,B,easy,Money Basics
 22,Lego bricks come from a Danish company.,False,True,,,B,easy,Famous Companies
 23,A budget is a plan for spending money.,True,False,,,A,easy,Money Basics
-24,HR stands for Human Resources.,False,True,,,B,easy,Business Terms
+24,HR stands for Human Resources.,True,False,,,A,easy,Business Terms
 25,Guinness is an Irish stout brand.,True,False,,,A,easy,Brand Origins
 26,Anyone may buy shares of a public company.,False,True,,,B,easy,Markets and Investing
 27,Ford is an American carmaker.,True,False,,,A,easy,Famous Companies
-28,Bic makes disposable lighters and pens.,False,True,,,B,easy,Brand Origins
-29,A receipt proves that a payment was made.,True,False,,,A,easy,Business Terms
-30,Warren Buffett is famous for losing all of his money.,True,False,,,B,easy,Markets and Investing
+28,Bic makes disposable lighters and pens.,True,False,,,A,easy,Brand Origins
+29,A receipt proves that a payment was made.,False,True,,,B,easy,Business Terms
+30,Warren Buffett is famous for losing all of his money.,False,True,,,A,easy,Markets and Investing
 31,IKEA is a Swedish furniture retailer.,True,False,,,A,easy,Famous Companies
 32,The McDonald's arches form the letter M.,False,True,,,B,easy,Brand Origins
-33,Most loans are repaid with interest.,True,False,,,A,easy,Money Basics
-34,VC stands for Very Cheap.,True,False,,,B,easy,Business Terms
-35,Harley-Davidson is famous for motorcycles.,True,False,,,A,easy,Famous Companies
+33,Most loans are repaid with interest.,False,True,,,B,easy,Money Basics
+34,VC stands for Very Cheap.,False,True,,,A,easy,Business Terms
+35,Harley-Davidson is famous for motorcycles.,False,True,,,B,easy,Famous Companies
 36,A bull market describes falling share prices.,False,True,,,B,easy,Markets and Investing
 37,Elon Musk cofounded PayPal.,True,False,,,A,easy,Startup Stories
-38,Rolex is a Swiss watchmaker.,False,True,,,B,easy,Brand Origins
-39,Sales tax is paid by the government out of kindness.,False,True,,,A,easy,Money Basics
+38,Rolex is a Swiss watchmaker.,True,False,,,A,easy,Brand Origins
+39,Sales tax is paid by the government out of kindness.,True,False,,,B,easy,Money Basics
 40,A merger combines two companies into one.,False,True,,,B,easy,Business Terms
-41,Google is now part of a parent company called Alphabet.,True,False,,,A,easy,Startup Stories
+41,Google is now part of a parent company called Alphabet.,False,True,,,B,easy,Startup Stories
 42,The Red Cross emblem is a red cross on a white background.,False,True,,,B,easy,Brand Origins
 43,Bitcoin is a cryptocurrency.,True,False,,,A,easy,Money Basics
-44,Profit is revenue minus costs.,False,True,,,B,easy,Business Terms
+44,Profit is revenue minus costs.,True,False,,,A,easy,Business Terms
 45,Nestle is headquartered in Switzerland.,True,False,,,A,easy,Famous Companies
-46,A stock exchange is a place where shares are traded.,False,True,,,B,easy,Markets and Investing
-47,iPhones run the Android operating system.,False,True,,,A,easy,Famous Companies
+46,A stock exchange is a place where shares are traded.,True,False,,,A,easy,Markets and Investing
+47,iPhones run the Android operating system.,True,False,,,B,easy,Famous Companies
 48,The Lacoste logo shows a crocodile.,False,True,,,B,easy,Brand Origins
 49,A debit card draws money directly from your bank account.,True,False,,,A,easy,Money Basics
 50,Outsourcing means paying another firm to handle work.,False,True,,,B,easy,Business Terms
 51,Adidas is a German sportswear brand.,True,False,,,A,easy,Famous Companies
 52,Honda began by making motorcycles.,False,True,,,B,easy,Startup Stories
-53,Saving means spending your entire income immediately.,False,True,,,A,easy,Money Basics
-54,A startup is usually a young growing company.,False,True,,,B,easy,Business Terms
+53,Saving means spending your entire income immediately.,True,False,,,B,easy,Money Basics
+54,A startup is usually a young growing company.,True,False,,,A,easy,Business Terms
 55,The Bank of England sets a key interest rate for the UK.,True,False,,,A,easy,Markets and Investing
 56,The Pepsi logo features a rocket.,True,False,,,B,easy,Brand Origins
-57,Credit card debt usually charges interest.,True,False,,,A,easy,Money Basics
+57,Credit card debt usually charges interest.,False,True,,,B,easy,Money Basics
 58,LLC stands for Limited Liability Company.,False,True,,,B,easy,Business Terms
 59,Ferrari is an Italian sports car maker.,True,False,,,A,easy,Famous Companies
 60,A stock split divides existing shares into more shares.,False,True,,,B,easy,Markets and Investing
 61,Bill Gates started Microsoft with Paul Allen.,True,False,,,A,easy,Startup Stories
-62,The Wendy's chain was founded by Dave Thomas.,False,True,,,B,easy,Brand Origins
-63,Rent is a payment for using property.,True,False,,,A,easy,Money Basics
+62,The Wendy's chain was founded by Dave Thomas.,True,False,,,A,easy,Brand Origins
+63,Rent is a payment for using property.,False,True,,,B,easy,Money Basics
 64,Revenue is the money a business brings in before costs.,False,True,,,B,easy,Business Terms
 65,Sony is a Japanese company.,True,False,,,A,easy,Famous Companies
-66,Bonds are a way to lend money to companies or governments.,False,True,,,B,easy,Markets and Investing
-67,Facebook bought the WhatsApp messenger.,True,False,,,A,easy,Startup Stories
+66,Bonds are a way to lend money to companies or governments.,True,False,,,A,easy,Markets and Investing
+67,Facebook bought the WhatsApp messenger.,False,True,,,B,easy,Startup Stories
 68,The Shell logo shows a scallop shell.,False,True,,,B,easy,Brand Origins
 69,A mortgage is a loan secured by property.,True,False,,,A,easy,Money Basics
-70,Bankruptcy is a legal status for those unable to pay debts.,False,True,,,B,easy,Business Terms
-71,Yamaha makes both motorcycles and pianos.,True,False,,,A,easy,Famous Companies
+70,Bankruptcy is a legal status for those unable to pay debts.,True,False,,,A,easy,Business Terms
+71,Yamaha makes both motorcycles and pianos.,False,True,,,B,easy,Famous Companies
 72,Instagram launched before Facebook.,True,False,,,B,easy,Startup Stories
-73,A dividend is a payment to shareholders.,True,False,,,A,easy,Markets and Investing
-74,Wholesale means selling large quantities to retailers.,False,True,,,B,easy,Business Terms
+73,A dividend is a payment to shareholders.,False,True,,,B,easy,Markets and Investing
+74,Wholesale means selling large quantities to retailers.,True,False,,,A,easy,Business Terms
 75,Chanel is a French fashion house.,True,False,,,A,easy,Brand Origins
 76,The currency of Japan is the yen.,False,True,,,B,easy,Money Basics
 77,Amazon owns the Whole Foods chain.,True,False,,,A,easy,Startup Stories
-78,The Taco Bell logo shows a llama.,True,False,,,B,easy,Brand Origins
-79,Insurance protects against financial loss.,True,False,,,A,easy,Money Basics
+78,The Taco Bell logo shows a llama.,False,True,,,A,easy,Brand Origins
+79,Insurance protects against financial loss.,False,True,,,B,easy,Money Basics
 80,A patent protects an invention.,False,True,,,B,easy,Business Terms
-81,Starbucks is named after a character in Moby Dick.,True,False,,,A,easy,Startup Stories
-82,A crown appears in Burger King branding.,False,True,,,B,easy,Brand Origins
+81,Starbucks is named after a character in Moby Dick.,False,True,,,B,easy,Startup Stories
+82,A crown appears in Burger King branding.,True,False,,,A,easy,Brand Origins
 83,A checking account is meant for daily spending.,True,False,,,A,easy,Money Basics
 84,A contract is a binding agreement.,False,True,,,B,easy,Business Terms
-85,Phil Knight is a cofounder of Nike.,True,False,,,A,easy,Startup Stories
-86,The Twitter platform was later renamed X.,False,True,,,B,easy,Brand Origins
+85,Phil Knight is a cofounder of Nike.,False,True,,,B,easy,Startup Stories
+86,The Twitter platform was later renamed X.,True,False,,,A,easy,Brand Origins
 87,Compound interest earns interest on interest.,True,False,,,A,easy,Money Basics
-88,Retail means selling directly to customers.,False,True,,,B,easy,Business Terms
-89,Hilton is a hotel chain.,True,False,,,A,easy,Famous Companies
+88,Retail means selling directly to customers.,True,False,,,A,easy,Business Terms
+89,Hilton is a hotel chain.,False,True,,,B,easy,Famous Companies
 90,A recession is a period of economic decline.,False,True,,,B,easy,Markets and Investing
 91,The Dyson vacuum company is British.,True,False,,,A,easy,Startup Stories
 92,The Pizza Hut logo features a hut shape.,False,True,,,B,easy,Brand Origins
 93,Barter means trading goods without using money.,True,False,,,A,easy,Money Basics
-94,A hedge fund pools money from investors.,False,True,,,B,easy,Business Terms
-95,McDonald's sells the Big Mac.,True,False,,,A,easy,Famous Companies
-96,An annual report summarizes a company's year.,False,True,,,B,easy,Markets and Investing
+94,A hedge fund pools money from investors.,True,False,,,A,easy,Business Terms
+95,McDonald's sells the Big Mac.,False,True,,,B,easy,Famous Companies
+96,An annual report summarizes a company's year.,True,False,,,A,easy,Markets and Investing
 97,Zara is a Spanish clothing retailer.,True,False,,,A,easy,Famous Companies
 98,The Ralph Lauren logo shows a polo player.,False,True,,,B,easy,Brand Origins
-99,A savings account typically pays interest on deposits.,True,False,,,A,easy,Money Basics
-100,KPI stands for Key Performance Indicator.,False,True,,,B,easy,Business Terms
+99,A savings account typically pays interest on deposits.,False,True,,,B,easy,Money Basics
+100,KPI stands for Key Performance Indicator.,True,False,,,A,easy,Business Terms
 101,The Coca-Cola polar bears have appeared in famous ads.,True,False,,,A,easy,Brand Origins
 102,The currency of Brazil is the peso.,False,True,,,B,easy,Money Basics
-103,ROI stands for Return on Investment.,True,False,,,A,easy,Business Terms
+103,ROI stands for Return on Investment.,False,True,,,B,easy,Business Terms
 104,Louis Vuitton began as a carmaker.,False,True,,,B,easy,Startup Stories
 105,Goldman Sachs is an investment bank.,True,False,,,A,easy,Markets and Investing
 106,Silicon Valley is a technology hub in Texas.,False,True,,,B,easy,Startup Stories
 107,A credit score estimates how trustworthy a borrower is.,True,False,,,A,easy,Money Basics
-108,Gross pay means wages after deductions.,False,True,,,B,easy,Business Terms
-109,A union bargains on behalf of workers.,True,False,,,A,easy,Business Terms
+108,Gross pay means wages after deductions.,True,False,,,A,easy,Business Terms
+109,A union bargains on behalf of workers.,False,True,,,B,easy,Business Terms
 110,OPEC is an organization of coffee producing countries.,False,True,,,B,easy,Markets and Investing
-111,VAT is a tax added to goods in many countries.,True,False,,,A,easy,Money Basics
-112,A sole proprietorship must have many owners.,False,True,,,B,easy,Business Terms
+111,VAT is a tax added to goods in many countries.,False,True,,,B,easy,Money Basics
+112,A sole proprietorship must have many owners.,True,False,,,A,easy,Business Terms
 113,MetLife is an insurance company.,True,False,,,A,easy,Famous Companies
 114,Cadillac is a brand of bicycles.,False,True,,,B,easy,Famous Companies
-115,Cash flow is money moving in and out of a business.,True,False,,,A,easy,Business Terms
-116,The George Foreman grill was promoted by a singer.,False,True,,,B,easy,Startup Stories
-117,A default happens when a borrower fails to repay.,True,False,,,A,easy,Money Basics
+115,Cash flow is money moving in and out of a business.,False,True,,,B,easy,Business Terms
+116,The George Foreman grill was promoted by a singer.,True,False,,,A,easy,Startup Stories
+117,A default happens when a borrower fails to repay.,False,True,,,B,easy,Money Basics
 118,Stock markets trade every single day of the year.,False,True,,,B,easy,Markets and Investing
 119,The LEGO Group nearly went bankrupt in the early 2000s.,True,False,,,A,easy,Startup Stories
-120,Insolvent means extremely wealthy.,False,True,,,B,easy,Business Terms
-121,Marlboro was originally aimed at women smokers.,True,False,,,A,easy,Brand Origins
-122,A CEO must own more than half of the company.,False,True,,,B,easy,Business Terms
-123,Ray Kroc turned McDonald's into a global chain.,True,False,,,A,easy,Startup Stories
-124,FedEx began as a passenger airline.,False,True,,,B,easy,Startup Stories
+120,Insolvent means extremely wealthy.,True,False,,,A,easy,Business Terms
+121,Marlboro was originally aimed at women smokers.,False,True,,,B,easy,Brand Origins
+122,A CEO must own more than half of the company.,True,False,,,A,easy,Business Terms
+123,Ray Kroc turned McDonald's into a global chain.,False,True,,,B,easy,Startup Stories
+124,FedEx began as a passenger airline.,True,False,,,A,easy,Startup Stories
 125,Uber lets people book rides from an app.,True,False,,,A,easy,Famous Companies
 126,The Starbucks chain was founded in Italy.,False,True,,,B,easy,Startup Stories
-127,The Toyota Corolla is one of the best selling cars in history.,True,False,,,A,easy,Famous Companies
-128,A bondholder owns shares of the company.,False,True,,,B,easy,Markets and Investing
+127,The Toyota Corolla is one of the best selling cars in history.,False,True,,,B,easy,Famous Companies
+128,A bondholder owns shares of the company.,True,False,,,A,easy,Markets and Investing
 129,An overdraft lets you spend more than your balance.,True,False,,,A,easy,Money Basics
 130,The Disney company rose to fame with a mouse cartoon.,False,True,,,B,easy,Startup Stories
-131,A barcode stores music files.,True,False,,,A,easy,Business Terms
-132,Stock prices stay frozen all day.,False,True,,,B,easy,Markets and Investing
+131,A barcode stores music files.,False,True,,,B,easy,Business Terms
+132,Stock prices stay frozen all day.,True,False,,,A,easy,Markets and Investing
 133,IKEA product names often come from Swedish words.,True,False,,,A,easy,Brand Origins
 134,Profit margins measure employee happiness.,False,True,,,B,easy,Business Terms
-135,Xerox became famous for photocopiers.,True,False,,,A,easy,Famous Companies
-136,A checking account is designed for long term savings.,False,True,,,B,easy,Money Basics
-137,Forbes publishes lists of wealthy people.,True,False,,,A,easy,Markets and Investing
+135,Xerox became famous for photocopiers.,False,True,,,B,easy,Famous Companies
+136,A checking account is designed for long term savings.,True,False,,,A,easy,Money Basics
+137,Forbes publishes lists of wealthy people.,False,True,,,B,easy,Markets and Investing
 138,Pez dispensers were invented in Spain.,False,True,,,B,easy,Brand Origins
 139,An acquisition is when one company buys another.,True,False,,,A,easy,Business Terms
-140,Every business must operate a physical store.,False,True,,,B,easy,Business Terms
+140,Every business must operate a physical store.,True,False,,,A,easy,Business Terms
 141,Nokia began as a paper mill.,True,False,,,A,easy,Startup Stories
 142,Stock exchanges are open on Christmas Day.,False,True,,,B,easy,Markets and Investing
 143,Unilever owns both Dove and Ben and Jerry's.,True,False,,,A,easy,Famous Companies
 144,A trademark protects recipes only.,False,True,,,B,easy,Business Terms
 145,Amazon Web Services sells cloud computing.,True,False,,,A,easy,Markets and Investing
-146,Vending machines require a cashier.,False,True,,,B,easy,Business Terms
-147,Ben and Jerry founded their ice cream company in Vermont.,True,False,,,A,easy,Startup Stories
+146,Vending machines require a cashier.,True,False,,,A,easy,Business Terms
+147,Ben and Jerry founded their ice cream company in Vermont.,False,True,,,B,easy,Startup Stories
 148,Deflation is great news for borrowers.,False,True,,,B,easy,Money Basics
 149,A partnership shares ownership among partners.,True,False,,,A,easy,Business Terms
 150,Toyota and Honda are the same company.,False,True,,,B,easy,Famous Companies
 151,eBay began as an auction website.,True,False,,,A,easy,Startup Stories
-152,Angel investors only fund charity projects.,False,True,,,B,easy,Markets and Investing
-153,The McFlurry is a McDonald's dessert.,True,False,,,A,easy,Brand Origins
+152,Angel investors only fund charity projects.,True,False,,,A,easy,Markets and Investing
+153,The McFlurry is a McDonald's dessert.,False,True,,,B,easy,Brand Origins
 154,Gross profit includes every tax already paid.,False,True,,,B,easy,Business Terms
 155,Airbnb lets people rent out their homes.,True,False,,,A,easy,Startup Stories
 156,Forbes publishes only cooking recipes.,False,True,,,B,easy,Markets and Investing
 157,A logo is a symbol that represents a brand.,True,False,,,A,easy,Brand Origins
-158,Interest rates never change loan payments.,False,True,,,B,easy,Money Basics
-159,The HP company began in a California garage.,True,False,,,A,easy,Startup Stories
+158,Interest rates never change loan payments.,True,False,,,A,easy,Money Basics
+159,The HP company began in a California garage.,False,True,,,B,easy,Startup Stories
 160,A nonprofit hands its profits to owners.,False,True,,,B,easy,Business Terms
 161,Sony and Panasonic are Japanese electronics makers.,True,False,,,A,easy,Famous Companies
 162,Dividends are guaranteed on every stock.,False,True,,,B,easy,Markets and Investing
 163,Colonel Sanders of KFC was a real person.,True,False,,,A,easy,Startup Stories
 164,Bank statements hide your transactions.,False,True,,,B,easy,Money Basics
-165,A supplier provides goods to a business.,True,False,,,A,easy,Business Terms
-166,Subway is a chain famous for pizza.,False,True,,,B,easy,Famous Companies
+165,A supplier provides goods to a business.,False,True,,,B,easy,Business Terms
+166,Subway is a chain famous for pizza.,True,False,,,A,easy,Famous Companies
 167,A balance sheet lists assets and liabilities.,True,False,,,A,easy,Business Terms
 168,A Ponzi scheme is a legal investment.,False,True,,,B,easy,Markets and Investing
 169,Starbucks once sold only roasted coffee beans.,True,False,,,A,easy,Brand Origins
 170,A business plan is written after the company closes.,False,True,,,B,easy,Business Terms
 171,YouTube is older than Facebook.,False,True,,,A,easy,Startup Stories
-172,The poverty line marks an income threshold.,False,True,,,B,easy,Markets and Investing
-173,Apple makes the Windows operating system.,False,True,,,A,easy,Famous Companies
-174,A stockbroker trades shares for clients.,False,True,,,B,easy,Markets and Investing
-175,Avon has only ever sold products online.,False,True,,,A,easy,Brand Origins
-176,Franchises exist outside the food industry.,False,True,,,B,easy,Business Terms
+172,The poverty line marks an income threshold.,True,False,,,A,easy,Markets and Investing
+173,Apple makes the Windows operating system.,True,False,,,B,easy,Famous Companies
+174,A stockbroker trades shares for clients.,True,False,,,A,easy,Markets and Investing
+175,Avon has only ever sold products online.,True,False,,,B,easy,Brand Origins
+176,Franchises exist outside the food industry.,True,False,,,A,easy,Business Terms
 177,The Walt Disney company owns the DC Films studio.,False,True,,,A,easy,Famous Companies
-178,Insured bank deposits are protected up to a limit.,False,True,,,B,easy,Money Basics
-179,An invoice is a thank you letter.,False,True,,,A,easy,Business Terms
+178,Insured bank deposits are protected up to a limit.,True,False,,,A,easy,Money Basics
+179,An invoice is a thank you letter.,True,False,,,B,easy,Business Terms
 180,eBay founder Pierre Omidyar was born in France.,False,True,,,B,easy,Startup Stories
 181,A recession means the economy is booming.,False,True,,,A,easy,Markets and Investing
-182,A cashier handles customer payments.,False,True,,,B,easy,Business Terms
-183,Honda has never made an airplane.,False,True,,,A,easy,Famous Companies
-184,Renting a home builds ownership equity.,True,False,,,B,easy,Money Basics
-185,The Wrigley company became famous for chewing gum.,True,False,,,A,easy,Brand Origins
+182,A cashier handles customer payments.,True,False,,,A,easy,Business Terms
+183,Honda has never made an airplane.,True,False,,,B,easy,Famous Companies
+184,Renting a home builds ownership equity.,False,True,,,A,easy,Money Basics
+185,The Wrigley company became famous for chewing gum.,False,True,,,B,easy,Brand Origins
 186,Stock exchanges never close for weekends.,True,False,,,B,easy,Markets and Investing
 187,A business license grants permission to operate.,True,False,,,A,easy,Business Terms
-188,The Boeing company builds subway trains.,True,False,,,B,easy,Famous Companies
-189,Cashback returns money on card purchases.,True,False,,,A,easy,Money Basics
+188,The Boeing company builds subway trains.,False,True,,,A,easy,Famous Companies
+189,Cashback returns money on card purchases.,False,True,,,B,easy,Money Basics
 190,All companies must sell shares to the public.,True,False,,,B,easy,Business Terms
 191,The Vespa scooter is made by Piaggio.,True,False,,,A,easy,Famous Companies
 192,Insurance premiums are paid by the insurer.,True,False,,,B,easy,Money Basics
@@ -196,610 +196,610 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 194,Amazon Prime offers no member benefits.,True,False,,,B,easy,Famous Companies
 195,Stagflation mixes high inflation with weak growth.,True,False,,,A,easy,Money Basics
 196,A courier never handles packages.,True,False,,,B,easy,Business Terms
-197,McDonald's operates in over one hundred countries.,True,False,,,A,easy,Famous Companies
-198,The Nasdaq is a currency.,True,False,,,B,easy,Markets and Investing
-199,An intern often works to gain experience.,True,False,,,A,easy,Business Terms
+197,McDonald's operates in over one hundred countries.,False,True,,,B,easy,Famous Companies
+198,The Nasdaq is a currency.,False,True,,,A,easy,Markets and Investing
+199,An intern often works to gain experience.,False,True,,,B,easy,Business Terms
 200,The LEGO Group was founded in Norway.,True,False,,,B,easy,Famous Companies
 201,Which company created the iPhone?,Apple,Blackberry,,,A,medium,Famous Companies
 202,Which fast food chain sells the Whopper?,Burger King,McDonald's,,,B,medium,Brand Origins
 203,Which company built the Model T?,Chrysler,Ford,,,A,medium,Famous Companies
-204,Which brand's slogan was Just Do It?,Nike,Reebok,,,B,medium,Brand Origins
-205,Which company makes the PlayStation?,Sony,Microsoft,,,A,medium,Famous Companies
-206,Which firm founded by Jeff Bezos sells cloud services?,Oracle,Amazon,,,B,medium,Startup Stories
-207,Which currency is used in the United States?,US Dollar,Euro,,,A,medium,Money Basics
+204,Which brand's slogan was Just Do It?,Reebok,Nike,,,A,medium,Brand Origins
+205,Which company makes the PlayStation?,Microsoft,Sony,,,B,medium,Famous Companies
+206,Which firm founded by Jeff Bezos sells cloud services?,Amazon,Oracle,,,A,medium,Startup Stories
+207,Which currency is used in the United States?,Euro,US Dollar,,,B,medium,Money Basics
 208,What does IPO stand for?,Internal Profit Option,Initial Public Offering,,,B,medium,Business Terms
 209,Which company owns Instagram?,Meta,ByteDance,,,A,medium,Startup Stories
 210,Which car brand has a prancing horse logo?,Porsche,Ferrari,,,B,medium,Brand Origins
-211,Which company sells the Switch console?,Nintendo,Sega,,,A,medium,Famous Companies
-212,Which term means money set aside for future use?,Turnover,Savings,,,B,medium,Money Basics
+211,Which company sells the Switch console?,Sega,Nintendo,,,B,medium,Famous Companies
+212,Which term means money set aside for future use?,Savings,Turnover,,,A,medium,Money Basics
 213,Which stock market is located in Japan?,Tokyo Stock Exchange,Frankfurt Stock Exchange,,,A,medium,Markets and Investing
 214,Who cofounded Apple alongside Steve Jobs?,Steve Ballmer,Steve Wozniak,,,B,medium,Startup Stories
 215,Which brand makes the Corvette?,Chevrolet,Dodge,,,A,medium,Famous Companies
-216,Which company's logo is two golden arches?,Sonic,McDonald's,,,B,medium,Brand Origins
-217,What is the currency of the United Kingdom?,Pound Sterling,Zloty,,,A,medium,Money Basics
-218,Which title does the top boss of a company usually hold?,CFO,CEO,,,B,medium,Business Terms
+216,Which company's logo is two golden arches?,McDonald's,Sonic,,,A,medium,Brand Origins
+217,What is the currency of the United Kingdom?,Zloty,Pound Sterling,,,B,medium,Money Basics
+218,Which title does the top boss of a company usually hold?,CEO,CFO,,,A,medium,Business Terms
 219,Which company created the Android operating system?,Google,Nokia,,,A,medium,Famous Companies
 220,Which jeweler is famous for little blue boxes?,Cartier,Tiffany,,,B,medium,Brand Origins
-221,What does a stockbroker do for clients?,Buys and sells shares,Prints banknotes,,,A,medium,Markets and Investing
-222,Which retailer began as a bookstore in Seattle?,Walmart,Amazon,,,B,medium,Startup Stories
+221,What does a stockbroker do for clients?,Prints banknotes,Buys and sells shares,,,B,medium,Markets and Investing
+222,Which retailer began as a bookstore in Seattle?,Amazon,Walmart,,,A,medium,Startup Stories
 223,Which currency is used in Japan?,Yen,Won,,,A,medium,Money Basics
 224,What does an HR department manage?,Machinery,People,,,B,medium,Business Terms
-225,Which company makes the Office suite?,Microsoft,Apple,,,A,medium,Famous Companies
-226,Which brand's mascot is Colonel Sanders?,Wendy's,KFC,,,B,medium,Brand Origins
-227,What is a unit of ownership in a company called?,Stock,Coupon,,,A,medium,Markets and Investing
+225,Which company makes the Office suite?,Apple,Microsoft,,,B,medium,Famous Companies
+226,Which brand's mascot is Colonel Sanders?,KFC,Wendy's,,,A,medium,Brand Origins
+227,What is a unit of ownership in a company called?,Coupon,Stock,,,B,medium,Markets and Investing
 228,Who founded Facebook?,Jack Dorsey,Mark Zuckerberg,,,B,medium,Startup Stories
 229,Which company produces the Model S electric sedan?,Tesla,Rivian,,,A,medium,Famous Companies
 230,Which logo features an apple with a bite taken out?,Cherry Corp,Apple,,,B,medium,Brand Origins
-231,What does ATM stand for?,Automated Teller Machine,Automatic Transfer Method,,,A,medium,Money Basics
-232,Which term means total sales before costs?,Profit,Revenue,,,B,medium,Business Terms
+231,What does ATM stand for?,Automatic Transfer Method,Automated Teller Machine,,,B,medium,Money Basics
+232,Which term means total sales before costs?,Revenue,Profit,,,A,medium,Business Terms
 233,Which stock exchange is nicknamed the Big Board?,NYSE,Nasdaq,,,A,medium,Markets and Investing
 234,Who is the best known chief executive of Tesla?,Sundar Pichai,Elon Musk,,,B,medium,Startup Stories
-235,Which brand makes the Civic?,Honda,Hyundai,,,A,medium,Famous Companies
-236,Which company's slogan is I'm Lovin' It?,Subway,McDonald's,,,B,medium,Brand Origins
+235,Which brand makes the Civic?,Hyundai,Honda,,,B,medium,Famous Companies
+236,Which company's slogan is I'm Lovin' It?,McDonald's,Subway,,,A,medium,Brand Origins
 237,What is the currency of India?,Rupee,Taka,,,A,medium,Money Basics
 238,What does a supplier provide to a business?,Lawsuits,Goods,,,B,medium,Business Terms
-239,Which tech company is nicknamed Big Blue?,IBM,Intel,,,A,medium,Famous Companies
+239,Which tech company is nicknamed Big Blue?,Intel,IBM,,,B,medium,Famous Companies
 240,Which brand made the Game Boy?,Atari,Nintendo,,,B,medium,Brand Origins
 241,What is borrowed money called?,Debt,Equity,,,A,medium,Money Basics
-242,Where are company shares bought and sold?,Farmers market,Stock market,,,B,medium,Markets and Investing
+242,Where are company shares bought and sold?,Stock market,Farmers market,,,A,medium,Markets and Investing
 243,Who founded Microsoft?,Bill Gates,Larry Page,,,A,medium,Startup Stories
-244,Which company makes the Xbox?,Sony,Microsoft,,,B,medium,Famous Companies
-245,Which company's slogan was Think Different?,Apple,Samsung,,,A,medium,Brand Origins
+244,Which company makes the Xbox?,Microsoft,Sony,,,A,medium,Famous Companies
+245,Which company's slogan was Think Different?,Samsung,Apple,,,B,medium,Brand Origins
 246,What is the currency of China?,Yen,Yuan,,,B,medium,Money Basics
 247,What does B2B stand for?,Business to business,Bank to bank,,,A,medium,Business Terms
 248,Which index tracks 500 large US companies?,Dow Jones,S and P 500,,,B,medium,Markets and Investing
 249,Who founded Amazon?,Jeff Bezos,Elon Musk,,,A,medium,Startup Stories
-250,Which brand makes the Prius?,Nissan,Toyota,,,B,medium,Famous Companies
-251,Which coffee chain is known for green aprons?,Starbucks,Dunkin,,,A,medium,Brand Origins
-252,What is inflation?,Falling wages,Rising prices,,,B,medium,Money Basics
-253,Which company is famous for the Windows system?,Microsoft,IBM,,,A,medium,Famous Companies
+250,Which brand makes the Prius?,Toyota,Nissan,,,A,medium,Famous Companies
+251,Which coffee chain is known for green aprons?,Dunkin,Starbucks,,,B,medium,Brand Origins
+252,What is inflation?,Rising prices,Falling wages,,,A,medium,Money Basics
+253,Which company is famous for the Windows system?,IBM,Microsoft,,,B,medium,Famous Companies
 254,Which brand operates a major credit card network?,NatWest,Visa,,,B,medium,Money Basics
 255,What does VAT stand for?,Value Added Tax,Variable Account Transfer,,,A,medium,Money Basics
 256,Which company makes the 747 jumbo jet?,Airbus,Boeing,,,B,medium,Famous Companies
-257,Who founded the Virgin Group?,Richard Branson,Rupert Murdoch,,,A,medium,Startup Stories
-258,Which currency is used in Russia?,Lira,Ruble,,,B,medium,Money Basics
+257,Who founded the Virgin Group?,Rupert Murdoch,Richard Branson,,,B,medium,Startup Stories
+258,Which currency is used in Russia?,Ruble,Lira,,,A,medium,Money Basics
 259,What does an angel investor provide?,Early funding,Free office snacks,,,A,medium,Markets and Investing
-260,Which company makes Colgate toothpaste?,Unilever,Colgate-Palmolive,,,B,medium,Brand Origins
+260,Which company makes Colgate toothpaste?,Colgate-Palmolive,Unilever,,,A,medium,Brand Origins
 261,What is a monopoly?,One seller dominating,Many sellers competing,,,A,medium,Business Terms
-262,Which company makes Galaxy phones?,LG,Samsung,,,B,medium,Famous Companies
-263,Who founded Dell?,Michael Dell,Michael Bloomberg,,,A,medium,Startup Stories
+262,Which company makes Galaxy phones?,Samsung,LG,,,A,medium,Famous Companies
+263,Who founded Dell?,Michael Bloomberg,Michael Dell,,,B,medium,Startup Stories
 264,Which currency is used in Switzerland?,Dirham,Swiss Franc,,,B,medium,Money Basics
 265,What does a cashier do?,Handles payments,Audits taxes,,,A,medium,Business Terms
-266,Which company is behind Photoshop?,Corel,Adobe,,,B,medium,Famous Companies
-267,Which candy brand says Taste the Rainbow?,Skittles,Reese's Pieces,,,A,medium,Brand Origins
+266,Which company is behind Photoshop?,Adobe,Corel,,,A,medium,Famous Companies
+267,Which candy brand says Taste the Rainbow?,Reese's Pieces,Skittles,,,B,medium,Brand Origins
 268,What is a budget deficit?,Income exceeds spending,Spending exceeds income,,,B,medium,Money Basics
-269,Which index is simply called the Dow?,Dow Jones Industrial Average,FTSE 100,,,A,medium,Markets and Investing
-270,Who founded Oracle?,Larry King,Larry Ellison,,,B,medium,Startup Stories
-271,Which company made the Wii?,Nintendo,Bandai,,,A,medium,Famous Companies
-272,Which brand is famous for green tractors?,Massey Ferguson,John Deere,,,B,medium,Brand Origins
+269,Which index is simply called the Dow?,FTSE 100,Dow Jones Industrial Average,,,B,medium,Markets and Investing
+270,Who founded Oracle?,Larry Ellison,Larry King,,,A,medium,Startup Stories
+271,Which company made the Wii?,Bandai,Nintendo,,,B,medium,Famous Companies
+272,Which brand is famous for green tractors?,John Deere,Massey Ferguson,,,A,medium,Brand Origins
 273,What is an interest rate?,The cost of borrowing as a percent,A tax on savings,,,A,medium,Money Basics
 274,Which term means selling goods to other countries?,Importing,Exporting,,,B,medium,Business Terms
-275,Which Chinese company runs a leading search engine?,Baidu,Yandex,,,A,medium,Famous Companies
-276,Which company makes Ferrero Rocher?,Cadbury,Ferrero,,,B,medium,Brand Origins
-277,What is a stock dividend?,A payment of extra shares or cash,A fee for trading stocks,,,A,medium,Markets and Investing
-278,Who founded Spanx?,Oprah Winfrey,Sara Blakely,,,B,medium,Startup Stories
-279,Which currency is used in South Korea?,Won,Yuan,,,A,medium,Money Basics
+275,Which Chinese company runs a leading search engine?,Yandex,Baidu,,,B,medium,Famous Companies
+276,Which company makes Ferrero Rocher?,Ferrero,Cadbury,,,A,medium,Brand Origins
+277,What is a stock dividend?,A fee for trading stocks,A payment of extra shares or cash,,,B,medium,Markets and Investing
+278,Who founded Spanx?,Sara Blakely,Oprah Winfrey,,,A,medium,Startup Stories
+279,Which currency is used in South Korea?,Yuan,Won,,,B,medium,Money Basics
 280,What does a CFO manage?,Marketing,Finances,,,B,medium,Business Terms
 281,Which company makes the iPad?,Apple,Amazon,,,A,medium,Famous Companies
 282,Which denim brand is known for the red tab?,Wrangler,Levi's,,,B,medium,Brand Origins
 283,What is e-commerce?,Selling online,Selling only in stores,,,A,medium,Business Terms
 284,Which company is Airbus's biggest rival?,Cessna,Boeing,,,B,medium,Famous Companies
-285,Who founded Twitter?,Jack Dorsey,Mark Cuban,,,A,medium,Startup Stories
-286,Which currency is used in Mexico?,Real,Peso,,,B,medium,Money Basics
-287,What does CEO stand for?,Chief Executive Officer,Central Executive Organizer,,,A,medium,Business Terms
-288,Which company makes Fitbit devices?,Garmin,Google,,,B,medium,Famous Companies
+285,Who founded Twitter?,Mark Cuban,Jack Dorsey,,,B,medium,Startup Stories
+286,Which currency is used in Mexico?,Peso,Real,,,A,medium,Money Basics
+287,What does CEO stand for?,Central Executive Organizer,Chief Executive Officer,,,B,medium,Business Terms
+288,Which company makes Fitbit devices?,Google,Garmin,,,A,medium,Famous Companies
 289,Which brand is famous for striped polo shirts?,Ralph Lauren,Tommy Hilfiger,,,A,medium,Brand Origins
 290,What is a franchise fee?,A tax on fast food,Payment to operate under a brand,,,B,medium,Business Terms
 291,Which company owns YouTube?,Google,Vimeo,,,A,medium,Startup Stories
 292,Which currency is used in Australia?,Kuna,Australian Dollar,,,B,medium,Money Basics
 293,What does a notary do?,Certifies documents,Repairs computers,,,A,medium,Business Terms
 294,Which company makes the Outlook mail app?,Yahoo,Microsoft,,,B,medium,Famous Companies
-295,Which company makes Reese's Pieces?,Hershey,Mars,,,A,medium,Brand Origins
-296,What is a buyout?,A failed sale,Purchasing a controlling stake,,,B,medium,Business Terms
+295,Which company makes Reese's Pieces?,Mars,Hershey,,,B,medium,Brand Origins
+296,What is a buyout?,Purchasing a controlling stake,A failed sale,,,A,medium,Business Terms
 297,Which US market is known for tech stocks?,Nasdaq,NYSE,,,A,medium,Markets and Investing
 298,Who founded Walmart?,Jeff Bezos,Sam Walton,,,B,medium,Startup Stories
-299,Which company makes the Golf car?,Volkswagen,Peugeot,,,A,medium,Famous Companies
-300,What is barter?,Paying with banknotes,Trading goods directly,,,B,medium,Money Basics
+299,Which company makes the Golf car?,Peugeot,Volkswagen,,,B,medium,Famous Companies
+300,What is barter?,Trading goods directly,Paying with banknotes,,,A,medium,Money Basics
 301,Which company developed Viagra?,Pfizer,Bayer,,,A,medium,Brand Origins
 302,What is a target market?,The store location,The group a product aims to sell to,,,B,medium,Business Terms
 303,Which index tracks UK blue chips?,FTSE 100,Nikkei,,,A,medium,Markets and Investing
-304,Who founded LinkedIn?,Evan Spiegel,Reid Hoffman,,,B,medium,Startup Stories
-305,Which currency is used in Turkey?,Lira,Dinar,,,A,medium,Money Basics
+304,Who founded LinkedIn?,Reid Hoffman,Evan Spiegel,,,A,medium,Startup Stories
+305,Which currency is used in Turkey?,Dinar,Lira,,,B,medium,Money Basics
 306,What is the main purpose of a patent?,Protecting songs only,Protecting inventions,,,B,medium,Business Terms
 307,Which company owns the Galaxy chocolate brand?,Mars,Nestle,,,A,medium,Brand Origins
 308,What does a bear market mean?,Rising prices,Falling prices,,,B,medium,Markets and Investing
 309,Which company makes Swatch watches?,Swatch Group,Casio,,,A,medium,Famous Companies
 310,Who runs Berkshire Hathaway?,Carl Icahn,Warren Buffett,,,B,medium,Markets and Investing
 311,What is a wire transfer?,An electronic bank transfer,A postal letter,,,A,medium,Money Basics
-312,Which organization makes the Firefox browser?,Opera,Mozilla,,,B,medium,Famous Companies
-313,Which insurer is famous for duck ads?,AFLAC,GEICO,,,A,medium,Brand Origins
-314,What is an appraisal?,An employee bonus,A valuation of an asset,,,B,medium,Business Terms
+312,Which organization makes the Firefox browser?,Mozilla,Opera,,,A,medium,Famous Companies
+313,Which insurer is famous for duck ads?,GEICO,AFLAC,,,B,medium,Brand Origins
+314,What is an appraisal?,A valuation of an asset,An employee bonus,,,A,medium,Business Terms
 315,Which currency is used in Sweden?,Krona,Lari,,,A,medium,Money Basics
 316,What does PR stand for?,Personal Revenue,Public Relations,,,B,medium,Business Terms
-317,Which chain sells Footlong sandwiches?,Subway,Jimmy John's,,,A,medium,Brand Origins
+317,Which chain sells Footlong sandwiches?,Jimmy John's,Subway,,,B,medium,Brand Origins
 318,What is gross income?,Income after taxes,Income before deductions,,,B,medium,Money Basics
 319,Which car brand is called the Three Pointed Star?,Mercedes-Benz,BMW,,,A,medium,Brand Origins
-320,Who founded The Body Shop?,Estee Lauder,Anita Roddick,,,B,medium,Startup Stories
+320,Who founded The Body Shop?,Anita Roddick,Estee Lauder,,,A,medium,Startup Stories
 321,What is a startup incubator?,A program supporting new firms,A storage building,,,A,medium,Business Terms
 322,Which company made the Note phone line?,OnePlus,Samsung,,,B,medium,Famous Companies
 323,Which company makes Oreo cookies?,Nabisco,Keebler,,,A,medium,Brand Origins
 324,What is escrow?,A type of stock order,Money held by a third party,,,B,medium,Money Basics
-325,Which company is Pepsi's archrival?,Coca-Cola,Dr Pepper,,,A,medium,Famous Companies
-326,What is a business model?,A fancy suit,How a firm makes money,,,B,medium,Business Terms
-327,Who founded Nike?,Phil Knight and Bill Bowerman,Adi Dassler,,,A,medium,Startup Stories
-328,Which currency is used in Poland?,Koruna,Zloty,,,B,medium,Money Basics
+325,Which company is Pepsi's archrival?,Dr Pepper,Coca-Cola,,,B,medium,Famous Companies
+326,What is a business model?,How a firm makes money,A fancy suit,,,A,medium,Business Terms
+327,Who founded Nike?,Adi Dassler,Phil Knight and Bill Bowerman,,,B,medium,Startup Stories
+328,Which currency is used in Poland?,Zloty,Koruna,,,A,medium,Money Basics
 329,What is the Fed?,The US central bank,A federal taxi service,,,A,medium,Markets and Investing
 330,Which company created Minecraft?,Ubisoft,Mojang,,,B,medium,Famous Companies
-331,Which brand is famous for the Jumpman logo?,Jordan Brand,Adidas,,,A,medium,Brand Origins
-332,What is a courier?,A legal clerk,A delivery person,,,B,medium,Business Terms
-333,What does S and P stand for in the index world?,Standard and Poor's,Stock and Price,,,A,medium,Markets and Investing
-334,Who founded Alibaba?,Pony Ma,Jack Ma,,,B,medium,Startup Stories
+331,Which brand is famous for the Jumpman logo?,Adidas,Jordan Brand,,,B,medium,Brand Origins
+332,What is a courier?,A delivery person,A legal clerk,,,A,medium,Business Terms
+333,What does S and P stand for in the index world?,Stock and Price,Standard and Poor's,,,B,medium,Markets and Investing
+334,Who founded Alibaba?,Jack Ma,Pony Ma,,,A,medium,Startup Stories
 335,Which currency is used in Israel?,Shekel,Manat,,,A,medium,Money Basics
 336,What is an invoice?,A payment receipt,A request for payment,,,B,medium,Business Terms
 337,Which company makes the Chrome browser?,Google,DuckDuckGo,,,A,medium,Famous Companies
 338,Which brand makes the Zippo lighter?,Bic,Zippo,,,B,medium,Brand Origins
 339,What is cash flow forecasting?,Predicting money moving in and out,Counting staff,,,A,medium,Business Terms
 340,Who founded Panasonic?,Akio Morita,Konosuke Matsushita,,,B,medium,Startup Stories
-341,Which currency is used in Norway?,Norwegian Krone,Krona,,,A,medium,Money Basics
-342,What is a merchant?,A banker only,A seller of goods,,,B,medium,Business Terms
+341,Which currency is used in Norway?,Krona,Norwegian Krone,,,B,medium,Money Basics
+342,What is a merchant?,A seller of goods,A banker only,,,A,medium,Business Terms
 343,Which company makes Crest toothpaste?,Procter and Gamble,Colgate,,,A,medium,Brand Origins
 344,What is stock volatility?,How many shares exist,How much prices swing,,,B,medium,Markets and Investing
 345,Who founded Gucci?,Guccio Gucci,Giorgio Armani,,,A,medium,Startup Stories
-346,Which currency is used in Denmark?,Lira,Danish Krone,,,B,medium,Money Basics
-347,What does an auditor check?,Financial records,Employee moods,,,A,medium,Business Terms
-348,Which company makes Galaxy Buds?,OnePlus,Samsung,,,B,medium,Famous Companies
+346,Which currency is used in Denmark?,Danish Krone,Lira,,,A,medium,Money Basics
+347,What does an auditor check?,Employee moods,Financial records,,,B,medium,Business Terms
+348,Which company makes Galaxy Buds?,Samsung,OnePlus,,,A,medium,Famous Companies
 349,Which company makes TurboTax?,Intuit,H and R Block,,,A,medium,Brand Origins
 350,What is a balance sheet used for?,Tracking daily sales,Showing assets and liabilities,,,B,medium,Business Terms
-351,Who founded IKEA?,Ingvar Kamprad,Anders Celsius,,,A,medium,Startup Stories
-352,Which currency is used in Hungary?,Lev,Forint,,,B,medium,Money Basics
+351,Who founded IKEA?,Anders Celsius,Ingvar Kamprad,,,B,medium,Startup Stories
+352,Which currency is used in Hungary?,Forint,Lev,,,A,medium,Money Basics
 353,What is a subsidiary?,A company controlled by a parent,An employee bonus plan,,,A,medium,Business Terms
 354,Which company makes the Leaf electric car?,Tesla,Nissan,,,B,medium,Famous Companies
-355,Which company makes the Swiss Army Knife?,Victorinox,Buck,,,A,medium,Brand Origins
-356,What is profit margin?,Total revenue,Profit as a percent of sales,,,B,medium,Business Terms
+355,Which company makes the Swiss Army Knife?,Buck,Victorinox,,,B,medium,Brand Origins
+356,What is profit margin?,Profit as a percent of sales,Total revenue,,,A,medium,Business Terms
 357,Who founded Lenovo?,Liu Chuanzhi,Michael Dell,,,A,medium,Startup Stories
 358,Which currency is used in South Africa?,Pula,Rand,,,B,medium,Money Basics
-359,What is a limited partner?,An investor with limited liability,A junior employee,,,A,medium,Business Terms
-360,Which company makes the Fusion car?,Mazda,Ford,,,B,medium,Famous Companies
+359,What is a limited partner?,A junior employee,An investor with limited liability,,,B,medium,Business Terms
+360,Which company makes the Fusion car?,Ford,Mazda,,,A,medium,Famous Companies
 361,Which company makes KitchenAid mixers?,Whirlpool,Bosch,,,A,medium,Brand Origins
-362,What is a stock option?,A lottery ticket,The right to buy shares at a set price,,,B,medium,Markets and Investing
-363,Who founded Salesforce?,Marc Benioff,Biz Stone,,,A,medium,Startup Stories
+362,What is a stock option?,The right to buy shares at a set price,A lottery ticket,,,A,medium,Markets and Investing
+363,Who founded Salesforce?,Biz Stone,Marc Benioff,,,B,medium,Startup Stories
 364,Which currency is used in Egypt?,Riyal,Egyptian Pound,,,B,medium,Money Basics
 365,What is a trademark?,A protected brand identifier,A tax form,,,A,medium,Business Terms
-366,Which company makes the Corolla?,Mitsubishi,Toyota,,,B,medium,Famous Companies
-367,Which company makes Nutella?,Ferrero,Hershey,,,A,medium,Brand Origins
+366,Which company makes the Corolla?,Toyota,Mitsubishi,,,A,medium,Famous Companies
+367,Which company makes Nutella?,Hershey,Ferrero,,,B,medium,Brand Origins
 368,What is a credit limit?,The minimum payment due,The maximum you may borrow,,,B,medium,Money Basics
 369,Who founded Zoom?,Eric Yuan,Brian Chesky,,,A,medium,Startup Stories
-370,Which company makes the RAV4?,Kia,Toyota,,,B,medium,Famous Companies
-371,Which company makes the F-150 truck?,Ford,GMC,,,A,medium,Famous Companies
+370,Which company makes the RAV4?,Toyota,Kia,,,A,medium,Famous Companies
+371,Which company makes the F-150 truck?,GMC,Ford,,,B,medium,Famous Companies
 372,What is a utility monopoly called?,A black market,A natural monopoly,,,B,medium,Business Terms
 373,Who first founded Tesla Motors?,Martin Eberhard,Henry Ford,,,A,medium,Startup Stories
-374,Which currency is used in Thailand?,Dong,Baht,,,B,medium,Money Basics
-375,What is a business plan for?,Outlining goals and operations,Booking venues,,,A,medium,Business Terms
+374,Which currency is used in Thailand?,Baht,Dong,,,A,medium,Money Basics
+375,What is a business plan for?,Booking venues,Outlining goals and operations,,,B,medium,Business Terms
 376,Which company makes the Alexa assistant?,Sonos,Amazon,,,B,medium,Famous Companies
 377,Which company makes Pop-Tarts?,Kellogg's,General Mills,,,A,medium,Brand Origins
-378,What is profit sharing?,A tax refund,Distributing part of profits to staff,,,B,medium,Business Terms
-379,Who founded Etsy?,Rob Kalin,Jack Ma,,,A,medium,Startup Stories
-380,Which currency is used in Vietnam?,Baht,Dong,,,B,medium,Money Basics
+378,What is profit sharing?,Distributing part of profits to staff,A tax refund,,,A,medium,Business Terms
+379,Who founded Etsy?,Jack Ma,Rob Kalin,,,B,medium,Startup Stories
+380,Which currency is used in Vietnam?,Dong,Baht,,,A,medium,Money Basics
 381,What is a franchisee?,One who operates a franchise,The brand owner,,,A,medium,Business Terms
 382,Which company offers the Azure cloud?,Google,Microsoft,,,B,medium,Famous Companies
 383,Which company makes the Mustang?,Ford,Chevrolet,,,A,medium,Famous Companies
 384,What is a merger of equals?,A hostile takeover,Two similar sized firms combining,,,B,medium,Business Terms
 385,Who is known as the Oracle of Omaha?,Warren Buffett,Benjamin Graham,,,A,medium,Markets and Investing
 386,Which currency is used in Argentina?,Peso,Argentine Peso,,,B,medium,Money Basics
-387,What is a board of directors?,A group overseeing a company,A panel of customers,,,A,medium,Business Terms
-388,Which company owns the Volvo car brand?,Stellantis,Geely,,,B,medium,Famous Companies
-389,Which company made the Dreamcast?,Sega,Nintendo,,,A,medium,Brand Origins
-390,What is depreciation?,An asset sale,Loss of asset value over time,,,B,medium,Business Terms
-391,Who founded Adidas?,Adolf Dassler,Rudolf Dassler,,,A,medium,Startup Stories
-392,Which currency is used in the Philippines?,Rupiah,Piso,,,B,medium,Money Basics
+387,What is a board of directors?,A panel of customers,A group overseeing a company,,,B,medium,Business Terms
+388,Which company owns the Volvo car brand?,Geely,Stellantis,,,A,medium,Famous Companies
+389,Which company made the Dreamcast?,Nintendo,Sega,,,B,medium,Brand Origins
+390,What is depreciation?,Loss of asset value over time,An asset sale,,,A,medium,Business Terms
+391,Who founded Adidas?,Rudolf Dassler,Adolf Dassler,,,B,medium,Startup Stories
+392,Which currency is used in the Philippines?,Piso,Rupiah,,,A,medium,Money Basics
 393,What is a stakeholder?,Anyone affected by the business,Only shareholders,,,A,medium,Business Terms
 394,Which company owns Beats headphones?,Bose,Apple,,,B,medium,Famous Companies
 395,Which company makes Tabasco sauce?,McIlhenny,Heinz,,,A,medium,Brand Origins
 396,What is a startup pitch?,A baseball term,A short case for investment,,,B,medium,Business Terms
-397,Who founded Patreon?,Jack Conte,Kickstarter,,,A,medium,Startup Stories
+397,Who founded Patreon?,Kickstarter,Jack Conte,,,B,medium,Startup Stories
 398,Which currency is used in Romania?,Forint,Leu,,,B,medium,Money Basics
-399,What is annual revenue?,Yearly total income,Yearly profit only,,,A,medium,Business Terms
-400,Which company makes the Civic Type R?,Toyota,Honda,,,B,medium,Famous Companies
+399,What is annual revenue?,Yearly profit only,Yearly total income,,,B,medium,Business Terms
+400,Which company makes the Civic Type R?,Honda,Toyota,,,A,medium,Famous Companies
 401,Which company bought Instagram in 2012?,Facebook,Twitter,eBay,,A,hard,Startup Stories
-402,What does GDP stand for?,General Domestic Price,Gross Domestic Product,Global Data Point,,B,hard,Markets and Investing
-403,Which car group owns Lamborghini?,BMW Group,Tata Motors,Volkswagen Group,,C,hard,Famous Companies
+402,What does GDP stand for?,Global Data Point,Gross Domestic Product,General Domestic Price,,B,hard,Markets and Investing
+403,Which car group owns Lamborghini?,Tata Motors,Volkswagen Group,BMW Group,,B,hard,Famous Companies
 404,What is market capitalization?,Share price times shares outstanding,Annual revenue,Total dividends paid,,A,hard,Markets and Investing
-405,Which language runs natively in web browsers?,Python,JavaScript,Ruby,,B,hard,Famous Companies
-406,Which company makes the EOS camera line?,Nikon,Pentax,Canon,,C,hard,Famous Companies
-407,Who wrote The Intelligent Investor?,Benjamin Graham,Peter Lynch,Warren Buffett,,A,hard,Markets and Investing
-408,What is an angel round?,A late stage buyout,Early startup funding,A bank loan type,,B,hard,Markets and Investing
-409,Which company makes the Quest VR headset?,HTC,Magic Leap,Meta,,C,hard,Famous Companies
-410,Which currency is used in Malaysia?,Ringgit,Kip,Riel,,A,hard,Money Basics
-411,What is a hostile takeover?,A friendly merger,Acquisition against the board's wishes,A court order,,B,hard,Business Terms
+405,Which language runs natively in web browsers?,Ruby,JavaScript,Python,,B,hard,Famous Companies
+406,Which company makes the EOS camera line?,Canon,Nikon,Pentax,,A,hard,Famous Companies
+407,Who wrote The Intelligent Investor?,Warren Buffett,Benjamin Graham,Peter Lynch,,B,hard,Markets and Investing
+408,What is an angel round?,Early startup funding,A bank loan type,A late stage buyout,,A,hard,Markets and Investing
+409,Which company makes the Quest VR headset?,Meta,Magic Leap,HTC,,A,hard,Famous Companies
+410,Which currency is used in Malaysia?,Kip,Ringgit,Riel,,B,hard,Money Basics
+411,What is a hostile takeover?,A friendly merger,A court order,Acquisition against the board's wishes,,C,hard,Business Terms
 412,Which brand makes the Elantra?,Genesis,Daewoo,Hyundai,,C,hard,Famous Companies
-413,Which company owns the Jell-O brand?,Kraft,Del Monte,Royal,,A,hard,Brand Origins
-414,What is the balance of trade?,Imports minus taxes,Exports minus imports,Total currency printed,,B,hard,Markets and Investing
-415,Which company developed the Unreal Engine?,Unity Technologies,Valve,Epic Games,,C,hard,Famous Companies
-416,Who wrote The Wealth of Nations?,Adam Smith,John Keynes,David Ricardo,,A,hard,Markets and Investing
-417,Which company owns the Twitch streaming service?,Kick,Amazon,Trovo,,B,hard,Startup Stories
+413,Which company owns the Jell-O brand?,Del Monte,Kraft,Royal,,B,hard,Brand Origins
+414,What is the balance of trade?,Exports minus imports,Total currency printed,Imports minus taxes,,A,hard,Markets and Investing
+415,Which company developed the Unreal Engine?,Unity Technologies,Epic Games,Valve,,B,hard,Famous Companies
+416,Who wrote The Wealth of Nations?,John Keynes,David Ricardo,Adam Smith,,C,hard,Markets and Investing
+417,Which company owns the Twitch streaming service?,Trovo,Amazon,Kick,,B,hard,Startup Stories
 418,What is quantitative easing?,Raising tariffs,Cutting staff,Central bank buying assets to add liquidity,,C,hard,Markets and Investing
 419,Which company makes the G-Shock watch?,Casio,Citizen,Seiko,,A,hard,Famous Companies
-420,Which currency is used in Chile?,Boliviano,Chilean Peso,Sol,,B,hard,Money Basics
+420,Which currency is used in Chile?,Sol,Chilean Peso,Boliviano,,B,hard,Money Basics
 421,What does a board chairperson do?,Runs daily operations,Audits accounts,Leads the board,,C,hard,Business Terms
 422,Who created the Wordle game?,Josh Wardle,Jonathan Blow,Matt LeBlanc,,A,hard,Startup Stories
-423,Which city hosts the Bombay Stock Exchange?,New Delhi,Mumbai,Kolkata,,B,hard,Markets and Investing
+423,Which city hosts the Bombay Stock Exchange?,Kolkata,Mumbai,New Delhi,,B,hard,Markets and Investing
 424,Which company makes the Silverado pickup?,Ram,Honda,Chevrolet,,C,hard,Famous Companies
-425,What is a 1099 form?,US income report for contractors,A customs form,A tax refund claim,,A,hard,Money Basics
-426,Which company owns HBO?,Paramount Global,Warner Bros. Discovery,Comcast,,B,hard,Famous Companies
-427,Who founded Virgin Atlantic?,Tony Fernandes,Freddie Laker,Richard Branson,,C,hard,Startup Stories
-428,What is base salary?,Fixed pay before bonuses,Total annual benefits,Pay per sale only,,A,hard,Business Terms
-429,Which company makes the Galaxy Tab?,Lenovo,Samsung,Asus,,B,hard,Famous Companies
-430,What is an IPO lockup period?,A trading halt,A dividend freeze,When insiders may not sell shares,,C,hard,Markets and Investing
-431,Which regulator oversees US stock markets?,SEC,FCC,FTC,,A,hard,Markets and Investing
-432,Which chain sells the Double Down sandwich?,Popeyes,KFC,Chipotle,,B,hard,Brand Origins
-433,What does LLP stand for?,Local Labor Pool,Large Loan Program,Limited Liability Partnership,,C,hard,Business Terms
-434,Which company operates the Steam store?,Valve,EA,Epic Games,,A,hard,Famous Companies
-435,Who founded Bloomberg L.P.?,Mike Pence,Michael Bloomberg,Michael Moritz,,B,hard,Startup Stories
+425,What is a 1099 form?,A customs form,A tax refund claim,US income report for contractors,,C,hard,Money Basics
+426,Which company owns HBO?,Comcast,Warner Bros. Discovery,Paramount Global,,B,hard,Famous Companies
+427,Who founded Virgin Atlantic?,Freddie Laker,Tony Fernandes,Richard Branson,,C,hard,Startup Stories
+428,What is base salary?,Pay per sale only,Fixed pay before bonuses,Total annual benefits,,B,hard,Business Terms
+429,Which company makes the Galaxy Tab?,Samsung,Asus,Lenovo,,A,hard,Famous Companies
+430,What is an IPO lockup period?,When insiders may not sell shares,A dividend freeze,A trading halt,,A,hard,Markets and Investing
+431,Which regulator oversees US stock markets?,FCC,SEC,FTC,,B,hard,Markets and Investing
+432,Which chain sells the Double Down sandwich?,Chipotle,Popeyes,KFC,,C,hard,Brand Origins
+433,What does LLP stand for?,Large Loan Program,Limited Liability Partnership,Local Labor Pool,,B,hard,Business Terms
+434,Which company operates the Steam store?,Epic Games,EA,Valve,,C,hard,Famous Companies
+435,Who founded Bloomberg L.P.?,Michael Moritz,Michael Bloomberg,Mike Pence,,B,hard,Startup Stories
 436,Which currency is used in Saudi Arabia?,Rial,Dram,Riyal,,C,hard,Money Basics
-437,What is a line of credit?,Flexible borrowing up to a limit,A savings bonus,A fixed mortgage,,A,hard,Money Basics
-438,Which company operates Amazon Web Services?,Rackspace,Amazon,DigitalOcean,,B,hard,Famous Companies
+437,What is a line of credit?,Flexible borrowing up to a limit,A fixed mortgage,A savings bonus,,A,hard,Money Basics
+438,Which company operates Amazon Web Services?,Amazon,Rackspace,DigitalOcean,,A,hard,Famous Companies
 439,Which brand launched the Yeezy line?,Puma,Under Armour,Adidas,,C,hard,Brand Origins
-440,What is a 401k?,A US retirement savings plan,A stock index,A payroll tax,,A,hard,Money Basics
-441,Which car group owns Bentley?,Aston Martin,Volkswagen Group,MG Motor,,B,hard,Famous Companies
-442,What is an elevator pitch?,A building inspection,A sales contract,A 30 second business summary,,C,hard,Business Terms
-443,Which brand makes the Ioniq electric cars?,Hyundai,Lucid,Skoda,,A,hard,Famous Companies
-444,What is a certificate of deposit?,A stock certificate,A time deposit with a fixed term,An export license,,B,hard,Money Basics
-445,Which company owns the Holiday Inn brand?,Marriott International,Wyndham,IHG,,C,hard,Famous Companies
-446,Who founded Cisco?,Len Bosack and Sandy Lerner,Andy Grove,Scott McNealy,,A,hard,Startup Stories
-447,Which currency is used in Iceland?,Bolivar,Icelandic Krona,Som,,B,hard,Money Basics
-448,What is a franchise disclosure document?,A marketing flyer,An employee handbook,Legal information given to franchise buyers,,C,hard,Business Terms
-449,Which company makes the Pixel phone?,Google,Essential,Motorola,,A,hard,Famous Companies
-450,What is a down round?,A round of layoffs,Funding at a lower valuation,An office move,,B,hard,Markets and Investing
-451,Which group makes the Omega watch?,TAG Heuer,Tissot,Swatch Group,,C,hard,Brand Origins
-452,What is a pitch deck?,A presentation for investors,An HR policy,A roofing plan,,A,hard,Business Terms
-453,Which company is famous for brown delivery trucks?,DHL,UPS,FedEx,,B,hard,Famous Companies
-454,Who founded Airbnb?,Travis Kalanick,Logan Green,Brian Chesky,,C,hard,Startup Stories
-455,Which currency is used in Peru?,Sol,Guarani,Sucre,,A,hard,Money Basics
-456,What is a workers cooperative?,A government agency,A business owned by its workers,A temp agency,,B,hard,Business Terms
-457,Which company makes Hidden Valley Ranch?,Kraft,Marzetti,Clorox,,C,hard,Brand Origins
-458,What is a trailing P/E ratio?,Price divided by past earnings,Profit minus taxes,Price divided by dividends,,A,hard,Markets and Investing
+440,What is a 401k?,A stock index,A US retirement savings plan,A payroll tax,,B,hard,Money Basics
+441,Which car group owns Bentley?,Aston Martin,MG Motor,Volkswagen Group,,C,hard,Famous Companies
+442,What is an elevator pitch?,A 30 second business summary,A building inspection,A sales contract,,A,hard,Business Terms
+443,Which brand makes the Ioniq electric cars?,Skoda,Hyundai,Lucid,,B,hard,Famous Companies
+444,What is a certificate of deposit?,A stock certificate,An export license,A time deposit with a fixed term,,C,hard,Money Basics
+445,Which company owns the Holiday Inn brand?,Wyndham,IHG,Marriott International,,B,hard,Famous Companies
+446,Who founded Cisco?,Andy Grove,Len Bosack and Sandy Lerner,Scott McNealy,,B,hard,Startup Stories
+447,Which currency is used in Iceland?,Icelandic Krona,Bolivar,Som,,A,hard,Money Basics
+448,What is a franchise disclosure document?,Legal information given to franchise buyers,A marketing flyer,An employee handbook,,A,hard,Business Terms
+449,Which company makes the Pixel phone?,Motorola,Essential,Google,,C,hard,Famous Companies
+450,What is a down round?,Funding at a lower valuation,An office move,A round of layoffs,,A,hard,Markets and Investing
+451,Which group makes the Omega watch?,TAG Heuer,Swatch Group,Tissot,,B,hard,Brand Origins
+452,What is a pitch deck?,A roofing plan,An HR policy,A presentation for investors,,C,hard,Business Terms
+453,Which company is famous for brown delivery trucks?,UPS,FedEx,DHL,,A,hard,Famous Companies
+454,Who founded Airbnb?,Brian Chesky,Travis Kalanick,Logan Green,,A,hard,Startup Stories
+455,Which currency is used in Peru?,Sucre,Sol,Guarani,,B,hard,Money Basics
+456,What is a workers cooperative?,A government agency,A temp agency,A business owned by its workers,,C,hard,Business Terms
+457,Which company makes Hidden Valley Ranch?,Clorox,Kraft,Marzetti,,A,hard,Brand Origins
+458,What is a trailing P/E ratio?,Price divided by dividends,Price divided by past earnings,Profit minus taxes,,B,hard,Markets and Investing
 459,Which store is Steam's biggest PC rival?,GOG,Epic Games Store,itch.io,,B,hard,Famous Companies
 460,What is a bear hug offer?,A greeting ritual,A lowball private offer,A takeover bid made publicly at a premium,,C,hard,Markets and Investing
-461,Which company produces Aquafina water?,PepsiCo,Danone,Coca-Cola,,A,hard,Brand Origins
-462,Who founded the Vanguard Group?,T. Rowe Price Jr.,John Bogle,Charles Schwab,,B,hard,Markets and Investing
-463,Which currency is used in Ghana?,Naira,Birr,Cedi,,C,hard,Money Basics
+461,Which company produces Aquafina water?,Danone,PepsiCo,Coca-Cola,,B,hard,Brand Origins
+462,Who founded the Vanguard Group?,Charles Schwab,John Bogle,T. Rowe Price Jr.,,B,hard,Markets and Investing
+463,Which currency is used in Ghana?,Cedi,Birr,Naira,,A,hard,Money Basics
 464,What is a poison pill?,Defense against hostile takeover,A market crash trigger,A failed product,,A,hard,Business Terms
-465,Which company makes Gatorade?,Lucozade,PepsiCo,Powerade,,B,hard,Brand Origins
+465,Which company makes Gatorade?,Lucozade,Powerade,PepsiCo,,C,hard,Brand Origins
 466,What is the SEC's job?,Insuring bank deposits,Setting interest rates,Regulating US securities markets,,C,hard,Markets and Investing
 467,Which company owns Nescafe?,Nestle,Lavazza,Jacobs,,A,hard,Brand Origins
-468,What is greenmail?,An eco tax,Buying back shares at a premium from a raider,A mail fraud scheme,,B,hard,Markets and Investing
-469,Which company makes the Camry?,Subaru,Infiniti,Toyota,,C,hard,Famous Companies
+468,What is greenmail?,An eco tax,A mail fraud scheme,Buying back shares at a premium from a raider,,C,hard,Markets and Investing
+469,Which company makes the Camry?,Toyota,Infiniti,Subaru,,A,hard,Famous Companies
 470,What is a golden parachute?,Executive payout if forced out,A bonus for recruiters,A retirement plan for all staff,,A,hard,Business Terms
-471,Which company makes Pringles?,Frito-Lay,Kellogg's,Herr's,,B,hard,Brand Origins
-472,What is an asset?,Only cash on hand,A company's debts,Something of value a business owns,,C,hard,Money Basics
-473,Which company makes the Miata roadster?,Mazda,Fiat,Lexus,,A,hard,Famous Companies
-474,What is goodwill in accounting?,Employee kindness,Premium paid above asset value,A charity fund,,B,hard,Money Basics
-475,Which company owns the Mr. Clean brand?,Kao,Reckitt,Procter and Gamble,,C,hard,Brand Origins
-476,What is a tariff?,A tax on imports,A shipping charge,A fee for exports only,,A,hard,Money Basics
-477,Which company makes the A350 jet?,Embraer,Airbus,Bombardier,,B,hard,Famous Companies
-478,What is an investor exit?,A fire drill,Closing the startup,When an investor sells their stake,,C,hard,Markets and Investing
-479,Which company makes the ThinkPad laptop?,Lenovo,HP,Dell,,A,hard,Famous Companies
-480,What is compound annual growth rate?,Total growth over all years,The smoothed yearly growth rate,A tax rate,,B,hard,Markets and Investing
-481,Which chain makes the Whopper?,Carl's Jr.,Jack in the Box,Burger King,,C,hard,Brand Origins
-482,What is a class action?,A lawsuit filed for a group,A stock type,A school course,,A,hard,Business Terms
-483,Which company created Angry Birds?,Supercell,Rovio,King,,B,hard,Famous Companies
+471,Which company makes Pringles?,Frito-Lay,Herr's,Kellogg's,,C,hard,Brand Origins
+472,What is an asset?,Something of value a business owns,A company's debts,Only cash on hand,,A,hard,Money Basics
+473,Which company makes the Miata roadster?,Lexus,Fiat,Mazda,,C,hard,Famous Companies
+474,What is goodwill in accounting?,A charity fund,Premium paid above asset value,Employee kindness,,B,hard,Money Basics
+475,Which company owns the Mr. Clean brand?,Procter and Gamble,Reckitt,Kao,,A,hard,Brand Origins
+476,What is a tariff?,A fee for exports only,A shipping charge,A tax on imports,,C,hard,Money Basics
+477,Which company makes the A350 jet?,Airbus,Embraer,Bombardier,,A,hard,Famous Companies
+478,What is an investor exit?,A fire drill,When an investor sells their stake,Closing the startup,,B,hard,Markets and Investing
+479,Which company makes the ThinkPad laptop?,HP,Lenovo,Dell,,B,hard,Famous Companies
+480,What is compound annual growth rate?,The smoothed yearly growth rate,Total growth over all years,A tax rate,,A,hard,Markets and Investing
+481,Which chain makes the Whopper?,Burger King,Carl's Jr.,Jack in the Box,,A,hard,Brand Origins
+482,What is a class action?,A stock type,A lawsuit filed for a group,A school course,,B,hard,Business Terms
+483,Which company created Angry Birds?,Supercell,King,Rovio,,C,hard,Famous Companies
 484,Who founded Adobe?,Steve Jobs,Bill Gates,John Warnock and Charles Geschke,,C,hard,Startup Stories
-485,Which currency is used in Kuwait?,Dinar,Nakfa,Kwanza,,A,hard,Money Basics
+485,Which currency is used in Kuwait?,Kwanza,Dinar,Nakfa,,B,hard,Money Basics
 486,What is a startup accelerator?,A gas pedal part,A fixed term program with funding and mentorship,A legal firm,,B,hard,Business Terms
-487,Which company owns Ben and Jerry's?,Breyers,Blue Bell,Unilever,,C,hard,Brand Origins
-488,What is a down payment?,The upfront portion of a purchase price,A monthly fee,A rejected offer,,A,hard,Money Basics
-489,Which company makes the ROG Ally handheld?,MSI,Asus,Acer,,B,hard,Famous Companies
-490,What is a cap table?,A table of funding caps,An office chart,A record of a startup's ownership,,C,hard,Markets and Investing
-491,Which company owns the Ray-Ban brand?,EssilorLuxottica,Marchon,Safilo,,A,hard,Brand Origins
-492,What is bootstrapping?,Getting a bank loan,Growing without outside funding,Selling the company,,B,hard,Business Terms
-493,Which company makes the Sonata sedan?,SsangYong,Polestar,Hyundai,,C,hard,Famous Companies
-494,What is a junk bond?,A high yield high risk bond,A government bond,A worthless stock,,A,hard,Markets and Investing
+487,Which company owns Ben and Jerry's?,Blue Bell,Breyers,Unilever,,C,hard,Brand Origins
+488,What is a down payment?,A monthly fee,A rejected offer,The upfront portion of a purchase price,,C,hard,Money Basics
+489,Which company makes the ROG Ally handheld?,Asus,Acer,MSI,,A,hard,Famous Companies
+490,What is a cap table?,An office chart,A table of funding caps,A record of a startup's ownership,,C,hard,Markets and Investing
+491,Which company owns the Ray-Ban brand?,Safilo,EssilorLuxottica,Marchon,,B,hard,Brand Origins
+492,What is bootstrapping?,Selling the company,Getting a bank loan,Growing without outside funding,,C,hard,Business Terms
+493,Which company makes the Sonata sedan?,Polestar,SsangYong,Hyundai,,C,hard,Famous Companies
+494,What is a junk bond?,A government bond,A high yield high risk bond,A worthless stock,,B,hard,Markets and Investing
 495,Who founded the Hershey chocolate company?,Frank Mars,Milton Hershey,William Wrigley,,B,hard,Startup Stories
-496,What is an audit?,A tax bill,A staff review only,An independent check of accounts,,C,hard,Business Terms
-497,Which company makes the QuietComfort headphones?,Bose,Sennheiser,Bowers and Wilkins,,A,hard,Famous Companies
-498,What is a stock buyback?,Buying rival shares,A company repurchasing its own shares,Employee stock gifts,,B,hard,Markets and Investing
-499,Which company makes Galaxy Buds earphones?,Jabra,Anker,Samsung,,C,hard,Famous Companies
-500,What is an acquisition premium?,The amount paid above market value,A loyalty reward,A buyer's discount,,A,hard,Markets and Investing
-501,Which currency is used in Singapore?,Brunei Dollar,Singapore Dollar,Pataca,,B,hard,Money Basics
-502,What is a franchise royalty?,A one time fee only,A government tax,An ongoing percent of sales paid to the brand,,C,hard,Business Terms
-503,Which company makes Snapdragon phone chips?,Qualcomm,HiSilicon,MediaTek,,A,hard,Famous Companies
-504,What is a tender offer?,A construction bid,A public offer to buy shares at a set price,A legal summons,,B,hard,Markets and Investing
+496,What is an audit?,A staff review only,An independent check of accounts,A tax bill,,B,hard,Business Terms
+497,Which company makes the QuietComfort headphones?,Sennheiser,Bowers and Wilkins,Bose,,C,hard,Famous Companies
+498,What is a stock buyback?,A company repurchasing its own shares,Employee stock gifts,Buying rival shares,,A,hard,Markets and Investing
+499,Which company makes Galaxy Buds earphones?,Jabra,Samsung,Anker,,B,hard,Famous Companies
+500,What is an acquisition premium?,The amount paid above market value,A buyer's discount,A loyalty reward,,A,hard,Markets and Investing
+501,Which currency is used in Singapore?,Brunei Dollar,Pataca,Singapore Dollar,,C,hard,Money Basics
+502,What is a franchise royalty?,A one time fee only,An ongoing percent of sales paid to the brand,A government tax,,B,hard,Business Terms
+503,Which company makes Snapdragon phone chips?,HiSilicon,Qualcomm,MediaTek,,B,hard,Famous Companies
+504,What is a tender offer?,A legal summons,A construction bid,A public offer to buy shares at a set price,,C,hard,Markets and Investing
 505,Which company makes the Escape SUV?,Suzuki,Buick,Ford,,C,hard,Famous Companies
 506,What is a prospectus?,A document detailing an offering,A resignation letter,A university brochure,,A,hard,Markets and Investing
-507,Which company makes Cheerios?,Kellogg's,General Mills,Post Holdings,,B,hard,Brand Origins
+507,Which company makes Cheerios?,General Mills,Post Holdings,Kellogg's,,A,hard,Brand Origins
 508,What is a bearer bond?,A digital only bond,A bond for carriers,A bond owned by whoever holds it,,C,hard,Markets and Investing
-509,Which company owns the Vaseline brand?,Unilever,Cetaphil,Nivea,,A,hard,Brand Origins
+509,Which company owns the Vaseline brand?,Cetaphil,Nivea,Unilever,,C,hard,Brand Origins
 510,What is acquisition financing?,Buying on credit cards,Borrowing to fund a purchase,A mortgage type,,B,hard,Markets and Investing
 511,Which company makes the Odyssey minivan?,Volkswagen,Renault,Honda,,C,hard,Famous Companies
-512,What is a margin call?,A demand for funds when collateral falls,A sales technique,A phone call from HR,,A,hard,Markets and Investing
+512,What is a margin call?,A phone call from HR,A sales technique,A demand for funds when collateral falls,,C,hard,Markets and Investing
 513,Which company makes the Shark vacuums?,Dyson,SharkNinja,Bissell,,B,hard,Famous Companies
-514,What is a golden share?,A premium bond,An executive bonus share,A share with special veto rights,,C,hard,Markets and Investing
+514,What is a golden share?,An executive bonus share,A premium bond,A share with special veto rights,,C,hard,Markets and Investing
 515,Which company makes M and M candies?,Mars,Mondelez,Ferrero,,A,hard,Brand Origins
-516,What is a strike price?,The market price always,The set price in an option contract,A union demand,,B,hard,Markets and Investing
-517,Which studio created The Sims?,Zynga,Lucasfilm,Maxis,,C,hard,Famous Companies
-518,What is a SPAC?,A shell company raised to acquire,A pension fund,A crypto token,,A,hard,Markets and Investing
+516,What is a strike price?,The set price in an option contract,A union demand,The market price always,,A,hard,Markets and Investing
+517,Which studio created The Sims?,Lucasfilm,Zynga,Maxis,,C,hard,Famous Companies
+518,What is a SPAC?,A shell company raised to acquire,A crypto token,A pension fund,,A,hard,Markets and Investing
 519,Which company makes the Ibanez guitars?,Fender,Hoshino,Gibson,,B,hard,Brand Origins
-520,What is the wholesale price?,The retail sticker price,A volume discount only,The price charged to retailers,,C,hard,Money Basics
-521,Which studio created the Warcraft series?,Blizzard,Riot Games,ArenaNet,,A,hard,Famous Companies
-522,What is a fiscal year?,The calendar year always,A company's accounting year,A tax penalty period,,B,hard,Business Terms
-523,Which watchmaker owns the Tudor brand?,Swatch Group,Oris,Rolex,,C,hard,Brand Origins
-524,What does an underwriter do for an IPO?,Prices and sells the new issue,A loan officer,An insurance claims clerk,,A,hard,Markets and Investing
-525,Which company owns the RC Cola brand?,Shasta,Keurig Dr Pepper,Faygo,,B,hard,Money Basics
-526,What is a rights issue?,A legal claim,A shareholder vote,Existing shareholders may buy new shares cheaply,,C,hard,Markets and Investing
+520,What is the wholesale price?,The price charged to retailers,The retail sticker price,A volume discount only,,A,hard,Money Basics
+521,Which studio created the Warcraft series?,Blizzard,ArenaNet,Riot Games,,A,hard,Famous Companies
+522,What is a fiscal year?,A tax penalty period,A company's accounting year,The calendar year always,,B,hard,Business Terms
+523,Which watchmaker owns the Tudor brand?,Oris,Swatch Group,Rolex,,C,hard,Brand Origins
+524,What does an underwriter do for an IPO?,A loan officer,Prices and sells the new issue,An insurance claims clerk,,B,hard,Markets and Investing
+525,Which company owns the RC Cola brand?,Faygo,Shasta,Keurig Dr Pepper,,C,hard,Money Basics
+526,What is a rights issue?,Existing shareholders may buy new shares cheaply,A legal claim,A shareholder vote,,A,hard,Markets and Investing
 527,Which company created the Pac Man game?,Namco,Williams Electronics,Taito,,A,hard,Famous Companies
-528,What is a P and L statement?,A loan document,A report of income and expenses,A savings bond,,B,hard,Business Terms
-529,Which company owns the Venmo app?,Square,Zelle,PayPal,,C,hard,Startup Stories
+528,What is a P and L statement?,A report of income and expenses,A loan document,A savings bond,,A,hard,Business Terms
+529,Which company owns the Venmo app?,Zelle,Square,PayPal,,C,hard,Startup Stories
 530,What is the balance sheet equation?,Assets equal liabilities plus equity,Cash equals income,Profit equals revenue minus costs,,A,hard,Business Terms
-531,Which company created Candy Crush?,Peak Games,King,Playrix,,B,hard,Famous Companies
-532,What is an IPO roadshow?,A street parade,A test drive,Pre listing investor presentations,,C,hard,Markets and Investing
-533,Which company makes the Silverado rival F-Series?,Chevrolet,Hummer,Jeep,,A,hard,Famous Companies
-534,What is a remittance?,A returned payment,Money sent to another party,A bank fee,,B,hard,Money Basics
-535,Which company makes Twix?,Whittakers,Milka,Mars,,C,hard,Brand Origins
-536,What is a non compete clause?,Bar on working for rivals after leaving,A supplier discount,A gym membership term,,A,hard,Business Terms
-537,Which company makes Ritz crackers?,Lance,Mondelez,Pepperidge Farm,,B,hard,Brand Origins
-538,What does EIN stand for?,European Industry Notice,Employee Incentive Number,Employer Identification Number,,C,hard,Money Basics
-539,Which studio developed the Pokemon games?,Game Freak,Creatures Inc,The Pokemon Company,,A,hard,Famous Companies
+531,Which company created Candy Crush?,King,Playrix,Peak Games,,A,hard,Famous Companies
+532,What is an IPO roadshow?,A test drive,A street parade,Pre listing investor presentations,,C,hard,Markets and Investing
+533,Which company makes the Silverado rival F-Series?,Hummer,Chevrolet,Jeep,,B,hard,Famous Companies
+534,What is a remittance?,Money sent to another party,A returned payment,A bank fee,,A,hard,Money Basics
+535,Which company makes Twix?,Whittakers,Mars,Milka,,B,hard,Brand Origins
+536,What is a non compete clause?,Bar on working for rivals after leaving,A gym membership term,A supplier discount,,A,hard,Business Terms
+537,Which company makes Ritz crackers?,Mondelez,Pepperidge Farm,Lance,,A,hard,Brand Origins
+538,What does EIN stand for?,European Industry Notice,Employer Identification Number,Employee Incentive Number,,B,hard,Money Basics
+539,Which studio developed the Pokemon games?,The Pokemon Company,Game Freak,Creatures Inc,,B,hard,Famous Companies
 540,What is a proxy vote?,Voting by mail only,Voting by a representative,A failed vote,,B,hard,Markets and Investing
-541,Which car group owns Audi?,Mercedes-Benz,Saab,Volkswagen Group,,C,hard,Famous Companies
-542,What is dividend yield?,Annual dividend as a percent of price,Total dividends ever paid,Profit per share,,A,hard,Markets and Investing
-543,Which company created Second Life?,Maxis,Linden Lab,Sulake,,B,hard,Famous Companies
-544,What is a depreciation schedule?,A meeting calendar,A layoff timeline,A table of asset value decline over time,,C,hard,Business Terms
+541,Which car group owns Audi?,Volkswagen Group,Mercedes-Benz,Saab,,A,hard,Famous Companies
+542,What is dividend yield?,Total dividends ever paid,Annual dividend as a percent of price,Profit per share,,B,hard,Markets and Investing
+543,Which company created Second Life?,Sulake,Linden Lab,Maxis,,B,hard,Famous Companies
+544,What is a depreciation schedule?,A layoff timeline,A meeting calendar,A table of asset value decline over time,,C,hard,Business Terms
 545,Which company makes Kinder eggs?,Ferrero,Godiva,Lindt,,A,hard,Brand Origins
-546,What is a reverse stock split?,Issuing dividends,Combining shares to raise the price,A bankruptcy step,,B,hard,Markets and Investing
-547,Which company owns the Lee jeans brand?,Levi Strauss,Guess,VF Corporation,,C,hard,Brand Origins
-548,What is an angel term sheet?,A non binding offer outlining investment terms,A customs declaration,A real estate deed,,A,hard,Markets and Investing
-549,Which company makes the Swiffer?,SC Johnson,Procter and Gamble,Church and Dwight,,B,hard,Brand Origins
-550,What is a golden handshake?,A job offer,A partnership deal,A large payout on leaving a company,,C,hard,Business Terms
-551,Which currency is used in Bangladesh?,Taka,Somoni,Rupee,,A,hard,Money Basics
-552,What is a mission statement?,A military order,A company's core purpose,A sales target,,B,hard,Business Terms
-553,Which company makes Diet Coke?,Keurig Dr Pepper,Zevia,Coca-Cola,,C,hard,Brand Origins
-554,What is collateral?,An asset pledged for a loan,A type of interest,A gift to a bank,,A,hard,Money Basics
-555,Who is the chief executive of Dropbox?,Arash Ferdowsi,Drew Houston,Tobi Lutke,,B,hard,Startup Stories
-556,What is a buy side analyst?,A real estate agent,A customer support role,One who advises fund buyers,,C,hard,Markets and Investing
-557,Which company bought Slack in 2021?,Salesforce,Zoom,Amazon,,A,hard,Startup Stories
-558,What is a quiet period?,A lunch break,Restricted communications before a listing,A market holiday,,B,hard,Markets and Investing
+546,What is a reverse stock split?,Issuing dividends,A bankruptcy step,Combining shares to raise the price,,C,hard,Markets and Investing
+547,Which company owns the Lee jeans brand?,Guess,VF Corporation,Levi Strauss,,B,hard,Brand Origins
+548,What is an angel term sheet?,A customs declaration,A non binding offer outlining investment terms,A real estate deed,,B,hard,Markets and Investing
+549,Which company makes the Swiffer?,Church and Dwight,SC Johnson,Procter and Gamble,,C,hard,Brand Origins
+550,What is a golden handshake?,A job offer,A large payout on leaving a company,A partnership deal,,B,hard,Business Terms
+551,Which currency is used in Bangladesh?,Rupee,Somoni,Taka,,C,hard,Money Basics
+552,What is a mission statement?,A company's core purpose,A military order,A sales target,,A,hard,Business Terms
+553,Which company makes Diet Coke?,Coca-Cola,Keurig Dr Pepper,Zevia,,A,hard,Brand Origins
+554,What is collateral?,A gift to a bank,An asset pledged for a loan,A type of interest,,B,hard,Money Basics
+555,Who is the chief executive of Dropbox?,Arash Ferdowsi,Tobi Lutke,Drew Houston,,C,hard,Startup Stories
+556,What is a buy side analyst?,A customer support role,One who advises fund buyers,A real estate agent,,B,hard,Markets and Investing
+557,Which company bought Slack in 2021?,Salesforce,Amazon,Zoom,,A,hard,Startup Stories
+558,What is a quiet period?,A lunch break,A market holiday,Restricted communications before a listing,,C,hard,Markets and Investing
 559,Which company owns the Chrysler brand?,General Motors,Plymouth,Stellantis,,C,hard,Famous Companies
 560,What is an angel group?,A network of individual investors,A bank syndicate,A choir,,A,hard,Markets and Investing
 561,Which company owns the Converse brand?,Vans,Nike,K-Swiss,,B,hard,Brand Origins
-562,What is float in banking?,A loan type,An interest rate,Money in transit between accounts,,C,hard,Money Basics
-563,Which studio created the Halo franchise?,Bungie,ID Software,Gearbox,,A,hard,Famous Companies
-564,What is a stake in a company?,A loan repayment,An ownership share,A board seat only,,B,hard,Business Terms
-565,Which company makes the Mini Cooper?,Alfa Romeo,Audi,BMW,,C,hard,Famous Companies
+562,What is float in banking?,Money in transit between accounts,A loan type,An interest rate,,A,hard,Money Basics
+563,Which studio created the Halo franchise?,Gearbox,Bungie,ID Software,,B,hard,Famous Companies
+564,What is a stake in a company?,A loan repayment,A board seat only,An ownership share,,C,hard,Business Terms
+565,Which company makes the Mini Cooper?,BMW,Audi,Alfa Romeo,,A,hard,Famous Companies
 566,What is an angel round valuation?,The startup worth around the funding,The office rent value,The founder's salary,,A,hard,Markets and Investing
 567,Which company makes Hot Wheels cars?,Hasbro,Mattel,LEGO,,B,hard,Brand Origins
-568,What is an earnout?,A salary advance,A signing bonus,Extra payment tied to future performance,,C,hard,Business Terms
+568,What is an earnout?,Extra payment tied to future performance,A salary advance,A signing bonus,,A,hard,Business Terms
 569,Which studio created Overwatch?,Blizzard,Raven Software,Bungie,,A,hard,Famous Companies
-570,What is a payee?,One who sends payment,One who receives payment,A bank teller,,B,hard,Money Basics
-571,Which company makes Barbie dolls?,Playmates Toys,MGA Entertainment,Mattel,,C,hard,Brand Origins
-572,What is a startup runway?,The months until cash runs out,A sales quarter,An airport strip,,A,hard,Markets and Investing
-573,Which company makes the Crock-Pot?,Hamilton Beach,Newell Brands,Ninja,,B,hard,Brand Origins
-574,What is a bond coupon rate?,The bond market price,An interest gift,The fixed interest paid on a bond,,C,hard,Markets and Investing
-575,Which company makes After Effects?,Adobe,Avid,DaVinci Resolve,,A,hard,Famous Companies
-576,What is a stock ticker?,A stockbroker device,A short symbol identifying a share,A market bell,,B,hard,Markets and Investing
-577,Which company makes Budweiser beer?,Miller,Coors,Anheuser-Busch,,C,hard,Brand Origins
-578,What is a non disclosure agreement?,Contract to keep information secret,An employment contract,A sales receipt,,A,hard,Business Terms
-579,Which company makes the Escalade?,Lincoln,Cadillac,Chrysler,,B,hard,Famous Companies
-580,What is a seed round?,A farm subsidy,A stock dividend,The earliest startup funding stage,,C,hard,Markets and Investing
-581,Which company owns Burger King?,Restaurant Brands International,Inspire Brands,Yum Brands,,A,hard,Famous Companies
-582,What is a payroll?,A company's clients,The list of employees and their pay,A tax form only,,B,hard,Business Terms
+570,What is a payee?,One who receives payment,A bank teller,One who sends payment,,A,hard,Money Basics
+571,Which company makes Barbie dolls?,MGA Entertainment,Playmates Toys,Mattel,,C,hard,Brand Origins
+572,What is a startup runway?,An airport strip,A sales quarter,The months until cash runs out,,C,hard,Markets and Investing
+573,Which company makes the Crock-Pot?,Newell Brands,Ninja,Hamilton Beach,,A,hard,Brand Origins
+574,What is a bond coupon rate?,The fixed interest paid on a bond,An interest gift,The bond market price,,A,hard,Markets and Investing
+575,Which company makes After Effects?,DaVinci Resolve,Avid,Adobe,,C,hard,Famous Companies
+576,What is a stock ticker?,A market bell,A short symbol identifying a share,A stockbroker device,,B,hard,Markets and Investing
+577,Which company makes Budweiser beer?,Miller,Anheuser-Busch,Coors,,B,hard,Brand Origins
+578,What is a non disclosure agreement?,An employment contract,A sales receipt,Contract to keep information secret,,C,hard,Business Terms
+579,Which company makes the Escalade?,Cadillac,Chrysler,Lincoln,,A,hard,Famous Companies
+580,What is a seed round?,A stock dividend,A farm subsidy,The earliest startup funding stage,,C,hard,Markets and Investing
+581,Which company owns Burger King?,Yum Brands,Inspire Brands,Restaurant Brands International,,C,hard,Famous Companies
+582,What is a payroll?,The list of employees and their pay,A tax form only,A company's clients,,A,hard,Business Terms
 583,Which studio created the Doom game?,Apogee,GT Interactive,ID Software,,C,hard,Famous Companies
-584,What is a dividend reinvestment plan?,Automatic reinvestment of dividends,A tax credit,A savings account type,,A,hard,Markets and Investing
-585,Which company makes Kleenex tissues?,Procter and Gamble,Kimberly-Clark,Georgia-Pacific,,B,hard,Brand Origins
-586,What is a shareholder meeting?,A staff party,A board retreat only,The annual gathering of owners,,C,hard,Business Terms
+584,What is a dividend reinvestment plan?,A savings account type,Automatic reinvestment of dividends,A tax credit,,B,hard,Markets and Investing
+585,Which company makes Kleenex tissues?,Procter and Gamble,Georgia-Pacific,Kimberly-Clark,,C,hard,Brand Origins
+586,What is a shareholder meeting?,A board retreat only,The annual gathering of owners,A staff party,,B,hard,Business Terms
 587,Which company makes Ziploc bags?,SC Johnson,Hefty,Glad,,A,hard,Brand Origins
-588,What is a market bubble?,A trading error,Prices inflated beyond real value,A market crash,,B,hard,Markets and Investing
-589,Which company owns the Airstream brand?,Winnebago Industries,Forest River,Thor Industries,,C,hard,Famous Companies
-590,What is a franchise renewal?,Extending the operating agreement,Closing the location,Buying a second brand,,A,hard,Business Terms
-591,Which company makes Magic The Gathering cards?,Konami,Wizards of the Coast,Upper Deck,,B,hard,Brand Origins
+588,What is a market bubble?,Prices inflated beyond real value,A market crash,A trading error,,A,hard,Markets and Investing
+589,Which company owns the Airstream brand?,Winnebago Industries,Thor Industries,Forest River,,B,hard,Famous Companies
+590,What is a franchise renewal?,Closing the location,Extending the operating agreement,Buying a second brand,,B,hard,Business Terms
+591,Which company makes Magic The Gathering cards?,Wizards of the Coast,Konami,Upper Deck,,A,hard,Brand Origins
 592,What is remittance advice?,A returned check,A bank statement,Payment notification sent to a supplier,,C,hard,Business Terms
-593,Which company makes Ore-Ida frozen potatoes?,Kraft Heinz,McCain Foods,Conagra,,A,hard,Brand Origins
-594,What is a divestiture?,Buying a rival,Selling off a business unit,A stock split,,B,hard,Markets and Investing
+593,Which company makes Ore-Ida frozen potatoes?,Conagra,Kraft Heinz,McCain Foods,,B,hard,Brand Origins
+594,What is a divestiture?,Selling off a business unit,Buying a rival,A stock split,,A,hard,Markets and Investing
 595,Which company makes Lysol?,Clorox,Purell,Reckitt,,C,hard,Brand Origins
-596,What is a white knight in a takeover?,A friendly acquirer rescuing a target,A market regulator,A failed bidder,,A,hard,Markets and Investing
+596,What is a white knight in a takeover?,A market regulator,A failed bidder,A friendly acquirer rescuing a target,,C,hard,Markets and Investing
 597,Which company makes the Easy-Bake Oven?,Mattel,Hasbro,Kenner,,B,hard,Brand Origins
-598,What is a merchant bank?,A retail branch,A currency exchange,A bank that invests in businesses,,C,hard,Markets and Investing
-599,Which company owns the Dr Pepper brand?,Keurig Dr Pepper,PepsiCo,National Beverage,,A,hard,Brand Origins
-600,What is a letter of intent?,A farewell memo,Preliminary commitment before a deal,A stock order,,B,hard,Business Terms
-601,Which firm bought the WhatsApp messenger?,Facebook,Viber,Line,Tencent,A,expert,Startup Stories
-602,What does ARR stand for in SaaS?,Annual Rate of Return,Annual Recurring Revenue,Adjusted Revenue Report,Asset Recovery Rate,B,expert,Markets and Investing
-603,Which company owns the Wall Street Journal?,Thomson Reuters,Bloomberg,News Corp,Hearst,C,expert,Famous Companies
+598,What is a merchant bank?,A currency exchange,A bank that invests in businesses,A retail branch,,B,hard,Markets and Investing
+599,Which company owns the Dr Pepper brand?,PepsiCo,National Beverage,Keurig Dr Pepper,,C,hard,Brand Origins
+600,What is a letter of intent?,A stock order,A farewell memo,Preliminary commitment before a deal,,C,hard,Business Terms
+601,Which firm bought the WhatsApp messenger?,Line,Tencent,Viber,Facebook,D,expert,Startup Stories
+602,What does ARR stand for in SaaS?,Asset Recovery Rate,Annual Rate of Return,Annual Recurring Revenue,Adjusted Revenue Report,C,expert,Markets and Investing
+603,Which company owns the Wall Street Journal?,Thomson Reuters,Hearst,News Corp,Bloomberg,C,expert,Famous Companies
 604,What is a syndicated loan?,A peer to peer loan,A newspaper loan,A syndicated TV deal,A loan from a group of lenders,D,expert,Markets and Investing
-605,Which company acquired Slack?,Salesforce,Workday,SAP,Adobe,A,expert,Startup Stories
-606,What is a stock beta?,Its dividend rate,Volatility versus the market,Its issue price,Its float size,B,expert,Markets and Investing
-607,Which company makes the Oracle Database?,Ingres,Teradata,Oracle,MongoDB,C,expert,Famous Companies
-608,Who wrote The Lean Startup?,Peter Thiel,Steve Blank,Paul Graham,Eric Ries,D,expert,Startup Stories
-609,Which company owns Snapchat?,Snap Inc,Threads,Pinterest,Discord,A,expert,Famous Companies
-610,What is treasury stock?,Government bonds held,Repurchased company shares,New shares pending,Foreign holdings,B,expert,Markets and Investing
-611,Which company owns Vogue magazine?,Advance Publications,Time Inc,Conde Nast,Meredith,C,expert,Brand Origins
+605,Which company acquired Slack?,Adobe,Workday,Salesforce,SAP,C,expert,Startup Stories
+606,What is a stock beta?,Its float size,Volatility versus the market,Its issue price,Its dividend rate,B,expert,Markets and Investing
+607,Which company makes the Oracle Database?,Ingres,Teradata,MongoDB,Oracle,D,expert,Famous Companies
+608,Who wrote The Lean Startup?,Eric Ries,Peter Thiel,Paul Graham,Steve Blank,A,expert,Startup Stories
+609,Which company owns Snapchat?,Snap Inc,Threads,Discord,Pinterest,A,expert,Famous Companies
+610,What is treasury stock?,Repurchased company shares,Foreign holdings,New shares pending,Government bonds held,A,expert,Markets and Investing
+611,Which company owns Vogue magazine?,Time Inc,Meredith,Conde Nast,Advance Publications,C,expert,Brand Origins
 612,What does ESOP stand for?,Equity Split Option,European Stock Option Pool,Executive Salary Overlay Plan,Employee Stock Ownership Plan,D,expert,Business Terms
-613,Which agency runs the James Webb Space Telescope?,NASA,ESA,Roscosmos,JAXA,A,expert,Famous Companies
-614,What is a staggered board?,A tilted boardroom table,Directors elected in phases,Sequential CEO terms,A stacked deck,B,expert,Business Terms
-615,Which company makes the Sierra pickup?,Mack Trucks,International Harvester,GMC,Scout Motors,C,expert,Famous Companies
-616,Who wrote The Innovators Dilemma?,Jim Collins,Malcolm Gladwell,Michael Porter,Clayton Christensen,D,expert,Startup Stories
-617,What does the SWIFT network provide?,Cross border payment messaging,Currency printing,Credit scoring,Stock clearing,A,expert,Markets and Investing
+613,Which agency runs the James Webb Space Telescope?,JAXA,Roscosmos,ESA,NASA,D,expert,Famous Companies
+614,What is a staggered board?,Sequential CEO terms,Directors elected in phases,A tilted boardroom table,A stacked deck,B,expert,Business Terms
+615,Which company makes the Sierra pickup?,Scout Motors,GMC,Mack Trucks,International Harvester,B,expert,Famous Companies
+616,Who wrote The Innovators Dilemma?,Malcolm Gladwell,Jim Collins,Clayton Christensen,Michael Porter,C,expert,Startup Stories
+617,What does the SWIFT network provide?,Cross border payment messaging,Stock clearing,Currency printing,Credit scoring,A,expert,Markets and Investing
 618,Which company makes Corona beer?,Heineken,Grupo Modelo,Constellation Brands,FEMSA,B,expert,Brand Origins
 619,What is a liquidation preference?,A cleaning clause,A tax lien,Investors paid first in a sale,A dividend rule,C,expert,Markets and Investing
-620,Which company makes Ryzen processors?,Qualcomm,VIA Technologies,Nvidia,AMD,D,expert,Famous Companies
-621,Who founded Sequoia Capital?,Don Valentine,Arthur Rock,Tom Perkins,John Doerr,A,expert,Startup Stories
-622,What is a double trigger?,A bike gear,Two conditions needed for vesting acceleration,A dual IPO,A tax penalty,B,expert,Markets and Investing
-623,Which company bought Oculus?,Pico Interactive,Razer,Facebook,Pimax,C,expert,Startup Stories
-624,What is a cap rate in real estate?,An interest cap,A hat size,A loan ceiling,Property income divided by value,D,expert,Markets and Investing
-625,Which company makes Dettol cleaner?,Reckitt,Diversey,Ecolab,3M,A,expert,Brand Origins
-626,What is an anti dilution provision?,A water additive,Protection for investors from ownership loss,A hiring rule,A stock split type,B,expert,Markets and Investing
-627,Which car brand makes the 911?,Jaguar,Lotus,Porsche,Maserati,C,expert,Famous Companies
-628,What is an accredited investor?,A bank auditor,A licensed broker,Any retail buyer,An investor meeting wealth or income thresholds,D,expert,Markets and Investing
-629,Which company owns Genentech?,Roche,Novartis,Pfizer,Merck,A,expert,Famous Companies
-630,What does an escrow agent do?,A mortgage broker,Neutral holder of funds in a deal,A loan shark,A customs officer,B,expert,Money Basics
-631,Which company owns the Firestone tire brand?,Goodyear,Michelin,Bridgestone,Continental,C,expert,Brand Origins
-632,What is a founder vesting schedule?,A salary ladder,A clothing line plan,A meeting cadence,The timeline for founders to earn their shares,D,expert,Markets and Investing
+620,Which company makes Ryzen processors?,Qualcomm,AMD,VIA Technologies,Nvidia,B,expert,Famous Companies
+621,Who founded Sequoia Capital?,Don Valentine,Tom Perkins,Arthur Rock,John Doerr,A,expert,Startup Stories
+622,What is a double trigger?,Two conditions needed for vesting acceleration,A tax penalty,A dual IPO,A bike gear,A,expert,Markets and Investing
+623,Which company bought Oculus?,Pimax,Pico Interactive,Razer,Facebook,D,expert,Startup Stories
+624,What is a cap rate in real estate?,An interest cap,Property income divided by value,A hat size,A loan ceiling,B,expert,Markets and Investing
+625,Which company makes Dettol cleaner?,Reckitt,Ecolab,Diversey,3M,A,expert,Brand Origins
+626,What is an anti dilution provision?,Protection for investors from ownership loss,A water additive,A hiring rule,A stock split type,A,expert,Markets and Investing
+627,Which car brand makes the 911?,Jaguar,Porsche,Maserati,Lotus,B,expert,Famous Companies
+628,What is an accredited investor?,A bank auditor,An investor meeting wealth or income thresholds,A licensed broker,Any retail buyer,B,expert,Markets and Investing
+629,Which company owns Genentech?,Roche,Merck,Pfizer,Novartis,A,expert,Famous Companies
+630,What does an escrow agent do?,A mortgage broker,A loan shark,Neutral holder of funds in a deal,A customs officer,C,expert,Money Basics
+631,Which company owns the Firestone tire brand?,Goodyear,Michelin,Continental,Bridgestone,D,expert,Brand Origins
+632,What is a founder vesting schedule?,A meeting cadence,A clothing line plan,The timeline for founders to earn their shares,A salary ladder,C,expert,Markets and Investing
 633,Which company makes the Roomba vacuum?,iRobot,SharkNinja,Neato,Eufy,A,expert,Famous Companies
-634,What is a take rate?,A movie gross,The platform percent per transaction,A tax bracket,A loan fee,B,expert,Markets and Investing
-635,Which organization created the GPS satellite system?,NASA,SpaceX,US Department of Defense,CNES,C,expert,Famous Companies
-636,What is a meme stock?,A bond fund,A delisted stock,A stable blue chip,A stock driven by social media hype,D,expert,Markets and Investing
-637,Which company owns the Vans shoes brand?,VF Corporation,Converse,DC Shoes,Etnies,A,expert,Brand Origins
-638,What is a wash sale?,A laundry business,Selling and repurchasing to harvest a loss,A share freeze,A fraudulent refund,B,expert,Markets and Investing
-639,Which company owns the Fendi fashion house?,Kering,Richemont,LVMH,Prada,C,expert,Brand Origins
-640,What is a data room?,A conference hall,A server closet,A filing cabinet,A secure space for due diligence documents,D,expert,Business Terms
-641,Which company makes Swiss Miss cocoa?,Conagra,Land O Lakes,Ghirardelli,Lake Champlain,A,expert,Brand Origins
-642,What is a board observer right?,A museum pass,Right to attend board meetings without voting,A press badge,An audit right,B,expert,Business Terms
-643,Which company owns the Old Navy chain?,American Eagle,Forever 21,Gap Inc,Uniqlo,C,expert,Famous Companies
-644,What is a pro rata right?,A voting rule,Equal per party share,A bonus pool,Investor keeps ownership percent in new rounds,D,expert,Markets and Investing
-645,Which company owns the Perrier water brand?,Nestle,Evian,Gerolsteiner,Volvic,A,expert,Brand Origins
-646,What is a bridge round?,A toll charge,Interim funding between rounds,A construction loan,An exit strategy,B,expert,Markets and Investing
-647,Which company is known for yellow construction machines?,Komatsu,John Deere,Caterpillar,Hitachi,C,expert,Famous Companies
-648,What does ESPP stand for?,European Shares Pool,Executive Salary Protection Program,Equity Split Price,Employee Stock Purchase Plan,D,expert,Business Terms
+634,What is a take rate?,A movie gross,A loan fee,A tax bracket,The platform percent per transaction,D,expert,Markets and Investing
+635,Which organization created the GPS satellite system?,SpaceX,NASA,US Department of Defense,CNES,C,expert,Famous Companies
+636,What is a meme stock?,A stable blue chip,A stock driven by social media hype,A bond fund,A delisted stock,B,expert,Markets and Investing
+637,Which company owns the Vans shoes brand?,Converse,VF Corporation,DC Shoes,Etnies,B,expert,Brand Origins
+638,What is a wash sale?,Selling and repurchasing to harvest a loss,A share freeze,A laundry business,A fraudulent refund,A,expert,Markets and Investing
+639,Which company owns the Fendi fashion house?,LVMH,Richemont,Kering,Prada,A,expert,Brand Origins
+640,What is a data room?,A conference hall,A server closet,A secure space for due diligence documents,A filing cabinet,C,expert,Business Terms
+641,Which company makes Swiss Miss cocoa?,Conagra,Ghirardelli,Land O Lakes,Lake Champlain,A,expert,Brand Origins
+642,What is a board observer right?,Right to attend board meetings without voting,A press badge,A museum pass,An audit right,A,expert,Business Terms
+643,Which company owns the Old Navy chain?,American Eagle,Uniqlo,Forever 21,Gap Inc,D,expert,Famous Companies
+644,What is a pro rata right?,A bonus pool,Investor keeps ownership percent in new rounds,A voting rule,Equal per party share,B,expert,Markets and Investing
+645,Which company owns the Perrier water brand?,Gerolsteiner,Evian,Nestle,Volvic,C,expert,Brand Origins
+646,What is a bridge round?,A toll charge,A construction loan,An exit strategy,Interim funding between rounds,D,expert,Markets and Investing
+647,Which company is known for yellow construction machines?,John Deere,Caterpillar,Hitachi,Komatsu,B,expert,Famous Companies
+648,What does ESPP stand for?,European Shares Pool,Executive Salary Protection Program,Employee Stock Purchase Plan,Equity Split Price,C,expert,Business Terms
 649,Which company owns the TikTok app?,ByteDance,Bilibili,Kuaishou,Baidu,A,expert,Famous Companies
-650,What is a market order?,An order with a price limit,Buy or sell at the current price,A delayed order,A bulk discount,B,expert,Markets and Investing
-651,Which company owns the Eggo waffles brand?,Van de Kamp's,Toaster Strudel,Kellogg's,Pillsbury,C,expert,Brand Origins
-652,What is a lockup expiry?,A merger close,A prison release,A parking end,When insiders may first sell after an IPO,D,expert,Markets and Investing
-653,Which group owns the Zara fashion chain?,Inditex,H&M Group,Fast Retailing,Arcadia,A,expert,Brand Origins
-654,What is stock dilution?,A payout freeze,Ownership shrinking from new shares,A dividend cut,A buyback,B,expert,Markets and Investing
-655,Which company makes OLED TV panels under its own display brand?,Samsung Display,Sharp,LG Display,Hisense,C,expert,Famous Companies
-656,What is a stock option pool?,A bond ladder,A casino prize,A swimming fund,Shares reserved for employees,D,expert,Markets and Investing
-657,Which luxury group owns the Cartier jewelry house?,Richemont,LVMH,Chanel,Tiffany & Co,A,expert,Brand Origins
-658,What is a burn rate?,A fire insurance figure,How fast a startup spends cash,A loan interest,A user fee,B,expert,Markets and Investing
-659,Who founded Forbes magazine?,William Randolph Hearst,Henry Luce,B.C. Forbes,Roy Thomson,C,expert,Startup Stories
-660,What is a SAFE note?,A savings account,A vault deposit,A bond type,A Simple Agreement for Future Equity,D,expert,Markets and Investing
-661,Which company makes Ugg boots?,Deckers,Timberland,Sorel,Bearpaw,A,expert,Brand Origins
-662,What is a 12b-1 fee?,A brokerage commission,A mutual fund marketing fee,A loan origination fee,A tax filing fee,B,expert,Markets and Investing
-663,Who founded Lululemon?,Kevin Plank,Phil Knight,Chip Wilson,Rene Ramillon,C,expert,Startup Stories
+650,What is a market order?,A delayed order,An order with a price limit,A bulk discount,Buy or sell at the current price,D,expert,Markets and Investing
+651,Which company owns the Eggo waffles brand?,Toaster Strudel,Pillsbury,Van de Kamp's,Kellogg's,D,expert,Brand Origins
+652,What is a lockup expiry?,A merger close,A parking end,When insiders may first sell after an IPO,A prison release,C,expert,Markets and Investing
+653,Which group owns the Zara fashion chain?,Arcadia,Fast Retailing,H&M Group,Inditex,D,expert,Brand Origins
+654,What is stock dilution?,Ownership shrinking from new shares,A dividend cut,A buyback,A payout freeze,A,expert,Markets and Investing
+655,Which company makes OLED TV panels under its own display brand?,Hisense,Samsung Display,LG Display,Sharp,C,expert,Famous Companies
+656,What is a stock option pool?,A swimming fund,A casino prize,Shares reserved for employees,A bond ladder,C,expert,Markets and Investing
+657,Which luxury group owns the Cartier jewelry house?,Richemont,Chanel,Tiffany & Co,LVMH,A,expert,Brand Origins
+658,What is a burn rate?,A loan interest,A user fee,How fast a startup spends cash,A fire insurance figure,C,expert,Markets and Investing
+659,Who founded Forbes magazine?,William Randolph Hearst,B.C. Forbes,Roy Thomson,Henry Luce,B,expert,Startup Stories
+660,What is a SAFE note?,A Simple Agreement for Future Equity,A vault deposit,A savings account,A bond type,A,expert,Markets and Investing
+661,Which company makes Ugg boots?,Sorel,Timberland,Deckers,Bearpaw,C,expert,Brand Origins
+662,What is a 12b-1 fee?,A brokerage commission,A loan origination fee,A tax filing fee,A mutual fund marketing fee,D,expert,Markets and Investing
+663,Who founded Lululemon?,Rene Ramillon,Kevin Plank,Chip Wilson,Phil Knight,C,expert,Startup Stories
 664,What is a growth stock?,A money market fund,A dividend staple,A municipal bond,Shares expected to grow above average,D,expert,Markets and Investing
-665,Who founded the Chobani yogurt company?,Hamdi Ulukaya,Muhtar Kent,Domenico De Sole,Ahmet Boyaci,A,expert,Startup Stories
-666,What is a treasury yield?,A corporate dividend,Return on US government debt,A savings promo,A tax refund rate,B,expert,Markets and Investing
-667,Which company owns the Timberland boot brand?,Red Wing,Wolverine Worldwide,VF Corporation,Clarks,C,expert,Brand Origins
-668,What is a penny stock?,A cash bonus,A coin collection,A discount bond,A low priced speculative share,D,expert,Markets and Investing
-669,Who founded HubSpot?,Brian Halligan and Dharmesh Shah,Jamie Siminoff,Marc Benioff,Dara Khosrowshahi,A,expert,Startup Stories
-670,What is a stock screener?,An airport device,A tool filtering shares by criteria,A background check,A metal detector,B,expert,Markets and Investing
-671,Which company owns the HeyDude shoe brand?,Skechers,Hoka,Crocs,Rocket Dog,C,expert,Brand Origins
-672,What is a floor price?,An auction start,A room rate,The highest price,The minimum allowed price,D,expert,Markets and Investing
-673,Who founded the Home Depot chain?,Bernie Marcus and Arthur Blank,Sam Walton,James Cash Penney,Richard Hayne,A,expert,Startup Stories
-674,What is a market maker?,A tradeshow vendor,A firm quoting buy and sell prices,A market researcher,A price regulator,B,expert,Markets and Investing
-675,Which company owns the Hydro Flask brand?,Yeti Holdings,Stanley Black and Decker,Helen of Troy,CamelBak,C,expert,Brand Origins
-676,What is the bid ask spread?,A trading tax,A realtor fee,An auction fee,The gap between buy and sell quotes,D,expert,Markets and Investing
-677,Which company owns the Glassdoor site?,Recruit Holdings,Monster,ZipRecruiter,DHI Group,A,expert,Famous Companies
-678,What is a capital call?,A phone survey,A request for committed investor funds,A margin loan,A board summons,B,expert,Markets and Investing
-679,Who founded Atlassian?,Dylan Field,Stewart Butterfield,Mike Cannon-Brookes and Scott Farquhar,Drew Houston,C,expert,Startup Stories
-680,What is a blue sky law?,A zoning rule,An air quality rule,A patent type,State level securities regulation,D,expert,Markets and Investing
-681,Which eyewear group owns the Persol brand?,EssilorLuxottica,Marcolin,De Rigo,Charmant,A,expert,Brand Origins
-682,What is a capital structure?,An office layout,The mix of debt and equity funding,A stock order type,A loan schedule,B,expert,Business Terms
-683,Which company makes Mega Bloks sets?,K'NEX,Playmobil,Mattel,Tomy,C,expert,Brand Origins
-684,What is an exit strategy?,A marketing calendar,A fire escape plan,A hiring plan,A plan for owners to cash out,D,expert,Business Terms
+665,Who founded the Chobani yogurt company?,Ahmet Boyaci,Hamdi Ulukaya,Domenico De Sole,Muhtar Kent,B,expert,Startup Stories
+666,What is a treasury yield?,A tax refund rate,A savings promo,Return on US government debt,A corporate dividend,C,expert,Markets and Investing
+667,Which company owns the Timberland boot brand?,Red Wing,VF Corporation,Wolverine Worldwide,Clarks,B,expert,Brand Origins
+668,What is a penny stock?,A discount bond,A low priced speculative share,A cash bonus,A coin collection,B,expert,Markets and Investing
+669,Who founded HubSpot?,Dara Khosrowshahi,Marc Benioff,Brian Halligan and Dharmesh Shah,Jamie Siminoff,C,expert,Startup Stories
+670,What is a stock screener?,A tool filtering shares by criteria,A background check,A metal detector,An airport device,A,expert,Markets and Investing
+671,Which company owns the HeyDude shoe brand?,Skechers,Rocket Dog,Crocs,Hoka,C,expert,Brand Origins
+672,What is a floor price?,The highest price,The minimum allowed price,A room rate,An auction start,B,expert,Markets and Investing
+673,Who founded the Home Depot chain?,Sam Walton,James Cash Penney,Richard Hayne,Bernie Marcus and Arthur Blank,D,expert,Startup Stories
+674,What is a market maker?,A market researcher,A tradeshow vendor,A firm quoting buy and sell prices,A price regulator,C,expert,Markets and Investing
+675,Which company owns the Hydro Flask brand?,CamelBak,Stanley Black and Decker,Yeti Holdings,Helen of Troy,D,expert,Brand Origins
+676,What is the bid ask spread?,A realtor fee,An auction fee,The gap between buy and sell quotes,A trading tax,C,expert,Markets and Investing
+677,Which company owns the Glassdoor site?,ZipRecruiter,Recruit Holdings,Monster,DHI Group,B,expert,Famous Companies
+678,What is a capital call?,A request for committed investor funds,A margin loan,A phone survey,A board summons,A,expert,Markets and Investing
+679,Who founded Atlassian?,Mike Cannon-Brookes and Scott Farquhar,Drew Houston,Dylan Field,Stewart Butterfield,A,expert,Startup Stories
+680,What is a blue sky law?,A zoning rule,A patent type,An air quality rule,State level securities regulation,D,expert,Markets and Investing
+681,Which eyewear group owns the Persol brand?,EssilorLuxottica,De Rigo,Marcolin,Charmant,A,expert,Brand Origins
+682,What is a capital structure?,A loan schedule,A stock order type,An office layout,The mix of debt and equity funding,D,expert,Business Terms
+683,Which company makes Mega Bloks sets?,K'NEX,Mattel,Tomy,Playmobil,B,expert,Brand Origins
+684,What is an exit strategy?,A marketing calendar,A plan for owners to cash out,A fire escape plan,A hiring plan,B,expert,Business Terms
 685,Which company owns the Play-Doh brand?,Hasbro,Crayola,RoseArt,Melissa and Doug,A,expert,Brand Origins
 686,What is a family office?,A home business,A private firm managing one family's wealth,A real estate agency,An HR department,B,expert,Markets and Investing
-687,Which company makes Fisher-Price toys?,VTech,LeapFrog,Mattel,Tonka,C,expert,Brand Origins
-688,What is a holding company?,A shipping line,A storage business,A staffing firm,A firm that owns other companies' shares,D,expert,Business Terms
-689,Which company makes American Girl dolls?,Mattel,Our Generation,Zapf Creation,Madame Alexander,A,expert,Brand Origins
-690,What is a piggyback round?,A children's game,Investors joining an existing deal,A freight surcharge,A stock loan,B,expert,Markets and Investing
-691,Which company owns the Crayola crayon brand?,Dixon Ticonderoga,Sargent Art,Hallmark,Prang,C,expert,Brand Origins
-692,What is a promissory note?,A rental listing,A greeting card,A purchase order,A written promise to repay a debt,D,expert,Business Terms
-693,Which company makes Sharpie markers?,Newell Brands,Pilot,Pentel,Uni-ball,A,expert,Brand Origins
-694,What is a dead cat bounce?,A pet insurance claim,A brief recovery in a falling market,A failed product test,An annual bonus,B,expert,Markets and Investing
-695,Which company makes the Aeron chair?,Steelcase,Haworth,Herman Miller,Knoll,C,expert,Brand Origins
-696,What is phantom stock?,A ghost listing,Counterfeit certificates,A gaming item,Fake units that pay like real shares,D,expert,Markets and Investing
-697,Which company makes Rubbermaid containers?,Newell Brands,Sterilite,Pyrex,OXO,A,expert,Brand Origins
-698,What is a lockbox banking service?,A safe deposit box,A service collecting deposits directly for the bank,A parking meter,A payment app,B,expert,Markets and Investing
-699,Which company owns the JVC brand?,Panasonic,Toshiba,JVC Kenwood,Funai,C,expert,Famous Companies
-700,What is a basis point?,A deposit type,One percent,A stock unit,One hundredth of a percent,D,expert,Markets and Investing
-701,Which company owns the Chaps clothing brand?,Ralph Lauren,Nautica,Izod,Gant,A,expert,Brand Origins
-702,What is a special dividend?,A holiday bonus,A one time payout outside the regular schedule,A regular quarterly payout,A reverse merger,B,expert,Markets and Investing
-703,Which company owns the American Tourister luggage brand?,Tumi,Delsey,Samsonite,Briggs and Riley,C,expert,Brand Origins
-704,What is a dividend aristocrat?,A newly listed stock,A royal family firm,A medieval guild,A company raising dividends for at least 25 years,D,expert,Markets and Investing
-705,Which company owns the Michael Kors brand?,Capri Holdings,Tapestry,Ralph Lauren,PVH,A,expert,Brand Origins
-706,What is a total addressable market?,A store catchment,The maximum demand for a product,A sales leaderboard,A sales quota,B,expert,Markets and Investing
-707,Which company makes the Steam Deck handheld?,Logitech,AYANEO,Valve,GPD,C,expert,Famous Companies
-708,What is a letter of credit?,A gift letter,A job reference,A credit score report,A bank guarantee of payment,D,expert,Money Basics
-709,Who created the Napster service?,Shawn Fanning,Sean Parker,Lars Ulrich,Niklas Zennstrom,A,expert,Startup Stories
-710,What is a market correction?,A trading pause,A drop of about ten percent in prices,A recall notice,A price floor,B,expert,Markets and Investing
-711,Which company owns the RCA brand?,Philips,Vivitar,Technicolor,Sanyo,C,expert,Brand Origins
-712,What is a bond rating?,An interest penalty,A parking spot,A year end payout,A grade of a bond's credit quality,D,expert,Money Basics
-713,Which luxury group owns the TAG Heuer watch brand?,LVMH,Breitling,Rolex,Orient Watch,A,expert,Brand Origins
-714,What is a blank check company?,A counterfeit printer,A firm with no set business plan at listing,An unfunded pension,A shell gas station,B,expert,Markets and Investing
-715,Which company makes Scotch Tape?,Duck brand,Gorilla Glue,3M,Loctite,C,expert,Brand Origins
-716,What is a bond ladder?,A debt spiral,A climbing tool,A stock bundle,Staggered bond maturities,D,expert,Markets and Investing
-717,Which company makes Hershey's Kisses?,Hershey,Russell Stover,See's Candies,Tootsie Roll,A,expert,Brand Origins
-718,What is an index fund?,An actively picked fund,A fund tracking a benchmark,A money order,A bond insurance,B,expert,Markets and Investing
-719,Which company makes Hot Pockets?,Marie Callender's,Banquet,Nestle,Amy's Kitchen,C,expert,Brand Origins
-720,What is an ex dividend date?,A tax deadline,A delisting day,A market pause,The cutoff to receive the next dividend,D,expert,Markets and Investing
-721,Which company did Dietmar Hopp help found?,SAP,Compaq,Siemens,Denso,A,expert,Startup Stories
-722,What is a broker dealer?,A real estate broker,A firm trading securities for itself and clients,A card dealer,A pawn shop,B,expert,Markets and Investing
-723,Which company made the original Nest thermostat?,Ecobee,Honeywell,Nest Labs,Tado,C,expert,Startup Stories
-724,What is a shareholder resolution?,A staff memo,A customer survey,A court filing,A proposal voted on by owners,D,expert,Business Terms
-725,Which company owns the Klipsch speaker brand?,Voxx International,Harman,Polk Audio,JBL,A,expert,Brand Origins
-726,What is an operating margin?,Revenue per employee,Operating profit as a percent of revenue,Gross sales total,Net cash position,B,expert,Markets and Investing
-727,Which company makes the WH-1000XM headphones?,Audio-Technica,Shure,Sony,Grado,C,expert,Famous Companies
-728,What is a shelf registration?,A book listing,A pantry list,A storage rental,Registering securities for future issuance,D,expert,Markets and Investing
-729,Which company owns the Neato vacuum brand?,Vorwerk,Miele,iRobot,Nilfisk,A,expert,Famous Companies
-730,What is a capital gain?,A loan bonus,Profit from selling an asset,A wage raise,A tax rebate,B,expert,Money Basics
-731,Which company owns the Duracell battery brand?,Energizer,Varta,Berkshire Hathaway,Rayovac,C,expert,Brand Origins
-732,What is a sunset clause?,A tax break,A solar incentive,A closing time,An expiry provision in a contract,D,expert,Business Terms
-733,Which company owns the GE Appliances brand?,Haier,Electrolux,Pantech,Beko,A,expert,Famous Companies
-734,What is a tax shield?,An armored car,A deduction that reduces taxable income,A tax holiday,An offshore account,B,expert,Money Basics
-735,Which company supplies engines to Ram trucks?,Caterpillar,Detroit Diesel,Cummins,Perkins,C,expert,Famous Companies
-736,What is a captive market?,A tourist trap,A jail store,A free market,Buyers with few alternatives,D,expert,Business Terms
-737,Which company created the Java language?,Sun Microsystems,Xerox PARC,Netscape,Borland,A,expert,Famous Companies
-738,What is a liquid asset?,A blended drink,Cash or holdings easily converted to cash,Real estate only,A fine wine,B,expert,Money Basics
-739,Who created the Hadoop software?,James Gosling,Ken Thompson,Doug Cutting,Linus Torvalds,C,expert,Startup Stories
-740,What is a franchise agreement?,A supplier quote,A franchise player tag,A voting deal,Contract granting brand operating rights,D,expert,Business Terms
-741,Which company owns the Wrangler jeans brand?,Kontoor Brands,Carhartt,Duluth Trading,Kimes Ranch,A,expert,Brand Origins
-742,What is the debt to equity ratio?,A salary comparison,Borrowings compared to owner funds,A wage band,A profit measure,B,expert,Money Basics
-743,Which company owns the Craftsman tools brand?,Makita,Milwaukee,Stanley Black and Decker,Ryobi,C,expert,Brand Origins
-744,What is a deed of trust?,A lease only,A friendship pact,A property title,A property loan security document,D,expert,Money Basics
+687,Which company makes Fisher-Price toys?,Tonka,Mattel,LeapFrog,VTech,B,expert,Brand Origins
+688,What is a holding company?,A firm that owns other companies' shares,A storage business,A staffing firm,A shipping line,A,expert,Business Terms
+689,Which company makes American Girl dolls?,Our Generation,Madame Alexander,Zapf Creation,Mattel,D,expert,Brand Origins
+690,What is a piggyback round?,A freight surcharge,A children's game,A stock loan,Investors joining an existing deal,D,expert,Markets and Investing
+691,Which company owns the Crayola crayon brand?,Hallmark,Sargent Art,Dixon Ticonderoga,Prang,A,expert,Brand Origins
+692,What is a promissory note?,A written promise to repay a debt,A purchase order,A greeting card,A rental listing,A,expert,Business Terms
+693,Which company makes Sharpie markers?,Pilot,Uni-ball,Pentel,Newell Brands,D,expert,Brand Origins
+694,What is a dead cat bounce?,A pet insurance claim,An annual bonus,A brief recovery in a falling market,A failed product test,C,expert,Markets and Investing
+695,Which company makes the Aeron chair?,Knoll,Haworth,Herman Miller,Steelcase,C,expert,Brand Origins
+696,What is phantom stock?,Fake units that pay like real shares,A gaming item,Counterfeit certificates,A ghost listing,A,expert,Markets and Investing
+697,Which company makes Rubbermaid containers?,OXO,Newell Brands,Pyrex,Sterilite,B,expert,Brand Origins
+698,What is a lockbox banking service?,A safe deposit box,A parking meter,A payment app,A service collecting deposits directly for the bank,D,expert,Markets and Investing
+699,Which company owns the JVC brand?,JVC Kenwood,Toshiba,Funai,Panasonic,A,expert,Famous Companies
+700,What is a basis point?,A stock unit,One hundredth of a percent,A deposit type,One percent,B,expert,Markets and Investing
+701,Which company owns the Chaps clothing brand?,Gant,Nautica,Ralph Lauren,Izod,C,expert,Brand Origins
+702,What is a special dividend?,A reverse merger,A one time payout outside the regular schedule,A regular quarterly payout,A holiday bonus,B,expert,Markets and Investing
+703,Which company owns the American Tourister luggage brand?,Samsonite,Delsey,Tumi,Briggs and Riley,A,expert,Brand Origins
+704,What is a dividend aristocrat?,A medieval guild,A royal family firm,A company raising dividends for at least 25 years,A newly listed stock,C,expert,Markets and Investing
+705,Which company owns the Michael Kors brand?,Tapestry,Ralph Lauren,Capri Holdings,PVH,C,expert,Brand Origins
+706,What is a total addressable market?,A sales quota,The maximum demand for a product,A sales leaderboard,A store catchment,B,expert,Markets and Investing
+707,Which company makes the Steam Deck handheld?,AYANEO,Logitech,Valve,GPD,C,expert,Famous Companies
+708,What is a letter of credit?,A job reference,A credit score report,A gift letter,A bank guarantee of payment,D,expert,Money Basics
+709,Who created the Napster service?,Sean Parker,Shawn Fanning,Lars Ulrich,Niklas Zennstrom,B,expert,Startup Stories
+710,What is a market correction?,A price floor,A trading pause,A recall notice,A drop of about ten percent in prices,D,expert,Markets and Investing
+711,Which company owns the RCA brand?,Vivitar,Technicolor,Sanyo,Philips,B,expert,Brand Origins
+712,What is a bond rating?,A grade of a bond's credit quality,A parking spot,A year end payout,An interest penalty,A,expert,Money Basics
+713,Which luxury group owns the TAG Heuer watch brand?,Rolex,Orient Watch,LVMH,Breitling,C,expert,Brand Origins
+714,What is a blank check company?,A counterfeit printer,A shell gas station,An unfunded pension,A firm with no set business plan at listing,D,expert,Markets and Investing
+715,Which company makes Scotch Tape?,3M,Duck brand,Loctite,Gorilla Glue,A,expert,Brand Origins
+716,What is a bond ladder?,A climbing tool,A stock bundle,Staggered bond maturities,A debt spiral,C,expert,Markets and Investing
+717,Which company makes Hershey's Kisses?,See's Candies,Hershey,Tootsie Roll,Russell Stover,B,expert,Brand Origins
+718,What is an index fund?,A money order,A fund tracking a benchmark,An actively picked fund,A bond insurance,B,expert,Markets and Investing
+719,Which company makes Hot Pockets?,Banquet,Amy's Kitchen,Marie Callender's,Nestle,D,expert,Brand Origins
+720,What is an ex dividend date?,The cutoff to receive the next dividend,A tax deadline,A market pause,A delisting day,A,expert,Markets and Investing
+721,Which company did Dietmar Hopp help found?,Compaq,Denso,Siemens,SAP,D,expert,Startup Stories
+722,What is a broker dealer?,A firm trading securities for itself and clients,A card dealer,A pawn shop,A real estate broker,A,expert,Markets and Investing
+723,Which company made the original Nest thermostat?,Nest Labs,Honeywell,Tado,Ecobee,A,expert,Startup Stories
+724,What is a shareholder resolution?,A customer survey,A staff memo,A proposal voted on by owners,A court filing,C,expert,Business Terms
+725,Which company owns the Klipsch speaker brand?,JBL,Polk Audio,Harman,Voxx International,D,expert,Brand Origins
+726,What is an operating margin?,Net cash position,Operating profit as a percent of revenue,Gross sales total,Revenue per employee,B,expert,Markets and Investing
+727,Which company makes the WH-1000XM headphones?,Shure,Audio-Technica,Grado,Sony,D,expert,Famous Companies
+728,What is a shelf registration?,Registering securities for future issuance,A pantry list,A storage rental,A book listing,A,expert,Markets and Investing
+729,Which company owns the Neato vacuum brand?,Miele,Vorwerk,iRobot,Nilfisk,B,expert,Famous Companies
+730,What is a capital gain?,A wage raise,A tax rebate,Profit from selling an asset,A loan bonus,C,expert,Money Basics
+731,Which company owns the Duracell battery brand?,Energizer,Berkshire Hathaway,Varta,Rayovac,B,expert,Brand Origins
+732,What is a sunset clause?,A solar incentive,A closing time,An expiry provision in a contract,A tax break,C,expert,Business Terms
+733,Which company owns the GE Appliances brand?,Beko,Electrolux,Pantech,Haier,D,expert,Famous Companies
+734,What is a tax shield?,A deduction that reduces taxable income,An offshore account,An armored car,A tax holiday,A,expert,Money Basics
+735,Which company supplies engines to Ram trucks?,Caterpillar,Detroit Diesel,Perkins,Cummins,D,expert,Famous Companies
+736,What is a captive market?,Buyers with few alternatives,A jail store,A tourist trap,A free market,A,expert,Business Terms
+737,Which company created the Java language?,Netscape,Borland,Sun Microsystems,Xerox PARC,C,expert,Famous Companies
+738,What is a liquid asset?,A fine wine,A blended drink,Real estate only,Cash or holdings easily converted to cash,D,expert,Money Basics
+739,Who created the Hadoop software?,Ken Thompson,Linus Torvalds,James Gosling,Doug Cutting,D,expert,Startup Stories
+740,What is a franchise agreement?,A supplier quote,Contract granting brand operating rights,A franchise player tag,A voting deal,B,expert,Business Terms
+741,Which company owns the Wrangler jeans brand?,Kimes Ranch,Carhartt,Duluth Trading,Kontoor Brands,D,expert,Brand Origins
+742,What is the debt to equity ratio?,A wage band,Borrowings compared to owner funds,A salary comparison,A profit measure,B,expert,Money Basics
+743,Which company owns the Craftsman tools brand?,Milwaukee,Makita,Stanley Black and Decker,Ryobi,C,expert,Brand Origins
+744,What is a deed of trust?,A lease only,A property title,A property loan security document,A friendship pact,C,expert,Money Basics
 745,Which company makes Titleist golf balls?,Acushnet,Callaway,TaylorMade,Ping,A,expert,Brand Origins
-746,What is an umbrella policy?,A rain gear sale,Extra liability coverage,A group health plan,A corporate logo,B,expert,Money Basics
+746,What is an umbrella policy?,A corporate logo,Extra liability coverage,A group health plan,A rain gear sale,B,expert,Money Basics
 747,Which company makes the Bugatti cars?,Lamborghini,Volkswagen Group,Bugatti Rimac,Pagani,C,expert,Famous Companies
-748,What is a bridge loan?,A bond issue,A toll road fee,A payday loan,Short term financing until permanent funds,D,expert,Money Basics
+748,What is a bridge loan?,Short term financing until permanent funds,A toll road fee,A bond issue,A payday loan,A,expert,Money Basics
 749,Which company codesigns the GR86 sports car with Toyota?,Subaru,Hino,Isuzu,Daihatsu,A,expert,Famous Companies
-750,What is a bootleg product?,A leg support,An unauthorized copy,A discounted return,A demo unit,B,expert,Business Terms
-751,Which company makes Rubik's Cube toys?,Ideal,Parker Brothers,Spin Master,Ravensburger,C,expert,Brand Origins
-752,What is a white label product?,A recalled item,A blank record,A luxury brand,A generic item rebranded by sellers,D,expert,Business Terms
-753,Which company owns the Marshall speaker brand?,Zound Industries,Universal Audio,Line 6,Positive Grid,A,expert,Brand Origins
-754,What is a keiretsu?,A Korean dish,A Japanese business alliance,A stock exchange,A union type,B,expert,Business Terms
-755,Which company owns the Hasselblad camera brand?,Leica,Fujifilm,DJI,Phase One,C,expert,Brand Origins
-756,What is a conglomerate?,A state enterprise,A single product shop,A merger of rivals,A corporation of many unrelated businesses,D,expert,Business Terms
-757,Which company makes the Instant Pot?,Instant Brands,Crock-Pot,Breville,Cosori,A,expert,Brand Origins
-758,What is an expense ratio?,A rent measure,Annual fund cost as a percent of assets,A trading fee only,An inflation gauge,B,expert,Markets and Investing
-759,Which company makes Playmobil toys?,Schleich,Papo,geobra Brandstaetter,Bullyland,C,expert,Brand Origins
-760,What is a blind trust?,A sealed bid,An opaque fund,A lottery pool,Assets managed without the owner's knowledge,D,expert,Money Basics
-761,Which company owns the Sperry shoe brand?,Authentic Brands Group,Sebago,Tretorn,Deckers,A,expert,Brand Origins
-762,What is a forensic audit?,A dental exam,An accounting investigation for legal cases,A routine tax check,A stock review,B,expert,Business Terms
-763,Who founded the Patagonia clothing brand?,Doug Tompkins,Yves Saint Laurent,Yvon Chouinard,Kenneth Cole,C,expert,Startup Stories
-764,What is a lead investor?,A bank agent,The largest employee holder,The first customer,The one setting the round terms,D,expert,Markets and Investing
+750,What is a bootleg product?,A demo unit,A discounted return,An unauthorized copy,A leg support,C,expert,Business Terms
+751,Which company makes Rubik's Cube toys?,Ravensburger,Ideal,Parker Brothers,Spin Master,D,expert,Brand Origins
+752,What is a white label product?,A generic item rebranded by sellers,A blank record,A luxury brand,A recalled item,A,expert,Business Terms
+753,Which company owns the Marshall speaker brand?,Positive Grid,Zound Industries,Line 6,Universal Audio,B,expert,Brand Origins
+754,What is a keiretsu?,A union type,A Japanese business alliance,A stock exchange,A Korean dish,B,expert,Business Terms
+755,Which company owns the Hasselblad camera brand?,Phase One,Leica,DJI,Fujifilm,C,expert,Brand Origins
+756,What is a conglomerate?,A single product shop,A state enterprise,A merger of rivals,A corporation of many unrelated businesses,D,expert,Business Terms
+757,Which company makes the Instant Pot?,Breville,Instant Brands,Crock-Pot,Cosori,B,expert,Brand Origins
+758,What is an expense ratio?,A trading fee only,Annual fund cost as a percent of assets,A rent measure,An inflation gauge,B,expert,Markets and Investing
+759,Which company makes Playmobil toys?,Papo,Schleich,Bullyland,geobra Brandstaetter,D,expert,Brand Origins
+760,What is a blind trust?,A lottery pool,Assets managed without the owner's knowledge,An opaque fund,A sealed bid,B,expert,Money Basics
+761,Which company owns the Sperry shoe brand?,Deckers,Authentic Brands Group,Sebago,Tretorn,B,expert,Brand Origins
+762,What is a forensic audit?,A dental exam,A routine tax check,An accounting investigation for legal cases,A stock review,C,expert,Business Terms
+763,Who founded the Patagonia clothing brand?,Kenneth Cole,Yvon Chouinard,Doug Tompkins,Yves Saint Laurent,B,expert,Startup Stories
+764,What is a lead investor?,The first customer,The largest employee holder,The one setting the round terms,A bank agent,C,expert,Markets and Investing
 765,Which company owns the North Face brand?,VF Corporation,Columbia Sportswear,Arcteryx,Patagonia,A,expert,Brand Origins
-766,What is reinsurance?,A second mortgage,Insurance purchased by insurance companies,A repeat policy,A claim appeal,B,expert,Money Basics
-767,Which company owns the Tim Hortons chain?,Focus Brands,Kraft Heinz,Restaurant Brands International,Apollo Global,C,expert,Famous Companies
-768,What is a proxy fight?,A boardwalk game,A boxing match,A proxy server issue,A battle for shareholder votes,D,expert,Markets and Investing
-769,Which company owns the Cabela's outdoors chain?,Bass Pro Shops,REI,Dick's Sporting Goods,Academy Sports,A,expert,Famous Companies
-770,What is a shotgun clause?,A hunting rule,An offer to buy or sell shares at a set price,A wedding shot,A bar bet,B,expert,Business Terms
-771,Which company makes JBL speakers?,Master and Dynamic,Marshall,Harman,Ultimate Ears,C,expert,Brand Origins
-772,What is a cash cow?,An ATM,A dairy farm,A failed venture,A business generating steady surplus cash,D,expert,Business Terms
-773,Which company owns the Dickies workwear brand?,Bluestar Alliance,VF Corporation,Walls,Red Kap,A,expert,Brand Origins
-774,What is venture debt?,A consumer car loan,Loans for venture backed startups,A credit card,A mortgage,B,expert,Markets and Investing
-775,Who founded the Chick fil A chain?,Ray Kroc,Dave Thomas,S. Truett Cathy,Colonel Sanders,C,expert,Startup Stories
+766,What is reinsurance?,Insurance purchased by insurance companies,A claim appeal,A second mortgage,A repeat policy,A,expert,Money Basics
+767,Which company owns the Tim Hortons chain?,Kraft Heinz,Restaurant Brands International,Focus Brands,Apollo Global,B,expert,Famous Companies
+768,What is a proxy fight?,A boardwalk game,A proxy server issue,A battle for shareholder votes,A boxing match,C,expert,Markets and Investing
+769,Which company owns the Cabela's outdoors chain?,REI,Dick's Sporting Goods,Academy Sports,Bass Pro Shops,D,expert,Famous Companies
+770,What is a shotgun clause?,A hunting rule,A bar bet,A wedding shot,An offer to buy or sell shares at a set price,D,expert,Business Terms
+771,Which company makes JBL speakers?,Harman,Master and Dynamic,Marshall,Ultimate Ears,A,expert,Brand Origins
+772,What is a cash cow?,A business generating steady surplus cash,A dairy farm,A failed venture,An ATM,A,expert,Business Terms
+773,Which company owns the Dickies workwear brand?,VF Corporation,Bluestar Alliance,Walls,Red Kap,B,expert,Brand Origins
+774,What is venture debt?,Loans for venture backed startups,A credit card,A consumer car loan,A mortgage,A,expert,Markets and Investing
+775,Who founded the Chick fil A chain?,S. Truett Cathy,Dave Thomas,Ray Kroc,Colonel Sanders,A,expert,Startup Stories
 776,What is a crown jewel defense?,A gold reserve,A royal wedding,A museum sale,Selling prized assets to block a takeover,D,expert,Markets and Investing
-777,Who founded the In N Out Burger chain?,Harry Snyder,Dick McDonald,Glen Bell,James McLamore,A,expert,Startup Stories
-778,What is a liquidity ratio?,A drink measure,A measure of ability to pay short term debts,A profit gauge,A market share,B,expert,Money Basics
-779,Which company owns the Panera Bread chain?,Starbucks,KKR,JAB Holding,Roark Capital,C,expert,Famous Companies
+777,Who founded the In N Out Burger chain?,Glen Bell,James McLamore,Harry Snyder,Dick McDonald,C,expert,Startup Stories
+778,What is a liquidity ratio?,A profit gauge,A drink measure,A measure of ability to pay short term debts,A market share,C,expert,Money Basics
+779,Which company owns the Panera Bread chain?,Roark Capital,JAB Holding,KKR,Starbucks,B,expert,Famous Companies
 780,What is a silent partner?,A minority lender,A mute banker,A retired founder,An investor who does not manage daily work,D,expert,Business Terms
-781,Which company owns the Sephora beauty chain?,LVMH,Coty,Shiseido,L'Oreal,A,expert,Brand Origins
-782,What is a capital expenditure?,A daily coffee budget,Money spent on long term assets,An operating rent only,A dividend payout,B,expert,Money Basics
-783,Which company makes Old Spice products?,AXE,Henkel,Procter and Gamble,Edgewell,C,expert,Brand Origins
-784,What is a benchmark rate?,A quota sheet,A workout rep,A stock ticker,A reference rate for loans and investments,D,expert,Money Basics
-785,Which company owns the Dior fashion house?,LVMH,Hermes,Givenchy,Burberry,A,expert,Brand Origins
-786,What is a margin of safety?,A helmet rating,The buffer between value and price,A profit margin only,A credit limit,B,expert,Markets and Investing
-787,Which luxury group owns the Bvlgari jewelry house?,Damiani,Chopard,LVMH,Pomellato,C,expert,Brand Origins
-788,What is a wind down?,A market rally,A sailboat race,A relaxation break,An orderly closing of a business,D,expert,Business Terms
-789,Who co-founded the Zillow site?,Rich Barton and Lloyd Frink,Glenn Kelman,Pete Flint,Adam D'Angelo,A,expert,Startup Stories
-790,What is a callable bond?,A stock option,A bond the issuer may redeem early,A premium note,A treasury note,B,expert,Markets and Investing
-791,Which company owns the DHL delivery brand?,UPS,TNT,Deutsche Post,Royal Mail,C,expert,Famous Companies
-792,What is a floor trader?,A market stall seller,A rug dealer,A stockbroker's clerk,One who trades on an exchange floor,D,expert,Markets and Investing
-793,Which company bought the Compaq computer brand?,HP,Gateway,Packard Bell,eMachines,A,expert,Famous Companies
-794,What is a right of first refusal?,A lawsuit right,An offer that must go to a party first,A union rule,A rental deposit,B,expert,Business Terms
-795,Which company created the BlackBerry phone?,Treo,Palm,Research In Motion,Ericsson,C,expert,Famous Companies
+781,Which company owns the Sephora beauty chain?,Shiseido,Coty,L'Oreal,LVMH,D,expert,Brand Origins
+782,What is a capital expenditure?,A daily coffee budget,Money spent on long term assets,A dividend payout,An operating rent only,B,expert,Money Basics
+783,Which company makes Old Spice products?,Henkel,Edgewell,Procter and Gamble,AXE,C,expert,Brand Origins
+784,What is a benchmark rate?,A workout rep,A stock ticker,A quota sheet,A reference rate for loans and investments,D,expert,Money Basics
+785,Which company owns the Dior fashion house?,LVMH,Givenchy,Burberry,Hermes,A,expert,Brand Origins
+786,What is a margin of safety?,A helmet rating,A profit margin only,The buffer between value and price,A credit limit,C,expert,Markets and Investing
+787,Which luxury group owns the Bvlgari jewelry house?,Chopard,Pomellato,LVMH,Damiani,C,expert,Brand Origins
+788,What is a wind down?,A sailboat race,An orderly closing of a business,A relaxation break,A market rally,B,expert,Business Terms
+789,Who co-founded the Zillow site?,Glenn Kelman,Rich Barton and Lloyd Frink,Pete Flint,Adam D'Angelo,B,expert,Startup Stories
+790,What is a callable bond?,A stock option,A premium note,A treasury note,A bond the issuer may redeem early,D,expert,Markets and Investing
+791,Which company owns the DHL delivery brand?,Royal Mail,UPS,TNT,Deutsche Post,D,expert,Famous Companies
+792,What is a floor trader?,One who trades on an exchange floor,A market stall seller,A rug dealer,A stockbroker's clerk,A,expert,Markets and Investing
+793,Which company bought the Compaq computer brand?,HP,eMachines,Packard Bell,Gateway,A,expert,Famous Companies
+794,What is a right of first refusal?,A rental deposit,An offer that must go to a party first,A lawsuit right,A union rule,B,expert,Business Terms
+795,Which company created the BlackBerry phone?,Research In Motion,Treo,Palm,Ericsson,A,expert,Famous Companies
 796,What is a windfall profit?,An inheritance,A lottery win,A planned margin,An unexpected gain from outside events,D,expert,Money Basics
-797,Which company bought the Netscape browser?,AOL,Lycos,Excite,CompuServe,A,expert,Famous Companies
-798,What is a settlement date?,A court date,When a trade finalizes,A due bill date,A listing day,B,expert,Markets and Investing
+797,Which company bought the Netscape browser?,Lycos,Excite,AOL,CompuServe,C,expert,Famous Companies
+798,What is a settlement date?,A court date,A listing day,A due bill date,When a trade finalizes,D,expert,Markets and Investing
 799,Which company created the Pong arcade game?,Namco,Magnavox,Atari,RCA,C,expert,Famous Companies
-800,What is a bear case?,A bull case,A zoo report,A short squeeze,An argument for falling value,D,expert,Markets and Investing
+800,What is a bear case?,A zoo report,An argument for falling value,A bull case,A short squeeze,B,expert,Markets and Investing
 801,What does the Dow Jones index mainly track?,,,,,blue chip stocks,extreme,Markets and Investing
 802,What was IBM's original company name?,,,,,Computing Tabulating Recording Company,extreme,Famous Companies
 803,What does the acronym KPI stand for?,,,,,Key Performance Indicator,extreme,Business Terms

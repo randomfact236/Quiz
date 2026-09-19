@@ -5,14 +5,14 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 2,J.K. Rowling wrote the Lord of the Rings novels.,True,False,,,B,easy,Books and Authors
 3,A centimeter is longer than a meter.,False,True,,,A,easy,Units and Numbers
 4,Christmas Day is celebrated on December 25 in many countries.,False,True,,,B,easy,Culture and Firsts
-5,Africa is the second largest continent.,True,False,,,A,easy,Geography and Landmarks
-6,An adult human typically has 32 teeth including wisdom teeth.,False,True,,,B,easy,Human Body
-7,Romeo and Juliet is a play written by Charles Dickens.,False,True,,,A,easy,Books and Authors
+5,Africa is the second largest continent.,False,True,,,B,easy,Geography and Landmarks
+6,An adult human typically has 32 teeth including wisdom teeth.,True,False,,,A,easy,Human Body
+7,Romeo and Juliet is a play written by Charles Dickens.,True,False,,,B,easy,Books and Authors
 8,There are 100 minutes in one hour.,True,False,,,B,easy,Units and Numbers
 9,The Olympic Games are held every four years.,True,False,,,A,easy,Culture and Firsts
-10,The Amazon River is located in Australia.,True,False,,,B,easy,Geography and Landmarks
-11,The brain is protected by the skull.,True,False,,,A,easy,Human Body
-12,The Hobbit was written by C.S. Lewis.,True,False,,,B,easy,Books and Authors
+10,The Amazon River is located in Australia.,False,True,,,A,easy,Geography and Landmarks
+11,The brain is protected by the skull.,False,True,,,B,easy,Human Body
+12,The Hobbit was written by C.S. Lewis.,False,True,,,A,easy,Books and Authors
 13,A kilogram is a unit of mass.,True,False,,,A,easy,Units and Numbers
 14,Valentine's Day is celebrated in January.,True,False,,,B,easy,Culture and Firsts
 15,Mount Everest is located in South America.,False,True,,,A,easy,Geography and Landmarks
@@ -21,12 +21,12 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 18,Cinderella's fairy godmother appears in The Little Mermaid.,True,False,,,B,easy,Books and Authors
 19,A decade is a period of 20 years.,False,True,,,A,easy,Units and Numbers
 20,The Eiffel Tower stands in Paris.,False,True,,,B,easy,Geography and Landmarks
-21,Australia is the largest country in the world by area.,False,True,,,A,easy,Geography and Landmarks
-22,Sound travels faster in water than in air.,False,True,,,B,easy,Science Basics
-23,Blood carries oxygen to the body's cells.,True,False,,,A,easy,Human Body
-24,Sherlock Holmes first appeared in a book by Agatha Christie.,True,False,,,B,easy,Books and Authors
-25,There are 24 hours in a day.,True,False,,,A,easy,Units and Numbers
-26,The Statue of Liberty was a gift from Spain to the United States.,True,False,,,B,easy,Culture and Firsts
+21,Australia is the largest country in the world by area.,True,False,,,B,easy,Geography and Landmarks
+22,Sound travels faster in water than in air.,True,False,,,A,easy,Science Basics
+23,Blood carries oxygen to the body's cells.,False,True,,,B,easy,Human Body
+24,Sherlock Holmes first appeared in a book by Agatha Christie.,False,True,,,A,easy,Books and Authors
+25,There are 24 hours in a day.,False,True,,,B,easy,Units and Numbers
+26,The Statue of Liberty was a gift from Spain to the United States.,False,True,,,A,easy,Culture and Firsts
 27,The Pacific Ocean is the smallest ocean on Earth.,False,True,,,A,easy,Geography and Landmarks
 28,Magnets can attract iron.,False,True,,,B,easy,Science Basics
 29,Humans breathe air into the lungs.,True,False,,,A,easy,Human Body
@@ -43,722 +43,722 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 40,Humans have three lungs.,True,False,,,B,easy,Human Body
 41,Aesop is known for writing fables.,True,False,,,A,easy,Books and Authors
 42,One meter contains 10 centimeters.,True,False,,,B,easy,Units and Numbers
-43,A rainbow traditionally has seven colors.,True,False,,,A,easy,Science Basics
-44,Japan is an island nation in Asia.,False,True,,,B,easy,Geography and Landmarks
+43,A rainbow traditionally has seven colors.,False,True,,,B,easy,Science Basics
+44,Japan is an island nation in Asia.,True,False,,,A,easy,Geography and Landmarks
 45,The largest organ of the human body is the liver.,False,True,,,A,easy,Human Body
 46,Charlotte's Web features a spider named Charlotte.,False,True,,,B,easy,Books and Authors
 47,One kilometer equals 100 meters.,False,True,,,A,easy,Units and Numbers
 48,New Year's Day falls on January 1.,False,True,,,B,easy,Culture and Firsts
-49,Canada borders the United States.,True,False,,,A,easy,Geography and Landmarks
-50,Water freezes into a gas when cooled.,True,False,,,B,easy,Science Basics
-51,The human body has two kidneys.,True,False,,,A,easy,Human Body
-52,Pinocchio's nose grows when he tells the truth.,True,False,,,B,easy,Books and Authors
-53,A millennium is a period of 100 years.,False,True,,,A,easy,Units and Numbers
-54,Thanksgiving is celebrated in November in the United States.,False,True,,,B,easy,Culture and Firsts
+49,Canada borders the United States.,False,True,,,B,easy,Geography and Landmarks
+50,Water freezes into a gas when cooled.,False,True,,,A,easy,Science Basics
+51,The human body has two kidneys.,False,True,,,B,easy,Human Body
+52,Pinocchio's nose grows when he tells the truth.,False,True,,,A,easy,Books and Authors
+53,A millennium is a period of 100 years.,True,False,,,B,easy,Units and Numbers
+54,Thanksgiving is celebrated in November in the United States.,True,False,,,A,easy,Culture and Firsts
 55,The Sahara is a large hot desert in Africa.,True,False,,,A,easy,Geography and Landmarks
 56,Diamonds are softer than chalk.,True,False,,,B,easy,Science Basics
-57,The human tongue is used for hearing.,False,True,,,A,easy,Human Body
-58,The Gruffalo was written by Julia Donaldson.,False,True,,,B,easy,Books and Authors
+57,The human tongue is used for hearing.,True,False,,,B,easy,Human Body
+58,The Gruffalo was written by Julia Donaldson.,True,False,,,A,easy,Books and Authors
 59,A century is a period of 50 years.,False,True,,,A,easy,Units and Numbers
 60,The Olympic flag has five interlocking rings.,False,True,,,B,easy,Culture and Firsts
-61,Italy is shaped like a boot.,True,False,,,A,easy,Geography and Landmarks
-62,The nose is used for smelling.,False,True,,,B,easy,Human Body
-63,Treasure Island was written by Beatrix Potter.,False,True,,,A,easy,Books and Authors
+61,Italy is shaped like a boot.,False,True,,,B,easy,Geography and Landmarks
+62,The nose is used for smelling.,True,False,,,A,easy,Human Body
+63,Treasure Island was written by Beatrix Potter.,True,False,,,B,easy,Books and Authors
 64,Antarctica is the hottest continent.,True,False,,,B,easy,Geography and Landmarks
 65,A rainbow appears when sunlight passes through raindrops.,True,False,,,A,easy,Science Basics
-66,The Cat in the Hat was written by Roald Dahl.,True,False,,,B,easy,Books and Authors
-67,An hour has 60 minutes.,True,False,,,A,easy,Units and Numbers
-68,The Mona Lisa was painted by van Gogh.,True,False,,,B,easy,Culture and Firsts
+66,The Cat in the Hat was written by Roald Dahl.,False,True,,,A,easy,Books and Authors
+67,An hour has 60 minutes.,False,True,,,B,easy,Units and Numbers
+68,The Mona Lisa was painted by van Gogh.,False,True,,,A,easy,Culture and Firsts
 69,Brazil's main language is Spanish.,False,True,,,A,easy,Geography and Landmarks
 70,Gravity pulls objects toward the Earth.,False,True,,,B,easy,Science Basics
-71,The femur is the smallest bone in the human body.,False,True,,,A,easy,Human Body
-72,Matilda is a novel by Roald Dahl.,False,True,,,B,easy,Books and Authors
+71,The femur is the smallest bone in the human body.,True,False,,,B,easy,Human Body
+72,Matilda is a novel by Roald Dahl.,True,False,,,A,easy,Books and Authors
 73,There are 12 months in a year.,True,False,,,A,easy,Units and Numbers
 74,Rapunzel is famous for her long green hair.,True,False,,,B,easy,Books and Authors
 75,The capital of Japan is Tokyo.,True,False,,,A,easy,Geography and Landmarks
-76,Rubber is an excellent conductor of electricity.,True,False,,,B,easy,Science Basics
+76,Rubber is an excellent conductor of electricity.,False,True,,,A,easy,Science Basics
 77,The lungs are used to digest food.,False,True,,,A,easy,Human Body
 78,Fairy tales often begin with the phrase once upon a time.,False,True,,,B,easy,Books and Authors
-79,February has 30 days every year.,False,True,,,A,easy,Units and Numbers
-80,A symphony is performed by an orchestra.,False,True,,,B,easy,Culture and Firsts
-81,Greenland is the world's largest island.,True,False,,,A,easy,Geography and Landmarks
-82,Humans can survive a year without drinking water.,True,False,,,B,easy,Human Body
+79,February has 30 days every year.,True,False,,,B,easy,Units and Numbers
+80,A symphony is performed by an orchestra.,True,False,,,A,easy,Culture and Firsts
+81,Greenland is the world's largest island.,False,True,,,B,easy,Geography and Landmarks
+82,Humans can survive a year without drinking water.,False,True,,,A,easy,Human Body
 83,Winnie the Pooh is a bear in children's literature.,True,False,,,A,easy,Books and Authors
 84,A fortnight means seven days.,True,False,,,B,easy,Units and Numbers
-85,The Statue of Liberty holds a torch.,True,False,,,A,easy,Culture and Firsts
-86,Norway is known for its fjords.,False,True,,,B,easy,Geography and Landmarks
-87,Cacti need large amounts of water every day.,False,True,,,A,easy,Science Basics
+85,The Statue of Liberty holds a torch.,False,True,,,B,easy,Culture and Firsts
+86,Norway is known for its fjords.,True,False,,,A,easy,Geography and Landmarks
+87,Cacti need large amounts of water every day.,True,False,,,B,easy,Science Basics
 88,The backbone is also called the spine.,False,True,,,B,easy,Human Body
 89,Hansel and Gretel follow a trail of rice crumbs.,False,True,,,A,easy,Books and Authors
-90,One yard is shorter than one foot.,True,False,,,B,easy,Units and Numbers
-91,A quartet has four performers.,True,False,,,A,easy,Culture and Firsts
+90,One yard is shorter than one foot.,False,True,,,A,easy,Units and Numbers
+91,A quartet has four performers.,False,True,,,B,easy,Culture and Firsts
 92,The Dead Sea is so salty that swimmers float easily.,False,True,,,B,easy,Geography and Landmarks
 93,Water covers about 30 percent of the Earth's surface.,False,True,,,A,easy,Science Basics
 94,Blood inside the human body is blue.,True,False,,,B,easy,Human Body
-95,The Ugly Duckling turns into a swan.,True,False,,,A,easy,Books and Authors
-96,A score is a word for fifty.,True,False,,,B,easy,Units and Numbers
+95,The Ugly Duckling turns into a swan.,False,True,,,B,easy,Books and Authors
+96,A score is a word for fifty.,False,True,,,A,easy,Units and Numbers
 97,Ballet is a form of dance.,True,False,,,A,easy,Culture and Firsts
 98,Venice is famous for its canals.,False,True,,,B,easy,Geography and Landmarks
 99,Sound travels through the vacuum of space.,False,True,,,A,easy,Science Basics
-100,Saliva helps digest food in the mouth.,False,True,,,B,easy,Human Body
-101,The Three Musketeers was written by Jane Austen.,False,True,,,A,easy,Books and Authors
-102,The Great Barrier Reef lies off the coast of Ireland.,True,False,,,B,easy,Geography and Landmarks
-103,Seeds grow into plants.,True,False,,,A,easy,Science Basics
-104,The ribs protect the heart and lungs.,False,True,,,B,easy,Human Body
+100,Saliva helps digest food in the mouth.,True,False,,,A,easy,Human Body
+101,The Three Musketeers was written by Jane Austen.,True,False,,,B,easy,Books and Authors
+102,The Great Barrier Reef lies off the coast of Ireland.,False,True,,,A,easy,Geography and Landmarks
+103,Seeds grow into plants.,False,True,,,B,easy,Science Basics
+104,The ribs protect the heart and lungs.,True,False,,,A,easy,Human Body
 105,Gulliver's Travels was written by Mark Twain.,False,True,,,A,easy,Books and Authors
 106,A dozen means twelve.,False,True,,,B,easy,Units and Numbers
 107,The Oscars honor achievements in television.,False,True,,,A,easy,Culture and Firsts
-108,Iceland is completely covered by ice all year.,True,False,,,B,easy,Geography and Landmarks
-109,A tadpole grows into a frog.,True,False,,,A,easy,Science Basics
+108,Iceland is completely covered by ice all year.,False,True,,,A,easy,Geography and Landmarks
+109,A tadpole grows into a frog.,False,True,,,B,easy,Science Basics
 110,Humans have four main senses.,True,False,,,B,easy,Human Body
 111,Cinderella loses a glass slipper at the ball.,True,False,,,A,easy,Books and Authors
 112,The capital of Italy is Rome.,False,True,,,B,easy,Geography and Landmarks
 113,Penguins live in the Arctic.,False,True,,,A,easy,Science Basics
 114,A human hand has five fingers.,False,True,,,B,easy,Human Body
-115,Dorothy reaches Oz by flying on a broomstick.,False,True,,,A,easy,Books and Authors
-116,One minute has 100 seconds.,True,False,,,B,easy,Units and Numbers
-117,The Louvre is a famous museum in Paris.,True,False,,,A,easy,Culture and Firsts
+115,Dorothy reaches Oz by flying on a broomstick.,True,False,,,B,easy,Books and Authors
+116,One minute has 100 seconds.,False,True,,,A,easy,Units and Numbers
+117,The Louvre is a famous museum in Paris.,False,True,,,B,easy,Culture and Firsts
 118,The Andes are mountains in Europe.,True,False,,,B,easy,Geography and Landmarks
 119,Salt dissolves in water.,True,False,,,A,easy,Science Basics
-120,The pupils of the eyes shrink in bright light.,False,True,,,B,easy,Human Body
-121,The BFG was written by Beatrix Potter.,False,True,,,A,easy,Books and Authors
-122,A newborn baby has 32 teeth at birth.,True,False,,,B,easy,Human Body
+120,The pupils of the eyes shrink in bright light.,True,False,,,A,easy,Human Body
+121,The BFG was written by Beatrix Potter.,True,False,,,B,easy,Books and Authors
+122,A newborn baby has 32 teeth at birth.,False,True,,,A,easy,Human Body
 123,Snow White meets seven dwarfs.,True,False,,,A,easy,Books and Authors
 124,There are eight seasons in a year.,True,False,,,B,easy,Units and Numbers
-125,A violin is a string instrument.,True,False,,,A,easy,Culture and Firsts
-126,The Thames flows through London.,False,True,,,B,easy,Geography and Landmarks
-127,The Moon produces its own light.,False,True,,,A,easy,Science Basics
+125,A violin is a string instrument.,False,True,,,B,easy,Culture and Firsts
+126,The Thames flows through London.,True,False,,,A,easy,Geography and Landmarks
+127,The Moon produces its own light.,True,False,,,B,easy,Science Basics
 128,Exercise strengthens the muscles.,False,True,,,B,easy,Human Body
 129,The beast in Beauty and the Beast turns into a frog at the end.,False,True,,,A,easy,Books and Authors
-130,A gram is heavier than a kilogram.,True,False,,,B,easy,Units and Numbers
+130,A gram is heavier than a kilogram.,False,True,,,A,easy,Units and Numbers
 131,Fireworks light up the sky on New Year's Eve in many cities.,True,False,,,A,easy,Culture and Firsts
 132,Switzerland is famous for the Alps.,False,True,,,B,easy,Geography and Landmarks
 133,Hot air sinks and cold air rises.,False,True,,,A,easy,Science Basics
 134,The stomach pumps blood around the body.,True,False,,,B,easy,Human Body
-135,The Very Hungry Caterpillar eats through many foods in the book.,True,False,,,A,easy,Books and Authors
+135,The Very Hungry Caterpillar eats through many foods in the book.,False,True,,,B,easy,Books and Authors
 136,A common year has 400 days.,True,False,,,B,easy,Units and Numbers
 137,Chess is played on a board of 64 squares.,True,False,,,A,easy,Culture and Firsts
-138,Mount Fuji is located in Japan.,False,True,,,B,easy,Geography and Landmarks
-139,In the water cycle rain falls upward into clouds.,False,True,,,A,easy,Science Basics
-140,Blinking keeps the eyes moist.,False,True,,,B,easy,Human Body
+138,Mount Fuji is located in Japan.,True,False,,,A,easy,Geography and Landmarks
+139,In the water cycle rain falls upward into clouds.,True,False,,,B,easy,Science Basics
+140,Blinking keeps the eyes moist.,True,False,,,A,easy,Human Body
 141,Jack trades his cow for a magic lamp.,False,True,,,A,easy,Books and Authors
 142,The Great Wall of China can be seen from the Moon with the naked eye.,True,False,,,B,easy,Geography and Landmarks
 143,A thermometer measures temperature.,True,False,,,A,easy,Science Basics
-144,The brain sends signals through nerves.,False,True,,,B,easy,Human Body
-145,The Pied Piper of Hamelin plays the violin to charm snakes.,False,True,,,A,easy,Books and Authors
+144,The brain sends signals through nerves.,True,False,,,A,easy,Human Body
+145,The Pied Piper of Hamelin plays the violin to charm snakes.,True,False,,,B,easy,Books and Authors
 146,A standard soccer team fields twelve players at once.,True,False,,,B,easy,Culture and Firsts
 147,The Mississippi is a river in Asia.,False,True,,,A,easy,Geography and Landmarks
 148,Fossils are the preserved remains of ancient living things.,False,True,,,B,easy,Science Basics
-149,The Achilles tendon is located in the neck.,False,True,,,A,easy,Human Body
-150,Hans Christian Andersen wrote The Little Mermaid.,False,True,,,B,easy,Books and Authors
+149,The Achilles tendon is located in the neck.,True,False,,,B,easy,Human Body
+150,Hans Christian Andersen wrote The Little Mermaid.,True,False,,,A,easy,Books and Authors
 151,The capital of Egypt is Cairo.,True,False,,,A,easy,Geography and Landmarks
 152,Winter is the warmest season.,True,False,,,B,easy,Science Basics
 153,The human body needs oxygen to survive.,True,False,,,A,easy,Human Body
 154,Aladdin's genie lives inside a seashell.,True,False,,,B,easy,Books and Authors
-155,There are ten feet in one yard.,False,True,,,A,easy,Units and Numbers
-156,The statue of Christ the Redeemer stands in Rio de Janeiro.,False,True,,,B,easy,Culture and Firsts
-157,The kangaroo is native to Africa.,False,True,,,A,easy,Geography and Landmarks
-158,The Earth revolves around the Sun.,False,True,,,B,easy,Science Basics
-159,The Gingerbread Man escapes by swimming across the river.,False,True,,,A,easy,Books and Authors
-160,Sweating makes the body hotter.,True,False,,,B,easy,Human Body
+155,There are ten feet in one yard.,True,False,,,B,easy,Units and Numbers
+156,The statue of Christ the Redeemer stands in Rio de Janeiro.,True,False,,,A,easy,Culture and Firsts
+157,The kangaroo is native to Africa.,True,False,,,B,easy,Geography and Landmarks
+158,The Earth revolves around the Sun.,True,False,,,A,easy,Science Basics
+159,The Gingerbread Man escapes by swimming across the river.,True,False,,,B,easy,Books and Authors
+160,Sweating makes the body hotter.,False,True,,,A,easy,Human Body
 161,A fable usually ends with a moral lesson.,True,False,,,A,easy,Books and Authors
 162,There are 200 pennies in one dollar.,True,False,,,B,easy,Units and Numbers
-163,A globe is a model of the Earth.,True,False,,,A,easy,Culture and Firsts
-164,The Emerald Isle is a nickname for Ireland.,False,True,,,B,easy,Geography and Landmarks
-165,The knee is a joint in the leg.,True,False,,,A,easy,Human Body
-166,The Three Billy Goats Gruff sail across a lake in a boat.,True,False,,,B,easy,Books and Authors
+163,A globe is a model of the Earth.,False,True,,,B,easy,Culture and Firsts
+164,The Emerald Isle is a nickname for Ireland.,True,False,,,A,easy,Geography and Landmarks
+165,The knee is a joint in the leg.,False,True,,,B,easy,Human Body
+166,The Three Billy Goats Gruff sail across a lake in a boat.,False,True,,,A,easy,Books and Authors
 167,A mile is shorter than a kilometer.,False,True,,,A,easy,Units and Numbers
 168,A torch relay is part of the modern Olympic tradition.,False,True,,,B,easy,Culture and Firsts
-169,The Amazon rainforest is mostly located in Brazil.,True,False,,,A,easy,Geography and Landmarks
-170,Plants eat soil in order to grow.,True,False,,,B,easy,Science Basics
+169,The Amazon rainforest is mostly located in Brazil.,False,True,,,B,easy,Geography and Landmarks
+170,Plants eat soil in order to grow.,False,True,,,A,easy,Science Basics
 171,The human body has exactly ten muscles.,False,True,,,A,easy,Human Body
 172,In The Princess and the Pea a pea is placed under many mattresses.,False,True,,,B,easy,Books and Authors
 173,Water freezes at 10 degrees Celsius.,False,True,,,A,easy,Units and Numbers
-174,Sudoku is a number puzzle.,False,True,,,B,easy,Culture and Firsts
-175,The Little Mermaid statue stands in Copenhagen.,True,False,,,A,easy,Geography and Landmarks
+174,Sudoku is a number puzzle.,True,False,,,A,easy,Culture and Firsts
+175,The Little Mermaid statue stands in Copenhagen.,False,True,,,B,easy,Geography and Landmarks
 176,The Earth's core is made of ice.,True,False,,,B,easy,Science Basics
 177,Skin heals wounds by forming scabs.,True,False,,,A,easy,Human Body
-178,In the Three Little Pigs the strongest house is built of straw.,True,False,,,B,easy,Books and Authors
-179,Mount Kilimanjaro is located in Morocco.,False,True,,,A,easy,Geography and Landmarks
-180,An insect has six legs.,False,True,,,B,easy,Science Basics
-181,The iris gives the eye its color.,True,False,,,A,easy,Human Body
+178,In the Three Little Pigs the strongest house is built of straw.,False,True,,,A,easy,Books and Authors
+179,Mount Kilimanjaro is located in Morocco.,True,False,,,B,easy,Geography and Landmarks
+180,An insect has six legs.,True,False,,,A,easy,Science Basics
+181,The iris gives the eye its color.,False,True,,,B,easy,Human Body
 182,In the Frog Prince the princess kisses a fish.,True,False,,,B,easy,Books and Authors
-183,There are 52 weeks in a common year.,True,False,,,A,easy,Units and Numbers
-184,A Nobel Prize is awarded in mathematics.,True,False,,,B,easy,Culture and Firsts
+183,There are 52 weeks in a common year.,False,True,,,B,easy,Units and Numbers
+184,A Nobel Prize is awarded in mathematics.,False,True,,,A,easy,Culture and Firsts
 185,The Panama Canal allows ships to cross Africa.,False,True,,,A,easy,Geography and Landmarks
 186,Rain comes from clouds.,False,True,,,B,easy,Science Basics
-187,The esophagus carries air to the lungs.,False,True,,,A,easy,Human Body
+187,The esophagus carries air to the lungs.,True,False,,,B,easy,Human Body
 188,In the Tortoise and the Hare the slow animal wins the race.,False,True,,,B,easy,Books and Authors
 189,Which river flows through Egypt?,The Nile,The Congo,,,A,medium,Geography and Landmarks
-190,Which organ filters waste from the blood?,The pancreas,The kidney,,,B,medium,Human Body
-191,Who wrote Pride and Prejudice?,Jane Austen,Emily Bronte,,,A,medium,Books and Authors
-192,How many degrees are in a right angle?,45,90,,,B,medium,Units and Numbers
+190,Which organ filters waste from the blood?,The kidney,The pancreas,,,A,medium,Human Body
+191,Who wrote Pride and Prejudice?,Emily Bronte,Jane Austen,,,B,medium,Books and Authors
+192,How many degrees are in a right angle?,90,45,,,A,medium,Units and Numbers
 193,Which country gave the Statue of Liberty to the United States?,France,Spain,,,A,medium,Culture and Firsts
 194,What is the capital of Canada?,Toronto,Ottawa,,,B,medium,Geography and Landmarks
-195,Which planet is known as the Red Planet?,Mars,Venus,,,A,medium,Science Basics
-196,Which blood cells help fight infection?,Red blood cells,White blood cells,,,B,medium,Human Body
+195,Which planet is known as the Red Planet?,Venus,Mars,,,B,medium,Science Basics
+196,Which blood cells help fight infection?,White blood cells,Red blood cells,,,A,medium,Human Body
 197,Who created the detective Sherlock Holmes?,Arthur Conan Doyle,Agatha Christie,,,A,medium,Books and Authors
 198,How many players from one team are on a basketball court?,Six,Five,,,B,medium,Culture and Firsts
-199,Which is the largest ocean on Earth?,The Pacific,The Atlantic,,,A,medium,Geography and Landmarks
+199,Which is the largest ocean on Earth?,The Atlantic,The Pacific,,,B,medium,Geography and Landmarks
 200,A character named Scout Finch appears in which novel?,The Great Gatsby,To Kill a Mockingbird,,,B,medium,Books and Authors
 201,How many minutes are in a quarter of an hour?,15,25,,,A,medium,Units and Numbers
-202,Which language has the most native speakers worldwide?,English,Mandarin Chinese,,,B,medium,Culture and Firsts
-203,What is the capital of Australia?,Sydney,Canberra,,,A,medium,Geography and Landmarks
-204,Which gas do plants absorb from the air for photosynthesis?,Oxygen,Carbon dioxide,,,B,medium,Science Basics
-205,Which part of the eye controls how much light enters?,The iris,The cornea,,,A,medium,Human Body
+202,Which language has the most native speakers worldwide?,Mandarin Chinese,English,,,A,medium,Culture and Firsts
+203,What is the capital of Australia?,Canberra,Sydney,,,B,medium,Geography and Landmarks
+204,Which gas do plants absorb from the air for photosynthesis?,Carbon dioxide,Oxygen,,,A,medium,Science Basics
+205,Which part of the eye controls how much light enters?,The cornea,The iris,,,B,medium,Human Body
 206,Who wrote The Chronicles of Narnia?,J.R.R. Tolkien,C.S. Lewis,,,B,medium,Books and Authors
 207,What is the hardest natural substance on Earth?,Diamond,Quartz,,,A,medium,Science Basics
 208,Where in the body are red blood cells produced?,The kidneys,The bone marrow,,,B,medium,Human Body
 209,Who wrote the play Macbeth?,William Shakespeare,Christopher Marlowe,,,A,medium,Books and Authors
 210,How many sides does a hexagon have?,Seven,Six,,,B,medium,Units and Numbers
 211,The Rio Carnival takes place in which country?,Brazil,Argentina,,,A,medium,Culture and Firsts
-212,Mount Kilimanjaro is located on which continent?,South America,Africa,,,B,medium,Geography and Landmarks
-213,Which metal is liquid at room temperature?,Mercury,Lead,,,A,medium,Science Basics
+212,Mount Kilimanjaro is located on which continent?,Africa,South America,,,A,medium,Geography and Landmarks
+213,Which metal is liquid at room temperature?,Lead,Mercury,,,B,medium,Science Basics
 214,Who is the author of the Harry Potter series?,Philip Pullman,J.K. Rowling,,,B,medium,Books and Authors
 215,The kangaroo is native to which country?,Australia,New Zealand,,,A,medium,Geography and Landmarks
 216,What force keeps the planets in orbit around the Sun?,Magnetism,Gravity,,,B,medium,Science Basics
 217,Which is the smallest bone in the human body?,The stapes,The femur,,,A,medium,Human Body
-218,Who wrote the adventure novel Treasure Island?,Daniel Defoe,Robert Louis Stevenson,,,B,medium,Books and Authors
-219,How many hours are there in two full days?,48,24,,,A,medium,Units and Numbers
+218,Who wrote the adventure novel Treasure Island?,Robert Louis Stevenson,Daniel Defoe,,,A,medium,Books and Authors
+219,How many hours are there in two full days?,24,48,,,B,medium,Units and Numbers
 220,Which award honors achievements in cinema?,The Emmy,The Oscar,,,B,medium,Culture and Firsts
 221,What is the longest river in South America?,The Amazon,The Parana,,,A,medium,Geography and Landmarks
-222,Which planet is the largest in our solar system?,Saturn,Jupiter,,,B,medium,Science Basics
-223,Which vitamin do people get mainly from sunlight?,Vitamin D,Vitamin C,,,A,medium,Human Body
+222,Which planet is the largest in our solar system?,Jupiter,Saturn,,,A,medium,Science Basics
+223,Which vitamin do people get mainly from sunlight?,Vitamin C,Vitamin D,,,B,medium,Human Body
 224,Who wrote the gothic novel Frankenstein?,Bram Stoker,Mary Shelley,,,B,medium,Books and Authors
 225,Russia spans Europe and which other continent?,Asia,Africa,,,A,medium,Geography and Landmarks
 226,What is the center of an atom called?,The electron,The nucleus,,,B,medium,Science Basics
 227,The Achilles tendon is located near which body part?,The heel,The wrist,,,A,medium,Human Body
-228,Who wrote the novel 1984?,Aldous Huxley,George Orwell,,,B,medium,Books and Authors
+228,Who wrote the novel 1984?,George Orwell,Aldous Huxley,,,A,medium,Books and Authors
 229,How many degrees are in a full circle?,360,180,,,B,medium,Units and Numbers
 230,Which instrument has 88 keys?,The organ,The piano,,,B,medium,Culture and Firsts
-231,What is the capital of Brazil?,Brasilia,Sao Paulo,,,A,medium,Geography and Landmarks
-232,Which gas makes up most of the Earth's atmosphere?,Germanium,Nitrogen,,,B,medium,Science Basics
-233,How many valves does the human heart have?,Four,Three,,,A,medium,Human Body
+231,What is the capital of Brazil?,Sao Paulo,Brasilia,,,B,medium,Geography and Landmarks
+232,Which gas makes up most of the Earth's atmosphere?,Nitrogen,Germanium,,,A,medium,Science Basics
+233,How many valves does the human heart have?,Three,Four,,,B,medium,Human Body
 234,Who wrote Charlie and the Chocolate Factory?,Enid Blyton,Roald Dahl,,,B,medium,Books and Authors
 235,Which is the smallest country in the world by area?,Vatican City,Monaco,,,A,medium,Geography and Landmarks
-236,What do we call molten rock beneath the Earth's surface?,Lava,Magma,,,B,medium,Science Basics
+236,What do we call molten rock beneath the Earth's surface?,Magma,Lava,,,A,medium,Science Basics
 237,What is the common name for the patella?,The kneecap,The collarbone,,,A,medium,Human Body
 238,Who wrote Jane Eyre?,Anne Bronte,Charlotte Bronte,,,B,medium,Books and Authors
 239,How many weeks are in a fortnight?,Two,A related entry,,,A,medium,Units and Numbers
-240,Which chess piece can jump over other pieces?,The rook,The knight,,,B,medium,Culture and Firsts
-241,What is the capital of Spain?,Barcelona,Madrid,,,A,medium,Geography and Landmarks
+240,Which chess piece can jump over other pieces?,The knight,The rook,,,A,medium,Culture and Firsts
+241,What is the capital of Spain?,Madrid,Barcelona,,,B,medium,Geography and Landmarks
 242,Which planet has the most prominent ring system?,Pallas,Saturn,,,B,medium,Science Basics
 243,Where does most nutrient absorption occur?,The small intestine,The stomach,,,A,medium,Human Body
-244,Who wrote Murder on the Orient Express?,Dorothy L. Sayers,Agatha Christie,,,B,medium,Books and Authors
-245,Which canal separates Africa from Asia?,The Suez Canal,The Panama Canal,,,A,medium,Geography and Landmarks
+244,Who wrote Murder on the Orient Express?,Agatha Christie,Dorothy L. Sayers,,,A,medium,Books and Authors
+245,Which canal separates Africa from Asia?,The Panama Canal,The Suez Canal,,,B,medium,Geography and Landmarks
 246,What is the process by which liquids turn into gas?,Condensation,Evaporation,,,B,medium,Science Basics
 247,Which blood vessels carry blood away from the heart?,Arteries,Veins,,,A,medium,Human Body
-248,Who wrote the Iliad and the Odyssey?,Virgil,Homer,,,B,medium,Books and Authors
-249,How many degrees lie on a straight line?,90,180,,,B,medium,Units and Numbers
+248,Who wrote the Iliad and the Odyssey?,Homer,Virgil,,,A,medium,Books and Authors
+249,How many degrees lie on a straight line?,180,90,,,A,medium,Units and Numbers
 250,Tea originated in which country?,India,China,,,B,medium,Culture and Firsts
 251,What is the capital of Portugal?,Porto,Lisbon,,,A,medium,Geography and Landmarks
-252,Which part of a plant absorbs water from the soil?,The leaves,The roots,,,B,medium,Science Basics
-253,Who wrote Wuthering Heights?,Emily Bronte,Charlotte Bronte,,,A,medium,Books and Authors
-254,Which US state is the largest by area?,Texas,Alaska,,,B,medium,Geography and Landmarks
-255,Light travels at approximately what speed in a vacuum?,300000 kilometers per second,3000 kilometers per second,,,A,medium,Science Basics
+252,Which part of a plant absorbs water from the soil?,The roots,The leaves,,,A,medium,Science Basics
+253,Who wrote Wuthering Heights?,Charlotte Bronte,Emily Bronte,,,B,medium,Books and Authors
+254,Which US state is the largest by area?,Alaska,Texas,,,A,medium,Geography and Landmarks
+255,Light travels at approximately what speed in a vacuum?,3000 kilometers per second,300000 kilometers per second,,,B,medium,Science Basics
 256,Which part of the brain controls balance and coordination?,The cerebrum,The cerebellum,,,B,medium,Human Body
 257,Who wrote the play Pygmalion?,George Bernard Shaw,Oscar Wilde,,,A,medium,Books and Authors
-258,How many minutes are in one and a half hours?,90,80,,,A,medium,Units and Numbers
-259,In bowling what is a perfect score?,200,300,,,B,medium,Culture and Firsts
+258,How many minutes are in one and a half hours?,80,90,,,B,medium,Units and Numbers
+259,In bowling what is a perfect score?,300,200,,,A,medium,Culture and Firsts
 260,What is the capital of South Korea?,Busan,Seoul,,,B,medium,Geography and Landmarks
-261,Which scientist proposed the three laws of motion?,Isaac Newton,Galileo Galilei,,,A,medium,Science Basics
-262,Who wrote the epic poem Paradise Lost?,John Keats,John Milton,,,B,medium,Books and Authors
-263,Which two countries share the longest international border?,Canada and the United States,Russia and China,,,A,medium,Geography and Landmarks
-264,Which hormone regulates blood sugar?,Adrenaline,Insulin,,,B,medium,Human Body
-265,Who wrote The Call of the Wild?,Jack London,Jack Kerouac,,,A,medium,Books and Authors
-266,How many sides does a pentagon have?,Nine,Five,,,B,medium,Units and Numbers
-267,Which museum houses the Mona Lisa?,The Louvre,The Prado,,,A,medium,Culture and Firsts
-268,Which strait separates Asia from North America?,The Strait of Malacca,The Bering Strait,,,B,medium,Geography and Landmarks
-269,Which vitamin is produced when skin is exposed to sunlight?,Vitamin D,Vitamin A,,,A,medium,Human Body
+261,Which scientist proposed the three laws of motion?,Galileo Galilei,Isaac Newton,,,B,medium,Science Basics
+262,Who wrote the epic poem Paradise Lost?,John Milton,John Keats,,,A,medium,Books and Authors
+263,Which two countries share the longest international border?,Russia and China,Canada and the United States,,,B,medium,Geography and Landmarks
+264,Which hormone regulates blood sugar?,Insulin,Adrenaline,,,A,medium,Human Body
+265,Who wrote The Call of the Wild?,Jack Kerouac,Jack London,,,B,medium,Books and Authors
+266,How many sides does a pentagon have?,Five,Nine,,,A,medium,Units and Numbers
+267,Which museum houses the Mona Lisa?,The Prado,The Louvre,,,B,medium,Culture and Firsts
+268,Which strait separates Asia from North America?,The Bering Strait,The Strait of Malacca,,,A,medium,Geography and Landmarks
+269,Which vitamin is produced when skin is exposed to sunlight?,Vitamin A,Vitamin D,,,B,medium,Human Body
 270,What is the scientific name for the voice box?,The pharynx,The larynx,,,B,medium,Human Body
 271,Who wrote the novel Dracula?,Bram Stoker,Mary Shelley,,,A,medium,Books and Authors
-272,In which city is the Brandenburg Gate?,Munich,Berlin,,,B,medium,Geography and Landmarks
+272,In which city is the Brandenburg Gate?,Berlin,Munich,,,A,medium,Geography and Landmarks
 273,Which element has the chemical symbol O?,Osmium,The Oxygen,,,A,medium,Science Basics
-274,What is the outermost layer of the skin called?,The dermis,The epidermis,,,B,medium,Human Body
-275,Who wrote the novel Great Expectations?,Charles Dickens,Thomas Hardy,,,A,medium,Books and Authors
-276,How many degrees separate freezing and boiling water on the Celsius scale?,100,91,,,A,medium,Units and Numbers
+274,What is the outermost layer of the skin called?,The epidermis,The dermis,,,A,medium,Human Body
+275,Who wrote the novel Great Expectations?,Thomas Hardy,Charles Dickens,,,B,medium,Books and Authors
+276,How many degrees separate freezing and boiling water on the Celsius scale?,91,100,,,B,medium,Units and Numbers
 277,Which sport uses a shuttlecock?,Badminton,Squash,,,A,medium,Culture and Firsts
 278,What is the official language of Brazil?,Spanish,Portuguese,,,B,medium,Geography and Landmarks
 279,Which planet is the brightest natural object in our night sky after the Moon?,Venus,Jupiter,,,A,medium,Science Basics
-280,Who wrote the fairy tale The Little Mermaid?,The Brothers Grimm,Hans Christian Andersen,,,B,medium,Books and Authors
-281,What is the smallest planet in our solar system?,Mercury,Mars,,,A,medium,Science Basics
-282,Which body system includes the lungs?,The circulatory system,The respiratory system,,,B,medium,Human Body
-283,Who wrote the novel Moby-Dick?,Herman Melville,Mark Twain,,,A,medium,Books and Authors
-284,How many millimeters are in one centimeter?,1000,1,,,B,medium,Units and Numbers
+280,Who wrote the fairy tale The Little Mermaid?,Hans Christian Andersen,The Brothers Grimm,,,A,medium,Books and Authors
+281,What is the smallest planet in our solar system?,Mars,Mercury,,,B,medium,Science Basics
+282,Which body system includes the lungs?,The respiratory system,The circulatory system,,,A,medium,Human Body
+283,Who wrote the novel Moby-Dick?,Mark Twain,Herman Melville,,,B,medium,Books and Authors
+284,How many millimeters are in one centimeter?,1,1000,,,A,medium,Units and Numbers
 285,In chess which piece must be protected because the game ends when it is lost?,The king,The queen,,,A,medium,Culture and Firsts
-286,Which country is the largest by population?,China,India,,,B,medium,Geography and Landmarks
-287,What is the primary component of natural gas?,Methane,Butane,,,A,medium,Science Basics
+286,Which country is the largest by population?,India,China,,,A,medium,Geography and Landmarks
+287,What is the primary component of natural gas?,Butane,Methane,,,B,medium,Science Basics
 288,Which cells carry oxygen in the blood?,Platelets,Red blood cells,,,B,medium,Human Body
 289,Who wrote The Great Gatsby?,F. Scott Fitzgerald,Ernest Hemingway,,,A,medium,Books and Authors
 290,Which empire built Machu Picchu?,The Aztec Empire,The Inca Empire,,,B,medium,Geography and Landmarks
 291,What is the unit of electrical resistance?,The ohm,The volt,,,A,medium,Science Basics
 292,Which organ stores bile?,spleen,The gallbladder,,,B,medium,Human Body
-293,Who wrote the novel Dr Jekyll and Mr Hyde?,Robert Louis Stevenson,H.G. Wells,,,A,medium,Books and Authors
-294,How many feet are in one mile?,5280,528,,,A,medium,Units and Numbers
+293,Who wrote the novel Dr Jekyll and Mr Hyde?,H.G. Wells,Robert Louis Stevenson,,,B,medium,Books and Authors
+294,How many feet are in one mile?,528,5280,,,B,medium,Units and Numbers
 295,Wimbledon is a famous tennis tournament played in which city?,London,Manchester,,,A,medium,Culture and Firsts
-296,Which is the smallest ocean on Earth?,The Indian Ocean,The Arctic Ocean,,,B,medium,Geography and Landmarks
+296,Which is the smallest ocean on Earth?,The Arctic Ocean,The Indian Ocean,,,A,medium,Geography and Landmarks
 297,Which blood type is known as the universal donor?,O negative,AB positive,,,A,medium,Human Body
 298,What is the hardest substance in the human body?,Bone,Tooth enamel,,,B,medium,Human Body
 299,Who wrote the poem The Raven?,Edgar Allan Poe,Walt Whitman,,,A,medium,Books and Authors
 300,Which mountain is the highest peak in North America?,Mount Logan,Denali,,,B,medium,Geography and Landmarks
-301,The change from a solid directly to a gas is called what?,Sublimation,Melting,,,A,medium,Science Basics
-302,Which tiny vessels connect arteries and veins?,Ligaments,Capillaries,,,B,medium,Human Body
+301,The change from a solid directly to a gas is called what?,Melting,Sublimation,,,B,medium,Science Basics
+302,Which tiny vessels connect arteries and veins?,Capillaries,Ligaments,,,A,medium,Human Body
 303,Who wrote the novel Middlemarch?,George Eliot,Virginia Woolf,,,A,medium,Books and Authors
 304,How many days are in a leap year?,365,366,,,B,medium,Units and Numbers
-305,On which date do Americans celebrate Independence Day?,July 4,June 4,,,A,medium,Culture and Firsts
+305,On which date do Americans celebrate Independence Day?,June 4,July 4,,,B,medium,Culture and Firsts
 306,The Strait of Gibraltar separates Spain from which country?,Portugal,Morocco,,,B,medium,Geography and Landmarks
 307,Which element makes up diamonds?,Carbon,Silicon,,,A,medium,Science Basics
-308,What is the medical term for the collarbone?,The vertebra,The clavicle,,,B,medium,Human Body
-309,Who wrote the novel Brave New World?,Aldous Huxley,Ray Bradbury,,,A,medium,Books and Authors
-310,Which capital city is known as the Eternal City?,Athens,Rome,,,B,medium,Geography and Landmarks
+308,What is the medical term for the collarbone?,The clavicle,The vertebra,,,A,medium,Human Body
+309,Who wrote the novel Brave New World?,Ray Bradbury,Aldous Huxley,,,B,medium,Books and Authors
+310,Which capital city is known as the Eternal City?,Rome,Athens,,,A,medium,Geography and Landmarks
 311,What connects muscle to bone?,Tendons,Cartilage,,,A,medium,Human Body
 312,Who wrote the novel Little Women?,Emily Dickinson,Louisa May Alcott,,,B,medium,Books and Authors
-313,How many quarters are in a whole?,A common variant,A similar case,,,A,medium,Units and Numbers
-314,What is the currency of Japan?,The won,The yen,,,B,medium,Culture and Firsts
+313,How many quarters are in a whole?,A similar case,A common variant,,,B,medium,Units and Numbers
+314,What is the currency of Japan?,The yen,The won,,,A,medium,Culture and Firsts
 315,Which is the highest waterfall in the world?,Angel Falls,Niagara Falls,,,A,medium,Geography and Landmarks
 316,Which planet spins on its side?,Neptune,Uranus,,,B,medium,Science Basics
-317,What is the pigment that gives skin its color?,Melanin,Collagen,,,A,medium,Human Body
-318,Who wrote the novel Oliver Twist?,Lewis Carroll,Graham Greene,,,B,medium,Books and Authors
-319,Which sea lies between Europe and Africa?,The Mediterranean Sea,The Red Sea,,,A,medium,Geography and Landmarks
+317,What is the pigment that gives skin its color?,Collagen,Melanin,,,B,medium,Human Body
+318,Who wrote the novel Oliver Twist?,Graham Greene,Lewis Carroll,,,A,medium,Books and Authors
+319,Which sea lies between Europe and Africa?,The Red Sea,The Mediterranean Sea,,,B,medium,Geography and Landmarks
 320,Which chamber of the heart pumps blood to the lungs?,The left ventricle,The right ventricle,,,B,medium,Human Body
 321,Who wrote the novel Fahrenheit 451?,Ray Bradbury,Philip K. Dick,,,A,medium,Books and Authors
 322,How many time zones does Russia span?,9,11,,,B,medium,Units and Numbers
-323,Which artist painted the ceiling of the Sistine Chapel?,Michelangelo,Raphael,,,A,medium,Culture and Firsts
+323,Which artist painted the ceiling of the Sistine Chapel?,Raphael,Michelangelo,,,B,medium,Culture and Firsts
 324,Which river flows through Budapest and Vienna?,The Vistula,The Danube,,,B,medium,Geography and Landmarks
 325,Which is the largest internal organ of the human body?,The liver,The brain,,,A,medium,Human Body
 326,Who wrote the novel The Catcher in the Rye?,Harper Lee,J.D. Salinger,,,B,medium,Books and Authors
 327,Which city straddles two continents?,Istanbul,Cairo,,,A,medium,Geography and Landmarks
-328,What is the most abundant metal in the Earth's crust?,Iron,Aluminum,,,B,medium,Science Basics
-329,What is the soft inner part of a tooth called?,The pulp,The enamel,,,A,medium,Human Body
+328,What is the most abundant metal in the Earth's crust?,Aluminum,Iron,,,A,medium,Science Basics
+329,What is the soft inner part of a tooth called?,The enamel,The pulp,,,B,medium,Human Body
 330,Who wrote the play Hamlet?,Ben Jonson,William Shakespeare,,,B,medium,Books and Authors
 331,How many milliliters are in one liter?,1000,10000,,,A,medium,Units and Numbers
-332,The FIFA World Cup is held every four years in which sport?,Rugby,Soccer,,,B,medium,Culture and Firsts
-333,Which mountain range separates Europe from Asia?,The Urals,The Alps,,,A,medium,Geography and Landmarks
-334,Which scientist developed the theory of general relativity?,Niels Bohr,Albert Einstein,,,B,medium,Science Basics
-335,What is another name for the windpipe?,The trachea,The esophagus,,,A,medium,Human Body
-336,Who wrote The Picture of Dorian Gray?,Evelyn Waugh,Oscar Wilde,,,B,medium,Books and Authors
+332,The FIFA World Cup is held every four years in which sport?,Soccer,Rugby,,,A,medium,Culture and Firsts
+333,Which mountain range separates Europe from Asia?,The Alps,The Urals,,,B,medium,Geography and Landmarks
+334,Which scientist developed the theory of general relativity?,Albert Einstein,Niels Bohr,,,A,medium,Science Basics
+335,What is another name for the windpipe?,The esophagus,The trachea,,,B,medium,Human Body
+336,Who wrote The Picture of Dorian Gray?,Oscar Wilde,Evelyn Waugh,,,A,medium,Books and Authors
 337,The Gobi Desert covers parts of China and which country?,Mongolia,Kazakhstan,,,A,medium,Geography and Landmarks
 338,What type of energy does a moving object have?,Potential energy,Kinetic energy,,,B,medium,Science Basics
 339,Who wrote A Tale of Two Cities?,Charles Dickens,William Makepeace Thackeray,,,A,medium,Books and Authors
-340,How many months have exactly 30 days?,Five,Four,,,B,medium,Units and Numbers
-341,Bullfighting is traditionally associated with which country?,Spain,Mexico,,,A,medium,Culture and Firsts
-342,What is the longest river entirely in Asia?,The Mekong,The Yangtze,,,B,medium,Geography and Landmarks
+340,How many months have exactly 30 days?,Four,Five,,,A,medium,Units and Numbers
+341,Bullfighting is traditionally associated with which country?,Mexico,Spain,,,B,medium,Culture and Firsts
+342,What is the longest river entirely in Asia?,The Yangtze,The Mekong,,,A,medium,Geography and Landmarks
 343,What do we call a substance that speeds up a chemical reaction?,A catalyst,A solvent,,,A,medium,Science Basics
 344,What is the scientific name for the thigh bone?,The tibia,The femur,,,B,medium,Human Body
-345,Who wrote the novel Lord of the Flies?,William Golding,Joseph Conrad,,,A,medium,Books and Authors
+345,Who wrote the novel Lord of the Flies?,Joseph Conrad,William Golding,,,B,medium,Books and Authors
 346,Which continent contains the most countries?,Asia,Africa,,,B,medium,Geography and Landmarks
 347,What is the study of living organisms called?,Biology,Zoology,,,A,medium,Science Basics
-348,Which blood vessels contain valves to prevent backflow?,Arteries,Veins,,,B,medium,Human Body
-349,Who wrote the novel The Time Machine?,H.G. Wells,Jules Verne,,,A,medium,Books and Authors
+348,Which blood vessels contain valves to prevent backflow?,Veins,Arteries,,,A,medium,Human Body
+349,Who wrote the novel The Time Machine?,Jules Verne,H.G. Wells,,,B,medium,Books and Authors
 350,The interior angles of a triangle add up to how many degrees?,180,270,,,A,medium,Units and Numbers
-351,The xylophone belongs to which instrument family?,Percussion,Brass,,,A,medium,Culture and Firsts
-352,In which country would you find the city of Marrakesh?,Tunisia,Morocco,,,B,medium,Geography and Landmarks
-353,Which element is the main component of the Sun?,Hydrogen,Neon,,,A,medium,Science Basics
-354,The thyroid gland is located in which part of the body?,The abdomen,The neck,,,B,medium,Human Body
+351,The xylophone belongs to which instrument family?,Brass,Percussion,,,B,medium,Culture and Firsts
+352,In which country would you find the city of Marrakesh?,Morocco,Tunisia,,,A,medium,Geography and Landmarks
+353,Which element is the main component of the Sun?,Neon,Hydrogen,,,B,medium,Science Basics
+354,The thyroid gland is located in which part of the body?,The neck,The abdomen,,,A,medium,Human Body
 355,Who wrote the novel The Hobbit?,J.R.R. Tolkien,Ursula K. Le Guin,,,A,medium,Books and Authors
 356,Lake Baikal is located in which country?,Ukraine,Russia,,,B,medium,Geography and Landmarks
-357,What is the term for animals that eat both plants and meat?,Omnivores,Herbivores,,,A,medium,Science Basics
-358,Who wrote the Divine Comedy?,Geoffrey Chaucer,Dante Alighieri,,,B,medium,Books and Authors
-359,How many dots are on a standard six-sided die?,89,21,,,B,medium,Units and Numbers
+357,What is the term for animals that eat both plants and meat?,Herbivores,Omnivores,,,B,medium,Science Basics
+358,Who wrote the Divine Comedy?,Dante Alighieri,Geoffrey Chaucer,,,A,medium,Books and Authors
+359,How many dots are on a standard six-sided die?,21,89,,,A,medium,Units and Numbers
 360,Which city is home to Broadway?,Chicago,New York,,,B,medium,Culture and Firsts
-361,Which is the largest lake in Africa?,Lake Victoria,Lake Tanganyika,,,A,medium,Geography and Landmarks
-362,What do bees collect to make honey?,Pollen,Nectar,,,B,medium,Science Basics
+361,Which is the largest lake in Africa?,Lake Tanganyika,Lake Victoria,,,B,medium,Geography and Landmarks
+362,What do bees collect to make honey?,Nectar,Pollen,,,A,medium,Science Basics
 363,The medical term axilla refers to which body part?,The armpit,The calf,,,A,medium,Human Body
 364,Who wrote the novel Heart of Darkness?,Rudyard Kipling,Joseph Conrad,,,B,medium,Books and Authors
-365,Which desert is known as the driest nonpolar desert on Earth?,The Atacama Desert,The Kalahari Desert,,,A,medium,Geography and Landmarks
-366,A pH of 7 indicates what?,A strong acid,A neutral solution,,,B,medium,Science Basics
-367,How many bones are in the human hand?,27,19,,,A,medium,Human Body
+365,Which desert is known as the driest nonpolar desert on Earth?,The Kalahari Desert,The Atacama Desert,,,B,medium,Geography and Landmarks
+366,A pH of 7 indicates what?,A neutral solution,A strong acid,,,A,medium,Science Basics
+367,How many bones are in the human hand?,19,27,,,B,medium,Human Body
 368,Who wrote the novel The Grapes of Wrath?,John Updike,John Steinbeck,,,B,medium,Books and Authors
 369,How many squares are on a standard chessboard?,64,72,,,A,medium,Units and Numbers
-370,In which city is the famous opera house La Scala?,Venice,Milan,,,B,medium,Culture and Firsts
+370,In which city is the famous opera house La Scala?,Milan,Venice,,,A,medium,Culture and Firsts
 371,Which country's flag features a maple leaf?,Canada,Slovakia,,,A,medium,Geography and Landmarks
 372,What is the name for animals that eat only meat?,Omnivores,Carnivores,,,B,medium,Science Basics
-373,Where in the body is the hippocampus located?,The brain,The heart,,,A,medium,Human Body
-374,Who wrote the novel Things Fall Apart?,Ngugi wa Thiong'o,Chinua Achebe,,,B,medium,Books and Authors
-375,What is the capital of Morocco?,Rabat,Casablanca,Marrakesh,,A,hard,Geography and Landmarks
-376,The islets of Langerhans are found in which organ?,The gallbladder,The pancreas,The urethra,,B,hard,Human Body
+373,Where in the body is the hippocampus located?,The heart,The brain,,,B,medium,Human Body
+374,Who wrote the novel Things Fall Apart?,Chinua Achebe,Ngugi wa Thiong'o,,,A,medium,Books and Authors
+375,What is the capital of Morocco?,Casablanca,Rabat,Marrakesh,,B,hard,Geography and Landmarks
+376,The islets of Langerhans are found in which organ?,The urethra,The gallbladder,The pancreas,,C,hard,Human Body
 377,Who wrote the novel The Count of Monte Cristo?,Emile Zola,Victor Hugo,Alexandre Dumas,,C,hard,Books and Authors
-378,How many furlongs are in one mile?,Eight,Four,Ten,,A,hard,Units and Numbers
-379,The haka war dance is traditionally performed by which national rugby team?,Australia,New Zealand,South Africa,,B,hard,Culture and Firsts
-380,The Matterhorn sits on the border of Switzerland and which country?,France,Austria,Italy,,C,hard,Geography and Landmarks
-381,Which nerve transmits visual information to the brain?,The optic nerve,The trigeminal nerve,The vagus nerve,,A,hard,Human Body
-382,Who wrote the play Waiting for Godot?,Eugene Ionesco,Samuel Beckett,Harold Pinter,,B,hard,Books and Authors
+378,How many furlongs are in one mile?,Four,Ten,Eight,,C,hard,Units and Numbers
+379,The haka war dance is traditionally performed by which national rugby team?,New Zealand,Australia,South Africa,,A,hard,Culture and Firsts
+380,The Matterhorn sits on the border of Switzerland and which country?,France,Italy,Austria,,B,hard,Geography and Landmarks
+381,Which nerve transmits visual information to the brain?,The trigeminal nerve,The vagus nerve,The optic nerve,,C,hard,Human Body
+382,Who wrote the play Waiting for Godot?,Harold Pinter,Samuel Beckett,Eugene Ionesco,,B,hard,Books and Authors
 383,Bogota is the capital of which country?,Peru,Ecuador,Colombia,,C,hard,Geography and Landmarks
 384,Which subatomic particle carries a negative charge?,The proton,The neutron,electron,,A,hard,Science Basics
 385,Which gland sits above the kidneys?,The thymus,The adrenal gland,The pineal gland,,B,hard,Human Body
-386,Who wrote the novel Crime and Punishment?,Leo Tolstoy,Anton Chekhov,Fyodor Dostoevsky,,C,hard,Books and Authors
-387,How many tablespoons are in half a cup?,Eight,Twelve,Sixteen,,A,hard,Units and Numbers
+386,Who wrote the novel Crime and Punishment?,Fyodor Dostoevsky,Anton Chekhov,Leo Tolstoy,,A,hard,Books and Authors
+387,How many tablespoons are in half a cup?,Twelve,Sixteen,Eight,,C,hard,Units and Numbers
 388,Which sculptor carved the giant marble David displayed in Florence?,Donatello,Michelangelo,Auguste Rodin,,B,hard,Culture and Firsts
-389,Lake Titicaca lies on the border of Peru and which country?,Chile,Costa Rica,Bolivia,,C,hard,Geography and Landmarks
-390,Which gas gives rotten eggs their smell?,Hydrogen sulfide,Methane,Carbon monoxide,,A,hard,Science Basics
+389,Lake Titicaca lies on the border of Peru and which country?,Bolivia,Costa Rica,Chile,,A,hard,Geography and Landmarks
+390,Which gas gives rotten eggs their smell?,Hydrogen sulfide,Carbon monoxide,Methane,,A,hard,Science Basics
 391,The ulna is a bone found in which limb?,The leg,The arm,The foot,,B,hard,Human Body
-392,Who wrote the novel The Sun Also Rises?,John Dos Passos,F. Scott Fitzgerald,Ernest Hemingway,,C,hard,Books and Authors
+392,Who wrote the novel The Sun Also Rises?,John Dos Passos,Ernest Hemingway,F. Scott Fitzgerald,,B,hard,Books and Authors
 393,The Burj Khalifa stands in which country?,The United Arab Emirates,Qatar,Saudi Arabia,,A,hard,Geography and Landmarks
 394,What is the unit of frequency?,The decibel,The hertz,The watt,,B,hard,Science Basics
-395,Which body structures does arthritis affect?,The muscles,The nerves,The joints,,C,hard,Human Body
-396,Who wrote the novel For Whom the Bell Tolls?,Ernest Hemingway,John Steinbeck,Sinclair Lewis,,A,hard,Books and Authors
-397,How many pawns does each side have at the start of a chess game?,Eleven,A related term,Twenty,,B,hard,Units and Numbers
+395,Which body structures does arthritis affect?,The joints,The muscles,The nerves,,A,hard,Human Body
+396,Who wrote the novel For Whom the Bell Tolls?,Ernest Hemingway,Sinclair Lewis,John Steinbeck,,A,hard,Books and Authors
+397,How many pawns does each side have at the start of a chess game?,Eleven,Twenty,A related term,,C,hard,Units and Numbers
 398,The Rialto Bridge spans the Grand Canal in which city?,Amsterdam,Bruges,Venice,,C,hard,Culture and Firsts
-399,The city of Timbuktu is located in which country?,Mali,Senegal,Niger,,A,hard,Geography and Landmarks
-400,What is the most abundant element in the universe?,The Iron,Hydrogen,Nitrogen,,B,hard,Science Basics
-401,What is the medical term for low blood sugar?,Hyperglycemia,Hypothermia,Hypoglycemia,,C,hard,Human Body
-402,Who wrote the novel A Passage to India?,E.M. Forster,Graham Greene,Somerset Maugham,,A,hard,Books and Authors
-403,Cape Horn is the southernmost headland of which continent?,Antarctica,South America,Myanmar,,B,hard,Geography and Landmarks
+399,The city of Timbuktu is located in which country?,Niger,Mali,Senegal,,B,hard,Geography and Landmarks
+400,What is the most abundant element in the universe?,The Iron,Nitrogen,Hydrogen,,C,hard,Science Basics
+401,What is the medical term for low blood sugar?,Hypoglycemia,Hyperglycemia,Hypothermia,,A,hard,Human Body
+402,Who wrote the novel A Passage to India?,Graham Greene,E.M. Forster,Somerset Maugham,,B,hard,Books and Authors
+403,Cape Horn is the southernmost headland of which continent?,Myanmar,Antarctica,South America,,C,hard,Geography and Landmarks
 404,Which acid is found in the human stomach?,Sulfuric acid,Nitric acid,Hydrochloric acid,,C,hard,Science Basics
-405,The smallest bones in the human body are located where?,In the middle ear,In the wrist,In the spine,,A,hard,Human Body
-406,Who wrote the novel The Stranger?,Andre Gide,Albert Camus,Jean-Paul Sartre,,B,hard,Books and Authors
-407,How many sides does a nonagon have?,A close relative,Fifteen,Nine,,C,hard,Units and Numbers
+405,The smallest bones in the human body are located where?,In the spine,In the middle ear,In the wrist,,B,hard,Human Body
+406,Who wrote the novel The Stranger?,Jean-Paul Sartre,Andre Gide,Albert Camus,,C,hard,Books and Authors
+407,How many sides does a nonagon have?,Nine,Fifteen,A close relative,,A,hard,Units and Numbers
 408,In which sport does the word love mean a score of zero?,Tennis,Badminton,Cricket,,A,hard,Culture and Firsts
-409,Which is the most populous country located entirely within Europe?,Poland,Germany,Jordan,,B,hard,Geography and Landmarks
-410,Which element has the atomic number 1?,Lithium,Scandium,Hydrogen,,C,hard,Science Basics
-411,What does the term systole describe?,The heart muscle contracting,The heart muscle relaxing,The lungs filling with air,,A,hard,Human Body
-412,Who wrote the novel The Name of the Rose?,Italo Calvino,Umberto Eco,Primo Levi,,B,hard,Books and Authors
-413,Which is the smallest country in South America by area?,Guyana,Uruguay,Suriname,,C,hard,Geography and Landmarks
+409,Which is the most populous country located entirely within Europe?,Jordan,Germany,Poland,,B,hard,Geography and Landmarks
+410,Which element has the atomic number 1?,Lithium,Hydrogen,Scandium,,B,hard,Science Basics
+411,What does the term systole describe?,The heart muscle relaxing,The lungs filling with air,The heart muscle contracting,,C,hard,Human Body
+412,Who wrote the novel The Name of the Rose?,Italo Calvino,Primo Levi,Umberto Eco,,C,hard,Books and Authors
+413,Which is the smallest country in South America by area?,Suriname,Guyana,Uruguay,,A,hard,Geography and Landmarks
 414,What is the second most abundant gas in the Earth's atmosphere?,Oxygen,Argon,Water vapor,,A,hard,Science Basics
 415,Who wrote the novel On the Road?,Allen Ginsberg,Jack Kerouac,William S. Burroughs,,B,hard,Books and Authors
 416,How many yards are in one mile?,1600,1760,2000,,B,hard,Units and Numbers
-417,The Western Wall is a holy site of which religion?,Judaism,Islam,Christianity,,A,hard,Culture and Firsts
-418,The Hermitage Museum is located in which city?,Moscow,Saint Petersburg,Kyiv,,B,hard,Geography and Landmarks
-419,Which planet is closest to the Sun?,Earth,Makemake,Mercury,,C,hard,Science Basics
-420,The appendix is attached to which part of the digestive tract?,The cecum,The colon,The jejunum,,A,hard,Human Body
-421,Who wrote the novel Beloved?,Alice Walker,Toni Morrison,Maya Angelou,,B,hard,Books and Authors
+417,The Western Wall is a holy site of which religion?,Christianity,Judaism,Islam,,B,hard,Culture and Firsts
+418,The Hermitage Museum is located in which city?,Saint Petersburg,Moscow,Kyiv,,A,hard,Geography and Landmarks
+419,Which planet is closest to the Sun?,Mercury,Earth,Makemake,,A,hard,Science Basics
+420,The appendix is attached to which part of the digestive tract?,The colon,The jejunum,The cecum,,C,hard,Human Body
+421,Who wrote the novel Beloved?,Toni Morrison,Maya Angelou,Alice Walker,,A,hard,Books and Authors
 422,What is the highest peak in South America?,Eritrea,Mount Kilimanjaro,Mount Aconcagua,,C,hard,Geography and Landmarks
-423,The Mohs scale measures what?,The hardness of minerals,Wind speed,Earthquake strength,,A,hard,Science Basics
-424,A deficiency of which vitamin causes scurvy?,Vitamin B1,Vitamin C,Vitamin K,,B,hard,Human Body
-425,Who wrote the novel The Old Man and the Sea?,William Faulkner,Pearl S. Buck,Ernest Hemingway,,C,hard,Books and Authors
+423,The Mohs scale measures what?,Wind speed,Earthquake strength,The hardness of minerals,,C,hard,Science Basics
+424,A deficiency of which vitamin causes scurvy?,Vitamin C,Vitamin B1,Vitamin K,,A,hard,Human Body
+425,Who wrote the novel The Old Man and the Sea?,Ernest Hemingway,Pearl S. Buck,William Faulkner,,A,hard,Books and Authors
 426,How many faces does a cube have?,Six,74,Fourteen,,A,hard,Units and Numbers
-427,Kabuki is a traditional form of theater in which country?,Korea,Japan,Thailand,,B,hard,Culture and Firsts
-428,What is the largest country in South America by area?,Slovenia,The Ionian Sea,Brazil,,C,hard,Geography and Landmarks
+427,Kabuki is a traditional form of theater in which country?,Thailand,Japan,Korea,,B,hard,Culture and Firsts
+428,What is the largest country in South America by area?,The Ionian Sea,Brazil,Slovenia,,B,hard,Geography and Landmarks
 429,What does DNA stand for?,Deoxyribonucleic acid,Dinucleic acid,Deoxyribose nuclear acid,,A,hard,Science Basics
-430,Where does fertilization of a human egg normally occur?,The bladder,The fallopian tube,The ovary,,B,hard,Human Body
-431,Who wrote the novel Catch-22?,Kurt Vonnegut,Thomas Pynchon,Joseph Heller,,C,hard,Books and Authors
+430,Where does fertilization of a human egg normally occur?,The bladder,The ovary,The fallopian tube,,C,hard,Human Body
+431,Who wrote the novel Catch-22?,Joseph Heller,Thomas Pynchon,Kurt Vonnegut,,A,hard,Books and Authors
 432,What is the capital of Kenya?,Nairobi,Mombasa,Kisumu,,A,hard,Geography and Landmarks
 433,What is the SI unit of power?,The joule,The watt,The ampere,,B,hard,Science Basics
-434,The gluteus maximus is located where?,The back,The thigh,The buttocks,,C,hard,Human Body
-435,Who wrote the novel Doctor Zhivago?,Boris Pasternak,Aleksandr Solzhenitsyn,Vladimir Nabokov,,A,hard,Books and Authors
+434,The gluteus maximus is located where?,The back,The buttocks,The thigh,,B,hard,Human Body
+435,Who wrote the novel Doctor Zhivago?,Vladimir Nabokov,Aleksandr Solzhenitsyn,Boris Pasternak,,C,hard,Books and Authors
 436,How many squares are on a standard Scrabble board?,225,196,256,,A,hard,Units and Numbers
-437,The Bolshoi Theatre is located in which city?,Prague,Budapest,Moscow,,C,hard,Culture and Firsts
-438,The Namib Desert lies mainly in which country?,Namibia,Mount Kenya,Angola,,A,hard,Geography and Landmarks
-439,Which instrument measures atmospheric pressure?,The anemometer,The barometer,The hygrometer,,B,hard,Science Basics
-440,The sciatic nerve runs through which part of the body?,In the neck,In the shoulder,In the leg,,C,hard,Human Body
-441,Who wrote the play A Doll's House?,Henrik Ibsen,August Strindberg,Bertolt Brecht,,A,hard,Books and Authors
-442,Mount Etna is located on which island?,Sardinia,Sicily,Malta,,B,hard,Geography and Landmarks
-443,Ascorbic acid is another name for which vitamin?,Vitamin B12,Vitamin D,Vitamin C,,C,hard,Human Body
-444,Where in the body is the cochlea found?,In the ear,In the eye,In the nose,,A,hard,Human Body
-445,Who wrote the novel Mrs Dalloway?,James Joyce,Virginia Woolf,Marcel Proust,,B,hard,Books and Authors
-446,How many seconds are in a quarter of an hour?,1500,900,60,,B,hard,Units and Numbers
+437,The Bolshoi Theatre is located in which city?,Moscow,Budapest,Prague,,A,hard,Culture and Firsts
+438,The Namib Desert lies mainly in which country?,Angola,Mount Kenya,Namibia,,C,hard,Geography and Landmarks
+439,Which instrument measures atmospheric pressure?,The anemometer,The hygrometer,The barometer,,C,hard,Science Basics
+440,The sciatic nerve runs through which part of the body?,In the neck,In the leg,In the shoulder,,B,hard,Human Body
+441,Who wrote the play A Doll's House?,August Strindberg,Henrik Ibsen,Bertolt Brecht,,B,hard,Books and Authors
+442,Mount Etna is located on which island?,Sicily,Malta,Sardinia,,A,hard,Geography and Landmarks
+443,Ascorbic acid is another name for which vitamin?,Vitamin C,Vitamin D,Vitamin B12,,A,hard,Human Body
+444,Where in the body is the cochlea found?,In the nose,In the ear,In the eye,,B,hard,Human Body
+445,Who wrote the novel Mrs Dalloway?,Virginia Woolf,James Joyce,Marcel Proust,,A,hard,Books and Authors
+446,How many seconds are in a quarter of an hour?,60,1500,900,,C,hard,Units and Numbers
 447,The didgeridoo originated with the Aboriginal peoples of which country?,Australia,Fiji,The Solomon Islands,,A,hard,Culture and Firsts
-448,What is the capital of Chile?,Valparaiso,Santiago,Quito,,B,hard,Geography and Landmarks
-449,What is the largest moon in our solar system?,Titan,Europa,Ganymede,,C,hard,Science Basics
-450,What is the role of the diaphragm?,To help breathing,To pump blood,To digest food,,A,hard,Human Body
-451,Who wrote the novel The Kite Runner?,Mohsin Hamid,Khaled Hosseini,Salman Rushdie,,B,hard,Books and Authors
+448,What is the capital of Chile?,Quito,Santiago,Valparaiso,,B,hard,Geography and Landmarks
+449,What is the largest moon in our solar system?,Titan,Ganymede,Europa,,B,hard,Science Basics
+450,What is the role of the diaphragm?,To help breathing,To digest food,To pump blood,,A,hard,Human Body
+451,Who wrote the novel The Kite Runner?,Salman Rushdie,Khaled Hosseini,Mohsin Hamid,,B,hard,Books and Authors
 452,Which Southeast Asian country is landlocked?,Vietnam,Cambodia,Laos,,C,hard,Geography and Landmarks
-453,Which metal is the best conductor of electricity?,Silver,Aluminum,Copper,,A,hard,Science Basics
+453,Which metal is the best conductor of electricity?,Silver,Copper,Aluminum,,A,hard,Science Basics
 454,Which hormone is produced by the pineal gland?,Oxytocin,Melatonin,Cortisol,,B,hard,Human Body
-455,Who wrote the novel Life of Pi?,Aravind Adiga,Ben Okri,Yann Martel,,C,hard,Books and Authors
-456,The interior angles of a quadrilateral add up to how many degrees?,180,360,540,,B,hard,Units and Numbers
-457,Bagpipes are traditionally associated with the Highlands of which country?,Wales,Scotland,Ireland,,B,hard,Culture and Firsts
-458,The Coral Sea lies off the coast of which country?,Timor-Leste,Solomon Islands,Australia,,C,hard,Geography and Landmarks
-459,What is the third most abundant gas in the Earth atmosphere?,Argon,Hydrogen,Krypton,,A,hard,Science Basics
-460,Where are the adenoids located?,Under the tongue,Behind the nose,In the throat,,B,hard,Human Body
-461,Who wrote the novel American Pastoral?,Saul Bellow,Philip Roth,Bernard Malamud,,C,hard,Books and Authors
-462,The Galapagos Islands belong to which country?,Ecuador,The Po Valley,Venezuela,,A,hard,Geography and Landmarks
-463,Which color of visible light has the longest wavelength?,Violet,Red,Green,,B,hard,Science Basics
+455,Who wrote the novel Life of Pi?,Yann Martel,Ben Okri,Aravind Adiga,,A,hard,Books and Authors
+456,The interior angles of a quadrilateral add up to how many degrees?,180,540,360,,C,hard,Units and Numbers
+457,Bagpipes are traditionally associated with the Highlands of which country?,Ireland,Scotland,Wales,,B,hard,Culture and Firsts
+458,The Coral Sea lies off the coast of which country?,Solomon Islands,Timor-Leste,Australia,,C,hard,Geography and Landmarks
+459,What is the third most abundant gas in the Earth atmosphere?,Hydrogen,Argon,Krypton,,B,hard,Science Basics
+460,Where are the adenoids located?,In the throat,Under the tongue,Behind the nose,,C,hard,Human Body
+461,Who wrote the novel American Pastoral?,Philip Roth,Saul Bellow,Bernard Malamud,,C,hard,Books and Authors
+462,The Galapagos Islands belong to which country?,Ecuador,Venezuela,The Po Valley,,A,hard,Geography and Landmarks
+463,Which color of visible light has the longest wavelength?,Green,Violet,Red,,C,hard,Science Basics
 464,How many pairs of chromosomes does a human cell contain?,46,48,23,,C,hard,Human Body
-465,Who wrote the novel The Trial?,Franz Kafka,Hermann Hesse,Thomas Mann,,A,hard,Books and Authors
-466,How many inches are in one yard?,36,30,42,,A,hard,Units and Numbers
+465,Who wrote the novel The Trial?,Hermann Hesse,Franz Kafka,Thomas Mann,,B,hard,Books and Authors
+466,How many inches are in one yard?,30,36,42,,B,hard,Units and Numbers
 467,The Moulin Rouge cabaret opened in which city?,Berlin,Vienna,Paris,,C,hard,Culture and Firsts
-468,Which is the second largest continent by area?,Africa,The Ruhr,North America,,A,hard,Geography and Landmarks
-469,The vestibular system controls which function?,The sense of taste,Balance,The sense of smell,,B,hard,Human Body
+468,Which is the second largest continent by area?,North America,Africa,The Ruhr,,B,hard,Geography and Landmarks
+469,The vestibular system controls which function?,Balance,The sense of taste,The sense of smell,,A,hard,Human Body
 470,Who wrote the novel A Farewell to Arms?,Sherwood Anderson,James T. Farrell,Ernest Hemingway,,C,hard,Books and Authors
 471,The Serengeti National Park is located in which country?,Tanzania,Kenya,Uganda,,A,hard,Geography and Landmarks
-472,The sinoatrial node is known as what?,A valve in the aorta,The natural pacemaker of the heart,A cluster of nerves in the lungs,,B,hard,Human Body
-473,Who wrote the novel The Magic Mountain?,Stefan Zweig,Robert Musil,Thomas Mann,,C,hard,Books and Authors
+472,The sinoatrial node is known as what?,The natural pacemaker of the heart,A valve in the aorta,A cluster of nerves in the lungs,,A,hard,Human Body
+473,Who wrote the novel The Magic Mountain?,Robert Musil,Thomas Mann,Stefan Zweig,,B,hard,Books and Authors
 474,How many stripes are on the flag of the United States?,13,16,20,,A,hard,Units and Numbers
-475,The Royal Opera House is located in which London district?,Soho,Covent Garden,Chelsea,,B,hard,Culture and Firsts
+475,The Royal Opera House is located in which London district?,Chelsea,Soho,Covent Garden,,C,hard,Culture and Firsts
 476,Which country contains the source of the Blue Nile?,Sudan,Egypt,Ethiopia,,C,hard,Geography and Landmarks
-477,What is the primary function of platelets?,To help blood clot,To attack viruses,To store energy,,A,hard,Human Body
-478,What is the medical term for nearsightedness?,Hyperopia,Myopia,Astigmatism,,B,hard,Human Body
+477,What is the primary function of platelets?,To attack viruses,To help blood clot,To store energy,,B,hard,Human Body
+478,What is the medical term for nearsightedness?,Hyperopia,Astigmatism,Myopia,,C,hard,Human Body
 479,Who wrote the novel Lord Jim?,Robert Louis Stevenson,Jonathan Swift,Joseph Conrad,,C,hard,Books and Authors
-480,What is the deepest lake in the world?,Lake Baikal,Lake Titicaca,Crater Lake,,A,hard,Geography and Landmarks
-481,Which is the smallest unit of a chemical element?,The molecule,The atom,The cell,,B,hard,Science Basics
-482,Which mineral is essential for a healthy thyroid gland?,Potassium,Calcium,Iodine,,C,hard,Human Body
+480,What is the deepest lake in the world?,Crater Lake,Lake Baikal,Lake Titicaca,,B,hard,Geography and Landmarks
+481,Which is the smallest unit of a chemical element?,The cell,The molecule,The atom,,C,hard,Science Basics
+482,Which mineral is essential for a healthy thyroid gland?,Calcium,Iodine,Potassium,,B,hard,Human Body
 483,Who wrote the play The Cherry Orchard?,Anton Chekhov,Ivan Turgenev,Maxim Gorky,,A,hard,Books and Authors
-484,How many cards are in a standard deck without jokers?,50,52,54,,B,hard,Units and Numbers
-485,The Grammy Awards honor achievements in which field?,Theater,Film,Music,,C,hard,Culture and Firsts
-486,What is the capital of Finland?,Helsinki,Oslo,Stockholm,,A,hard,Geography and Landmarks
+484,How many cards are in a standard deck without jokers?,52,50,54,,A,hard,Units and Numbers
+485,The Grammy Awards honor achievements in which field?,Film,Music,Theater,,B,hard,Culture and Firsts
+486,What is the capital of Finland?,Stockholm,Oslo,Helsinki,,C,hard,Geography and Landmarks
 487,Which element has the chemical symbol Na?,Sulfur,Sodium,Nickel,,B,hard,Science Basics
 488,What are the bronchi?,The tubes carrying air into the lungs,The sections of the brain,The chambers of the heart,,C,hard,Human Body
-489,Who wrote the novel Wide Sargasso Sea?,Jean Rhys,Doris Lessing,Nadine Gordimer,,A,hard,Books and Authors
-490,Kathmandu is the capital of which country?,Bhutan,Nepal,Bangladesh,,B,hard,Geography and Landmarks
-491,What is the chemical symbol for tungsten?,Tu,Tg,W,,C,hard,Science Basics
+489,Who wrote the novel Wide Sargasso Sea?,Doris Lessing,Jean Rhys,Nadine Gordimer,,B,hard,Books and Authors
+490,Kathmandu is the capital of which country?,Nepal,Bhutan,Bangladesh,,A,hard,Geography and Landmarks
+491,What is the chemical symbol for tungsten?,Tu,W,Tg,,B,hard,Science Basics
 492,The rotator cuff is located where?,In the shoulder,In the knee,In the hip,,A,hard,Human Body
-493,Who wrote the novel Cry the Beloved Country?,Athol Fugard,Alan Paton,J.M. Coetzee,,B,hard,Books and Authors
+493,Who wrote the novel Cry the Beloved Country?,Alan Paton,J.M. Coetzee,Athol Fugard,,A,hard,Books and Authors
 494,One kilowatt equals how many watts?,500,1001,5000,,B,hard,Units and Numbers
-495,The first Winter Olympics were held in which country?,France,Norway,Great Britain,,A,hard,Culture and Firsts
-496,What is the capital of Vietnam?,Ho Chi Minh City,Hanoi,Da Nang,,B,hard,Geography and Landmarks
-497,Which element is the most abundant in the Earth crust by mass?,The Silicon,Magnesium,Oxygen,,C,hard,Science Basics
-498,The hypothalamus links which two body systems?,The nervous and endocrine systems,The muscular and skeletal systems,The circulatory and respiratory systems,,A,hard,Human Body
-499,Who wrote the novel The Wind in the Willows?,A.A. Milne,Kenneth Grahame,Beatrix Potter,,B,hard,Books and Authors
-500,Which is the second largest island in the world?,Borneo,Taiwan,New Guinea,,C,hard,Geography and Landmarks
-501,What is the approximate speed of sound in air at sea level?,343 meters per second,143 meters per second,2430 meters per second,,A,hard,Science Basics
-502,What is another name for the eardrum?,The cochlea,The tympanic membrane,The pinna,,B,hard,Human Body
-503,Who wrote the novel Of Mice and Men?,William Saroyan,Erskine Caldwell,John Steinbeck,,C,hard,Books and Authors
+495,The first Winter Olympics were held in which country?,France,Great Britain,Norway,,A,hard,Culture and Firsts
+496,What is the capital of Vietnam?,Da Nang,Hanoi,Ho Chi Minh City,,B,hard,Geography and Landmarks
+497,Which element is the most abundant in the Earth crust by mass?,Magnesium,The Silicon,Oxygen,,C,hard,Science Basics
+498,The hypothalamus links which two body systems?,The circulatory and respiratory systems,The nervous and endocrine systems,The muscular and skeletal systems,,B,hard,Human Body
+499,Who wrote the novel The Wind in the Willows?,Beatrix Potter,A.A. Milne,Kenneth Grahame,,C,hard,Books and Authors
+500,Which is the second largest island in the world?,Borneo,New Guinea,Taiwan,,B,hard,Geography and Landmarks
+501,What is the approximate speed of sound in air at sea level?,2430 meters per second,143 meters per second,343 meters per second,,C,hard,Science Basics
+502,What is another name for the eardrum?,The cochlea,The pinna,The tympanic membrane,,C,hard,Human Body
+503,Who wrote the novel Of Mice and Men?,Erskine Caldwell,John Steinbeck,William Saroyan,,B,hard,Books and Authors
 504,Which unit is used to measure the depth of water?,The fathom,The knot,The nautical mile,,A,hard,Units and Numbers
 505,The tango originated in which country?,Cuba,Argentina,Brazil,,B,hard,Culture and Firsts
-506,What is the capital of Nigeria?,Lagos,Accra,Abuja,,C,hard,Geography and Landmarks
-507,Which galaxy contains our solar system?,The Milky Way,Andromeda,The Magellanic Clouds,,A,hard,Science Basics
-508,Where is the thymus gland located?,Behind the breastbone,In the upper chest,In the pelvis,,B,hard,Human Body
+506,What is the capital of Nigeria?,Abuja,Accra,Lagos,,A,hard,Geography and Landmarks
+507,Which galaxy contains our solar system?,Andromeda,The Milky Way,The Magellanic Clouds,,B,hard,Science Basics
+508,Where is the thymus gland located?,In the upper chest,Behind the breastbone,In the pelvis,,A,hard,Human Body
 509,Who wrote the novel The Godfather?,Francis Ford Coppola,Nicholas Pileggi,Mario Puzo,,C,hard,Books and Authors
-510,What is the capital of Iceland?,Reykjavik,Akureyri,Keflavik,,A,hard,Geography and Landmarks
-511,What is the SI unit of inductance?,The siemens,The henry,The lux,,B,hard,Science Basics
-512,Which gland is often called the master gland of the body?,The thyroid,The hypothalamus,The pituitary gland,,C,hard,Human Body
-513,Who wrote the novel Number the Stars?,Lois Lowry,Judy Blume,Katherine Paterson,,A,hard,Books and Authors
-514,How many sides does a dodecagon have?,Eighteen,Twelve,Seventeen,,B,hard,Units and Numbers
+510,What is the capital of Iceland?,Akureyri,Keflavik,Reykjavik,,C,hard,Geography and Landmarks
+511,What is the SI unit of inductance?,The henry,The siemens,The lux,,A,hard,Science Basics
+512,Which gland is often called the master gland of the body?,The hypothalamus,The thyroid,The pituitary gland,,C,hard,Human Body
+513,Who wrote the novel Number the Stars?,Katherine Paterson,Judy Blume,Lois Lowry,,C,hard,Books and Authors
+514,How many sides does a dodecagon have?,Seventeen,Twelve,Eighteen,,B,hard,Units and Numbers
 515,Claude Monet is associated with which art movement?,Cubism,Surrealism,Impressionism,,C,hard,Culture and Firsts
-516,Which is the highest capital city in the world?,La Paz,Bogota,Lhasa,,A,hard,Geography and Landmarks
-517,Which force opposes motion between two sliding surfaces?,Tension,Friction,Inertia,,B,hard,Science Basics
-518,The deltoid muscle is located where?,In the thigh,In the back,In the shoulder,,C,hard,Human Body
+516,Which is the highest capital city in the world?,Bogota,Lhasa,La Paz,,C,hard,Geography and Landmarks
+517,Which force opposes motion between two sliding surfaces?,Inertia,Friction,Tension,,B,hard,Science Basics
+518,The deltoid muscle is located where?,In the shoulder,In the back,In the thigh,,A,hard,Human Body
 519,Who wrote the novel The Left Hand of Darkness?,Ursula K. Le Guin,Arthur C. Clarke,Octavia Butler,,A,hard,Books and Authors
-520,The Skeleton Coast lies along which desert?,The Kalahari,The Namib,The Mojave,,B,hard,Geography and Landmarks
-521,Which element is used as fuel in most nuclear reactors?,Plutonium,Thorium,Uranium,,C,hard,Science Basics
+520,The Skeleton Coast lies along which desert?,The Mojave,The Namib,The Kalahari,,B,hard,Geography and Landmarks
+521,Which element is used as fuel in most nuclear reactors?,Thorium,Plutonium,Uranium,,C,hard,Science Basics
 522,How many bones are in the adult human foot?,26,33,21,,A,hard,Human Body
 523,Who wrote the novel Midnight's Children?,Vikram Seth,Salman Rushdie,Arundhati Roy,,B,hard,Books and Authors
-524,How many fluid ounces are in a US cup?,68,8,4,,B,hard,Units and Numbers
-525,The Palme d'Or is the top prize at which film festival?,Cannes,Opera,Symphony,,A,hard,Culture and Firsts
-526,What is the capital of New Zealand?,Auckland,Wellington,Christchurch,,B,hard,Geography and Landmarks
-527,Which cell structure is known as the powerhouse of the cell?,The ribosome,The cell membrane,The mitochondria,,C,hard,Science Basics
-528,Thrombocytes are better known as what?,Platelets,White blood cells,Plasma cells,,A,hard,Human Body
-529,Who wrote the novel The Notebook?,Richard Paul Evans,Nicholas Sparks,Mitch Albom,,B,hard,Books and Authors
-530,Which country is home to the Sinai Peninsula?,Israel,Kuwait,Egypt,,C,hard,Geography and Landmarks
-531,What is the atomic number of hydrogen?,1,2,3,,A,hard,Science Basics
-532,Which hormone thickens the lining of the uterus during the menstrual cycle?,Estrogen,Progesterone,Testosterone,,B,hard,Human Body
-533,Who wrote the novella The Little Prince?,Maurice Leblanc,Marcel Pagnol,Antoine de Saint-Exupery,,C,hard,Books and Authors
-534,How many strings does a standard guitar have?,Six,59,69,,A,hard,Units and Numbers
-535,The Davis Cup is an international team competition in which sport?,Rowing,Tennis,Field hockey,,B,hard,Culture and Firsts
+524,How many fluid ounces are in a US cup?,4,68,8,,C,hard,Units and Numbers
+525,The Palme d'Or is the top prize at which film festival?,Opera,Symphony,Cannes,,C,hard,Culture and Firsts
+526,What is the capital of New Zealand?,Wellington,Auckland,Christchurch,,A,hard,Geography and Landmarks
+527,Which cell structure is known as the powerhouse of the cell?,The mitochondria,The cell membrane,The ribosome,,A,hard,Science Basics
+528,Thrombocytes are better known as what?,White blood cells,Platelets,Plasma cells,,B,hard,Human Body
+529,Who wrote the novel The Notebook?,Nicholas Sparks,Richard Paul Evans,Mitch Albom,,A,hard,Books and Authors
+530,Which country is home to the Sinai Peninsula?,Kuwait,Egypt,Israel,,B,hard,Geography and Landmarks
+531,What is the atomic number of hydrogen?,2,1,3,,B,hard,Science Basics
+532,Which hormone thickens the lining of the uterus during the menstrual cycle?,Testosterone,Estrogen,Progesterone,,C,hard,Human Body
+533,Who wrote the novella The Little Prince?,Antoine de Saint-Exupery,Maurice Leblanc,Marcel Pagnol,,A,hard,Books and Authors
+534,How many strings does a standard guitar have?,69,Six,59,,B,hard,Units and Numbers
+535,The Davis Cup is an international team competition in which sport?,Tennis,Rowing,Field hockey,,A,hard,Culture and Firsts
 536,Which is generally considered the southernmost city in the world?,Hobart,Punta Arenas,Ushuaia,,C,hard,Geography and Landmarks
 537,Which planet is famous for its Great Red Spot?,Jupiter,Juno,Ceres,,A,hard,Science Basics
-538,What is the medical term for the breastbone?,The radius,The sternum,The clavicle,,B,hard,Human Body
-539,Who wrote the novel A Confederacy of Dunces?,Walker Percy,Flannery O'Connor,John Kennedy Toole,,C,hard,Books and Authors
+538,What is the medical term for the breastbone?,The sternum,The clavicle,The radius,,A,hard,Human Body
+539,Who wrote the novel A Confederacy of Dunces?,Flannery O'Connor,John Kennedy Toole,Walker Percy,,B,hard,Books and Authors
 540,What is the capital of Peru?,Lima,Arequipa,Cusco,,A,hard,Geography and Landmarks
 541,The fallopian tubes connect the ovaries to which organ?,The cervix,The uterus,The vagina,,B,hard,Human Body
 542,Who wrote the novel Bel Ami?,Gustave Flaubert,Honore de Balzac,Guy de Maupassant,,C,hard,Books and Authors
-543,One tablespoon equals how many teaspoons?,Three,A nearby example,A lesser known one,,A,hard,Units and Numbers
-544,Flamenco is a traditional dance of which country?,Morocco,Spain,Hungary,,B,hard,Culture and Firsts
-545,The Blue Nile and the White Nile merge at which city?,Juba,Aswan,Khartoum,,C,hard,Geography and Landmarks
-546,What is the study of birds called?,Ornithology,Entomology,Etymology,,A,hard,Science Basics
-547,Where are the sweat glands most concentrated on the human body?,On the scalp,On the palms and soles,On the back,,B,hard,Human Body
-548,Who wrote the novel The Man in the Iron Mask?,Gaston Leroux,Anatole France,Alexandre Dumas,,C,hard,Books and Authors
-549,Which is the largest island country in the world by land area?,Indonesia,The Philippines,Papua New Guinea,,A,hard,Geography and Landmarks
-550,What is the SI unit of temperature?,The celsius,The kelvin,The fahrenheit,,B,hard,Science Basics
-551,What does the liver produce that helps digest fats?,Insulin,Gastric acid,Bile,,C,hard,Human Body
+543,One tablespoon equals how many teaspoons?,A nearby example,Three,A lesser known one,,B,hard,Units and Numbers
+544,Flamenco is a traditional dance of which country?,Morocco,Hungary,Spain,,C,hard,Culture and Firsts
+545,The Blue Nile and the White Nile merge at which city?,Khartoum,Juba,Aswan,,A,hard,Geography and Landmarks
+546,What is the study of birds called?,Ornithology,Etymology,Entomology,,A,hard,Science Basics
+547,Where are the sweat glands most concentrated on the human body?,On the back,On the scalp,On the palms and soles,,C,hard,Human Body
+548,Who wrote the novel The Man in the Iron Mask?,Anatole France,Gaston Leroux,Alexandre Dumas,,C,hard,Books and Authors
+549,Which is the largest island country in the world by land area?,Papua New Guinea,The Philippines,Indonesia,,C,hard,Geography and Landmarks
+550,What is the SI unit of temperature?,The fahrenheit,The kelvin,The celsius,,B,hard,Science Basics
+551,What does the liver produce that helps digest fats?,Bile,Gastric acid,Insulin,,A,hard,Human Body
 552,Who wrote the novel Tender Is the Night?,F. Scott Fitzgerald,J.P. Donleavy,Nathanael West,,A,hard,Books and Authors
-553,One nautical mile equals approximately how many meters?,1609 meters,1852 meters,2016 meters,,B,hard,Units and Numbers
-554,Which composer wrote The Four Seasons concertos?,Johann Sebastian Bach,George Frideric Handel,Antonio Vivaldi,,C,hard,Culture and Firsts
-555,Which lake is the largest freshwater lake in the world by surface area?,Lake Superior,Lake Ontario,Lake Michigan,,A,hard,Geography and Landmarks
-556,Which planet is second from the Sun?,Eris,Vesta,Mercury,,B,hard,Science Basics
-557,Which is the largest joint in the human body?,The hip,The shoulder,The knee,,C,hard,Human Body
-558,Who wrote the novel The Silence of the Lambs?,Thomas Harris,James Patterson,Patricia Cornwell,,A,hard,Books and Authors
+553,One nautical mile equals approximately how many meters?,1852 meters,1609 meters,2016 meters,,A,hard,Units and Numbers
+554,Which composer wrote The Four Seasons concertos?,George Frideric Handel,Antonio Vivaldi,Johann Sebastian Bach,,B,hard,Culture and Firsts
+555,Which lake is the largest freshwater lake in the world by surface area?,Lake Ontario,Lake Michigan,Lake Superior,,C,hard,Geography and Landmarks
+556,Which planet is second from the Sun?,Eris,Mercury,Vesta,,C,hard,Science Basics
+557,Which is the largest joint in the human body?,The shoulder,The knee,The hip,,B,hard,Human Body
+558,Who wrote the novel The Silence of the Lambs?,Patricia Cornwell,James Patterson,Thomas Harris,,C,hard,Books and Authors
 559,What is the capital of Kazakhstan?,Almaty,Astana,Tashkent,,B,hard,Geography and Landmarks
-560,What is the SI unit of force?,The pascal,The dyne,The newton,,C,hard,Science Basics
+560,What is the SI unit of force?,The newton,The dyne,The pascal,,A,hard,Science Basics
 561,Who wrote the novel The Day of the Jackal?,Frederick Forsyth,Ken Follett,John le Carre,,A,hard,Books and Authors
-562,How many degrees are in a semicircle?,120,180,61,,B,hard,Units and Numbers
-563,Which artist painted the Mona Lisa?,Caravaggio,Titian,Leonardo da Vinci,,C,hard,Culture and Firsts
-564,What is the process by which plants lose water through their leaves?,Transpiration,Germination,Respiration,,A,hard,Science Basics
+562,How many degrees are in a semicircle?,120,61,180,,C,hard,Units and Numbers
+563,Which artist painted the Mona Lisa?,Leonardo da Vinci,Caravaggio,Titian,,A,hard,Culture and Firsts
+564,What is the process by which plants lose water through their leaves?,Germination,Respiration,Transpiration,,C,hard,Science Basics
 565,Who wrote the novel Empire of the Sun?,Martin Amis,J.G. Ballard,Ian McEwan,,B,hard,Books and Authors
-566,Victoria Falls sits on the border of Zambia and which country?,Zimbabwe,Botswana,Mozambique,Malawi,A,expert,Geography and Landmarks
-567,Which isotope of hydrogen is radioactive?,Protium,Tritium,Deuterium,Hydronium,B,expert,Science Basics
-568,The hormone erythropoietin is produced mainly by which organ?,The liver,The bone marrow,The kidney,The skin,C,expert,Human Body
-569,Who wrote the novel The Master and Margarita?,Isaac Babel,Vladimir Mayakovsky,Nikolai Gogol,Mikhail Bulgakov,D,expert,Books and Authors
-570,What is absolute zero in degrees Celsius?,Minus 273,Minus 173,Minus 373,Minus 100,A,expert,Science Basics
+566,Victoria Falls sits on the border of Zambia and which country?,Mozambique,Zimbabwe,Botswana,Malawi,B,expert,Geography and Landmarks
+567,Which isotope of hydrogen is radioactive?,Protium,Deuterium,Hydronium,Tritium,D,expert,Science Basics
+568,The hormone erythropoietin is produced mainly by which organ?,The kidney,The skin,The liver,The bone marrow,A,expert,Human Body
+569,Who wrote the novel The Master and Margarita?,Mikhail Bulgakov,Vladimir Mayakovsky,Nikolai Gogol,Isaac Babel,A,expert,Books and Authors
+570,What is absolute zero in degrees Celsius?,Minus 373,Minus 173,Minus 273,Minus 100,C,expert,Science Basics
 571,Which city hosted the 2016 Summer Olympics?,London,Rio de Janeiro,Tokyo,Beijing,B,expert,Culture and Firsts
-572,The Okavango Delta lies in which country?,Zambia,Namibia,Botswana,Lesotho,C,expert,Geography and Landmarks
-573,What is normal human body temperature in degrees Celsius?,35,38,34,37,D,expert,Human Body
-574,Who wrote the play Rosencrantz and Guildenstern Are Dead?,Tom Stoppard,David Mamet,Sam Shepard,Arthur Miller,A,expert,Books and Authors
-575,How many degrees of arc does each hour mark on a clock face represent?,15,30,40,36,B,expert,Units and Numbers
-576,The Atacama Desert lies mainly in which country?,Croatia,Serbia,Chile,Paraguay,C,expert,Geography and Landmarks
+572,The Okavango Delta lies in which country?,Botswana,Lesotho,Namibia,Zambia,A,expert,Geography and Landmarks
+573,What is normal human body temperature in degrees Celsius?,35,37,38,34,B,expert,Human Body
+574,Who wrote the play Rosencrantz and Guildenstern Are Dead?,David Mamet,Sam Shepard,Arthur Miller,Tom Stoppard,D,expert,Books and Authors
+575,How many degrees of arc does each hour mark on a clock face represent?,36,30,15,40,B,expert,Units and Numbers
+576,The Atacama Desert lies mainly in which country?,Chile,Serbia,Paraguay,Croatia,A,expert,Geography and Landmarks
 577,What is the scientific name for the shoulder blade?,The sternum,The mandible,The ulna,The scapula,D,expert,Human Body
-578,Who wrote the novel One Hundred Years of Solitude?,Gabriel Garcia Marquez,Mario Vargas Llosa,Isabel Allende,Pablo Neruda,A,expert,Books and Authors
-579,How many acres are in one square mile?,320,480,600,640,D,expert,Units and Numbers
+578,Who wrote the novel One Hundred Years of Solitude?,Isabel Allende,Mario Vargas Llosa,Pablo Neruda,Gabriel Garcia Marquez,D,expert,Books and Authors
+579,How many acres are in one square mile?,640,480,600,320,A,expert,Units and Numbers
 580,The Prado museum is located in which city?,Seville,Naples,Madrid,Toledo,C,expert,Culture and Firsts
-581,K2 is located in which mountain range?,The Karakoram,The Pamirs,The Hindu Kush,The Himalayas,D,expert,Geography and Landmarks
-582,Which gas glows red and is used in classic advertising signs?,Neon,Rubidium,Xenon,Radon,A,expert,Science Basics
-583,The organ of Corti is found in which structure?,The larynx,The cochlea,The eustachian tube,The trachea,B,expert,Human Body
-584,Who wrote the novel The Wind-Up Bird Chronicle?,Yasunari Kawabata,Yukio Mishima,Haruki Murakami,Kazuo Ishiguro,C,expert,Books and Authors
-585,The city of Agra is located in which country?,Pakistan,Nepal,Sri Lanka,India,D,expert,Geography and Landmarks
-586,What is the SI unit of electric charge?,The coulomb,The tesla,The weber,The farad,A,expert,Science Basics
-587,What is the medical term for the big toe?,The pollex,The hallux,The calcaneus,The tarsus,B,expert,Human Body
-588,Who wrote the novel Robinson Crusoe?,Samuel Richardson,Henry Fielding,Daniel Defoe,Tobias Smollett,C,expert,Books and Authors
-589,How many teaspoons are in one cup?,62,48,65,44,B,expert,Units and Numbers
-590,Which country won the first FIFA World Cup in 1930?,Uruguay,Netherlands,Germany,The Tyrrhenian Sea,A,expert,Culture and Firsts
+581,K2 is located in which mountain range?,The Karakoram,The Himalayas,The Pamirs,The Hindu Kush,B,expert,Geography and Landmarks
+582,Which gas glows red and is used in classic advertising signs?,Neon,Radon,Rubidium,Xenon,A,expert,Science Basics
+583,The organ of Corti is found in which structure?,The larynx,The eustachian tube,The trachea,The cochlea,D,expert,Human Body
+584,Who wrote the novel The Wind-Up Bird Chronicle?,Kazuo Ishiguro,Yukio Mishima,Haruki Murakami,Yasunari Kawabata,C,expert,Books and Authors
+585,The city of Agra is located in which country?,Pakistan,Nepal,India,Sri Lanka,C,expert,Geography and Landmarks
+586,What is the SI unit of electric charge?,The weber,The coulomb,The farad,The tesla,B,expert,Science Basics
+587,What is the medical term for the big toe?,The calcaneus,The hallux,The tarsus,The pollex,B,expert,Human Body
+588,Who wrote the novel Robinson Crusoe?,Henry Fielding,Tobias Smollett,Daniel Defoe,Samuel Richardson,C,expert,Books and Authors
+589,How many teaspoons are in one cup?,48,65,44,62,A,expert,Units and Numbers
+590,Which country won the first FIFA World Cup in 1930?,Germany,Uruguay,The Tyrrhenian Sea,Netherlands,B,expert,Culture and Firsts
 591,Which strait connects the Mediterranean Sea to the Atlantic Ocean?,The Bering Strait,The Strait of Gibraltar,The Strait of Hormuz,The Strait of Magellan,B,expert,Geography and Landmarks
-592,What is the chemical symbol for antimony?,An,At,Sb,Ab,C,expert,Science Basics
-593,Who wrote the novel Steppenwolf?,Joseph Roth,Heinrich Boll,Gunter Grass,Hermann Hesse,D,expert,Books and Authors
-594,What is the capital of Argentina?,Buenos Aires,Cordoba,Rosario,Mendoza,A,expert,Geography and Landmarks
-595,Which is the brightest star in the night sky?,Polaris,Sirius,Betelgeuse,Vega,B,expert,Science Basics
-596,Which cranial nerve branches down into the chest and abdomen?,The hypoglossal nerve,The accessory nerve,The vagus nerve,The facial nerve,C,expert,Human Body
-597,Who wrote the novel The Age of Innocence?,Henry James,Kate Chopin,Willa Cather,Edith Wharton,D,expert,Books and Authors
-598,One degree of latitude equals about how many miles?,69 miles,59 miles,49 miles,79 miles,A,expert,Units and Numbers
-599,Which country hosted the 1988 Winter Olympics in Calgary?,Soviet Union,Canada,Yugoslavia,Japan,B,expert,Culture and Firsts
-600,Which is the largest lake in South America?,Lake Nicaragua,Lake Chapala,Lake Maracaibo,Lake Valencia,C,expert,Geography and Landmarks
-601,What is the function of the myelin sheath?,To produce hormones,To filter blood,To store calcium,To speed up nerve impulses,D,expert,Human Body
-602,Who wrote the novel The French Lieutenant's Woman?,John Fowles,Kingsley Amis,Anthony Burgess,William Golding,A,expert,Books and Authors
-603,The city of Fez is located in which country?,Algeria,Morocco,Libya,Ghana,B,expert,Geography and Landmarks
-604,Which mineral is the most abundant in the human body?,Phosphorus,Sodium,Calcium,Zinc,C,expert,Human Body
-605,The bundle of His is located in which organ?,The lungs,The spleen,The intestines,The heart,D,expert,Human Body
-606,Who wrote the novel The Tin Drum?,Gunter Grass,Uwe Johnson,W.G. Sebald,Alfred Doblin,A,expert,Books and Authors
+592,What is the chemical symbol for antimony?,Ab,At,An,Sb,D,expert,Science Basics
+593,Who wrote the novel Steppenwolf?,Hermann Hesse,Gunter Grass,Heinrich Boll,Joseph Roth,A,expert,Books and Authors
+594,What is the capital of Argentina?,Buenos Aires,Mendoza,Rosario,Cordoba,A,expert,Geography and Landmarks
+595,Which is the brightest star in the night sky?,Vega,Betelgeuse,Sirius,Polaris,C,expert,Science Basics
+596,Which cranial nerve branches down into the chest and abdomen?,The accessory nerve,The facial nerve,The vagus nerve,The hypoglossal nerve,C,expert,Human Body
+597,Who wrote the novel The Age of Innocence?,Henry James,Edith Wharton,Willa Cather,Kate Chopin,B,expert,Books and Authors
+598,One degree of latitude equals about how many miles?,79 miles,59 miles,49 miles,69 miles,D,expert,Units and Numbers
+599,Which country hosted the 1988 Winter Olympics in Calgary?,Soviet Union,Yugoslavia,Japan,Canada,D,expert,Culture and Firsts
+600,Which is the largest lake in South America?,Lake Valencia,Lake Nicaragua,Lake Maracaibo,Lake Chapala,C,expert,Geography and Landmarks
+601,What is the function of the myelin sheath?,To filter blood,To speed up nerve impulses,To produce hormones,To store calcium,B,expert,Human Body
+602,Who wrote the novel The French Lieutenant's Woman?,William Golding,Anthony Burgess,Kingsley Amis,John Fowles,D,expert,Books and Authors
+603,The city of Fez is located in which country?,Ghana,Algeria,Libya,Morocco,D,expert,Geography and Landmarks
+604,Which mineral is the most abundant in the human body?,Calcium,Phosphorus,Sodium,Zinc,A,expert,Human Body
+605,The bundle of His is located in which organ?,The heart,The spleen,The lungs,The intestines,A,expert,Human Body
+606,Who wrote the novel The Tin Drum?,Alfred Doblin,Gunter Grass,W.G. Sebald,Uwe Johnson,B,expert,Books and Authors
 607,The hand unit for measuring horses equals how many inches?,4,5,17,71,A,expert,Units and Numbers
-608,The Booker Prize is awarded annually for what?,A play,A poem,A work of fiction,A biography,C,expert,Culture and Firsts
-609,The Canary Islands belong to which country?,The Orinoco,Italy,Greece,Spain,D,expert,Geography and Landmarks
-610,A deficiency of which vitamin causes rickets?,Vitamin D,Vitamin B6,Vitamin E,Vitamin B2,A,expert,Human Body
-611,Who wrote the novel The Remains of the Day?,Amitav Ghosh,Kazuo Ishiguro,Julian Barnes,Zadie Smith,B,expert,Books and Authors
-612,Which African country was formerly called Abyssinia?,Somalia,Benin,Ethiopia,Togo,C,expert,Geography and Landmarks
-613,What is the only metal that is liquid at room temperature?,Gallium,Cesium,Bromine,Mercury,D,expert,Science Basics
-614,What is the largest organ of the lymphatic system?,The spleen,The tonsils,The appendix,The adenoids,A,expert,Human Body
-615,Who wrote the novel The Good Soldier?,Elizabeth Bowen,Ford Madox Ford,D.H. Lawrence,Elizabeth Taylor,B,expert,Books and Authors
-616,How many gills are in one US pint?,The Twelve,The Sixteen,Eight,The Fourteen,C,expert,Units and Numbers
-617,Which board game uses letter tiles to form a crossword grid?,Mahjong,Boggle,Upwords,Scrabble,D,expert,Culture and Firsts
-618,The Kara Sea borders which country?,Russia,Finland,Sweden,Greenland,A,expert,Geography and Landmarks
-619,What is the most common blood type in the United States?,A positive,O positive,B positive,AB negative,B,expert,Human Body
-620,Who wrote the poetry collection The Waste Land?,Ezra Pound,W.B. Yeats,T.S. Eliot,Wallace Stevens,C,expert,Books and Authors
-621,How many square inches are in one square foot?,81,121,144,169,C,expert,Units and Numbers
-622,Which city is known as the Venice of the North in Sweden?,Stockholm,Gothenburg,Malmo,Uppsala,A,expert,Geography and Landmarks
-623,What is the term for a word that reads the same backwards and forwards?,An anagram,A palindrome,A homonym,A synonym,B,expert,Science Basics
-624,Which hormone is secreted by the beta cells of the pancreas?,Glucagon,Somatostatin,Insulin,Gastrin,C,expert,Human Body
-625,Who wrote the novel The Defense?,Alexander Kuprin,W. Somerset Maugham,Ivan Bunin,Vladimir Nabokov,D,expert,Books and Authors
-626,One slug equals about how many kilograms?,9.8,10.4,14.6,25.1,C,expert,Units and Numbers
-627,Which artist cut off part of his own ear in 1888?,Claude Monet,Vincent van Gogh,Edgar Degas,Pierre-Auguste Renoir,B,expert,Culture and Firsts
-628,The Torres Strait separates Australia from which region?,Vanuatu,Tasmania,New Guinea,Indonesia,C,expert,Geography and Landmarks
-629,Which of these animals has a four-chambered stomach?,The horse,The dog,The cat,The cow,D,expert,Science Basics
-630,Who wrote the novel The Autobiography of an Ex-Colored Man?,Melatonin,Serotonin,Norepinephrine,Dopamine,A,expert,Books and Authors
-631,How many lines does a limerick have?,Thirteen,Five,Twenty five,Thirty,B,expert,Units and Numbers
-632,What is the process of a liquid changing into a solid called?,Boiling,Subliming,Freezing,Condensing,C,expert,Science Basics
+608,The Booker Prize is awarded annually for what?,A work of fiction,A poem,A biography,A play,A,expert,Culture and Firsts
+609,The Canary Islands belong to which country?,The Orinoco,Greece,Italy,Spain,D,expert,Geography and Landmarks
+610,A deficiency of which vitamin causes rickets?,Vitamin B6,Vitamin B2,Vitamin E,Vitamin D,D,expert,Human Body
+611,Who wrote the novel The Remains of the Day?,Kazuo Ishiguro,Zadie Smith,Julian Barnes,Amitav Ghosh,A,expert,Books and Authors
+612,Which African country was formerly called Abyssinia?,Ethiopia,Benin,Somalia,Togo,A,expert,Geography and Landmarks
+613,What is the only metal that is liquid at room temperature?,Cesium,Mercury,Gallium,Bromine,B,expert,Science Basics
+614,What is the largest organ of the lymphatic system?,The adenoids,The tonsils,The spleen,The appendix,C,expert,Human Body
+615,Who wrote the novel The Good Soldier?,Elizabeth Taylor,D.H. Lawrence,Elizabeth Bowen,Ford Madox Ford,D,expert,Books and Authors
+616,How many gills are in one US pint?,The Twelve,Eight,The Fourteen,The Sixteen,B,expert,Units and Numbers
+617,Which board game uses letter tiles to form a crossword grid?,Upwords,Scrabble,Mahjong,Boggle,B,expert,Culture and Firsts
+618,The Kara Sea borders which country?,Greenland,Sweden,Finland,Russia,D,expert,Geography and Landmarks
+619,What is the most common blood type in the United States?,AB negative,O positive,B positive,A positive,B,expert,Human Body
+620,Who wrote the poetry collection The Waste Land?,Ezra Pound,T.S. Eliot,W.B. Yeats,Wallace Stevens,B,expert,Books and Authors
+621,How many square inches are in one square foot?,81,121,169,144,D,expert,Units and Numbers
+622,Which city is known as the Venice of the North in Sweden?,Malmo,Stockholm,Gothenburg,Uppsala,B,expert,Geography and Landmarks
+623,What is the term for a word that reads the same backwards and forwards?,A palindrome,An anagram,A homonym,A synonym,A,expert,Science Basics
+624,Which hormone is secreted by the beta cells of the pancreas?,Insulin,Somatostatin,Gastrin,Glucagon,A,expert,Human Body
+625,Who wrote the novel The Defense?,W. Somerset Maugham,Alexander Kuprin,Vladimir Nabokov,Ivan Bunin,C,expert,Books and Authors
+626,One slug equals about how many kilograms?,14.6,9.8,10.4,25.1,A,expert,Units and Numbers
+627,Which artist cut off part of his own ear in 1888?,Vincent van Gogh,Claude Monet,Edgar Degas,Pierre-Auguste Renoir,A,expert,Culture and Firsts
+628,The Torres Strait separates Australia from which region?,Tasmania,Vanuatu,New Guinea,Indonesia,C,expert,Geography and Landmarks
+629,Which of these animals has a four-chambered stomach?,The cat,The horse,The dog,The cow,D,expert,Science Basics
+630,Who wrote the novel The Autobiography of an Ex-Colored Man?,Dopamine,Serotonin,Melatonin,Norepinephrine,C,expert,Books and Authors
+631,How many lines does a limerick have?,Thirty,Five,Twenty five,Thirteen,B,expert,Units and Numbers
+632,What is the process of a liquid changing into a solid called?,Freezing,Condensing,Subliming,Boiling,A,expert,Science Basics
 633,What is the medical term for an abnormally slow heart rate?,Tachycardia,Hypotension,Arrhythmia,Bradycardia,D,expert,Human Body
-634,Who wrote the play The Balcony?,Jean Genet,Samuel Beckett,Jean Anouilh,Arthur Adamov,A,expert,Books and Authors
-635,At what temperature do the Fahrenheit and Celsius scales read the same?,Zero,Minus 40,Minus 20,Plus 40,B,expert,Units and Numbers
-636,Which theater festival takes place annually in Avignon?,The Palais Festival,The Cannes Festival,The Festival d'Avignon,The Aix Festival,C,expert,Culture and Firsts
-637,Which country has the longest coastline in the world?,The Gulf of Sidra,Bulgaria,Russia,Canada,D,expert,Geography and Landmarks
-638,What is the study of the structure of the body called?,Anatomy,Physiology,Pathology,Cytology,A,expert,Human Body
-639,Who wrote the novel Humboldt's Gift?,Ada Lovelace,Marie Curie,Lise Meitner,Rosalind Franklin,B,expert,Books and Authors
-640,About how many double stitches does a standard baseball have?,86,97,108,144,C,expert,Units and Numbers
-641,Which sea has no coastline along Asia?,The Black Sea,The Caspian Sea,The Aral Sea,The Baltic Sea,D,expert,Geography and Landmarks
-642,Which element has the highest melting point?,Sulfur dioxide,Rhenium,Ammonia,Barium,A,expert,Science Basics
-643,Which is the longest nerve in the human body?,The femoral nerve,The sciatic nerve,The vestibulocochlear nerve,The phrenic nerve,B,expert,Human Body
-644,Who wrote the novel The Moviegoer?,Donald Barthelme,Mary McCarthy,Walker Percy,Daphne du Maurier,C,expert,Books and Authors
-645,About how many carats equal one gram in mass?,About 3,About 4,About 6,About 5,D,expert,Units and Numbers
-646,Which city hosted the first modern Olympic Games in 1896?,Athens,Olympia,Rome,Brussels,A,expert,Culture and Firsts
-647,The Denmark Strait separates Greenland from which island?,Jan Mayen,Iceland,Svalbard,Faroe Islands,B,expert,Geography and Landmarks
-648,What is the term for an abnormally high level of carbon dioxide in the blood?,Apnea,Hypoxia,Hypercapnia,Cyanosis,C,expert,Human Body
-649,Who wrote the novel The Wings of the Dove?,Scott Turow,Peter De Vries,Tom Wolfe,Henry James,D,expert,Books and Authors
+634,Who wrote the play The Balcony?,Jean Genet,Jean Anouilh,Samuel Beckett,Arthur Adamov,A,expert,Books and Authors
+635,At what temperature do the Fahrenheit and Celsius scales read the same?,Plus 40,Zero,Minus 40,Minus 20,C,expert,Units and Numbers
+636,Which theater festival takes place annually in Avignon?,The Festival d'Avignon,The Aix Festival,The Palais Festival,The Cannes Festival,A,expert,Culture and Firsts
+637,Which country has the longest coastline in the world?,Russia,Bulgaria,Canada,The Gulf of Sidra,C,expert,Geography and Landmarks
+638,What is the study of the structure of the body called?,Physiology,Pathology,Anatomy,Cytology,C,expert,Human Body
+639,Who wrote the novel Humboldt's Gift?,Rosalind Franklin,Marie Curie,Lise Meitner,Ada Lovelace,B,expert,Books and Authors
+640,About how many double stitches does a standard baseball have?,86,97,144,108,D,expert,Units and Numbers
+641,Which sea has no coastline along Asia?,The Aral Sea,The Baltic Sea,The Caspian Sea,The Black Sea,B,expert,Geography and Landmarks
+642,Which element has the highest melting point?,Ammonia,Sulfur dioxide,Barium,Rhenium,B,expert,Science Basics
+643,Which is the longest nerve in the human body?,The vestibulocochlear nerve,The femoral nerve,The sciatic nerve,The phrenic nerve,C,expert,Human Body
+644,Who wrote the novel The Moviegoer?,Mary McCarthy,Daphne du Maurier,Donald Barthelme,Walker Percy,D,expert,Books and Authors
+645,About how many carats equal one gram in mass?,About 5,About 4,About 6,About 3,A,expert,Units and Numbers
+646,Which city hosted the first modern Olympic Games in 1896?,Rome,Olympia,Athens,Brussels,C,expert,Culture and Firsts
+647,The Denmark Strait separates Greenland from which island?,Svalbard,Iceland,Jan Mayen,Faroe Islands,B,expert,Geography and Landmarks
+648,What is the term for an abnormally high level of carbon dioxide in the blood?,Hypoxia,Hypercapnia,Apnea,Cyanosis,B,expert,Human Body
+649,Who wrote the novel The Wings of the Dove?,Scott Turow,Peter De Vries,Henry James,Tom Wolfe,C,expert,Books and Authors
 650,A regular hexagon has interior angles that sum to how many degrees?,560,620,720,760,C,expert,Units and Numbers
-651,Which US state has the lowest highest point?,Delaware,Florida,Kansas,Louisiana,B,expert,Geography and Landmarks
-652,What term describes the pleasant smell of rain on dry earth?,Ozone,Musk,Petrichor,Chlorophyll,C,expert,Science Basics
-653,What is the smallest muscle in the human body?,The sartorius,The tensor tympani,The gracilis,The stapedius,D,expert,Human Body
+651,Which US state has the lowest highest point?,Florida,Delaware,Kansas,Louisiana,A,expert,Geography and Landmarks
+652,What term describes the pleasant smell of rain on dry earth?,Chlorophyll,Petrichor,Ozone,Musk,B,expert,Science Basics
+653,What is the smallest muscle in the human body?,The tensor tympani,The stapedius,The sartorius,The gracilis,B,expert,Human Body
 654,Who wrote the novel A High Wind in Jamaica?,Richard Hughes,L.P. Hartley,Wilkie Collins,Anthony Powell,A,expert,Books and Authors
-655,How many fluid drams are in one fluid ounce?,47,Eight,93,Forty,B,expert,Units and Numbers
-656,The first adhesive postage stamp appeared in which country?,Belgium,United States,United Kingdom,Switzerland,C,expert,Culture and Firsts
-657,What is the capital of Uganda?,Entebbe,Kigali,Nairobi,Kampala,D,expert,Geography and Landmarks
+655,How many fluid drams are in one fluid ounce?,Forty,47,93,Eight,D,expert,Units and Numbers
+656,The first adhesive postage stamp appeared in which country?,United Kingdom,Switzerland,Belgium,United States,A,expert,Culture and Firsts
+657,What is the capital of Uganda?,Entebbe,Kigali,Kampala,Nairobi,C,expert,Geography and Landmarks
 658,What is the medical term for the sense of taste?,Gustation,Olfaction,Tactition,Audition,A,expert,Human Body
-659,Who wrote the novel The Secret Agent?,Louis Bromfield,Joseph Conrad,George Gissing,Hugh Walpole,B,expert,Books and Authors
-660,A speed of one nautical mile per hour equals what unit?,One league,One fathom,One knot,One cable,C,expert,Units and Numbers
-661,The Windward Passage separates Cuba from which country?,Honduras,Jamaica,The Bahamas,Haiti,D,expert,Geography and Landmarks
-662,Which scientist discovered penicillin?,Alexander Fleming,Louis Pasteur,Robert Koch,Joseph Lister,A,expert,Science Basics
-663,The circle of Willis is located where?,Around the heart,At the base of the brain,In the liver,Along the spine,B,expert,Human Body
-664,Who wrote the novel Of Human Bondage?,James Hilton,Gore Vidal,W. Somerset Maugham,A.J. Cronin,C,expert,Books and Authors
-665,One cubic yard equals how many cubic feet?,27,29,37,31,A,expert,Units and Numbers
-666,Which band recorded the 1973 album The Dark Side of the Moon?,Pink Floyd,The Beatles,The Rolling Stones,Led Zeppelin,A,expert,Culture and Firsts
-667,Which country contains Cape Froward the southernmost point of mainland South America?,Bolivia,Chile,Suriname,Panama,B,expert,Geography and Landmarks
-668,Which innermost layer of the eye contains photoreceptors?,The sclera,The choroid,The retina,The uvea,C,expert,Human Body
-669,Who wrote the novel The Stand?,Peter Straub,Dean Koontz,Clive Barker,Stephen King,D,expert,Books and Authors
-670,How many keys does a standard full-size piano have?,76,88,92,84,B,expert,Units and Numbers
-671,The Bosphorus connects the Sea of Marmara to which sea?,The Aegean Sea,The Black Sea,The Adriatic Sea,The Balearic Sea,B,expert,Geography and Landmarks
-672,What is the SI unit of capacitance?,The henry,The maxwell,The farad,The ohm,C,expert,Science Basics
-673,Who wrote the novel The Talented Mr Ripley?,Ross Macdonald,Raymond Chandler,Dashiell Hammett,Patricia Highsmith,D,expert,Books and Authors
-674,One fathom equals how many feet?,Six,73,108,22,A,expert,Units and Numbers
-675,Which civilization built the Palace of Knossos?,The Mycenaeans,The Minoans,The Romans,The Phoenicians,B,expert,Culture and Firsts
-676,The Gulf of Bothnia lies between Sweden and which country?,Aland Islands,Latvia,Finland,Lithuania,C,expert,Geography and Landmarks
-677,What is the atomic number of helium?,2,57,111,56,A,expert,Science Basics
-678,What is the largest part of the human brain?,The cerebrum,The brainstem,The hippocampus,The cerebellum,A,expert,Human Body
-679,Who wrote the novel The Last of the Mohicans?,Washington Irving,James Fenimore Cooper,Nathaniel Hawthorne,Herman Melville,B,expert,Books and Authors
-680,What is the capital of Norway?,Bergen,Trondheim,Oslo,Stavanger,C,expert,Geography and Landmarks
-681,Which element is the most abundant in the human body by mass?,Fluorine,Chlorine,Iodine,Oxygen,D,expert,Science Basics
-682,The olecranon is the bony tip of which body part?,The elbow,knee,The ankle,hip,A,expert,Human Body
-683,Who wrote the novel A Handful of Dust?,J.B. Priestley,Evelyn Waugh,Compton Mackenzie,Christopher Isherwood,B,expert,Books and Authors
-684,How many quarts are in one gallon?,105,75,Four,43,C,expert,Units and Numbers
-685,Which band released the album Abbey Road in 1969?,The Beach Boys,The Who,The Kinks,The Beatles,D,expert,Culture and Firsts
-686,Which country is home to most of the Kalahari Desert?,Botswana,Tanzania,Gabon,Congo,A,expert,Geography and Landmarks
-687,Wind speed is measured with which instrument?,The barometer,The anemometer,The clinometer,The odometer,B,expert,Science Basics
-688,The gastrocnemius is the chief muscle of which body region?,The forearm,The chest,The calf,foot,C,expert,Human Body
-689,Who wrote the novel The Bell Jar?,Anne Sexton,Adrienne Rich,Elizabeth Bishop,Sylvia Plath,D,expert,Books and Authors
-690,Which river flows through Prague?,The Vltava,The Elbe,The Oder,The Danube,A,expert,Geography and Landmarks
-691,Which planet is associated with the Great Dark Spot?,Uranus,Neptune,Haumea,Pluto,B,expert,Science Basics
-692,What is the medical term for the jawbone?,The maxilla,The zygomatic,The mandible,The temporal,C,expert,Human Body
-693,Who wrote the novel The Wapshot Chronicle?,John O'Hara,James Gould Cozzens,Irwin Shaw,John Cheever,D,expert,Books and Authors
-694,How many pecks are in one bushel?,39,300,5281,52,A,expert,Units and Numbers
-695,The moai statues stand on which island?,Bora Bora,Easter Island,Tahiti,Hawaii,B,expert,Culture and Firsts
-696,Which country lies immediately north of Sweden?,Iceland,Denmark,Norway,Estonia,C,expert,Geography and Landmarks
-697,What is the common name for solid carbon dioxide?,Dry ice,Heavy ice,Blue ice,Black ice,D,expert,Science Basics
-698,The calcaneus is the scientific name for which bone?,The heel bone,The shin bone,The wrist bone,The skull,A,expert,Human Body
-699,Who wrote the novel A Clockwork Orange?,Ken Kesey,Anthony Burgess,Ira Levin,Norman Mailer,B,expert,Books and Authors
-700,The Strait of Malacca lies between the Malay Peninsula and which island?,Java,The Borneo,Sumatra,Sulawesi,C,expert,Geography and Landmarks
-701,Which gas is most abundant in volcanic emissions?,Sulfur dioxide,The Ammonia,Carbon dioxide,Water vapor,D,expert,Science Basics
-702,Which artery is palpated at the wrist to take a pulse?,The radial artery,The ulnar artery,The brachial artery,The carotid artery,A,expert,Human Body
+659,Who wrote the novel The Secret Agent?,Joseph Conrad,Louis Bromfield,Hugh Walpole,George Gissing,A,expert,Books and Authors
+660,A speed of one nautical mile per hour equals what unit?,One league,One cable,One fathom,One knot,D,expert,Units and Numbers
+661,The Windward Passage separates Cuba from which country?,The Bahamas,Jamaica,Haiti,Honduras,C,expert,Geography and Landmarks
+662,Which scientist discovered penicillin?,Louis Pasteur,Robert Koch,Joseph Lister,Alexander Fleming,D,expert,Science Basics
+663,The circle of Willis is located where?,Around the heart,In the liver,Along the spine,At the base of the brain,D,expert,Human Body
+664,Who wrote the novel Of Human Bondage?,A.J. Cronin,Gore Vidal,W. Somerset Maugham,James Hilton,C,expert,Books and Authors
+665,One cubic yard equals how many cubic feet?,31,27,37,29,B,expert,Units and Numbers
+666,Which band recorded the 1973 album The Dark Side of the Moon?,The Rolling Stones,The Beatles,Pink Floyd,Led Zeppelin,C,expert,Culture and Firsts
+667,Which country contains Cape Froward the southernmost point of mainland South America?,Panama,Suriname,Bolivia,Chile,D,expert,Geography and Landmarks
+668,Which innermost layer of the eye contains photoreceptors?,The retina,The uvea,The sclera,The choroid,A,expert,Human Body
+669,Who wrote the novel The Stand?,Clive Barker,Stephen King,Dean Koontz,Peter Straub,B,expert,Books and Authors
+670,How many keys does a standard full-size piano have?,84,76,92,88,D,expert,Units and Numbers
+671,The Bosphorus connects the Sea of Marmara to which sea?,The Black Sea,The Aegean Sea,The Adriatic Sea,The Balearic Sea,A,expert,Geography and Landmarks
+672,What is the SI unit of capacitance?,The farad,The ohm,The henry,The maxwell,A,expert,Science Basics
+673,Who wrote the novel The Talented Mr Ripley?,Ross Macdonald,Dashiell Hammett,Patricia Highsmith,Raymond Chandler,C,expert,Books and Authors
+674,One fathom equals how many feet?,108,Six,73,22,B,expert,Units and Numbers
+675,Which civilization built the Palace of Knossos?,The Phoenicians,The Mycenaeans,The Romans,The Minoans,D,expert,Culture and Firsts
+676,The Gulf of Bothnia lies between Sweden and which country?,Aland Islands,Lithuania,Finland,Latvia,C,expert,Geography and Landmarks
+677,What is the atomic number of helium?,57,2,111,56,B,expert,Science Basics
+678,What is the largest part of the human brain?,The hippocampus,The cerebellum,The brainstem,The cerebrum,D,expert,Human Body
+679,Who wrote the novel The Last of the Mohicans?,Herman Melville,Washington Irving,Nathaniel Hawthorne,James Fenimore Cooper,D,expert,Books and Authors
+680,What is the capital of Norway?,Oslo,Trondheim,Stavanger,Bergen,A,expert,Geography and Landmarks
+681,Which element is the most abundant in the human body by mass?,Fluorine,Chlorine,Oxygen,Iodine,C,expert,Science Basics
+682,The olecranon is the bony tip of which body part?,hip,The ankle,The elbow,knee,C,expert,Human Body
+683,Who wrote the novel A Handful of Dust?,Christopher Isherwood,J.B. Priestley,Compton Mackenzie,Evelyn Waugh,D,expert,Books and Authors
+684,How many quarts are in one gallon?,43,105,Four,75,C,expert,Units and Numbers
+685,Which band released the album Abbey Road in 1969?,The Who,The Beach Boys,The Beatles,The Kinks,C,expert,Culture and Firsts
+686,Which country is home to most of the Kalahari Desert?,Gabon,Botswana,Congo,Tanzania,B,expert,Geography and Landmarks
+687,Wind speed is measured with which instrument?,The anemometer,The barometer,The clinometer,The odometer,A,expert,Science Basics
+688,The gastrocnemius is the chief muscle of which body region?,The calf,The forearm,The chest,foot,A,expert,Human Body
+689,Who wrote the novel The Bell Jar?,Anne Sexton,Sylvia Plath,Elizabeth Bishop,Adrienne Rich,B,expert,Books and Authors
+690,Which river flows through Prague?,The Elbe,The Danube,The Oder,The Vltava,D,expert,Geography and Landmarks
+691,Which planet is associated with the Great Dark Spot?,Neptune,Haumea,Uranus,Pluto,A,expert,Science Basics
+692,What is the medical term for the jawbone?,The maxilla,The temporal,The zygomatic,The mandible,D,expert,Human Body
+693,Who wrote the novel The Wapshot Chronicle?,John O'Hara,John Cheever,Irwin Shaw,James Gould Cozzens,B,expert,Books and Authors
+694,How many pecks are in one bushel?,5281,39,300,52,B,expert,Units and Numbers
+695,The moai statues stand on which island?,Hawaii,Bora Bora,Tahiti,Easter Island,D,expert,Culture and Firsts
+696,Which country lies immediately north of Sweden?,Denmark,Norway,Estonia,Iceland,B,expert,Geography and Landmarks
+697,What is the common name for solid carbon dioxide?,Dry ice,Heavy ice,Black ice,Blue ice,C,expert,Science Basics
+698,The calcaneus is the scientific name for which bone?,The skull,The wrist bone,The heel bone,The shin bone,C,expert,Human Body
+699,Who wrote the novel A Clockwork Orange?,Anthony Burgess,Ken Kesey,Norman Mailer,Ira Levin,A,expert,Books and Authors
+700,The Strait of Malacca lies between the Malay Peninsula and which island?,Sulawesi,Java,Sumatra,The Borneo,C,expert,Geography and Landmarks
+701,Which gas is most abundant in volcanic emissions?,Carbon dioxide,Sulfur dioxide,Water vapor,The Ammonia,C,expert,Science Basics
+702,Which artery is palpated at the wrist to take a pulse?,The radial artery,The ulnar artery,The carotid artery,The brachial artery,A,expert,Human Body
 703,Who wrote the novel Fontamara?,Alberto Moravia,Ignazio Silone,Cesare Pavese,Carlo Levi,B,expert,Books and Authors
-704,A full rotation equals how many radians?,3 pi,Pi,2 pi,4 pi,C,expert,Units and Numbers
-705,Which sculptor created the statue The Thinker?,Camille Claudel,Constantin Brancusi,Aristide Maillol,Auguste Rodin,D,expert,Culture and Firsts
-706,The Makgadikgadi salt pans are located in which country?,Botswana,Rwanda,Mauritania,Mauritius,A,expert,Geography and Landmarks
-707,What is the deepest layer of the epidermis called?,The stratum corneum,The stratum basale,The stratum lucidum,The stratum granulosum,B,expert,Human Body
-708,Who wrote the novel The Violent Bear It Away?,Truman Capote,Carson McCullers,Flannery O'Connor,Eudora Welty,C,expert,Books and Authors
-709,A century in cricket equals how many runs?,150,101,250,140,B,expert,Units and Numbers
-710,Which is the highest capital city in the European Union?,Madrid,Bratislava,Warsaw,Basel,A,expert,Geography and Landmarks
+704,A full rotation equals how many radians?,Pi,3 pi,2 pi,4 pi,C,expert,Units and Numbers
+705,Which sculptor created the statue The Thinker?,Aristide Maillol,Auguste Rodin,Camille Claudel,Constantin Brancusi,B,expert,Culture and Firsts
+706,The Makgadikgadi salt pans are located in which country?,Mauritius,Rwanda,Mauritania,Botswana,D,expert,Geography and Landmarks
+707,What is the deepest layer of the epidermis called?,The stratum lucidum,The stratum granulosum,The stratum basale,The stratum corneum,C,expert,Human Body
+708,Who wrote the novel The Violent Bear It Away?,Truman Capote,Flannery O'Connor,Carson McCullers,Eudora Welty,B,expert,Books and Authors
+709,A century in cricket equals how many runs?,101,150,250,140,A,expert,Units and Numbers
+710,Which is the highest capital city in the European Union?,Bratislava,Madrid,Warsaw,Basel,B,expert,Geography and Landmarks
 711,Which letter appears in the name of no US state?,J,Q,X,Z,B,expert,Units and Numbers
-712,The hormone leptin is produced by which tissue?,Muscle tissue,Liver tissue,Adipose tissue,Nerve tissue,C,expert,Human Body
-713,Who wrote the novel Saturday Night and Sunday Morning?,Keith Waterhouse,Stan Barstow,John Braine,Alan Sillitoe,D,expert,Books and Authors
-714,A standard mahjong set contains how many tiles?,136,152,164,144,D,expert,Units and Numbers
-715,Which city served as the first capital of the United States?,Philadelphia,New York,Boston,Washington DC,B,expert,Culture and Firsts
+712,The hormone leptin is produced by which tissue?,Nerve tissue,Liver tissue,Muscle tissue,Adipose tissue,D,expert,Human Body
+713,Who wrote the novel Saturday Night and Sunday Morning?,John Braine,Stan Barstow,Alan Sillitoe,Keith Waterhouse,C,expert,Books and Authors
+714,A standard mahjong set contains how many tiles?,144,136,164,152,A,expert,Units and Numbers
+715,Which city served as the first capital of the United States?,Philadelphia,Washington DC,Boston,New York,D,expert,Culture and Firsts
 716,The Dead Sea borders Israel and which country?,Yemen,Syria,Jordan,Oman,C,expert,Geography and Landmarks
-717,What is the term for programmed cell death?,Meiosis,Necrosis,Mitosis,Apoptosis,D,expert,Human Body
-718,Who wrote the novel Ironweed?,William Kennedy,John Irving,E.L. Doctorow,Russell Banks,A,expert,Books and Authors
-719,One bel equals how many decibels?,One hundred,Ten,One thousand,One million,B,expert,Units and Numbers
-720,Mosi-oa-Tunya is the local name for which waterfall?,Iguazu Falls,Sutherland Falls,Victoria Falls,Angel Falls,C,expert,Geography and Landmarks
-721,What is the science of measuring the size and shape of the Earth called?,Orography,Meteorology,Seismology,Geodesy,D,expert,Science Basics
-722,Which bone is commonly called the shin bone?,The tibia,The fibula,The patella,The kneecap,A,expert,Human Body
-723,Who wrote the novel The Naked and the Dead?,James Jones,Norman Mailer,Joseph Heller,Herman Wouk,B,expert,Books and Authors
-724,A sonnet contains how many lines?,58,102,Fourteen,Twenty one,C,expert,Units and Numbers
-725,The silkworm is the caterpillar of which insect?,A wasp,A butterfly,A beetle,A moth,D,expert,Science Basics
-726,The Dardanelles strait connects the Aegean Sea to which sea?,The Sea of Marmara,The Sea of Azov,The Arabian Sea,The Ligurian Sea,A,expert,Geography and Landmarks
-727,Which lobe of the brain processes visual information?,The temporal lobe,The occipital lobe,The parietal lobe,The frontal lobe,B,expert,Human Body
-728,Who wrote the novel Intruder in the Dust?,Robert Penn Warren,Margaret Mitchell,William Faulkner,Tennessee Williams,C,expert,Books and Authors
+717,What is the term for programmed cell death?,Meiosis,Apoptosis,Mitosis,Necrosis,B,expert,Human Body
+718,Who wrote the novel Ironweed?,William Kennedy,Russell Banks,E.L. Doctorow,John Irving,A,expert,Books and Authors
+719,One bel equals how many decibels?,One thousand,One hundred,Ten,One million,C,expert,Units and Numbers
+720,Mosi-oa-Tunya is the local name for which waterfall?,Iguazu Falls,Sutherland Falls,Angel Falls,Victoria Falls,D,expert,Geography and Landmarks
+721,What is the science of measuring the size and shape of the Earth called?,Meteorology,Geodesy,Seismology,Orography,B,expert,Science Basics
+722,Which bone is commonly called the shin bone?,The patella,The kneecap,The fibula,The tibia,D,expert,Human Body
+723,Who wrote the novel The Naked and the Dead?,James Jones,Joseph Heller,Norman Mailer,Herman Wouk,C,expert,Books and Authors
+724,A sonnet contains how many lines?,Fourteen,58,Twenty one,102,A,expert,Units and Numbers
+725,The silkworm is the caterpillar of which insect?,A butterfly,A beetle,A wasp,A moth,D,expert,Science Basics
+726,The Dardanelles strait connects the Aegean Sea to which sea?,The Sea of Marmara,The Sea of Azov,The Ligurian Sea,The Arabian Sea,A,expert,Geography and Landmarks
+727,Which lobe of the brain processes visual information?,The occipital lobe,The temporal lobe,The parietal lobe,The frontal lobe,A,expert,Human Body
+728,Who wrote the novel Intruder in the Dust?,Robert Penn Warren,Tennessee Williams,Margaret Mitchell,William Faulkner,D,expert,Books and Authors
 729,A cord of firewood measures how many cubic feet?,63,96,192,128,D,expert,Units and Numbers
-730,The Tiber flows through which capital city?,Rome,Bern,Zurich,Osaka,A,expert,Geography and Landmarks
-731,What is the SI unit of magnetic flux density?,farad,tesla,The gauss,The hertz,B,expert,Science Basics
-732,Which is the longest cranial nerve?,The olfactory nerve,The abducens nerve,The vagus nerve,The trochlear nerve,C,expert,Human Body
-733,Who wrote the novel The Heart Is a Lonely Hunter?,James Agee,Katherine Anne Porter,Zora Neale Hurston,Carson McCullers,D,expert,Books and Authors
-734,How many strings does a standard violin have?,53,51,128,26,A,expert,Units and Numbers
-735,The Nebula Awards honor works in which genre?,Mystery,Science fiction,Romance,History,B,expert,Culture and Firsts
-736,The Atlas Mountains are located in which region?,The Arabian Peninsula,South Asia,Northwest Africa,Central Europe,C,expert,Geography and Landmarks
-737,Which flap prevents food from entering the windpipe?,The uvula,The diaphragm,The bronchus,The epiglottis,D,expert,Human Body
-738,Who wrote the novel The Power and the Glory?,Graham Greene,C.S. Forester,James M. Cain,Joyce Cary,A,expert,Books and Authors
-739,A standard double-six domino set contains how many tiles?,28,39,66,55,A,expert,Units and Numbers
-740,Which country is completely surrounded by South Africa?,Burundi,Eswatini,Lesotho,Nigeria,C,expert,Geography and Landmarks
-741,Which is the nearest major galaxy to the Milky Way?,The Sombrero Galaxy,The Pinwheel Galaxy,The Whirlpool Galaxy,Andromeda,D,expert,Science Basics
-742,Which is the largest vein in the human body?,The inferior vena cava,The pulmonary vein,The superior vena cava,The jugular vein,A,expert,Human Body
-743,Who wrote the novel The Death of the Heart?,Ivy Compton-Burnett,Elizabeth Bowen,Storm Jameson,Rosamond Lehmann,B,expert,Books and Authors
-744,One micron equals what fraction of a meter?,One thousandth of a meter,One billionth of a meter,One millionth of a meter,One hundred thousandth of a meter,C,expert,Units and Numbers
-745,The Grand Ole Opry is broadcast from which city?,Memphis,Louisville,Austin,Nashville,D,expert,Culture and Firsts
-746,The Drakensberg mountains are located in which country?,South Africa,Swaziland,Madagascar,Ethiopia,A,expert,Geography and Landmarks
-747,The process of cell division that produces gametes is called what?,Cytokinesis,Meiosis,Photosynthesis,Osmosis,B,expert,Science Basics
-748,Who wrote the novel The Man Who Was Thursday?,H. Rider Haggard,Arthur Conan Doyle,G.K. Chesterton,James Barrie,C,expert,Books and Authors
-749,One grain the apothecary unit equals about how many milligrams?,70,66,85,95,B,expert,Units and Numbers
+730,The Tiber flows through which capital city?,Bern,Rome,Osaka,Zurich,B,expert,Geography and Landmarks
+731,What is the SI unit of magnetic flux density?,farad,The hertz,The gauss,tesla,D,expert,Science Basics
+732,Which is the longest cranial nerve?,The abducens nerve,The olfactory nerve,The vagus nerve,The trochlear nerve,C,expert,Human Body
+733,Who wrote the novel The Heart Is a Lonely Hunter?,Zora Neale Hurston,Carson McCullers,Katherine Anne Porter,James Agee,B,expert,Books and Authors
+734,How many strings does a standard violin have?,26,51,128,53,D,expert,Units and Numbers
+735,The Nebula Awards honor works in which genre?,Science fiction,Mystery,Romance,History,A,expert,Culture and Firsts
+736,The Atlas Mountains are located in which region?,Northwest Africa,The Arabian Peninsula,Central Europe,South Asia,A,expert,Geography and Landmarks
+737,Which flap prevents food from entering the windpipe?,The diaphragm,The uvula,The epiglottis,The bronchus,C,expert,Human Body
+738,Who wrote the novel The Power and the Glory?,Joyce Cary,C.S. Forester,James M. Cain,Graham Greene,D,expert,Books and Authors
+739,A standard double-six domino set contains how many tiles?,28,66,55,39,A,expert,Units and Numbers
+740,Which country is completely surrounded by South Africa?,Nigeria,Eswatini,Lesotho,Burundi,C,expert,Geography and Landmarks
+741,Which is the nearest major galaxy to the Milky Way?,Andromeda,The Whirlpool Galaxy,The Pinwheel Galaxy,The Sombrero Galaxy,A,expert,Science Basics
+742,Which is the largest vein in the human body?,The jugular vein,The inferior vena cava,The superior vena cava,The pulmonary vein,B,expert,Human Body
+743,Who wrote the novel The Death of the Heart?,Elizabeth Bowen,Ivy Compton-Burnett,Rosamond Lehmann,Storm Jameson,A,expert,Books and Authors
+744,One micron equals what fraction of a meter?,One millionth of a meter,One thousandth of a meter,One hundred thousandth of a meter,One billionth of a meter,A,expert,Units and Numbers
+745,The Grand Ole Opry is broadcast from which city?,Memphis,Louisville,Nashville,Austin,C,expert,Culture and Firsts
+746,The Drakensberg mountains are located in which country?,Ethiopia,Swaziland,Madagascar,South Africa,D,expert,Geography and Landmarks
+747,The process of cell division that produces gametes is called what?,Photosynthesis,Cytokinesis,Meiosis,Osmosis,C,expert,Science Basics
+748,Who wrote the novel The Man Who Was Thursday?,G.K. Chesterton,Arthur Conan Doyle,James Barrie,H. Rider Haggard,A,expert,Books and Authors
+749,One grain the apothecary unit equals about how many milligrams?,66,70,85,95,A,expert,Units and Numbers
 750,The Kerch Strait connects the Black Sea to which body of water?,The Sea of Azov,The White Sea,The Barents Sea,North Sea,A,expert,Geography and Landmarks
-751,Which metal is the best conductor of heat?,Gold,Silver,Bronze,Tin,B,expert,Science Basics
-752,Who wrote the novel A Town Like Alice?,Leon Uris,James A. Michener,Nevil Shute,James Clavell,C,expert,Books and Authors
-753,One barrel of crude oil equals how many US gallons?,41,77,124,42,D,expert,Units and Numbers
-754,The Rijksmuseum is located in which city?,Lille,Rotterdam,Turin,The Hague,A,expert,Culture and Firsts
-755,Which is the largest island in the Mediterranean Sea?,Corsica,Sicily,Crete,Rhodes,B,expert,Geography and Landmarks
-756,What is the medical term for normal breathing?,Tachypnea,Dyspnea,Eupnea,Hyperpnea,C,expert,Human Body
-757,Who wrote the novel The Recognitions?,Don DeLillo,John Barth,David Foster Wallace,William Gaddis,D,expert,Books and Authors
-758,One furlong equals how many yards?,220 yards,440 yards,110 yards,880 yards,A,expert,Units and Numbers
+751,Which metal is the best conductor of heat?,Tin,Silver,Bronze,Gold,B,expert,Science Basics
+752,Who wrote the novel A Town Like Alice?,James A. Michener,Leon Uris,James Clavell,Nevil Shute,D,expert,Books and Authors
+753,One barrel of crude oil equals how many US gallons?,41,42,77,124,B,expert,Units and Numbers
+754,The Rijksmuseum is located in which city?,The Hague,Lille,Turin,Rotterdam,B,expert,Culture and Firsts
+755,Which is the largest island in the Mediterranean Sea?,Rhodes,Corsica,Crete,Sicily,D,expert,Geography and Landmarks
+756,What is the medical term for normal breathing?,Dyspnea,Eupnea,Hyperpnea,Tachypnea,B,expert,Human Body
+757,Who wrote the novel The Recognitions?,David Foster Wallace,John Barth,William Gaddis,Don DeLillo,C,expert,Books and Authors
+758,One furlong equals how many yards?,110 yards,440 yards,880 yards,220 yards,D,expert,Units and Numbers
 759,In which Spanish city is the running of the bulls held each July?,,,,,Pamplona,extreme,Geography and Landmarks
 760,How many bones are in the human middle ear?,,,,,Three,extreme,Human Body
 761,Which Bronte sister wrote the novel Agnes Grey?,,,,,Anne Bronte,extreme,Books and Authors

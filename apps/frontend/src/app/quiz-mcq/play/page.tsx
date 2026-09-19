@@ -184,6 +184,29 @@ function QuizContent(): JSX.Element {
   const currentQuestionId = quiz.currentQuestion?.id ?? null;
   // Question changed (advanced / went Back) or unmounted — no longer pending.
   useEffect(() => clearAutoAdvance, [currentQuestionId, clearAutoAdvance]);
+
+  // BUG-040: comments after answering. Open cancels the pending auto-advance
+  // and BLOCKS advancing (Next + keyboard); close proceeds to the next
+  // question (or the submit confirm on the last one).
+  const [commentsOpen, setCommentsOpen] = useState(false);
+  useEffect(() => {
+    setCommentsOpen(false);
+  }, [currentQuestionId]);
+  const toggleComments = useCallback(() => {
+    setCommentsOpen((prev) => {
+      if (!prev) clearAutoAdvance();
+      return !prev;
+    });
+  }, [clearAutoAdvance]);
+  const proceedAfterComments = useCallback(() => {
+    setCommentsOpen(false);
+    questionCardRef.current?.clearBubbles();
+    if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
+      setShowConfirmSubmit(true);
+    } else {
+      quiz.goToNext();
+    }
+  }, [quiz.currentQuestionIndex, quiz.totalQuestions, quiz.goToNext]);
   const scheduleAutoAdvance = useCallback(() => {
     if (isTimerMode || quiz.status !== 'playing') return;
     clearAutoAdvance();
@@ -212,6 +235,7 @@ function QuizContent(): JSX.Element {
       if (quiz.status !== 'playing') return;
       if (showConfirmSubmit || showExtendQuiz) return;
 
+      if (commentsOpen) return; // comments open: typing + advancing are theirs
       const target = e.target as HTMLElement | null;
       const tag = target?.tagName;
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || tag === 'BUTTON') return;
@@ -267,6 +291,7 @@ function QuizContent(): JSX.Element {
     quiz.timeRemaining,
     quiz.selectAnswer,
     quiz.goToNext,
+    commentsOpen,
     level,
     isTimerMode,
     scheduleAutoAdvance,
@@ -491,6 +516,13 @@ function QuizContent(): JSX.Element {
                   maxScore={quiz.totalQuestions}
                   timeUp={isTimeUp}
                   onShare={handleShare}
+                  {...(quiz.hasAnsweredCurrent
+                    ? {
+                        commentsOpen,
+                        onToggleComments: toggleComments,
+                        onCloseComments: proceedAfterComments,
+                      }
+                    : {})}
                   {...(isTimerMode && {
                     questionTimeRemaining: quiz.timeRemaining,
                     questionTimeLimit: timeLimit ?? 60,
@@ -551,7 +583,7 @@ function QuizContent(): JSX.Element {
                     quiz.goToNext();
                   }
                 }}
-                disabled={!quiz.hasAnsweredCurrent}
+                disabled={!quiz.hasAnsweredCurrent || commentsOpen}
                 className={`inline-flex items-center gap-2 rounded-lg px-6 py-2 text-sm font-bold transition-all ${quiz.hasAnsweredCurrent ? 'animate-pulse bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-lg scale-105' : 'bg-white/10 dark:bg-secondary-800/10 text-white/30 cursor-not-allowed'}`}
               >
                 {quiz.currentQuestionIndex >= quiz.totalQuestions - 1 ? 'Submit' : 'Next'}

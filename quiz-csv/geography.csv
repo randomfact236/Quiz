@@ -2,66 +2,66 @@
 
 ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 1,Paris is the capital city of France.,True,False,,,A,easy,Capitals
-2,The capital of Japan is Beijing.,True,False,,,B,easy,Capitals
+2,The capital of Japan is Beijing.,False,True,,,A,easy,Capitals
 3,Asia is the largest continent by area.,True,False,,,A,easy,Countries and Continents
 4,Europe is the largest continent by area.,True,False,,,B,easy,Countries and Continents
 5,The Nile River flows through Egypt.,True,False,,,A,easy,Rivers and Lakes
 6,The Amazon River flows through Europe.,True,False,,,B,easy,Rivers and Lakes
-7,Mount Everest is the highest mountain on Earth.,True,False,,,A,easy,Mountains and Deserts
-8,Mount Kilimanjaro is located in Germany.,True,False,,,B,easy,Mountains and Deserts
-9,The Atlantic Ocean is the largest ocean on Earth.,False,True,,,A,easy,Oceans and Seas
+7,Mount Everest is the highest mountain on Earth.,False,True,,,B,easy,Mountains and Deserts
+8,Mount Kilimanjaro is located in Germany.,False,True,,,A,easy,Mountains and Deserts
+9,The Atlantic Ocean is the largest ocean on Earth.,True,False,,,B,easy,Oceans and Seas
 10,The Eiffel Tower is located in Paris.,False,True,,,B,easy,Landmarks and Maps
 11,The Statue of Liberty stands in Los Angeles.,False,True,,,A,easy,Landmarks and Maps
 12,Egypt is a country in Africa.,False,True,,,B,easy,Capitals
-13,Brazil is a country in Asia.,False,True,,,A,easy,Capitals
-14,Rome is the capital city of Italy.,False,True,,,B,easy,Capitals
+13,Brazil is a country in Asia.,True,False,,,B,easy,Capitals
+14,Rome is the capital city of Italy.,True,False,,,A,easy,Capitals
 15,Madrid is the capital city of Portugal.,False,True,,,A,easy,Capitals
 16,The Sahara is a vast desert in North Africa.,False,True,,,B,easy,Mountains and Deserts
-17,The Sahara Desert lies in southern Europe.,False,True,,,A,easy,Mountains and Deserts
-18,The Mediterranean Sea lies between Europe and Africa.,False,True,,,B,easy,Oceans and Seas
+17,The Sahara Desert lies in southern Europe.,True,False,,,B,easy,Mountains and Deserts
+18,The Mediterranean Sea lies between Europe and Africa.,True,False,,,A,easy,Oceans and Seas
 19,The Dead Sea borders Brazil.,False,True,,,A,easy,Oceans and Seas
 20,The Colosseum is located in Rome.,False,True,,,B,easy,Landmarks and Maps
 21,The Taj Mahal is located in Egypt.,False,True,,,A,easy,Landmarks and Maps
-22,Russia is the largest country in the world by area.,False,True,,,B,easy,Countries and Continents
-23,Canada is the largest country in the world by area.,False,True,,,A,easy,Countries and Continents
+22,Russia is the largest country in the world by area.,True,False,,,A,easy,Countries and Continents
+23,Canada is the largest country in the world by area.,True,False,,,B,easy,Countries and Continents
 24,The Danube River flows through central Europe.,False,True,,,B,easy,Rivers and Lakes
 25,The Mississippi River flows through China.,False,True,,,A,easy,Rivers and Lakes
-26,The Alps are a mountain range in Europe.,False,True,,,B,easy,Mountains and Deserts
-27,The Andes are located in Antarctica.,False,True,,,A,easy,Mountains and Deserts
-28,Australia is both a country and a continent.,False,True,,,B,easy,Countries and Continents
-29,Africa is a single country.,False,True,,,A,easy,Countries and Continents
+26,The Alps are a mountain range in Europe.,True,False,,,A,easy,Mountains and Deserts
+27,The Andes are located in Antarctica.,True,False,,,B,easy,Mountains and Deserts
+28,Australia is both a country and a continent.,True,False,,,A,easy,Countries and Continents
+29,Africa is a single country.,True,False,,,B,easy,Countries and Continents
 30,Tokyo is the capital city of Japan.,False,True,,,B,easy,Capitals
 31,Ottawa is the capital city of the United States.,False,True,,,A,easy,Capitals
 32,The Ganges River flows through India.,False,True,,,B,easy,Rivers and Lakes
-33,The Rhine River flows through South America.,False,True,,,A,easy,Rivers and Lakes
-34,Mount Fuji is a volcano in Japan.,False,True,,,B,easy,Mountains and Deserts
+33,The Rhine River flows through South America.,True,False,,,B,easy,Rivers and Lakes
+34,Mount Fuji is a volcano in Japan.,True,False,,,A,easy,Mountains and Deserts
 35,Mount Everest is located in Switzerland.,False,True,,,A,easy,Mountains and Deserts
 36,The Indian Ocean lies between Africa and Australia.,False,True,,,B,easy,Oceans and Seas
-37,The Arctic Ocean is the warmest ocean on Earth.,False,True,,,A,easy,Oceans and Seas
-38,Big Ben is a famous clock tower in London.,False,True,,,B,easy,Landmarks and Maps
-39,Christ the Redeemer stands in Buenos Aires.,False,True,,,A,easy,Landmarks and Maps
+37,The Arctic Ocean is the warmest ocean on Earth.,True,False,,,B,easy,Oceans and Seas
+38,Big Ben is a famous clock tower in London.,True,False,,,A,easy,Landmarks and Maps
+39,Christ the Redeemer stands in Buenos Aires.,True,False,,,B,easy,Landmarks and Maps
 40,India is located in Asia.,False,True,,,B,easy,Countries and Continents
 41,Norway is located in Africa.,False,True,,,A,easy,Countries and Continents
 42,London is the capital city of the United Kingdom.,False,True,,,B,easy,Capitals
-43,Berlin is the capital city of Austria.,False,True,,,A,easy,Capitals
-44,Lake Victoria is located in Africa.,False,True,,,B,easy,Rivers and Lakes
-45,Lake Baikal is located in Australia.,False,True,,,A,easy,Rivers and Lakes
+43,Berlin is the capital city of Austria.,True,False,,,B,easy,Capitals
+44,Lake Victoria is located in Africa.,True,False,,,A,easy,Rivers and Lakes
+45,Lake Baikal is located in Australia.,True,False,,,B,easy,Rivers and Lakes
 46,Kilimanjaro is the highest mountain in Africa.,False,True,,,B,easy,Mountains and Deserts
 47,Denali is the highest peak in South America.,False,True,,,A,easy,Mountains and Deserts
-48,The Red Sea lies between Africa and Asia.,False,True,,,B,easy,Oceans and Seas
-49,The Caribbean Sea borders Russia.,False,True,,,A,easy,Oceans and Seas
-50,The Pyramids of Giza are located in Egypt.,False,True,,,B,easy,Landmarks and Maps
-51,Machu Picchu is located in Mexico.,False,True,,,A,easy,Landmarks and Maps
+48,The Red Sea lies between Africa and Asia.,True,False,,,A,easy,Oceans and Seas
+49,The Caribbean Sea borders Russia.,True,False,,,B,easy,Oceans and Seas
+50,The Pyramids of Giza are located in Egypt.,True,False,,,A,easy,Landmarks and Maps
+51,Machu Picchu is located in Mexico.,True,False,,,B,easy,Landmarks and Maps
 52,Indonesia consists of many thousands of islands.,False,True,,,B,easy,Countries and Continents
 53,Egypt is located in South America.,False,True,,,A,easy,Countries and Continents
-54,Madrid is the capital city of Spain.,False,True,,,B,easy,Capitals
-55,Rome is the capital city of Greece.,False,True,,,A,easy,Capitals
-56,The Amazon carries more water than any other river.,False,True,,,B,easy,Rivers and Lakes
+54,Madrid is the capital city of Spain.,True,False,,,A,easy,Capitals
+55,Rome is the capital city of Greece.,True,False,,,B,easy,Capitals
+56,The Amazon carries more water than any other river.,True,False,,,A,easy,Rivers and Lakes
 57,The Yangtze River flows through Africa.,False,True,,,A,easy,Rivers and Lakes
 58,Aconcagua is the highest peak in the Americas.,False,True,,,B,easy,Mountains and Deserts
 59,Mont Blanc is the highest mountain of the Andes.,False,True,,,A,easy,Mountains and Deserts
-60,The Southern Ocean surrounds Antarctica.,False,True,,,B,easy,Oceans and Seas
-61,The Indian Ocean surrounds Antarctica.,False,True,,,A,easy,Oceans and Seas
+60,The Southern Ocean surrounds Antarctica.,True,False,,,A,easy,Oceans and Seas
+61,The Indian Ocean surrounds Antarctica.,True,False,,,B,easy,Oceans and Seas
 62,The Leaning Tower is located in Pisa.,False,True,,,B,easy,Landmarks and Maps
 63,The Acropolis is located in Rome.,False,True,,,A,easy,Landmarks and Maps
 64,Brazil is the largest country in South America.,False,True,,,B,easy,Countries and Continents
@@ -71,8 +71,8 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 68,Lake Superior is one of the Great Lakes.,False,True,,,B,easy,Rivers and Lakes
 69,Lake Titicaca lies in northern Europe.,False,True,,,A,easy,Rivers and Lakes
 70,The Himalayas stretch across Asia.,False,True,,,B,easy,Mountains and Deserts
-71,The Rocky Mountains are located in Europe.,False,True,,,A,easy,Mountains and Deserts
-72,The Arabian Sea lies between India and Arabia.,False,True,,,B,easy,Oceans and Seas
+71,The Rocky Mountains are located in Europe.,True,False,,,B,easy,Mountains and Deserts
+72,The Arabian Sea lies between India and Arabia.,True,False,,,A,easy,Oceans and Seas
 73,The Yellow Sea lies near Brazil.,False,True,,,A,easy,Oceans and Seas
 74,The Golden Gate Bridge is in San Francisco.,False,True,,,B,easy,Landmarks and Maps
 75,The Sagrada Familia stands in Portugal.,False,True,,,A,easy,Landmarks and Maps
@@ -80,45 +80,45 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 77,The Tigris and Euphrates flow through the Middle East.,True,False,,,A,easy,Rivers and Lakes
 78,The Seine River flows through Berlin.,True,False,,,B,easy,Rivers and Lakes
 79,Death Valley is one of the hottest places on Earth.,True,False,,,A,easy,Mountains and Deserts
-80,Death Valley is located in Alaska.,True,False,,,B,easy,Mountains and Deserts
-81,There are five named oceans on Earth.,True,False,,,A,easy,Oceans and Seas
-82,The Atlantic is the deepest ocean on Earth.,True,False,,,B,easy,Oceans and Seas
-83,The Statue of Liberty was a gift from France.,True,False,,,A,easy,Landmarks and Maps
+80,Death Valley is located in Alaska.,False,True,,,A,easy,Mountains and Deserts
+81,There are five named oceans on Earth.,False,True,,,B,easy,Oceans and Seas
+82,The Atlantic is the deepest ocean on Earth.,False,True,,,A,easy,Oceans and Seas
+83,The Statue of Liberty was a gift from France.,False,True,,,B,easy,Landmarks and Maps
 84,The Eiffel Tower is located in London.,True,False,,,B,easy,Landmarks and Maps
 85,Spain is located in Europe.,True,False,,,A,easy,Countries and Continents
 86,Spain is located in Asia.,True,False,,,B,easy,Countries and Continents
 87,Ankara is the capital of Turkey.,True,False,,,A,easy,Capitals
 88,Istanbul is the capital of Turkey.,True,False,,,B,easy,Capitals
-89,The Congo River flows through Central Africa.,True,False,,,A,easy,Rivers and Lakes
-90,The Volga River is located in China.,True,False,,,B,easy,Rivers and Lakes
-91,The Atacama is one of the driest deserts on Earth.,True,False,,,A,easy,Mountains and Deserts
+89,The Congo River flows through Central Africa.,False,True,,,B,easy,Rivers and Lakes
+90,The Volga River is located in China.,False,True,,,A,easy,Rivers and Lakes
+91,The Atacama is one of the driest deserts on Earth.,False,True,,,B,easy,Mountains and Deserts
 92,The Atacama Desert lies in Southeast Asia.,True,False,,,B,easy,Mountains and Deserts
 93,The Sargasso Sea lies within the Atlantic Ocean.,True,False,,,A,easy,Oceans and Seas
 94,The Sargasso Sea lies within the Indian Ocean.,True,False,,,B,easy,Oceans and Seas
 95,Mount Rushmore is located in the United States.,True,False,,,A,easy,Landmarks and Maps
-96,Mount Rushmore is located in Canada.,True,False,,,B,easy,Landmarks and Maps
+96,Mount Rushmore is located in Canada.,False,True,,,A,easy,Landmarks and Maps
 97,Europe and Asia share one continuous landmass.,True,False,,,A,easy,Countries and Continents
 98,Africa and Europe share one continuous landmass.,True,False,,,B,easy,Countries and Continents
-99,Seoul is the capital of South Korea.,True,False,,,A,easy,Capitals
-100,Pyongyang is the capital of South Korea.,True,False,,,B,easy,Capitals
+99,Seoul is the capital of South Korea.,False,True,,,B,easy,Capitals
+100,Pyongyang is the capital of South Korea.,False,True,,,A,easy,Capitals
 101,The Mississippi flows into the Gulf of Mexico.,True,False,,,A,easy,Rivers and Lakes
 102,The Nile flows into the Atlantic Ocean.,True,False,,,B,easy,Rivers and Lakes
 103,Mount Vesuvius overlooks the city of Naples.,True,False,,,A,easy,Mountains and Deserts
-104,Mount Vesuvius is located in Greece.,True,False,,,B,easy,Mountains and Deserts
-105,The Persian Gulf lies between Iran and Arabia.,True,False,,,A,easy,Oceans and Seas
-106,The Persian Gulf lies north of Scandinavia.,True,False,,,B,easy,Oceans and Seas
-107,Stonehenge is located in the United Kingdom.,True,False,,,A,easy,Landmarks and Maps
-108,Stonehenge is located in Ireland.,True,False,,,B,easy,Landmarks and Maps
+104,Mount Vesuvius is located in Greece.,False,True,,,A,easy,Mountains and Deserts
+105,The Persian Gulf lies between Iran and Arabia.,False,True,,,B,easy,Oceans and Seas
+106,The Persian Gulf lies north of Scandinavia.,False,True,,,A,easy,Oceans and Seas
+107,Stonehenge is located in the United Kingdom.,False,True,,,B,easy,Landmarks and Maps
+108,Stonehenge is located in Ireland.,False,True,,,A,easy,Landmarks and Maps
 109,Kenya is located in East Africa.,True,False,,,A,easy,Countries and Continents
 110,Kenya is located in South America.,True,False,,,B,easy,Countries and Continents
 111,Bern is the capital of Switzerland.,True,False,,,A,easy,Capitals
 112,Zurich is the capital of Switzerland.,True,False,,,B,easy,Capitals
-113,Lake Tanganyika borders four countries.,True,False,,,A,easy,Rivers and Lakes
-114,Lake Michigan is the largest lake in the world.,True,False,,,B,easy,Rivers and Lakes
+113,Lake Tanganyika borders four countries.,False,True,,,B,easy,Rivers and Lakes
+114,Lake Michigan is the largest lake in the world.,False,True,,,A,easy,Rivers and Lakes
 115,Greenland is the largest island in the world.,True,False,,,A,easy,Countries and Continents
-116,Australia is the largest island in the world.,True,False,,,B,easy,Countries and Continents
-117,Mount Kilimanjaro rises in Tanzania.,True,False,,,A,easy,Mountains and Deserts
-118,Mount Kilimanjaro rises in Kenya.,True,False,,,B,easy,Mountains and Deserts
+116,Australia is the largest island in the world.,False,True,,,A,easy,Countries and Continents
+117,Mount Kilimanjaro rises in Tanzania.,False,True,,,B,easy,Mountains and Deserts
+118,Mount Kilimanjaro rises in Kenya.,False,True,,,A,easy,Mountains and Deserts
 119,The Bering Strait separates Asia from North America.,True,False,,,A,easy,Oceans and Seas
 120,The Bering Strait separates Spain from Morocco.,True,False,,,B,easy,Oceans and Seas
 121,Christ the Redeemer overlooks Rio de Janeiro.,True,False,,,A,easy,Landmarks and Maps
@@ -126,37 +126,37 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 123,Portugal lies in southwestern Europe.,True,False,,,A,easy,Countries and Continents
 124,Portugal lies in Central Asia.,True,False,,,B,easy,Countries and Continents
 125,Vienna is the capital of Austria.,True,False,,,A,easy,Capitals
-126,Vienna is the capital of Hungary.,True,False,,,B,easy,Capitals
-127,The Rhine River flows through Germany.,True,False,,,A,easy,Rivers and Lakes
-128,The Thames River flows through Paris.,True,False,,,B,easy,Rivers and Lakes
-129,The Gobi Desert spans China and Mongolia.,True,False,,,A,easy,Mountains and Deserts
+126,Vienna is the capital of Hungary.,False,True,,,A,easy,Capitals
+127,The Rhine River flows through Germany.,False,True,,,B,easy,Rivers and Lakes
+128,The Thames River flows through Paris.,False,True,,,A,easy,Rivers and Lakes
+129,The Gobi Desert spans China and Mongolia.,False,True,,,B,easy,Mountains and Deserts
 130,The Gobi Desert lies in South America.,True,False,,,B,easy,Mountains and Deserts
 131,The Gulf of Mexico lies between the southern United States and Mexico.,True,False,,,A,easy,Oceans and Seas
 132,The Gulf of Mexico lies between Sweden and Finland.,True,False,,,B,easy,Oceans and Seas
-133,The Kremlin is located in Moscow.,True,False,,,A,easy,Landmarks and Maps
-134,The Kremlin is located in Kiev.,True,False,,,B,easy,Landmarks and Maps
+133,The Kremlin is located in Moscow.,False,True,,,B,easy,Landmarks and Maps
+134,The Kremlin is located in Kiev.,False,True,,,A,easy,Landmarks and Maps
 135,The Sahara is larger than the Amazon rainforest.,True,False,,,A,easy,Mountains and Deserts
 136,The Gobi is the largest desert in the world.,True,False,,,B,easy,Mountains and Deserts
 137,The South China Sea is part of the Pacific Ocean.,True,False,,,A,easy,Oceans and Seas
 138,The South China Sea is part of the Arctic Ocean.,True,False,,,B,easy,Oceans and Seas
-139,The Sydney Opera House is located in Australia.,True,False,,,A,easy,Landmarks and Maps
-140,The Sydney Opera House is located in Austria.,True,False,,,B,easy,Landmarks and Maps
+139,The Sydney Opera House is located in Australia.,False,True,,,B,easy,Landmarks and Maps
+140,The Sydney Opera House is located in Austria.,False,True,,,A,easy,Landmarks and Maps
 141,The United States borders the Atlantic and the Pacific.,True,False,,,A,easy,Oceans and Seas
 142,The United States borders the Southern Ocean.,True,False,,,B,easy,Oceans and Seas
-143,Athens is the capital of Greece.,True,False,,,A,easy,Capitals
-144,Sparta is the capital of Greece.,True,False,,,B,easy,Capitals
+143,Athens is the capital of Greece.,False,True,,,B,easy,Capitals
+144,Sparta is the capital of Greece.,False,True,,,A,easy,Capitals
 145,The Orinoco River flows through Venezuela.,True,False,,,A,easy,Rivers and Lakes
 146,The Orinoco River flows through Poland.,True,False,,,B,easy,Rivers and Lakes
 147,Mount Saint Helens is a volcano in Washington State.,True,False,,,A,easy,Mountains and Deserts
 148,Mount Saint Helens is a volcano in Japan.,True,False,,,B,easy,Mountains and Deserts
 149,The Coral Sea lies off northeastern Australia.,True,False,,,A,easy,Oceans and Seas
 150,The Coral Sea lies off the coast of Norway.,True,False,,,B,easy,Oceans and Seas
-151,Angkor Wat is located in Cambodia.,True,False,,,A,easy,Landmarks and Maps
-152,Angkor Wat is located in India.,True,False,,,B,easy,Landmarks and Maps
-153,Morocco is located in northwestern Africa.,True,False,,,A,easy,Countries and Continents
-154,Morocco is located in Oceania.,True,False,,,B,easy,Countries and Continents
-155,Havana is the capital of Cuba.,True,False,,,A,easy,Capitals
-156,Havana is the capital of Jamaica.,True,False,,,B,easy,Capitals
+151,Angkor Wat is located in Cambodia.,False,True,,,B,easy,Landmarks and Maps
+152,Angkor Wat is located in India.,False,True,,,A,easy,Landmarks and Maps
+153,Morocco is located in northwestern Africa.,False,True,,,B,easy,Countries and Continents
+154,Morocco is located in Oceania.,False,True,,,A,easy,Countries and Continents
+155,Havana is the capital of Cuba.,False,True,,,B,easy,Capitals
+156,Havana is the capital of Jamaica.,False,True,,,A,easy,Capitals
 157,The Zambezi River flows over Victoria Falls.,True,False,,,A,easy,Rivers and Lakes
 158,Victoria Falls lies on the Nile River.,True,False,,,B,easy,Rivers and Lakes
 159,The Karakoram range contains K2.,True,False,,,A,easy,Mountains and Deserts
@@ -165,633 +165,633 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 162,The Tasman Sea lies between Italy and Croatia.,True,False,,,B,easy,Oceans and Seas
 163,Mount Olympus is the highest mountain in Greece.,True,False,,,A,easy,Mountains and Deserts
 164,Mount Olympus is located in Turkey.,True,False,,,B,easy,Mountains and Deserts
-165,The Gulf Stream is a warm Atlantic current.,True,False,,,A,easy,Oceans and Seas
-166,The Gulf Stream is a cold current past Egypt.,True,False,,,B,easy,Oceans and Seas
-167,The Louvre is a museum in Paris.,True,False,,,A,easy,Landmarks and Maps
+165,The Gulf Stream is a warm Atlantic current.,False,True,,,B,easy,Oceans and Seas
+166,The Gulf Stream is a cold current past Egypt.,False,True,,,A,easy,Oceans and Seas
+167,The Louvre is a museum in Paris.,False,True,,,B,easy,Landmarks and Maps
 168,The Louvre is a museum in Berlin.,True,False,,,B,easy,Landmarks and Maps
-169,Ethiopia is located in the Horn of Africa.,True,False,,,A,easy,Countries and Continents
-170,Ethiopia is located in the Balkans.,True,False,,,B,easy,Countries and Continents
-171,Bangkok is the capital of Thailand.,True,False,,,A,easy,Capitals
-172,Bangkok is the capital of Vietnam.,True,False,,,B,easy,Capitals
+169,Ethiopia is located in the Horn of Africa.,False,True,,,B,easy,Countries and Continents
+170,Ethiopia is located in the Balkans.,False,True,,,A,easy,Countries and Continents
+171,Bangkok is the capital of Thailand.,False,True,,,B,easy,Capitals
+172,Bangkok is the capital of Vietnam.,False,True,,,A,easy,Capitals
 173,The Murray is Australia's longest river.,True,False,,,A,easy,Rivers and Lakes
 174,The Murray is Europe's longest river.,True,False,,,B,easy,Rivers and Lakes
 175,The Namib is a coastal desert of southern Africa.,True,False,,,A,easy,Mountains and Deserts
 176,The Namib Desert lies in central Europe.,True,False,,,B,easy,Mountains and Deserts
-177,The Baltic Sea lies between Scandinavia and central Europe.,True,False,,,A,easy,Oceans and Seas
-178,The Black Sea lies north of the Baltic Sea.,True,False,,,B,easy,Oceans and Seas
+177,The Baltic Sea lies between Scandinavia and central Europe.,False,True,,,B,easy,Oceans and Seas
+178,The Black Sea lies north of the Baltic Sea.,False,True,,,A,easy,Oceans and Seas
 179,The Forbidden City is located in Beijing.,True,False,,,A,easy,Landmarks and Maps
 180,The Forbidden City is located in Tokyo.,True,False,,,B,easy,Landmarks and Maps
-181,Argentina is located in South America.,True,False,,,A,easy,Countries and Continents
-182,Argentina is located in East Asia.,True,False,,,B,easy,Countries and Continents
-183,Ottawa is the capital of Canada.,True,False,,,A,easy,Capitals
-184,Toronto is the capital of Canada.,True,False,,,B,easy,Capitals
+181,Argentina is located in South America.,False,True,,,B,easy,Countries and Continents
+182,Argentina is located in East Asia.,False,True,,,A,easy,Countries and Continents
+183,Ottawa is the capital of Canada.,False,True,,,B,easy,Capitals
+184,Toronto is the capital of Canada.,False,True,,,A,easy,Capitals
 185,The Yangtze is the longest river of Asia.,True,False,,,A,easy,Rivers and Lakes
 186,The Danube is the longest river of Asia.,True,False,,,B,easy,Rivers and Lakes
 187,Everest sits on the border of Nepal and China.,True,False,,,A,easy,Mountains and Deserts
-188,Everest sits entirely within India.,True,False,,,B,easy,Mountains and Deserts
-189,The Strait of Gibraltar separates Europe from Africa.,True,False,,,A,easy,Oceans and Seas
-190,The Strait of Gibraltar separates India from Sri Lanka.,True,False,,,B,easy,Oceans and Seas
+188,Everest sits entirely within India.,False,True,,,A,easy,Mountains and Deserts
+189,The Strait of Gibraltar separates Europe from Africa.,False,True,,,B,easy,Oceans and Seas
+190,The Strait of Gibraltar separates India from Sri Lanka.,False,True,,,A,easy,Oceans and Seas
 191,The Acropolis stands in Athens.,True,False,,,A,easy,Landmarks and Maps
-192,The Acropolis stands in Istanbul.,True,False,,,B,easy,Landmarks and Maps
-193,Nigeria has one of Africa's largest populations.,True,False,,,A,easy,Countries and Continents
-194,Nigeria is the smallest country in Africa.,True,False,,,B,easy,Countries and Continents
-195,Wellington is the capital of New Zealand.,True,False,,,A,easy,Capitals
+192,The Acropolis stands in Istanbul.,False,True,,,A,easy,Landmarks and Maps
+193,Nigeria has one of Africa's largest populations.,False,True,,,B,easy,Countries and Continents
+194,Nigeria is the smallest country in Africa.,False,True,,,A,easy,Countries and Continents
+195,Wellington is the capital of New Zealand.,False,True,,,B,easy,Capitals
 196,Auckland is the capital of New Zealand.,True,False,,,B,easy,Capitals
 197,The Rhine flows into the North Sea.,True,False,,,A,easy,Rivers and Lakes
 198,The Rhine flows into the Black Sea.,True,False,,,B,easy,Rivers and Lakes
-199,Which country has the larger land area?,Russia,Canada,,,A,medium,Countries and Continents
-200,Which capital is farther north?,Rome,Oslo,,,B,medium,Capitals
-201,Which desert is larger?,Sahara,Gobi,,,A,medium,Mountains and Deserts
+199,Which country has the larger land area?,Canada,Russia,,,B,medium,Countries and Continents
+200,Which capital is farther north?,Oslo,Rome,,,A,medium,Capitals
+201,Which desert is larger?,Gobi,Sahara,,,B,medium,Mountains and Deserts
 202,Which sea is larger?,The Black Sea,The Mediterranean,,,B,medium,Oceans and Seas
 203,Which country has more people?,India,Norway,,,A,medium,Countries and Continents
-204,Which capital hosts the main EU institutions?,Amsterdam,Brussels,,,B,medium,Capitals
+204,Which capital hosts the main EU institutions?,Brussels,Amsterdam,,,A,medium,Capitals
 205,Which river is longer?,The Nile,The Rhine,,,A,medium,Rivers and Lakes
-206,Which mountain is higher?,Mont Blanc,K2,,,B,medium,Mountains and Deserts
+206,Which mountain is higher?,K2,Mont Blanc,,,A,medium,Mountains and Deserts
 207,Which ocean is larger?,The Atlantic Ocean,The Indian Ocean,,,A,medium,Oceans and Seas
 208,In which city is the Sorbonne?,Bologna,Paris,,,B,medium,Landmarks and Maps
-209,Which country has a larger population?,Indonesia,Australia,,,A,medium,Countries and Continents
-210,Which strait separates Asia and North America?,The Strait of Gibraltar,The Bering Strait,,,B,medium,Oceans and Seas
+209,Which country has a larger population?,Australia,Indonesia,,,B,medium,Countries and Continents
+210,Which strait separates Asia and North America?,The Bering Strait,The Strait of Gibraltar,,,A,medium,Oceans and Seas
 211,Which desert lies mainly in Chile?,Atacama,Kalahari,,,A,medium,Mountains and Deserts
 212,Which range runs along western South America?,Rockies,Andes,,,B,medium,Mountains and Deserts
 213,Which country is an archipelago nation?,Japan,Laos,,,A,medium,Countries and Continents
 214,Which city is Australia's capital?,Melbourne,Canberra,,,B,medium,Capitals
 215,Which lake is the world's deepest?,Lake Baikal,Lake Tanganyika,,,A,medium,Rivers and Lakes
-216,Which continent has no permanent residents?,Africa,Antarctica,,,B,medium,Countries and Continents
+216,Which continent has no permanent residents?,Antarctica,Africa,,,A,medium,Countries and Continents
 217,Which city hosts the Sagrada Familia?,Barcelona,Seville,,,A,medium,Landmarks and Maps
 218,Which flag shows a red circle on white?,South Korea,Japan,,,B,medium,Countries and Continents
-219,Which capital is called the Pearl of the Danube?,Budapest,Belgrade,,,A,medium,Capitals
-220,Which river flows through Cairo?,The Tigris,The Nile,,,B,medium,Rivers and Lakes
-221,Which is the largest country in South America?,Brazil,Argentina,,,A,medium,Countries and Continents
+219,Which capital is called the Pearl of the Danube?,Belgrade,Budapest,,,B,medium,Capitals
+220,Which river flows through Cairo?,The Nile,The Tigris,,,A,medium,Rivers and Lakes
+221,Which is the largest country in South America?,Argentina,Brazil,,,B,medium,Countries and Continents
 222,Which desert covers much of Mongolia?,Namib,Gobi,,,B,medium,Mountains and Deserts
-223,Which strait links the Mediterranean and the Atlantic?,The Strait of Gibraltar,The Bosporus,,,A,medium,Oceans and Seas
-224,Which landmark is in Agra?,Amber Fort,Taj Mahal,,,B,medium,Landmarks and Maps
+223,Which strait links the Mediterranean and the Atlantic?,The Bosporus,The Strait of Gibraltar,,,B,medium,Oceans and Seas
+224,Which landmark is in Agra?,Taj Mahal,Amber Fort,,,A,medium,Landmarks and Maps
 225,Which country has the world's largest Muslim population?,Indonesia,Egypt,,,A,medium,Countries and Continents
 226,Which city straddles Europe and Asia?,Casablanca,Istanbul,,,B,medium,Capitals
-227,Which river is Europe's longest?,The Volga,The Danube,,,A,medium,Rivers and Lakes
-228,Which is North America's highest peak?,Mount Logan,Denali,,,B,medium,Mountains and Deserts
-229,Which country spans Europe and Asia?,Turkey,Greece,,,A,medium,Countries and Continents
-230,Which capital is the Eternal City?,Athens,Rome,,,B,medium,Capitals
+227,Which river is Europe's longest?,The Danube,The Volga,,,B,medium,Rivers and Lakes
+228,Which is North America's highest peak?,Denali,Mount Logan,,,A,medium,Mountains and Deserts
+229,Which country spans Europe and Asia?,Greece,Turkey,,,B,medium,Countries and Continents
+230,Which capital is the Eternal City?,Rome,Athens,,,A,medium,Capitals
 231,Which lake is the largest by surface area?,Caspian Sea,Lake Superior,,,A,medium,Rivers and Lakes
 232,Which desert lies in southern Africa?,Thar,Kalahari,,,B,medium,Mountains and Deserts
-233,Which sea borders Ukraine?,Black Sea,Baltic Sea,,,A,medium,Oceans and Seas
-234,Which structure is Paris' tallest?,Tour Montparnasse,Eiffel Tower,,,B,medium,Landmarks and Maps
-235,Which country spans the most time zones?,France,Spain,,,A,medium,Countries and Continents
+233,Which sea borders Ukraine?,Baltic Sea,Black Sea,,,B,medium,Oceans and Seas
+234,Which structure is Paris' tallest?,Eiffel Tower,Tour Montparnasse,,,A,medium,Landmarks and Maps
+235,Which country spans the most time zones?,Spain,France,,,B,medium,Countries and Continents
 236,Which Italian city is famous for canals?,Palermo,Venice,,,B,medium,Landmarks and Maps
-237,Which river borders Texas and Mexico?,Rio Grande,Colorado River,,,A,medium,Rivers and Lakes
-238,Which is the world's highest waterfall?,Niagara Falls,Angel Falls,,,B,medium,Landmarks and Maps
+237,Which river borders Texas and Mexico?,Colorado River,Rio Grande,,,B,medium,Rivers and Lakes
+238,Which is the world's highest waterfall?,Angel Falls,Niagara Falls,,,A,medium,Landmarks and Maps
 239,Which country is fully surrounded by South Africa?,Lesotho,Eswatini,,,A,medium,Countries and Continents
-240,Whose capital is Bogota?,Venezuela,Colombia,,,B,medium,Capitals
-241,Which Great Lake is the largest by area?,Lake Superior,Lake Huron,,,A,medium,Rivers and Lakes
-242,Which cold desert lies in Central Asia?,Kyzylkum,Gobi,,,B,medium,Mountains and Deserts
+240,Whose capital is Bogota?,Colombia,Venezuela,,,A,medium,Capitals
+241,Which Great Lake is the largest by area?,Lake Huron,Lake Superior,,,B,medium,Rivers and Lakes
+242,Which cold desert lies in Central Asia?,Gobi,Kyzylkum,,,A,medium,Mountains and Deserts
 243,Which lake is the saltiest?,Dead Sea,Red Sea,,,A,medium,Oceans and Seas
 244,Which museum is in Saint Petersburg?,The Uffizi,The Hermitage,,,B,medium,Landmarks and Maps
 245,Which capital sits on Honshu?,Tokyo,Seoul,,,A,medium,Capitals
-246,Which river flows through Baghdad?,The Jordan,The Tigris,,,B,medium,Rivers and Lakes
-247,Which country is the smallest by area?,Vatican City,Monaco,,,A,medium,Countries and Continents
+246,Which river flows through Baghdad?,The Tigris,The Jordan,,,A,medium,Rivers and Lakes
+247,Which country is the smallest by area?,Monaco,Vatican City,,,B,medium,Countries and Continents
 248,Which range runs through western Russia?,The Pyrenees,The Urals,,,B,medium,Mountains and Deserts
 249,Which sea lies between Sweden and Estonia?,Baltic Sea,North Sea,,,A,medium,Oceans and Seas
-250,Which bridge links San Francisco and Marin?,Bay Bridge,Golden Gate Bridge,,,B,medium,Landmarks and Maps
-251,Which capital was built on seven hills?,Rome,Brussels,,,A,medium,Capitals
+250,Which bridge links San Francisco and Marin?,Golden Gate Bridge,Bay Bridge,,,A,medium,Landmarks and Maps
+251,Which capital was built on seven hills?,Brussels,Rome,,,B,medium,Capitals
 252,Which river is South America's longest?,Parana River,Amazon,,,B,medium,Rivers and Lakes
 253,Which peak is called the Savage Mountain?,K2,Everest,,,A,medium,Mountains and Deserts
 254,Which sea lies east of Italy?,Tyrrhenian Sea,Adriatic Sea,,,B,medium,Oceans and Seas
-255,Where is the Gateway of India?,Mumbai,New Delhi,,,A,medium,Landmarks and Maps
-256,Which African country avoided colonization?,Ghana,Ethiopia,,,B,medium,Countries and Continents
-257,Which is Europe's highest capital?,Andorra la Vella,Madrid,,,A,medium,Capitals
+255,Where is the Gateway of India?,New Delhi,Mumbai,,,B,medium,Landmarks and Maps
+256,Which African country avoided colonization?,Ethiopia,Ghana,,,A,medium,Countries and Continents
+257,Which is Europe's highest capital?,Madrid,Andorra la Vella,,,B,medium,Capitals
 258,Which river flows through Budapest?,The Elbe,The Danube,,,B,medium,Rivers and Lakes
 259,Which desert is the Empty Quarter?,Rub al Khali,Sahara,,,A,medium,Mountains and Deserts
-260,Which ocean lies along East Africa's coast?,Pacific Ocean,Indian Ocean,,,B,medium,Oceans and Seas
-261,Which palace stands at Versailles?,Palace of Versailles,Chateau de Chambord,,,A,medium,Landmarks and Maps
+260,Which ocean lies along East Africa's coast?,Indian Ocean,Pacific Ocean,,,A,medium,Oceans and Seas
+261,Which palace stands at Versailles?,Chateau de Chambord,Palace of Versailles,,,B,medium,Landmarks and Maps
 262,Which South American country is landlocked?,Chile,Bolivia,,,B,medium,Countries and Continents
 263,Which capital has the Little Mermaid statue?,Copenhagen,Helsinki,,,A,medium,Capitals
-264,Which is the largest island in the Mediterranean?,Sardinia,Sicily,,,B,medium,Countries and Continents
-265,Which peak is Africa's famous snowcapped volcano?,Kilimanjaro,Mount Kenya,,,A,medium,Mountains and Deserts
+264,Which is the largest island in the Mediterranean?,Sicily,Sardinia,,,A,medium,Countries and Continents
+265,Which peak is Africa's famous snowcapped volcano?,Mount Kenya,Kilimanjaro,,,B,medium,Mountains and Deserts
 266,Which bay lies off India's east?,Bay of Biscay,Bay of Bengal,,,B,medium,Oceans and Seas
 267,Which citadel overlooks Athens?,The Acropolis,The Alhambra,,,A,medium,Landmarks and Maps
-268,Which flag bears a maple leaf?,Lebanon,Canada,,,B,medium,Countries and Continents
-269,Which capital does the Liffey divide?,Dublin,Cork,,,A,medium,Capitals
-270,Which river flows through Warsaw?,The Dnieper,The Vistula,,,B,medium,Rivers and Lakes
+268,Which flag bears a maple leaf?,Canada,Lebanon,,,A,medium,Countries and Continents
+269,Which capital does the Liffey divide?,Cork,Dublin,,,B,medium,Capitals
+270,Which river flows through Warsaw?,The Vistula,The Dnieper,,,A,medium,Rivers and Lakes
 271,Which is the driest nonpolar desert?,Atacama,Syrian Desert,,,A,medium,Mountains and Deserts
 272,Which Italian tower famously leans?,Mole Antonelliana,Tower of Pisa,,,B,medium,Landmarks and Maps
-273,Which flag features a cedar tree?,Lebanon,Qatar,,,A,medium,Countries and Continents
-274,Which capital sits on the Potomac?,Richmond,Washington DC,,,B,medium,Capitals
-275,Which river crosses the Equator twice?,The Congo,The Nile,,,A,medium,Rivers and Lakes
+273,Which flag features a cedar tree?,Qatar,Lebanon,,,B,medium,Countries and Continents
+274,Which capital sits on the Potomac?,Washington DC,Richmond,,,A,medium,Capitals
+275,Which river crosses the Equator twice?,The Nile,The Congo,,,B,medium,Rivers and Lakes
 276,Which volcano buried Pompeii?,Etna,Vesuvius,,,B,medium,Mountains and Deserts
 277,Where are the UN headquarters?,New York,Geneva,,,A,medium,Landmarks and Maps
-278,Which country has the longest coastline?,Russia,Canada,,,B,medium,Countries and Continents
-279,Which is the world's highest capital?,La Paz,Quito,,,A,medium,Capitals
+278,Which country has the longest coastline?,Canada,Russia,,,A,medium,Countries and Continents
+279,Which is the world's highest capital?,Quito,La Paz,,,B,medium,Capitals
 280,Which river carved the Grand Canyon?,The Columbia,The Colorado,,,B,medium,Rivers and Lakes
 281,Which is Japan's highest peak?,Mount Fuji,Mount Tate,,,A,medium,Mountains and Deserts
 282,Which strait is the narrowest between England and France?,Strait of Hormuz,Strait of Dover,,,B,medium,Oceans and Seas
 283,Which castle is tied to the Dracula legend?,Bran Castle,Prague Castle,,,A,medium,Landmarks and Maps
-284,Which country is the most populous in 2026?,China,India,,,B,medium,Countries and Continents
-285,Which capital is the City of Light?,Paris,Vienna,,,A,medium,Capitals
-286,Which river is the Huang He?,Yangtze River,Yellow River,,,B,medium,Rivers and Lakes
-287,Which desert hides Timbuktu at its edge?,Sahara,Karoo,,,A,medium,Mountains and Deserts
-288,Which ocean lies between Africa and Australia?,Atlantic Ocean,Indian Ocean,,,B,medium,Oceans and Seas
+284,Which country is the most populous in 2026?,India,China,,,A,medium,Countries and Continents
+285,Which capital is the City of Light?,Vienna,Paris,,,B,medium,Capitals
+286,Which river is the Huang He?,Yellow River,Yangtze River,,,A,medium,Rivers and Lakes
+287,Which desert hides Timbuktu at its edge?,Karoo,Sahara,,,B,medium,Mountains and Deserts
+288,Which ocean lies between Africa and Australia?,Indian Ocean,Atlantic Ocean,,,A,medium,Oceans and Seas
 289,Which monument bears four presidents' faces?,Mount Rushmore,Crazy Horse Memorial,,,A,medium,Landmarks and Maps
 290,What do Japanese people call their homeland?,Nihon-bashi,Nippon,,,B,medium,Countries and Continents
-291,Which country hosts Mount Kilimanjaro?,Tanzania,Zambia,,,A,medium,Countries and Continents
-292,Which capital sits on the island of Zealand?,Malmo,Copenhagen,,,B,medium,Capitals
-293,Which river flows through Shanghai?,The Huangpu,The Pearl River,,,A,medium,Rivers and Lakes
-294,Which range contains Annapurna?,The Andes,The Himalayas,,,B,medium,Mountains and Deserts
+291,Which country hosts Mount Kilimanjaro?,Zambia,Tanzania,,,B,medium,Countries and Continents
+292,Which capital sits on the island of Zealand?,Copenhagen,Malmo,,,A,medium,Capitals
+293,Which river flows through Shanghai?,The Pearl River,The Huangpu,,,B,medium,Rivers and Lakes
+294,Which range contains Annapurna?,The Himalayas,The Andes,,,A,medium,Mountains and Deserts
 295,Which sea lies north of Turkey?,The Black Sea,The Red Sea,,,A,medium,Oceans and Seas
 296,What is Uluru also called?,Kata Tjuta,Ayers Rock,,,B,medium,Landmarks and Maps
 297,Which country governs Puerto Rico?,The United States,Cuba,,,A,medium,Countries and Continents
 298,Which capital hosts the Zocalo?,Guadalajara,Mexico City,,,B,medium,Capitals
 299,Which river is Africa's longest?,The Nile,The Gambia,,,A,medium,Rivers and Lakes
 300,Which is the highest peak in the Alps?,Zugspitze,Mont Blanc,,,B,medium,Mountains and Deserts
-301,Which sea does the Volga feed?,The Caspian Sea,The Sea of Azov,,,A,medium,Oceans and Seas
-302,Where is Petra?,Saudi Arabia,Jordan,,,B,medium,Landmarks and Maps
-303,Which African country has the most people?,Nigeria,Ethiopia,,,A,medium,Countries and Continents
-304,Which capital is the Venice of the North?,Minsk,Stockholm,,,B,medium,Capitals
-305,Which lake do Bolivia and Peru share?,Lake Titicaca,Lake Maracaibo,,,A,medium,Rivers and Lakes
+301,Which sea does the Volga feed?,The Sea of Azov,The Caspian Sea,,,B,medium,Oceans and Seas
+302,Where is Petra?,Jordan,Saudi Arabia,,,A,medium,Landmarks and Maps
+303,Which African country has the most people?,Ethiopia,Nigeria,,,B,medium,Countries and Continents
+304,Which capital is the Venice of the North?,Stockholm,Minsk,,,A,medium,Capitals
+305,Which lake do Bolivia and Peru share?,Lake Maracaibo,Lake Titicaca,,,B,medium,Rivers and Lakes
 306,Which desert covers Turkmenistan?,Taklamakan,Karakum,,,B,medium,Mountains and Deserts
 307,Which current warms Western Europe?,The North Atlantic Drift,The Canary Current,,,A,medium,Oceans and Seas
 308,Which Paris church did Victor Hugo make famous?,Sainte-Chapelle,Notre-Dame,,,B,medium,Landmarks and Maps
 309,Which country is doubly landlocked?,Liechtenstein,Andorra,,,A,medium,Countries and Continents
-310,Which capital has the coldest winters?,Astana,Ulaanbaatar,,,B,medium,Capitals
+310,Which capital has the coldest winters?,Ulaanbaatar,Astana,,,A,medium,Capitals
 311,Which river flows through Amsterdam's heart?,The Amstel,The Vecht,,,A,medium,Rivers and Lakes
-312,Which range crosses the Scottish Highlands?,The Cotswolds,The Grampians,,,B,medium,Mountains and Deserts
-313,Which reef lies off Queensland?,Great Barrier Reef,Ningaloo Reef,,,A,medium,Landmarks and Maps
+312,Which range crosses the Scottish Highlands?,The Grampians,The Cotswolds,,,A,medium,Mountains and Deserts
+313,Which reef lies off Queensland?,Ningaloo Reef,Great Barrier Reef,,,B,medium,Landmarks and Maps
 314,Which capital was once Christiania?,Copenhagen,Oslo,,,B,medium,Capitals
 315,Which river flows through Hanoi?,The Red River,The Mekong,,,A,medium,Rivers and Lakes
 316,Which is the world's largest bay?,Hudson Bay,Bay of Bengal,,,B,medium,Oceans and Seas
 317,Which flag is not rectangular?,Nepal,Switzerland,,,A,medium,Countries and Continents
 318,Which capital does the Seine cross?,Rouen,Paris,,,B,medium,Capitals
-319,Which river flows through Krakow?,The Vistula,The Bug,,,A,medium,Rivers and Lakes
-320,Which range forms Italy's spine?,The Dolomites,The Apennines,,,B,medium,Mountains and Deserts
+319,Which river flows through Krakow?,The Bug,The Vistula,,,B,medium,Rivers and Lakes
+320,Which range forms Italy's spine?,The Apennines,The Dolomites,,,A,medium,Mountains and Deserts
 321,Which gulf receives the Mississippi?,The Gulf of Mexico,The Gulf of Alaska,,,A,medium,Oceans and Seas
 322,Where is the Chrysler Building?,Chicago,New York,,,B,medium,Landmarks and Maps
-323,Which country holds the Yucatan?,Mexico,Honduras,,,A,medium,Countries and Continents
-324,Which city hosted the 2020 Olympics?,Beijing,Tokyo,,,B,medium,Landmarks and Maps
-325,Which river divides Buda and Pest?,The Danube,The Tisza,,,A,medium,Rivers and Lakes
+323,Which country holds the Yucatan?,Honduras,Mexico,,,B,medium,Countries and Continents
+324,Which city hosted the 2020 Olympics?,Tokyo,Beijing,,,A,medium,Landmarks and Maps
+325,Which river divides Buda and Pest?,The Tisza,The Danube,,,B,medium,Rivers and Lakes
 326,Which is the Great Indian Desert?,Dasht-e Kavir,Thar,,,B,medium,Mountains and Deserts
 327,Which sea lies between Britain and Denmark?,The North Sea,The Norwegian Sea,,,A,medium,Oceans and Seas
 328,Which is the Caribbean's largest island?,Hispaniola,Cuba,,,B,medium,Countries and Continents
 329,Which city seats the World Court?,The Hague,Rotterdam,,,A,medium,Landmarks and Maps
-330,Which is the Father of Waters?,The Missouri,The Mississippi,,,B,medium,Rivers and Lakes
-331,Which is South America's highest peak?,Aconcagua,Ojos del Salado,,,A,medium,Mountains and Deserts
-332,Which is the largest enclosed inland water body?,Aral Sea,Caspian Sea,,,B,medium,Rivers and Lakes
-333,Which Spanish city has a Roman aqueduct?,Segovia,Toledo,,,A,medium,Landmarks and Maps
-334,Which country has the most islands?,Finland,Sweden,,,B,medium,Countries and Continents
+330,Which is the Father of Waters?,The Mississippi,The Missouri,,,A,medium,Rivers and Lakes
+331,Which is South America's highest peak?,Ojos del Salado,Aconcagua,,,B,medium,Mountains and Deserts
+332,Which is the largest enclosed inland water body?,Caspian Sea,Aral Sea,,,A,medium,Rivers and Lakes
+333,Which Spanish city has a Roman aqueduct?,Toledo,Segovia,,,B,medium,Landmarks and Maps
+334,Which country has the most islands?,Sweden,Finland,,,A,medium,Countries and Continents
 335,Which observatory defines the Prime Meridian?,Greenwich,Paris Observatory,,,A,medium,Landmarks and Maps
 336,Which river flows through Sofia?,The Vardar,The Iskar,,,B,medium,Rivers and Lakes
 337,Which desert lies in Israel?,The Negev,The Sinai,,,A,medium,Mountains and Deserts
 338,Which sea receives the Danube?,The Adriatic Sea,The Black Sea,,,B,medium,Oceans and Seas
-339,Which statues stand on Easter Island?,Moai,Nazca Lines,,,A,medium,Landmarks and Maps
-340,Which country has 17000 islands?,Philippines,Indonesia,,,B,medium,Countries and Continents
+339,Which statues stand on Easter Island?,Nazca Lines,Moai,,,B,medium,Landmarks and Maps
+340,Which country has 17000 islands?,Indonesia,Philippines,,,A,medium,Countries and Continents
 341,Which capital has the Merlion?,Singapore,Kuala Lumpur,,,A,medium,Capitals
 342,Which river flows through Geneva?,The Seine,The Rhone,,,B,medium,Rivers and Lakes
-343,Which is the world's longest range?,The Andes,The Rockies,,,A,medium,Mountains and Deserts
-344,Which strait joins the Aegean and the Sea of Marmara?,The Strait of Messina,The Dardanelles,,,B,medium,Oceans and Seas
-345,Where is the Terracotta Army?,Xian,Luoyang,,,A,medium,Landmarks and Maps
+343,Which is the world's longest range?,The Rockies,The Andes,,,B,medium,Mountains and Deserts
+344,Which strait joins the Aegean and the Sea of Marmara?,The Dardanelles,The Strait of Messina,,,A,medium,Oceans and Seas
+345,Where is the Terracotta Army?,Luoyang,Xian,,,B,medium,Landmarks and Maps
 346,Which flag is the oldest in use?,Iceland,Denmark,,,B,medium,Countries and Continents
 347,Which capital is on the Baltic shore?,Tallinn,Riga,,,A,medium,Capitals
 348,Which fjord does Oslo sit on?,The Sognefjord,The Oslofjord,,,B,medium,Oceans and Seas
 349,Which is Africa's highest peak?,Kilimanjaro,Mount Meru,,,A,medium,Mountains and Deserts
-350,Which gulf lies between Estonia and Finland?,The Gulf of Bothnia,The Gulf of Finland,,,B,medium,Oceans and Seas
-351,Which tower stands in Shanghai?,Oriental Pearl Tower,Canton Tower,,,A,medium,Landmarks and Maps
+350,Which gulf lies between Estonia and Finland?,The Gulf of Finland,The Gulf of Bothnia,,,A,medium,Oceans and Seas
+351,Which tower stands in Shanghai?,Canton Tower,Oriental Pearl Tower,,,B,medium,Landmarks and Maps
 352,Which country lies fully in the Southern Hemisphere?,Brazil,Uruguay,,,B,medium,Countries and Continents
 353,Which capital was once Edo?,Tokyo,Kyoto,,,A,medium,Capitals
-354,Which river flows through Vancouver?,The Skeena,The Fraser,,,B,medium,Rivers and Lakes
-355,Which desert spans Botswana and Namibia?,The Kalahari,The Karoo,,,A,medium,Mountains and Deserts
+354,Which river flows through Vancouver?,The Fraser,The Skeena,,,A,medium,Rivers and Lakes
+355,Which desert spans Botswana and Namibia?,The Karoo,The Kalahari,,,B,medium,Mountains and Deserts
 356,Where did the Titanic sink?,The Baltic Sea,The North Atlantic,,,B,medium,Oceans and Seas
 357,Which palace complex is in Granada?,The Alhambra,The Escorial,,,A,medium,Landmarks and Maps
 358,Which is the northernmost capital?,Stockholm,Reykjavik,,,B,medium,Capitals
 359,Which river flows through Lisbon?,The Tagus,The Douro,,,A,medium,Rivers and Lakes
-360,Which is Antarctica's highest peak?,Mount Erebus,Vinson Massif,,,B,medium,Mountains and Deserts
-361,Which Vietnamese bay is a UNESCO site?,Ha Long Bay,Nha Trang Bay,,,A,medium,Oceans and Seas
+360,Which is Antarctica's highest peak?,Vinson Massif,Mount Erebus,,,A,medium,Mountains and Deserts
+361,Which Vietnamese bay is a UNESCO site?,Nha Trang Bay,Ha Long Bay,,,B,medium,Oceans and Seas
 362,Which London bridge has tower exhibitions?,Westminster Bridge,Tower Bridge,,,B,medium,Landmarks and Maps
 363,Which EU country has the most people?,Germany,France,,,A,medium,Countries and Continents
 364,Which capital is the Big Durian?,Manila,Jakarta,,,B,medium,Capitals
-365,Which is the world's deepest river?,The Congo,The Yangtze,,,A,medium,Rivers and Lakes
-366,Which desert lies partly in California?,The Chihuahuan,The Mojave,,,B,medium,Mountains and Deserts
+365,Which is the world's deepest river?,The Yangtze,The Congo,,,B,medium,Rivers and Lakes
+366,Which desert lies partly in California?,The Mojave,The Chihuahuan,,,A,medium,Mountains and Deserts
 367,Which sea lies between Japan and Korea?,The Sea of Japan,The Yellow Sea,,,A,medium,Oceans and Seas
 368,Which Italian city centers on the Grand Canal?,Milan,Venice,,,B,medium,Landmarks and Maps
-369,Whose capital is Montevideo?,Uruguay,Paraguay,,,A,medium,Capitals
-370,Which is Italy's longest river?,The Tiber,The Po,,,B,medium,Rivers and Lakes
-371,Which range runs along eastern Australia?,The Great Dividing Range,The Flinders Ranges,,,A,medium,Mountains and Deserts
+369,Whose capital is Montevideo?,Paraguay,Uruguay,,,B,medium,Capitals
+370,Which is Italy's longest river?,The Po,The Tiber,,,A,medium,Rivers and Lakes
+371,Which range runs along eastern Australia?,The Flinders Ranges,The Great Dividing Range,,,B,medium,Mountains and Deserts
 372,Which strait joins Sweden and Denmark?,The Kattegat,The Oresund,,,B,medium,Oceans and Seas
 373,Which is the monarch's London residence?,Buckingham Palace,Windsor Castle,,,A,medium,Landmarks and Maps
-374,Which country borders only one nation?,Mexico,Canada,,,B,medium,Countries and Continents
+374,Which country borders only one nation?,Canada,Mexico,,,A,medium,Countries and Continents
 375,Which capital has Europe's largest metro area?,Moscow,London,,,A,medium,Capitals
 376,Which river flows through Bordeaux?,The Loire,The Garonne,,,B,medium,Rivers and Lakes
-377,Which volcano looms over Catania?,Mount Etna,Mount Stromboli,,,A,medium,Mountains and Deserts
-378,Which sea lies between Corsica and Italy?,The Ionian Sea,The Tyrrhenian Sea,,,B,medium,Oceans and Seas
-379,Which flag bears a dragon?,Bhutan,Nepal,,,A,medium,Countries and Continents
-380,Which capital hosts Tivoli Gardens?,Odense,Copenhagen,,,B,medium,Capitals
+377,Which volcano looms over Catania?,Mount Stromboli,Mount Etna,,,B,medium,Mountains and Deserts
+378,Which sea lies between Corsica and Italy?,The Tyrrhenian Sea,The Ionian Sea,,,A,medium,Oceans and Seas
+379,Which flag bears a dragon?,Nepal,Bhutan,,,B,medium,Countries and Continents
+380,Which capital hosts Tivoli Gardens?,Copenhagen,Odense,,,A,medium,Capitals
 381,Which river runs the Black Canyon?,The Colorado,The Snake,,,A,medium,Rivers and Lakes
-382,Which is New Zealand's highest peak?,Mount Tasman,Aoraki Mount Cook,,,B,medium,Mountains and Deserts
-383,Which sea surrounds Malta?,The Mediterranean Sea,The Ligurian Sea,,,A,medium,Oceans and Seas
-384,Which city birthed the Renaissance?,Venice,Florence,,,B,medium,Landmarks and Maps
-385,Which African country has three capitals?,South Africa,Kenya,,,A,medium,Countries and Continents
+382,Which is New Zealand's highest peak?,Aoraki Mount Cook,Mount Tasman,,,A,medium,Mountains and Deserts
+383,Which sea surrounds Malta?,The Ligurian Sea,The Mediterranean Sea,,,B,medium,Oceans and Seas
+384,Which city birthed the Renaissance?,Florence,Venice,,,A,medium,Landmarks and Maps
+385,Which African country has three capitals?,Kenya,South Africa,,,B,medium,Countries and Continents
 386,Which river flows through Kyoto?,The Kiso,The Kamo,,,B,medium,Rivers and Lakes
 387,Which flat-topped mountain watches Cape Town?,Table Mountain,Lion's Head,,,A,medium,Landmarks and Maps
-388,Which sea lies east of Sweden?,Norwegian Sea,Baltic Sea,,,B,medium,Oceans and Seas
+388,Which sea lies east of Sweden?,Baltic Sea,Norwegian Sea,,,A,medium,Oceans and Seas
 389,Which national flag is square?,Switzerland,Belgium,,,A,medium,Countries and Continents
-390,Which river flows through Sheffield?,The Aire,The Don,,,B,medium,Rivers and Lakes
+390,Which river flows through Sheffield?,The Don,The Aire,,,A,medium,Rivers and Lakes
 391,Which is the highest peak of the lower 48?,Mount Whitney,Mount Rainier,,,A,medium,Mountains and Deserts
-392,Which city is the capital of Hokkaido?,Sapporo,Aomori,Sendai,,A,hard,Capitals
-393,Which river flows through Bern?,The Reuss,The Aare,The Limmat,,B,hard,Rivers and Lakes
-394,Which country governs Greenland?,Slovakia,Slovenia,Denmark,,C,hard,Countries and Continents
-395,Which desert lies in Uzbekistan and Kazakhstan?,The Kyzylkum,The Thar,The Karakum,,A,hard,Mountains and Deserts
-396,Which bay lies west of France?,The Gulf of Lion,The Bay of Biscay,The Balearic Sea,,B,hard,Oceans and Seas
-397,Which landmark stands on Liberty Island?,The Chrysler Building,The Brooklyn Bridge,The Statue of Liberty,,C,hard,Landmarks and Maps
-398,Whose highest point is Pico de Teide?,Spain,Portugal,Morocco,,A,hard,Countries and Continents
-399,Which river flows through Inverness?,The Spey,The Ness,The Tay,,B,hard,Rivers and Lakes
-400,Which continent is the driest?,South America,Europe,Antarctica,,C,hard,Countries and Continents
+392,Which city is the capital of Hokkaido?,Sendai,Sapporo,Aomori,,B,hard,Capitals
+393,Which river flows through Bern?,The Aare,The Limmat,The Reuss,,A,hard,Rivers and Lakes
+394,Which country governs Greenland?,Denmark,Slovenia,Slovakia,,A,hard,Countries and Continents
+395,Which desert lies in Uzbekistan and Kazakhstan?,The Karakum,The Thar,The Kyzylkum,,C,hard,Mountains and Deserts
+396,Which bay lies west of France?,The Balearic Sea,The Gulf of Lion,The Bay of Biscay,,C,hard,Oceans and Seas
+397,Which landmark stands on Liberty Island?,The Statue of Liberty,The Brooklyn Bridge,The Chrysler Building,,A,hard,Landmarks and Maps
+398,Whose highest point is Pico de Teide?,Portugal,Spain,Morocco,,B,hard,Countries and Continents
+399,Which river flows through Inverness?,The Ness,The Spey,The Tay,,A,hard,Rivers and Lakes
+400,Which continent is the driest?,Europe,Antarctica,South America,,B,hard,Countries and Continents
 401,Which city is Kazakhstan's capital?,Astana,Shymkent,Almaty,,A,hard,Capitals
-402,Which river is China's longest?,The Yellow River,The Yangtze,The Han River,,B,hard,Rivers and Lakes
-403,Which is the world's second highest peak?,Lhotse,Kangchenjunga,K2,,C,hard,Mountains and Deserts
+402,Which river is China's longest?,The Han River,The Yangtze,The Yellow River,,B,hard,Rivers and Lakes
+403,Which is the world's second highest peak?,K2,Kangchenjunga,Lhotse,,A,hard,Mountains and Deserts
 404,Which sea lies between Australia and New Zealand?,The Tasman Sea,The Coral Sea,The Solomon Sea,,A,hard,Oceans and Seas
-405,Which country is home to the Dolomites?,Austria,Italy,Belarus,,B,hard,Countries and Continents
-406,Which capital sits where the two Niles meet?,Cairo,Addis Ababa,Khartoum,,C,hard,Capitals
-407,Which lake is South America's largest?,Lake Maracaibo,Lake Poopo,Lake Junin,,A,hard,Rivers and Lakes
-408,Which is Africa's second largest desert?,The Nubian Desert,The Kalahari,The Danakil,,B,hard,Mountains and Deserts
+405,Which country is home to the Dolomites?,Austria,Belarus,Italy,,C,hard,Countries and Continents
+406,Which capital sits where the two Niles meet?,Addis Ababa,Cairo,Khartoum,,C,hard,Capitals
+407,Which lake is South America's largest?,Lake Junin,Lake Poopo,Lake Maracaibo,,C,hard,Rivers and Lakes
+408,Which is Africa's second largest desert?,The Kalahari,The Danakil,The Nubian Desert,,A,hard,Mountains and Deserts
 409,Which strait separates Taiwan from the mainland?,The Bashi Channel,The Luzon Strait,The Taiwan Strait,,C,hard,Oceans and Seas
-410,Which palace is the Japanese Emperor's home?,The Imperial Palace,Akasaka Palace,Kyoto Imperial Palace,,A,hard,Landmarks and Maps
-411,Which European capital stands on the Tagus estuary?,Porto,Lisbon,Cadiz,,B,hard,Capitals
-412,Which river cuts the Iron Gates gorge?,The Moselle,The Sava,The Danube,,C,hard,Rivers and Lakes
-413,Which country grows the most coffee?,Brazil,Colombia,Vietnam,,A,hard,Countries and Continents
-414,Which range separates France and Spain?,The Vosges,The Pyrenees,The Ardennes,,B,hard,Mountains and Deserts
-415,Which sea does the Strait of Hormuz open into?,The Arabian Sea,The Gulf of Aden,The Gulf of Oman,,C,hard,Oceans and Seas
-416,Which rose-red city is in Jordan?,Petra,Palmyra,Angkor,,A,hard,Landmarks and Maps
+410,Which palace is the Japanese Emperor's home?,Kyoto Imperial Palace,Akasaka Palace,The Imperial Palace,,C,hard,Landmarks and Maps
+411,Which European capital stands on the Tagus estuary?,Cadiz,Lisbon,Porto,,B,hard,Capitals
+412,Which river cuts the Iron Gates gorge?,The Sava,The Moselle,The Danube,,C,hard,Rivers and Lakes
+413,Which country grows the most coffee?,Brazil,Vietnam,Colombia,,A,hard,Countries and Continents
+414,Which range separates France and Spain?,The Ardennes,The Pyrenees,The Vosges,,B,hard,Mountains and Deserts
+415,Which sea does the Strait of Hormuz open into?,The Gulf of Oman,The Gulf of Aden,The Arabian Sea,,A,hard,Oceans and Seas
+416,Which rose-red city is in Jordan?,Angkor,Palmyra,Petra,,C,hard,Landmarks and Maps
 417,Whose flag bears a Maasai shield and spear?,Tanzania,Kenya,Uganda,,B,hard,Countries and Continents
-418,Which river flows from Tibet to the Arabian Sea?,The Ganges,The Brahmaputra,The Indus,,C,hard,Rivers and Lakes
-419,Which is the world's smallest country?,Vatican City,Tuvalu,San Marino,,A,hard,Capitals
+418,Which river flows from Tibet to the Arabian Sea?,The Brahmaputra,The Indus,The Ganges,,B,hard,Rivers and Lakes
+419,Which is the world's smallest country?,San Marino,Tuvalu,Vatican City,,C,hard,Capitals
 420,Which lake holds the most water?,Tanganyika,Baikal,Superior,,B,hard,Rivers and Lakes
 421,Which desert runs along Namibia's coast?,The Kalahari,The Sahara,The Namib,,C,hard,Mountains and Deserts
-422,Which waterway runs through Istanbul?,The Bosporus,The Dardanelles,The Sea of Marmara,,A,hard,Oceans and Seas
-423,Which country hosts the Okavango Delta?,Namibia,Botswana,Mozambique,,B,hard,Countries and Continents
-424,Which capital was designed by Walter Burley Griffin?,Wellington,Ottawa,Canberra,,C,hard,Capitals
+422,Which waterway runs through Istanbul?,The Sea of Marmara,The Bosporus,The Dardanelles,,B,hard,Oceans and Seas
+423,Which country hosts the Okavango Delta?,Botswana,Namibia,Mozambique,,A,hard,Countries and Continents
+424,Which capital was designed by Walter Burley Griffin?,Canberra,Ottawa,Wellington,,A,hard,Capitals
 425,Which river is the Mississippi's longest tributary?,The Missouri,The Arkansas,The Ohio,,A,hard,Rivers and Lakes
 426,Which is the Balkans' highest peak?,Mount Olympus,Musala,Mount Korab,,B,hard,Mountains and Deserts
-427,Which salt lake sits at the lowest land elevation?,Lake Assal,The Caspian Sea,The Dead Sea,,C,hard,Oceans and Seas
-428,Which country holds Europe's largest port?,Netherlands,Germany,Ireland,,A,hard,Countries and Continents
-429,Which river links Krakow and Warsaw?,The Warta,The Vistula,The Wieprz,,B,hard,Rivers and Lakes
-430,Which peak is the tallest from base to top?,Chimborazo,Denali,Mauna Kea,,C,hard,Mountains and Deserts
-431,Which capital stands on the Moskva river?,Moscow,Kazan,Saint Petersburg,,A,hard,Capitals
-432,Which river crosses the Sahara?,The Po,The Nile,The Tagus,,B,hard,Rivers and Lakes
-433,Which desert has the Sossusvlei dunes?,The Atacama,The Gobi,The Namib,,C,hard,Mountains and Deserts
-434,Which is South America's largest country?,Brazil,Peru,Guyana,,A,hard,Countries and Continents
-435,Which city is the capital of the Philippines?,Cebu City,Manila,Davao,,B,hard,Capitals
+427,Which salt lake sits at the lowest land elevation?,Lake Assal,The Dead Sea,The Caspian Sea,,B,hard,Oceans and Seas
+428,Which country holds Europe's largest port?,Germany,Ireland,Netherlands,,C,hard,Countries and Continents
+429,Which river links Krakow and Warsaw?,The Vistula,The Wieprz,The Warta,,A,hard,Rivers and Lakes
+430,Which peak is the tallest from base to top?,Mauna Kea,Denali,Chimborazo,,A,hard,Mountains and Deserts
+431,Which capital stands on the Moskva river?,Saint Petersburg,Kazan,Moscow,,C,hard,Capitals
+432,Which river crosses the Sahara?,The Tagus,The Po,The Nile,,C,hard,Rivers and Lakes
+433,Which desert has the Sossusvlei dunes?,The Atacama,The Namib,The Gobi,,B,hard,Mountains and Deserts
+434,Which is South America's largest country?,Peru,Brazil,Guyana,,B,hard,Countries and Continents
+435,Which city is the capital of the Philippines?,Manila,Cebu City,Davao,,A,hard,Capitals
 436,Which river is Chile's longest?,The Biobio,The Maule,The Loa,,C,hard,Rivers and Lakes
 437,Which range lies between the Black and Caspian seas?,The Caucasus,The Pindus,The Balkan Mountains,,A,hard,Mountains and Deserts
-438,Which is the largest country fully inside Europe?,Poland,Ukraine,Romania,,B,hard,Countries and Continents
-439,Which Niger-river capital lies below Timbuktu?,Abuja,Bamako,Niamey,,C,hard,Capitals
-440,Which is Africa's second highest peak?,Mount Kenya,Mount Stanley,Toubkal,,A,hard,Mountains and Deserts
-441,Which state capital sits on the Swan River?,Adelaide,Perth,Brisbane,,B,hard,Capitals
-442,Which river reaches the sea at Astrakhan?,The Ural,The Kama,The Volga,,C,hard,Rivers and Lakes
-443,Where is the world's largest barrier reef?,Australia,Papua New Guinea,Belize,,A,hard,Landmarks and Maps
-444,Which sea reaches Jordan's southern coast?,The Dead Sea,The Red Sea,The Barents Sea,,B,hard,Oceans and Seas
-445,Which sea lies north of Siberia?,The White Sea,The Bering Sea,The Kara Sea,,C,hard,Oceans and Seas
+438,Which is the largest country fully inside Europe?,Ukraine,Poland,Romania,,A,hard,Countries and Continents
+439,Which Niger-river capital lies below Timbuktu?,Abuja,Niamey,Bamako,,B,hard,Capitals
+440,Which is Africa's second highest peak?,Toubkal,Mount Kenya,Mount Stanley,,B,hard,Mountains and Deserts
+441,Which state capital sits on the Swan River?,Brisbane,Adelaide,Perth,,C,hard,Capitals
+442,Which river reaches the sea at Astrakhan?,The Volga,The Kama,The Ural,,A,hard,Rivers and Lakes
+443,Where is the world's largest barrier reef?,Papua New Guinea,Australia,Belize,,B,hard,Landmarks and Maps
+444,Which sea reaches Jordan's southern coast?,The Red Sea,The Dead Sea,The Barents Sea,,A,hard,Oceans and Seas
+445,Which sea lies north of Siberia?,The White Sea,The Kara Sea,The Bering Sea,,B,hard,Oceans and Seas
 446,Which capital was built on fourteen islands?,Stockholm,Kaunas,Turku,,A,hard,Capitals
-447,Which river flows through Seville?,The Ebro,The Guadalquivir,The Jucar,,B,hard,Rivers and Lakes
+447,Which river flows through Seville?,The Guadalquivir,The Ebro,The Jucar,,A,hard,Rivers and Lakes
 448,Which is Central America's highest peak?,Volcan Baru,Acatenango,Tajumulco,,C,hard,Mountains and Deserts
-449,Which sea receives the Jordan River?,The Dead Sea,The Gulf of Aqaba,The Mediterranean,,A,hard,Oceans and Seas
-450,Which country is home to the Maasai Mara?,Rwanda,Kenya,Burundi,,B,hard,Countries and Continents
-451,Which river flows through Havana?,The Toa,The Cauto,The Almendares,,C,hard,Rivers and Lakes
-452,Which range forms Chile's eastern wall?,The Andes,The Alps,The Sierra Madre,,A,hard,Mountains and Deserts
-453,Which sea lies between Sweden and Finland?,The Gulf of Riga,The Gulf of Bothnia,The Gulf of Finland,,B,hard,Oceans and Seas
-454,Which country is the world's largest archipelago state?,Japan,Maldives,Indonesia,,C,hard,Countries and Continents
-455,Which city spans about one hundred islands?,Venice,Utrecht,Bruges,,A,hard,Landmarks and Maps
-456,Which is the Middle East's longest river?,The Orontes,The Euphrates,The Litani,,B,hard,Rivers and Lakes
-457,Which desert lies between the Indus and the Aravallis?,The Ladakh,The Rann of Kutch,The Thar,,C,hard,Mountains and Deserts
+449,Which sea receives the Jordan River?,The Dead Sea,The Mediterranean,The Gulf of Aqaba,,A,hard,Oceans and Seas
+450,Which country is home to the Maasai Mara?,Burundi,Rwanda,Kenya,,C,hard,Countries and Continents
+451,Which river flows through Havana?,The Cauto,The Toa,The Almendares,,C,hard,Rivers and Lakes
+452,Which range forms Chile's eastern wall?,The Andes,The Sierra Madre,The Alps,,A,hard,Mountains and Deserts
+453,Which sea lies between Sweden and Finland?,The Gulf of Riga,The Gulf of Finland,The Gulf of Bothnia,,C,hard,Oceans and Seas
+454,Which country is the world's largest archipelago state?,Japan,Indonesia,Maldives,,B,hard,Countries and Continents
+455,Which city spans about one hundred islands?,Bruges,Venice,Utrecht,,B,hard,Landmarks and Maps
+456,Which is the Middle East's longest river?,The Orontes,The Litani,The Euphrates,,C,hard,Rivers and Lakes
+457,Which desert lies between the Indus and the Aravallis?,The Ladakh,The Thar,The Rann of Kutch,,B,hard,Mountains and Deserts
 458,Which country governs the Faroe Islands?,Denmark,Sweden,Estonia,,A,hard,Countries and Continents
 459,Which river forms the Iguazu Falls?,The Parana,The Iguazu,The Uruguay,,B,hard,Rivers and Lakes
-460,Which capital hosts Drottningholm Palace?,Aarhus,Tallinn,Stockholm,,C,hard,Capitals
-461,Which capital sits at the head of the Gulf of Riga?,Riga,Parnu,Klaipeda,,A,hard,Capitals
-462,Which river flows through Toledo?,The Guadiana,The Tagus,The Manzanares,,B,hard,Rivers and Lakes
-463,Which desert lies between the Nile and the Red Sea?,The Bayuda,The Libyan Desert,The Eastern Desert,,C,hard,Mountains and Deserts
-464,Which strait separates Australia and Tasmania?,The Bass Strait,The Torres Strait,The Cook Strait,,A,hard,Oceans and Seas
-465,Which country hosts Neuschwanstein Castle?,Somalia,Germany,Liechtenstein,,B,hard,Countries and Continents
-466,Which city is Brazil's federal capital?,Rio de Janeiro,Sao Paulo,Brasilia,,C,hard,Capitals
-467,Which river flows through Lyon?,The Rhone,The Isere,The Saone,,A,hard,Rivers and Lakes
-468,Which country produces the most tea?,India,China,Mali,,B,hard,Countries and Continents
-469,What did Romans call the Mediterranean?,Mare Suebicum,Mare Erythraeum,Mare Nostrum,,C,hard,Landmarks and Maps
-470,Which river is formed at Pittsburgh?,The Ohio,The Allegheny,The Monongahela,,A,hard,Rivers and Lakes
-471,Which capital is famed for thermal baths?,Prague,Budapest,Bratislava,,B,hard,Capitals
-472,Which river flows past Jackson Hole?,The Yellowstone,The Wind,The Snake,,C,hard,Rivers and Lakes
-473,Which desert borders the Nile's west in Egypt?,The Libyan Desert,The Nubian,The Arabian Desert,,A,hard,Mountains and Deserts
-474,Which country claims Ojos del Salado's summit?,Chad,Chile,Ecuador,,B,hard,Countries and Continents
-475,Which river flows through Sarajevo?,The Neretva,The Drina,The Miljacka,,C,hard,Rivers and Lakes
-476,Which is the Iberian Peninsula's highest peak?,Mulhacen,Aneto,Moncayo,,A,hard,Mountains and Deserts
-477,Which sea does the Suez Canal reach?,The Java Sea,The Red Sea,The Celebes Sea,,B,hard,Oceans and Seas
-478,Which is Central America's smallest country?,Nicaragua,Costa Rica,El Salvador,,C,hard,Countries and Continents
-479,Which river flows through Quito?,The Machangara,The Napo,The Guayas,,A,hard,Rivers and Lakes
+460,Which capital hosts Drottningholm Palace?,Stockholm,Tallinn,Aarhus,,A,hard,Capitals
+461,Which capital sits at the head of the Gulf of Riga?,Parnu,Klaipeda,Riga,,C,hard,Capitals
+462,Which river flows through Toledo?,The Tagus,The Manzanares,The Guadiana,,A,hard,Rivers and Lakes
+463,Which desert lies between the Nile and the Red Sea?,The Bayuda,The Eastern Desert,The Libyan Desert,,B,hard,Mountains and Deserts
+464,Which strait separates Australia and Tasmania?,The Cook Strait,The Bass Strait,The Torres Strait,,B,hard,Oceans and Seas
+465,Which country hosts Neuschwanstein Castle?,Somalia,Liechtenstein,Germany,,C,hard,Countries and Continents
+466,Which city is Brazil's federal capital?,Rio de Janeiro,Brasilia,Sao Paulo,,B,hard,Capitals
+467,Which river flows through Lyon?,The Saone,The Rhone,The Isere,,B,hard,Rivers and Lakes
+468,Which country produces the most tea?,China,India,Mali,,A,hard,Countries and Continents
+469,What did Romans call the Mediterranean?,Mare Nostrum,Mare Suebicum,Mare Erythraeum,,A,hard,Landmarks and Maps
+470,Which river is formed at Pittsburgh?,The Monongahela,The Allegheny,The Ohio,,C,hard,Rivers and Lakes
+471,Which capital is famed for thermal baths?,Bratislava,Prague,Budapest,,C,hard,Capitals
+472,Which river flows past Jackson Hole?,The Snake,The Yellowstone,The Wind,,A,hard,Rivers and Lakes
+473,Which desert borders the Nile's west in Egypt?,The Nubian,The Arabian Desert,The Libyan Desert,,C,hard,Mountains and Deserts
+474,Which country claims Ojos del Salado's summit?,Chad,Ecuador,Chile,,C,hard,Countries and Continents
+475,Which river flows through Sarajevo?,The Drina,The Miljacka,The Neretva,,B,hard,Rivers and Lakes
+476,Which is the Iberian Peninsula's highest peak?,Aneto,Moncayo,Mulhacen,,C,hard,Mountains and Deserts
+477,Which sea does the Suez Canal reach?,The Java Sea,The Celebes Sea,The Red Sea,,C,hard,Oceans and Seas
+478,Which is Central America's smallest country?,El Salvador,Nicaragua,Costa Rica,,A,hard,Countries and Continents
+479,Which river flows through Quito?,The Machangara,The Guayas,The Napo,,A,hard,Rivers and Lakes
 480,Which is Europe's longest mountain range?,The Carpathians,The Urals,The Scandinavian Mountains,,B,hard,Mountains and Deserts
-481,Which capital sits on the Chao Phraya?,Phnom Penh,Vientiane,Bangkok,,C,hard,Capitals
-482,Which is Germany's longest river?,The Rhine,The Olt,The Ems,,A,hard,Rivers and Lakes
-483,Which desert lies in northeast Sudan?,The Bayuda Desert,The Nubian Desert,The Great Sand Sea,,B,hard,Mountains and Deserts
-484,Which country is home to Mount Ararat?,Armenia,Iran,Turkey,,C,hard,Countries and Continents
-485,Which capital lies in an Andean valley at 500 meters?,Santiago,Bogota,Lima,,A,hard,Capitals
-486,Which river flows through Bucharest?,The Maritsa,The Dambovita,The Mures,,B,hard,Rivers and Lakes
-487,Which is the Arabian Peninsula's largest desert?,The Wahiba,The Nafud,The Rub al Khali,,C,hard,Mountains and Deserts
+481,Which capital sits on the Chao Phraya?,Phnom Penh,Bangkok,Vientiane,,B,hard,Capitals
+482,Which is Germany's longest river?,The Ems,The Olt,The Rhine,,C,hard,Rivers and Lakes
+483,Which desert lies in northeast Sudan?,The Nubian Desert,The Bayuda Desert,The Great Sand Sea,,A,hard,Mountains and Deserts
+484,Which country is home to Mount Ararat?,Armenia,Turkey,Iran,,B,hard,Countries and Continents
+485,Which capital lies in an Andean valley at 500 meters?,Lima,Santiago,Bogota,,B,hard,Capitals
+486,Which river flows through Bucharest?,The Dambovita,The Mures,The Maritsa,,A,hard,Rivers and Lakes
+487,Which is the Arabian Peninsula's largest desert?,The Rub al Khali,The Wahiba,The Nafud,,A,hard,Mountains and Deserts
 488,Which sea lies west of Greece?,The Ionian Sea,The Aegean Sea,The Tyrrhenian Sea,,A,hard,Oceans and Seas
-489,Which African capital is the highest?,Nairobi,Addis Ababa,Kampala,,B,hard,Capitals
-490,Which river flows through Yerevan?,The Aras,The Kura,The Hrazdan,,C,hard,Rivers and Lakes
-491,Which is Georgia's highest peak?,Shkhara,Ushba,Mount Kazbek,,A,hard,Mountains and Deserts
-492,Which country holds the Blue Nile's source?,Sudan,Ethiopia,South Sudan,,B,hard,Countries and Continents
-493,Which river flows by Yangon?,The Sittaung,The Ayeyarwady,The Yangon River,,C,hard,Rivers and Lakes
-494,Which is the Pyrenees' highest peak?,Aneto,Posets,Mont Perdu,,A,hard,Mountains and Deserts
-495,Which country holds Central America's biggest lake?,Guatemala,Nicaragua,Panama,,B,hard,Countries and Continents
-496,Which river flows through Florence?,The Krka,The Ombrone,The Arno,,C,hard,Rivers and Lakes
-497,Which salty Iranian basin is the hottest desert?,The Dasht-e Lut,The Kavir-e Namak,The Maranjab,,A,hard,Mountains and Deserts
-498,Which capital stands where the Danube meets the Sava?,Zagreb,Belgrade,Budapest,,B,hard,Capitals
-499,Whose flag bears a machete and gear?,Zimbabwe,Guinea,Angola,,C,hard,Countries and Continents
-500,Which river flows through Basel?,The Rhine,The Ill,The Doubs,,A,hard,Rivers and Lakes
-501,Which is the Carpathians' highest peak?,Hoverla,Gerlachovsky stit,Moldoveanu,,B,hard,Mountains and Deserts
-502,Which sea lies between Denmark and Sweden?,The Great Belt,The Little Belt,The Kattegat,,C,hard,Oceans and Seas
-503,Which river flows through Detroit?,The Detroit River,The Maumee,The Saint Clair River,,A,hard,Rivers and Lakes
-504,Which sea receives the Thames?,The Irish Sea,The North Sea,The English Channel,,B,hard,Oceans and Seas
-505,Whose coat of arms bears a double-headed eagle?,Serbia,Ukraine,Russia,,C,hard,Countries and Continents
-506,Which river flows through Turin?,The Po,The Dora Baltea,The Sangone,,A,hard,Rivers and Lakes
-507,Which is Norway's highest peak?,Glittertind,Galdhopiggen,Store Skagastolstind,,B,hard,Mountains and Deserts
-508,Which gulf separates Sinai from mainland Egypt?,The Laptev Sea,The Gulf of Oman,The Gulf of Suez,,C,hard,Oceans and Seas
+489,Which African capital is the highest?,Kampala,Addis Ababa,Nairobi,,B,hard,Capitals
+490,Which river flows through Yerevan?,The Kura,The Hrazdan,The Aras,,B,hard,Rivers and Lakes
+491,Which is Georgia's highest peak?,Ushba,Mount Kazbek,Shkhara,,C,hard,Mountains and Deserts
+492,Which country holds the Blue Nile's source?,South Sudan,Ethiopia,Sudan,,B,hard,Countries and Continents
+493,Which river flows by Yangon?,The Ayeyarwady,The Sittaung,The Yangon River,,C,hard,Rivers and Lakes
+494,Which is the Pyrenees' highest peak?,Mont Perdu,Aneto,Posets,,B,hard,Mountains and Deserts
+495,Which country holds Central America's biggest lake?,Panama,Guatemala,Nicaragua,,C,hard,Countries and Continents
+496,Which river flows through Florence?,The Krka,The Arno,The Ombrone,,B,hard,Rivers and Lakes
+497,Which salty Iranian basin is the hottest desert?,The Kavir-e Namak,The Dasht-e Lut,The Maranjab,,B,hard,Mountains and Deserts
+498,Which capital stands where the Danube meets the Sava?,Belgrade,Zagreb,Budapest,,A,hard,Capitals
+499,Whose flag bears a machete and gear?,Angola,Zimbabwe,Guinea,,A,hard,Countries and Continents
+500,Which river flows through Basel?,The Ill,The Rhine,The Doubs,,B,hard,Rivers and Lakes
+501,Which is the Carpathians' highest peak?,Hoverla,Moldoveanu,Gerlachovsky stit,,C,hard,Mountains and Deserts
+502,Which sea lies between Denmark and Sweden?,The Kattegat,The Great Belt,The Little Belt,,A,hard,Oceans and Seas
+503,Which river flows through Detroit?,The Saint Clair River,The Maumee,The Detroit River,,C,hard,Rivers and Lakes
+504,Which sea receives the Thames?,The English Channel,The Irish Sea,The North Sea,,C,hard,Oceans and Seas
+505,Whose coat of arms bears a double-headed eagle?,Ukraine,Russia,Serbia,,B,hard,Countries and Continents
+506,Which river flows through Turin?,The Po,The Sangone,The Dora Baltea,,A,hard,Rivers and Lakes
+507,Which is Norway's highest peak?,Glittertind,Store Skagastolstind,Galdhopiggen,,C,hard,Mountains and Deserts
+508,Which gulf separates Sinai from mainland Egypt?,The Gulf of Oman,The Laptev Sea,The Gulf of Suez,,C,hard,Oceans and Seas
 509,Which country anchors the Malay Peninsula's tip?,Singapore,Malawi,Malaysia,,A,hard,Countries and Continents
 510,Which river flows through Vilnius?,The Nemunas,The Neris,The Sesupe,,B,hard,Rivers and Lakes
-511,Which is Asia's largest desert?,The Syrian,The Ustyurt,The Arabian Desert,,C,hard,Mountains and Deserts
+511,Which is Asia's largest desert?,The Arabian Desert,The Ustyurt,The Syrian,,A,hard,Mountains and Deserts
 512,Which capital stands on the Daugava?,Riga,Jelgava,Daugavpils,,A,hard,Capitals
 513,Which river builds the Mekong Delta?,The Red River,The Mekong,The Perfume River,,B,hard,Rivers and Lakes
-514,Which is Indonesia's highest peak?,Mount Kerinci,Mount Rinjani,Puncak Jaya,,C,hard,Mountains and Deserts
-515,Which strait separates Honshu and Hokkaido?,The Tsugaru Strait,The Soya Strait,The Tsushima Strait,,A,hard,Oceans and Seas
-516,Which country hosted the Chimu kingdom?,Tunisia,Peru,Gabon,,B,hard,Countries and Continents
-517,Which river flows through Ulaanbaatar?,The Selenge,The Orkhon,The Tuul,,C,hard,Rivers and Lakes
+514,Which is Indonesia's highest peak?,Mount Rinjani,Puncak Jaya,Mount Kerinci,,B,hard,Mountains and Deserts
+515,Which strait separates Honshu and Hokkaido?,The Tsugaru Strait,The Tsushima Strait,The Soya Strait,,A,hard,Oceans and Seas
+516,Which country hosted the Chimu kingdom?,Tunisia,Gabon,Peru,,C,hard,Countries and Continents
+517,Which river flows through Ulaanbaatar?,The Tuul,The Selenge,The Orkhon,,A,hard,Rivers and Lakes
 518,Which desert lies mainly in Xinjiang?,The Taklamakan,The Kumtag,The Ordos,,A,hard,Mountains and Deserts
-519,Whose flag pairs an eagle with a cactus?,Uruguay,Mexico,Botswana,,B,hard,Countries and Continents
+519,Whose flag pairs an eagle with a cactus?,Botswana,Mexico,Uruguay,,B,hard,Countries and Continents
 520,Which river flows through Kyiv?,The Dniester,The Desna,The Dnieper,,C,hard,Rivers and Lakes
-521,Which is Mexico's highest peak?,Pico de Orizaba,Iztaccihuatl,Popocatepetl,,A,hard,Mountains and Deserts
+521,Which is Mexico's highest peak?,Popocatepetl,Pico de Orizaba,Iztaccihuatl,,B,hard,Mountains and Deserts
 522,Which sea lies between Alaska and Russia?,The Chukchi Sea,The Bering Sea,The Sea of Okhotsk,,B,hard,Oceans and Seas
-523,Whose capital is Dakar?,Gambia,Mauritania,Senegal,,C,hard,Countries and Continents
-524,Which river flows through Tashkent?,The Chirchik,The Syr Darya,The Angren,,A,hard,Rivers and Lakes
-525,Which desert hides the Richat Structure?,The Namib,The Sahara,The Mojave,,B,hard,Mountains and Deserts
-526,Which capital is the Lion City?,Jakarta,Bangkok,Singapore,,C,hard,Capitals
-527,Which river flows through Minsk?,The Svislach,The Pripyat,The Berezina,,A,hard,Rivers and Lakes
-528,Which is Tajikistan's highest peak?,Ibn Sina Peak,Ismoil Somoni,Revolution Peak,,B,hard,Mountains and Deserts
+523,Whose capital is Dakar?,Mauritania,Gambia,Senegal,,C,hard,Countries and Continents
+524,Which river flows through Tashkent?,The Angren,The Syr Darya,The Chirchik,,C,hard,Rivers and Lakes
+525,Which desert hides the Richat Structure?,The Namib,The Mojave,The Sahara,,C,hard,Mountains and Deserts
+526,Which capital is the Lion City?,Singapore,Jakarta,Bangkok,,A,hard,Capitals
+527,Which river flows through Minsk?,The Svislach,The Berezina,The Pripyat,,A,hard,Rivers and Lakes
+528,Which is Tajikistan's highest peak?,Ibn Sina Peak,Revolution Peak,Ismoil Somoni,,C,hard,Mountains and Deserts
 529,Which ocean did da Gama cross to India?,The Arctic Ocean,The Southern Ocean,The Indian Ocean,,C,hard,Oceans and Seas
 530,Which country is home to Timbuktu?,Niger,Burkina Faso,Algeria,,A,hard,Countries and Continents
-531,Which capital sits where the Danube and Morava meet?,Lucerne,Bratislava,Linz,,B,hard,Capitals
-532,Which desert covers the Sinai Peninsula?,The Judean Desert,The Eastern,The Sinai Desert,,C,hard,Mountains and Deserts
-533,Whose capital is Port Moresby?,Papua New Guinea,Samoa,Solomon Islands,,A,hard,Countries and Continents
-534,Which river flows through Skopje?,The Drin,The Vardar,The Bregalnica,,B,hard,Rivers and Lakes
-535,Which is the Caucasus' highest peak?,Mauna Loa,Dykh-Tau,Mount Elbrus,,C,hard,Mountains and Deserts
-536,Which sea lies east of Vietnam?,The South China Sea,The Gulf of Thailand,The Banda Sea,,A,hard,Oceans and Seas
-537,Which country hosts Angkor Wat?,Thailand,Cambodia,Senegal,,B,hard,Countries and Continents
-538,Which river flows through Porto?,The Minho,The Mondego,The Douro,,C,hard,Rivers and Lakes
-539,Which is Australia's largest desert?,The Great Victoria Desert,The Gibson Desert,The Great Sandy Desert,,A,hard,Mountains and Deserts
-540,Which city hosts the Western Wall?,Tel Aviv,Jerusalem,Amman,,B,hard,Landmarks and Maps
-541,Which river meets the Baltic at Gdansk?,The Nogat,The Pregolya,The Vistula,,C,hard,Rivers and Lakes
+531,Which capital sits where the Danube and Morava meet?,Lucerne,Linz,Bratislava,,C,hard,Capitals
+532,Which desert covers the Sinai Peninsula?,The Sinai Desert,The Judean Desert,The Eastern,,A,hard,Mountains and Deserts
+533,Whose capital is Port Moresby?,Solomon Islands,Papua New Guinea,Samoa,,B,hard,Countries and Continents
+534,Which river flows through Skopje?,The Bregalnica,The Drin,The Vardar,,C,hard,Rivers and Lakes
+535,Which is the Caucasus' highest peak?,Dykh-Tau,Mount Elbrus,Mauna Loa,,B,hard,Mountains and Deserts
+536,Which sea lies east of Vietnam?,The Gulf of Thailand,The South China Sea,The Banda Sea,,B,hard,Oceans and Seas
+537,Which country hosts Angkor Wat?,Thailand,Senegal,Cambodia,,C,hard,Countries and Continents
+538,Which river flows through Porto?,The Minho,The Douro,The Mondego,,B,hard,Rivers and Lakes
+539,Which is Australia's largest desert?,The Gibson Desert,The Great Sandy Desert,The Great Victoria Desert,,C,hard,Mountains and Deserts
+540,Which city hosts the Western Wall?,Amman,Jerusalem,Tel Aviv,,B,hard,Landmarks and Maps
+541,Which river meets the Baltic at Gdansk?,The Nogat,The Vistula,The Pregolya,,B,hard,Rivers and Lakes
 542,Which is Crete's highest peak?,Mount Ida,Mount Dikti,Lefka Ori,,A,hard,Mountains and Deserts
-543,Which sea lies between Anatolia and Thrace?,The Aegean,The Sea of Marmara,The Tyrrhenian,,B,hard,Oceans and Seas
-544,Whose capital is Rabat?,Guinea-Bissau,Libya,Morocco,,C,hard,Countries and Continents
-545,Which river flows through Tbilisi?,The Mtkvari,The Alazani,The Rioni,,A,hard,Rivers and Lakes
-546,Which is the Rhodopes' highest peak?,Vihren,Golyam Perelik,Botev,,B,hard,Mountains and Deserts
-547,Which sea lies between Australia and Timor?,The East China Sea,The Arafura Sea,The Timor Sea,,C,hard,Oceans and Seas
-548,Whose capital is Caracas?,Venezuela,Suriname,Trinidad,,A,hard,Countries and Continents
-549,Which river flows past Avignon?,The Durance,The Rhone,The Gardon,,B,hard,Rivers and Lakes
-550,Which is South America's largest cold desert?,The Monte,The Sechura,The Patagonian Desert,,C,hard,Mountains and Deserts
+543,Which sea lies between Anatolia and Thrace?,The Tyrrhenian,The Aegean,The Sea of Marmara,,C,hard,Oceans and Seas
+544,Whose capital is Rabat?,Morocco,Libya,Guinea-Bissau,,A,hard,Countries and Continents
+545,Which river flows through Tbilisi?,The Mtkvari,The Rioni,The Alazani,,A,hard,Rivers and Lakes
+546,Which is the Rhodopes' highest peak?,Botev,Golyam Perelik,Vihren,,B,hard,Mountains and Deserts
+547,Which sea lies between Australia and Timor?,The Timor Sea,The East China Sea,The Arafura Sea,,A,hard,Oceans and Seas
+548,Whose capital is Caracas?,Trinidad,Suriname,Venezuela,,C,hard,Countries and Continents
+549,Which river flows past Avignon?,The Gardon,The Durance,The Rhone,,C,hard,Rivers and Lakes
+550,Which is South America's largest cold desert?,The Patagonian Desert,The Sechura,The Monte,,A,hard,Mountains and Deserts
 551,Which city was once Saigon?,Ho Chi Minh City,Da Nang,Hanoi,,A,hard,Landmarks and Maps
 552,Which river flows through Cambridge?,The Isis,The Cam,The Cherwell,,B,hard,Rivers and Lakes
 553,Which is Bosnia's highest peak?,Jahorina,Vlasic,Mount Maglic,,C,hard,Mountains and Deserts
-554,Which sea borders Saint Petersburg?,The Gulf of Finland,The Greenland Sea,The Kara Sea,,A,hard,Oceans and Seas
-555,Which is the oldest surviving republic?,Liberia,San Marino,Nauru,,B,hard,Countries and Continents
-556,Which river flows through Innsbruck?,The Isar,The Lech,The Inn,,C,hard,Rivers and Lakes
-557,Which desert covers Egypt's west?,The Western Desert,The Qattara,The Judean,,A,hard,Mountains and Deserts
-558,Which desert lies mostly in Botswana?,The Great Basin,The Kalahari,The Ogaden,,B,hard,Mountains and Deserts
-559,Which river powers the Guri Dam?,The Cuyuni,The Orinoco,The Caroni,,C,hard,Rivers and Lakes
-560,Which is the highest point of Denmark's realm?,Gunnbjorn Fjeld,Mollehoj,Yding Skovhoj,,A,hard,Mountains and Deserts
-561,Which ocean does the Congo reach?,The Philippine Sea,The Atlantic,The Arctic,,B,hard,Oceans and Seas
-562,Which country hosts the Tsangpo gorge?,Myanmar,Bhutan,China,,C,hard,Countries and Continents
-563,Which river flows through Lancaster?,The Lune,The Wyre,The Ribble,,A,hard,Rivers and Lakes
+554,Which sea borders Saint Petersburg?,The Kara Sea,The Gulf of Finland,The Greenland Sea,,B,hard,Oceans and Seas
+555,Which is the oldest surviving republic?,San Marino,Liberia,Nauru,,A,hard,Countries and Continents
+556,Which river flows through Innsbruck?,The Lech,The Isar,The Inn,,C,hard,Rivers and Lakes
+557,Which desert covers Egypt's west?,The Western Desert,The Judean,The Qattara,,A,hard,Mountains and Deserts
+558,Which desert lies mostly in Botswana?,The Ogaden,The Great Basin,The Kalahari,,C,hard,Mountains and Deserts
+559,Which river powers the Guri Dam?,The Caroni,The Orinoco,The Cuyuni,,A,hard,Rivers and Lakes
+560,Which is the highest point of Denmark's realm?,Mollehoj,Yding Skovhoj,Gunnbjorn Fjeld,,C,hard,Mountains and Deserts
+561,Which ocean does the Congo reach?,The Atlantic,The Philippine Sea,The Arctic,,A,hard,Oceans and Seas
+562,Which country hosts the Tsangpo gorge?,Bhutan,Myanmar,China,,C,hard,Countries and Continents
+563,Which river flows through Lancaster?,The Wyre,The Lune,The Ribble,,B,hard,Rivers and Lakes
 564,Which is Jordan's highest peak?,Mount Nebo,Jabal Umm ad Dami,Jabal Ram,,B,hard,Mountains and Deserts
-565,Which strait splits Sicily from the mainland?,The Strait of Bonifacio,The Strait of Otranto,The Strait of Messina,,C,hard,Oceans and Seas
-566,Whose capital is Abu Dhabi?,United Arab Emirates,Oman,Bahrain,,A,hard,Countries and Continents
-567,Which river flows through Ohio's Toledo?,The Scioto,The Maumee,The Cuyahoga,,B,hard,Rivers and Lakes
-568,Which is the world's largest salt flat?,Salar de Atacama,Salinas Grandes,Salar de Uyuni,,C,hard,Landmarks and Maps
-569,Which is the British Isles' highest peak?,Ben Nevis,Slieve Donard,Carrauntoohil,,A,hard,Mountains and Deserts
-570,Which gulf lies between Estonia and Latvia?,The Andaman Sea,The Gulf of Riga,The Bay of Bothnia,,B,hard,Oceans and Seas
+565,Which strait splits Sicily from the mainland?,The Strait of Bonifacio,The Strait of Messina,The Strait of Otranto,,B,hard,Oceans and Seas
+566,Whose capital is Abu Dhabi?,Bahrain,Oman,United Arab Emirates,,C,hard,Countries and Continents
+567,Which river flows through Ohio's Toledo?,The Cuyahoga,The Maumee,The Scioto,,B,hard,Rivers and Lakes
+568,Which is the world's largest salt flat?,Salar de Uyuni,Salinas Grandes,Salar de Atacama,,A,hard,Landmarks and Maps
+569,Which is the British Isles' highest peak?,Ben Nevis,Carrauntoohil,Slieve Donard,,A,hard,Mountains and Deserts
+570,Which gulf lies between Estonia and Latvia?,The Bay of Bothnia,The Gulf of Riga,The Andaman Sea,,B,hard,Oceans and Seas
 571,Which country hosts the Uyuni salt flat?,Togo,Cameroon,Bolivia,,C,hard,Landmarks and Maps
-572,Which river runs beneath La Paz?,The Choqueyapu,The Desaguadero,The Pilcomayo,,A,hard,Rivers and Lakes
-573,Which is Saudi Arabia's highest peak?,Jabal al-Lawz,Jabal Sawda,Mount Uhud,,B,hard,Mountains and Deserts
-574,Which sea laps Turkey's south coast?,The Sulu Sea,The Baltic,The Mediterranean Sea,,C,hard,Oceans and Seas
-575,Whose capital is Suva?,Fiji,Vanuatu,Tonga,,A,hard,Countries and Continents
-576,Which river flows through Valencia?,The Mijares,The Turia,The Palancia,,B,hard,Rivers and Lakes
+572,Which river runs beneath La Paz?,The Desaguadero,The Pilcomayo,The Choqueyapu,,C,hard,Rivers and Lakes
+573,Which is Saudi Arabia's highest peak?,Mount Uhud,Jabal Sawda,Jabal al-Lawz,,B,hard,Mountains and Deserts
+574,Which sea laps Turkey's south coast?,The Baltic,The Sulu Sea,The Mediterranean Sea,,C,hard,Oceans and Seas
+575,Whose capital is Suva?,Tonga,Fiji,Vanuatu,,B,hard,Countries and Continents
+576,Which river flows through Valencia?,The Turia,The Mijares,The Palancia,,A,hard,Rivers and Lakes
 577,Which arid region covers southeast Ethiopia?,The Serengeti,The Sahel,The Ogaden,,C,hard,Mountains and Deserts
-578,Whose capital is Vientiane?,Laos,Cambodia,Brunei,,A,hard,Countries and Continents
-579,Which French river flows through Rouen?,The Somme,The Seine,The Orne,,B,hard,Rivers and Lakes
-580,Which is Sardinia's highest peak?,Monte Limbara,Monte Cinto,Punta La Marmora,,C,hard,Mountains and Deserts
-581,Which sea borders Crimea?,The Black Sea,The Aral,The Caspian,,A,hard,Oceans and Seas
-582,Which is South America's smallest country?,French Guiana,Uruguay,Falkland Islands,,B,hard,Countries and Continents
+578,Whose capital is Vientiane?,Laos,Brunei,Cambodia,,A,hard,Countries and Continents
+579,Which French river flows through Rouen?,The Seine,The Somme,The Orne,,A,hard,Rivers and Lakes
+580,Which is Sardinia's highest peak?,Monte Limbara,Punta La Marmora,Monte Cinto,,B,hard,Mountains and Deserts
+581,Which sea borders Crimea?,The Black Sea,The Caspian,The Aral,,A,hard,Oceans and Seas
+582,Which is South America's smallest country?,French Guiana,Falkland Islands,Uruguay,,C,hard,Countries and Continents
 583,Which river flows through Bilbao?,The Urola,The Bidasoa,The Nervion,,C,hard,Rivers and Lakes
 584,Which is Haiti's highest peak?,Pic la Selle,Pic Macaya,Morne Diablotins,,A,hard,Mountains and Deserts
-585,Which sea separates Africa and Asia at Suez?,The Persian Gulf,The Red Sea,The Flores Sea,,B,hard,Oceans and Seas
-586,Whose delta does the Orinoco build?,Guiana,Amapa,Venezuela,,C,hard,Countries and Continents
-587,Which river flows through Merida?,The Guadiana,The Genil,The Tajo,,A,hard,Rivers and Lakes
-588,Which is Kosovo's highest peak?,Titov Vrv,Gjeravica,Korab,,B,hard,Mountains and Deserts
-589,Which sea spans the Yemen-Eritrea gap?,The Tasman Sea,The Beaufort Sea,The Red Sea,,C,hard,Oceans and Seas
-590,Which country hosts the world's largest sand island?,Australia,New Zealand,Borneo,,A,hard,Countries and Continents
+585,Which sea separates Africa and Asia at Suez?,The Persian Gulf,The Flores Sea,The Red Sea,,C,hard,Oceans and Seas
+586,Whose delta does the Orinoco build?,Guiana,Venezuela,Amapa,,B,hard,Countries and Continents
+587,Which river flows through Merida?,The Guadiana,The Tajo,The Genil,,A,hard,Rivers and Lakes
+588,Which is Kosovo's highest peak?,Gjeravica,Titov Vrv,Korab,,A,hard,Mountains and Deserts
+589,Which sea spans the Yemen-Eritrea gap?,The Tasman Sea,The Red Sea,The Beaufort Sea,,B,hard,Oceans and Seas
+590,Which country hosts the world's largest sand island?,New Zealand,Australia,Borneo,,B,hard,Countries and Continents
 591,Which river traces the Wakhan Corridor?,The Kokcha,The Panj,The Helmand,,B,hard,Rivers and Lakes
-592,Which autonomous territory is the world's largest island?,Greenland,Svalbard,Tasmania,Newfoundland,A,expert,Countries and Continents
-593,Which river forms where the Bow meets the Oldman?,The North Saskatchewan,The South Saskatchewan,The Red Deer,The Sheep River,B,expert,Rivers and Lakes
-594,Which South American capital sits almost on the Equator?,Georgetown,Paramaribo,Quito,La Paz,C,expert,Capitals
-595,Which Arctic archipelago belongs to Norway?,Franz Josef Land,Novaya Zemlya,Severnaya Zemlya,Svalbard,D,expert,Countries and Continents
-596,Which river flows through Kazan?,The Volga,The Mesha,The Kazanka,The Sviyaga,A,expert,Rivers and Lakes
-597,Which line of latitude crosses Taiwan?,The Equator,The Tropic of Cancer,The Tropic of Capricorn,The Antarctic Circle,B,expert,Landmarks and Maps
-598,Which microstate is enclosed by Italy alone?,Benin,Sierra Leone,San Marino,Malta,C,expert,Countries and Continents
-599,Which is Africa's second longest river?,The Limpopo,The Niger,The Zambezi,The Congo,D,expert,Rivers and Lakes
-600,Which capital lies at about 1800 meters?,Nairobi,Kathmandu,Kigali,Lusaka,A,expert,Capitals
-601,Which strait joins the Red Sea and Gulf of Aden?,The Strait of Hormuz,Bab el-Mandeb,The Strait of Malacca,The East Siberian Sea,B,expert,Oceans and Seas
-602,Which Pacific territory is French?,Kiribati,Marshall Islands,French Polynesia,Palau,C,expert,Countries and Continents
-603,Which river cuts the Tiger Leaping Gorge?,The Salween,The Yalong,The Dadu,The Jinsha,D,expert,Rivers and Lakes
-604,Which capital is the world's rainiest?,Monrovia,Suva,Manaus,Port Vila,A,expert,Capitals
-605,Which Spanish territory lies on Morocco's coast?,Gibraltar,Ceuta,Tangier,Sidi Ifni,B,expert,Countries and Continents
-606,Which river is Switzerland's longest?,The Ticino,The Thur,The Aare,The Kander,C,expert,Rivers and Lakes
-607,Which latitude line crosses the Amazon mouth?,The Tropic of Cancer,The Arctic Circle,The Prime Meridian,The Equator,D,expert,Landmarks and Maps
-608,Which is the smallest UN member state?,Tuvalu,Djibouti,Bahamas,Seychelles,A,expert,Countries and Continents
-609,Which is Europe's second longest river?,The Trave,The Danube,The Don,The Warnow,B,expert,Rivers and Lakes
-610,Which capital fronts the Gulf of Guinea?,Lome,Libreville,Accra,Douala,C,expert,Capitals
-611,Which British territory guards the Mediterranean's gate?,Cyprus,Menorca,Corsica,Gibraltar,D,expert,Countries and Continents
-612,Which dark river meets the Solimoes at Manaus?,The Rio Negro,The Tapajos,The Xingu,The Madeira,A,expert,Rivers and Lakes
-613,Which latitude line crosses Kenya?,The Celestial Equator,The Equator,The International Date Line,The Greenwich Meridian,B,expert,Landmarks and Maps
-614,Which US state has the longest tidal shoreline?,Florida,California,Alaska,Hawaii,C,expert,Countries and Continents
-615,Which river is the Plata's main source flow?,The Iguazu,The Paraguay,The Bermejo,The Parana,D,expert,Rivers and Lakes
-616,Which national capital lies farthest north?,Reykjavik,Nuuk,Tromso,Anchorage,A,expert,Capitals
-617,Which river flows past the Lena Pillars?,The Ob,The Lena,The Aldan,The Vilyuy,B,expert,Rivers and Lakes
-618,Which Pacific realm does Tokelau belong to?,Micronesia,Wallis and Futuna,New Zealand,American Samoa,C,expert,Countries and Continents
-619,Which river is Earth's widest?,The Mississippi,The Congo,The Yarra,The Amazon,D,expert,Rivers and Lakes
-620,Which capital sits on the Persian Gulf?,Kuwait City,Manama,Doha,Beirut,A,expert,Capitals
-621,Which river means River of Silver?,The Suquia,The Rio de la Plata,The Salado,The Colorado,B,expert,Rivers and Lakes
-622,Which capital lies closest to the Arctic Circle?,Oulu,Lulea,Reykjavik,Bodo,C,expert,Capitals
-623,Which river carves the Tsangpo Grand Canyon?,The Lohit,The Irrawaddy,The Kameng,The Yarlung Tsangpo,D,expert,Rivers and Lakes
-624,Which Mediterranean islands are Spanish?,The Balearics,Elba,Crete,Sicily,A,expert,Countries and Continents
-625,Which river rises in the Altai?,The Yenisei,The Ob,The Lena,The Amur,B,expert,Rivers and Lakes
-626,Which capital was Roman Lutetia?,Lyon,Trier,Paris,Cologne,C,expert,Capitals
-627,Which river flows through Venezuela's Amazonas?,The Caroni,The Caura,The Ventuari,The Orinoco,D,expert,Rivers and Lakes
-628,Which North Atlantic islands belong to Denmark?,The Faroe Islands,Orkney,Aland,Shetland,A,expert,Countries and Continents
-629,Which river forms Namibia's southern border?,The Kunene,The Orange,The Okavango,The Kwando,B,expert,Rivers and Lakes
+592,Which autonomous territory is the world's largest island?,Tasmania,Newfoundland,Svalbard,Greenland,D,expert,Countries and Continents
+593,Which river forms where the Bow meets the Oldman?,The South Saskatchewan,The North Saskatchewan,The Red Deer,The Sheep River,A,expert,Rivers and Lakes
+594,Which South American capital sits almost on the Equator?,Paramaribo,Quito,Georgetown,La Paz,B,expert,Capitals
+595,Which Arctic archipelago belongs to Norway?,Severnaya Zemlya,Svalbard,Franz Josef Land,Novaya Zemlya,B,expert,Countries and Continents
+596,Which river flows through Kazan?,The Mesha,The Kazanka,The Sviyaga,The Volga,D,expert,Rivers and Lakes
+597,Which line of latitude crosses Taiwan?,The Tropic of Cancer,The Equator,The Tropic of Capricorn,The Antarctic Circle,A,expert,Landmarks and Maps
+598,Which microstate is enclosed by Italy alone?,Sierra Leone,Benin,San Marino,Malta,C,expert,Countries and Continents
+599,Which is Africa's second longest river?,The Limpopo,The Niger,The Congo,The Zambezi,C,expert,Rivers and Lakes
+600,Which capital lies at about 1800 meters?,Lusaka,Nairobi,Kathmandu,Kigali,B,expert,Capitals
+601,Which strait joins the Red Sea and Gulf of Aden?,The Strait of Hormuz,The Strait of Malacca,Bab el-Mandeb,The East Siberian Sea,C,expert,Oceans and Seas
+602,Which Pacific territory is French?,Kiribati,French Polynesia,Palau,Marshall Islands,B,expert,Countries and Continents
+603,Which river cuts the Tiger Leaping Gorge?,The Jinsha,The Yalong,The Salween,The Dadu,A,expert,Rivers and Lakes
+604,Which capital is the world's rainiest?,Suva,Port Vila,Monrovia,Manaus,C,expert,Capitals
+605,Which Spanish territory lies on Morocco's coast?,Ceuta,Sidi Ifni,Gibraltar,Tangier,A,expert,Countries and Continents
+606,Which river is Switzerland's longest?,The Thur,The Aare,The Ticino,The Kander,B,expert,Rivers and Lakes
+607,Which latitude line crosses the Amazon mouth?,The Tropic of Cancer,The Equator,The Prime Meridian,The Arctic Circle,B,expert,Landmarks and Maps
+608,Which is the smallest UN member state?,Seychelles,Djibouti,Tuvalu,Bahamas,C,expert,Countries and Continents
+609,Which is Europe's second longest river?,The Don,The Warnow,The Trave,The Danube,D,expert,Rivers and Lakes
+610,Which capital fronts the Gulf of Guinea?,Lome,Libreville,Douala,Accra,D,expert,Capitals
+611,Which British territory guards the Mediterranean's gate?,Gibraltar,Menorca,Corsica,Cyprus,A,expert,Countries and Continents
+612,Which dark river meets the Solimoes at Manaus?,The Rio Negro,The Tapajos,The Madeira,The Xingu,A,expert,Rivers and Lakes
+613,Which latitude line crosses Kenya?,The International Date Line,The Celestial Equator,The Greenwich Meridian,The Equator,D,expert,Landmarks and Maps
+614,Which US state has the longest tidal shoreline?,Florida,California,Hawaii,Alaska,D,expert,Countries and Continents
+615,Which river is the Plata's main source flow?,The Bermejo,The Iguazu,The Parana,The Paraguay,C,expert,Rivers and Lakes
+616,Which national capital lies farthest north?,Reykjavik,Tromso,Anchorage,Nuuk,A,expert,Capitals
+617,Which river flows past the Lena Pillars?,The Aldan,The Lena,The Ob,The Vilyuy,B,expert,Rivers and Lakes
+618,Which Pacific realm does Tokelau belong to?,New Zealand,Wallis and Futuna,Micronesia,American Samoa,A,expert,Countries and Continents
+619,Which river is Earth's widest?,The Mississippi,The Yarra,The Amazon,The Congo,C,expert,Rivers and Lakes
+620,Which capital sits on the Persian Gulf?,Kuwait City,Doha,Beirut,Manama,A,expert,Capitals
+621,Which river means River of Silver?,The Rio de la Plata,The Colorado,The Salado,The Suquia,A,expert,Rivers and Lakes
+622,Which capital lies closest to the Arctic Circle?,Oulu,Reykjavik,Lulea,Bodo,B,expert,Capitals
+623,Which river carves the Tsangpo Grand Canyon?,The Lohit,The Irrawaddy,The Yarlung Tsangpo,The Kameng,C,expert,Rivers and Lakes
+624,Which Mediterranean islands are Spanish?,Elba,Crete,Sicily,The Balearics,D,expert,Countries and Continents
+625,Which river rises in the Altai?,The Amur,The Yenisei,The Lena,The Ob,D,expert,Rivers and Lakes
+626,Which capital was Roman Lutetia?,Lyon,Cologne,Paris,Trier,C,expert,Capitals
+627,Which river flows through Venezuela's Amazonas?,The Ventuari,The Orinoco,The Caura,The Caroni,B,expert,Rivers and Lakes
+628,Which North Atlantic islands belong to Denmark?,Aland,Orkney,The Faroe Islands,Shetland,C,expert,Countries and Continents
+629,Which river forms Namibia's southern border?,The Kunene,The Orange,The Kwando,The Okavango,B,expert,Rivers and Lakes
 630,Which city is Sicily's capital?,Messina,Syracuse,Palermo,Trapani,C,expert,Capitals
-631,Which is Greece's longest river?,The Evros,The Acheloos,The Pineios,The Aliakmonas,D,expert,Rivers and Lakes
-632,Which Dutch Caribbean island is nearest Venezuela?,Aruba,Curacao,Bonaire,Sint Maarten,A,expert,Countries and Continents
-633,Which river flows through Srinagar?,The Chenab,The Jhelum,The Ravi,The Beas,B,expert,Rivers and Lakes
-634,Which capital sits at nearly 12 degrees south?,Harare,Gitega,Lima,Asuncion,C,expert,Capitals
-635,Which territory did the US buy from Russia?,Grenada,Puerto Rico,Guam,Alaska,D,expert,Countries and Continents
-636,Which is New Zealand's longest river?,The Waikato,The Whanganui,The Rakaia,The Clutha,A,expert,Rivers and Lakes
-637,Which capital hosts the Independence Arch?,Asmara,Accra,Cotonou,Dakar,B,expert,Landmarks and Maps
-638,Which French islands lie south of Newfoundland?,Bermuda,Guernsey,Saint Pierre and Miquelon,Jersey,C,expert,Countries and Continents
-639,Which river flows through Podgorica?,The Sitnica,The Zeta,The Cijevna,The Moraca,D,expert,Rivers and Lakes
-640,Which capital is split by a buffer zone?,Nicosia,Skopje,Baku,Yerevan,A,expert,Capitals
-641,Which river marks much of the Peru-Colombia border?,The Amazon,The Putumayo,The Caqueta,The Maranon,B,expert,Rivers and Lakes
-642,Which is France's longest river?,The Garonne,The Dordogne,The Loire,The Allier,C,expert,Rivers and Lakes
-643,Which remote Pacific territory is Chilean?,Galapagos,New Caledonia,Barbados,Easter Island,D,expert,Countries and Continents
-644,Which river flows through Guayaquil?,The Guayas,The Daule,The Babahoyo,The Pastaza,A,expert,Rivers and Lakes
-645,Which capital sits at nearly 34 degrees north?,Damascus,Beirut,Tunis,Ostrava,B,expert,Capitals
-646,Which islands belong to Finland?,Gotland,Saaremaa,The Aland Islands,Bornholm,C,expert,Countries and Continents
-647,Which river is Central Asia's longest?,The Vakhsh,The Ili,The Cher,The Amu Darya,D,expert,Rivers and Lakes
+631,Which is Greece's longest river?,The Aliakmonas,The Pineios,The Evros,The Acheloos,A,expert,Rivers and Lakes
+632,Which Dutch Caribbean island is nearest Venezuela?,Sint Maarten,Aruba,Bonaire,Curacao,B,expert,Countries and Continents
+633,Which river flows through Srinagar?,The Ravi,The Jhelum,The Beas,The Chenab,B,expert,Rivers and Lakes
+634,Which capital sits at nearly 12 degrees south?,Lima,Asuncion,Gitega,Harare,A,expert,Capitals
+635,Which territory did the US buy from Russia?,Alaska,Guam,Puerto Rico,Grenada,A,expert,Countries and Continents
+636,Which is New Zealand's longest river?,The Clutha,The Waikato,The Whanganui,The Rakaia,B,expert,Rivers and Lakes
+637,Which capital hosts the Independence Arch?,Cotonou,Asmara,Accra,Dakar,C,expert,Landmarks and Maps
+638,Which French islands lie south of Newfoundland?,Guernsey,Bermuda,Saint Pierre and Miquelon,Jersey,C,expert,Countries and Continents
+639,Which river flows through Podgorica?,The Cijevna,The Sitnica,The Zeta,The Moraca,D,expert,Rivers and Lakes
+640,Which capital is split by a buffer zone?,Baku,Yerevan,Skopje,Nicosia,D,expert,Capitals
+641,Which river marks much of the Peru-Colombia border?,The Caqueta,The Amazon,The Putumayo,The Maranon,C,expert,Rivers and Lakes
+642,Which is France's longest river?,The Garonne,The Loire,The Dordogne,The Allier,B,expert,Rivers and Lakes
+643,Which remote Pacific territory is Chilean?,Easter Island,New Caledonia,Barbados,Galapagos,A,expert,Countries and Continents
+644,Which river flows through Guayaquil?,The Guayas,The Babahoyo,The Daule,The Pastaza,A,expert,Rivers and Lakes
+645,Which capital sits at nearly 34 degrees north?,Ostrava,Tunis,Damascus,Beirut,D,expert,Capitals
+646,Which islands belong to Finland?,Saaremaa,The Aland Islands,Bornholm,Gotland,B,expert,Countries and Continents
+647,Which river is Central Asia's longest?,The Amu Darya,The Ili,The Cher,The Vakhsh,A,expert,Rivers and Lakes
 648,Which capital lies on the Spree?,Berlin,Hamburg,Potsdam,Rostock,A,expert,Capitals
-649,Which river forms Ottawa's northern edge?,The Rideau River,The Ottawa River,The Gatineau,The Riviere des Prairies,B,expert,Rivers and Lakes
-650,Which island is the world's most remote inhabited?,Saint Helena,Ascension Island,Tristan da Cunha,The Falklands,C,expert,Countries and Continents
-651,Which river is central to Perth?,The Sarthe,The Brisbane,The Derwent,The Swan,D,expert,Rivers and Lakes
-652,Whose ruins does Carthage neighbor?,Tunis,Tripoli,Oran,Algiers,A,expert,Landmarks and Maps
-653,Which river marks Togo's Ghana border?,The Mono,The Volta,The Oti,The Haho,B,expert,Rivers and Lakes
-654,Which capital hosts the African Union headquarters?,N'Djamena,Szeged,Addis Ababa,Rabat,C,expert,Capitals
-655,Which lake laps Bujumbura's shore?,Lake Albert,Lake Kivu,Lake Edward,Lake Tanganyika,D,expert,Rivers and Lakes
-656,Which island territory is Australian?,Norfolk Island,Christmas Island,Cocos Islands,Bougainville,A,expert,Countries and Continents
-657,Which river flows through Szeged?,The Maros,The Tisza,The Koros,The Zagyva,B,expert,Rivers and Lakes
-658,Which capital sits on its own island kingdom?,Riyadh,Tehran,Manama,Sanaa,C,expert,Capitals
+649,Which river forms Ottawa's northern edge?,The Rideau River,The Riviere des Prairies,The Gatineau,The Ottawa River,D,expert,Rivers and Lakes
+650,Which island is the world's most remote inhabited?,The Falklands,Tristan da Cunha,Saint Helena,Ascension Island,B,expert,Countries and Continents
+651,Which river is central to Perth?,The Derwent,The Brisbane,The Swan,The Sarthe,C,expert,Rivers and Lakes
+652,Whose ruins does Carthage neighbor?,Oran,Algiers,Tripoli,Tunis,D,expert,Landmarks and Maps
+653,Which river marks Togo's Ghana border?,The Mono,The Oti,The Volta,The Haho,C,expert,Rivers and Lakes
+654,Which capital hosts the African Union headquarters?,Rabat,Addis Ababa,Szeged,N'Djamena,B,expert,Capitals
+655,Which lake laps Bujumbura's shore?,Lake Tanganyika,Lake Albert,Lake Edward,Lake Kivu,A,expert,Rivers and Lakes
+656,Which island territory is Australian?,Cocos Islands,Christmas Island,Norfolk Island,Bougainville,C,expert,Countries and Continents
+657,Which river flows through Szeged?,The Zagyva,The Koros,The Tisza,The Maros,C,expert,Rivers and Lakes
+658,Which capital sits on its own island kingdom?,Riyadh,Manama,Tehran,Sanaa,B,expert,Capitals
 659,Which river is Seoul's main stream?,The Geum,The Nakdong,The Imjin,The Han,D,expert,Rivers and Lakes
-660,Which capital hosts the Sultan Qaboos Grand Mosque?,Muscat,Abu Dhabi,Pecs,Dubai,A,expert,Landmarks and Maps
-661,Which river flows through Taipei?,The Kaoping,The Tamsui,The Choshui,The Tachia,B,expert,Rivers and Lakes
-662,Which US territory lies farthest west?,Wake Island,Midway,Guam,Jarvis Island,C,expert,Countries and Continents
-663,Which river flows through Andorra la Vella?,The Ariege,The Segre,The Llobregat,The Valira,D,expert,Rivers and Lakes
+660,Which capital hosts the Sultan Qaboos Grand Mosque?,Abu Dhabi,Muscat,Dubai,Pecs,B,expert,Landmarks and Maps
+661,Which river flows through Taipei?,The Tachia,The Kaoping,The Choshui,The Tamsui,D,expert,Rivers and Lakes
+662,Which US territory lies farthest west?,Guam,Wake Island,Jarvis Island,Midway,A,expert,Countries and Continents
+663,Which river flows through Andorra la Vella?,The Llobregat,The Valira,The Segre,The Ariege,B,expert,Rivers and Lakes
 664,Which cantonal capital sits on Lake Geneva?,Geneva,Zurich,Bern,Perugia,A,expert,Capitals
-665,Which is India's second longest river?,The Krishna,The Godavari,The Narmada,The Mahanadi,B,expert,Rivers and Lakes
-666,Which capital lies nearest Kilimanjaro?,Dodoma,Mogadishu,Nairobi,Arusha,C,expert,Capitals
-667,Which river flows through Aleppo?,The Barada,The Khabur,The Balikh,The Quweiq,D,expert,Rivers and Lakes
-668,Which capital lies on the Red River?,Hanoi,Hue,Cagliari,Siena,A,expert,Capitals
-669,Which archipelago belongs to Ecuador?,The Juan Fernandez,The Galapagos,Antigua,The Marianas,B,expert,Countries and Continents
-670,Which is Indonesia's longest river?,The Mahakam,The Solo,The Kapuas,The Barito,C,expert,Rivers and Lakes
-671,Which capital lies at nearly 1 degree north?,Ngerulmud,Bandar Seri Begawan,Port Moresby,Singapore,D,expert,Capitals
-672,Which Portuguese archipelago lies farthest west?,The Azores,Madeira,The Canaries,Cape Verde,A,expert,Countries and Continents
-673,Which river flows beneath Brussels?,The Meuse,The Senne,The Scheldt,The Dijle,B,expert,Rivers and Lakes
-674,From which capital can Mount Rainier be seen?,Salem,Boise,Olympia,Sacramento,C,expert,Countries and Continents
-675,Which river thunders over Victoria Falls?,The Kafue,The Luangwa,The Cuando,The Zambezi,D,expert,Rivers and Lakes
-676,Which unrecognized state sits on the Dniester?,Tiraspol,Odesa,Kharkiv,Chisinau,A,expert,Countries and Continents
-677,Which river joins the Nile at Atbara?,The Sobat,The Atbara,The Gash,The Rahad,B,expert,Rivers and Lakes
+665,Which is India's second longest river?,The Krishna,The Mahanadi,The Godavari,The Narmada,C,expert,Rivers and Lakes
+666,Which capital lies nearest Kilimanjaro?,Arusha,Dodoma,Mogadishu,Nairobi,D,expert,Capitals
+667,Which river flows through Aleppo?,The Barada,The Khabur,The Quweiq,The Balikh,C,expert,Rivers and Lakes
+668,Which capital lies on the Red River?,Hue,Cagliari,Siena,Hanoi,D,expert,Capitals
+669,Which archipelago belongs to Ecuador?,The Marianas,The Juan Fernandez,Antigua,The Galapagos,D,expert,Countries and Continents
+670,Which is Indonesia's longest river?,The Mahakam,The Kapuas,The Solo,The Barito,B,expert,Rivers and Lakes
+671,Which capital lies at nearly 1 degree north?,Bandar Seri Begawan,Singapore,Ngerulmud,Port Moresby,B,expert,Capitals
+672,Which Portuguese archipelago lies farthest west?,The Canaries,Cape Verde,Madeira,The Azores,D,expert,Countries and Continents
+673,Which river flows beneath Brussels?,The Senne,The Meuse,The Scheldt,The Dijle,A,expert,Rivers and Lakes
+674,From which capital can Mount Rainier be seen?,Salem,Olympia,Boise,Sacramento,B,expert,Countries and Continents
+675,Which river thunders over Victoria Falls?,The Cuando,The Zambezi,The Kafue,The Luangwa,B,expert,Rivers and Lakes
+676,Which unrecognized state sits on the Dniester?,Chisinau,Odesa,Kharkiv,Tiraspol,D,expert,Countries and Continents
+677,Which river joins the Nile at Atbara?,The Rahad,The Sobat,The Gash,The Atbara,D,expert,Rivers and Lakes
 678,Which city hosts the Potala Palace?,Chengdu,Uppsala,Lhasa,Thimphu,C,expert,Landmarks and Maps
-679,Which river rushes through the Three Gorges?,The Yuan,The Jialing,The Wu,The Yangtze,D,expert,Rivers and Lakes
+679,Which river rushes through the Three Gorges?,The Yangtze,The Wu,The Yuan,The Jialing,A,expert,Rivers and Lakes
 680,Which capital faces the Pilcomayo junction?,Asuncion,Buenos Aires,Clorinda,Formosa,A,expert,Capitals
-681,Which lake lies at Brasilia's heart?,Lake Mirim,Lake Paranoa,Lake Tefe,Lake Mangueira,B,expert,Rivers and Lakes
-682,Which regional capital sits on the Guadiana?,Cordoba,Caceres,Merida,Granada,C,expert,Landmarks and Maps
-683,Which river runs through Kandy?,The Kelani,The Kalu,The Walawe,The Mahaweli,D,expert,Rivers and Lakes
-684,Which capital lies closest to the Tropic of Capricorn?,Windhoek,Gaborone,Gyor,Pretoria,A,expert,Capitals
-685,Which river flows through Coimbra?,The Sado,The Mondego,The Zezere,The Cavado,B,expert,Rivers and Lakes
-686,Which city was the Inca capital?,Nis,Sucre,Cusco,Cajamarca,C,expert,Landmarks and Maps
-687,Which river flows through Gaborone?,The Madikwe,The Marico,The Metsimotlhaba,The Notwane,D,expert,Rivers and Lakes
-688,Which capital sits on Lake Managua's shore?,Managua,San Salvador,Tegucigalpa,San Jose,A,expert,Capitals
-689,Which river flows by Belmopan?,The Sibun,The Belize River,The Hondo,The Sarstoon,B,expert,Rivers and Lakes
-690,Which river flows through Rome?,Kragujevac,The Aniene,The Tiber,The Almone,C,expert,Landmarks and Maps
-691,Which strait connects the Black Sea and the Sea of Marmara?,The Alboran Sea,The Irminger Sea,The Lincoln Sea,The Bosporus,D,expert,Oceans and Seas
-692,Which capital sits where the American River joins?,Sacramento,Fresno,Redding,San Francisco,A,expert,Capitals
-693,Which island group belongs to Yemen?,Zanzibar,Socotra,The Comoros,Hainan,B,expert,Countries and Continents
-694,Which river feeds the Okavango Delta?,The Cuito,The Cubango,The Okavango,The Nhabe,C,expert,Rivers and Lakes
+681,Which lake lies at Brasilia's heart?,Lake Mangueira,Lake Paranoa,Lake Mirim,Lake Tefe,B,expert,Rivers and Lakes
+682,Which regional capital sits on the Guadiana?,Merida,Caceres,Cordoba,Granada,A,expert,Landmarks and Maps
+683,Which river runs through Kandy?,The Kalu,The Walawe,The Mahaweli,The Kelani,C,expert,Rivers and Lakes
+684,Which capital lies closest to the Tropic of Capricorn?,Gyor,Pretoria,Windhoek,Gaborone,C,expert,Capitals
+685,Which river flows through Coimbra?,The Sado,The Zezere,The Cavado,The Mondego,D,expert,Rivers and Lakes
+686,Which city was the Inca capital?,Cusco,Cajamarca,Nis,Sucre,A,expert,Landmarks and Maps
+687,Which river flows through Gaborone?,The Notwane,The Madikwe,The Metsimotlhaba,The Marico,A,expert,Rivers and Lakes
+688,Which capital sits on Lake Managua's shore?,Tegucigalpa,San Salvador,Managua,San Jose,C,expert,Capitals
+689,Which river flows by Belmopan?,The Sibun,The Belize River,The Sarstoon,The Hondo,B,expert,Rivers and Lakes
+690,Which river flows through Rome?,The Almone,The Aniene,Kragujevac,The Tiber,D,expert,Landmarks and Maps
+691,Which strait connects the Black Sea and the Sea of Marmara?,The Bosporus,The Lincoln Sea,The Alboran Sea,The Irminger Sea,A,expert,Oceans and Seas
+692,Which capital sits where the American River joins?,Fresno,Sacramento,Redding,San Francisco,B,expert,Capitals
+693,Which island group belongs to Yemen?,Zanzibar,Hainan,Socotra,The Comoros,C,expert,Countries and Continents
+694,Which river feeds the Okavango Delta?,The Okavango,The Nhabe,The Cuito,The Cubango,A,expert,Rivers and Lakes
 695,Which capital fronts the Indian Ocean?,Antananarivo,Mbabane,Maseru,Maputo,D,expert,Capitals
-696,Which river supplies Montevideo?,The Santa Lucia,The Yi,The Cebollati,The Tacuarembo,A,expert,Rivers and Lakes
-697,Which Arctic island belongs to Norway?,The Faroes,Jan Mayen,Bear Island,Oland,B,expert,Countries and Continents
-698,Which river flows through Dunedin?,The Taieri,The Mataura,The Leith,The Pomahaka,C,expert,Rivers and Lakes
-699,Which Senegalese city sat at the river mouth capital?,Rufisque,Thies,Kaolack,Saint-Louis,D,expert,Capitals
-700,Which river flows through Segovia?,The Eresma,The Cega,The Piron,The Duraton,A,expert,Rivers and Lakes
-701,Which capital abuts the Atacama's coastal strip?,Iquique,Lima,Antofagasta,Arica,B,expert,Capitals
-702,Which river drains Lake Tana?,The Angereb,The Beles,The Blue Nile,The Dabus,C,expert,Rivers and Lakes
-703,Which imperial city sits below the High Atlas?,Essaouira,Fez,Meknes,Marrakesh,D,expert,Mountains and Deserts
-704,Which river flows through Kigali?,The Nyabarongo,The Akanyaru,The Ruvubu,The Ruzizi,A,expert,Rivers and Lakes
-705,Which capital sits on the Ciliwung?,Bandung,Jakarta,Surabaya,Medan,B,expert,Capitals
-706,Which British territory lies nearest Antarctica?,Ascension,South Shetland Islands,South Georgia,Bouvet,C,expert,Countries and Continents
-707,Which river runs through the Fergana Valley?,The Zeravshan,The Naryn,The Chatkal,The Syr Darya,D,expert,Rivers and Lakes
-708,Which capital sits at the Minnesota-Mississippi meeting?,Saint Paul,Des Moines,Springfield,Madison,A,expert,Capitals
-709,Which river flows through Yaounde?,The Sanaga,The Mfoundi,The Nyong,The Wouri,B,expert,Rivers and Lakes
-710,Which capital lies closest to 6 north?,Lagos,Freetown,Monrovia,Yamoussoukro,C,expert,Capitals
-711,Which river rises near Bishkek?,The Sokuluk,The Chuy,The Talas,The Ala-Archa,D,expert,Rivers and Lakes
-712,Which Pacific capital replaced Koror?,Ngerulmud,Honiara,Tarawa,Yaren,A,expert,Capitals
-713,Which sea does the Rioni reach?,The Marmara,The Black Sea,The Celtic Sea,The Labrador Sea,B,expert,Rivers and Lakes
-714,Which capital lies at nearly 30 north?,Baghdad,Kabul,Cairo,Lahore,C,expert,Capitals
-715,Which river forms Paraguay's southeast border?,The Apa,The Tebicuary,The Ypane,The Parana,D,expert,Rivers and Lakes
-716,Which capital lies on Java?,Jakarta,Makassar,Pontianak,Denpasar,A,expert,Capitals
-717,Which river flows through Dushanbe?,The Kofarnihon,The Varzob,The Panj,The Surkhob,B,expert,Rivers and Lakes
-718,Which capital hosts Gorky Park?,Kyiv,Warsaw,Moscow,Djibouti City,C,expert,Capitals
+696,Which river supplies Montevideo?,The Cebollati,The Yi,The Santa Lucia,The Tacuarembo,C,expert,Rivers and Lakes
+697,Which Arctic island belongs to Norway?,Jan Mayen,Oland,Bear Island,The Faroes,A,expert,Countries and Continents
+698,Which river flows through Dunedin?,The Taieri,The Pomahaka,The Mataura,The Leith,D,expert,Rivers and Lakes
+699,Which Senegalese city sat at the river mouth capital?,Kaolack,Thies,Saint-Louis,Rufisque,C,expert,Capitals
+700,Which river flows through Segovia?,The Piron,The Cega,The Duraton,The Eresma,D,expert,Rivers and Lakes
+701,Which capital abuts the Atacama's coastal strip?,Lima,Iquique,Antofagasta,Arica,A,expert,Capitals
+702,Which river drains Lake Tana?,The Angereb,The Blue Nile,The Dabus,The Beles,B,expert,Rivers and Lakes
+703,Which imperial city sits below the High Atlas?,Marrakesh,Fez,Meknes,Essaouira,A,expert,Mountains and Deserts
+704,Which river flows through Kigali?,The Akanyaru,The Nyabarongo,The Ruvubu,The Ruzizi,B,expert,Rivers and Lakes
+705,Which capital sits on the Ciliwung?,Surabaya,Bandung,Jakarta,Medan,C,expert,Capitals
+706,Which British territory lies nearest Antarctica?,South Shetland Islands,South Georgia,Ascension,Bouvet,B,expert,Countries and Continents
+707,Which river runs through the Fergana Valley?,The Zeravshan,The Chatkal,The Syr Darya,The Naryn,C,expert,Rivers and Lakes
+708,Which capital sits at the Minnesota-Mississippi meeting?,Madison,Saint Paul,Des Moines,Springfield,B,expert,Capitals
+709,Which river flows through Yaounde?,The Sanaga,The Nyong,The Mfoundi,The Wouri,C,expert,Rivers and Lakes
+710,Which capital lies closest to 6 north?,Freetown,Yamoussoukro,Monrovia,Lagos,C,expert,Capitals
+711,Which river rises near Bishkek?,The Talas,The Sokuluk,The Chuy,The Ala-Archa,D,expert,Rivers and Lakes
+712,Which Pacific capital replaced Koror?,Honiara,Ngerulmud,Tarawa,Yaren,B,expert,Capitals
+713,Which sea does the Rioni reach?,The Labrador Sea,The Marmara,The Celtic Sea,The Black Sea,D,expert,Rivers and Lakes
+714,Which capital lies at nearly 30 north?,Cairo,Baghdad,Lahore,Kabul,A,expert,Capitals
+715,Which river forms Paraguay's southeast border?,The Parana,The Apa,The Ypane,The Tebicuary,A,expert,Rivers and Lakes
+716,Which capital lies on Java?,Pontianak,Makassar,Denpasar,Jakarta,D,expert,Capitals
+717,Which river flows through Dushanbe?,The Varzob,The Kofarnihon,The Panj,The Surkhob,A,expert,Rivers and Lakes
+718,Which capital hosts Gorky Park?,Moscow,Djibouti City,Warsaw,Kyiv,A,expert,Capitals
 719,Which river flows through Paramaribo?,The Commewijne,The Maroni,The Coppename,The Suriname,D,expert,Rivers and Lakes
-720,Which capital stands where the Morava meets the Danube?,Bratislava,Bucharest,Zilina,Trnava,A,expert,Capitals
-721,Which river roars past Livingstone?,The Lungwebungu,The Zambezi,The Lunga,The Kabompo,B,expert,Rivers and Lakes
-722,Which capital lies nearest the Yellow Sea?,Tokyo,Ulaanbaatar,Seoul,Pyongyang,C,expert,Oceans and Seas
-723,Which river flows through Kathmandu?,The Kosi,The Gandaki,The Karnali,The Bagmati,D,expert,Rivers and Lakes
-724,Which capital sits at 3600 meters?,La Paz,Potosi,Oruro,Novi Sad,A,expert,Capitals
-725,Which river flows through Lucknow?,The Yamuna,The Gomti,The Saryu,The Ghaghra,B,expert,Rivers and Lakes
+720,Which capital stands where the Morava meets the Danube?,Bratislava,Trnava,Zilina,Bucharest,A,expert,Capitals
+721,Which river roars past Livingstone?,The Lunga,The Zambezi,The Kabompo,The Lungwebungu,B,expert,Rivers and Lakes
+722,Which capital lies nearest the Yellow Sea?,Tokyo,Seoul,Ulaanbaatar,Pyongyang,B,expert,Oceans and Seas
+723,Which river flows through Kathmandu?,The Bagmati,The Gandaki,The Kosi,The Karnali,A,expert,Rivers and Lakes
+724,Which capital sits at 3600 meters?,Oruro,La Paz,Novi Sad,Potosi,B,expert,Capitals
+725,Which river flows through Lucknow?,The Gomti,The Yamuna,The Saryu,The Ghaghra,A,expert,Rivers and Lakes
 726,Which largest city sits atop extinct volcanoes?,Hamilton,Christchurch,Auckland,Dunedin,C,expert,Capitals
 727,Which river flows past Kinshasa?,The Kwango,The Ubangi,The Kasai,The Congo,D,expert,Rivers and Lakes
-728,Which capital lies near Taal Volcano?,Manila,Baguio,Iloilo,Zamboanga,A,expert,Capitals
-729,Which river flows through Astana?,The Irtysh,The Ishim,The Tobol,The Nura,B,expert,Rivers and Lakes
-730,Which river reaches the sea at Banjul?,The Casamance,The Geba,The Gambia,The Corubal,C,expert,Rivers and Lakes
-731,Which capital is the world's southernmost?,Toulon,Stanley,Punta Arenas,Wellington,D,expert,Capitals
-732,Which river flows through Gitega?,The Ruvubu,The Kagera,The Nyabarongo,The Malagarasi,A,expert,Rivers and Lakes
-733,Which capital lies at nearly 15 south?,Nimes,Lusaka,Maputo,Lilongwe,B,expert,Capitals
-734,Which river flows through Sao Paulo?,The Paraiba do Sul,The Doce,The Tiete,The Sao Francisco,C,expert,Rivers and Lakes
-735,Which capital sits at a fjord's head?,Alesund,Bergen,Stavanger,Oslo,D,expert,Capitals
-736,Which river flows through Ho Chi Minh City?,The Saigon,The Dong Nai,The Perfume,The Vam Co Dong,A,expert,Rivers and Lakes
+728,Which capital lies near Taal Volcano?,Zamboanga,Baguio,Iloilo,Manila,D,expert,Capitals
+729,Which river flows through Astana?,The Nura,The Irtysh,The Ishim,The Tobol,C,expert,Rivers and Lakes
+730,Which river reaches the sea at Banjul?,The Corubal,The Gambia,The Geba,The Casamance,B,expert,Rivers and Lakes
+731,Which capital is the world's southernmost?,Wellington,Toulon,Punta Arenas,Stanley,A,expert,Capitals
+732,Which river flows through Gitega?,The Nyabarongo,The Ruvubu,The Malagarasi,The Kagera,B,expert,Rivers and Lakes
+733,Which capital lies at nearly 15 south?,Nimes,Maputo,Lusaka,Lilongwe,C,expert,Capitals
+734,Which river flows through Sao Paulo?,The Sao Francisco,The Paraiba do Sul,The Tiete,The Doce,C,expert,Rivers and Lakes
+735,Which capital sits at a fjord's head?,Stavanger,Bergen,Alesund,Oslo,D,expert,Capitals
+736,Which river flows through Ho Chi Minh City?,The Vam Co Dong,The Dong Nai,The Perfume,The Saigon,D,expert,Rivers and Lakes
 737,Which capital lies at nearly 25 north?,Jeddah,Riyadh,Makkah,Dammam,B,expert,Capitals
-738,Which river flows through Vinnytsia?,The Ros,The Inhulets,The Southern Buh,The Styr,C,expert,Rivers and Lakes
-739,Which legislative capital sits near Africa's tip?,Bloemfontein,Reims,Durban,Cape Town,D,expert,Capitals
+738,Which river flows through Vinnytsia?,The Styr,The Southern Buh,The Ros,The Inhulets,B,expert,Rivers and Lakes
+739,Which legislative capital sits near Africa's tip?,Reims,Bloemfontein,Cape Town,Durban,C,expert,Capitals
 740,Which river flows through Graz?,The Mur,The Enns,The Gurk,The Drau,A,expert,Rivers and Lakes
-741,Which capital hosts Qasr al-Hosn?,Sharjah,Abu Dhabi,Ajman,Al Ain,B,expert,Capitals
-742,Which river flows through Novosibirsk?,The Angara,The Ishim,The Ob,The Ket,C,expert,Rivers and Lakes
+741,Which capital hosts Qasr al-Hosn?,Abu Dhabi,Ajman,Sharjah,Al Ain,A,expert,Capitals
+742,Which river flows through Novosibirsk?,The Ket,The Ishim,The Ob,The Angara,C,expert,Rivers and Lakes
 743,Which capital straddles the Ljubljanica?,Podgorica,Sarajevo,Maribor,Ljubljana,D,expert,Capitals
 744,Which river flows through Brno?,The Svratka,The Svitava,The Dyje,The Jihlava,A,expert,Rivers and Lakes
-745,Which state capital lies nearest the Great Sandy Desert?,Hobart,Perth,Darwin,Sydney,B,expert,Capitals
-746,Which river flows through Chiang Mai?,The Wang,The Yom,The Ping,The Nan,C,expert,Rivers and Lakes
-747,From which capital is Popocatepetl visible?,Tijuana,Monterrey,Puebla,Mexico City,D,expert,Capitals
-748,Which river flows through Omsk?,The Irtysh,The Katun,The Om,The Biya,A,expert,Rivers and Lakes
-749,Which capital lies closest to 20 south?,Apia,Suva,Nuku'alofa,Noumea,B,expert,Capitals
-750,Which river flows through Juba?,The Blue Nile,The Bahr el Ghazal,The White Nile,The Bahr el Arab,C,expert,Rivers and Lakes
-751,Which capital sits on the Congo's north bank at 4 south?,Pointe-Noire,Kinshasa,Luanda,Brazzaville,D,expert,Capitals
-752,Which river flows through Ziguinchor?,The Casamance,The Kayanga,The Soungrougrou,The Rokel,A,expert,Rivers and Lakes
-753,Which former capital sits below Mount Hiei?,Nara,Kyoto,Kamakura,Edo,B,expert,Landmarks and Maps
-754,Which river flows through Kananga?,The Kwilu,The Sankuru,The Lulua,The Fimi,C,expert,Rivers and Lakes
-755,Which capital lies closest to the Equator?,Malabo,Sao Tome,Moroni,Quito,D,expert,Capitals
-756,Which river runs just east of Milan?,The Lambro,The Oglio,The Serio,The Adda,A,expert,Rivers and Lakes
-757,Which capital lies closest to Lake Victoria?,Bujumbura,Kampala,Mwanza,Kisumu,B,expert,Capitals
-758,Which river flows through Poznan?,The Notec,The Welna,The Warta,The Cybina,C,expert,Rivers and Lakes
-759,Which river flows through Medellin?,The Atrato,The Cauca,The Magdalena,The Medellin,D,expert,Rivers and Lakes
-760,Which capital lies at nearly 9 north?,Panama City,Santo Domingo,Kingston,Guatemala City,A,expert,Capitals
-761,Which river flows through Tegucigalpa?,The Ulua,The Choluteca,The Patuca,The Aguan,B,expert,Rivers and Lakes
-762,Which capital was destroyed by a volcano?,Roseau,Bridgetown,Plymouth,Fort-de-France,C,expert,Capitals
+745,Which state capital lies nearest the Great Sandy Desert?,Perth,Hobart,Darwin,Sydney,A,expert,Capitals
+746,Which river flows through Chiang Mai?,The Yom,The Ping,The Wang,The Nan,B,expert,Rivers and Lakes
+747,From which capital is Popocatepetl visible?,Tijuana,Puebla,Monterrey,Mexico City,D,expert,Capitals
+748,Which river flows through Omsk?,The Katun,The Om,The Irtysh,The Biya,C,expert,Rivers and Lakes
+749,Which capital lies closest to 20 south?,Apia,Noumea,Nuku'alofa,Suva,D,expert,Capitals
+750,Which river flows through Juba?,The White Nile,The Bahr el Ghazal,The Blue Nile,The Bahr el Arab,A,expert,Rivers and Lakes
+751,Which capital sits on the Congo's north bank at 4 south?,Pointe-Noire,Luanda,Brazzaville,Kinshasa,C,expert,Capitals
+752,Which river flows through Ziguinchor?,The Rokel,The Kayanga,The Soungrougrou,The Casamance,D,expert,Rivers and Lakes
+753,Which former capital sits below Mount Hiei?,Kamakura,Edo,Kyoto,Nara,C,expert,Landmarks and Maps
+754,Which river flows through Kananga?,The Kwilu,The Lulua,The Sankuru,The Fimi,B,expert,Rivers and Lakes
+755,Which capital lies closest to the Equator?,Moroni,Quito,Sao Tome,Malabo,B,expert,Capitals
+756,Which river runs just east of Milan?,The Oglio,The Serio,The Lambro,The Adda,C,expert,Rivers and Lakes
+757,Which capital lies closest to Lake Victoria?,Bujumbura,Mwanza,Kampala,Kisumu,C,expert,Capitals
+758,Which river flows through Poznan?,The Notec,The Cybina,The Welna,The Warta,D,expert,Rivers and Lakes
+759,Which river flows through Medellin?,The Magdalena,The Cauca,The Medellin,The Atrato,C,expert,Rivers and Lakes
+760,Which capital lies at nearly 9 north?,Kingston,Panama City,Guatemala City,Santo Domingo,B,expert,Capitals
+761,Which river flows through Tegucigalpa?,The Choluteca,The Patuca,The Ulua,The Aguan,A,expert,Rivers and Lakes
+762,Which capital was destroyed by a volcano?,Plymouth,Bridgetown,Fort-de-France,Roseau,A,expert,Capitals
 763,Which river joins the Chari at N'Djamena?,The Ouham,The Bahr Salamat,The El Beid,The Logone,D,expert,Rivers and Lakes
-764,Which capital lies closest to 13 north?,Bamako,Ouagadougou,Conakry,Niamey,A,expert,Capitals
-765,Which river flows through Niamey?,The Bani,The Niger,The Milo,The Sankarani,B,expert,Rivers and Lakes
-766,Which capital lies at nearly 42 north?,Tirana,Pristina,Skopje,Sofia,C,expert,Capitals
-767,Which river flows through Ouagadougou?,The Sourou,The Mouhoun,The Nazinon,The Kadiogo,D,expert,Rivers and Lakes
-768,Which capital lies closest to 18 south?,Harare,Johannesburg,Bulawayo,Livingstone,A,expert,Capitals
-769,Which official capital sits on the lagoon of its name?,Metz,Porto-Novo,Abomey,Parakou,B,expert,Capitals
-770,Which capital lies nearest longitude zero?,Chur,Dublin,London,Lisbon,C,expert,Landmarks and Maps
-771,Which river flows through Nairobi?,The Athi,The Tana,The Ewaso Nyiro,The Nairobi,D,expert,Rivers and Lakes
-772,Which capital lies closest to 33 south?,Santiago,Perth,Joensuu,Winterthur,A,expert,Capitals
-773,Which river flows through Cordoba in Argentina?,The Xanaes,The Suquia,The Ctalamochita,The Cosquin,B,expert,Rivers and Lakes
-774,Which capital sits on Maputo Bay?,Tampere,Richards Bay,Maputo,East London,C,expert,Capitals
-775,Which river flows through Antananarivo?,The Mangoro,The Betsiboka,The Onibe,The Ikopa,D,expert,Rivers and Lakes
-776,Which capital lies at nearly 19 north?,Port-au-Prince,Vaasa,Nouakchott,Havana,A,expert,Capitals
-777,Which river flows through Moundou?,The Bahr Sara,The Logone,The Mbere,The Bahr Aouk,B,expert,Rivers and Lakes
-778,Which river flows through Gambela?,The Omo,The Awash,The Baro,The Wabe Shebelle,C,expert,Rivers and Lakes
-779,Which legislative capital overlooks Table Mountain?,Kimberley,Mahikeng,Nelspruit,Cape Town,D,expert,Capitals
-780,Which river flows out of Lake Tana?,The Blue Nile,The Gilgel Abay,The Yabus,The Aisne,A,expert,Rivers and Lakes
-781,Which capital lies closest to 47 north?,Vaduz,Bern,Luxembourg,Pori,B,expert,Capitals
-782,Which German city is famed for three rivers?,Regensburg,Nuremberg,Passau,Wurzburg,C,expert,Landmarks and Maps
-783,Which capital lies at nearly 38 north?,Ankara,Kotka,Valletta,Lisbon,D,expert,Capitals
-784,Which river flows through Nantes?,The Loire,The Vilaine,The Erdre,The Sevre Nantaise,A,expert,Rivers and Lakes
-785,Which capital lies closest to 36 south?,La Plata,Canberra,Rosario,Bahia Blanca,B,expert,Capitals
-786,Which river flows through Kyzyl?,The Abakan,The Tom,The Yenisei,The Chulym,C,expert,Rivers and Lakes
-787,Which capital lies closest to 45 north?,Hameenlinna,Lahti,Vilnius,Belgrade,D,expert,Capitals
-788,Which river flows through Smolensk?,The Dnieper,The Sozh,The Ugra,The Western Dvina,A,expert,Rivers and Lakes
-789,Which capital sits beneath Vitosha?,Thessaloniki,Sofia,Ohrid,Bitola,B,expert,Capitals
-790,Which river flows through Chisinau?,The Prut,The Raut,The Bic,The Botna,C,expert,Rivers and Lakes
-791,Which capital lies closest to 50 north?,Leipzig,Mikkeli,Dresden,Prague,D,expert,Capitals
+764,Which capital lies closest to 13 north?,Ouagadougou,Bamako,Conakry,Niamey,B,expert,Capitals
+765,Which river flows through Niamey?,The Niger,The Sankarani,The Bani,The Milo,A,expert,Rivers and Lakes
+766,Which capital lies at nearly 42 north?,Sofia,Pristina,Skopje,Tirana,C,expert,Capitals
+767,Which river flows through Ouagadougou?,The Kadiogo,The Sourou,The Nazinon,The Mouhoun,A,expert,Rivers and Lakes
+768,Which capital lies closest to 18 south?,Bulawayo,Harare,Johannesburg,Livingstone,B,expert,Capitals
+769,Which official capital sits on the lagoon of its name?,Porto-Novo,Metz,Abomey,Parakou,A,expert,Capitals
+770,Which capital lies nearest longitude zero?,London,Dublin,Lisbon,Chur,A,expert,Landmarks and Maps
+771,Which river flows through Nairobi?,The Athi,The Tana,The Nairobi,The Ewaso Nyiro,C,expert,Rivers and Lakes
+772,Which capital lies closest to 33 south?,Winterthur,Perth,Joensuu,Santiago,D,expert,Capitals
+773,Which river flows through Cordoba in Argentina?,The Xanaes,The Ctalamochita,The Cosquin,The Suquia,D,expert,Rivers and Lakes
+774,Which capital sits on Maputo Bay?,Tampere,East London,Maputo,Richards Bay,C,expert,Capitals
+775,Which river flows through Antananarivo?,The Mangoro,The Ikopa,The Betsiboka,The Onibe,B,expert,Rivers and Lakes
+776,Which capital lies at nearly 19 north?,Havana,Port-au-Prince,Vaasa,Nouakchott,B,expert,Capitals
+777,Which river flows through Moundou?,The Bahr Aouk,The Bahr Sara,The Mbere,The Logone,D,expert,Rivers and Lakes
+778,Which river flows through Gambela?,The Awash,The Omo,The Wabe Shebelle,The Baro,D,expert,Rivers and Lakes
+779,Which legislative capital overlooks Table Mountain?,Cape Town,Mahikeng,Kimberley,Nelspruit,A,expert,Capitals
+780,Which river flows out of Lake Tana?,The Blue Nile,The Gilgel Abay,The Aisne,The Yabus,A,expert,Rivers and Lakes
+781,Which capital lies closest to 47 north?,Vaduz,Luxembourg,Pori,Bern,D,expert,Capitals
+782,Which German city is famed for three rivers?,Wurzburg,Passau,Regensburg,Nuremberg,B,expert,Landmarks and Maps
+783,Which capital lies at nearly 38 north?,Lisbon,Ankara,Kotka,Valletta,A,expert,Capitals
+784,Which river flows through Nantes?,The Erdre,The Vilaine,The Loire,The Sevre Nantaise,C,expert,Rivers and Lakes
+785,Which capital lies closest to 36 south?,Rosario,Canberra,La Plata,Bahia Blanca,B,expert,Capitals
+786,Which river flows through Kyzyl?,The Tom,The Chulym,The Yenisei,The Abakan,C,expert,Rivers and Lakes
+787,Which capital lies closest to 45 north?,Vilnius,Hameenlinna,Belgrade,Lahti,C,expert,Capitals
+788,Which river flows through Smolensk?,The Ugra,The Dnieper,The Sozh,The Western Dvina,B,expert,Rivers and Lakes
+789,Which capital sits beneath Vitosha?,Bitola,Thessaloniki,Ohrid,Sofia,D,expert,Capitals
+790,Which river flows through Chisinau?,The Prut,The Bic,The Raut,The Botna,B,expert,Rivers and Lakes
+791,Which capital lies closest to 50 north?,Mikkeli,Leipzig,Dresden,Prague,D,expert,Capitals
 792,What is the capital of Burkina Faso?,,,,,Ouagadougou,extreme,Capitals
 793,Which river forms the border between Zambia and Zimbabwe?,,,,,Zambezi,extreme,Rivers and Lakes
 794,What is the capital of Bhutan?,,,,,Thimphu,extreme,Capitals

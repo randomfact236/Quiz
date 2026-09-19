@@ -16,6 +16,8 @@ import { Share2 } from 'lucide-react';
 import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
+import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
+import { MessageCircle } from 'lucide-react';
 import { LikeButton } from '@/components/likes/LikeButton';
 import type { Question } from '@/types/quiz-mcq';
 
@@ -50,6 +52,12 @@ interface QuestionCardProps {
   questionTimeLimit?: number;
   /** Share callback */
   onShare?: () => void;
+  /** BUG-040: comments panel open state — while open, the play page blocks
+   *  advancing; closing it proceeds to the next question. */
+  commentsOpen?: boolean;
+  onToggleComments?: () => void;
+  /** Closing proceeds to the next question (page-owned navigation). */
+  onCloseComments?: () => void;
 }
 
 export interface QuestionCardRef {
@@ -150,6 +158,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
     question,
     questionNumber,
     totalQuestions,
+    commentsOpen,
+    onToggleComments,
+    onCloseComments,
     selectedAnswer,
     onSelectAnswer,
     showFeedback,
@@ -386,6 +397,26 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
           showFeedback={showFeedback || false}
           level={question.level}
         />
+
+        {/* BUG-040: comments after answering — while open, the play page blocks
+            advancing; closing it proceeds to the next question. */}
+        {showFeedback && onToggleComments && (
+          <div className="mt-4 border-t border-gray-100 pt-3 dark:border-secondary-700">
+            <button
+              onClick={() => (commentsOpen ? onCloseComments?.() : onToggleComments?.())}
+              aria-expanded={commentsOpen}
+              className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500 transition-colors hover:text-indigo-500 dark:bg-secondary-800 dark:text-secondary-300"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              {commentsOpen ? 'Hide comments' : 'Comments'}
+            </button>
+            {commentsOpen && (
+              <div className="mt-3">
+                <QuestionComments contentType="quiz-question" questionId={question.id} autoOpen />
+              </div>
+            )}
+          </div>
+        )}
       </motion.div>
     </>
   );

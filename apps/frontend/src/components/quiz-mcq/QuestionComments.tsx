@@ -34,10 +34,16 @@ const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
 export interface QuestionCommentsProps {
   contentType: Extract<CommentContentType, 'quiz-question' | 'riddle-question'>;
   questionId: string;
+  /** Play-flow usage: the feed renders expanded immediately (BUG-040). */
+  autoOpen?: boolean;
 }
 
-export function QuestionComments({ contentType, questionId }: QuestionCommentsProps): JSX.Element {
-  const [open, setOpen] = useState(false);
+export function QuestionComments({
+  contentType,
+  questionId,
+  autoOpen,
+}: QuestionCommentsProps): JSX.Element {
+  const [open, setOpen] = useState(!!autoOpen);
   const [count, setCount] = useState<number | null>(null);
   const [items, setItems] = useState<Comment[] | null>(null);
   const [text, setText] = useState('');

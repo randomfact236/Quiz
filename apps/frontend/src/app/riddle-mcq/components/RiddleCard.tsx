@@ -14,6 +14,8 @@
 import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHandle } from 'react';
 import { motion } from 'framer-motion';
 import { AnswerOptions } from '@/components/quiz-mcq/AnswerOptions';
+import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
+import { MessageCircle } from 'lucide-react';
 import {
   BubbleEmojiEffect,
   type BubbleEmojiEffectRef,
@@ -51,6 +53,11 @@ interface RiddleCardProps {
   questionTimeLimit?: number | undefined;
   /** Fired when the player reveals this riddle's hint (analytics §4b A3) */
   onHintShown?: () => void;
+  /** BUG-040: comments panel open state — while open, the play page blocks
+   *  advancing; closing it proceeds to the next riddle. */
+  commentsOpen?: boolean;
+  onToggleComments?: () => void;
+  onCloseComments?: () => void;
 }
 
 export interface RiddleCardRef {
@@ -150,6 +157,9 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     questionTimeRemaining,
     questionTimeLimit,
     onHintShown,
+    commentsOpen,
+    onToggleComments,
+    onCloseComments,
   },
   ref
 ): JSX.Element {
@@ -380,6 +390,26 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           level={level}
           game="riddle"
         />
+
+        {/* BUG-040: comments after answering — while open, the play page blocks
+            advancing; closing it proceeds to the next riddle. */}
+        {showFeedback && selectedAnswer && onToggleComments && (
+          <div className="mt-4 border-t border-gray-100 pt-3 dark:border-secondary-700">
+            <button
+              onClick={() => (commentsOpen ? onCloseComments?.() : onToggleComments?.())}
+              aria-expanded={!!commentsOpen}
+              className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500 transition-colors hover:text-indigo-500 dark:bg-secondary-800 dark:text-secondary-300"
+            >
+              <MessageCircle className="h-3.5 w-3.5" />
+              {commentsOpen ? 'Hide comments' : 'Comments'}
+            </button>
+            {commentsOpen && (
+              <div className="mt-3">
+                <QuestionComments contentType="riddle-question" questionId={riddle.id} autoOpen />
+              </div>
+            )}
+          </div>
+        )}
       </motion.div>
     </>
   );

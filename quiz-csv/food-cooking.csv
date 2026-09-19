@@ -5,94 +5,94 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 2,In botanical terms a tomato is a vegetable.,True,False,,,B,easy,Ingredients
 3,Water boils at 100 degrees Celsius at sea level.,True,False,,,A,easy,Cooking Techniques
 4,Bread dough rises because baking soda whips air into it.,True,False,,,B,easy,Baking
-5,Basil is the main herb in classic Italian pesto.,True,False,,,A,easy,Herbs and Spices
-6,Freezing food kills every bacterium instantly.,True,False,,,B,easy,Kitchen Science
+5,Basil is the main herb in classic Italian pesto.,False,True,,,B,easy,Herbs and Spices
+6,Freezing food kills every bacterium instantly.,False,True,,,A,easy,Kitchen Science
 7,Pizza margherita is named after an Italian queen.,True,False,,,A,easy,World Cuisines
 8,Potatoes grow on trees.,True,False,,,B,easy,Ingredients
 9,Deep frying submerges food completely in hot oil.,True,False,,,A,easy,Cooking Techniques
-10,Meringue is made mainly from butter.,True,False,,,B,easy,Baking
-11,Mint is a common flavoring for tea and chewing gum.,True,False,,,A,easy,Herbs and Spices
-12,Adding salt makes water boil much faster.,True,False,,,B,easy,Kitchen Science
-13,Tacos are a traditional street food of Mexico.,True,False,,,A,easy,World Cuisines
-14,White chocolate contains plenty of cocoa solids.,True,False,,,B,easy,Ingredients
-15,Chopping cuts food into smaller pieces.,True,False,,,A,easy,Cooking Techniques
-16,Cookies are always savory snacks.,True,False,,,B,easy,Baking
+10,Meringue is made mainly from butter.,False,True,,,A,easy,Baking
+11,Mint is a common flavoring for tea and chewing gum.,False,True,,,B,easy,Herbs and Spices
+12,Adding salt makes water boil much faster.,False,True,,,A,easy,Kitchen Science
+13,Tacos are a traditional street food of Mexico.,False,True,,,B,easy,World Cuisines
+14,White chocolate contains plenty of cocoa solids.,False,True,,,A,easy,Ingredients
+15,Chopping cuts food into smaller pieces.,False,True,,,B,easy,Cooking Techniques
+16,Cookies are always savory snacks.,False,True,,,A,easy,Baking
 17,Black pepper adds a sharp bite to food.,True,False,,,A,easy,Herbs and Spices
 18,Cooking destroys every vitamin in vegetables.,True,False,,,B,easy,Kitchen Science
 19,Paella comes from the Valencia region of Spain.,True,False,,,A,easy,World Cuisines
 20,Honey is made by butterflies.,True,False,,,B,easy,Ingredients
-21,Grilling cooks food with direct high heat.,True,False,,,A,easy,Cooking Techniques
+21,Grilling cooks food with direct high heat.,False,True,,,B,easy,Cooking Techniques
 22,Yeast is a type of metal powder.,True,False,,,B,easy,Baking
 23,Cinnamon is a warming spice used in sweet baking.,True,False,,,A,easy,Herbs and Spices
-24,Microwave ovens heat food from the inside out.,True,False,,,B,easy,Kitchen Science
-25,Croissants are strongly associated with France.,True,False,,,A,easy,World Cuisines
-26,Peanuts grow on trees.,True,False,,,B,easy,Ingredients
+24,Microwave ovens heat food from the inside out.,False,True,,,A,easy,Kitchen Science
+25,Croissants are strongly associated with France.,False,True,,,B,easy,World Cuisines
+26,Peanuts grow on trees.,False,True,,,A,easy,Ingredients
 27,Steaming cooks food with hot vapor.,True,False,,,A,easy,Cooking Techniques
 28,Pancakes are baked in an oven for an hour.,True,False,,,B,easy,Baking
 29,Chili peppers add heat to food.,True,False,,,A,easy,Herbs and Spices
 30,A refrigerator is colder than a freezer.,True,False,,,B,easy,Kitchen Science
-31,Curry dishes are central to much Indian cooking.,True,False,,,A,easy,World Cuisines
-32,Olive oil is pressed from oranges.,True,False,,,B,easy,Ingredients
-33,Whipping cream folds air into it.,True,False,,,A,easy,Cooking Techniques
-34,Frosting is served underneath the cake.,True,False,,,B,easy,Baking
-35,Garlic is a pungent bulb used for seasoning.,True,False,,,A,easy,Herbs and Spices
-36,Ice turns directly into steam on a warm plate.,True,False,,,B,easy,Kitchen Science
+31,Curry dishes are central to much Indian cooking.,False,True,,,B,easy,World Cuisines
+32,Olive oil is pressed from oranges.,False,True,,,A,easy,Ingredients
+33,Whipping cream folds air into it.,False,True,,,B,easy,Cooking Techniques
+34,Frosting is served underneath the cake.,False,True,,,A,easy,Baking
+35,Garlic is a pungent bulb used for seasoning.,False,True,,,B,easy,Herbs and Spices
+36,Ice turns directly into steam on a warm plate.,False,True,,,A,easy,Kitchen Science
 37,Pasta is a staple food across Italy.,True,False,,,A,easy,World Cuisines
 38,Butter is churned from lemon juice.,True,False,,,B,easy,Ingredients
-39,Simmering means cooking in gently bubbling liquid.,True,False,,,A,easy,Cooking Techniques
-40,A rolling pin is used to fry eggs.,True,False,,,B,easy,Baking
+39,Simmering means cooking in gently bubbling liquid.,False,True,,,B,easy,Cooking Techniques
+40,A rolling pin is used to fry eggs.,False,True,,,A,easy,Baking
 41,Parsley is a common garnish.,True,False,,,A,easy,Herbs and Spices
 42,Sugar melts into liquid at freezer temperatures.,True,False,,,B,easy,Kitchen Science
-43,Kimchi is a famous fermented dish from Korea.,True,False,,,A,easy,World Cuisines
-44,Salmon is a leafy green vegetable.,True,False,,,B,easy,Ingredients
+43,Kimchi is a famous fermented dish from Korea.,False,True,,,B,easy,World Cuisines
+44,Salmon is a leafy green vegetable.,False,True,,,A,easy,Ingredients
 45,Marinating soaks food in a seasoned liquid.,True,False,,,A,easy,Cooking Techniques
 46,Brownies get their dark color from blue dye.,True,False,,,B,easy,Baking
-47,Oregano is a classic pizza herb.,True,False,,,A,easy,Herbs and Spices
-48,Cooking oil turns solid when heated in a pan.,True,False,,,B,easy,Kitchen Science
+47,Oregano is a classic pizza herb.,False,True,,,B,easy,Herbs and Spices
+48,Cooking oil turns solid when heated in a pan.,False,True,,,A,easy,Kitchen Science
 49,Falafel is a dish from the Middle East.,True,False,,,A,easy,World Cuisines
 50,Table sugar is mined from the ground like salt.,True,False,,,B,easy,Ingredients
 51,Kneading develops gluten in bread dough.,True,False,,,A,easy,Cooking Techniques
-52,Fruit pies are always served frozen.,True,False,,,B,easy,Baking
-53,Vanilla is a popular ice cream flavor.,True,False,,,A,easy,Herbs and Spices
+52,Fruit pies are always served frozen.,False,True,,,A,easy,Baking
+53,Vanilla is a popular ice cream flavor.,False,True,,,B,easy,Herbs and Spices
 54,Steam from a kettle is icy cold.,True,False,,,B,easy,Kitchen Science
 55,Hummus is a dip built on mashed chickpeas.,True,False,,,A,easy,World Cuisines
 56,Milk is harvested from sunflowers.,True,False,,,B,easy,Ingredients
-57,A pot lid traps heat and steam inside.,True,False,,,A,easy,Cooking Techniques
+57,A pot lid traps heat and steam inside.,False,True,,,B,easy,Cooking Techniques
 58,Shortbread contains no butter.,True,False,,,B,easy,Baking
 59,Lemon juice adds bright sourness to dishes.,True,False,,,A,easy,Herbs and Spices
 60,A metal pan heats up very slowly.,True,False,,,B,easy,Kitchen Science
-61,Stir-frying is a signature technique of Chinese cooking.,True,False,,,A,easy,World Cuisines
-62,Rice grows on vines.,True,False,,,B,easy,Ingredients
+61,Stir-frying is a signature technique of Chinese cooking.,False,True,,,B,easy,World Cuisines
+62,Rice grows on vines.,False,True,,,A,easy,Ingredients
 63,Roasting uses the dry heat of an oven.,True,False,,,A,easy,Cooking Techniques
 64,Waffles have a perfectly smooth flat surface.,True,False,,,B,easy,Baking
 65,Salt is used to season dishes in nearly every cuisine.,True,False,,,A,easy,Herbs and Spices
-66,Freezing milk turns it into butter.,True,False,,,B,easy,Kitchen Science
-67,Goulash is a paprika stew from Hungary.,True,False,,,A,easy,World Cuisines
-68,Cocoa beans grow on strawberry plants.,True,False,,,B,easy,Ingredients
-69,Peeling removes the outer skin of produce.,True,False,,,A,easy,Cooking Techniques
-70,Pie crust is made mostly of chocolate chips.,True,False,,,B,easy,Baking
-71,Ginger is a zesty knobby root used in Asian cooking.,True,False,,,A,easy,Herbs and Spices
-72,Bratwurst is a German sausage.,False,True,,,B,easy,World Cuisines
-73,Maple syrup is tapped from cactuses.,False,True,,,A,easy,Ingredients
+66,Freezing milk turns it into butter.,False,True,,,A,easy,Kitchen Science
+67,Goulash is a paprika stew from Hungary.,False,True,,,B,easy,World Cuisines
+68,Cocoa beans grow on strawberry plants.,False,True,,,A,easy,Ingredients
+69,Peeling removes the outer skin of produce.,False,True,,,B,easy,Cooking Techniques
+70,Pie crust is made mostly of chocolate chips.,False,True,,,A,easy,Baking
+71,Ginger is a zesty knobby root used in Asian cooking.,False,True,,,B,easy,Herbs and Spices
+72,Bratwurst is a German sausage.,True,False,,,A,easy,World Cuisines
+73,Maple syrup is tapped from cactuses.,True,False,,,B,easy,Ingredients
 74,Pasta is boiled in water to cook it.,False,True,,,B,easy,Cooking Techniques
 75,Baguettes are a signature bread of Brazil.,False,True,,,A,easy,Baking
-76,Cumin is an earthy spice common in taco seasoning.,False,True,,,B,easy,Herbs and Spices
-77,A wooden spoon conducts heat faster than a metal one.,False,True,,,A,easy,Kitchen Science
-78,Feijoada is a black bean and pork stew linked to Brazil.,False,True,,,B,easy,World Cuisines
-79,Raisins are fresh plums.,False,True,,,A,easy,Ingredients
-80,Grating shreds food into small pieces.,False,True,,,B,easy,Cooking Techniques
-81,Birthday candles are baked inside the cake.,False,True,,,A,easy,Baking
-82,Rosemary pairs well with roasted potatoes.,False,True,,,B,easy,Herbs and Spices
+76,Cumin is an earthy spice common in taco seasoning.,True,False,,,A,easy,Herbs and Spices
+77,A wooden spoon conducts heat faster than a metal one.,True,False,,,B,easy,Kitchen Science
+78,Feijoada is a black bean and pork stew linked to Brazil.,True,False,,,A,easy,World Cuisines
+79,Raisins are fresh plums.,True,False,,,B,easy,Ingredients
+80,Grating shreds food into small pieces.,True,False,,,A,easy,Cooking Techniques
+81,Birthday candles are baked inside the cake.,True,False,,,B,easy,Baking
+82,Rosemary pairs well with roasted potatoes.,True,False,,,A,easy,Herbs and Spices
 83,An oven stays cold inside while baking cookies.,False,True,,,A,easy,Kitchen Science
 84,Moussaka is a layered eggplant bake from Greece.,False,True,,,B,easy,World Cuisines
 85,Strawberries grow underground.,False,True,,,A,easy,Ingredients
 86,Blanching means a quick boil followed by an ice bath.,False,True,,,B,easy,Cooking Techniques
-87,Donuts are boiled in salted water to cook them.,False,True,,,A,easy,Baking
-88,Bay leaves perfume soups and stews as they simmer.,False,True,,,B,easy,Herbs and Spices
-89,Vinegar is sweeter than table sugar.,False,True,,,A,easy,Kitchen Science
-90,Borscht is a beet soup associated with Ukraine.,False,True,,,B,easy,World Cuisines
-91,Coffee beans are dried banana seeds.,False,True,,,A,easy,Ingredients
-92,Toasting browns the surface of bread.,False,True,,,B,easy,Cooking Techniques
+87,Donuts are boiled in salted water to cook them.,True,False,,,B,easy,Baking
+88,Bay leaves perfume soups and stews as they simmer.,True,False,,,A,easy,Herbs and Spices
+89,Vinegar is sweeter than table sugar.,True,False,,,B,easy,Kitchen Science
+90,Borscht is a beet soup associated with Ukraine.,True,False,,,A,easy,World Cuisines
+91,Coffee beans are dried banana seeds.,True,False,,,B,easy,Ingredients
+92,Toasting browns the surface of bread.,True,False,,,A,easy,Cooking Techniques
 93,Cheesecake never contains any cheese.,False,True,,,A,easy,Baking
 94,Turmeric gives many curries a golden color.,False,True,,,B,easy,Herbs and Spices
 95,Egg yolks whip into a stiff white foam.,False,True,,,A,easy,Kitchen Science
@@ -100,86 +100,86 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 97,Anchovies are a kind of fruit.,False,True,,,A,easy,Ingredients
 98,A ladle serves soup from the pot.,False,True,,,B,easy,Cooking Techniques
 99,Pizzas are baked inside a freezer.,False,True,,,A,easy,Baking
-100,Saffron threads are the stigmas of a crocus flower.,False,True,,,B,easy,Herbs and Spices
-101,Butter melts into a liquid when stored in the freezer.,False,True,,,A,easy,Kitchen Science
-102,Tandoori chicken is a classic dish of India.,False,True,,,B,easy,World Cuisines
-103,Chickpeas are classified as a meat.,False,True,,,A,easy,Ingredients
-104,Poaching cooks food gently in liquid just below a simmer.,False,True,,,B,easy,Cooking Techniques
-105,A bundt pan is flat like a cookie sheet.,False,True,,,A,easy,Baking
+100,Saffron threads are the stigmas of a crocus flower.,True,False,,,A,easy,Herbs and Spices
+101,Butter melts into a liquid when stored in the freezer.,True,False,,,B,easy,Kitchen Science
+102,Tandoori chicken is a classic dish of India.,True,False,,,A,easy,World Cuisines
+103,Chickpeas are classified as a meat.,True,False,,,B,easy,Ingredients
+104,Poaching cooks food gently in liquid just below a simmer.,True,False,,,A,easy,Cooking Techniques
+105,A bundt pan is flat like a cookie sheet.,True,False,,,B,easy,Baking
 106,Dill is often paired with pickles and fish.,False,True,,,B,easy,Herbs and Spices
 107,Fresh egg yolks are naturally bright blue.,False,True,,,A,easy,Kitchen Science
 108,Pho is a noodle soup from Vietnam.,False,True,,,B,easy,World Cuisines
 109,Cashews grow inside bananas.,False,True,,,A,easy,Ingredients
-110,A sharp knife is safer to use than a dull one.,False,True,,,B,easy,Cooking Techniques
+110,A sharp knife is safer to use than a dull one.,True,False,,,A,easy,Cooking Techniques
 111,Croissants are boiled like bagels before baking.,False,True,,,A,easy,Baking
 112,Nutmeg is a warming spice used in eggnog.,False,True,,,B,easy,Herbs and Spices
 113,Milk stays fresh for months in a hot car.,False,True,,,A,easy,Kitchen Science
-114,Couscous is a staple grain in North African cooking.,False,True,,,B,easy,World Cuisines
-115,Bacon is made from dried seaweed.,False,True,,,A,easy,Ingredients
+114,Couscous is a staple grain in North African cooking.,True,False,,,A,easy,World Cuisines
+115,Bacon is made from dried seaweed.,True,False,,,B,easy,Ingredients
 116,Folding batter gently keeps air in the mixture.,False,True,,,B,easy,Cooking Techniques
 117,Pie fillings are always made with meat.,False,True,,,A,easy,Baking
-118,Paprika is made from ground dried peppers.,False,True,,,B,easy,Herbs and Spices
-119,Chocolate melts in your hand because your hand is colder than the chocolate.,False,True,,,A,easy,Kitchen Science
+118,Paprika is made from ground dried peppers.,True,False,,,A,easy,Herbs and Spices
+119,Chocolate melts in your hand because your hand is colder than the chocolate.,True,False,,,B,easy,Kitchen Science
 120,Spring rolls are a traditional part of many Asian cuisines.,False,True,,,B,easy,World Cuisines
 121,Coconuts grow on oak trees.,False,True,,,A,easy,Ingredients
-122,Searing browns the surface of meat quickly over high heat.,False,True,,,B,easy,Cooking Techniques
-123,Biscotti are as soft as marshmallows.,False,True,,,A,easy,Baking
-124,Sage is a classic herb in Thanksgiving stuffing.,False,True,,,B,easy,Herbs and Spices
-125,Water shrinks and takes up less space when it freezes.,False,True,,,A,easy,Kitchen Science
-126,Tagine cooking is associated with Morocco.,False,True,,,B,easy,World Cuisines
+122,Searing browns the surface of meat quickly over high heat.,True,False,,,A,easy,Cooking Techniques
+123,Biscotti are as soft as marshmallows.,True,False,,,B,easy,Baking
+124,Sage is a classic herb in Thanksgiving stuffing.,True,False,,,A,easy,Herbs and Spices
+125,Water shrinks and takes up less space when it freezes.,True,False,,,B,easy,Kitchen Science
+126,Tagine cooking is associated with Morocco.,True,False,,,A,easy,World Cuisines
 127,Barley is a type of pasta.,False,True,,,A,easy,Ingredients
 128,Resting meat after cooking helps keep it juicy.,False,True,,,B,easy,Cooking Techniques
-129,Angel food cake is made mostly with rich egg yolks.,False,True,,,A,easy,Baking
-130,Mustard is made from the seeds of a mustard plant.,False,True,,,B,easy,Herbs and Spices
+129,Angel food cake is made mostly with rich egg yolks.,True,False,,,B,easy,Baking
+130,Mustard is made from the seeds of a mustard plant.,True,False,,,A,easy,Herbs and Spices
 131,Vinegar tastes sweet like sugar.,False,True,,,A,easy,Kitchen Science
 132,Pad thai is a stir-fried noodle dish from Thailand.,False,True,,,B,easy,World Cuisines
-133,Lobster is a type of grain.,False,True,,,A,easy,Ingredients
-134,Mincing cuts food into very tiny pieces.,False,True,,,B,easy,Cooking Techniques
+133,Lobster is a type of grain.,True,False,,,B,easy,Ingredients
+134,Mincing cuts food into very tiny pieces.,True,False,,,A,easy,Cooking Techniques
 135,Gingerbread houses are built with mortar and bricks.,False,True,,,A,easy,Baking
 136,Black peppercorns are ground to make black pepper.,False,True,,,B,easy,Herbs and Spices
 137,A kitchen thermometer measures how salty food is.,False,True,,,A,easy,Kitchen Science
-138,Empanadas are stuffed pastries popular across Latin America.,False,True,,,B,easy,World Cuisines
-139,Quinoa is a kind of fizzy soda.,False,True,,,A,easy,Ingredients
-140,Deglazing a pan lifts browned bits with added liquid.,False,True,,,B,easy,Cooking Techniques
+138,Empanadas are stuffed pastries popular across Latin America.,True,False,,,A,easy,World Cuisines
+139,Quinoa is a kind of fizzy soda.,True,False,,,B,easy,Ingredients
+140,Deglazing a pan lifts browned bits with added liquid.,True,False,,,A,easy,Cooking Techniques
 141,Rustic artisan bread is baked in the microwave.,False,True,,,A,easy,Baking
 142,Cardamom flavors chai and Indian sweets.,False,True,,,B,easy,Herbs and Spices
-143,Oil and water mix perfectly when whisked hard.,False,True,,,A,easy,Kitchen Science
+143,Oil and water mix perfectly when whisked hard.,True,False,,,B,easy,Kitchen Science
 144,Lasagna is a layered pasta bake from Italy.,False,True,,,B,easy,World Cuisines
 145,Salmon are land mammals.,False,True,,,A,easy,Ingredients
 146,Chilling cookie dough makes it easier to handle.,False,True,,,B,easy,Cooking Techniques
-147,Puff pastry contains no fat at all.,False,True,,,A,easy,Baking
-148,Chives have a mild onion flavor.,False,True,,,B,easy,Herbs and Spices
+147,Puff pastry contains no fat at all.,True,False,,,B,easy,Baking
+148,Chives have a mild onion flavor.,True,False,,,A,easy,Herbs and Spices
 149,Ice cream is served sizzling hot.,False,True,,,A,easy,Kitchen Science
 150,Moules frites pairs mussels with fried potatoes.,False,True,,,B,easy,World Cuisines
 151,Almonds grow underwater in rivers.,False,True,,,A,easy,Ingredients
 152,A timer helps prevent overbaking and burning.,False,True,,,B,easy,Cooking Techniques
-153,Yeast works fastest in ice-cold water.,False,True,,,A,easy,Baking
-154,Peppermint and spearmint are both types of mint.,False,True,,,B,easy,Herbs and Spices
-155,A freezer burns food with real flames.,False,True,,,A,easy,Kitchen Science
-156,Fajitas feature sizzling grilled meat and peppers.,False,True,,,B,easy,World Cuisines
+153,Yeast works fastest in ice-cold water.,True,False,,,B,easy,Baking
+154,Peppermint and spearmint are both types of mint.,True,False,,,A,easy,Herbs and Spices
+155,A freezer burns food with real flames.,True,False,,,B,easy,Kitchen Science
+156,Fajitas feature sizzling grilled meat and peppers.,True,False,,,A,easy,World Cuisines
 157,Rye is a tropical fruit.,False,True,,,A,easy,Ingredients
 158,A whisk beats and aerates ingredients quickly.,False,True,,,B,easy,Cooking Techniques
 159,Croutons are soft raw mushrooms.,False,True,,,A,easy,Baking
 160,Bay leaves are taken out of the dish before serving.,False,True,,,B,easy,Herbs and Spices
 161,Mixing salt and pepper creates a dangerous acid.,False,True,,,A,easy,Kitchen Science
 162,Baklava is a layered nut pastry from the eastern Mediterranean.,False,True,,,B,easy,World Cuisines
-163,Beets are bright blue citrus fruits.,False,True,,,A,easy,Ingredients
-164,Skimming removes fat and foam from a simmering pot.,False,True,,,B,easy,Cooking Techniques
-165,A flour sifter is used to fry onions.,False,True,,,A,easy,Baking
+163,Beets are bright blue citrus fruits.,True,False,,,B,easy,Ingredients
+164,Skimming removes fat and foam from a simmering pot.,True,False,,,A,easy,Cooking Techniques
+165,A flour sifter is used to fry onions.,True,False,,,B,easy,Baking
 166,Allspice has a warm aroma reminiscent of several spices.,False,True,,,B,easy,Herbs and Spices
 167,Sugar dissolves faster in iced water than in hot water.,False,True,,,A,easy,Kitchen Science
-168,Tzatziki is a cucumber yogurt sauce from Greece.,False,True,,,B,easy,World Cuisines
-169,Oysters grow on grapevines.,False,True,,,A,easy,Ingredients
-170,A spatula is handy for flipping pancakes.,False,True,,,B,easy,Cooking Techniques
+168,Tzatziki is a cucumber yogurt sauce from Greece.,True,False,,,A,easy,World Cuisines
+169,Oysters grow on grapevines.,True,False,,,B,easy,Ingredients
+170,A spatula is handy for flipping pancakes.,True,False,,,A,easy,Cooking Techniques
 171,Macarons are made from mashed potatoes.,False,True,,,A,easy,Baking
 172,Chili powder blends dried chilies with other spices.,False,True,,,B,easy,Herbs and Spices
-173,Microwave ovens make food radioactive.,False,True,,,A,easy,Kitchen Science
-174,Kimbap is a Korean seaweed rice roll.,False,True,,,B,easy,World Cuisines
+173,Microwave ovens make food radioactive.,True,False,,,B,easy,Kitchen Science
+174,Kimbap is a Korean seaweed rice roll.,True,False,,,A,easy,World Cuisines
 175,Walnuts are a type of seafood.,False,True,,,A,easy,Ingredients
 176,Oven mitts protect hands from hot pans.,False,True,,,B,easy,Cooking Techniques
-177,Every brownie must contain walnuts.,False,True,,,A,easy,Baking
-178,Lemon zest is the colorful outer peel of the fruit.,False,True,,,B,easy,Herbs and Spices
-179,Boiling water is a safe way to put out a grease fire.,False,True,,,A,easy,Kitchen Science
+177,Every brownie must contain walnuts.,True,False,,,B,easy,Baking
+178,Lemon zest is the colorful outer peel of the fruit.,True,False,,,A,easy,Herbs and Spices
+179,Boiling water is a safe way to put out a grease fire.,True,False,,,B,easy,Kitchen Science
 180,Asado is a tradition of grilling meat in Argentina.,False,True,,,B,easy,World Cuisines
 181,Tofu is made from yellow corn.,False,True,,,A,easy,Ingredients
 182,A cleaver is a broad heavy knife.,False,True,,,B,easy,Cooking Techniques
@@ -187,32 +187,32 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 184,Vanilla pods come from an orchid plant.,False,True,,,B,easy,Herbs and Spices
 185,Salt water boils at a lower temperature than fresh water.,False,True,,,A,easy,Kitchen Science
 186,Poutine is a fries-and-gravy dish from Canada.,False,True,,,B,easy,World Cuisines
-187,Balsamic vinegar is made from apples.,False,True,,,A,easy,Ingredients
-188,Kitchen scales measure ingredients by weight.,False,True,,,B,easy,Cooking Techniques
-189,Pavlova is a savory meat pie.,False,True,,,A,easy,Baking
-190,Teriyaki glaze is Japanese in origin.,False,True,,,B,easy,World Cuisines
+187,Balsamic vinegar is made from apples.,True,False,,,B,easy,Ingredients
+188,Kitchen scales measure ingredients by weight.,True,False,,,A,easy,Cooking Techniques
+189,Pavlova is a savory meat pie.,True,False,,,B,easy,Baking
+190,Teriyaki glaze is Japanese in origin.,True,False,,,A,easy,World Cuisines
 191,Pineapples grow in cold mountain caves.,False,True,,,A,easy,Ingredients
-192,Tongs grip and turn food safely.,False,True,,,B,easy,Cooking Techniques
+192,Tongs grip and turn food safely.,True,False,,,A,easy,Cooking Techniques
 193,Scones are deep-fried in oil like donuts.,False,True,,,A,easy,Baking
 194,Cloves are dried flower buds.,False,True,,,B,easy,Herbs and Spices
-195,Dissolving sugar in water removes its calories.,False,True,,,A,easy,Kitchen Science
+195,Dissolving sugar in water removes its calories.,True,False,,,B,easy,Kitchen Science
 196,Piri piri sauce is linked to Portuguese cooking.,False,True,,,B,easy,World Cuisines
 197,Cinnamon comes from the roots of a pine tree.,False,True,,,A,easy,Herbs and Spices
 198,Gluten gives bread dough its stretchy structure.,False,True,,,B,easy,Kitchen Science
-199,Wasabi is a type of hot pepper.,False,True,,,A,easy,Ingredients
-200,Which country gave us the croissant ancestor the kipferl?,Austria,Turkey,,,A,medium,Baking
+199,Wasabi is a type of hot pepper.,True,False,,,B,easy,Ingredients
+200,Which country gave us the croissant ancestor the kipferl?,Turkey,Austria,,,B,medium,Baking
 201,What is the main thickener in classic bechamel sauce?,Rice flour,White roux,,,B,medium,Cooking Techniques
 202,Which grain is the base of traditional risotto?,Arborio rice,Pearl barley,,,A,medium,Ingredients
 203,Which nut is traditional in basil pesto?,Almonds,Pine nuts,,,B,medium,Ingredients
-204,Feijoada is also claimed by which European country?,Portugal,Greece,,,A,medium,World Cuisines
-205,Which spirit flares in bananas Foster?,Gin,Dark rum,,,B,medium,Baking
-206,What does the Japanese word umami describe?,A savory taste,A cooking method,,,A,medium,Kitchen Science
+204,Feijoada is also claimed by which European country?,Greece,Portugal,,,B,medium,World Cuisines
+205,Which spirit flares in bananas Foster?,Dark rum,Gin,,,A,medium,Baking
+206,What does the Japanese word umami describe?,A cooking method,A savory taste,,,B,medium,Kitchen Science
 207,Which herb is central to Lebanese tabbouleh?,Sorrel,Parsley,,,B,medium,Herbs and Spices
 208,Biryani is traditionally finished using which sealed pot technique?,Dum steaming,Slow oven drying,,,A,medium,Cooking Techniques
 209,Botanically an avocado is classified as what?,A drupe,A berry,,,B,medium,Ingredients
 210,Which country produces the most olive oil?,Spain,Italy,,,A,medium,Ingredients
-211,Which sesame paste enriches hummus?,Peanut butter,Tahini,,,B,medium,Ingredients
-212,Which classic French mother sauce is built on milk?,Bechamel,Hollandaise,,,A,medium,Cooking Techniques
+211,Which sesame paste enriches hummus?,Tahini,Peanut butter,,,A,medium,Ingredients
+212,Which classic French mother sauce is built on milk?,Hollandaise,Bechamel,,,B,medium,Cooking Techniques
 213,Which spice is harvested from crocus flowers?,Cumin,Saffron,,,B,medium,Herbs and Spices
 214,Ceviche is most identified with which cuisine?,Peruvian,Mongolian,,,A,medium,World Cuisines
 215,Which pasta name means little tongues?,Fusilli,Linguine,,,B,medium,Ingredients
@@ -221,585 +221,585 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 218,Consomme is clarified with which whipping agent?,Egg whites,Instant potato flakes,,,A,medium,Cooking Techniques
 219,Which fruit wears its seeds on the outside?,Kiwi,Strawberry,,,B,medium,Kitchen Science
 220,Tempura frying is most associated with which cuisine?,Japanese,Russian,,,A,medium,World Cuisines
-221,What is miso made from?,Fermented rice only,Fermented soybeans,,,B,medium,Ingredients
-222,Which tool zests citrus into fine ribbons?,Microplane,Melon baller,,,A,medium,Cooking Techniques
-223,File powder for gumbo is ground from which tree leaves?,Willow,Sassafras,,,B,medium,Herbs and Spices
-224,Bibimbap belongs to which cuisine?,Korean,Nepali,,,A,medium,World Cuisines
+221,What is miso made from?,Fermented soybeans,Fermented rice only,,,A,medium,Ingredients
+222,Which tool zests citrus into fine ribbons?,Melon baller,Microplane,,,B,medium,Cooking Techniques
+223,File powder for gumbo is ground from which tree leaves?,Sassafras,Willow,,,A,medium,Herbs and Spices
+224,Bibimbap belongs to which cuisine?,Nepali,Korean,,,B,medium,World Cuisines
 225,Which sugar melts down into classic caramel?,Icing sugar,Granulated white sugar,,,B,medium,Baking
 226,Which gas makes bread dough rise?,Carbon dioxide,Oxygen,,,A,medium,Kitchen Science
 227,Which pasta shape is a nest of fine strands?,Orecchiette,Angel hair,,,B,medium,Ingredients
 228,Espresso was born in which country?,Italy,Yemen,,,A,medium,World Cuisines
-229,Which plant part is ginger?,Flower bud,Rhizome,,,B,medium,Ingredients
-230,Ranch dressing gets its tang from which cultured dairy?,Buttermilk,Heavy cream,,,A,medium,Ingredients
-231,What does al dente describe?,Soft all the way through,Firm to the bite,,,B,medium,Cooking Techniques
+229,Which plant part is ginger?,Rhizome,Flower bud,,,A,medium,Ingredients
+230,Ranch dressing gets its tang from which cultured dairy?,Heavy cream,Buttermilk,,,B,medium,Ingredients
+231,What does al dente describe?,Firm to the bite,Soft all the way through,,,A,medium,Cooking Techniques
 232,Which country drinks the most tea per person?,Turkey,India,,,A,medium,World Cuisines
 233,Which spice costs the most by weight?,Cardamom,Saffron,,,B,medium,Herbs and Spices
-234,Which Spanish soup serves tomatoes chilled?,Gazpacho,Minestrone,,,A,medium,World Cuisines
-235,Which milled grain forms polenta?,Semolina,Cornmeal,,,B,medium,Ingredients
+234,Which Spanish soup serves tomatoes chilled?,Minestrone,Gazpacho,,,B,medium,World Cuisines
+235,Which milled grain forms polenta?,Cornmeal,Semolina,,,A,medium,Ingredients
 236,Which fat builds croissant flakes?,Layered butter,Vegetable shortening,,,A,medium,Baking
 237,Which bean anchors traditional refried beans?,Black beans,Pinto beans,,,B,medium,Ingredients
-238,What does marbling describe in raw beef?,Streaks of fat,Bone fragments,,,A,medium,Kitchen Science
-239,Which citrus resulted from crossing orange and pomelo?,Tangelo,Grapefruit,,,B,medium,Ingredients
-240,Which country grows the most rice?,China,Bangladesh,,,A,medium,Ingredients
+238,What does marbling describe in raw beef?,Bone fragments,Streaks of fat,,,B,medium,Kitchen Science
+239,Which citrus resulted from crossing orange and pomelo?,Grapefruit,Tangelo,,,A,medium,Ingredients
+240,Which country grows the most rice?,Bangladesh,China,,,B,medium,Ingredients
 241,Classic sponge cake rises mainly thanks to what?,Baking soda,Whipped eggs,,,B,medium,Baking
 242,Which herbs does a bouquet garni bundle?,Parsley and thyme,Mint and dill,,,A,medium,Herbs and Spices
-243,Which milk sweetens traditional Thai tea?,Oat milk,Condensed milk,,,B,medium,World Cuisines
-244,Which Korean noodle bowl serves cold?,Naengmyeon,Laksa,,,A,medium,World Cuisines
-245,Coconut milk comes from what?,Coconut water alone,Grated flesh soaked in water,,,B,medium,Ingredients
+243,Which milk sweetens traditional Thai tea?,Condensed milk,Oat milk,,,A,medium,World Cuisines
+244,Which Korean noodle bowl serves cold?,Laksa,Naengmyeon,,,B,medium,World Cuisines
+245,Coconut milk comes from what?,Grated flesh soaked in water,Coconut water alone,,,A,medium,Ingredients
 246,Which knife cut yields matchsticks?,Julienne,Chiffonade,,,A,medium,Cooking Techniques
 247,Roquefort wheels age in which country?,Denmark,France,,,B,medium,World Cuisines
-248,What thickens creme anglaise?,Egg yolks,Flour,,,A,medium,Baking
-249,Which cracked grain builds tabbouleh?,Couscous,Bulgur,,,B,medium,World Cuisines
-250,Which vinegar anchors a French vinaigrette?,Red wine vinegar,Malt vinegar,,,A,medium,Ingredients
-251,Which nation bakes a king cake for Epiphany?,Spain,France,,,B,medium,Baking
+248,What thickens creme anglaise?,Flour,Egg yolks,,,B,medium,Baking
+249,Which cracked grain builds tabbouleh?,Bulgur,Couscous,,,A,medium,World Cuisines
+250,Which vinegar anchors a French vinaigrette?,Malt vinegar,Red wine vinegar,,,B,medium,Ingredients
+251,Which nation bakes a king cake for Epiphany?,France,Spain,,,A,medium,Baking
 252,Falafel balls are ground from what?,Ground chickpeas,Ground lentils,,,A,medium,World Cuisines
 253,Which Dutch cheese ships in red wax?,Comte,Edam,,,B,medium,Ingredients
-254,Which crust seals food under a salt shell?,Salt crust baking,Salt curing,,,A,medium,Cooking Techniques
-255,What gives paella its golden hue?,Paprika,Saffron,,,B,medium,World Cuisines
+254,Which crust seals food under a salt shell?,Salt curing,Salt crust baking,,,B,medium,Cooking Techniques
+255,What gives paella its golden hue?,Saffron,Paprika,,,A,medium,World Cuisines
 256,Garden strawberries were first bred in which country?,France,Chile,,,A,medium,Ingredients
 257,Which braided egg bread graces Jewish tables?,Brioche,Challah,,,B,medium,Baking
 258,Dry brining relies on what?,Salt alone,Acid alone,,,A,medium,Cooking Techniques
-259,Blue Curacao gets flavor and hue from what?,Blueberry,Bitter orange,,,B,medium,Ingredients
-260,Which chilled soup purees leeks and potatoes?,Vichyssoise,Ajiaco,,,A,medium,World Cuisines
-261,Panettone is tied to which Italian city?,Naples,Milan,,,B,medium,Baking
+259,Blue Curacao gets flavor and hue from what?,Bitter orange,Blueberry,,,A,medium,Ingredients
+260,Which chilled soup purees leeks and potatoes?,Ajiaco,Vichyssoise,,,B,medium,World Cuisines
+261,Panettone is tied to which Italian city?,Milan,Naples,,,A,medium,Baking
 262,Which tool scores bread dough before baking?,A lame,A bench scraper,,,A,medium,Cooking Techniques
 263,Rosemary belongs to which plant family?,Rose family,Mint family,,,B,medium,Herbs and Spices
-264,Currywurst is a street food of which city?,Berlin,Munich,,,A,medium,World Cuisines
-265,Edamame pods grow on which plant?,Pea plant,Soybean plant,,,B,medium,Ingredients
+264,Currywurst is a street food of which city?,Munich,Berlin,,,B,medium,World Cuisines
+265,Edamame pods grow on which plant?,Soybean plant,Pea plant,,,A,medium,Ingredients
 266,Where should fresh basil rest longest?,In water at room temperature,In a dry paper bag,,,A,medium,Kitchen Science
 267,Which cheese is stretched like taffy?,Paneer,Mozzarella,,,B,medium,Ingredients
 268,Garam masala belongs to which cuisine?,Indian,Ethiopian,,,A,medium,Herbs and Spices
-269,What thins and enriches a ganache?,Whole milk,Heavy cream,,,B,medium,Baking
-270,Quick cooking vegetables in a little fat over high heat is called what?,Sauteing,Braising,,,A,medium,Cooking Techniques
-271,Green curry paste is essential to which cuisine?,Japanese,Thai,,,B,medium,World Cuisines
-272,Pink Himalayan salt owes its tint to what?,Iron minerals,Crushed shells,,,A,medium,Ingredients
+269,What thins and enriches a ganache?,Heavy cream,Whole milk,,,A,medium,Baking
+270,Quick cooking vegetables in a little fat over high heat is called what?,Braising,Sauteing,,,B,medium,Cooking Techniques
+271,Green curry paste is essential to which cuisine?,Thai,Japanese,,,A,medium,World Cuisines
+272,Pink Himalayan salt owes its tint to what?,Crushed shells,Iron minerals,,,B,medium,Ingredients
 273,Croissant dough and puff pastry share which method?,Proofing,Lamination,,,B,medium,Baking
 274,Which drink is pressed apples fermented?,Cider,Perry,,,A,medium,Ingredients
 275,Which cheese grates over cacio e pepe?,Ricotta,Pecorino Romano,,,B,medium,World Cuisines
-276,Proofing bread dough allows what?,Final rise before baking,Crust to harden,,,A,medium,Baking
-277,Which so called nut is a legume?,Cashew,Peanut,,,B,medium,Ingredients
-278,What does India call clarified butter?,Ghee,Malai,,,A,medium,Ingredients
-279,Which nation tops coffee drinking per person?,Brazil,Finland,,,B,medium,World Cuisines
-280,Which egg part carries lecithin the emulsifier?,Yolk,The membrane,,,A,medium,Kitchen Science
-281,Wonton skins are made from what?,Rice paper,Wheat based wrappers,,,B,medium,World Cuisines
-282,Which herb defines the spirit absinthe?,Wormwood,Hyssop,,,A,medium,Herbs and Spices
-283,Which Celsius reading marks medium rare beef?,About 75 degrees C,About 55 degrees C,,,B,medium,Kitchen Science
-284,Which region guards authentic Parmigiano Reggiano?,Emilia Romagna,Tuscany,,,A,medium,World Cuisines
-285,Tahini is ground from which seeds?,Sunflower seeds,Sesame seeds,,,B,medium,Ingredients
-286,What does mise en place mean?,Everything in its place,To serve immediately,,,A,medium,Cooking Techniques
-287,Which fruit keeps ripening after picking?,Grapes,Bananas,,,B,medium,Kitchen Science
+276,Proofing bread dough allows what?,Crust to harden,Final rise before baking,,,B,medium,Baking
+277,Which so called nut is a legume?,Peanut,Cashew,,,A,medium,Ingredients
+278,What does India call clarified butter?,Malai,Ghee,,,B,medium,Ingredients
+279,Which nation tops coffee drinking per person?,Finland,Brazil,,,A,medium,World Cuisines
+280,Which egg part carries lecithin the emulsifier?,The membrane,Yolk,,,B,medium,Kitchen Science
+281,Wonton skins are made from what?,Wheat based wrappers,Rice paper,,,A,medium,World Cuisines
+282,Which herb defines the spirit absinthe?,Hyssop,Wormwood,,,B,medium,Herbs and Spices
+283,Which Celsius reading marks medium rare beef?,About 55 degrees C,About 75 degrees C,,,A,medium,Kitchen Science
+284,Which region guards authentic Parmigiano Reggiano?,Tuscany,Emilia Romagna,,,B,medium,World Cuisines
+285,Tahini is ground from which seeds?,Sesame seeds,Sunflower seeds,,,A,medium,Ingredients
+286,What does mise en place mean?,To serve immediately,Everything in its place,,,B,medium,Cooking Techniques
+287,Which fruit keeps ripening after picking?,Bananas,Grapes,,,A,medium,Kitchen Science
 288,Banh mi merges French bread with which cuisine?,Vietnamese,Filipino,,,A,medium,World Cuisines
 289,Marzipan is modeled from what?,Ground cashews,Ground almonds,,,B,medium,Baking
-290,Which vitamin is citrus famous for?,Vitamin C,Vitamin K,,,A,medium,Kitchen Science
-291,Which wine deglazes risotto?,Red wine,Dry white wine,,,B,medium,Ingredients
+290,Which vitamin is citrus famous for?,Vitamin K,Vitamin C,,,B,medium,Kitchen Science
+291,Which wine deglazes risotto?,Dry white wine,Red wine,,,A,medium,Ingredients
 292,Which pepper dethroned the Carolina Reaper in 2023?,Pepper X,Ghost pepper,,,A,medium,Herbs and Spices
 293,Which cheese melts on a Reuben?,Provolone,Swiss cheese,,,B,medium,Ingredients
 294,Stopping blanched vegetables in ice water is called what?,Shocking,Steeping,,,A,medium,Cooking Techniques
-295,Which country eats the most pasta per person?,Japan,Italy,,,B,medium,World Cuisines
+295,Which country eats the most pasta per person?,Italy,Japan,,,A,medium,World Cuisines
 296,Profiteroles puff from which pastry?,Choux pastry,Filo pastry,,,A,medium,Baking
 297,Which flour carries the most protein?,Cake flour,Bread flour,,,B,medium,Baking
-298,Shichimi togarashi belongs to which cuisine?,Japanese,Korean,,,A,medium,Herbs and Spices
-299,Which citrus juice cures fish for ceviche?,Orange juice,Lime juice,,,B,medium,World Cuisines
-300,Tzatziki is built on which dairy base?,Strained yogurt,Creme fraiche,,,A,medium,Ingredients
-301,Most instant coffee is made by which process?,Cold pressing beans,Spray drying brewed coffee,,,B,medium,Kitchen Science
-302,Which pasta name means little worms?,Vermicelli,Fettuccine,,,A,medium,World Cuisines
-303,Which spice is stripped as tree bark?,Cloves,Cinnamon,,,B,medium,Herbs and Spices
-304,Duck confit is preserved in what?,Its own fat,Brine,,,A,medium,Cooking Techniques
-305,A dark Cajun roux starts from what two basics?,Butter and sugar,Oil and flour,,,B,medium,Cooking Techniques
-306,Which nut butter thickens African groundnut stew?,Ground peanuts,Almond paste,,,A,medium,World Cuisines
-307,Which quick fix sours milk for baking?,Water plus oil,Milk plus lemon juice,,,B,medium,Baking
-308,Which blade glides through tomato skin?,A serrated knife,A paring knife,,,A,medium,Cooking Techniques
-309,Which country leads vanilla bean exports?,Mexico,Madagascar,,,B,medium,Ingredients
-310,The egg white is scientifically known as what?,Albumen,Chalaza,,,A,medium,Kitchen Science
-311,Banana ketchup is a condiment from which country?,Indonesia,Philippines,,,B,medium,World Cuisines
-312,Cilantro is the leaf of which plant?,Coriander,Lemongrass,,,A,medium,Herbs and Spices
-313,Panna cotta translates as cooked what?,Milk,Cream,,,B,medium,Baking
-314,Which fat is traditional for authentic tamales?,Lard,Coconut oil,,,A,medium,World Cuisines
+298,Shichimi togarashi belongs to which cuisine?,Korean,Japanese,,,B,medium,Herbs and Spices
+299,Which citrus juice cures fish for ceviche?,Lime juice,Orange juice,,,A,medium,World Cuisines
+300,Tzatziki is built on which dairy base?,Creme fraiche,Strained yogurt,,,B,medium,Ingredients
+301,Most instant coffee is made by which process?,Spray drying brewed coffee,Cold pressing beans,,,A,medium,Kitchen Science
+302,Which pasta name means little worms?,Fettuccine,Vermicelli,,,B,medium,World Cuisines
+303,Which spice is stripped as tree bark?,Cinnamon,Cloves,,,A,medium,Herbs and Spices
+304,Duck confit is preserved in what?,Brine,Its own fat,,,B,medium,Cooking Techniques
+305,A dark Cajun roux starts from what two basics?,Oil and flour,Butter and sugar,,,A,medium,Cooking Techniques
+306,Which nut butter thickens African groundnut stew?,Almond paste,Ground peanuts,,,B,medium,World Cuisines
+307,Which quick fix sours milk for baking?,Milk plus lemon juice,Water plus oil,,,A,medium,Baking
+308,Which blade glides through tomato skin?,A paring knife,A serrated knife,,,B,medium,Cooking Techniques
+309,Which country leads vanilla bean exports?,Madagascar,Mexico,,,A,medium,Ingredients
+310,The egg white is scientifically known as what?,Chalaza,Albumen,,,B,medium,Kitchen Science
+311,Banana ketchup is a condiment from which country?,Philippines,Indonesia,,,A,medium,World Cuisines
+312,Cilantro is the leaf of which plant?,Lemongrass,Coriander,,,B,medium,Herbs and Spices
+313,Panna cotta translates as cooked what?,Cream,Milk,,,A,medium,Baking
+314,Which fat is traditional for authentic tamales?,Coconut oil,Lard,,,B,medium,World Cuisines
 315,Which acid dominates lemons?,Malic acid,Citric acid,,,B,medium,Kitchen Science
 316,Which country guards Stilton production?,England,Wales,,,A,medium,Ingredients
-317,A roast doneness is best checked with what?,A kitchen timer,An instant read thermometer,,,B,medium,Cooking Techniques
-318,Which legume builds much of India dal?,Lentils,Chickpeas,,,A,medium,Ingredients
-319,Halloumi hails from which island?,Sicily,Cyprus,,,B,medium,World Cuisines
+317,A roast doneness is best checked with what?,An instant read thermometer,A kitchen timer,,,A,medium,Cooking Techniques
+318,Which legume builds much of India dal?,Chickpeas,Lentils,,,B,medium,Ingredients
+319,Halloumi hails from which island?,Cyprus,Sicily,,,A,medium,World Cuisines
 320,Cooking fruit with sugar for toast topping makes what?,Jam,Chutney,,,A,medium,Baking
-321,Which mineral fortifies table salt against goiter?,Fluoride,Iodine,,,B,medium,Kitchen Science
-322,Tiramisu was created in which country?,Italy,Austria,,,A,medium,World Cuisines
+321,Which mineral fortifies table salt against goiter?,Iodine,Fluoride,,,A,medium,Kitchen Science
+322,Tiramisu was created in which country?,Austria,Italy,,,B,medium,World Cuisines
 323,Which rendered fat once built classic pie crust?,Tallow,Lard,,,B,medium,Baking
 324,Which blend seasons Indian chaat?,Chaat masala,Zaatar,,,A,medium,Herbs and Spices
 325,Which broth underpins miso soup?,Kombu tea,Dashi,,,B,medium,World Cuisines
-326,Burrata hides a creamy center called what?,Stracciatella cream,Ricotta salata,,,A,medium,Ingredients
-327,Which sweetener is extracted from a leafy plant?,Aspartame,Stevia,,,B,medium,Kitchen Science
+326,Burrata hides a creamy center called what?,Ricotta salata,Stracciatella cream,,,B,medium,Ingredients
+327,Which sweetener is extracted from a leafy plant?,Stevia,Aspartame,,,A,medium,Kitchen Science
 328,Soft pretzels with beer are icons of which country?,Germany,Poland,,,A,medium,World Cuisines
 329,Which leavener needs an acid like buttermilk?,Baking powder,Baking soda,,,B,medium,Baking
 330,Which beef cut is prized for slow braising?,Chuck,Tenderloin,,,A,medium,Cooking Techniques
-331,Which spice is key to pho broth aroma?,Fenugreek,Star anise,,,B,medium,Herbs and Spices
-332,Oyakodon tops rice with what pairing?,Chicken and egg,Pork and cabbage,,,A,medium,World Cuisines
-333,Which salty yogurt drink is beloved in Turkey?,Kefir,Ayran,,,B,medium,Ingredients
-334,Hash browns start with which potato state?,Shredded raw potato,Mashed with milk,,,A,medium,Cooking Techniques
+331,Which spice is key to pho broth aroma?,Star anise,Fenugreek,,,A,medium,Herbs and Spices
+332,Oyakodon tops rice with what pairing?,Pork and cabbage,Chicken and egg,,,B,medium,World Cuisines
+333,Which salty yogurt drink is beloved in Turkey?,Ayran,Kefir,,,A,medium,Ingredients
+334,Hash browns start with which potato state?,Mashed with milk,Shredded raw potato,,,B,medium,Cooking Techniques
 335,Which US state grew pineapples historically?,Florida,Hawaii,,,B,medium,Ingredients
 336,White streaks on old chocolate are called what?,Chocolate bloom,Chocolate rust,,,A,medium,Kitchen Science
-337,Dolmas belong to which broader culinary world?,Thai,Turkish,,,B,medium,World Cuisines
-338,Which herb crowns a classic caprese salad?,Basil,Tarragon,,,A,medium,Herbs and Spices
-339,Crepes cook best in which pan?,A deep stockpot,A shallow crepe pan,,,B,medium,Cooking Techniques
+337,Dolmas belong to which broader culinary world?,Turkish,Thai,,,A,medium,World Cuisines
+338,Which herb crowns a classic caprese salad?,Tarragon,Basil,,,B,medium,Herbs and Spices
+339,Crepes cook best in which pan?,A shallow crepe pan,A deep stockpot,,,A,medium,Cooking Techniques
 340,Ketchup traces back to a fish sauce of which country?,China,Vietnam,,,A,medium,World Cuisines
 341,Which grain grinds into soba noodles?,Millet,Buckwheat,,,B,medium,Ingredients
-342,Whipped cream dispensers charge with which gas?,Nitrous oxide,Nitrogen,,,A,medium,Kitchen Science
-343,Which frozen treat is churned with less air?,Sorbet,Gelato,,,B,medium,Baking
+342,Whipped cream dispensers charge with which gas?,Nitrogen,Nitrous oxide,,,B,medium,Kitchen Science
+343,Which frozen treat is churned with less air?,Gelato,Sorbet,,,A,medium,Baking
 344,Which Italian cheese is smoked and pear shaped?,Scamorza,Mascarpone,,,A,medium,Ingredients
 345,Which citrus soy dip dresses Japanese gyoza?,Yakiniku sauce,Ponzu,,,B,medium,World Cuisines
-346,Tempering chocolate stabilizes what?,Crystal structure of cocoa butter,Sugar content,,,A,medium,Baking
-347,Peppercorns grow in which form on the vine?,Long pods,Small round berries,,,B,medium,Herbs and Spices
+346,Tempering chocolate stabilizes what?,Sugar content,Crystal structure of cocoa butter,,,B,medium,Baking
+347,Peppercorns grow in which form on the vine?,Small round berries,Long pods,,,A,medium,Herbs and Spices
 348,Which flatbread wraps classic shawarma?,Pita,Naan,,,A,medium,World Cuisines
 349,Which common oil comes from rapeseed?,Grapeseed oil,Canola oil,,,B,medium,Ingredients
 350,What tops creme brulee?,Torched sugar,Broiled meringue,,,A,medium,Baking
 351,Rice congee for breakfast is a staple of which cuisine?,French,Chinese,,,B,medium,World Cuisines
-352,Which hand pose guards fingers while chopping?,The claw grip,The fist grip,,,A,medium,Cooking Techniques
-353,Which English salt is prized for flakes?,Kosher salt,Maldon salt,,,B,medium,Ingredients
-354,Which vitamin does your body make from sunlight?,Vitamin D,Vitamin B12,,,A,medium,Kitchen Science
-355,Which pasta shape is literally a bow tie?,Pappardelle,Farfalle,,,B,medium,Ingredients
-356,Which herb perfumes bearnaise sauce?,Tarragon,Chives,,,A,medium,Cooking Techniques
+352,Which hand pose guards fingers while chopping?,The fist grip,The claw grip,,,B,medium,Cooking Techniques
+353,Which English salt is prized for flakes?,Maldon salt,Kosher salt,,,A,medium,Ingredients
+354,Which vitamin does your body make from sunlight?,Vitamin B12,Vitamin D,,,B,medium,Kitchen Science
+355,Which pasta shape is literally a bow tie?,Farfalle,Pappardelle,,,A,medium,Ingredients
+356,Which herb perfumes bearnaise sauce?,Chives,Tarragon,,,B,medium,Cooking Techniques
 357,Tempeh starts from which whole bean?,Adzuki beans,Soybeans,,,B,medium,Ingredients
 358,What do Canadian maple syrup grades describe?,Color and flavor,Tree age,,,A,medium,Ingredients
-359,Angel food cake bakes in which pan?,A loaf pan,A tube pan,,,B,medium,Baking
-360,Harissa chili paste belongs to which cuisine?,Tunisian,Lebanese,,,A,medium,Herbs and Spices
+359,Angel food cake bakes in which pan?,A tube pan,A loaf pan,,,A,medium,Baking
+360,Harissa chili paste belongs to which cuisine?,Lebanese,Tunisian,,,B,medium,Herbs and Spices
 361,Lassi blends fruit with which dairy base?,Cottage cheese,Yogurt,,,B,medium,Ingredients
 362,Fresh eggs sink while stale eggs do what in water?,Float,Dissolve,,,A,medium,Kitchen Science
 363,Which pastry wraps a classic beef wellington?,Shortcrust pastry,Puff pastry,,,B,medium,Baking
-364,Gravlax is salmon cured with what?,Salt sugar and dill,Vinegar and chilies,,,A,medium,World Cuisines
-365,Which plant milk did medieval European cooks favor?,Soy milk,Almond milk,,,B,medium,Ingredients
+364,Gravlax is salmon cured with what?,Vinegar and chilies,Salt sugar and dill,,,B,medium,World Cuisines
+365,Which plant milk did medieval European cooks favor?,Almond milk,Soy milk,,,A,medium,Ingredients
 366,What keeps scrambled eggs from sticking?,A greased nonstick pan,A dry steel pan,,,A,medium,Cooking Techniques
-367,Authentic feta must come from which country?,Bulgaria,Greece,,,B,medium,World Cuisines
-368,Which enzyme curdles milk for cheese?,Rennet,Pepsin,,,A,medium,Kitchen Science
+367,Authentic feta must come from which country?,Greece,Bulgaria,,,A,medium,World Cuisines
+368,Which enzyme curdles milk for cheese?,Pepsin,Rennet,,,B,medium,Kitchen Science
 369,Which microgreens sprout from peas?,Wheatgrass,Pea shoots,,,B,medium,Ingredients
 370,Which French dish braises chicken in red wine?,Coq au vin,Beef bourguignon,,,A,medium,World Cuisines
-371,Gnocchi are dumplings built on which vegetable?,Zucchini,Potatoes,,,B,medium,Ingredients
-372,Fudge is cooked to which sugar stage?,Soft ball,Hard crack,,,A,medium,Baking
-373,Which spice is the lacy aril around nutmeg?,Cassia bud,Mace,,,B,medium,Herbs and Spices
-374,Which Spanish beer drink mixes with lemon soda?,Clara,Tinto de verano,,,A,medium,World Cuisines
+371,Gnocchi are dumplings built on which vegetable?,Potatoes,Zucchini,,,A,medium,Ingredients
+372,Fudge is cooked to which sugar stage?,Hard crack,Soft ball,,,B,medium,Baking
+373,Which spice is the lacy aril around nutmeg?,Mace,Cassia bud,,,A,medium,Herbs and Spices
+374,Which Spanish beer drink mixes with lemon soda?,Tinto de verano,Clara,,,B,medium,World Cuisines
 375,Which rice builds proper sushi?,Jasmine rice,Japanese short grain,,,B,medium,Ingredients
 376,Which basket like tool fishes pasta from the pot?,A spider strainer,A slotted turner,,,A,medium,Cooking Techniques
 377,Which flowers brew a classic bedtime tea?,Hibiscus,Chamomile,,,B,medium,Herbs and Spices
 378,Gouda cheese is named after which Dutch city?,Gouda,Rotterdam,,,A,medium,Ingredients
-379,Which egg part whips into meringue?,The shell,The white,,,B,medium,Baking
-380,Turkish pide resembles which food?,A boat shaped flatbread pizza,A steamed bun,,,A,medium,World Cuisines
+379,Which egg part whips into meringue?,The white,The shell,,,A,medium,Baking
+380,Turkish pide resembles which food?,A steamed bun,A boat shaped flatbread pizza,,,B,medium,World Cuisines
 381,Quick pickles rely on which acid?,Lemon pips,Vinegar,,,B,medium,Kitchen Science
 382,Which cheese anchors classic Swiss fondue?,Gruyere,Brie,,,A,medium,Ingredients
 383,Which pork cut becomes streaky bacon?,Pork loin,Pork belly,,,B,medium,Ingredients
-384,What binds oil into vinaigrette?,Slow drizzle while whisking,Boiling the oil,,,A,medium,Cooking Techniques
-385,Wonton noodles are a classic of which cuisine?,Vietnamese,Cantonese,,,B,medium,World Cuisines
+384,What binds oil into vinaigrette?,Boiling the oil,Slow drizzle while whisking,,,B,medium,Cooking Techniques
+385,Wonton noodles are a classic of which cuisine?,Cantonese,Vietnamese,,,A,medium,World Cuisines
 386,Which vitamin do carrots help your body make?,Vitamin A,Vitamin E,,,A,medium,Kitchen Science
 387,Seitan is built from what?,Chickpea flour,Vital wheat gluten,,,B,medium,Ingredients
-388,Piercing dough with a fork before baking is called what?,Docking,Scoring,,,A,medium,Baking
-389,Which chili tops nachos from a jar?,Chipotles in adobo,Pickled jalapenos,,,B,medium,Ingredients
-390,Which citrus oils Earl Grey tea?,Bergamot,Yuzu,,,A,medium,Ingredients
-391,Washed salad greens stay crisp when you what?,Soak them overnight,Spin them dry before storing,,,B,medium,Kitchen Science
-392,Pastrami on rye is an icon of which city delis?,New York,Chicago,,,A,medium,World Cuisines
+388,Piercing dough with a fork before baking is called what?,Scoring,Docking,,,B,medium,Baking
+389,Which chili tops nachos from a jar?,Pickled jalapenos,Chipotles in adobo,,,A,medium,Ingredients
+390,Which citrus oils Earl Grey tea?,Yuzu,Bergamot,,,B,medium,Ingredients
+391,Washed salad greens stay crisp when you what?,Spin them dry before storing,Soak them overnight,,,A,medium,Kitchen Science
+392,Pastrami on rye is an icon of which city delis?,Chicago,New York,,,B,medium,World Cuisines
 393,Which plant milk is prized for latte art?,Rice milk,Barista oat milk,,,B,medium,Ingredients
-394,Cooking a chicken upright over a beer can is called what?,Beer can chicken,Butterflied roasting,,,A,medium,Cooking Techniques
-395,Freekeh is roasted young what?,Green barley,Green wheat,,,B,medium,Ingredients
+394,Cooking a chicken upright over a beer can is called what?,Butterflied roasting,Beer can chicken,,,B,medium,Cooking Techniques
+395,Freekeh is roasted young what?,Green wheat,Green barley,,,A,medium,Ingredients
 396,Melted butter in cookie dough makes cookies what?,Spread more,Puff taller,,,A,medium,Baking
-397,Which basil paste is the French cousin of pesto?,Rouille,Pistou,,,B,medium,Herbs and Spices
-398,Which ancient Roman sauce was fermented fish?,Garum,Moretum,,,A,medium,Ingredients
-399,Which starch thickens fruit pie fillings?,Malt powder,Cornstarch,,,B,medium,Baking
-400,Which range best matches collagen melting into gelatin in a braise?,Around 70 to 80 degrees C,Around 40 to 50 degrees C,Around 100 to 110 degrees C,,A,hard,Cooking Techniques
-401,Which Andean country raised guinea pigs for food?,Ecuador,Peru,Bolivia,,B,hard,World Cuisines
-402,Typical baguette dough hydrates near what?,About 40 percent,About 90 percent,About 70 percent,,C,hard,Baking
-403,Which juice slows guacamole browning?,Lime juice,Apple juice,Grape juice,,A,hard,Kitchen Science
+397,Which basil paste is the French cousin of pesto?,Pistou,Rouille,,,A,medium,Herbs and Spices
+398,Which ancient Roman sauce was fermented fish?,Moretum,Garum,,,B,medium,Ingredients
+399,Which starch thickens fruit pie fillings?,Cornstarch,Malt powder,,,A,medium,Baking
+400,Which range best matches collagen melting into gelatin in a braise?,Around 40 to 50 degrees C,Around 100 to 110 degrees C,Around 70 to 80 degrees C,,C,hard,Cooking Techniques
+401,Which Andean country raised guinea pigs for food?,Ecuador,Bolivia,Peru,,C,hard,World Cuisines
+402,Typical baguette dough hydrates near what?,About 70 percent,About 90 percent,About 40 percent,,A,hard,Baking
+403,Which juice slows guacamole browning?,Grape juice,Apple juice,Lime juice,,C,hard,Kitchen Science
 404,Which grape must Chianti include by law?,Nebbiolo,Sangiovese,Barbera,,B,hard,Ingredients
-405,Confit classically means food cooked and stored in what?,Wine lees,Honey,Its own rendered fat,,C,hard,Cooking Techniques
+405,Confit classically means food cooked and stored in what?,Wine lees,Its own rendered fat,Honey,,B,hard,Cooking Techniques
 406,Traditional balsamic is guarded by Modena and which other city?,Reggio Emilia,Parma,Bologna,,A,hard,World Cuisines
-407,Bread flour typically tests near which protein level?,About 8 percent,About 12 percent,About 6 percent,,B,hard,Baking
-408,Which enzyme drives cut apple browning?,Lipase,Lactase,Polyphenol oxidase,,C,hard,Kitchen Science
-409,Italian pesto pine nuts come mainly from which tree?,Italian stone pine,Black walnut,Cork oak,,A,hard,Ingredients
-410,A tagine lid serves what purpose?,Blocks smoke,Returns condensation to the food,Adds pressure like a cooker,,B,hard,Cooking Techniques
+407,Bread flour typically tests near which protein level?,About 6 percent,About 8 percent,About 12 percent,,C,hard,Baking
+408,Which enzyme drives cut apple browning?,Lactase,Polyphenol oxidase,Lipase,,B,hard,Kitchen Science
+409,Italian pesto pine nuts come mainly from which tree?,Black walnut,Italian stone pine,Cork oak,,B,hard,Ingredients
+410,A tagine lid serves what purpose?,Returns condensation to the food,Adds pressure like a cooker,Blocks smoke,,A,hard,Cooking Techniques
 411,Which anise spirit is Greece's national drink?,Rakija,Arak,Ouzo,,C,hard,Ingredients
-412,Cold smoking happens below roughly which temperature?,About 90 degrees F,About 150 degrees F,About 200 degrees F,,A,hard,Cooking Techniques
-413,Mole poblano hails from which Mexican state?,Oaxaca,Puebla,Yucatan,,B,hard,World Cuisines
-414,Water bath canning needs a pH below what?,About 7.0,About 9.0,About 4.6,,C,hard,Kitchen Science
-415,Heavy cream in the US must hold at least how much butterfat?,About 36 percent,About 18 percent,About 50 percent,,A,hard,Ingredients
+412,Cold smoking happens below roughly which temperature?,About 90 degrees F,About 200 degrees F,About 150 degrees F,,A,hard,Cooking Techniques
+413,Mole poblano hails from which Mexican state?,Yucatan,Puebla,Oaxaca,,B,hard,World Cuisines
+414,Water bath canning needs a pH below what?,About 4.6,About 7.0,About 9.0,,A,hard,Kitchen Science
+415,Heavy cream in the US must hold at least how much butterfat?,About 50 percent,About 18 percent,About 36 percent,,C,hard,Ingredients
 416,A broken hollandaise can often be rescued with what?,Ice cold milk,A spoonful of hot water,Extra salt,,B,hard,Cooking Techniques
-417,Boston baked beans anchor which white bean?,Kidney beans,Pinto beans,Navy beans,,C,hard,Ingredients
-418,Which sake label means it skipped pasteurization?,Namazake,Nigori,Ginjo,,A,hard,Ingredients
-419,Maillard browning becomes noticeable above about which Celsius level?,About 50 degrees C,About 140 degrees C,About 250 degrees C,,B,hard,Kitchen Science
-420,Which dice is finer than small dice?,Oblique,Paysanne,Brunoise,,C,hard,Cooking Techniques
-421,Roquefort veins come from which mold?,Penicillium roqueforti,Penicillium camemberti,Penicillium nigrum,,A,hard,Ingredients
-422,Lutefisk is treated with which harsh agent?,Wood ash,Lye,Whey,,B,hard,World Cuisines
-423,The rapid initial rise in the oven is called what?,Bench rest,Autolyse,Oven spring,,C,hard,Baking
-424,Traditional Japanese tofu sets with which coagulant?,Nigari,Gypsum,Lemon juice,,A,hard,Ingredients
+417,Boston baked beans anchor which white bean?,Navy beans,Kidney beans,Pinto beans,,A,hard,Ingredients
+418,Which sake label means it skipped pasteurization?,Ginjo,Nigori,Namazake,,C,hard,Ingredients
+419,Maillard browning becomes noticeable above about which Celsius level?,About 50 degrees C,About 250 degrees C,About 140 degrees C,,C,hard,Kitchen Science
+420,Which dice is finer than small dice?,Oblique,Brunoise,Paysanne,,B,hard,Cooking Techniques
+421,Roquefort veins come from which mold?,Penicillium nigrum,Penicillium roqueforti,Penicillium camemberti,,B,hard,Ingredients
+422,Lutefisk is treated with which harsh agent?,Wood ash,Whey,Lye,,C,hard,World Cuisines
+423,The rapid initial rise in the oven is called what?,Oven spring,Autolyse,Bench rest,,A,hard,Baking
+424,Traditional Japanese tofu sets with which coagulant?,Nigari,Lemon juice,Gypsum,,A,hard,Ingredients
 425,A tomahawk steak is which cut with a long bone?,Filet mignon,Ribeye,Sirloin,,B,hard,Ingredients
-426,Kimchi tang comes from which bacteria family?,Yeast,Acetobacter,Lactic acid bacteria,,C,hard,Kitchen Science
+426,Kimchi tang comes from which bacteria family?,Acetobacter,Lactic acid bacteria,Yeast,,B,hard,Kitchen Science
 427,Classic shortcrust uses roughly which flour to fat ratio?,2 to 1 flour to fat,1 to 1 flour to fat,4 to 1 flour to fat,,A,hard,Baking
-428,Which country grows most of the world cumin?,Syria,India,Iran,,B,hard,Herbs and Spices
-429,Which pan metal gives the most even heat for sauces?,Aluminum foil,Cast iron,Copper,,C,hard,Cooking Techniques
+428,Which country grows most of the world cumin?,India,Iran,Syria,,A,hard,Herbs and Spices
+429,Which pan metal gives the most even heat for sauces?,Cast iron,Aluminum foil,Copper,,C,hard,Cooking Techniques
 430,Which amino acid carries umami in parmesan?,Glutamate,Glycine,Arginine,,A,hard,Kitchen Science
-431,Which tea leaves are fully oxidized?,Green tea,Black tea,Oolong tea,,B,hard,Ingredients
-432,Leafy herbs rolled and sliced into ribbons are cut how?,Tourne,Rondelle,Chiffonade,,C,hard,Cooking Techniques
-433,Which Tokyo market replaced Tsukiji for tuna auctions?,Toyosu,Nishiki,Osaka market,,A,hard,World Cuisines
-434,Meringue foam owes its stability mainly to which protein?,Casein,Ovalbumin,Glutenin,,B,hard,Kitchen Science
-435,Biryani favors basmati aged for which benefit?,Sweeter taste,Faster cooking,Firmer longer grains,,C,hard,Ingredients
+431,Which tea leaves are fully oxidized?,Black tea,Green tea,Oolong tea,,A,hard,Ingredients
+432,Leafy herbs rolled and sliced into ribbons are cut how?,Rondelle,Chiffonade,Tourne,,B,hard,Cooking Techniques
+433,Which Tokyo market replaced Tsukiji for tuna auctions?,Nishiki,Toyosu,Osaka market,,B,hard,World Cuisines
+434,Meringue foam owes its stability mainly to which protein?,Ovalbumin,Casein,Glutenin,,A,hard,Kitchen Science
+435,Biryani favors basmati aged for which benefit?,Sweeter taste,Firmer longer grains,Faster cooking,,B,hard,Ingredients
 436,Which sturgeon yields true beluga caviar?,Huso huso,Osetra sturgeon,Sterlet,,A,hard,Ingredients
 437,A sourdough starter doubles fastest near which temperature?,About 5 degrees C,About 25 degrees C,About 40 degrees C,,B,hard,Baking
-438,Mezcal smoky note comes from what?,Adding smoke essence,Aging in oak,Cooking agave in earthen pits,,C,hard,Ingredients
-439,Which Roman pasta dresses egg guanciale and pecorino?,Carbonara,Alla gricia,Amatriciana,,A,hard,World Cuisines
+438,Mezcal smoky note comes from what?,Cooking agave in earthen pits,Adding smoke essence,Aging in oak,,A,hard,Ingredients
+439,Which Roman pasta dresses egg guanciale and pecorino?,Carbonara,Amatriciana,Alla gricia,,A,hard,World Cuisines
 440,Which vitamin is most heat sensitive in green vegetables?,Folate,Vitamin C,Niacin,,B,hard,Kitchen Science
 441,Comte wheels traditionally age inside what?,Mountain springs,Hay barns,Old fort tunnels,,C,hard,Ingredients
 442,Resting dough after mixing mainly lets what happen?,Gluten bonds relax,Yeast die off,Starch turn to sugar,,A,hard,Baking
 443,Which botanical defines gin?,Angelica root,Juniper,Coriander seed,,B,hard,Herbs and Spices
-444,Surstromming cans hiss open in which country?,Norway,Finland,Sweden,,C,hard,World Cuisines
-445,Poultry is considered safe at which internal temperature?,About 74 degrees C,About 85 degrees C,About 60 degrees C,,A,hard,Kitchen Science
-446,Which mother sauce starts from a pale stock?,Beurre blanc,Veloute,Espagnole,,B,hard,Cooking Techniques
-447,A tangelo crosses tangerine with which other fruit?,Apricot,Plum,Grapefruit,,C,hard,Ingredients
-448,Which bread emerged carbonized from Pompeii ovens?,Panis quadratus,Focaccia,Baguette,,A,hard,Baking
-449,Self rising flour comes pre mixed with what?,Dry yeast,Baking powder and salt,Cream of tartar only,,B,hard,Baking
-450,Which country has the highest per person mate consumption?,Argentina,Paraguay,Uruguay,,C,hard,World Cuisines
-451,Which rennet suits vegetarians?,Microbial rennet,Calf stomach extract,Fish bladder isinglass,,A,hard,Ingredients
-452,Hard crack candy snaps at what sugar concentration?,About 70 percent,About 99 percent,About 85 percent,,B,hard,Kitchen Science
-453,Osso buco stars which veal cut?,Veal breast,Veal loin,Veal shank,,C,hard,Ingredients
-454,Slowly browned onions owe their sweetness to what?,Caramelized onion sugars,Added honey,Salt drawing moisture,,A,hard,Cooking Techniques
-455,Which French cheese hides a line of ash?,Reblochon,Morbier,Munster,,B,hard,Ingredients
-456,White pepper comes from what treatment of the berry?,Roasted red berry,Unripe green berry dried,Ripe berry soaked and skinned,,C,hard,Herbs and Spices
-457,The long handled pot for Turkish coffee is called what?,Cezve,Dallah,Moka pot,,A,hard,World Cuisines
-458,Classic British marmalade uses which bitter orange?,Valencia orange,Seville orange,Cara cara orange,,B,hard,Ingredients
-459,Which tool keeps vegetables submerged during fermentation?,A cookie sheet,A colander,Fermentation weights,,C,hard,Kitchen Science
-460,Which ratio gives pound cake its name?,A pound each of butter sugar eggs flour,A pound of flour only,One pound total weight,,A,hard,Baking
+444,Surstromming cans hiss open in which country?,Finland,Sweden,Norway,,B,hard,World Cuisines
+445,Poultry is considered safe at which internal temperature?,About 60 degrees C,About 85 degrees C,About 74 degrees C,,C,hard,Kitchen Science
+446,Which mother sauce starts from a pale stock?,Veloute,Beurre blanc,Espagnole,,A,hard,Cooking Techniques
+447,A tangelo crosses tangerine with which other fruit?,Plum,Grapefruit,Apricot,,B,hard,Ingredients
+448,Which bread emerged carbonized from Pompeii ovens?,Focaccia,Panis quadratus,Baguette,,B,hard,Baking
+449,Self rising flour comes pre mixed with what?,Dry yeast,Cream of tartar only,Baking powder and salt,,C,hard,Baking
+450,Which country has the highest per person mate consumption?,Uruguay,Argentina,Paraguay,,A,hard,World Cuisines
+451,Which rennet suits vegetarians?,Calf stomach extract,Fish bladder isinglass,Microbial rennet,,C,hard,Ingredients
+452,Hard crack candy snaps at what sugar concentration?,About 99 percent,About 70 percent,About 85 percent,,A,hard,Kitchen Science
+453,Osso buco stars which veal cut?,Veal breast,Veal shank,Veal loin,,B,hard,Ingredients
+454,Slowly browned onions owe their sweetness to what?,Added honey,Salt drawing moisture,Caramelized onion sugars,,C,hard,Cooking Techniques
+455,Which French cheese hides a line of ash?,Munster,Reblochon,Morbier,,C,hard,Ingredients
+456,White pepper comes from what treatment of the berry?,Unripe green berry dried,Roasted red berry,Ripe berry soaked and skinned,,C,hard,Herbs and Spices
+457,The long handled pot for Turkish coffee is called what?,Cezve,Moka pot,Dallah,,A,hard,World Cuisines
+458,Classic British marmalade uses which bitter orange?,Seville orange,Valencia orange,Cara cara orange,,A,hard,Ingredients
+459,Which tool keeps vegetables submerged during fermentation?,A colander,A cookie sheet,Fermentation weights,,C,hard,Kitchen Science
+460,Which ratio gives pound cake its name?,One pound total weight,A pound each of butter sugar eggs flour,A pound of flour only,,B,hard,Baking
 461,Kedgeree builds on which smoked fish?,Smoked mackerel,Smoked haddock,Smoked trout,,B,hard,Ingredients
-462,Which country leads world black pepper exports?,Cambodia,Malaysia,Vietnam,,C,hard,Herbs and Spices
-463,Which pan finish resists sticking when seasoned well?,A well seasoned cast iron pan,A polished copper pan,A glass pan,,A,hard,Cooking Techniques
-464,Which pepper dries into ancho?,Pasilla,Poblano,Mulato,,B,hard,Ingredients
+462,Which country leads world black pepper exports?,Malaysia,Cambodia,Vietnam,,C,hard,Herbs and Spices
+463,Which pan finish resists sticking when seasoned well?,A glass pan,A well seasoned cast iron pan,A polished copper pan,,B,hard,Cooking Techniques
+464,Which pepper dries into ancho?,Poblano,Pasilla,Mulato,,A,hard,Ingredients
 465,Labneh is which kind of dairy?,A brined cheese,A smoked cheese,A strained yogurt cheese,,C,hard,Ingredients
-466,Which tool shaves truffles and parmesan thinly?,A truffle shaver,A cheese plane,A box grater,,A,hard,Cooking Techniques
-467,Which seaweed wraps onigiri?,Wakame,Nori,Hijiki,,B,hard,Ingredients
-468,Why do cooks add pasta water to sauce?,It cools the sauce,It adds salt only,Its starch helps sauce cling,,C,hard,Kitchen Science
-469,Herbes de Provence typically contains which floral herb?,Lavender,Marjoram,Savory,,A,hard,Herbs and Spices
-470,Which Greek dessert layers filo with custard?,Baklava,Galaktoboureko,Loukoumades,,B,hard,World Cuisines
-471,Whole milk in the US holds which butterfat?,About 1 percent,About 2 percent,About 3.25 percent,,C,hard,Ingredients
-472,Which tool breaks down a whole bird fastest?,Poultry shears,A fillet knife,A utility knife,,A,hard,Cooking Techniques
-473,Gochujang combines chili with which fermented base?,Miso,Fermented soybean powder,Fish sauce,,B,hard,Ingredients
-474,A boule is which shape of bread?,A flat disc,A tall square tin,A round loaf,,C,hard,Baking
-475,Which seed paste fills many Chinese pastries?,Black sesame paste,Tahini,Sunflower butter,,A,hard,Ingredients
-476,An espresso cut with equal warm milk is called what in Spain?,Cafe au lait,Cortado,Flat white,,B,hard,Ingredients
-477,Croissant lift in the oven comes mainly from what?,Yeast only,Baking ammonia,Steam from butter water,,C,hard,Baking
-478,Which board material is gentlest on knife edges?,Wood,Glass,Stone,,A,hard,Cooking Techniques
-479,Puerh tea cakes age in which region?,From Japan,From Yunnan province,From Sri Lanka,,B,hard,Ingredients
+466,Which tool shaves truffles and parmesan thinly?,A truffle shaver,A box grater,A cheese plane,,A,hard,Cooking Techniques
+467,Which seaweed wraps onigiri?,Hijiki,Wakame,Nori,,C,hard,Ingredients
+468,Why do cooks add pasta water to sauce?,Its starch helps sauce cling,It cools the sauce,It adds salt only,,A,hard,Kitchen Science
+469,Herbes de Provence typically contains which floral herb?,Lavender,Savory,Marjoram,,A,hard,Herbs and Spices
+470,Which Greek dessert layers filo with custard?,Baklava,Loukoumades,Galaktoboureko,,C,hard,World Cuisines
+471,Whole milk in the US holds which butterfat?,About 2 percent,About 3.25 percent,About 1 percent,,B,hard,Ingredients
+472,Which tool breaks down a whole bird fastest?,A fillet knife,Poultry shears,A utility knife,,B,hard,Cooking Techniques
+473,Gochujang combines chili with which fermented base?,Miso,Fish sauce,Fermented soybean powder,,C,hard,Ingredients
+474,A boule is which shape of bread?,A flat disc,A round loaf,A tall square tin,,B,hard,Baking
+475,Which seed paste fills many Chinese pastries?,Black sesame paste,Sunflower butter,Tahini,,A,hard,Ingredients
+476,An espresso cut with equal warm milk is called what in Spain?,Cortado,Flat white,Cafe au lait,,A,hard,Ingredients
+477,Croissant lift in the oven comes mainly from what?,Baking ammonia,Yeast only,Steam from butter water,,C,hard,Baking
+478,Which board material is gentlest on knife edges?,Wood,Stone,Glass,,A,hard,Cooking Techniques
+479,Puerh tea cakes age in which region?,From Japan,From Sri Lanka,From Yunnan province,,C,hard,Ingredients
 480,Which sugar is least refined?,White sugar,Powdered sugar,Muscovado,,C,hard,Ingredients
-481,UV exposed mushrooms naturally make which vitamin?,Vitamin D,Vitamin C,Vitamin B6,,A,hard,Kitchen Science
-482,Classic French puff pastry calls for about how many letter folds?,About 2,About 6,About 12,,B,hard,Baking
-483,Kazunoko is the roe of which fish?,Trout,Tuna,Herring,,C,hard,Ingredients
-484,Vinegar forms when which microbes finish the job?,Acetic acid bacteria,Lactic acid bacteria,Blue mold,,A,hard,Kitchen Science
-485,A sauce said to nappe does what?,Splits on reheating,Coats the back of a spoon,Thins under heat,,B,hard,Cooking Techniques
-486,Einkorn is an ancient species of what?,Barley,Rye,Wheat,,C,hard,Ingredients
-487,Most Western chef knives sharpen near which angle per side?,About 20 degrees,About 10 degrees,About 40 degrees,,A,hard,Cooking Techniques
-488,Which toasted nut blends into Mexican salsa macha?,Cashews,Peanuts,Macadamias,,B,hard,Ingredients
-489,A half sheet pan measures about what?,About 9 by 13 inches,About 12 by 16 inches,About 18 by 13 inches,,C,hard,Cooking Techniques
-490,Potatoes for salad are cooked to what stage?,Fork tender,Fall apart,Raw center,,A,hard,Cooking Techniques
+481,UV exposed mushrooms naturally make which vitamin?,Vitamin B6,Vitamin D,Vitamin C,,B,hard,Kitchen Science
+482,Classic French puff pastry calls for about how many letter folds?,About 6,About 2,About 12,,A,hard,Baking
+483,Kazunoko is the roe of which fish?,Tuna,Herring,Trout,,B,hard,Ingredients
+484,Vinegar forms when which microbes finish the job?,Lactic acid bacteria,Blue mold,Acetic acid bacteria,,C,hard,Kitchen Science
+485,A sauce said to nappe does what?,Coats the back of a spoon,Splits on reheating,Thins under heat,,A,hard,Cooking Techniques
+486,Einkorn is an ancient species of what?,Wheat,Rye,Barley,,A,hard,Ingredients
+487,Most Western chef knives sharpen near which angle per side?,About 40 degrees,About 10 degrees,About 20 degrees,,C,hard,Cooking Techniques
+488,Which toasted nut blends into Mexican salsa macha?,Peanuts,Cashews,Macadamias,,A,hard,Ingredients
+489,A half sheet pan measures about what?,About 18 by 13 inches,About 12 by 16 inches,About 9 by 13 inches,,A,hard,Cooking Techniques
+490,Potatoes for salad are cooked to what stage?,Fall apart,Fork tender,Raw center,,B,hard,Cooking Techniques
 491,Which Malabar port was a historic pepper hub?,Goa,Calicut,Mumbai,,B,hard,World Cuisines
-492,Cream whips best because of what trait?,Its sugar content,Its salt content,Its fat clusters trap air,,C,hard,Kitchen Science
-493,Which spatula flips delicate fish?,A fish spatula,A wooden spoon,A serving fork,,A,hard,Cooking Techniques
-494,Grappa distills what raw material?,Whole grapes,Grape skins and seeds,Molasses,,B,hard,Ingredients
-495,Which oven setting uses only the top element?,Convection bake,The warm setting,The broiler,,C,hard,Cooking Techniques
-496,A chili heat concentrates mostly in what?,The placental pith,The seeds,The skin,,A,hard,Herbs and Spices
-497,Which Italian cheese name means recooked?,Gorgonzola,Ricotta,Taleggio,,B,hard,Ingredients
-498,Mounting a sauce means finishing with what?,Cream,Flour slurry,Cold butter,,C,hard,Cooking Techniques
+492,Cream whips best because of what trait?,Its salt content,Its sugar content,Its fat clusters trap air,,C,hard,Kitchen Science
+493,Which spatula flips delicate fish?,A serving fork,A wooden spoon,A fish spatula,,C,hard,Cooking Techniques
+494,Grappa distills what raw material?,Grape skins and seeds,Whole grapes,Molasses,,A,hard,Ingredients
+495,Which oven setting uses only the top element?,The warm setting,Convection bake,The broiler,,C,hard,Cooking Techniques
+496,A chili heat concentrates mostly in what?,The placental pith,The skin,The seeds,,A,hard,Herbs and Spices
+497,Which Italian cheese name means recooked?,Gorgonzola,Taleggio,Ricotta,,C,hard,Ingredients
+498,Mounting a sauce means finishing with what?,Flour slurry,Cold butter,Cream,,B,hard,Cooking Techniques
 499,Matcha whisking belongs to which ceremony?,The Japanese tea ceremony,The British tea ritual,The Moroccan mint ritual,,A,hard,World Cuisines
-500,Which rocky fish is classic in bouillabaisse?,Sea bass,Rascasse,Halibut,,B,hard,World Cuisines
-501,Which enzyme turns starch into fermentable sugar?,Trypsin,Ligase,Amylase,,C,hard,Kitchen Science
-502,Brisket comes from which part of the cow?,The chest,The hind leg,The back rib area,,A,hard,Ingredients
-503,A poolish is which kind of pre ferment?,A stiff sourdough ball,A wet yeast sponge of equal flour and water,A dry crumb topping,,B,hard,Baking
-504,Which pepper scores zero on the Scoville scale?,Fresno chili,Poblano,Bell pepper,,C,hard,Ingredients
-505,Creaming butter and sugar adds what?,Tiny air pockets,Extra gluten,Water content,,A,hard,Baking
+500,Which rocky fish is classic in bouillabaisse?,Rascasse,Halibut,Sea bass,,A,hard,World Cuisines
+501,Which enzyme turns starch into fermentable sugar?,Trypsin,Amylase,Ligase,,B,hard,Kitchen Science
+502,Brisket comes from which part of the cow?,The hind leg,The chest,The back rib area,,B,hard,Ingredients
+503,A poolish is which kind of pre ferment?,A dry crumb topping,A stiff sourdough ball,A wet yeast sponge of equal flour and water,,C,hard,Baking
+504,Which pepper scores zero on the Scoville scale?,Bell pepper,Fresno chili,Poblano,,A,hard,Ingredients
+505,Creaming butter and sugar adds what?,Tiny air pockets,Water content,Extra gluten,,A,hard,Baking
 506,Pastis turns milky when you add what?,Ice cubes only,Cold water,Sugar syrup,,B,hard,Ingredients
-507,Which sweetener gives anadama bread its character?,Maple syrup,Sorghum,Molasses,,C,hard,Baking
-508,Which Spanish paprika is famously smoked?,Pimenton de la Vera,Kashmiri chili powder,Cayenne,,A,hard,Herbs and Spices
-509,Which common oil turns cloudy in the refrigerator?,Sunflower oil,Olive oil,Avocado oil,,B,hard,Kitchen Science
-510,The word saute literally means what in French?,To whisper,To drown,To jump,,C,hard,Cooking Techniques
-511,Cacao trees fruit best in which climate?,Consistently tropical humid heat,Cool alpine air,Mediterranean dry summers,,A,hard,Ingredients
-512,In the US system which fire class covers kitchen oil fires?,Class A,Class K,Class C,,B,hard,Kitchen Science
-513,Tahdig names the treasured what in Persian cooking?,Yogurt drink,Flatbread sandwich,Crispy rice crust,,C,hard,World Cuisines
-514,Which tofu grills without crumbling?,Extra firm,Silken,Soft,,A,hard,Ingredients
-515,Which Irish loaf leavens with soda and buttermilk?,Boxty,Irish soda bread,Barmbrack,,B,hard,Baking
-516,Which kelp partners bonito flakes in dashi?,Arame,Spirulina,Kombu,,C,hard,Ingredients
+507,Which sweetener gives anadama bread its character?,Molasses,Maple syrup,Sorghum,,A,hard,Baking
+508,Which Spanish paprika is famously smoked?,Kashmiri chili powder,Pimenton de la Vera,Cayenne,,B,hard,Herbs and Spices
+509,Which common oil turns cloudy in the refrigerator?,Olive oil,Sunflower oil,Avocado oil,,A,hard,Kitchen Science
+510,The word saute literally means what in French?,To drown,To jump,To whisper,,B,hard,Cooking Techniques
+511,Cacao trees fruit best in which climate?,Cool alpine air,Consistently tropical humid heat,Mediterranean dry summers,,B,hard,Ingredients
+512,In the US system which fire class covers kitchen oil fires?,Class A,Class C,Class K,,C,hard,Kitchen Science
+513,Tahdig names the treasured what in Persian cooking?,Yogurt drink,Crispy rice crust,Flatbread sandwich,,B,hard,World Cuisines
+514,Which tofu grills without crumbling?,Extra firm,Soft,Silken,,A,hard,Ingredients
+515,Which Irish loaf leavens with soda and buttermilk?,Barmbrack,Boxty,Irish soda bread,,C,hard,Baking
+516,Which kelp partners bonito flakes in dashi?,Spirulina,Kombu,Arame,,B,hard,Ingredients
 517,Which knife steel fights rust the most?,Stainless steel,High carbon steel,Tool steel,,A,hard,Cooking Techniques
-518,Portugal's famous custard tart is called what?,Churros,Pastel de nata,Alfajores,,B,hard,World Cuisines
-519,Which coffee roast masks origin flavors most?,Light roast,Medium roast,Dark roast,,C,hard,Ingredients
-520,Which cereal grain leads world production?,Corn,Wheat,Rice,,A,hard,Ingredients
-521,Which green sauce accompanies Argentine asado?,Pebre,Chimichurri,Aji verde,,B,hard,World Cuisines
-522,Lactose is the natural sugar found in what?,Agave syrup,Date syrup,Milk,,C,hard,Kitchen Science
-523,Which pasta name means little ears?,Orecchiette,Cavatappi,Campanelle,,A,hard,Ingredients
-524,Nixtamalization soaks corn in what?,Saltwater,Limewater,Sugar water,,B,hard,Ingredients
-525,Which starch must be shaken with cold water first?,Instant tapioca,Wondra flour,Cornstarch,,C,hard,Cooking Techniques
-526,Which US city owns deep dish pizza fame?,Chicago,Detroit,New Haven,,A,hard,World Cuisines
-527,Which yeast form spoils within weeks?,Instant dry yeast,Fresh cake yeast,Active dry yeast,,B,hard,Baking
-528,Which kernel part sprouts into a new plant?,The bran,The endosperm,The germ,,C,hard,Kitchen Science
-529,Which Japanese dressing stars toasted sesame?,Goma dressing,Miso dressing,Yuzu kosho dressing,,A,hard,World Cuisines
-530,Which sparkling wine is pressed from Prosecco grapes?,Cava,Prosecco,Cremant,,B,hard,Ingredients
-531,Natto ferments which bean?,Black eyed peas,Lupini beans,Soybeans,,C,hard,Ingredients
-532,Which pan construction mixes metals for heat control?,Clad stainless with aluminum core,Solid glass,Bare wood,,A,hard,Cooking Techniques
+518,Portugal's famous custard tart is called what?,Churros,Alfajores,Pastel de nata,,C,hard,World Cuisines
+519,Which coffee roast masks origin flavors most?,Medium roast,Light roast,Dark roast,,C,hard,Ingredients
+520,Which cereal grain leads world production?,Rice,Corn,Wheat,,B,hard,Ingredients
+521,Which green sauce accompanies Argentine asado?,Aji verde,Chimichurri,Pebre,,B,hard,World Cuisines
+522,Lactose is the natural sugar found in what?,Milk,Agave syrup,Date syrup,,A,hard,Kitchen Science
+523,Which pasta name means little ears?,Cavatappi,Campanelle,Orecchiette,,C,hard,Ingredients
+524,Nixtamalization soaks corn in what?,Limewater,Saltwater,Sugar water,,A,hard,Ingredients
+525,Which starch must be shaken with cold water first?,Cornstarch,Wondra flour,Instant tapioca,,A,hard,Cooking Techniques
+526,Which US city owns deep dish pizza fame?,New Haven,Detroit,Chicago,,C,hard,World Cuisines
+527,Which yeast form spoils within weeks?,Active dry yeast,Instant dry yeast,Fresh cake yeast,,C,hard,Baking
+528,Which kernel part sprouts into a new plant?,The endosperm,The germ,The bran,,B,hard,Kitchen Science
+529,Which Japanese dressing stars toasted sesame?,Goma dressing,Yuzu kosho dressing,Miso dressing,,A,hard,World Cuisines
+530,Which sparkling wine is pressed from Prosecco grapes?,Cremant,Cava,Prosecco,,C,hard,Ingredients
+531,Natto ferments which bean?,Black eyed peas,Soybeans,Lupini beans,,B,hard,Ingredients
+532,Which pan construction mixes metals for heat control?,Bare wood,Solid glass,Clad stainless with aluminum core,,C,hard,Cooking Techniques
 533,True cinnamon bark ships mainly from which island?,Laos,Sri Lanka,New Guinea,,B,hard,Herbs and Spices
-534,Unagi is grilled which creature?,Sea urchin,Flying fish,Freshwater eel,,C,hard,World Cuisines
-535,Which English cheese wears nettle leaves?,Cornish Yarg,Red Leicester,Double Gloucester,,A,hard,Ingredients
-536,Which long single bevel knife cuts sashimi?,Nakiri,Yanagiba,Deba,,B,hard,Cooking Techniques
-537,Which milk enriches Kerala payasam?,Buffalo milk,Almond milk,Coconut milk,,C,hard,World Cuisines
-538,Yuzu cultivation centers on which country?,Japan,Thailand,China,,A,hard,Ingredients
+534,Unagi is grilled which creature?,Sea urchin,Freshwater eel,Flying fish,,B,hard,World Cuisines
+535,Which English cheese wears nettle leaves?,Cornish Yarg,Double Gloucester,Red Leicester,,A,hard,Ingredients
+536,Which long single bevel knife cuts sashimi?,Nakiri,Deba,Yanagiba,,C,hard,Cooking Techniques
+537,Which milk enriches Kerala payasam?,Coconut milk,Buffalo milk,Almond milk,,A,hard,World Cuisines
+538,Yuzu cultivation centers on which country?,Thailand,China,Japan,,C,hard,Ingredients
 539,Which icing hardens for cookie decorating?,Buttercream,Royal icing,Ganache,,B,hard,Baking
-540,Maize domestication began in which region?,Fertile Crescent,Andes,Mesoamerica,,C,hard,Ingredients
-541,Which airy breadcrumb hails from Japan?,Panko,Gremolata,Pangrattato,,A,hard,Ingredients
-542,Cleaning bone to expose rib tips is called what?,Trussing,Frenching,Larding,,B,hard,Cooking Techniques
-543,Which melty cheese caps French onion soup?,Emmentaler,Manchego,Gruyere,,C,hard,World Cuisines
-544,Slow scrambled eggs should finish as what?,Velvety soft curds,Dry crumble,Brown crisp,,A,hard,Cooking Techniques
-545,Which salty yogurt drink is Persian?,Kvass,Doogh,Ryazhenka,,B,hard,Ingredients
+540,Maize domestication began in which region?,Andes,Fertile Crescent,Mesoamerica,,C,hard,Ingredients
+541,Which airy breadcrumb hails from Japan?,Panko,Pangrattato,Gremolata,,A,hard,Ingredients
+542,Cleaning bone to expose rib tips is called what?,Frenching,Trussing,Larding,,A,hard,Cooking Techniques
+543,Which melty cheese caps French onion soup?,Manchego,Emmentaler,Gruyere,,C,hard,World Cuisines
+544,Slow scrambled eggs should finish as what?,Dry crumble,Velvety soft curds,Brown crisp,,B,hard,Cooking Techniques
+545,Which salty yogurt drink is Persian?,Doogh,Kvass,Ryazhenka,,A,hard,Ingredients
 546,Which nutty oil finishes Korean rice bowls?,Perilla oil,Corn oil,Sesame oil,,C,hard,World Cuisines
-547,Which marinade base tenderizes gently with calcium?,Yogurt,Vinegar,Cola,,A,hard,Kitchen Science
-548,Which Sardinian flatbread is paper thin?,Grissini,Pane carasau,Ciabatta,,B,hard,World Cuisines
-549,Commercial salt includes which additive against clumping?,Sea minerals,Corn syrup,Anti caking agents,,C,hard,Kitchen Science
-550,Which pastry demands hand stretched translucent dough?,Strudel dough,Pate brisee,Hot water crust,,A,hard,Baking
-551,American grocery bean sprouts usually come from which bean?,Split peas,Mung beans,Lima beans,,B,hard,Ingredients
-552,Carrots were originally which colors before orange?,Blue and green,Pink and gray,Purple and yellow,,C,hard,Ingredients
+547,Which marinade base tenderizes gently with calcium?,Vinegar,Cola,Yogurt,,C,hard,Kitchen Science
+548,Which Sardinian flatbread is paper thin?,Pane carasau,Grissini,Ciabatta,,A,hard,World Cuisines
+549,Commercial salt includes which additive against clumping?,Corn syrup,Anti caking agents,Sea minerals,,B,hard,Kitchen Science
+550,Which pastry demands hand stretched translucent dough?,Pate brisee,Strudel dough,Hot water crust,,B,hard,Baking
+551,American grocery bean sprouts usually come from which bean?,Split peas,Lima beans,Mung beans,,C,hard,Ingredients
+552,Carrots were originally which colors before orange?,Pink and gray,Purple and yellow,Blue and green,,B,hard,Ingredients
 553,Which unlined metal turns tomato sauce gray?,Aluminum,Stainless steel,Titanium,,A,hard,Cooking Techniques
-554,France's poached meringue on custard dessert is called what?,Clafoutis,Ile flottante,Far breton,,B,hard,Baking
-555,Which potato cut fries fastest?,Steak fries,Wedges,Shoestring,,C,hard,Cooking Techniques
-556,Egyptian taameya uses which legume instead of chickpeas?,Fava beans,Lentils,Butter beans,,A,hard,World Cuisines
-557,A chipotle is a smoked version of which pepper?,Serrano,Jalapeno,Habanero,,B,hard,Ingredients
-558,Bottarga is cured roe of which fish traditionally?,Salmon,Sardine,Grey mullet,,C,hard,Ingredients
-559,Which oven feature spins heat around with a fan?,Convection,Broil,Self clean,,A,hard,Cooking Techniques
-560,Which blue cheese is Denmark's famous export?,Stilton,Danablu,Cabrales,,B,hard,Ingredients
-561,Which chemical coating defines classic nonstick pans?,Silicone,Enamel,PTFE,,C,hard,Cooking Techniques
-562,Beurre blanc emulsifies wine reduction with what?,Cold butter cubes,Yogurt,Half and half,,A,hard,Cooking Techniques
-563,Ful medames is a breakfast staple of which country?,Lebanon,Egypt,Morocco,,B,hard,World Cuisines
-564,Which milk protein clumps into curds?,Whey protein,Albumin,Casein,,C,hard,Kitchen Science
-565,Which country produces the most saffron?,Iran,Kashmir region,Azerbaijan,,A,hard,Ingredients
-566,Boston butt comes from which primal?,Pork belly,Pork shoulder,Pork ham,,B,hard,Ingredients
-567,Which dessert bakes shredded phyllo soaked in syrup?,Lokum,Halva,Kadayif,,C,hard,World Cuisines
-568,Which scale resolution suits precise baking?,One gram increments,Ten gram increments,Half kilogram increments,,A,hard,Cooking Techniques
+554,France's poached meringue on custard dessert is called what?,Ile flottante,Clafoutis,Far breton,,A,hard,Baking
+555,Which potato cut fries fastest?,Wedges,Steak fries,Shoestring,,C,hard,Cooking Techniques
+556,Egyptian taameya uses which legume instead of chickpeas?,Lentils,Fava beans,Butter beans,,B,hard,World Cuisines
+557,A chipotle is a smoked version of which pepper?,Habanero,Serrano,Jalapeno,,C,hard,Ingredients
+558,Bottarga is cured roe of which fish traditionally?,Salmon,Grey mullet,Sardine,,B,hard,Ingredients
+559,Which oven feature spins heat around with a fan?,Convection,Self clean,Broil,,A,hard,Cooking Techniques
+560,Which blue cheese is Denmark's famous export?,Cabrales,Stilton,Danablu,,C,hard,Ingredients
+561,Which chemical coating defines classic nonstick pans?,Enamel,Silicone,PTFE,,C,hard,Cooking Techniques
+562,Beurre blanc emulsifies wine reduction with what?,Half and half,Cold butter cubes,Yogurt,,B,hard,Cooking Techniques
+563,Ful medames is a breakfast staple of which country?,Egypt,Lebanon,Morocco,,A,hard,World Cuisines
+564,Which milk protein clumps into curds?,Whey protein,Casein,Albumin,,B,hard,Kitchen Science
+565,Which country produces the most saffron?,Kashmir region,Iran,Azerbaijan,,B,hard,Ingredients
+566,Boston butt comes from which primal?,Pork shoulder,Pork belly,Pork ham,,A,hard,Ingredients
+567,Which dessert bakes shredded phyllo soaked in syrup?,Halva,Lokum,Kadayif,,C,hard,World Cuisines
+568,Which scale resolution suits precise baking?,Ten gram increments,Half kilogram increments,One gram increments,,C,hard,Cooking Techniques
 569,Which Himalayan dumpling is steamed and stuffed?,Gyoza,Momo,Pierogi,,B,hard,World Cuisines
-570,Which crunchy condiment jars Chinese noodles?,Chili oil,Doubanjiang,Chili crisp,,C,hard,Ingredients
-571,Which unleavened Indian bread balloons in hot oil?,Poori,Paratha,Dosa,,A,hard,World Cuisines
-572,Mozzarella di bufala comes from which animal?,Goat,Water buffalo,Yak,,B,hard,Ingredients
-573,Why do bakers add steam to bread ovens?,Cools the oven,Washes the dough,Delays crust so loaf expands,,C,hard,Baking
+570,Which crunchy condiment jars Chinese noodles?,Doubanjiang,Chili crisp,Chili oil,,B,hard,Ingredients
+571,Which unleavened Indian bread balloons in hot oil?,Paratha,Dosa,Poori,,C,hard,World Cuisines
+572,Mozzarella di bufala comes from which animal?,Goat,Yak,Water buffalo,,C,hard,Ingredients
+573,Why do bakers add steam to bread ovens?,Cools the oven,Delays crust so loaf expands,Washes the dough,,B,hard,Baking
 574,Which avocado cultivar rules the export market?,Hass,Fuerte,Bacon,,A,hard,Ingredients
-575,Which Japanese tea is roasted over charcoal?,Genmaicha,Hojicha,Kukicha,,B,hard,Ingredients
+575,Which Japanese tea is roasted over charcoal?,Hojicha,Kukicha,Genmaicha,,A,hard,Ingredients
 576,Which white Spanish soup blends almonds and garlic?,Salmorejo,Gazpacho,Ajoblanco,,C,hard,World Cuisines
 577,Which pan base works on induction cooktops?,A magnetic steel plate,Pure copper base,Glass bottom,,A,hard,Cooking Techniques
-578,Johnnycakes build on which corn product?,Hominy grits,Cornmeal,Popcorn,,B,hard,World Cuisines
-579,Which fish sauce is Vietnam's famous version?,Patis,Nam pla,Nuoc mam,,C,hard,Ingredients
-580,Which German city claims seven herb green sauce?,Frankfurt,Cologne,Hamburg,,A,hard,World Cuisines
-581,Which pickled plum sits atop Japanese rice?,Tsukemono,Umeboshi,Furikake,,B,hard,Ingredients
-582,Which sweetener sweetens sugar free gum and harms dogs?,Sucralose,Erythritol,Xylitol,,C,hard,Kitchen Science
-583,Which Italian island bakes flourless caprese cake?,Capri,Sardinia,Ischia,,A,hard,World Cuisines
+578,Johnnycakes build on which corn product?,Hominy grits,Popcorn,Cornmeal,,C,hard,World Cuisines
+579,Which fish sauce is Vietnam's famous version?,Patis,Nuoc mam,Nam pla,,B,hard,Ingredients
+580,Which German city claims seven herb green sauce?,Cologne,Frankfurt,Hamburg,,B,hard,World Cuisines
+581,Which pickled plum sits atop Japanese rice?,Umeboshi,Tsukemono,Furikake,,A,hard,Ingredients
+582,Which sweetener sweetens sugar free gum and harms dogs?,Xylitol,Erythritol,Sucralose,,A,hard,Kitchen Science
+583,Which Italian island bakes flourless caprese cake?,Capri,Ischia,Sardinia,,A,hard,World Cuisines
 584,Which tuber milks Spanish horchata de chufa?,Malted barley,Tiger nuts,Coconut,,B,hard,Ingredients
-585,Marmite is a spread made from what?,Soybeans,Brown sugar,Yeast extract,,C,hard,Ingredients
-586,Which sweet Japanese drink ferments rice with koji?,Amazake,Horchata,Orgeat,,A,hard,Ingredients
-587,Sichuan dishes tingle thanks to which husk?,White pepper,Sichuan peppercorn,Cubeb,,B,hard,Herbs and Spices
-588,Carnitas finish by frying their shreds in what?,Butter,Oil,Pork fat,,C,hard,Cooking Techniques
-589,Baked Alaska hides which frozen center?,Ice cream,Frozen yogurt,Meringue,,A,hard,Baking
-590,Yuba is the skin formed on what?,Simmering dairy milk,Simmering soy milk,Simmering broth,,B,hard,Ingredients
-591,Which root flavors the Turkish drink salgam?,Beet,Radish,Purple carrot,,C,hard,Ingredients
+585,Marmite is a spread made from what?,Yeast extract,Brown sugar,Soybeans,,A,hard,Ingredients
+586,Which sweet Japanese drink ferments rice with koji?,Orgeat,Amazake,Horchata,,B,hard,Ingredients
+587,Sichuan dishes tingle thanks to which husk?,White pepper,Cubeb,Sichuan peppercorn,,C,hard,Herbs and Spices
+588,Carnitas finish by frying their shreds in what?,Butter,Pork fat,Oil,,B,hard,Cooking Techniques
+589,Baked Alaska hides which frozen center?,Meringue,Frozen yogurt,Ice cream,,C,hard,Baking
+590,Yuba is the skin formed on what?,Simmering dairy milk,Simmering broth,Simmering soy milk,,C,hard,Ingredients
+591,Which root flavors the Turkish drink salgam?,Purple carrot,Beet,Radish,,A,hard,Ingredients
 592,In Italy pasta is served as which course?,The primo first course,The main course,The dessert course,,A,hard,World Cuisines
-593,Khoya is milk slowly reduced to what?,Buttermilk,Solid milk fudge,Cheese curds,,B,hard,Ingredients
-594,Grill crosshatching comes from rotating food how?,Moving it to cold side,Pressing with a spatula,A quarter turn mid cook,,C,hard,Cooking Techniques
-595,Ceylon tea grows on which island?,Sri Lanka,Java,Taiwan,,A,hard,Ingredients
-596,Which sesame crust coats fried Chinese rice balls?,Tangyuan,Jiandui,Mochi,,B,hard,World Cuisines
-597,High pressure cooking runs near which gauge pressure?,About 5 psi,About 30 psi,About 15 psi,,C,hard,Kitchen Science
-598,Marcona almonds grow mainly in which country?,Spain,Tunisia,France,,A,hard,Ingredients
-599,Which lightweight metal builds classic woks?,Aluminum,Carbon steel,Clay,,B,hard,Cooking Techniques
-600,Butter in the US must hold at least how much butterfat?,About 80 percent,About 65 percent,About 55 percent,About 72 percent,A,expert,Baking
-601,Ciabatta dough typically hydrates near what?,About 60 percent,About 78 percent,About 92 percent,About 95 percent,B,expert,Baking
-602,Oil quality labs measure which breakdown products?,Free fatty acids,Amino acids,Nitrites,Chlorophyll,C,expert,Kitchen Science
-603,Kippers are cold smoked which fish?,Mackerel,Haddock,Sprat,Herring,D,expert,Ingredients
-604,Soft ball candy stage lands near which Celsius reading?,About 114 degrees C,About 100 degrees C,About 133 degrees C,About 155 degrees C,A,expert,Baking
-605,Rennet's active enzyme is named what?,Chymosin,Hyaluronidase,Urease,Ptyalin,B,expert,Kitchen Science
-606,Cut eggplant browns via which enzyme?,Catalase,Peroxidase,Polyphenol oxidase,Invertase,C,expert,Kitchen Science
-607,Chapati flatbread is ground from which flour?,Maida,Besan,Sooji,Atta,D,expert,Ingredients
-608,Corked wine carries which aroma taint?,TCA mustiness,Ethyl acetate nail polish,Sulfur rotten egg,Oxidized sherry note,A,expert,Kitchen Science
-609,Pate en croute gets its shine from what?,Melted butter,Aspic glaze,Honey syrup,Demi glaze,B,expert,Cooking Techniques
-610,Top grade Japanese wagyu is labeled what?,A3,B4,A5,M9,C,expert,Ingredients
-611,Couverture chocolate must contain at least how much cocoa butter?,About 20 percent,About 45 percent,About 10 percent,About 31 percent,D,expert,Baking
-612,An Italian biga is which kind of pre ferment?,A stiff dry pre dough,A wet 100 percent hydration sponge,A sour rye culture,A milk based sponge,A,expert,Baking
-613,Brewing water hardness measures which dissolved minerals?,Sodium and potassium,Calcium and magnesium,Iron and zinc,Chlorides only,B,expert,Kitchen Science
-614,Kobe beef must come from which prefecture?,Hokkaido,Kagoshima,Hyogo,Mie,C,expert,World Cuisines
-615,Clothbound cheddar ages under which wrapping?,Wax seal,Vacuum plastic,Parchment,Cotton cloth and lard,D,expert,Ingredients
-616,Low temperature long hold pasteurization runs at?,About 63 degrees C for 30 minutes,About 100 degrees C for 1 minute,About 138 degrees C for 2 seconds,About 40 degrees C for 1 hour,A,expert,Kitchen Science
-617,Sauce supreme builds on which mother sauce?,Tomato,Veloute,Allemande,Beurre rouge,B,expert,Cooking Techniques
-618,Half sour pickles get their tang from what?,Vinegar brine,Quick blanch,Lactic fermentation,Whey only,C,expert,Kitchen Science
-619,Dark chocolate is tempered to about which working temperature?,About 44 degrees C,About 20 degrees C,About 38 degrees C,About 31 degrees C,D,expert,Baking
-620,Which milling step strips rice bran?,Polishing,Parboiling,Steaming,Aging,A,expert,Ingredients
-621,British double cream holds about what butterfat?,About 30 percent,About 48 percent,About 49 percent,About 12 percent,B,expert,Ingredients
-622,Velveting Chinese meat marinates with which base?,Yogurt and cumin,Beer and mustard,Starch egg white and rice wine,Oil and paprika,C,expert,Cooking Techniques
-623,Kamut is the trademarked name of which ancient wheat?,Spelt,Einkorn,Emmer,Khorasan,D,expert,Ingredients
-624,Cloves numb the tongue with which compound?,Eugenol,Cinnamaldehyde,Capsaicin,Safrole,A,expert,Herbs and Spices
-625,Inverting sucrose splits it into which sugars?,Lactose and maltose,Glucose and fructose,Galactose only,Starch chains,B,expert,Kitchen Science
-626,Which gluten free grain ferments into injera?,Buckwheat,Fonio,Teff,Amaranth,C,expert,World Cuisines
-627,Seasoning cast iron polymerizes which layer?,Salt crust,Wax,Lacquer,Thin oil films,D,expert,Cooking Techniques
-628,Perfect risotto waves when tilted. Italians call it what?,All onda,Al dente,Al burro,Al salto,A,expert,Cooking Techniques
-629,Oolong oxidation typically falls between what range?,About 0 and 10 percent,About 10 and 70 percent,About 90 and 100 percent,About 75 and 90 percent,B,expert,Ingredients
-630,Butchers pull hanger steak from near what?,The chuck roll,The brisket,The diaphragm,The shank,C,expert,Ingredients
-631,Mozzarella curd stretches best near which temperature?,About 30 degrees C,About 70 degrees C,About 95 degrees C,About 57 degrees C,D,expert,Ingredients
-632,Papaya tenderizes meat with which enzyme?,Papain,Bromelain,Actinidin,Ficin,A,expert,Kitchen Science
-633,Curds squeezing out whey is called what?,Emulsification,Syneresis,Gelatinization,Caramelization,B,expert,Kitchen Science
-634,Bronze die pasta differs because it is what?,Pressed thinner,Extruded faster,Coarser and more porous,Dried under sun only,C,expert,Ingredients
-635,Which grape leads Rioja blends?,Garnacha,Graciano,Mazuelo,Tempranillo,D,expert,Ingredients
-636,Sugar bloom on chocolate comes from what?,Moisture dissolving then recrystallizing sugar,Overheating cocoa butter,Cold storage with fat migration,Old packaging ink,A,expert,Baking
-637,Fully saturated brine holds about what salt percentage?,About 5 percent,About 26 percent,About 15 percent,About 33 percent,B,expert,Kitchen Science
-638,Which urn brews Russian tea?,Kyusu,Yunomi,Samovar,Tetsubin,C,expert,World Cuisines
-639,Doubling dough onto itself in quarters is which fold?,A letter fold,A wallet fold,A single turn,A book fold,D,expert,Baking
-640,The pakki biryani method pre cooks what?,The rice and meat,Only the onions,Only the spices,The dough seal,A,expert,World Cuisines
-641,Salmon cooked sous vide shines at which core temperature?,About 65 degrees C,About 52 degrees C,About 80 degrees C,About 48 degrees C,B,expert,Cooking Techniques
-642,Guanciale is cured which cut?,Lardo,Leaf lard,Pork jowl,Spare rib meat,C,expert,Ingredients
-643,Starch gelatinizes in bread crumb near which range?,About 45 to 55 degrees C,About 95 to 100 degrees C,About 30 to 40 degrees C,About 60 to 80 degrees C,D,expert,Baking
-644,Which almond nougat is Spanish?,Turron,Montelimar nougat,Divinity,Nougat glace,A,expert,Baking
+593,Khoya is milk slowly reduced to what?,Cheese curds,Buttermilk,Solid milk fudge,,C,hard,Ingredients
+594,Grill crosshatching comes from rotating food how?,Pressing with a spatula,A quarter turn mid cook,Moving it to cold side,,B,hard,Cooking Techniques
+595,Ceylon tea grows on which island?,Java,Taiwan,Sri Lanka,,C,hard,Ingredients
+596,Which sesame crust coats fried Chinese rice balls?,Mochi,Jiandui,Tangyuan,,B,hard,World Cuisines
+597,High pressure cooking runs near which gauge pressure?,About 15 psi,About 5 psi,About 30 psi,,A,hard,Kitchen Science
+598,Marcona almonds grow mainly in which country?,Tunisia,Spain,France,,B,hard,Ingredients
+599,Which lightweight metal builds classic woks?,Aluminum,Clay,Carbon steel,,C,hard,Cooking Techniques
+600,Butter in the US must hold at least how much butterfat?,About 72 percent,About 65 percent,About 80 percent,About 55 percent,C,expert,Baking
+601,Ciabatta dough typically hydrates near what?,About 92 percent,About 60 percent,About 95 percent,About 78 percent,D,expert,Baking
+602,Oil quality labs measure which breakdown products?,Chlorophyll,Nitrites,Amino acids,Free fatty acids,B,expert,Kitchen Science
+603,Kippers are cold smoked which fish?,Mackerel,Herring,Haddock,Sprat,B,expert,Ingredients
+604,Soft ball candy stage lands near which Celsius reading?,About 114 degrees C,About 100 degrees C,About 155 degrees C,About 133 degrees C,A,expert,Baking
+605,Rennet's active enzyme is named what?,Ptyalin,Hyaluronidase,Urease,Chymosin,B,expert,Kitchen Science
+606,Cut eggplant browns via which enzyme?,Polyphenol oxidase,Catalase,Invertase,Peroxidase,A,expert,Kitchen Science
+607,Chapati flatbread is ground from which flour?,Atta,Maida,Sooji,Besan,A,expert,Ingredients
+608,Corked wine carries which aroma taint?,Ethyl acetate nail polish,Oxidized sherry note,Sulfur rotten egg,TCA mustiness,D,expert,Kitchen Science
+609,Pate en croute gets its shine from what?,Melted butter,Honey syrup,Demi glaze,Aspic glaze,D,expert,Cooking Techniques
+610,Top grade Japanese wagyu is labeled what?,M9,A5,B4,A3,B,expert,Ingredients
+611,Couverture chocolate must contain at least how much cocoa butter?,About 10 percent,About 31 percent,About 45 percent,About 20 percent,B,expert,Baking
+612,An Italian biga is which kind of pre ferment?,A milk based sponge,A sour rye culture,A stiff dry pre dough,A wet 100 percent hydration sponge,C,expert,Baking
+613,Brewing water hardness measures which dissolved minerals?,Calcium and magnesium,Iron and zinc,Chlorides only,Sodium and potassium,A,expert,Kitchen Science
+614,Kobe beef must come from which prefecture?,Hokkaido,Kagoshima,Mie,Hyogo,D,expert,World Cuisines
+615,Clothbound cheddar ages under which wrapping?,Cotton cloth and lard,Vacuum plastic,Parchment,Wax seal,A,expert,Ingredients
+616,Low temperature long hold pasteurization runs at?,About 100 degrees C for 1 minute,About 40 degrees C for 1 hour,About 63 degrees C for 30 minutes,About 138 degrees C for 2 seconds,C,expert,Kitchen Science
+617,Sauce supreme builds on which mother sauce?,Beurre rouge,Tomato,Allemande,Veloute,D,expert,Cooking Techniques
+618,Half sour pickles get their tang from what?,Lactic fermentation,Quick blanch,Whey only,Vinegar brine,A,expert,Kitchen Science
+619,Dark chocolate is tempered to about which working temperature?,About 44 degrees C,About 31 degrees C,About 20 degrees C,About 38 degrees C,B,expert,Baking
+620,Which milling step strips rice bran?,Steaming,Parboiling,Aging,Polishing,D,expert,Ingredients
+621,British double cream holds about what butterfat?,About 30 percent,About 49 percent,About 48 percent,About 12 percent,C,expert,Ingredients
+622,Velveting Chinese meat marinates with which base?,Beer and mustard,Yogurt and cumin,Starch egg white and rice wine,Oil and paprika,C,expert,Cooking Techniques
+623,Kamut is the trademarked name of which ancient wheat?,Emmer,Einkorn,Spelt,Khorasan,D,expert,Ingredients
+624,Cloves numb the tongue with which compound?,Cinnamaldehyde,Eugenol,Capsaicin,Safrole,B,expert,Herbs and Spices
+625,Inverting sucrose splits it into which sugars?,Galactose only,Lactose and maltose,Starch chains,Glucose and fructose,D,expert,Kitchen Science
+626,Which gluten free grain ferments into injera?,Buckwheat,Amaranth,Teff,Fonio,C,expert,World Cuisines
+627,Seasoning cast iron polymerizes which layer?,Lacquer,Thin oil films,Salt crust,Wax,B,expert,Cooking Techniques
+628,Perfect risotto waves when tilted. Italians call it what?,Al dente,All onda,Al burro,Al salto,B,expert,Cooking Techniques
+629,Oolong oxidation typically falls between what range?,About 90 and 100 percent,About 75 and 90 percent,About 10 and 70 percent,About 0 and 10 percent,C,expert,Ingredients
+630,Butchers pull hanger steak from near what?,The chuck roll,The shank,The brisket,The diaphragm,D,expert,Ingredients
+631,Mozzarella curd stretches best near which temperature?,About 57 degrees C,About 30 degrees C,About 95 degrees C,About 70 degrees C,A,expert,Ingredients
+632,Papaya tenderizes meat with which enzyme?,Ficin,Bromelain,Papain,Actinidin,C,expert,Kitchen Science
+633,Curds squeezing out whey is called what?,Caramelization,Syneresis,Gelatinization,Emulsification,B,expert,Kitchen Science
+634,Bronze die pasta differs because it is what?,Coarser and more porous,Dried under sun only,Extruded faster,Pressed thinner,A,expert,Ingredients
+635,Which grape leads Rioja blends?,Mazuelo,Garnacha,Tempranillo,Graciano,C,expert,Ingredients
+636,Sugar bloom on chocolate comes from what?,Old packaging ink,Moisture dissolving then recrystallizing sugar,Overheating cocoa butter,Cold storage with fat migration,B,expert,Baking
+637,Fully saturated brine holds about what salt percentage?,About 15 percent,About 5 percent,About 33 percent,About 26 percent,D,expert,Kitchen Science
+638,Which urn brews Russian tea?,Kyusu,Tetsubin,Yunomi,Samovar,D,expert,World Cuisines
+639,Doubling dough onto itself in quarters is which fold?,A book fold,A letter fold,A single turn,A wallet fold,A,expert,Baking
+640,The pakki biryani method pre cooks what?,The dough seal,Only the onions,The rice and meat,Only the spices,C,expert,World Cuisines
+641,Salmon cooked sous vide shines at which core temperature?,About 48 degrees C,About 65 degrees C,About 52 degrees C,About 80 degrees C,C,expert,Cooking Techniques
+642,Guanciale is cured which cut?,Leaf lard,Pork jowl,Lardo,Spare rib meat,B,expert,Ingredients
+643,Starch gelatinizes in bread crumb near which range?,About 95 to 100 degrees C,About 60 to 80 degrees C,About 30 to 40 degrees C,About 45 to 55 degrees C,B,expert,Baking
+644,Which almond nougat is Spanish?,Divinity,Nougat glace,Turron,Montelimar nougat,C,expert,Baking
 645,Surstromming ferments which small fish?,Anchovy,Baltic herring,Capelin,Smelt,B,expert,World Cuisines
-646,Which country refined conching into smooth chocolate?,Belgium,Venezuela,Switzerland,Ghana,C,expert,Ingredients
-647,Which Parisian saint names a choux and cream gateau?,Saint Germain,Saint Michel,Saint Marcel,Saint Honore,D,expert,Baking
-648,Salep drink thickens with which orchid part?,The tuber flour,The petals,The leaves,The root bark,A,expert,Ingredients
-649,Sake warms in which ceramic flask?,Guinomi,Tokkuri,Masu,Ochoko,B,expert,World Cuisines
-650,Idli batter ferments which two staples?,Wheat and lentil,Millet and chickpea,Rice and urad dal,Corn and soy,C,expert,World Cuisines
-651,One US butter stick equals how much volume?,Quarter cup,Third of a cup,Full cup,Half a cup,D,expert,Baking
-652,Which fruit puree keeps gelatin from setting?,Actinidin,Papain,Zingibain,Diastase,A,expert,Kitchen Science
-653,A poke test that springs back slowly means what?,Under proofed,Fully proofed,Over proofed,Dead dough,B,expert,Baking
-654,In Japan which miso style ages the longest?,White miso,Awase blend,Red miso,Yellow shinshu miso,C,expert,Ingredients
-655,Cooked and cooled potatoes resist digestion via what?,Added vinegar,Frozen water crystals,Skin fiber only,Resistant starch type 3,D,expert,Kitchen Science
-656,Tamari differs from shoyu how?,Little or no wheat,More sugar,Raw and unpasteurized,Lower salt,A,expert,Ingredients
-657,Harasu is grilled salmon what?,Collar,Belly,Back,Tail,B,expert,Ingredients
-658,Pinotage crosses Pinot Noir with which grape?,Merlot,Syrah,Cinsaut,Chenin,C,expert,Ingredients
-659,Focaccia dough commonly hydrates near what?,About 35 percent,About 68 percent,About 80 percent,About 50 percent,D,expert,Baking
-660,Belgian endive blanches because it grows where?,In darkness,Under glass,In sand,Near seawater,A,expert,Ingredients
-661,Dry caramel means sugar melts with what?,Vanilla extract,No added water,Glucose syrup,Salt pinch,B,expert,Baking
-662,Which nation eats the most chocolate per person?,USA,Germany,Switzerland,UK,C,expert,Ingredients
-663,The butter free dough base in laminating is called what?,Beurrage,Paton,Tourage,Detrempe,D,expert,Baking
-664,Mayonnaise emulsifies thanks to which egg compound?,Lecithin,Lysozyme,Ovotransferrin,Ovomucin,A,expert,Kitchen Science
-665,Chefs salt pasta water to about what salinity?,About 7 percent,About 1 percent,About 0.1 percent,About 9 percent,B,expert,Cooking Techniques
-666,Tuna buyers inspect which body part at auction?,The eye,The gills,The tail cross section,The fins,C,expert,World Cuisines
-667,Chocolate snap requires which cocoa butter crystal form?,Form II,Form I,Form VI,Form V,D,expert,Kitchen Science
-668,China's famously aged black vinegar hails from which province?,Shanxi,Sichuan,Hunan,Yunnan,A,expert,Ingredients
-669,Milk for latte art should end near which temperature?,About 35 degrees C,About 65 degrees C,About 58 degrees C,About 71 degrees C,B,expert,Ingredients
-670,Minimum aging for Parmigiano Reggiano runs how long?,About 6 months,About 36 months,About 12 months,About 2 months,C,expert,Ingredients
-671,Montreal bagels distinguish themselves with which sweet boil?,Malt bath,Maple water,Sugar brine,Honey sweetened water,D,expert,Baking
-672,US milk chocolate legally needs how much chocolate liquor?,At least 10 percent,At least 45 percent,At least 60 percent,At least 25 percent,A,expert,Ingredients
-673,Two zone grilling places food where to finish gently?,Directly over coals,The cool indirect side,Half on the grate edge,Inside a foil tent,B,expert,Cooking Techniques
-674,Ghee keeps without refrigeration because what is gone?,Its aroma compounds,Its short fatty acids,Its milk solids,Its beta carotene,C,expert,Ingredients
-675,French type 55 flour names its what?,Protein percent,Extraction weight,Milling year,Ash content around 0.55 percent,D,expert,Baking
-676,Bellota ham comes from which Spanish pig breed?,Iberian pig,Duroc pig,Landrace pig,Berkshire pig,A,expert,Ingredients
-677,A chasen whisk holds about how many bamboo prongs?,About 10 prongs,About 100 prongs,About 500 prongs,About 30 prongs,B,expert,Cooking Techniques
-678,Butter creams best near which temperature?,About 8 degrees C,About 1 degree C,About 18 degrees C,About 28 degrees C,C,expert,Baking
-679,Chlorinated cake flour handles high sugar batters because chlorination does what?,Adds sweetness,Raises protein,Kills yeast,Weakens gluten and improves moisture uptake,D,expert,Baking
-680,Dried apricots keep bright orange thanks to what preservative?,Sulfur dioxide,Sodium benzoate,Nitrite,Sorbic acid,A,expert,Kitchen Science
+646,Which country refined conching into smooth chocolate?,Switzerland,Belgium,Ghana,Venezuela,A,expert,Ingredients
+647,Which Parisian saint names a choux and cream gateau?,Saint Honore,Saint Marcel,Saint Germain,Saint Michel,A,expert,Baking
+648,Salep drink thickens with which orchid part?,The petals,The leaves,The tuber flour,The root bark,C,expert,Ingredients
+649,Sake warms in which ceramic flask?,Tokkuri,Masu,Guinomi,Ochoko,A,expert,World Cuisines
+650,Idli batter ferments which two staples?,Rice and urad dal,Corn and soy,Wheat and lentil,Millet and chickpea,A,expert,World Cuisines
+651,One US butter stick equals how much volume?,Third of a cup,Full cup,Quarter cup,Half a cup,D,expert,Baking
+652,Which fruit puree keeps gelatin from setting?,Actinidin,Diastase,Papain,Zingibain,A,expert,Kitchen Science
+653,A poke test that springs back slowly means what?,Over proofed,Fully proofed,Dead dough,Under proofed,B,expert,Baking
+654,In Japan which miso style ages the longest?,Awase blend,White miso,Yellow shinshu miso,Red miso,D,expert,Ingredients
+655,Cooked and cooled potatoes resist digestion via what?,Added vinegar,Resistant starch type 3,Skin fiber only,Frozen water crystals,B,expert,Kitchen Science
+656,Tamari differs from shoyu how?,Lower salt,Raw and unpasteurized,Little or no wheat,More sugar,C,expert,Ingredients
+657,Harasu is grilled salmon what?,Back,Belly,Collar,Tail,B,expert,Ingredients
+658,Pinotage crosses Pinot Noir with which grape?,Merlot,Chenin,Cinsaut,Syrah,C,expert,Ingredients
+659,Focaccia dough commonly hydrates near what?,About 50 percent,About 80 percent,About 35 percent,About 68 percent,A,expert,Baking
+660,Belgian endive blanches because it grows where?,Under glass,Near seawater,In sand,In darkness,D,expert,Ingredients
+661,Dry caramel means sugar melts with what?,No added water,Glucose syrup,Vanilla extract,Salt pinch,A,expert,Baking
+662,Which nation eats the most chocolate per person?,Germany,Switzerland,USA,UK,B,expert,Ingredients
+663,The butter free dough base in laminating is called what?,Paton,Tourage,Detrempe,Beurrage,C,expert,Baking
+664,Mayonnaise emulsifies thanks to which egg compound?,Lysozyme,Ovotransferrin,Lecithin,Ovomucin,C,expert,Kitchen Science
+665,Chefs salt pasta water to about what salinity?,About 1 percent,About 7 percent,About 9 percent,About 0.1 percent,A,expert,Cooking Techniques
+666,Tuna buyers inspect which body part at auction?,The gills,The tail cross section,The eye,The fins,B,expert,World Cuisines
+667,Chocolate snap requires which cocoa butter crystal form?,Form V,Form VI,Form I,Form II,A,expert,Kitchen Science
+668,China's famously aged black vinegar hails from which province?,Hunan,Sichuan,Shanxi,Yunnan,C,expert,Ingredients
+669,Milk for latte art should end near which temperature?,About 35 degrees C,About 58 degrees C,About 71 degrees C,About 65 degrees C,D,expert,Ingredients
+670,Minimum aging for Parmigiano Reggiano runs how long?,About 6 months,About 12 months,About 2 months,About 36 months,B,expert,Ingredients
+671,Montreal bagels distinguish themselves with which sweet boil?,Maple water,Malt bath,Sugar brine,Honey sweetened water,D,expert,Baking
+672,US milk chocolate legally needs how much chocolate liquor?,At least 25 percent,At least 10 percent,At least 45 percent,At least 60 percent,B,expert,Ingredients
+673,Two zone grilling places food where to finish gently?,Directly over coals,Inside a foil tent,Half on the grate edge,The cool indirect side,D,expert,Cooking Techniques
+674,Ghee keeps without refrigeration because what is gone?,Its milk solids,Its short fatty acids,Its aroma compounds,Its beta carotene,A,expert,Ingredients
+675,French type 55 flour names its what?,Protein percent,Milling year,Extraction weight,Ash content around 0.55 percent,D,expert,Baking
+676,Bellota ham comes from which Spanish pig breed?,Iberian pig,Duroc pig,Berkshire pig,Landrace pig,A,expert,Ingredients
+677,A chasen whisk holds about how many bamboo prongs?,About 100 prongs,About 10 prongs,About 500 prongs,About 30 prongs,A,expert,Cooking Techniques
+678,Butter creams best near which temperature?,About 8 degrees C,About 1 degree C,About 28 degrees C,About 18 degrees C,D,expert,Baking
+679,Chlorinated cake flour handles high sugar batters because chlorination does what?,Weakens gluten and improves moisture uptake,Raises protein,Adds sweetness,Kills yeast,A,expert,Baking
+680,Dried apricots keep bright orange thanks to what preservative?,Nitrite,Sodium benzoate,Sulfur dioxide,Sorbic acid,C,expert,Kitchen Science
 681,Bresse chicken earns its AOC through which breed?,Cornish cross,White Bresse breed,Leghorn,Rhode Island Red,B,expert,World Cuisines
-682,An autolyse rest mixes only which two?,Flour and yeast,Water and salt,Flour and water,Flour and butter,C,expert,Baking
-683,Which province grows Cambodia's famed pepper?,Siem Reap,Battambang,Phnom Penh,Kampot,D,expert,Ingredients
-684,Bagel dough stays chewy via which low hydration?,Around 55 percent,Around 82 percent,Around 95 percent,Around 62 percent,A,expert,Baking
-685,Worcestershire sauce ferments which fish into its depth?,Eel,Anchovies,Herring,Cod,B,expert,Ingredients
-686,Sauerbraten marinates for days in what base?,Yogurt and garlic,Citrus brine,Red wine vinegar and spices,Cola and ketchup,C,expert,World Cuisines
-687,Sugar flower paste stiffens with which gum?,Agar,Gum arabic,Pectin,Tylose powder,D,expert,Baking
-688,Which pepper gives Peruvian dishes its golden heat?,Aji amarillo,Aji panca,Rocoto,Guajillo,A,expert,Ingredients
-689,Manchego milks from which animal?,Camel,Sheep,Cow,Llama,B,expert,Ingredients
-690,Which biscuit survived long voyages without spoiling?,Rusk,Crumpet,Hardtack,Water cracker,C,expert,Baking
-691,Pressed sushi forms inside which box?,A bamboo mat,A cedar tub,A clay pot,An oshizushi press,D,expert,World Cuisines
-692,Risotto toasts rice before adding what liquid first?,Warm stock ladle by ladle,Cold milk,Boiling oil,Sparkling water,A,expert,Cooking Techniques
-693,Which spreadable Calabrian sausage brings chili heat?,Soppressata,Nduja,Culatello,Finocchiona,B,expert,Ingredients
-694,Red velvet's hue once came from which root?,Carrot,Safflower,Beetroot,Turnip,C,expert,Baking
+682,An autolyse rest mixes only which two?,Water and salt,Flour and yeast,Flour and water,Flour and butter,C,expert,Baking
+683,Which province grows Cambodia's famed pepper?,Phnom Penh,Battambang,Kampot,Siem Reap,C,expert,Ingredients
+684,Bagel dough stays chewy via which low hydration?,Around 82 percent,Around 62 percent,Around 95 percent,Around 55 percent,D,expert,Baking
+685,Worcestershire sauce ferments which fish into its depth?,Anchovies,Cod,Eel,Herring,A,expert,Ingredients
+686,Sauerbraten marinates for days in what base?,Yogurt and garlic,Cola and ketchup,Red wine vinegar and spices,Citrus brine,C,expert,World Cuisines
+687,Sugar flower paste stiffens with which gum?,Gum arabic,Tylose powder,Pectin,Agar,B,expert,Baking
+688,Which pepper gives Peruvian dishes its golden heat?,Aji amarillo,Aji panca,Guajillo,Rocoto,A,expert,Ingredients
+689,Manchego milks from which animal?,Cow,Camel,Sheep,Llama,C,expert,Ingredients
+690,Which biscuit survived long voyages without spoiling?,Crumpet,Water cracker,Rusk,Hardtack,D,expert,Baking
+691,Pressed sushi forms inside which box?,An oshizushi press,A clay pot,A cedar tub,A bamboo mat,A,expert,World Cuisines
+692,Risotto toasts rice before adding what liquid first?,Cold milk,Warm stock ladle by ladle,Boiling oil,Sparkling water,B,expert,Cooking Techniques
+693,Which spreadable Calabrian sausage brings chili heat?,Soppressata,Nduja,Finocchiona,Culatello,B,expert,Ingredients
+694,Red velvet's hue once came from which root?,Beetroot,Safflower,Carrot,Turnip,A,expert,Baking
 695,Fruit salad recipes add pineapple juice mainly to what?,Sweeten only,Add foam,Soften seeds,Slow browning,D,expert,Kitchen Science
-696,Roquefort ripens inside which natural cave network?,Mount Combalou caves,Lascaux caves,Chauvet caves,Postojna caves,A,expert,Ingredients
-697,Korean fermentation relies on which earthen jars?,Tsubo,Onggi,Amphora,Stoneware crock,B,expert,World Cuisines
+696,Roquefort ripens inside which natural cave network?,Lascaux caves,Mount Combalou caves,Chauvet caves,Postojna caves,B,expert,Ingredients
+697,Korean fermentation relies on which earthen jars?,Tsubo,Amphora,Onggi,Stoneware crock,C,expert,World Cuisines
 698,Which egg white protein sets at the lowest temperature?,Ovoflavoprotein,Ovomucoid,Ovotransferrin,Ovalbumin,C,expert,Kitchen Science
-699,Translucent har gow skins come from which starch?,Potato starch,Mung bean starch,Corn starch,Tapioca starch,D,expert,World Cuisines
-700,Clotted cream must exceed which butterfat?,About 55 percent,About 41 percent,About 52 percent,About 42 percent,A,expert,Ingredients
-701,Curing salt number one carries which active compound?,Sodium chloride only,Sodium nitrite,Sodium citrate,Sodium bicarbonate,B,expert,Kitchen Science
-702,Sachertorte layers chocolate sponge with which jam?,Raspberry jam,Cherry preserve,Apricot jam,Quince paste,C,expert,Baking
-703,Cranachan layers cream with which fruit?,Gooseberries,Blackcurrants,Rhubarb,Raspberries,D,expert,Baking
-704,Malt conversion depends on which enzyme family?,Amylases,Proteases only,Lipases,Cellulases,A,expert,Kitchen Science
-705,Which Dutch cheese carries cumin seeds?,Limburger,Leyden cheese,Maasdam,Boerenkaas,B,expert,Ingredients
-706,Duck skin crisps best after finishing near which oven heat?,About 120 degrees C,About 150 degrees C,About 220 degrees C,About 170 degrees C,C,expert,Cooking Techniques
-707,Which yakitori skewer serves crunchy cartilage?,Tsukune,Kawa,Mune,Nankotsu,D,expert,World Cuisines
-708,Which fermented shrimp paste seasons Thai curries?,Kapi,Belacan,Bagoong,Mam nem,A,expert,Ingredients
-709,Which wheat species grinds into pasta semolina?,Triticale,Durum wheat,Red Fife,Farro,B,expert,Ingredients
-710,Which folding mistake kills souffle lift?,Folding in thirds,Adding sugar early,Stirring in circles,Warming the whites,C,expert,Baking
-711,Sake brewing starts by molding what?,Brown rice,Quinoa,Wild rice,Steamed polished rice,D,expert,Ingredients
-712,Pumpernickel rye hails from which German region?,Westphalia,Bavaria,Swabia,Hesse,A,expert,World Cuisines
+699,Translucent har gow skins come from which starch?,Mung bean starch,Corn starch,Potato starch,Tapioca starch,D,expert,World Cuisines
+700,Clotted cream must exceed which butterfat?,About 41 percent,About 52 percent,About 42 percent,About 55 percent,D,expert,Ingredients
+701,Curing salt number one carries which active compound?,Sodium bicarbonate,Sodium nitrite,Sodium chloride only,Sodium citrate,B,expert,Kitchen Science
+702,Sachertorte layers chocolate sponge with which jam?,Apricot jam,Quince paste,Raspberry jam,Cherry preserve,A,expert,Baking
+703,Cranachan layers cream with which fruit?,Blackcurrants,Raspberries,Rhubarb,Gooseberries,B,expert,Baking
+704,Malt conversion depends on which enzyme family?,Amylases,Proteases only,Cellulases,Lipases,A,expert,Kitchen Science
+705,Which Dutch cheese carries cumin seeds?,Leyden cheese,Limburger,Maasdam,Boerenkaas,A,expert,Ingredients
+706,Duck skin crisps best after finishing near which oven heat?,About 170 degrees C,About 150 degrees C,About 220 degrees C,About 120 degrees C,C,expert,Cooking Techniques
+707,Which yakitori skewer serves crunchy cartilage?,Kawa,Mune,Nankotsu,Tsukune,C,expert,World Cuisines
+708,Which fermented shrimp paste seasons Thai curries?,Bagoong,Belacan,Mam nem,Kapi,D,expert,Ingredients
+709,Which wheat species grinds into pasta semolina?,Red Fife,Triticale,Durum wheat,Farro,C,expert,Ingredients
+710,Which folding mistake kills souffle lift?,Warming the whites,Stirring in circles,Adding sugar early,Folding in thirds,B,expert,Baking
+711,Sake brewing starts by molding what?,Steamed polished rice,Quinoa,Wild rice,Brown rice,A,expert,Ingredients
+712,Pumpernickel rye hails from which German region?,Westphalia,Swabia,Bavaria,Hesse,A,expert,World Cuisines
 713,Kefir cultures live inside which structure?,Paper filters,Gel grains,Wax pellets,Glass beads,B,expert,Kitchen Science
-714,Cola drinks color with which caramel class?,Class II caustic sulfite,Class III ammonia caramel,Class IV sulfite ammonia caramel,Class I plain caramel,C,expert,Kitchen Science
-715,Boston cream pie layers sponge with which filling?,Whipped cream,Marshmallow,Lemon curd,Custard,D,expert,Baking
-716,Hand pulled noodles earn which Chinese name?,Lamian,Wonton noodles,Rice noodles,Glass noodles,A,expert,World Cuisines
-717,Hard cheese crunch comes from which crystals?,Salt crystals,Calcium lactate,Sugar crystals,Ice crystals,B,expert,Ingredients
-718,Binchotan charcoal comes from which tree family?,Pine,Maple,Ubame oak,Cedar,C,expert,Cooking Techniques
-719,Xiaolongbao steams inside which vessel?,A clay tagine,A dutch oven,A copper pan,A bamboo steamer,D,expert,World Cuisines
-720,US dark chocolate starts at which liquor percentage?,At least 35 percent,At least 70 percent,At least 15 percent,At least 50 percent,A,expert,Ingredients
-721,Kombucha ferments under which culture?,Water kefir grains,A SCOBY,Milk kefir grains,Baker yeast only,B,expert,Kitchen Science
+714,Cola drinks color with which caramel class?,Class I plain caramel,Class III ammonia caramel,Class II caustic sulfite,Class IV sulfite ammonia caramel,D,expert,Kitchen Science
+715,Boston cream pie layers sponge with which filling?,Marshmallow,Lemon curd,Custard,Whipped cream,C,expert,Baking
+716,Hand pulled noodles earn which Chinese name?,Glass noodles,Lamian,Rice noodles,Wonton noodles,B,expert,World Cuisines
+717,Hard cheese crunch comes from which crystals?,Salt crystals,Sugar crystals,Ice crystals,Calcium lactate,D,expert,Ingredients
+718,Binchotan charcoal comes from which tree family?,Ubame oak,Maple,Pine,Cedar,A,expert,Cooking Techniques
+719,Xiaolongbao steams inside which vessel?,A copper pan,A dutch oven,A clay tagine,A bamboo steamer,D,expert,World Cuisines
+720,US dark chocolate starts at which liquor percentage?,At least 15 percent,At least 70 percent,At least 50 percent,At least 35 percent,D,expert,Ingredients
+721,Kombucha ferments under which culture?,Water kefir grains,Milk kefir grains,A SCOBY,Baker yeast only,C,expert,Kitchen Science
 722,Orange washed rind cheeses bathe in what?,Vinegar spray,Dust flour,Brine and basting liquids,Herb rub,C,expert,Ingredients
-723,Which tuna cut commands otoro status?,The loin,The collar,The tail cut,The fatty belly,D,expert,World Cuisines
-724,Picual olives dominate which oil region?,Jaen Spain,Tuscany Italy,Kalamata Greece,Provence France,A,expert,Ingredients
-725,Nutty brown butter browns which component?,Its water,Its milk solids,Its salt,Its fat,B,expert,Baking
-726,Hatch chile harvest crowns which US state?,Texas,Arizona,New Mexico,Colorado,C,expert,Ingredients
-727,Panna cotta sets with which gelling agent?,Xanthan gum,Irish moss,Locust bean gum,Gelatin,D,expert,Kitchen Science
-728,Sel roti fries which grain batter?,Ground soaked rice,Tapioca,Corn,Oats,A,expert,World Cuisines
-729,Real wasabi grates from which plant part?,The root tuber,The rhizome,The leaf stem,The seed pod,B,expert,Ingredients
-730,Which French cake layers hazelnut meringue discs?,Financier,Madeleine,Dacquoise,Canele,C,expert,Baking
-731,Hot holding keeps buffet food above which Celsius line?,Above 50 degrees C,Above 75 degrees C,Above 30 degrees C,Above 63 degrees C,D,expert,Kitchen Science
-732,Musakhan bakes atop which village bread?,Taboon bread,Lavash,Barbari,Matzo,A,expert,World Cuisines
-733,Shopska salad crumbles which white brined cheese?,Bryndza,Sirene,Mizithra,Feta,B,expert,Ingredients
-734,Tej ferments from which sweet base?,Barley malt,Rice syrup,Honey,Agave,C,expert,Ingredients
-735,Mojama cures which fish loin?,Swordfish,Marlin,Sailfish,Tuna,D,expert,Ingredients
-736,Tonkotsu broth simmers which bones for hours?,Pork bones,Chicken bones,Fish bones,Beef bones,A,expert,World Cuisines
-737,Tiramisu layers which ladyfinger biscuits?,Amaretti,Savoiardi,Cantucci,Pandoro,B,expert,Baking
-738,Antep baklava layers which green nut?,Walnuts,Hazelnuts,Pistachios,Pecans,C,expert,World Cuisines
-739,Cold brew coffee steeps for roughly how long?,About 2 hours,About 1 hour,About 60 hours,About 18 hours,D,expert,Ingredients
-740,Ikura pops with which orange roe?,Salmon roe,Trout roe,Flying fish roe,Herring roe,A,expert,World Cuisines
-741,Deli rye bread perfumes with which seed?,Fennel seeds,Caraway seeds,Anise seeds,Poppy seeds,B,expert,Ingredients
-742,Classic truffle ganache blends chocolate to cream about?,One to one ratio,Four to one ratio,Two to one ratio,One to three ratio,C,expert,Baking
-743,Real wasabi farms favor which growing condition?,Dry gravel fields,Full desert sun,Salt marsh air,Cool flowing stream water,D,expert,Ingredients
-744,Chili oil dumplings in Sichuan are called what?,Chao shou,Shui jiao,Guo tie,Bao zi,A,expert,World Cuisines
-745,Which country leads world cocoa bean production?,Cameroon,Ivory Coast,Peru,Dominican Republic,B,expert,Ingredients
-746,Bulgarian yogurt credits which bacterium species?,Lactobacillus plantarum,Lactobacillus casei,Lactobacillus bulgaricus,Lactobacillus reuteri,C,expert,Kitchen Science
-747,Which maple grade pours the boldest flavor?,Golden delicate taste,Amber rich taste,Dark robust taste,Very dark strong taste,D,expert,Ingredients
-748,Coronation chicken dresses poultry in which sauce family?,Curried mayonnaise,Tzatziki,Tartar sauce,Barbecue glaze,A,expert,World Cuisines
-749,Aioli emulsifies garlic into which oil?,Peanut oil,Olive oil,Flaxseed oil,Hazelnut oil,B,expert,Ingredients
-750,Paella's prized crust is named what?,Tahdig,Confit,Socarrat,Risoni,C,expert,World Cuisines
-751,Which plain Chinese steamed bun stuffs nothing?,Baozi,Gua bao,Tang bao,Mantou,D,expert,World Cuisines
-752,San Francisco's famous 1849 starter belongs to which bread?,Sourdough,Multigrain,Challah,Tortilla,A,expert,Baking
-753,Which Portuguese boil gathers meats and veggies?,Caldo verde,Cozido,Bacalhau a Bras,Ameijoas,B,expert,World Cuisines
-754,Which savory custard steams in tea cups in Japan?,Tamagoyaki,Onsen tamago,Chawanmushi,Dashimaki,C,expert,World Cuisines
-755,Which cube condiment ferments tofu with brine?,Doenjang,Tauchu,Terasi,Sufu paste,D,expert,Ingredients
-756,Scotch bonnet heat tops out near what Scoville level?,Around 350000 SHU,Around 5000000 SHU,Around 8000 SHU,Around 50 SHU,A,expert,Herbs and Spices
-757,Italian meringue whips with which syrup?,Cold simple syrup,Hot sugar syrup,Palm syrup,Corn syrup only,B,expert,Baking
-758,Green peppercorns are picked at which stage?,Fully ripe red berries,Sun dried brown berries,Unripe green berries,Roasted black berries,C,expert,Herbs and Spices
-759,Gravy sheds grease via which tool?,A ladle,A whisk,A sieve,A fat separator jug,D,expert,Cooking Techniques
-760,Welsh rarebit melts which sauce over toast?,Cheddar beer sauce,Mornay sauce,Roux alone,Soubise,A,expert,World Cuisines
-761,Italy's prized dried boletes are called what?,Chanterelles,Porcini,Morels,Truffles,B,expert,Ingredients
+723,Which tuna cut commands otoro status?,The collar,The fatty belly,The tail cut,The loin,B,expert,World Cuisines
+724,Picual olives dominate which oil region?,Tuscany Italy,Jaen Spain,Provence France,Kalamata Greece,B,expert,Ingredients
+725,Nutty brown butter browns which component?,Its salt,Its fat,Its milk solids,Its water,C,expert,Baking
+726,Hatch chile harvest crowns which US state?,Colorado,Arizona,New Mexico,Texas,C,expert,Ingredients
+727,Panna cotta sets with which gelling agent?,Irish moss,Gelatin,Locust bean gum,Xanthan gum,B,expert,Kitchen Science
+728,Sel roti fries which grain batter?,Oats,Corn,Tapioca,Ground soaked rice,D,expert,World Cuisines
+729,Real wasabi grates from which plant part?,The root tuber,The rhizome,The seed pod,The leaf stem,B,expert,Ingredients
+730,Which French cake layers hazelnut meringue discs?,Financier,Madeleine,Canele,Dacquoise,D,expert,Baking
+731,Hot holding keeps buffet food above which Celsius line?,Above 75 degrees C,Above 50 degrees C,Above 63 degrees C,Above 30 degrees C,C,expert,Kitchen Science
+732,Musakhan bakes atop which village bread?,Matzo,Lavash,Taboon bread,Barbari,C,expert,World Cuisines
+733,Shopska salad crumbles which white brined cheese?,Sirene,Mizithra,Feta,Bryndza,A,expert,Ingredients
+734,Tej ferments from which sweet base?,Rice syrup,Agave,Honey,Barley malt,C,expert,Ingredients
+735,Mojama cures which fish loin?,Marlin,Swordfish,Sailfish,Tuna,D,expert,Ingredients
+736,Tonkotsu broth simmers which bones for hours?,Chicken bones,Pork bones,Fish bones,Beef bones,B,expert,World Cuisines
+737,Tiramisu layers which ladyfinger biscuits?,Cantucci,Amaretti,Savoiardi,Pandoro,C,expert,Baking
+738,Antep baklava layers which green nut?,Pistachios,Hazelnuts,Walnuts,Pecans,A,expert,World Cuisines
+739,Cold brew coffee steeps for roughly how long?,About 60 hours,About 18 hours,About 2 hours,About 1 hour,B,expert,Ingredients
+740,Ikura pops with which orange roe?,Trout roe,Flying fish roe,Salmon roe,Herring roe,C,expert,World Cuisines
+741,Deli rye bread perfumes with which seed?,Anise seeds,Fennel seeds,Poppy seeds,Caraway seeds,D,expert,Ingredients
+742,Classic truffle ganache blends chocolate to cream about?,Two to one ratio,Four to one ratio,One to one ratio,One to three ratio,A,expert,Baking
+743,Real wasabi farms favor which growing condition?,Dry gravel fields,Salt marsh air,Full desert sun,Cool flowing stream water,D,expert,Ingredients
+744,Chili oil dumplings in Sichuan are called what?,Bao zi,Guo tie,Shui jiao,Chao shou,D,expert,World Cuisines
+745,Which country leads world cocoa bean production?,Ivory Coast,Dominican Republic,Cameroon,Peru,A,expert,Ingredients
+746,Bulgarian yogurt credits which bacterium species?,Lactobacillus bulgaricus,Lactobacillus plantarum,Lactobacillus casei,Lactobacillus reuteri,A,expert,Kitchen Science
+747,Which maple grade pours the boldest flavor?,Golden delicate taste,Amber rich taste,Very dark strong taste,Dark robust taste,C,expert,Ingredients
+748,Coronation chicken dresses poultry in which sauce family?,Barbecue glaze,Curried mayonnaise,Tzatziki,Tartar sauce,B,expert,World Cuisines
+749,Aioli emulsifies garlic into which oil?,Hazelnut oil,Olive oil,Flaxseed oil,Peanut oil,B,expert,Ingredients
+750,Paella's prized crust is named what?,Socarrat,Tahdig,Confit,Risoni,A,expert,World Cuisines
+751,Which plain Chinese steamed bun stuffs nothing?,Tang bao,Gua bao,Baozi,Mantou,D,expert,World Cuisines
+752,San Francisco's famous 1849 starter belongs to which bread?,Sourdough,Challah,Multigrain,Tortilla,A,expert,Baking
+753,Which Portuguese boil gathers meats and veggies?,Bacalhau a Bras,Cozido,Ameijoas,Caldo verde,B,expert,World Cuisines
+754,Which savory custard steams in tea cups in Japan?,Chawanmushi,Tamagoyaki,Dashimaki,Onsen tamago,A,expert,World Cuisines
+755,Which cube condiment ferments tofu with brine?,Tauchu,Sufu paste,Terasi,Doenjang,B,expert,Ingredients
+756,Scotch bonnet heat tops out near what Scoville level?,Around 8000 SHU,Around 5000000 SHU,Around 350000 SHU,Around 50 SHU,C,expert,Herbs and Spices
+757,Italian meringue whips with which syrup?,Corn syrup only,Hot sugar syrup,Palm syrup,Cold simple syrup,B,expert,Baking
+758,Green peppercorns are picked at which stage?,Roasted black berries,Sun dried brown berries,Fully ripe red berries,Unripe green berries,D,expert,Herbs and Spices
+759,Gravy sheds grease via which tool?,A fat separator jug,A whisk,A sieve,A ladle,A,expert,Cooking Techniques
+760,Welsh rarebit melts which sauce over toast?,Soubise,Roux alone,Cheddar beer sauce,Mornay sauce,C,expert,World Cuisines
+761,Italy's prized dried boletes are called what?,Porcini,Chanterelles,Truffles,Morels,A,expert,Ingredients
 762,Which olive oil grade tops the IOOC standards?,Virgin,Pure,Extra virgin,Light,C,expert,Ingredients
-763,Fudge texture depends on sugar crystals staying what?,Large,Layered,Hollow,Microscopic small,D,expert,Baking
-764,Roman semolina gnocchi bakes under which cheese?,Pecorino Romano,Burrata,Asiago,Smoked scamorza,A,expert,World Cuisines
-765,Which yeast cake bathes in rum syrup?,Kouglof,Baba au rhum,Croquembouche,Madeira cake,B,expert,Baking
-766,Which Thai chili jam roasts shallots and chilies?,Sriracha,Sambal oelek,Nam prik pao,Harissa,C,expert,Ingredients
-767,Appenzeller rinds bathe in which herbal brine?,Salt only,Beer,Cider,Herb wine brine,D,expert,Ingredients
-768,Which fermented millet drink warms Balkan winters?,Boza,Kompot,Hardaliye,Salgam,A,expert,World Cuisines
-769,Which Dutch street waffle glues syrup layers?,Poffertjes,Stroopwafel,Oliebol,Appeltaart,B,expert,World Cuisines
-770,Gratin tops brown best on which oven rack?,The bottom rack,The middle rack,The top rack,The door rack,C,expert,Cooking Techniques
-771,Sushi rice seasons with which mild vinegar?,Sherry vinegar,Apple cider vinegar,White wine vinegar,Rice vinegar,D,expert,World Cuisines
-772,Which golden paste fills classic mooncakes?,Lotus seed paste,Red bean paste,Mung bean paste,Winter melon,A,expert,Baking
-773,Which British bake puffs beside roast beef?,Toad in the hole,Yorkshire pudding,Dundee cake,Battenberg,B,expert,Baking
-774,Which salty churned tea warms Tibet?,Masala chai,Thai iced tea,Po cha,Mint tea,C,expert,World Cuisines
-775,Challah shines before baking with which wash?,Milk wash,Butter wash,Honey glaze,Egg yolk wash,D,expert,Baking
-776,Which three pointed pepper roasts in Basque jars?,Piquillo,Padron,Shishito,Cubanelle,A,expert,Ingredients
-777,Which chilled pink soup blends beets with kefir?,Tarator,Saltibarsciai,Okroshka,Sorrel soup,B,expert,World Cuisines
-778,Which soda puff cracks peanut brittle bubbles?,Baker's ammonia,Cream of tartar,Baking soda,Potash,C,expert,Baking
-779,Traditional olive pressing crushes fruit under what?,Steel blades,Wooden mallets,Rubber rollers,Granite millstones,D,expert,Ingredients
-780,Which Italian cured loin matches Spanish lomo?,Lonza,Coppa,Pancetta,Guanciale,A,expert,Ingredients
-781,Which Middle Eastern semolina cookie is pressed in wooden molds?,Kahk,Maamoul,Ghraybeh,Basbousa,B,expert,Baking
-782,Florentine cookies lace with which sliced nut?,Flaked coconut,Sliced pistachios,Flaked almonds,Chopped macadamias,C,expert,Baking
-783,Which Georgian dumpling traps hot broth?,Pelmeni,Manti,Vareniki,Khinkali,D,expert,World Cuisines
+763,Fudge texture depends on sugar crystals staying what?,Hollow,Layered,Large,Microscopic small,D,expert,Baking
+764,Roman semolina gnocchi bakes under which cheese?,Asiago,Burrata,Pecorino Romano,Smoked scamorza,C,expert,World Cuisines
+765,Which yeast cake bathes in rum syrup?,Baba au rhum,Madeira cake,Kouglof,Croquembouche,A,expert,Baking
+766,Which Thai chili jam roasts shallots and chilies?,Sambal oelek,Nam prik pao,Sriracha,Harissa,B,expert,Ingredients
+767,Appenzeller rinds bathe in which herbal brine?,Beer,Salt only,Cider,Herb wine brine,D,expert,Ingredients
+768,Which fermented millet drink warms Balkan winters?,Kompot,Boza,Hardaliye,Salgam,B,expert,World Cuisines
+769,Which Dutch street waffle glues syrup layers?,Stroopwafel,Poffertjes,Oliebol,Appeltaart,A,expert,World Cuisines
+770,Gratin tops brown best on which oven rack?,The bottom rack,The top rack,The door rack,The middle rack,B,expert,Cooking Techniques
+771,Sushi rice seasons with which mild vinegar?,Rice vinegar,Apple cider vinegar,White wine vinegar,Sherry vinegar,A,expert,World Cuisines
+772,Which golden paste fills classic mooncakes?,Mung bean paste,Lotus seed paste,Red bean paste,Winter melon,B,expert,Baking
+773,Which British bake puffs beside roast beef?,Toad in the hole,Dundee cake,Battenberg,Yorkshire pudding,D,expert,Baking
+774,Which salty churned tea warms Tibet?,Masala chai,Mint tea,Thai iced tea,Po cha,D,expert,World Cuisines
+775,Challah shines before baking with which wash?,Milk wash,Egg yolk wash,Honey glaze,Butter wash,B,expert,Baking
+776,Which three pointed pepper roasts in Basque jars?,Cubanelle,Padron,Piquillo,Shishito,C,expert,Ingredients
+777,Which chilled pink soup blends beets with kefir?,Sorrel soup,Okroshka,Saltibarsciai,Tarator,C,expert,World Cuisines
+778,Which soda puff cracks peanut brittle bubbles?,Potash,Baker's ammonia,Baking soda,Cream of tartar,C,expert,Baking
+779,Traditional olive pressing crushes fruit under what?,Granite millstones,Steel blades,Rubber rollers,Wooden mallets,A,expert,Ingredients
+780,Which Italian cured loin matches Spanish lomo?,Pancetta,Guanciale,Lonza,Coppa,C,expert,Ingredients
+781,Which Middle Eastern semolina cookie is pressed in wooden molds?,Kahk,Ghraybeh,Maamoul,Basbousa,C,expert,Baking
+782,Florentine cookies lace with which sliced nut?,Flaked coconut,Sliced pistachios,Chopped macadamias,Flaked almonds,D,expert,Baking
+783,Which Georgian dumpling traps hot broth?,Manti,Khinkali,Vareniki,Pelmeni,B,expert,World Cuisines
 784,Which saffron rice pudding sweets Persian tables?,Sholeh zard,Kheer,Arroz con leche,Sago pudding,A,expert,World Cuisines
-785,Which tea smokes over pine fires?,Keemun,Lapsang souchong,Gyokuro,Darjeeling,B,expert,Ingredients
-786,Zaatar blend counts which tart berry among it?,Barberries,Cranberries,Sumac,Currants,C,expert,Herbs and Spices
-787,Which pink slab sears and serves food warm?,A pizza stone,A soapstone,A cast iron brick,A Himalayan salt block,D,expert,Cooking Techniques
-788,Which Swiss loaf braids like challah?,Zopf,Stollen,Birnweg,Magronen,A,expert,Baking
-789,Which aromatic oil drizzles finished truffle fries?,Argan oil,Truffle oil,Pumpkin seed oil,Neem oil,B,expert,Ingredients
-790,Which city whisks egg yolk into its coffee?,Da Nang,Hue,Hanoi,Hoi An,C,expert,World Cuisines
-791,Texas pitmasters burn which smoking wood for brisket?,Mesquite,Hickory,Apple,Post oak,D,expert,Cooking Techniques
-792,Padron peppers gamble with roughly what hot ratio?,About one in ten,About one in two,All of them,One in a thousand,A,expert,Ingredients
-793,Cotton candy spins from what sugar state?,Crushed rock sugar,Melted spun sugar,Corn syrup jelly,Honeycomb wax,B,expert,Kitchen Science
-794,Mentaiko seasons which spicy roe sacs?,Sardine roe,Mullet roe,Pollock roe,Tuna roe,C,expert,Ingredients
+785,Which tea smokes over pine fires?,Keemun,Darjeeling,Gyokuro,Lapsang souchong,D,expert,Ingredients
+786,Zaatar blend counts which tart berry among it?,Sumac,Currants,Cranberries,Barberries,A,expert,Herbs and Spices
+787,Which pink slab sears and serves food warm?,A pizza stone,A cast iron brick,A soapstone,A Himalayan salt block,D,expert,Cooking Techniques
+788,Which Swiss loaf braids like challah?,Magronen,Zopf,Birnweg,Stollen,B,expert,Baking
+789,Which aromatic oil drizzles finished truffle fries?,Truffle oil,Pumpkin seed oil,Argan oil,Neem oil,A,expert,Ingredients
+790,Which city whisks egg yolk into its coffee?,Da Nang,Hue,Hoi An,Hanoi,D,expert,World Cuisines
+791,Texas pitmasters burn which smoking wood for brisket?,Apple,Hickory,Post oak,Mesquite,C,expert,Cooking Techniques
+792,Padron peppers gamble with roughly what hot ratio?,One in a thousand,About one in two,All of them,About one in ten,D,expert,Ingredients
+793,Cotton candy spins from what sugar state?,Crushed rock sugar,Corn syrup jelly,Honeycomb wax,Melted spun sugar,D,expert,Kitchen Science
+794,Mentaiko seasons which spicy roe sacs?,Pollock roe,Tuna roe,Sardine roe,Mullet roe,A,expert,Ingredients
 795,Which saltless loaf stars in panzanella?,Pane sciocco,Rye loaf,Cornbread,Croissant,D,expert,World Cuisines
 796,Which finishing salt studs modern caramels?,Fleur de sel,Table salt,Rock salt,Pickling salt,A,expert,Baking
-797,Which Parisian cake stacks coffee and chocolate?,Paris Brest,Opera cake,Mille feuille,Religieuse,B,expert,Baking
-798,Which island ages Tabasco sauce in barrels?,Mustang Island,Amelia Island,Avery Island,Hilton Head,C,expert,Ingredients
-799,Which country's goats climb for argan nuts?,Algeria,Western Sahara,Libya,Morocco,D,expert,Ingredients
+797,Which Parisian cake stacks coffee and chocolate?,Religieuse,Paris Brest,Opera cake,Mille feuille,C,expert,Baking
+798,Which island ages Tabasco sauce in barrels?,Mustang Island,Avery Island,Hilton Head,Amelia Island,B,expert,Ingredients
+799,Which country's goats climb for argan nuts?,Western Sahara,Morocco,Algeria,Libya,B,expert,Ingredients
 800,What is the French term for the chopped onion carrot celery base?,,,,,Mirepoix,extreme,Cooking Techniques
 801,Which country consumes the most tea by total volume?,,,,,China,extreme,World Cuisines
 802,Which pot brews Arabic cardamom coffee?,,,,,Dallah,extreme,Cooking Techniques

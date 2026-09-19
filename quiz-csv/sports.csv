@@ -4,107 +4,107 @@
 ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 1,A football team fields eleven players on the pitch.,True,False,,,A,easy,Football
 2,Michael Jordan won eight NBA titles.,True,False,,,B,easy,Basketball
-3,A cricket team fields nine players in a Test match.,False,True,,,A,easy,Cricket
-4,Wimbledon is played on grass courts.,False,True,,,B,easy,Tennis
+3,A cricket team fields nine players in a Test match.,True,False,,,B,easy,Cricket
+4,Wimbledon is played on grass courts.,True,False,,,A,easy,Tennis
 5,The Olympic Games are held every two years.,False,True,,,A,easy,Olympics
-6,A Formula 1 race win earns 25 points.,False,True,,,B,easy,Other Sports
-7,A standard football match lasts 90 minutes.,True,False,,,A,easy,Football
-8,The basketball rim is fifteen feet above the floor.,True,False,,,B,easy,Basketball
+6,A Formula 1 race win earns 25 points.,True,False,,,A,easy,Other Sports
+7,A standard football match lasts 90 minutes.,False,True,,,B,easy,Football
+8,The basketball rim is fifteen feet above the floor.,False,True,,,A,easy,Basketball
 9,A cricket over consists of six balls.,True,False,,,A,easy,Cricket
 10,The French Open is played on grass.,True,False,,,B,easy,Tennis
 11,The modern Olympic Games began in Rome.,False,True,,,A,easy,Olympics
-12,Ayrton Senna won the Monaco Grand Prix six times.,False,True,,,B,easy,Other Sports
-13,Lionel Messi led Argentina to the 2022 World Cup title.,True,False,,,A,easy,Football
+12,Ayrton Senna won the Monaco Grand Prix six times.,True,False,,,A,easy,Other Sports
+13,Lionel Messi led Argentina to the 2022 World Cup title.,False,True,,,B,easy,Football
 14,Kobe Bryant won six NBA championships.,True,False,,,B,easy,Basketball
 15,Sachin Tendulkar scored 100 international centuries.,True,False,,,A,easy,Cricket
 16,Novak Djokovic has won 30 Grand Slam singles titles.,True,False,,,B,easy,Tennis
-17,Michael Phelps won 23 Olympic silver medals.,False,True,,,A,easy,Olympics
-18,Lewis Hamilton has won seven Formula 1 world titles.,False,True,,,B,easy,Other Sports
+17,Michael Phelps won 23 Olympic silver medals.,True,False,,,B,easy,Olympics
+18,Lewis Hamilton has won seven Formula 1 world titles.,True,False,,,A,easy,Other Sports
 19,The FIFA World Cup is held every three years.,False,True,,,A,easy,Football
-20,An NBA game has four quarters.,False,True,,,B,easy,Basketball
-21,The Ashes is contested between England and Australia.,True,False,,,A,easy,Cricket
-22,Rafael Nadal has won more Wimbledon titles than French Open titles.,True,False,,,B,easy,Tennis
-23,The Olympic flame is traditionally lit in Olympia.,True,False,,,A,easy,Olympics
+20,An NBA game has four quarters.,True,False,,,A,easy,Basketball
+21,The Ashes is contested between England and Australia.,False,True,,,B,easy,Cricket
+22,Rafael Nadal has won more Wimbledon titles than French Open titles.,False,True,,,A,easy,Tennis
+23,The Olympic flame is traditionally lit in Olympia.,False,True,,,B,easy,Olympics
 24,The Masters golf tournament is played at St Andrews.,True,False,,,B,easy,Other Sports
 25,A red card means only a warning for a footballer.,False,True,,,A,easy,Football
-26,Kareem Abdul Jabbar won six NBA MVP awards.,False,True,,,B,easy,Basketball
-27,A Test match is completed in a single day.,False,True,,,A,easy,Cricket
+26,Kareem Abdul Jabbar won six NBA MVP awards.,True,False,,,A,easy,Basketball
+27,A Test match is completed in a single day.,True,False,,,B,easy,Cricket
 28,Serena Williams won 23 Grand Slam singles titles.,False,True,,,B,easy,Tennis
 29,Usain Bolt won the 200m at three consecutive Olympics.,True,False,,,A,easy,Olympics
 30,The Tour de France leader wears a red jersey.,True,False,,,B,easy,Other Sports
-31,A football goal stands fifteen feet high.,False,True,,,A,easy,Football
-32,Kobe Bryant scored 81 points in a single NBA game.,False,True,,,B,easy,Basketball
+31,A football goal stands fifteen feet high.,True,False,,,B,easy,Football
+32,Kobe Bryant scored 81 points in a single NBA game.,True,False,,,A,easy,Basketball
 33,A wicket is made of two stumps.,False,True,,,A,easy,Cricket
 34,Andy Murray won two Olympic singles gold medals.,False,True,,,B,easy,Tennis
 35,Jesse Owens won four gold medals at the 1936 Olympics.,True,False,,,A,easy,Olympics
-36,The Monaco Grand Prix is held on a purpose built oval.,True,False,,,B,easy,Other Sports
-37,A penalty spot sits twelve yards from the goal.,True,False,,,A,easy,Football
+36,The Monaco Grand Prix is held on a purpose built oval.,False,True,,,A,easy,Other Sports
+37,A penalty spot sits twelve yards from the goal.,False,True,,,B,easy,Football
 38,Michael Jordan never won the NBA MVP award.,True,False,,,B,easy,Basketball
-39,LBW stands for leg behind wicket.,False,True,,,A,easy,Cricket
-40,Steffi Graf won Olympic gold in 1988.,False,True,,,B,easy,Tennis
-41,The first modern Olympic Games were held in Athens.,True,False,,,A,easy,Olympics
-42,Ayrton Senna raced for Ferrari for most of his career.,True,False,,,B,easy,Other Sports
+39,LBW stands for leg behind wicket.,True,False,,,B,easy,Cricket
+40,Steffi Graf won Olympic gold in 1988.,True,False,,,A,easy,Tennis
+41,The first modern Olympic Games were held in Athens.,False,True,,,B,easy,Olympics
+42,Ayrton Senna raced for Ferrari for most of his career.,False,True,,,A,easy,Other Sports
 43,The Premier League is the top division of Spain.,False,True,,,A,easy,Football
 44,LeBron James became the NBA's all time leading scorer in 2023.,False,True,,,B,easy,Basketball
-45,Don Bradman finished with a Test batting average of 49.94.,False,True,,,A,easy,Cricket
-46,A tiebreak is played at six games all in a set.,False,True,,,B,easy,Tennis
+45,Don Bradman finished with a Test batting average of 49.94.,True,False,,,B,easy,Cricket
+46,A tiebreak is played at six games all in a set.,True,False,,,A,easy,Tennis
 47,Nadia Comaneci scored the first perfect 10 in Olympic gymnastics.,True,False,,,A,easy,Olympics
 48,The Dakar Rally is run on a closed tarmac circuit.,True,False,,,B,easy,Other Sports
-49,England won the 1966 World Cup.,True,False,,,A,easy,Football
-50,Magic Johnson never won the Finals MVP award.,True,False,,,B,easy,Basketball
+49,England won the 1966 World Cup.,False,True,,,B,easy,Football
+50,Magic Johnson never won the Finals MVP award.,False,True,,,A,easy,Basketball
 51,An ODI innings is limited to forty overs.,False,True,,,A,easy,Cricket
 52,Roger Federer won eight Wimbledon singles titles.,False,True,,,B,easy,Tennis
-53,The Tokyo Olympics were actually held in 2021.,True,False,,,A,easy,Olympics
-54,NASCAR races are held mainly on road circuits.,True,False,,,B,easy,Other Sports
+53,The Tokyo Olympics were actually held in 2021.,False,True,,,B,easy,Olympics
+54,NASCAR races are held mainly on road circuits.,False,True,,,A,easy,Other Sports
 55,Argentina beat France in the 2022 World Cup final.,True,False,,,A,easy,Football
 56,Stephen Curry plays for the Boston Celtics.,True,False,,,B,easy,Basketball
-57,A T20 innings lasts fifty overs.,False,True,,,A,easy,Cricket
-58,Rafael Nadal has won the French Open fourteen times.,False,True,,,B,easy,Tennis
+57,A T20 innings lasts fifty overs.,True,False,,,B,easy,Cricket
+58,Rafael Nadal has won the French Open fourteen times.,True,False,,,A,easy,Tennis
 59,Mark Spitz won six gold medals at the 1972 Olympics.,False,True,,,A,easy,Olympics
 60,Michael Schumacher won five straight titles with Ferrari.,False,True,,,B,easy,Other Sports
-61,Usain Bolt won the 100m and 200m at three straight Olympics.,True,False,,,A,easy,Olympics
-62,Valentino Rossi raced in Formula 1.,True,False,,,B,easy,Other Sports
+61,Usain Bolt won the 100m and 200m at three straight Olympics.,False,True,,,B,easy,Olympics
+62,Valentino Rossi raced in Formula 1.,False,True,,,A,easy,Other Sports
 63,Diego Maradona captained Argentina to the 1986 World Cup.,True,False,,,A,easy,Football
 64,Michael Jordan won his titles with the Phoenix Suns.,True,False,,,B,easy,Basketball
 65,Australia won the 2011 Cricket World Cup.,False,True,,,A,easy,Cricket
 66,Wimbledon requires players to wear mostly white clothing.,False,True,,,B,easy,Tennis
-67,The Olympic marathon is 30 kilometres long.,False,True,,,A,easy,Olympics
-68,The Isle of Man TT is a motorcycle time trial.,False,True,,,B,easy,Other Sports
-69,Brazil has won the FIFA World Cup five times.,True,False,,,A,easy,Football
-70,A basketball free throw is worth two points.,True,False,,,B,easy,Basketball
+67,The Olympic marathon is 30 kilometres long.,True,False,,,B,easy,Olympics
+68,The Isle of Man TT is a motorcycle time trial.,True,False,,,A,easy,Other Sports
+69,Brazil has won the FIFA World Cup five times.,False,True,,,B,easy,Football
+70,A basketball free throw is worth two points.,False,True,,,A,easy,Basketball
 71,The Winter Olympics were first held in Paris.,False,True,,,A,easy,Olympics
 72,Lewis Hamilton won his first Formula 1 title with McLaren.,False,True,,,B,easy,Other Sports
-73,Cristiano Ronaldo has won more Ballon dOr awards than Lionel Messi.,False,True,,,A,easy,Football
-74,Bill Russell won eleven NBA championships.,False,True,,,B,easy,Basketball
+73,Cristiano Ronaldo has won more Ballon dOr awards than Lionel Messi.,True,False,,,B,easy,Football
+74,Bill Russell won eleven NBA championships.,True,False,,,A,easy,Basketball
 75,Shane Warne bowled leg spin.,True,False,,,A,easy,Cricket
 76,Bjorn Borg never won the French Open.,True,False,,,B,easy,Tennis
-77,Michael Phelps won eight gold medals at the 2008 Olympics.,True,False,,,A,easy,Olympics
+77,Michael Phelps won eight gold medals at the 2008 Olympics.,False,True,,,B,easy,Olympics
 78,The Formula 1 halo was introduced in the 1990s.,True,False,,,B,easy,Other Sports
 79,The 2018 World Cup was hosted by Qatar.,False,True,,,A,easy,Football
 80,Kareem Abdul Jabbar played twenty NBA seasons.,False,True,,,B,easy,Basketball
-81,An innings ends when ten wickets have fallen.,True,False,,,A,easy,Cricket
-82,Arthur Ashe Stadium is located in London.,True,False,,,B,easy,Tennis
+81,An innings ends when ten wickets have fallen.,False,True,,,B,easy,Cricket
+82,Arthur Ashe Stadium is located in London.,False,True,,,A,easy,Tennis
 83,An Olympic gold medal is made of solid gold.,False,True,,,A,easy,Olympics
 84,Steffi Graf won the Golden Slam in 1988.,False,True,,,B,easy,Tennis
-85,The first FIFA World Cup was held in 1950.,False,True,,,A,easy,Football
-86,Shaquille O'Neal won three straight Finals MVPs with the Lakers.,False,True,,,B,easy,Basketball
+85,The first FIFA World Cup was held in 1950.,True,False,,,B,easy,Football
+86,Shaquille O'Neal won three straight Finals MVPs with the Lakers.,True,False,,,A,easy,Basketball
 87,Brian Lara scored 400 not out in a Test innings.,True,False,,,A,easy,Cricket
 88,Martina Navratilova never won Wimbledon.,True,False,,,B,easy,Tennis
 89,Pele won three World Cups with Brazil.,True,False,,,A,easy,Football
 90,The NBA Finals are decided over nine games.,True,False,,,B,easy,Basketball
-91,Sachin Tendulkar played Test cricket for Pakistan.,False,True,,,A,easy,Cricket
-92,Russia hosted the 2018 World Cup.,False,True,,,B,easy,Football
+91,Sachin Tendulkar played Test cricket for Pakistan.,True,False,,,B,easy,Cricket
+92,Russia hosted the 2018 World Cup.,True,False,,,A,easy,Football
 93,Venus Williams won five Wimbledon singles titles.,True,False,,,A,easy,Tennis
 94,Cathy Freeman won her Sydney gold medal in the 100m.,True,False,,,B,easy,Olympics
-95,Tiger Woods has won fifteen major championships.,True,False,,,A,easy,Other Sports
-96,Michael Jordan played for the New York Knicks.,True,False,,,B,easy,Basketball
-97,The Champions League final is played every two years.,False,True,,,A,easy,Football
-98,Rod Laver won the calendar Grand Slam twice.,False,True,,,B,easy,Tennis
-99,Chris Gayle is nicknamed the Quiet Storm.,False,True,,,A,easy,Cricket
-100,Pete Sampras won fourteen Grand Slam titles.,False,True,,,B,easy,Tennis
-101,Michael Phelps retired with 23 Olympic gold medals.,True,False,,,A,easy,Olympics
-102,The 24 Hours of Le Mans lasts twelve hours.,True,False,,,B,easy,Other Sports
-103,Zinedine Zidane was sent off in the 2006 World Cup final.,True,False,,,A,easy,Football
+95,Tiger Woods has won fifteen major championships.,False,True,,,B,easy,Other Sports
+96,Michael Jordan played for the New York Knicks.,False,True,,,A,easy,Basketball
+97,The Champions League final is played every two years.,True,False,,,B,easy,Football
+98,Rod Laver won the calendar Grand Slam twice.,True,False,,,A,easy,Tennis
+99,Chris Gayle is nicknamed the Quiet Storm.,True,False,,,B,easy,Cricket
+100,Pete Sampras won fourteen Grand Slam titles.,True,False,,,A,easy,Tennis
+101,Michael Phelps retired with 23 Olympic gold medals.,False,True,,,B,easy,Olympics
+102,The 24 Hours of Le Mans lasts twelve hours.,False,True,,,A,easy,Other Sports
+103,Zinedine Zidane was sent off in the 2006 World Cup final.,False,True,,,B,easy,Football
 104,Tim Duncan won five titles with the Miami Heat.,True,False,,,B,easy,Basketball
 105,India won the 1987 Cricket World Cup.,False,True,,,A,easy,Cricket
 106,Maria Sharapova won Wimbledon as a teenager.,False,True,,,B,easy,Tennis
@@ -112,676 +112,676 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 108,The Dakar Rally is now held in Saudi Arabia.,False,True,,,B,easy,Other Sports
 109,Ferenc Puskas led Hungary in the 1950s.,True,False,,,A,easy,Football
 110,Larry Bird played for the Los Angeles Lakers.,True,False,,,B,easy,Basketball
-111,The IPL started in the 1980s.,False,True,,,A,easy,Cricket
-112,Billie Jean King won the Battle of the Sexes in 1973.,False,True,,,B,easy,Tennis
-113,The first Winter Olympics were held in Rome.,False,True,,,A,easy,Olympics
+111,The IPL started in the 1980s.,True,False,,,B,easy,Cricket
+112,Billie Jean King won the Battle of the Sexes in 1973.,True,False,,,A,easy,Tennis
+113,The first Winter Olympics were held in Rome.,True,False,,,B,easy,Olympics
 114,Alain Prost won four Formula 1 championships.,False,True,,,B,easy,Other Sports
 115,Lionel Messi has won eight Ballon dOr awards.,True,False,,,A,easy,Football
-116,Giannis Antetokounmpo led Milwaukee to the 2019 NBA title.,True,False,,,B,easy,Basketball
+116,Giannis Antetokounmpo led Milwaukee to the 2019 NBA title.,False,True,,,A,easy,Basketball
 117,Anil Kumble took all ten wickets in a Test innings.,True,False,,,A,easy,Cricket
 118,Serena Williams never won the French Open.,True,False,,,B,easy,Tennis
 119,Carl Lewis won six Olympic gold medals.,False,True,,,A,easy,Olympics
-120,Mike Tyson became heavyweight champion at age twenty.,False,True,,,B,easy,Other Sports
-121,Paolo Rossi was the top scorer at the 1982 World Cup.,True,False,,,A,easy,Football
-122,The NBA shot clock is thirty seconds.,True,False,,,B,easy,Basketball
+120,Mike Tyson became heavyweight champion at age twenty.,True,False,,,A,easy,Other Sports
+121,Paolo Rossi was the top scorer at the 1982 World Cup.,False,True,,,B,easy,Football
+122,The NBA shot clock is thirty seconds.,False,True,,,A,easy,Basketball
 123,Wasim Akram was a wicketkeeper.,False,True,,,A,easy,Cricket
 124,Chris Evert dominated on clay in the 1970s.,False,True,,,B,easy,Tennis
 125,The 1980 Moscow Olympics were boycotted by the Soviet Union.,False,True,,,A,easy,Olympics
-126,Secretariat won the 1973 Kentucky Derby.,False,True,,,B,easy,Other Sports
-127,Spain won the 2010 World Cup.,True,False,,,A,easy,Football
+126,Secretariat won the 1973 Kentucky Derby.,True,False,,,A,easy,Other Sports
+127,Spain won the 2010 World Cup.,False,True,,,B,easy,Football
 128,Michael Jordan won six titles with the New York Knicks.,True,False,,,B,easy,Basketball
 129,Rahul Dravid was nicknamed the Wall.,True,False,,,A,easy,Cricket
-130,Monica Seles never won a Grand Slam title.,True,False,,,B,easy,Tennis
-131,The ancient Olympic Games were held in Rome.,False,True,,,A,easy,Olympics
+130,Monica Seles never won a Grand Slam title.,False,True,,,A,easy,Tennis
+131,The ancient Olympic Games were held in Rome.,True,False,,,B,easy,Olympics
 132,Ayrton Senna died after a crash at Imola in 1994.,False,True,,,B,easy,Other Sports
 133,Uruguay won the decisive 1950 World Cup match in Brazil.,True,False,,,A,easy,Football
 134,Patrick Ewing starred for the Los Angeles Lakers.,True,False,,,B,easy,Basketball
-135,Anil Kumble took his ten wickets against Pakistan.,True,False,,,A,easy,Cricket
-136,Boris Becker won Wimbledon at age twenty five.,True,False,,,B,easy,Tennis
+135,Anil Kumble took his ten wickets against Pakistan.,False,True,,,B,easy,Cricket
+136,Boris Becker won Wimbledon at age twenty five.,False,True,,,A,easy,Tennis
 137,Edwin Moses was an Olympic swimmer.,False,True,,,A,easy,Olympics
 138,The America's Cup is a sailing competition.,False,True,,,B,easy,Other Sports
 139,Maradona scored his Hand of God goal in the 1986 final.,False,True,,,A,easy,Football
-140,The Toronto Raptors play home games in Canada.,False,True,,,B,easy,Basketball
-141,The Ashes features five Test matches.,True,False,,,A,easy,Cricket
+140,The Toronto Raptors play home games in Canada.,True,False,,,A,easy,Basketball
+141,The Ashes features five Test matches.,False,True,,,B,easy,Cricket
 142,Roger Federer won the 2008 Wimbledon final.,True,False,,,B,easy,Tennis
 143,Abebe Bikila ran barefoot to marathon gold in 1960.,True,False,,,A,easy,Olympics
-144,The Formula 1 halo appeared in the 1970s.,True,False,,,B,easy,Other Sports
-145,The Golden Boot goes to the best goalkeeper.,False,True,,,A,easy,Football
-146,Karl Malone was nicknamed the Mailman.,False,True,,,B,easy,Basketball
+144,The Formula 1 halo appeared in the 1970s.,False,True,,,A,easy,Other Sports
+145,The Golden Boot goes to the best goalkeeper.,True,False,,,B,easy,Football
+146,Karl Malone was nicknamed the Mailman.,True,False,,,A,easy,Basketball
 147,Shoaib Akhtar bowled slow left arm spin.,False,True,,,A,easy,Cricket
 148,Ivan Lendl won eight Grand Slam titles.,False,True,,,B,easy,Tennis
-149,Nadia Comaneci competed for Romania.,True,False,,,A,easy,Olympics
-150,Lance Armstrong still holds seven Tour de France titles.,True,False,,,B,easy,Other Sports
+149,Nadia Comaneci competed for Romania.,False,True,,,B,easy,Olympics
+150,Lance Armstrong still holds seven Tour de France titles.,False,True,,,A,easy,Other Sports
 151,Lionel Messi has won zero Ballon dOr awards.,False,True,,,A,easy,Football
 152,Kobe Bryant won five championships with the Lakers.,False,True,,,B,easy,Basketball
-153,Garfield Sobers was primarily a wicketkeeper.,False,True,,,A,easy,Cricket
-154,Martina Navratilova won nine Wimbledon singles titles.,False,True,,,B,easy,Tennis
+153,Garfield Sobers was primarily a wicketkeeper.,True,False,,,B,easy,Cricket
+154,Martina Navratilova won nine Wimbledon singles titles.,True,False,,,A,easy,Tennis
 155,Mark Spitz set seven world records at the 1972 Olympics.,True,False,,,A,easy,Olympics
 156,The Stanley Cup is awarded in basketball.,True,False,,,B,easy,Other Sports
-157,Germany reached four straight World Cup semifinals from 2002 to 2014.,True,False,,,A,easy,Football
-158,LeBron James never left the Cleveland Cavaliers.,True,False,,,B,easy,Basketball
+157,Germany reached four straight World Cup semifinals from 2002 to 2014.,False,True,,,B,easy,Football
+158,LeBron James never left the Cleveland Cavaliers.,False,True,,,A,easy,Basketball
 159,Sunil Gavaskar scored fifty Test centuries.,False,True,,,A,easy,Cricket
 160,Bjorn Borg won five straight Wimbledon titles.,False,True,,,B,easy,Tennis
-161,The Fosbury Flop changed high jump technique.,True,False,,,A,easy,Olympics
-162,Niki Lauda never raced after his 1976 crash.,True,False,,,B,easy,Other Sports
-163,The UEFA Euro is held every year.,False,True,,,A,easy,Football
-164,Hakeem Olajuwon led Houston to back to back titles.,False,True,,,B,easy,Basketball
-165,T20 cricket began before Test cricket.,False,True,,,A,easy,Cricket
-166,Arthur Ashe won the US Open in 1968.,False,True,,,B,easy,Tennis
-167,Greg Louganis won Olympic diving golds in 1984 and 1988.,True,False,,,A,easy,Olympics
+161,The Fosbury Flop changed high jump technique.,False,True,,,B,easy,Olympics
+162,Niki Lauda never raced after his 1976 crash.,False,True,,,A,easy,Other Sports
+163,The UEFA Euro is held every year.,True,False,,,B,easy,Football
+164,Hakeem Olajuwon led Houston to back to back titles.,True,False,,,A,easy,Basketball
+165,T20 cricket began before Test cricket.,True,False,,,B,easy,Cricket
+166,Arthur Ashe won the US Open in 1968.,True,False,,,A,easy,Tennis
+167,Greg Louganis won Olympic diving golds in 1984 and 1988.,False,True,,,B,easy,Olympics
 168,The Masters is a tennis event.,True,False,,,B,easy,Other Sports
 169,Pele scored in the 1958 World Cup final.,True,False,,,A,easy,Football
 170,A basketball court is 120 feet long.,True,False,,,B,easy,Basketball
 171,New Zealand won the 2019 Cricket World Cup.,False,True,,,A,easy,Cricket
-172,Chris Evert won a Grand Slam for thirteen straight years.,False,True,,,B,easy,Tennis
-173,Cathy Freeman lit the cauldron at the 2000 Olympics.,True,False,,,A,easy,Olympics
-174,Stephen Curry was drafted first overall in 2009.,True,False,,,B,easy,Basketball
-175,Kylian Mbappe scored a hat trick in the 2022 World Cup final.,True,False,,,A,easy,Football
-176,Virat Kohli has more international centuries than Sachin Tendulkar.,True,False,,,B,easy,Cricket
-177,Serena Williams never won Olympic singles gold.,False,True,,,A,easy,Tennis
-178,Muhammad Ali lit the cauldron at the 1996 Olympics.,False,True,,,B,easy,Olympics
+172,Chris Evert won a Grand Slam for thirteen straight years.,True,False,,,A,easy,Tennis
+173,Cathy Freeman lit the cauldron at the 2000 Olympics.,False,True,,,B,easy,Olympics
+174,Stephen Curry was drafted first overall in 2009.,False,True,,,A,easy,Basketball
+175,Kylian Mbappe scored a hat trick in the 2022 World Cup final.,False,True,,,B,easy,Football
+176,Virat Kohli has more international centuries than Sachin Tendulkar.,False,True,,,A,easy,Cricket
+177,Serena Williams never won Olympic singles gold.,True,False,,,B,easy,Tennis
+178,Muhammad Ali lit the cauldron at the 1996 Olympics.,True,False,,,A,easy,Olympics
 179,The Tour de France finishes in Spain.,False,True,,,A,easy,Other Sports
 180,Kareem Abdul Jabbar was the NBA's scoring leader until 2023.,False,True,,,B,easy,Basketball
 181,Real Madrid has won the most Champions League titles.,True,False,,,A,easy,Football
-182,Wilt Chamberlain won eight NBA championships.,True,False,,,B,easy,Basketball
-183,Wasim Akram took more than 400 Test wickets.,True,False,,,A,easy,Cricket
-184,Steffi Graf won 30 Grand Slam titles.,True,False,,,B,easy,Tennis
+182,Wilt Chamberlain won eight NBA championships.,False,True,,,A,easy,Basketball
+183,Wasim Akram took more than 400 Test wickets.,False,True,,,B,easy,Cricket
+184,Steffi Graf won 30 Grand Slam titles.,False,True,,,A,easy,Tennis
 185,The Olympic Games were cancelled in 1952.,False,True,,,A,easy,Olympics
 186,Ayrton Senna was Brazilian.,False,True,,,B,easy,Other Sports
-187,Argentina has won the World Cup eight times.,False,True,,,A,easy,Football
-188,Dwyane Wade won a title with Miami in 2006.,False,True,,,B,easy,Basketball
-189,The Duckworth Lewis method handles rain affected matches.,True,False,,,A,easy,Cricket
+187,Argentina has won the World Cup eight times.,True,False,,,B,easy,Football
+188,Dwyane Wade won a title with Miami in 2006.,True,False,,,A,easy,Basketball
+189,The Duckworth Lewis method handles rain affected matches.,False,True,,,B,easy,Cricket
 190,The Davis Cup is a womens team event.,True,False,,,B,easy,Tennis
 191,The 1956 Olympics were held in Asia.,False,True,,,A,easy,Olympics
-192,Niki Lauda won the 1984 title with McLaren.,False,True,,,B,easy,Other Sports
+192,Niki Lauda won the 1984 title with McLaren.,True,False,,,A,easy,Other Sports
 193,The 1930 World Cup was held in Brazil.,False,True,,,A,easy,Football
 194,Michael Jordan won Finals MVP in all six of his titles.,False,True,,,B,easy,Basketball
 195,Viv Richards starred for the West Indies.,True,False,,,A,easy,Cricket
-196,John McEnroe won ten Grand Slam singles titles.,True,False,,,B,easy,Tennis
-197,Florence Griffith Joyner still holds the 100m world record.,True,False,,,A,easy,Olympics
+196,John McEnroe won ten Grand Slam singles titles.,False,True,,,A,easy,Tennis
+197,Florence Griffith Joyner still holds the 100m world record.,False,True,,,B,easy,Olympics
 198,Red Bull has won more constructors titles than Ferrari.,True,False,,,B,easy,Other Sports
 199,Brazil won the 1998 World Cup.,False,True,,,A,easy,Football
 200,Stephen Curry has made the most three pointers in NBA history.,False,True,,,B,easy,Basketball
 201,Which team did India beat in the 1983 World Cup final?,West Indies,Ireland,,,A,medium,Cricket
-202,Which player has won 24 Grand Slam singles titles?,Roger Federer,Novak Djokovic,,,B,medium,Tennis
-203,Which city hosted the 1968 Olympics?,Mexico City,Tokyo,,,A,medium,Olympics
+202,Which player has won 24 Grand Slam singles titles?,Novak Djokovic,Roger Federer,,,A,medium,Tennis
+203,Which city hosted the 1968 Olympics?,Tokyo,Mexico City,,,B,medium,Olympics
 204,Which team has won the most Formula 1 constructors titles?,Mercedes,Ferrari,,,B,medium,Other Sports
 205,Which club plays home games at the Etihad Stadium?,Manchester City,Sunderland,,,A,medium,Football
 206,Which player has won more NBA MVP awards?,Steve Nash,Michael Jordan,,,B,medium,Basketball
-207,Which bowler took 19 wickets in a single Test?,Jim Laker,Bob Massie,,,A,medium,Cricket
+207,Which bowler took 19 wickets in a single Test?,Bob Massie,Jim Laker,,,B,medium,Cricket
 208,Which Grand Slam is played in January?,Wimbledon,Australian Open,,,B,medium,Tennis
 209,Which nation has won the most Olympic gold medals in basketball?,United States,Argentina,,,A,medium,Olympics
-210,Which darts player has won the most world championships?,Eric Bristow,Phil Taylor,,,B,medium,Other Sports
-211,Which nation won the 1966 World Cup?,England,Argentina,,,A,medium,Football
-212,Which team won the 2024 NBA championship?,Dallas Mavericks,Boston Celtics,,,B,medium,Basketball
+210,Which darts player has won the most world championships?,Phil Taylor,Eric Bristow,,,A,medium,Other Sports
+211,Which nation won the 1966 World Cup?,Argentina,England,,,B,medium,Football
+212,Which team won the 2024 NBA championship?,Boston Celtics,Dallas Mavericks,,,A,medium,Basketball
 213,Which cricket format limits each side to twenty overs?,T20,ODI,,,A,medium,Cricket
 214,Which player won the 2011 US Open mens title?,Marin Cilic,Novak Djokovic,,,B,medium,Tennis
-215,Which swimmer has won the most Olympic medals?,Michael Phelps,Ian Thorpe,,,A,medium,Olympics
-216,Which driver has won the most Formula 1 races?,Max Verstappen,Lewis Hamilton,,,B,medium,Other Sports
-217,Which club has won the most Premier League titles?,Manchester United,Liverpool,,,A,medium,Football
+215,Which swimmer has won the most Olympic medals?,Ian Thorpe,Michael Phelps,,,B,medium,Olympics
+216,Which driver has won the most Formula 1 races?,Lewis Hamilton,Max Verstappen,,,A,medium,Other Sports
+217,Which club has won the most Premier League titles?,Liverpool,Manchester United,,,B,medium,Football
 218,Which team plays home games at Crypto.com Arena?,Golden State Warriors,Los Angeles Lakers,,,B,medium,Basketball
-219,Which trophy do England and Australia contest in cricket?,Ashes,Border Gavaskar Trophy,,,A,medium,Cricket
-220,Which surface is used at Roland Garros?,Carpet,Clay,,,B,medium,Tennis
+219,Which trophy do England and Australia contest in cricket?,Border Gavaskar Trophy,Ashes,,,B,medium,Cricket
+220,Which surface is used at Roland Garros?,Clay,Carpet,,,A,medium,Tennis
 221,Which nation has won the most Winter Olympic medals?,Norway,Germany,,,A,medium,Olympics
 222,Which boxer beat George Foreman in 1974?,Ken Norton,Muhammad Ali,,,B,medium,Other Sports
 223,Which player has scored the most World Cup goals?,Miroslav Klose,Pele,,,A,medium,Football
-224,Which coach has won the most NBA titles?,Steve Kerr,Phil Jackson,,,B,medium,Basketball
-225,Which spinner took 708 Test wickets?,Shane Warne,Nathan Lyon,,,A,medium,Cricket
-226,Which surface is used at the US Open?,Grass,Hard,,,B,medium,Tennis
-227,Which nation has won the most Summer Olympic medals overall?,United States,China,,,A,medium,Olympics
-228,Which snooker player has won the most ranking titles?,Stephen Hendry,Ronnie O'Sullivan,,,B,medium,Other Sports
+224,Which coach has won the most NBA titles?,Phil Jackson,Steve Kerr,,,A,medium,Basketball
+225,Which spinner took 708 Test wickets?,Nathan Lyon,Shane Warne,,,B,medium,Cricket
+226,Which surface is used at the US Open?,Hard,Grass,,,A,medium,Tennis
+227,Which nation has won the most Summer Olympic medals overall?,China,United States,,,B,medium,Olympics
+228,Which snooker player has won the most ranking titles?,Ronnie O'Sullivan,Stephen Hendry,,,A,medium,Other Sports
 229,Which country hosted the 1978 World Cup?,Argentina,Chile,,,A,medium,Football
 230,Which player won the 2023 NBA MVP?,Nikola Jokic,Joel Embiid,,,B,medium,Basketball
 231,Which team won the first T20 World Cup in 2007?,India,Namibia,,,A,medium,Cricket
 232,Which siblings met in multiple Grand Slam singles finals?,Bob and Mike Bryan,Venus and Serena Williams,,,B,medium,Tennis
-233,Which city hosted the 2012 Olympics?,London,Manchester,,,A,medium,Olympics
-234,Which driver has won the most Monaco Grand Prix races?,Mika Hakkinen,Ayrton Senna,,,B,medium,Other Sports
-235,Which player won the 2023 Ballon dOr?,Lionel Messi,Erling Haaland,,,A,medium,Football
-236,Which player scored 73 points in a regular season game?,Damian Lillard,David Robinson,,,B,medium,Basketball
+233,Which city hosted the 2012 Olympics?,Manchester,London,,,B,medium,Olympics
+234,Which driver has won the most Monaco Grand Prix races?,Ayrton Senna,Mika Hakkinen,,,A,medium,Other Sports
+235,Which player won the 2023 Ballon dOr?,Erling Haaland,Lionel Messi,,,B,medium,Football
+236,Which player scored 73 points in a regular season game?,David Robinson,Damian Lillard,,,A,medium,Basketball
 237,Which team did Australia beat in the 2023 World Cup final?,New Zealand,India,,,A,medium,Cricket
 238,Which player won the 2025 US Open mens title?,Taylor Fritz,Carlos Alcaraz,,,B,medium,Tennis
 239,Which gymnast won four golds at the 1976 Olympics?,Nadia Comaneci,Olga Korbut,,,A,medium,Olympics
 240,Which golfer completed the career Grand Slam in 2025?,Jordan Spieth,Rory McIlroy,,,B,medium,Other Sports
 241,Which nation reached the 2018 World Cup final?,Croatia,Belgium,,,A,medium,Football
 242,Which team did Dirk Nowitzki lead to a title?,Phoenix Suns,Dallas Mavericks,,,B,medium,Basketball
-243,Which team won the 2015 Cricket World Cup?,Australia,England,,,A,medium,Cricket
-244,Which player won the 2024 Wimbledon womens title?,Jasmine Paolini,Barbora Krejcikova,,,B,medium,Tennis
+243,Which team won the 2015 Cricket World Cup?,England,Australia,,,B,medium,Cricket
+244,Which player won the 2024 Wimbledon womens title?,Barbora Krejcikova,Jasmine Paolini,,,A,medium,Tennis
 245,Which continent hosted its first Olympics in 2016?,South America,Asia,,,A,medium,Olympics
 246,Which driver won the 2016 Formula 1 title?,Valtteri Bottas,Nico Rosberg,,,B,medium,Other Sports
 247,Which club plays at Celtic Park?,Celtic,Rangers,,,A,medium,Football
-248,Which player won the 2012 Finals MVP?,Kevin Durant,LeBron James,,,B,medium,Basketball
-249,Which bowler has taken the most ODI wickets?,Muttiah Muralitharan,Wasim Akram,,,A,medium,Cricket
+248,Which player won the 2012 Finals MVP?,LeBron James,Kevin Durant,,,A,medium,Basketball
+249,Which bowler has taken the most ODI wickets?,Wasim Akram,Muttiah Muralitharan,,,B,medium,Cricket
 250,Which player is nicknamed the King of Clay?,Stefan Edberg,Rafael Nadal,,,B,medium,Tennis
 251,Who lit the cauldron at the 1996 Atlanta Olympics?,Muhammad Ali,Janet Evans,,,A,medium,Olympics
 252,Which team has won the most Super Bowls alongside the Patriots?,Denver Broncos,Pittsburgh Steelers,,,B,medium,Other Sports
-253,Which club won the 2025 Champions League?,Paris Saint Germain,Inter Milan,,,A,medium,Football
-254,Which franchise drafted Kobe Bryant in 1996?,Minnesota Timberwolves,Charlotte Hornets,,,B,medium,Basketball
+253,Which club won the 2025 Champions League?,Inter Milan,Paris Saint Germain,,,B,medium,Football
+254,Which franchise drafted Kobe Bryant in 1996?,Charlotte Hornets,Minnesota Timberwolves,,,A,medium,Basketball
 255,Which team won the 2019 Cricket World Cup?,England,West Indies,,,A,medium,Cricket
-256,Which player won the 2004 Wimbledon womens title?,Lindsay Davenport,Maria Sharapova,,,B,medium,Tennis
-257,Which runner won the 5000m and 10000m at two straight Olympics?,Mo Farah,Haile Gebrselassie,,,A,medium,Olympics
-258,Which circuit hosts the Belgian Grand Prix?,Zandvoort,Spa Francorchamps,,,B,medium,Other Sports
+256,Which player won the 2004 Wimbledon womens title?,Maria Sharapova,Lindsay Davenport,,,A,medium,Tennis
+257,Which runner won the 5000m and 10000m at two straight Olympics?,Haile Gebrselassie,Mo Farah,,,B,medium,Olympics
+258,Which circuit hosts the Belgian Grand Prix?,Spa Francorchamps,Zandvoort,,,A,medium,Other Sports
 259,Which nation did Argentina beat in the 2022 final?,France,England,,,A,medium,Football
 260,Which team drafted Giannis Antetokounmpo?,Brooklyn Nets,Milwaukee Bucks,,,B,medium,Basketball
 261,Which Indian opener scored the first ODI double century?,Sachin Tendulkar,Sourav Ganguly,,,A,medium,Cricket
-262,Which player has won the most career Grand Slam titles?,Rafael Nadal,Novak Djokovic,,,B,medium,Tennis
-263,Which city will host the 2032 Olympics?,Brisbane,Paris,,,A,medium,Olympics
-264,Which rugby nation performs the haka?,Australia,New Zealand,,,B,medium,Other Sports
+262,Which player has won the most career Grand Slam titles?,Novak Djokovic,Rafael Nadal,,,A,medium,Tennis
+263,Which city will host the 2032 Olympics?,Paris,Brisbane,,,B,medium,Olympics
+264,Which rugby nation performs the haka?,New Zealand,Australia,,,A,medium,Other Sports
 265,Which club won the 2007 Champions League?,AC Milan,Roma,,,A,medium,Football
 266,Which player has the most career assists in NBA history?,John Stockton,Chris Paul,,,B,medium,Basketball
-267,Which ground is called the Home of Cricket?,Lord's,The Oval,,,A,medium,Cricket
+267,Which ground is called the Home of Cricket?,The Oval,Lord's,,,B,medium,Cricket
 268,Which stadium is the biggest tennis arena?,Centre Court,Arthur Ashe Stadium,,,B,medium,Tennis
 269,Which nation won the mens basketball gold at Paris 2024?,United States,Australia,,,A,medium,Olympics
 270,Which boxer retired undefeated at 50 wins?,Rocky Marciano,Floyd Mayweather,,,B,medium,Other Sports
-271,Which player won the 2016 Ballon dOr?,Cristiano Ronaldo,Antoine Griezmann,,,A,medium,Football
-272,Which team drafted Patrick Ewing?,Chicago Bulls,New York Knicks,,,B,medium,Basketball
-273,Which team won the 2024 T20 World Cup?,India,Sri Lanka,,,A,medium,Cricket
+271,Which player won the 2016 Ballon dOr?,Antoine Griezmann,Cristiano Ronaldo,,,B,medium,Football
+272,Which team drafted Patrick Ewing?,New York Knicks,Chicago Bulls,,,A,medium,Basketball
+273,Which team won the 2024 T20 World Cup?,Sri Lanka,India,,,B,medium,Cricket
 274,Which player won the 2013 Wimbledon mens title?,David Ferrer,Andy Murray,,,B,medium,Tennis
 275,Which country topped the gold medal table at the 2008 Olympics?,China,United States,,,A,medium,Olympics
-276,Which driver won the 2023 Formula 1 championship?,Charles Leclerc,Max Verstappen,,,B,medium,Other Sports
-277,Which club plays at Goodison Park?,Manchester City,Everton,,,A,medium,Football
-278,Which franchise has the longest active NBA title drought?,Sacramento Kings,Detroit Pistons,,,B,medium,Basketball
+276,Which driver won the 2023 Formula 1 championship?,Max Verstappen,Charles Leclerc,,,A,medium,Other Sports
+277,Which club plays at Goodison Park?,Everton,Manchester City,,,B,medium,Football
+278,Which franchise has the longest active NBA title drought?,Detroit Pistons,Sacramento Kings,,,A,medium,Basketball
 279,Which Indian has scored the most Test runs?,Sachin Tendulkar,VVS Laxman,,,A,medium,Cricket
-280,Which player won the 2016 Wimbledon mens title?,Milos Raonic,Andy Murray,,,B,medium,Tennis
-281,Which city hosted the 1976 Olympics?,Montreal,Denver,,,A,medium,Olympics
+280,Which player won the 2016 Wimbledon mens title?,Andy Murray,Milos Raonic,,,A,medium,Tennis
+281,Which city hosted the 1976 Olympics?,Denver,Montreal,,,B,medium,Olympics
 282,Which team won the 2023 Rugby World Cup?,South Africa,Wales,,,B,medium,Other Sports
 283,Which country will co host the 2026 World Cup?,Mexico,Portugal,,,A,medium,Football
 284,Which player won the 2000 NBA MVP?,Allen Iverson,Shaquille O'Neal,,,B,medium,Basketball
-285,Which stadium is the largest cricket ground by capacity?,Narendra Modi Stadium,Melbourne Cricket Ground,,,A,medium,Cricket
-286,Which player won the 2011 French Open womens title?,Samantha Stosur,Li Na,,,B,medium,Tennis
+285,Which stadium is the largest cricket ground by capacity?,Melbourne Cricket Ground,Narendra Modi Stadium,,,B,medium,Cricket
+286,Which player won the 2011 French Open womens title?,Li Na,Samantha Stosur,,,A,medium,Tennis
 287,Which nation has won the most Olympic gold medals in swimming?,United States,France,,,A,medium,Olympics
 288,Which golfer is nicknamed the King?,Gary Player,Arnold Palmer,,,B,medium,Other Sports
-289,Which club has won the most FA Cups?,Chelsea,Arsenal,,,A,medium,Football
-290,Which coach has the most regular season wins in NBA history?,Erik Spoelstra,Gregg Popovich,,,B,medium,Basketball
+289,Which club has won the most FA Cups?,Arsenal,Chelsea,,,B,medium,Football
+290,Which coach has the most regular season wins in NBA history?,Gregg Popovich,Erik Spoelstra,,,A,medium,Basketball
 291,Which player has hit the most sixes in international cricket?,Rohit Sharma,Chris Gayle,,,A,medium,Cricket
 292,Which player won the 2018 Australian Open womens title?,Petra Kvitova,Caroline Wozniacki,,,B,medium,Tennis
-293,Which sprinter won three golds at the 1988 Olympics?,Carl Lewis,Ben Johnson,,,A,medium,Olympics
-294,Which nation has won the most Olympic golds in mens ice hockey?,Soviet Union,Canada,,,B,medium,Other Sports
+293,Which sprinter won three golds at the 1988 Olympics?,Ben Johnson,Carl Lewis,,,B,medium,Olympics
+294,Which nation has won the most Olympic golds in mens ice hockey?,Canada,Soviet Union,,,A,medium,Other Sports
 295,Which stadium held the 2022 World Cup final?,Lusail Stadium,Wembley Stadium,,,A,medium,Football
 296,Which team won the 2011 NBA championship?,Miami Heat,Dallas Mavericks,,,B,medium,Basketball
-297,Which Australian has scored the most Test runs?,Ricky Ponting,Steve Waugh,,,A,medium,Cricket
-298,Which 17 year old won the 1989 French Open?,Jim Courier,Michael Chang,,,B,medium,Tennis
+297,Which Australian has scored the most Test runs?,Steve Waugh,Ricky Ponting,,,B,medium,Cricket
+298,Which 17 year old won the 1989 French Open?,Michael Chang,Jim Courier,,,A,medium,Tennis
 299,Which nation won mens football gold at the 2000 Olympics?,Cameroon,Nigeria,,,A,medium,Olympics
 300,Which driver has also won seven Formula 1 world titles?,Niki Lauda,Lewis Hamilton,,,B,medium,Other Sports
-301,Which player scored the fastest goal in World Cup history?,Hakan Sukur,Clint Dempsey,,,A,medium,Football
-302,Which player won the 2010 NBA MVP?,Dirk Nowitzki,LeBron James,,,B,medium,Basketball
+301,Which player scored the fastest goal in World Cup history?,Clint Dempsey,Hakan Sukur,,,B,medium,Football
+302,Which player won the 2010 NBA MVP?,LeBron James,Dirk Nowitzki,,,A,medium,Basketball
 303,Which bowler took 800 Test wickets?,Muttiah Muralitharan,Shane Warne,,,A,medium,Cricket
 304,Which player won the 2010 French Open mens title?,Tomas Berdych,Rafael Nadal,,,B,medium,Tennis
-305,Which swimmer won six golds at the 1988 Olympics?,Kristin Otto,Dawn Fraser,,,A,medium,Olympics
-306,Which driver has won seven titles with two different teams?,Sebastian Vettel,Lewis Hamilton,,,B,medium,Other Sports
-307,Which nation won the 2010 World Cup?,Spain,Germany,,,A,medium,Football
+305,Which swimmer won six golds at the 1988 Olympics?,Dawn Fraser,Kristin Otto,,,B,medium,Olympics
+306,Which driver has won seven titles with two different teams?,Lewis Hamilton,Sebastian Vettel,,,A,medium,Other Sports
+307,Which nation won the 2010 World Cup?,Germany,Spain,,,B,medium,Football
 308,Who won the 2019 Finals MVP?,Draymond Green,Kawhi Leonard,,,B,medium,Basketball
 309,Which team won the 2023 World Test Championship?,Australia,South Africa,,,A,medium,Cricket
 310,Which teenager won the 1997 US Open womens title?,Serena Williams,Martina Hingis,,,B,medium,Tennis
-311,Which nation has won the most Olympic golds in athletics?,United States,Kenya,,,A,medium,Olympics
-312,Which ice hockey player set the NHL career goals record in 2025?,Wayne Gretzky,Alex Ovechkin,,,B,medium,Other Sports
+311,Which nation has won the most Olympic golds in athletics?,Kenya,United States,,,B,medium,Olympics
+312,Which ice hockey player set the NHL career goals record in 2025?,Alex Ovechkin,Wayne Gretzky,,,A,medium,Other Sports
 313,Which club plays at the Allianz Arena?,Bayern Munich,Borussia Dortmund,,,A,medium,Football
 314,Which player won the 2024 NBA MVP?,Luka Doncic,Nikola Jokic,,,B,medium,Basketball
-315,Which team has won the most Cricket World Cups?,Australia,India,,,A,medium,Cricket
-316,Which player won the 2017 French Open womens title?,Simona Halep,Jelena Ostapenko,,,B,medium,Tennis
+315,Which team has won the most Cricket World Cups?,India,Australia,,,B,medium,Cricket
+316,Which player won the 2017 French Open womens title?,Jelena Ostapenko,Simona Halep,,,A,medium,Tennis
 317,Which city hosted the 1936 Olympics?,Berlin,Munich,,,A,medium,Olympics
 318,Which team won the 2019 Rugby World Cup?,France,South Africa,,,B,medium,Other Sports
-319,Which player has scored the most Premier League goals?,Alan Shearer,Thierry Henry,,,A,medium,Football
-320,Who won the 2007 Finals MVP?,Manu Ginobili,Tony Parker,,,B,medium,Basketball
-321,Which team won the 2005 Ashes?,England,Ireland,,,A,medium,Cricket
-322,Which player won the 2009 US Open womens title?,Caroline Wozniacki,Serena Williams,,,B,medium,Tennis
+319,Which player has scored the most Premier League goals?,Thierry Henry,Alan Shearer,,,B,medium,Football
+320,Who won the 2007 Finals MVP?,Tony Parker,Manu Ginobili,,,A,medium,Basketball
+321,Which team won the 2005 Ashes?,Ireland,England,,,B,medium,Cricket
+322,Which player won the 2009 US Open womens title?,Serena Williams,Caroline Wozniacki,,,A,medium,Tennis
 323,Which gymnast has won the most Olympic medals?,Larisa Latynina,Simone Biles,,,A,medium,Olympics
 324,Which golfer won the 2019 Masters?,Justin Thomas,Tiger Woods,,,B,medium,Other Sports
-325,Which nation won the first World Cup in 1930?,Uruguay,Brazil,,,A,medium,Football
-326,Which team reached the 2023 Finals as an eighth seed?,Boston Celtics,Miami Heat,,,B,medium,Basketball
+325,Which nation won the first World Cup in 1930?,Brazil,Uruguay,,,B,medium,Football
+326,Which team reached the 2023 Finals as an eighth seed?,Miami Heat,Boston Celtics,,,A,medium,Basketball
 327,Which captain led India to the 2011 World Cup title?,MS Dhoni,Rahul Dravid,,,A,medium,Cricket
 328,Which player won the 2023 Wimbledon mens title?,Matteo Berrettini,Carlos Alcaraz,,,B,medium,Tennis
-329,Which country hosted the 1988 Olympics?,Japan,South Korea,,,A,medium,Olympics
-330,Which team won four straight constructors titles from 2010 to 2013?,McLaren,Red Bull,,,B,medium,Other Sports
+329,Which country hosted the 1988 Olympics?,South Korea,Japan,,,B,medium,Olympics
+330,Which team won four straight constructors titles from 2010 to 2013?,Red Bull,McLaren,,,A,medium,Other Sports
 331,Which club plays at Villa Park?,Aston Villa,Birmingham City,,,A,medium,Football
 332,Which player has the most career rebounds in NBA history?,Bill Russell,Wilt Chamberlain,,,B,medium,Basketball
 333,Which fast bowler has taken the most Test wickets?,James Anderson,Glenn McGrath,,,A,medium,Cricket
-334,Which player won the 2019 US Open womens title?,Naomi Osaka,Bianca Andreescu,,,B,medium,Tennis
+334,Which player won the 2019 US Open womens title?,Bianca Andreescu,Naomi Osaka,,,A,medium,Tennis
 335,Which city hosted the 1956 Olympics?,Melbourne,Stockholm,,,A,medium,Olympics
-336,Which horse won the 1973 Triple Crown?,Seattle Slew,Secretariat,,,B,medium,Other Sports
-337,Which team did the Miracle on Ice defeat in 1980?,Soviet Union,Finland,,,A,medium,Football
+336,Which horse won the 1973 Triple Crown?,Secretariat,Seattle Slew,,,A,medium,Other Sports
+337,Which team did the Miracle on Ice defeat in 1980?,Finland,Soviet Union,,,B,medium,Football
 338,Which team won the 2008 NBA championship?,San Antonio Spurs,Los Angeles Lakers,,,B,medium,Basketball
 339,Which team won the 1996 Cricket World Cup?,Sri Lanka,Kenya,,,A,medium,Cricket
 340,Which player won the 2022 US Open womens title?,Ons Jabeur,Iga Swiatek,,,B,medium,Tennis
 341,Which city hosted the 2000 Olympics?,Sydney,Athens,,,A,medium,Olympics
-342,Which golfer is nicknamed the Golden Bear?,Ben Hogan,Jack Nicklaus,,,B,medium,Other Sports
-343,Who won the Golden Boot at the 2022 World Cup?,Kylian Mbappe,Lionel Messi,,,A,medium,Football
-344,Who won the 2015 Finals MVP?,Andre Iguodala,Stephen Curry,,,B,medium,Basketball
-345,Which England bowler has taken the most Test wickets?,James Anderson,Ian Botham,,,A,medium,Cricket
+342,Which golfer is nicknamed the Golden Bear?,Jack Nicklaus,Ben Hogan,,,A,medium,Other Sports
+343,Who won the Golden Boot at the 2022 World Cup?,Lionel Messi,Kylian Mbappe,,,B,medium,Football
+344,Who won the 2015 Finals MVP?,Stephen Curry,Andre Iguodala,,,A,medium,Basketball
+345,Which England bowler has taken the most Test wickets?,Ian Botham,James Anderson,,,B,medium,Cricket
 346,Which player won Wimbledon as a wildcard in 2001?,Patrick Rafter,Goran Ivanisevic,,,B,medium,Tennis
-347,Which nation won mens football gold at Paris 2024?,Spain,Argentina,,,A,medium,Olympics
-348,Which team won the 2009 Formula 1 constructors championship?,Toyota,Brawn GP,,,B,medium,Other Sports
+347,Which nation won mens football gold at Paris 2024?,Argentina,Spain,,,B,medium,Olympics
+348,Which team won the 2009 Formula 1 constructors championship?,Brawn GP,Toyota,,,A,medium,Other Sports
 349,Which club won the 2019 Champions League?,Liverpool,Tottenham,,,A,medium,Football
 350,Which player won the 2011 NBA MVP?,Dwight Howard,Derrick Rose,,,B,medium,Basketball
-351,Which team won the 2017 Champions Trophy?,Pakistan,Ireland,,,A,medium,Cricket
-352,Who won the 1996 Olympic tennis singles gold?,Sergi Bruguera,Andre Agassi,,,B,medium,Tennis
-353,Which swimmer has won the most Olympic gold medals?,Michael Phelps,Katie Ledecky,,,A,medium,Olympics
+351,Which team won the 2017 Champions Trophy?,Ireland,Pakistan,,,B,medium,Cricket
+352,Who won the 1996 Olympic tennis singles gold?,Andre Agassi,Sergi Bruguera,,,A,medium,Tennis
+353,Which swimmer has won the most Olympic gold medals?,Katie Ledecky,Michael Phelps,,,B,medium,Olympics
 354,Which boxer fought in the Thrilla in Manila?,Sugar Ray Leonard,Joe Frazier,,,B,medium,Other Sports
 355,Which country has won the most European Championships?,Germany,Italy,,,A,medium,Football
-356,Who won the 2020 Finals MVP?,LeBron James,Jimmy Butler,,,B,medium,Basketball
-357,Which team won the first two Cricket World Cups?,West Indies,Pakistan,,,A,medium,Cricket
+356,Who won the 2020 Finals MVP?,Jimmy Butler,LeBron James,,,A,medium,Basketball
+357,Which team won the first two Cricket World Cups?,Pakistan,West Indies,,,B,medium,Cricket
 358,Which player won the 2024 French Open?,Alexander Zverev,Carlos Alcaraz,,,B,medium,Tennis
 359,Which India spinner has taken the most Test wickets?,Ravichandran Ashwin,Bishan Singh Bedi,,,A,medium,Cricket
-360,Which team did Ayrton Senna join for the 1988 season?,Williams,McLaren,,,B,medium,Other Sports
-361,Which English club is nicknamed the Red Devils?,Newcastle United,Manchester United,,,A,medium,Football
-362,Who was Finals MVP three straight years from 2000 to 2002?,Tim Duncan,Shaquille O'Neal,,,B,medium,Basketball
-363,Which team has reached the most Cricket World Cup finals?,Australia,West Indies,,,A,medium,Cricket
+360,Which team did Ayrton Senna join for the 1988 season?,McLaren,Williams,,,A,medium,Other Sports
+361,Which English club is nicknamed the Red Devils?,Manchester United,Newcastle United,,,B,medium,Football
+362,Who was Finals MVP three straight years from 2000 to 2002?,Shaquille O'Neal,Tim Duncan,,,A,medium,Basketball
+363,Which team has reached the most Cricket World Cup finals?,West Indies,Australia,,,B,medium,Cricket
 364,Which player won the 2009 US Open mens title?,David Nalbandian,Juan Martin del Potro,,,B,medium,Tennis
 365,Which city hosted the 1932 Olympics?,Los Angeles,Berlin,,,A,medium,Olympics
 366,Which cyclist won the 2024 Tour de France?,Jonas Vingegaard,Tadej Pogacar,,,B,medium,Other Sports
 367,Who won the Golden Glove at the 2018 World Cup?,Hugo Lloris,Thibaut Courtois,,,A,medium,Football
 368,Against which team did Kobe Bryant score 81 points?,Utah Jazz,Toronto Raptors,,,B,medium,Basketball
 369,Which bowler is nicknamed Jumbo?,Anil Kumble,Harbhajan Singh,,,A,medium,Cricket
-370,Which player won the 2025 Australian Open?,Daniil Medvedev,Jannik Sinner,,,B,medium,Tennis
-371,Which nation has won the most Winter Olympic golds?,Norway,Russia,,,A,medium,Olympics
+370,Which player won the 2025 Australian Open?,Jannik Sinner,Daniil Medvedev,,,A,medium,Tennis
+371,Which nation has won the most Winter Olympic golds?,Russia,Norway,,,B,medium,Olympics
 372,Which team won the first Super Bowl?,Kansas City Chiefs,Green Bay Packers,,,B,medium,Other Sports
 373,Which player has won the most Ballon dOr awards?,Michel Platini,Lionel Messi,,,A,medium,Football
-374,Who won the 2021 Finals MVP?,Devin Booker,Giannis Antetokounmpo,,,B,medium,Basketball
-375,Which Indian opener has the most ODI double centuries?,Rohit Sharma,Sachin Tendulkar,,,A,medium,Cricket
-376,Which player won the 2023 US Open?,Jannik Sinner,Novak Djokovic,,,B,medium,Tennis
+374,Who won the 2021 Finals MVP?,Giannis Antetokounmpo,Devin Booker,,,A,medium,Basketball
+375,Which Indian opener has the most ODI double centuries?,Sachin Tendulkar,Rohit Sharma,,,B,medium,Cricket
+376,Which player won the 2023 US Open?,Novak Djokovic,Jannik Sinner,,,A,medium,Tennis
 377,Which nation won mens volleyball gold at Paris 2024?,France,Poland,,,A,medium,Olympics
 378,Which driver won the 1994 and 1995 Formula 1 titles?,Michael Schumacher,Damon Hill,,,B,medium,Other Sports
-379,Which club has won the most Champions League titles?,Real Madrid,Juventus,,,A,medium,Football
+379,Which club has won the most Champions League titles?,Juventus,Real Madrid,,,B,medium,Football
 380,Which player won the 2008 NBA MVP?,Chris Paul,Kobe Bryant,,,B,medium,Basketball
 381,Which team won the 2013 Champions Trophy?,India,Scotland,,,A,medium,Cricket
 382,Which player won the 2012 US Open mens title?,Grigor Dimitrov,Andy Murray,,,B,medium,Tennis
 383,Which gymnast won six golds at the 1992 Olympics?,Vitaly Scherbo,Boris Shakhlin,,,A,medium,Olympics
-384,Which boxer is nicknamed Iron Mike?,George Foreman,Mike Tyson,,,B,medium,Other Sports
-385,Which club won the treble in 2015?,FC Barcelona,Paris Saint Germain,,,A,medium,Football
+384,Which boxer is nicknamed Iron Mike?,Mike Tyson,George Foreman,,,A,medium,Other Sports
+385,Which club won the treble in 2015?,Paris Saint Germain,FC Barcelona,,,B,medium,Football
 386,Which team won the 2019 NBA championship?,Golden State Warriors,Toronto Raptors,,,B,medium,Basketball
 387,Which African nation will co host the 2027 Cricket World Cup?,South Africa,Bangladesh,,,A,medium,Cricket
 388,Which player won the 2025 French Open?,Casper Ruud,Carlos Alcaraz,,,B,medium,Tennis
-389,Which city hosted the 1900 Olympics?,Paris,Rome,,,A,medium,Olympics
-390,Which team won the 1988 constructors title ahead of Ferrari?,Lotus,McLaren,,,B,medium,Other Sports
+389,Which city hosted the 1900 Olympics?,Rome,Paris,,,B,medium,Olympics
+390,Which team won the 1988 constructors title ahead of Ferrari?,McLaren,Lotus,,,A,medium,Other Sports
 391,Which club plays at Signal Iduna Park?,Borussia Dortmund,Schalke 04,,,A,medium,Football
-392,Which team won the 2014 NBA championship?,San Antonio Spurs,Cleveland Cavaliers,,,B,medium,Basketball
-393,Which team won the first World Test Championship in 2021?,Zimbabwe,New Zealand,,,A,medium,Cricket
-394,Who did Novak Djokovic beat in the 2022 Wimbledon final?,Rafael Nadal,Nick Kyrgios,,,B,medium,Tennis
-395,Which region will host the 2030 Winter Olympics?,French Alps,Vancouver,,,A,medium,Olympics
+392,Which team won the 2014 NBA championship?,Cleveland Cavaliers,San Antonio Spurs,,,A,medium,Basketball
+393,Which team won the first World Test Championship in 2021?,New Zealand,Zimbabwe,,,B,medium,Cricket
+394,Who did Novak Djokovic beat in the 2022 Wimbledon final?,Nick Kyrgios,Rafael Nadal,,,A,medium,Tennis
+395,Which region will host the 2030 Winter Olympics?,Vancouver,French Alps,,,B,medium,Olympics
 396,Which driver won the 2007 Formula 1 title?,Lewis Hamilton,Kimi Raikkonen,,,B,medium,Other Sports
 397,Which club won the first Premier League season in 1992 93?,Leeds United,Manchester United,,,A,medium,Football
-398,Which team drafted Kareem Abdul Jabbar first overall in 1969?,Portland Trail Blazers,Milwaukee Bucks,,,B,medium,Basketball
+398,Which team drafted Kareem Abdul Jabbar first overall in 1969?,Milwaukee Bucks,Portland Trail Blazers,,,A,medium,Basketball
 399,Which team won the 2025 World Test Championship?,South Africa,Afghanistan,,,A,medium,Cricket
-400,Which player won the 1995 Australian Open?,Pete Sampras,Andre Agassi,,,B,medium,Tennis
-401,Which city hosted the 1994 Winter Olympics?,Lillehammer,Albertville,Nagano,,A,hard,Olympics
-402,Which rider has won the most premier class motorcycle world titles?,Giacomo Agostini,Kenny Roberts,Mick Doohan,,B,hard,Other Sports
-403,Which club signed Diego Maradona for a world record fee in 1984?,Lazio,Fiorentina,Napoli,,C,hard,Football
+400,Which player won the 1995 Australian Open?,Andre Agassi,Pete Sampras,,,A,medium,Tennis
+401,Which city hosted the 1994 Winter Olympics?,Albertville,Lillehammer,Nagano,,B,hard,Olympics
+402,Which rider has won the most premier class motorcycle world titles?,Mick Doohan,Kenny Roberts,Giacomo Agostini,,B,hard,Other Sports
+403,Which club signed Diego Maradona for a world record fee in 1984?,Napoli,Fiorentina,Lazio,,A,hard,Football
 404,Which player has blocked the most shots in NBA history?,Hakeem Olajuwon,Manute Bol,Dikembe Mutombo,,A,hard,Basketball
-405,Which bowler dismissed Don Bradman for a duck in his final Test?,Eric Hollies,Alec Bedser,Hedley Verity,,B,hard,Cricket
-406,Which woman has won the most Wimbledon singles titles?,Venus Williams,Steffi Graf,Martina Navratilova,,C,hard,Tennis
+405,Which bowler dismissed Don Bradman for a duck in his final Test?,Hedley Verity,Alec Bedser,Eric Hollies,,B,hard,Cricket
+406,Which woman has won the most Wimbledon singles titles?,Steffi Graf,Venus Williams,Martina Navratilova,,C,hard,Tennis
 407,Which swimmer won the 200m backstroke at three straight Olympics?,Krisztina Egerszegi,Kristin Otto,Libby Trickett,,A,hard,Olympics
-408,Which Formula 1 circuit has the longest lap distance?,Monza,Spa Francorchamps,Suzuka,,B,hard,Other Sports
-409,Which goalkeeper scored the most career goals in professional football?,Rogerio Ceni,Jose Luis Chilavert,Rene Higuita,,C,hard,Football
-410,Which team drafted Dirk Nowitzki in 1998?,Milwaukee Bucks,Seattle SuperSonics,Boston Celtics,,A,hard,Basketball
-411,Who has scored the most runs across both innings of one Test?,Mark Taylor,Graham Gooch,Geoff Boycott,,B,hard,Cricket
-412,Which man won the first Open era Wimbledon in 1968?,Tony Roche,Ken Rosewall,Rod Laver,,C,hard,Tennis
-413,Which nation did Hungary face in the 1954 World Cup final?,West Germany,Brazil,Austria,,A,hard,Olympics
-414,Which boxer won middleweight gold at the 1952 Olympics?,Floyd Patterson,Sugar Ray Robinson,Ingemar Johansson,,B,hard,Other Sports
-415,Which club won the treble in 1999?,Borussia Dortmund,Manchester United,Ajax,,C,hard,Football
-416,Which team won the most games in one NBA regular season?,Golden State Warriors,Philadelphia 76ers,Los Angeles Lakers,,A,hard,Basketball
-417,Which batsman has the highest individual score in a Test innings?,Matthew Hayden,Brian Lara,Virender Sehwag,,B,hard,Cricket
-418,Which man won five consecutive French Open titles?,Bjorn Borg,Mats Wilander,Rafael Nadal,,C,hard,Tennis
-419,Which gymnast did perfect 10s at the 1976 Olympics?,Nadia Comaneci,Vera Caslavska,Agnes Keleti,,A,hard,Olympics
-420,Which driver has started the most Formula 1 races?,Kimi Raikkonen,Fernando Alonso,Rubens Barrichello,,B,hard,Other Sports
-421,Who was the oldest goalscorer in a World Cup match?,Ali Daei,Alessandro Costacurta,Roger Milla,,C,hard,Football
-422,Which team drafted Tracy McGrady?,Toronto Raptors,Vancouver Grizzlies,Washington Wizards,,A,hard,Basketball
-423,Who took the first Test hat trick?,Jimmy Matthews,Fred Spofforth,Hugh Trumble,,B,hard,Cricket
-424,Which siblings faced each other in nine Grand Slam singles finals?,John McEnroe and Patrick McEnroe,Marat Safin and Dinara Safina,Venus and Serena Williams,,C,hard,Tennis
-425,Which nation won the most golds at the 1936 Olympics?,Germany,Hungary,Finland,,A,hard,Olympics
+408,Which Formula 1 circuit has the longest lap distance?,Monza,Suzuka,Spa Francorchamps,,C,hard,Other Sports
+409,Which goalkeeper scored the most career goals in professional football?,Jose Luis Chilavert,Rogerio Ceni,Rene Higuita,,C,hard,Football
+410,Which team drafted Dirk Nowitzki in 1998?,Seattle SuperSonics,Milwaukee Bucks,Boston Celtics,,B,hard,Basketball
+411,Who has scored the most runs across both innings of one Test?,Graham Gooch,Mark Taylor,Geoff Boycott,,A,hard,Cricket
+412,Which man won the first Open era Wimbledon in 1968?,Ken Rosewall,Rod Laver,Tony Roche,,B,hard,Tennis
+413,Which nation did Hungary face in the 1954 World Cup final?,Austria,Brazil,West Germany,,C,hard,Olympics
+414,Which boxer won middleweight gold at the 1952 Olympics?,Ingemar Johansson,Sugar Ray Robinson,Floyd Patterson,,B,hard,Other Sports
+415,Which club won the treble in 1999?,Manchester United,Ajax,Borussia Dortmund,,B,hard,Football
+416,Which team won the most games in one NBA regular season?,Philadelphia 76ers,Los Angeles Lakers,Golden State Warriors,,C,hard,Basketball
+417,Which batsman has the highest individual score in a Test innings?,Virender Sehwag,Brian Lara,Matthew Hayden,,B,hard,Cricket
+418,Which man won five consecutive French Open titles?,Rafael Nadal,Mats Wilander,Bjorn Borg,,A,hard,Tennis
+419,Which gymnast did perfect 10s at the 1976 Olympics?,Vera Caslavska,Agnes Keleti,Nadia Comaneci,,C,hard,Olympics
+420,Which driver has started the most Formula 1 races?,Fernando Alonso,Kimi Raikkonen,Rubens Barrichello,,A,hard,Other Sports
+421,Who was the oldest goalscorer in a World Cup match?,Roger Milla,Alessandro Costacurta,Ali Daei,,A,hard,Football
+422,Which team drafted Tracy McGrady?,Washington Wizards,Toronto Raptors,Vancouver Grizzlies,,B,hard,Basketball
+423,Who took the first Test hat trick?,Fred Spofforth,Jimmy Matthews,Hugh Trumble,,A,hard,Cricket
+424,Which siblings faced each other in nine Grand Slam singles finals?,Venus and Serena Williams,John McEnroe and Patrick McEnroe,Marat Safin and Dinara Safina,,A,hard,Tennis
+425,Which nation won the most golds at the 1936 Olympics?,Hungary,Germany,Finland,,B,hard,Olympics
 426,Which cyclist won the Tour de France five times in the 1960s?,Louison Bobet,Jacques Anquetil,Eddy Merckx,,B,hard,Other Sports
 427,Which country won the first Asian Cup in 1956?,Israel,Iran,South Korea,,C,hard,Football
-428,Which player won MVP awards in both the ABA and the NBA?,Julius Erving,George Gervin,Moses Malone,,A,hard,Basketball
-429,Which country hosted the first Cricket World Cup final?,Australia,England,New Zealand,,B,hard,Cricket
-430,Which venue hosted the Australian Open before Melbourne Park?,White City,Memorial Drive,Kooyong,,C,hard,Tennis
-431,Who won the first womens Olympic marathon in 1984?,Joan Benoit,Grete Waitz,Ingrid Kristiansen,,A,hard,Olympics
-432,Which boxer beat Mike Tyson in 1990?,Evander Holyfield,Buster Douglas,Lennox Lewis,,B,hard,Other Sports
-433,Which club has won the most Copa Libertadores titles?,Penarol,Boca Juniors,Independiente,,C,hard,Football
-434,Who holds the single game playoff scoring record?,Michael Jordan,Rick Barry,Donovan Mitchell,,A,hard,Basketball
-435,Who captained England in the 1981 Ashes?,David Gower,Mike Brearley,Ian Botham,,B,hard,Cricket
+428,Which player won MVP awards in both the ABA and the NBA?,Moses Malone,George Gervin,Julius Erving,,C,hard,Basketball
+429,Which country hosted the first Cricket World Cup final?,England,Australia,New Zealand,,A,hard,Cricket
+430,Which venue hosted the Australian Open before Melbourne Park?,Memorial Drive,Kooyong,White City,,B,hard,Tennis
+431,Who won the first womens Olympic marathon in 1984?,Grete Waitz,Joan Benoit,Ingrid Kristiansen,,B,hard,Olympics
+432,Which boxer beat Mike Tyson in 1990?,Evander Holyfield,Lennox Lewis,Buster Douglas,,C,hard,Other Sports
+433,Which club has won the most Copa Libertadores titles?,Boca Juniors,Independiente,Penarol,,B,hard,Football
+434,Who holds the single game playoff scoring record?,Michael Jordan,Donovan Mitchell,Rick Barry,,A,hard,Basketball
+435,Who captained England in the 1981 Ashes?,Ian Botham,David Gower,Mike Brearley,,C,hard,Cricket
 436,Which woman won four straight US Open titles?,Margaret Court,Justine Henin,Chris Evert,,C,hard,Tennis
-437,Which city hosted the Winter Olympics twice in the 1960s and 1970s?,Innsbruck,Garmisch Partenkirchen,Sapporo,,A,hard,Olympics
-438,Which team won the 1994 Stanley Cup?,Detroit Red Wings,New York Rangers,Vancouver Canucks,,B,hard,Other Sports
-439,Who is the only goalkeeper to win the Ballon dOr?,Gordon Banks,Dino Zoff,Lev Yashin,,C,hard,Football
-440,Which player averaged a triple double for three straight seasons?,Russell Westbrook,Oscar Robertson,Magic Johnson,,A,hard,Basketball
+437,Which city hosted the Winter Olympics twice in the 1960s and 1970s?,Innsbruck,Sapporo,Garmisch Partenkirchen,,A,hard,Olympics
+438,Which team won the 1994 Stanley Cup?,New York Rangers,Detroit Red Wings,Vancouver Canucks,,A,hard,Other Sports
+439,Who is the only goalkeeper to win the Ballon dOr?,Gordon Banks,Lev Yashin,Dino Zoff,,B,hard,Football
+440,Which player averaged a triple double for three straight seasons?,Oscar Robertson,Magic Johnson,Russell Westbrook,,C,hard,Basketball
 441,Which Test ground sits at the foot of Table Mountain?,Wanderers,Newlands,Kingsmead,,B,hard,Cricket
-442,Who won the 1975 Wimbledon mens final?,Guillermo Vilas,John Newcombe,Arthur Ashe,,C,hard,Tennis
-443,Which athlete won decathlon gold at the 1984 Olympics?,Daley Thompson,Bruce Jenner,Erki Nool,,A,hard,Olympics
-444,Which team has won the most 24 Hours of Le Mans races?,Audi,Porsche,Alfa Romeo,,B,hard,Other Sports
-445,Who won the Golden Ball at the 2014 World Cup?,Thomas Muller,Arjen Robben,Lionel Messi,,C,hard,Football
-446,Which player won six titles alongside Michael Jordan?,Scottie Pippen,Horace Grant,Dennis Rodman,,A,hard,Basketball
-447,Which team posted the highest total in a Test innings?,Australia,Sri Lanka,Pakistan,,B,hard,Cricket
-448,Which woman has won the most French Open titles in the Open era?,Iga Swiatek,Maria Sharapova,Chris Evert,,C,hard,Tennis
-449,Which gymnast won the mens all around gold in 2004?,Paul Hamm,Kohei Uchimura,Alexei Nemov,,A,hard,Olympics
-450,Who set the womens marathon world record in 2024?,Tigist Assefa,Ruth Chepngetich,Brigid Kosgei,,B,hard,Olympics
-451,Which club won the first European Cup in 1956?,Reims,Benfica,Real Madrid,,C,hard,Football
+442,Who won the 1975 Wimbledon mens final?,Arthur Ashe,Guillermo Vilas,John Newcombe,,A,hard,Tennis
+443,Which athlete won decathlon gold at the 1984 Olympics?,Erki Nool,Bruce Jenner,Daley Thompson,,C,hard,Olympics
+444,Which team has won the most 24 Hours of Le Mans races?,Alfa Romeo,Audi,Porsche,,C,hard,Other Sports
+445,Who won the Golden Ball at the 2014 World Cup?,Lionel Messi,Arjen Robben,Thomas Muller,,A,hard,Football
+446,Which player won six titles alongside Michael Jordan?,Horace Grant,Scottie Pippen,Dennis Rodman,,B,hard,Basketball
+447,Which team posted the highest total in a Test innings?,Pakistan,Australia,Sri Lanka,,C,hard,Cricket
+448,Which woman has won the most French Open titles in the Open era?,Chris Evert,Maria Sharapova,Iga Swiatek,,A,hard,Tennis
+449,Which gymnast won the mens all around gold in 2004?,Alexei Nemov,Kohei Uchimura,Paul Hamm,,C,hard,Olympics
+450,Who set the womens marathon world record in 2024?,Ruth Chepngetich,Brigid Kosgei,Tigist Assefa,,A,hard,Olympics
+451,Which club won the first European Cup in 1956?,Benfica,Reims,Real Madrid,,C,hard,Football
 452,Who won the first NBA three point contest?,Larry Bird,Mark Price,Craig Hodges,,A,hard,Basketball
 453,Which wicketkeeper has the most Test dismissals?,Jeffrey Dujon,Mark Boucher,Ian Healy,,B,hard,Cricket
 454,Which man won all four majors and Olympic gold?,Ken Rosewall,Andy Murray,Andre Agassi,,C,hard,Tennis
-455,Which nation stunned the USA in the 1972 Olympic basketball final?,Soviet Union,Yugoslavia,Cuba,,A,hard,Olympics
-456,Which circuit hosted the first world championship race in 1950?,Monza,Silverstone,Imola,,B,hard,Other Sports
+455,Which nation stunned the USA in the 1972 Olympic basketball final?,Cuba,Yugoslavia,Soviet Union,,C,hard,Olympics
+456,Which circuit hosted the first world championship race in 1950?,Silverstone,Monza,Imola,,A,hard,Other Sports
 457,Which nation won the first African Cup of Nations in 1957?,Ghana,Cameroon,Egypt,,C,hard,Football
 458,Which player has the most career steals in NBA history?,John Stockton,Jason Kidd,Michael Jordan,,A,hard,Basketball
-459,Who scored the fastest century in Test cricket?,Adam Gilchrist,Brendon McCullum,Shivnarine Chanderpaul,,B,hard,Cricket
-460,Which American woman won the most Open era Grand Slam titles?,Chris Evert,Billie Jean King,Serena Williams,,C,hard,Tennis
-461,Who won the 100m at the first modern Olympics?,Tom Burke,Ellery Clark,Alvin Kraenzlein,,A,hard,Olympics
-462,Which team has won the most Stanley Cups?,Toronto Maple Leafs,Montreal Canadiens,Boston Bruins,,B,hard,Other Sports
-463,Which player won three straight European Cups with Ajax?,Marco van Basten,Franz Beckenbauer,Johan Cruyff,,C,hard,Football
-464,Which team won the first BAA championship in 1947?,Philadelphia Warriors,Baltimore Bullets,Chicago Stags,,A,hard,Basketball
-465,Which ground hosted the 1992 World Cup final?,Lord's,Melbourne Cricket Ground,Sydney Cricket Ground,,B,hard,Cricket
-466,Who won the 1991 US Open womens title?,Martina Navratilova,Steffi Graf,Monica Seles,,C,hard,Tennis
-467,Which swimmer won the 800m freestyle at four straight Olympics?,Katie Ledecky,Ian Thorpe,Franziska van Almsick,,A,hard,Olympics
-468,Which boxer retired 49 and 0?,Jack Johnson,Rocky Marciano,Jack Dempsey,,B,hard,Other Sports
-469,Which English club won the European Cup in 1968?,Celtic,Ajax,Manchester United,,C,hard,Football
-470,Which team won 33 straight NBA games in 1971 72?,Los Angeles Lakers,Syracuse Nationals,Cincinnati Royals,,A,hard,Basketball
-471,Which India opener scored 219 in an ODI?,Rohit Sharma,Virender Sehwag,Martin Guptill,,B,hard,Cricket
+459,Who scored the fastest century in Test cricket?,Brendon McCullum,Adam Gilchrist,Shivnarine Chanderpaul,,A,hard,Cricket
+460,Which American woman won the most Open era Grand Slam titles?,Billie Jean King,Chris Evert,Serena Williams,,C,hard,Tennis
+461,Who won the 100m at the first modern Olympics?,Ellery Clark,Tom Burke,Alvin Kraenzlein,,B,hard,Olympics
+462,Which team has won the most Stanley Cups?,Boston Bruins,Toronto Maple Leafs,Montreal Canadiens,,C,hard,Other Sports
+463,Which player won three straight European Cups with Ajax?,Johan Cruyff,Franz Beckenbauer,Marco van Basten,,A,hard,Football
+464,Which team won the first BAA championship in 1947?,Baltimore Bullets,Philadelphia Warriors,Chicago Stags,,B,hard,Basketball
+465,Which ground hosted the 1992 World Cup final?,Sydney Cricket Ground,Lord's,Melbourne Cricket Ground,,C,hard,Cricket
+466,Who won the 1991 US Open womens title?,Martina Navratilova,Monica Seles,Steffi Graf,,B,hard,Tennis
+467,Which swimmer won the 800m freestyle at four straight Olympics?,Ian Thorpe,Katie Ledecky,Franziska van Almsick,,B,hard,Olympics
+468,Which boxer retired 49 and 0?,Rocky Marciano,Jack Johnson,Jack Dempsey,,A,hard,Other Sports
+469,Which English club won the European Cup in 1968?,Ajax,Celtic,Manchester United,,C,hard,Football
+470,Which team won 33 straight NBA games in 1971 72?,Cincinnati Royals,Syracuse Nationals,Los Angeles Lakers,,C,hard,Basketball
+471,Which India opener scored 219 in an ODI?,Virender Sehwag,Rohit Sharma,Martin Guptill,,A,hard,Cricket
 472,Which venue hosts the Miami Open?,Indian Wells Tennis Garden,Crandon Park,Hard Rock Stadium,,C,hard,Tennis
 473,Who won the womens 100m at the 2004 Olympics?,Yulia Nestserenko,Lauryn Williams,Veronica Campbell,,A,hard,Olympics
-474,Which golfer won the 2008 US Open on a broken leg?,Phil Mickelson,Tiger Woods,Padraig Harrington,,B,hard,Other Sports
-475,Which coach won three straight Champions Leagues?,Carlo Ancelotti,Pep Guardiola,Zinedine Zidane,,C,hard,Football
-476,Which team drafted Manu Ginobili in 1999?,San Antonio Spurs,Seattle SuperSonics,Milwaukee Bucks,,A,hard,Basketball
-477,At which ground did Jim Laker take 19 wickets?,Headingley,Old Trafford,Edgbaston,,B,hard,Cricket
-478,Who has won the most French Open titles among men in the Open era?,Gustavo Kuerten,Stan Smith,Rafael Nadal,,C,hard,Tennis
-479,Which city hosted the 1964 Olympics?,Tokyo,Mexico City,Seoul,,A,hard,Olympics
-480,Who won the 2019 Womens Ballon dOr?,Lucy Bronze,Megan Rapinoe,Alex Morgan,,B,hard,Olympics
-481,Which club has won the most Dutch titles?,PSV Eindhoven,Feyenoord,Ajax,,C,hard,Football
-482,Who was the first pick of the 2003 NBA draft?,LeBron James,Dwyane Wade,Carmelo Anthony,,A,hard,Basketball
-483,Who took the first T20 international hat trick?,Umar Gul,Brett Lee,Lasith Malinga,,B,hard,Cricket
-484,Who won the 1995 Wimbledon mens title?,Pat Cash,Kevin Curren,Pete Sampras,,C,hard,Tennis
-485,Who won the 100m and 200m at the 1932 Olympics?,Eddie Tolan,Ralph Metcalfe,Jesse Owens,,A,hard,Olympics
-486,Which heavyweight had the longest world title reign?,Wladimir Klitschko,Joe Louis,Larry Holmes,,B,hard,Other Sports
-487,Which club did George Best star for?,Stockport County,Fulham,Manchester United,,C,hard,Football
+474,Which golfer won the 2008 US Open on a broken leg?,Tiger Woods,Phil Mickelson,Padraig Harrington,,A,hard,Other Sports
+475,Which coach won three straight Champions Leagues?,Carlo Ancelotti,Zinedine Zidane,Pep Guardiola,,B,hard,Football
+476,Which team drafted Manu Ginobili in 1999?,Seattle SuperSonics,San Antonio Spurs,Milwaukee Bucks,,B,hard,Basketball
+477,At which ground did Jim Laker take 19 wickets?,Edgbaston,Headingley,Old Trafford,,C,hard,Cricket
+478,Who has won the most French Open titles among men in the Open era?,Stan Smith,Rafael Nadal,Gustavo Kuerten,,B,hard,Tennis
+479,Which city hosted the 1964 Olympics?,Mexico City,Seoul,Tokyo,,C,hard,Olympics
+480,Who won the 2019 Womens Ballon dOr?,Megan Rapinoe,Alex Morgan,Lucy Bronze,,A,hard,Olympics
+481,Which club has won the most Dutch titles?,Ajax,Feyenoord,PSV Eindhoven,,A,hard,Football
+482,Who was the first pick of the 2003 NBA draft?,Carmelo Anthony,LeBron James,Dwyane Wade,,B,hard,Basketball
+483,Who took the first T20 international hat trick?,Lasith Malinga,Umar Gul,Brett Lee,,C,hard,Cricket
+484,Who won the 1995 Wimbledon mens title?,Kevin Curren,Pat Cash,Pete Sampras,,C,hard,Tennis
+485,Who won the 100m and 200m at the 1932 Olympics?,Jesse Owens,Eddie Tolan,Ralph Metcalfe,,B,hard,Olympics
+486,Which heavyweight had the longest world title reign?,Larry Holmes,Joe Louis,Wladimir Klitschko,,B,hard,Other Sports
+487,Which club did George Best star for?,Fulham,Stockport County,Manchester United,,C,hard,Football
 488,Who won the 1994 NBA MVP and Defensive Player of the Year?,Hakeem Olajuwon,Michael Jordan,Patrick Ewing,,A,hard,Basketball
-489,Who bowled the Ball of the Century in 1993?,Muttiah Muralitharan,Shane Warne,Anil Kumble,,B,hard,Cricket
-490,Who won the 1997 Wimbledon womens title?,Julie Halard Decugis,Monica Seles,Martina Hingis,,C,hard,Tennis
-491,Who won the womens marathon at the 2000 Olympics?,Naoko Takahashi,Liz McColgan,Catherine Ndereba,,A,hard,Olympics
-492,Which bowler took a hat trick at the 1987 World Cup?,Navjot Sidhu,Chetan Sharma,Manoj Prabhakar,,B,hard,Cricket
-493,Who is the all time top scorer in El Clasico matches?,Karim Benzema,Cristiano Ronaldo,Lionel Messi,,C,hard,Football
+489,Who bowled the Ball of the Century in 1993?,Shane Warne,Muttiah Muralitharan,Anil Kumble,,A,hard,Cricket
+490,Who won the 1997 Wimbledon womens title?,Julie Halard Decugis,Martina Hingis,Monica Seles,,B,hard,Tennis
+491,Who won the womens marathon at the 2000 Olympics?,Catherine Ndereba,Liz McColgan,Naoko Takahashi,,C,hard,Olympics
+492,Which bowler took a hat trick at the 1987 World Cup?,Chetan Sharma,Navjot Sidhu,Manoj Prabhakar,,A,hard,Cricket
+493,Who is the all time top scorer in El Clasico matches?,Cristiano Ronaldo,Lionel Messi,Karim Benzema,,B,hard,Football
 494,Against which team did Wilt Chamberlain score 100 points?,New York Knicks,Rochester Royals,Boston Celtics,,A,hard,Basketball
-495,Who was the first bowler to reach 500 Test wickets?,Glenn McGrath,Courtney Walsh,Curtly Ambrose,,B,hard,Cricket
-496,Which woman has won the most Australian Open singles titles?,Martina Navratilova,Serena Williams,Margaret Court,,C,hard,Tennis
-497,Who won back to back 100m Olympic titles before Usain Bolt?,Carl Lewis,Maurice Greene,Donovan Bailey,,A,hard,Olympics
-498,Which jockey rode Red Rum to two Grand National wins?,Bob Champion,Brian Fletcher,Lester Piggott,,B,hard,Other Sports
-499,Which manager led Greece to Euro 2004?,Guus Hiddink,Luiz Felipe Scolari,Otto Rehhagel,,C,hard,Football
-500,Who won the first NBA Sixth Man of the Year award?,Bobby Jones,Kiki Vandeweghe,Ricky Pierce,,A,hard,Basketball
-501,Who was the first batter to reach 10000 Test runs?,Allan Border,Sunil Gavaskar,Viv Richards,,B,hard,Cricket
-502,Who won the 2001 US Open mens title?,Yevgeny Kafelnikov,Pete Sampras,Lleyton Hewitt,,C,hard,Tennis
+495,Who was the first bowler to reach 500 Test wickets?,Glenn McGrath,Curtly Ambrose,Courtney Walsh,,C,hard,Cricket
+496,Which woman has won the most Australian Open singles titles?,Margaret Court,Martina Navratilova,Serena Williams,,A,hard,Tennis
+497,Who won back to back 100m Olympic titles before Usain Bolt?,Donovan Bailey,Carl Lewis,Maurice Greene,,B,hard,Olympics
+498,Which jockey rode Red Rum to two Grand National wins?,Brian Fletcher,Lester Piggott,Bob Champion,,A,hard,Other Sports
+499,Which manager led Greece to Euro 2004?,Otto Rehhagel,Luiz Felipe Scolari,Guus Hiddink,,A,hard,Football
+500,Who won the first NBA Sixth Man of the Year award?,Ricky Pierce,Kiki Vandeweghe,Bobby Jones,,C,hard,Basketball
+501,Who was the first batter to reach 10000 Test runs?,Viv Richards,Sunil Gavaskar,Allan Border,,B,hard,Cricket
+502,Who won the 2001 US Open mens title?,Lleyton Hewitt,Yevgeny Kafelnikov,Pete Sampras,,A,hard,Tennis
 503,Which town hosted the first Winter Olympics in 1924?,Chamonix,St Moritz,Oslo,,A,hard,Olympics
-504,Which circuit hosts the Abu Dhabi season finale?,Bahrain International Circuit,Yas Marina Circuit,Losail International Circuit,,B,hard,Other Sports
-505,Who is the all time top scorer in Serie A?,Gunnar Nordahl,Francesco Totti,Silvio Piola,,C,hard,Football
+504,Which circuit hosts the Abu Dhabi season finale?,Losail International Circuit,Yas Marina Circuit,Bahrain International Circuit,,B,hard,Other Sports
+505,Who is the all time top scorer in Serie A?,Silvio Piola,Gunnar Nordahl,Francesco Totti,,A,hard,Football
 506,Which team won the final ABA championship in 1976?,New York Nets,Denver Rockets,Kentucky Colonels,,A,hard,Basketball
-507,Who took the most wickets at the 2023 World Cup?,Adam Zampa,Mohammed Shami,Jasprit Bumrah,,B,hard,Cricket
-508,Who lost the famous 1980 Wimbledon final to Bjorn Borg?,Ken Rosewall,Jimmy Connors,John McEnroe,,C,hard,Tennis
-509,Who won the 100m gold at the 1988 Olympics?,Carl Lewis,Linford Christie,Ben Johnson,,A,hard,Olympics
-510,Who was the first Finnish Formula 1 world champion?,Nico Rosberg,Keke Rosberg,Mika Hakkinen,,B,hard,Other Sports
+507,Who took the most wickets at the 2023 World Cup?,Adam Zampa,Jasprit Bumrah,Mohammed Shami,,C,hard,Cricket
+508,Who lost the famous 1980 Wimbledon final to Bjorn Borg?,John McEnroe,Jimmy Connors,Ken Rosewall,,A,hard,Tennis
+509,Who won the 100m gold at the 1988 Olympics?,Linford Christie,Carl Lewis,Ben Johnson,,B,hard,Olympics
+510,Who was the first Finnish Formula 1 world champion?,Keke Rosberg,Mika Hakkinen,Nico Rosberg,,A,hard,Other Sports
 511,Who is the oldest player to appear in a World Cup match?,Jorge Campos,Faryd Mondragon,Essam El Hadary,,C,hard,Football
 512,Which coach led the Pistons to back to back titles?,Chuck Daly,Larry Brown,Doug Collins,,A,hard,Basketball
 513,Who scored the only away triple century for India?,Karun Nair,Virender Sehwag,Rahul Dravid,,B,hard,Cricket
-514,Who won the longest Wimbledon final ever played?,Michael Stich,John McEnroe,Rafael Nadal,,C,hard,Tennis
-515,Who won the first Olympic womens flyweight gold?,Nicola Adams,Claressa Shields,Ren Cancan,,A,hard,Olympics
+514,Who won the longest Wimbledon final ever played?,John McEnroe,Rafael Nadal,Michael Stich,,B,hard,Tennis
+515,Who won the first Olympic womens flyweight gold?,Nicola Adams,Ren Cancan,Claressa Shields,,A,hard,Olympics
 516,Which club won the first rebranded Champions League in 1993?,Steaua Bucuresti,Olympique Marseille,Red Star Belgrade,,B,hard,Football
-517,Who scored a hat trick in the 1966 World Cup final?,Martin Peters,Bobby Charlton,Geoff Hurst,,C,hard,Football
-518,Which team drafted Moses Malone in 1974?,Utah Stars,Portland Trail Blazers,New Orleans Jazz,,A,hard,Basketball
-519,Who scored the fastest century in ODI cricket?,Corey Anderson,AB de Villiers,Shahid Afridi,,B,hard,Cricket
+517,Who scored a hat trick in the 1966 World Cup final?,Geoff Hurst,Bobby Charlton,Martin Peters,,A,hard,Football
+518,Which team drafted Moses Malone in 1974?,Portland Trail Blazers,Utah Stars,New Orleans Jazz,,B,hard,Basketball
+519,Who scored the fastest century in ODI cricket?,Shahid Afridi,Corey Anderson,AB de Villiers,,C,hard,Cricket
 520,Who won the 1990 Wimbledon mens title?,Miloslav Mecir,Boris Becker,Stefan Edberg,,C,hard,Tennis
-521,Who won four straight discus golds from 1956 to 1968?,Al Oerter,Harold Connolly,Mac Wilkins,,A,hard,Olympics
-522,Which team drafted Manu Ginobili in the second round?,Denver Nuggets,San Antonio Spurs,Atlanta Hawks,,B,hard,Basketball
-523,Which club did Ronaldo Nazario join in 1997?,Barcelona,Lazio,Inter Milan,,C,hard,Football
-524,Who scored the first points in NBA history?,Ossie Schectman,Joe Fulks,Bob Davies,,A,hard,Basketball
+521,Who won four straight discus golds from 1956 to 1968?,Mac Wilkins,Al Oerter,Harold Connolly,,B,hard,Olympics
+522,Which team drafted Manu Ginobili in the second round?,Denver Nuggets,Atlanta Hawks,San Antonio Spurs,,C,hard,Basketball
+523,Which club did Ronaldo Nazario join in 1997?,Inter Milan,Barcelona,Lazio,,A,hard,Football
+524,Who scored the first points in NBA history?,Bob Davies,Joe Fulks,Ossie Schectman,,C,hard,Basketball
 525,Who captained Sri Lanka to the 1996 World Cup?,Aravinda de Silva,Arjuna Ranatunga,Sanath Jayasuriya,,B,hard,Cricket
-526,Who won the 1990 French Open mens title?,Emilio Sanchez,Ivan Lendl,Andres Gomez,,C,hard,Tennis
+526,Who won the 1990 French Open mens title?,Ivan Lendl,Emilio Sanchez,Andres Gomez,,C,hard,Tennis
 527,Who lit the cauldron at the 2008 Beijing Olympics?,Li Ning,Yao Ming,Liu Xiang,,A,hard,Olympics
-528,Which boxer won light heavyweight gold at the 1960 Olympics?,Joe Frazier,Cassius Clay,Floyd Patterson,,B,hard,Other Sports
-529,Which nation won the 1995 Copa America?,Chile,Paraguay,Uruguay,,C,hard,Football
-530,Who was the shortest player to win the Slam Dunk Contest?,Spud Webb,Nate Robinson,Dominique Wilkins,,A,hard,Basketball
+528,Which boxer won light heavyweight gold at the 1960 Olympics?,Floyd Patterson,Cassius Clay,Joe Frazier,,B,hard,Other Sports
+529,Which nation won the 1995 Copa America?,Chile,Uruguay,Paraguay,,B,hard,Football
+530,Who was the shortest player to win the Slam Dunk Contest?,Spud Webb,Dominique Wilkins,Nate Robinson,,A,hard,Basketball
 531,Which ground hosted the 2019 World Cup final?,Rose Bowl,Lord's,Sophia Gardens,,B,hard,Cricket
-532,Who won the 2010 Wimbledon womens title?,Vera Zvonareva,Tsvetana Pironkova,Serena Williams,,C,hard,Tennis
-533,Which nation has won the most Olympic golds in boxing?,Cuba,United States,Kazakhstan,,A,hard,Olympics
-534,Which golfer won the 1986 Masters at age 46?,Tom Watson,Jack Nicklaus,Seve Ballesteros,,B,hard,Other Sports
-535,Which player has made the most World Cup appearances?,Bastian Schweinsteiger,Lothar Matthaus,Lionel Messi,,C,hard,Football
-536,Who was the first foreign born NBA MVP?,Hakeem Olajuwon,Steve Nash,Detlef Schrempf,,A,hard,Basketball
-537,Who is the only cricketer to play 200 Test matches?,Ricky Ponting,Sachin Tendulkar,James Anderson,,B,hard,Cricket
-538,Which Swiss player won the 1992 Olympic tennis gold?,Jordi Arrese,Stefan Edberg,Marc Rosset,,C,hard,Tennis
-539,Who won the 800m gold at the 1996 Olympics?,Vebjorn Rodal,Wilson Kipketer,Johnny Gray,,A,hard,Olympics
+532,Who won the 2010 Wimbledon womens title?,Serena Williams,Vera Zvonareva,Tsvetana Pironkova,,A,hard,Tennis
+533,Which nation has won the most Olympic golds in boxing?,Cuba,Kazakhstan,United States,,A,hard,Olympics
+534,Which golfer won the 1986 Masters at age 46?,Tom Watson,Seve Ballesteros,Jack Nicklaus,,C,hard,Other Sports
+535,Which player has made the most World Cup appearances?,Lothar Matthaus,Lionel Messi,Bastian Schweinsteiger,,B,hard,Football
+536,Who was the first foreign born NBA MVP?,Steve Nash,Hakeem Olajuwon,Detlef Schrempf,,B,hard,Basketball
+537,Who is the only cricketer to play 200 Test matches?,Sachin Tendulkar,Ricky Ponting,James Anderson,,A,hard,Cricket
+538,Which Swiss player won the 1992 Olympic tennis gold?,Stefan Edberg,Marc Rosset,Jordi Arrese,,B,hard,Tennis
+539,Who won the 800m gold at the 1996 Olympics?,Wilson Kipketer,Johnny Gray,Vebjorn Rodal,,C,hard,Olympics
 540,Which quarterback has won the most Super Bowl MVPs?,Joe Montana,Tom Brady,Patrick Mahomes,,B,hard,Other Sports
-541,Which club won the 1988 FA Cup final?,Luton Town,Everton,Wimbledon,,C,hard,Football
-542,Who won the 2004 Finals MVP?,Chauncey Billups,Tayshaun Prince,Ben Wallace,,A,hard,Basketball
-543,Who scored 281 at Kolkata in 2001?,Sourav Ganguly,VVS Laxman,Javagal Srinath,,B,hard,Cricket
-544,Who won the 1998 US Open mens title?,Richard Krajicek,Mark Philippoussis,Patrick Rafter,,C,hard,Tennis
-545,Which swimmer won the 100m freestyle at three straight Games?,Dawn Fraser,Inge de Bruijn,Sarah Sjostrom,,A,hard,Olympics
-546,Who won the 1980 Formula 1 title?,Nelson Piquet,Alan Jones,Carlos Reutemann,,B,hard,Other Sports
+541,Which club won the 1988 FA Cup final?,Wimbledon,Everton,Luton Town,,A,hard,Football
+542,Who won the 2004 Finals MVP?,Tayshaun Prince,Ben Wallace,Chauncey Billups,,C,hard,Basketball
+543,Who scored 281 at Kolkata in 2001?,Sourav Ganguly,Javagal Srinath,VVS Laxman,,C,hard,Cricket
+544,Who won the 1998 US Open mens title?,Richard Krajicek,Patrick Rafter,Mark Philippoussis,,B,hard,Tennis
+545,Which swimmer won the 100m freestyle at three straight Games?,Sarah Sjostrom,Dawn Fraser,Inge de Bruijn,,B,hard,Olympics
+546,Who won the 1980 Formula 1 title?,Nelson Piquet,Carlos Reutemann,Alan Jones,,C,hard,Other Sports
 547,Who scored the first ever World Cup goal?,Guillermo Stabile,Pedro Cea,Lucien Laurent,,C,hard,Football
-548,Which player won Finals MVP on a losing team?,Jerry West,Elgin Baylor,Walt Frazier,,A,hard,Basketball
+548,Which player won Finals MVP on a losing team?,Jerry West,Walt Frazier,Elgin Baylor,,A,hard,Basketball
 549,Who took the first ODI hat trick?,Bruce Reid,Jalal Ud Din,Peter Taylor,,B,hard,Cricket
 550,Who won the 2005 Australian Open mens title?,Lleyton Hewitt,Andy Roddick,Marat Safin,,C,hard,Tennis
-551,Who won the 200m gold at the 1992 Olympics?,Michael Johnson,Frankie Fredericks,Michael Marsh,,A,hard,Olympics
+551,Who won the 200m gold at the 1992 Olympics?,Michael Johnson,Michael Marsh,Frankie Fredericks,,A,hard,Olympics
 552,Which manager won the 2004 Champions League with Porto?,Rafael Benitez,Jose Mourinho,Carlos Queiroz,,B,hard,Other Sports
-553,Who kept goal for Brazil in the 1970 World Cup final?,Gilmar,Claudio Taffarel,Felix,,C,hard,Football
-554,Which player has the most blocks in a single NBA season?,Mark Eaton,Kareem Abdul Jabbar,Tree Rollins,,A,hard,Basketball
-555,Which team won the 1999 Cricket World Cup?,West Indies,Australia,Sri Lanka,,B,hard,Cricket
+553,Who kept goal for Brazil in the 1970 World Cup final?,Felix,Claudio Taffarel,Gilmar,,A,hard,Football
+554,Which player has the most blocks in a single NBA season?,Kareem Abdul Jabbar,Tree Rollins,Mark Eaton,,C,hard,Basketball
+555,Which team won the 1999 Cricket World Cup?,Australia,West Indies,Sri Lanka,,A,hard,Cricket
 556,Who won the 1998 Wimbledon mens title?,Cedric Pioline,Tim Henman,Pete Sampras,,C,hard,Tennis
-557,Who won the 400m gold at the 1996 Olympics?,Michael Johnson,Quincy Watts,Butch Reynolds,,A,hard,Olympics
-558,Who is the only posthumous Formula 1 world champion?,Francois Cevert,Jochen Rindt,Ronnie Peterson,,B,hard,Other Sports
-559,Which manager led Inter to the 2010 treble?,Leonardo,Fabio Capello,Jose Mourinho,,C,hard,Football
-560,Which team won the 1976 NBA Finals?,Boston Celtics,Washington Bullets,New York Nets,,A,hard,Basketball
-561,Who captained India in the 1983 World Cup final?,Sunil Gavaskar,Kapil Dev,Mohinder Amarnath,,B,hard,Cricket
-562,Who did Goran Ivanisevic beat in the 2001 Wimbledon final?,Jonas Bjorkman,Marat Safin,Patrick Rafter,,C,hard,Tennis
-563,Which nation won the mens basketball silver at Paris 2024?,France,Serbia,Germany,,A,hard,Olympics
-564,Which jockey has won the most Kentucky Derbies?,Bill Hartack,Eddie Arcaro,Ron Turcotte,,B,hard,Other Sports
+557,Who won the 400m gold at the 1996 Olympics?,Butch Reynolds,Quincy Watts,Michael Johnson,,C,hard,Olympics
+558,Who is the only posthumous Formula 1 world champion?,Jochen Rindt,Ronnie Peterson,Francois Cevert,,A,hard,Other Sports
+559,Which manager led Inter to the 2010 treble?,Fabio Capello,Jose Mourinho,Leonardo,,B,hard,Football
+560,Which team won the 1976 NBA Finals?,New York Nets,Boston Celtics,Washington Bullets,,B,hard,Basketball
+561,Who captained India in the 1983 World Cup final?,Sunil Gavaskar,Mohinder Amarnath,Kapil Dev,,C,hard,Cricket
+562,Who did Goran Ivanisevic beat in the 2001 Wimbledon final?,Patrick Rafter,Jonas Bjorkman,Marat Safin,,A,hard,Tennis
+563,Which nation won the mens basketball silver at Paris 2024?,Germany,France,Serbia,,B,hard,Olympics
+564,Which jockey has won the most Kentucky Derbies?,Ron Turcotte,Bill Hartack,Eddie Arcaro,,C,hard,Other Sports
 565,Which club plays at the Stadio Diego Armando Maradona?,AS Roma,Udinese,Napoli,,C,hard,Football
 566,Which team won the 1994 NBA Finals?,Houston Rockets,Utah Jazz,New York Knicks,,A,hard,Basketball
-567,Who holds the fastest fifty in Test cricket?,AB de Villiers,Misbah Ul Haq,Jacques Kallis,,B,hard,Cricket
-568,Who won the 2005 US Open womens title?,Elena Dementieva,Mary Pierce,Kim Clijsters,,C,hard,Tennis
-569,Which town hosted the 1932 Winter Olympics?,Lake Placid,Chamonix,Squaw Valley,,A,hard,Olympics
-570,Which snooker player is nicknamed the Rocket?,Alex Higgins,Ronnie O'Sullivan,Jimmy White,,B,hard,Other Sports
-571,Who scored the winning goal in the 2010 World Cup final?,Xavi,David Villa,Andres Iniesta,,C,hard,Football
-572,Which team drafted Larry Bird in 1978?,Boston Celtics,Kansas City Kings,Indiana State,,A,hard,Basketball
-573,Who scored the first triple century in Test cricket?,Wally Hammond,Andy Sandham,Don Bradman,,B,hard,Cricket
-574,Who won the 1990 French Open womens title?,Arantxa Sanchez Vicario,Conchita Martinez,Monica Seles,,C,hard,Tennis
-575,Who won the 400m gold at the 1976 Olympics?,Alberto Juantorena,Edwin Moses,Fred Newhouse,,A,hard,Olympics
-576,Who won the 1978 Formula 1 title for Lotus?,Carlos Pace,Mario Andretti,Jacky Ickx,,B,hard,Other Sports
-577,Which club won the 1967 European Cup?,Santos,Inter Milan,Celtic,,C,hard,Football
-578,Which team won the first ABA championship in 1968?,Pittsburgh Pipers,New Orleans Buccaneers,Minnesota Muskies,,A,hard,Basketball
-579,Who took 9 wickets for 83 runs in a Test innings?,Sydney Barnes,Jim Laker,Derek Underwood,,B,hard,Cricket
-580,Who won the 1994 Wimbledon mens title?,Goran Ivanisevic,Andrei Chesnokov,Pete Sampras,,C,hard,Tennis
-581,Which swimmer won the 200m backstroke at three straight Games in the 1990s?,Krisztina Egerszegi,Diana Mocanu,Kirsty Coventry,,A,hard,Olympics
+567,Who holds the fastest fifty in Test cricket?,Jacques Kallis,Misbah Ul Haq,AB de Villiers,,B,hard,Cricket
+568,Who won the 2005 US Open womens title?,Kim Clijsters,Elena Dementieva,Mary Pierce,,A,hard,Tennis
+569,Which town hosted the 1932 Winter Olympics?,Squaw Valley,Chamonix,Lake Placid,,C,hard,Olympics
+570,Which snooker player is nicknamed the Rocket?,Ronnie O'Sullivan,Jimmy White,Alex Higgins,,A,hard,Other Sports
+571,Who scored the winning goal in the 2010 World Cup final?,Xavi,Andres Iniesta,David Villa,,B,hard,Football
+572,Which team drafted Larry Bird in 1978?,Indiana State,Kansas City Kings,Boston Celtics,,C,hard,Basketball
+573,Who scored the first triple century in Test cricket?,Andy Sandham,Don Bradman,Wally Hammond,,A,hard,Cricket
+574,Who won the 1990 French Open womens title?,Arantxa Sanchez Vicario,Monica Seles,Conchita Martinez,,B,hard,Tennis
+575,Who won the 400m gold at the 1976 Olympics?,Edwin Moses,Alberto Juantorena,Fred Newhouse,,B,hard,Olympics
+576,Who won the 1978 Formula 1 title for Lotus?,Carlos Pace,Jacky Ickx,Mario Andretti,,C,hard,Other Sports
+577,Which club won the 1967 European Cup?,Celtic,Inter Milan,Santos,,A,hard,Football
+578,Which team won the first ABA championship in 1968?,Minnesota Muskies,New Orleans Buccaneers,Pittsburgh Pipers,,C,hard,Basketball
+579,Who took 9 wickets for 83 runs in a Test innings?,Sydney Barnes,Derek Underwood,Jim Laker,,C,hard,Cricket
+580,Who won the 1994 Wimbledon mens title?,Goran Ivanisevic,Pete Sampras,Andrei Chesnokov,,B,hard,Tennis
+581,Which swimmer won the 200m backstroke at three straight Games in the 1990s?,Kirsty Coventry,Diana Mocanu,Krisztina Egerszegi,,C,hard,Olympics
 582,Which team won the 1976 constructors championship?,Williams,Ferrari,Brabham,,B,hard,Other Sports
 583,Which club won the 1985 European Cup?,Liverpool,AC Milan,Juventus,,C,hard,Football
-584,Who scored 8 points in 9 seconds in a 1995 playoff game?,Reggie Miller,Jamal Crawford,Ray Allen,,A,hard,Basketball
+584,Who scored 8 points in 9 seconds in a 1995 playoff game?,Jamal Crawford,Reggie Miller,Ray Allen,,B,hard,Basketball
 585,Who was the first Indian to take an ODI hat trick?,Kapil Dev,Chetan Sharma,Ravi Shastri,,B,hard,Cricket
-586,Who won the 1998 Wimbledon womens title?,Amanda Coetzer,Arantxa Sanchez Vicario,Jana Novotna,,C,hard,Tennis
-587,Who won the 800m gold at the 1984 Olympics?,Joaquim Cruz,Steve Ovett,Sebastian Coe,,A,hard,Olympics
-588,Which golfer won the 1997 Masters by twelve strokes?,Fred Couples,Tiger Woods,Ernie Els,,B,hard,Other Sports
-589,Who scored the golden goal at Euro 2000?,Sylvain Wiltord,Zinedine Zidane,David Trezeguet,,C,hard,Football
-590,Who won the 1979 Finals MVP?,Dennis Johnson,Gus Williams,Fred Brown,,A,hard,Basketball
-591,Who scored the second ODI double century?,Glenn Maxwell,Virender Sehwag,Fakhar Zaman,,B,hard,Cricket
-592,Who won the 1993 Wimbledon womens title?,Gabriela Sabatini,Jana Novotna,Steffi Graf,,C,hard,Tennis
-593,Which gymnast won the womens all around at the 2004 Olympics?,Carly Patterson,Catalina Ponor,Svetlana Khorkina,,A,hard,Olympics
-594,Who hit the first televised nine dart finish?,Phil Taylor,John Lowe,John Part,,B,hard,Other Sports
+586,Who won the 1998 Wimbledon womens title?,Jana Novotna,Amanda Coetzer,Arantxa Sanchez Vicario,,A,hard,Tennis
+587,Who won the 800m gold at the 1984 Olympics?,Joaquim Cruz,Sebastian Coe,Steve Ovett,,A,hard,Olympics
+588,Which golfer won the 1997 Masters by twelve strokes?,Ernie Els,Fred Couples,Tiger Woods,,C,hard,Other Sports
+589,Who scored the golden goal at Euro 2000?,Zinedine Zidane,David Trezeguet,Sylvain Wiltord,,B,hard,Football
+590,Who won the 1979 Finals MVP?,Dennis Johnson,Fred Brown,Gus Williams,,A,hard,Basketball
+591,Who scored the second ODI double century?,Virender Sehwag,Fakhar Zaman,Glenn Maxwell,,A,hard,Cricket
+592,Who won the 1993 Wimbledon womens title?,Gabriela Sabatini,Steffi Graf,Jana Novotna,,B,hard,Tennis
+593,Which gymnast won the womens all around at the 2004 Olympics?,Svetlana Khorkina,Catalina Ponor,Carly Patterson,,C,hard,Olympics
+594,Who hit the first televised nine dart finish?,John Lowe,John Part,Phil Taylor,,A,hard,Other Sports
 595,Who won the Golden Ball at the 1986 World Cup?,Gary Lineker,Harald Schumacher,Diego Maradona,,C,hard,Football
-596,Which NBA team plays at the Smoothie King Center?,Charlotte Hornets,New Orleans Pelicans,Oklahoma City Thunder,,A,hard,Basketball
-597,Who scored 175 for India at Tunbridge Wells in 1983?,Sachin Tendulkar,Kapil Dev,Roger Binny,,B,hard,Cricket
+596,Which NBA team plays at the Smoothie King Center?,Oklahoma City Thunder,Charlotte Hornets,New Orleans Pelicans,,B,hard,Basketball
+597,Who scored 175 for India at Tunbridge Wells in 1983?,Kapil Dev,Sachin Tendulkar,Roger Binny,,A,hard,Cricket
 598,Who won the 1996 Wimbledon womens title?,Monica Seles,Chanda Rubin,Steffi Graf,,C,hard,Tennis
-599,Who won the high jump gold at the 1996 Olympics?,Charles Austin,Javier Sotomayor,Artur Partyka,,A,hard,Olympics
+599,Who won the high jump gold at the 1996 Olympics?,Charles Austin,Artur Partyka,Javier Sotomayor,,A,hard,Olympics
 600,Who won the 1995 Masters?,Greg Norman,Ben Crenshaw,Davis Love III,,B,hard,Other Sports
-601,Who scored the most goals in a single Champions League season?,Cristiano Ronaldo,Ruud van Nistelrooy,Filippo Inzaghi,Raul,A,expert,Football
+601,Who scored the most goals in a single Champions League season?,Filippo Inzaghi,Ruud van Nistelrooy,Raul,Cristiano Ronaldo,D,expert,Football
 602,Who holds the NBA single game assist record?,Kevin Porter,Scott Skiles,Nate McMillan,John Stockton,B,expert,Basketball
-603,Who was the third bowler to take all ten wickets in a Test innings?,Jim Laker,Anil Kumble,Ajaz Patel,Muttiah Muralitharan,C,expert,Cricket
-604,Who won the 1992 Olympic womens singles tennis gold?,Iva Majoli,Zina Garrison,Barbara Schett,Jennifer Capriati,D,expert,Tennis
-605,Who won the marathon gold at the 1952 Olympics?,Emil Zatopek,Reinaldo Gorno,Gustaf Jansson,Jim Peters,A,expert,Olympics
-606,Who won the 1994 Formula 1 drivers title?,Damon Hill,Michael Schumacher,Jean Alesi,David Coulthard,B,expert,Other Sports
+603,Who was the third bowler to take all ten wickets in a Test innings?,Ajaz Patel,Muttiah Muralitharan,Anil Kumble,Jim Laker,A,expert,Cricket
+604,Who won the 1992 Olympic womens singles tennis gold?,Iva Majoli,Jennifer Capriati,Barbara Schett,Zina Garrison,B,expert,Tennis
+605,Who won the marathon gold at the 1952 Olympics?,Reinaldo Gorno,Emil Zatopek,Jim Peters,Gustaf Jansson,B,expert,Olympics
+606,Who won the 1994 Formula 1 drivers title?,Michael Schumacher,Damon Hill,Jean Alesi,David Coulthard,A,expert,Other Sports
 607,Who won the Golden Boot at the 2002 World Cup?,Miroslav Klose,Rivaldo,Ronaldo,Ronaldinho,C,expert,Football
-608,Which player attempted the most career three pointers?,Reggie Miller,James Harden,Kyle Korver,Ray Allen,D,expert,Basketball
-609,Who holds the highest individual score in ODI cricket?,Rohit Sharma,Saeed Anwar,Charles Coventry,Shane Watson,A,expert,Cricket
-610,Who won the 1995 US Open mens title?,Andre Agassi,Pete Sampras,Marc Rosset,Michael Chang,B,expert,Tennis
-611,Who was the first to reach 10000 runs in ODIs?,Brian Lara,Hashan Tillakaratne,Sachin Tendulkar,Marvan Atapattu,C,expert,Cricket
-612,Which man has won the most Open era doubles titles?,Mark Woodforde,Daniel Nestor,Mike Bryan,Todd Woodbridge,D,expert,Tennis
-613,Who won the womens 100m gold at the 1992 Olympics?,Gail Devers,Gwen Torrence,Irina Privalova,Merlene Ottey,A,expert,Olympics
-614,Who won the 1988 Formula 1 drivers title?,Alain Prost,Ayrton Senna,Gerhard Berger,Thierry Boutsen,B,expert,Other Sports
-615,Which club won the 1984 European Cup final on penalties?,Roma,Sampdoria,Liverpool,Nottingham Forest,C,expert,Football
-616,Who won the 1997 Finals MVP?,John Stockton,Scottie Pippen,Charles Barkley,Michael Jordan,D,expert,Basketball
-617,Who took the most wickets at the 2019 World Cup?,Mitchell Starc,Jofra Archer,Pat Cummins,Lockie Ferguson,A,expert,Cricket
-618,Who won the 1971 Wimbledon mens title?,John Newcombe,Lew Hoad,Mal Anderson,Rod Laver,B,expert,Tennis
-619,Which ground hosted the 1983 World Cup final?,Trent Bridge,Old Trafford,Lord's,Cardiff Wales Stadium,C,expert,Cricket
+608,Which player attempted the most career three pointers?,Reggie Miller,James Harden,Ray Allen,Kyle Korver,C,expert,Basketball
+609,Who holds the highest individual score in ODI cricket?,Saeed Anwar,Shane Watson,Charles Coventry,Rohit Sharma,D,expert,Cricket
+610,Who won the 1995 US Open mens title?,Pete Sampras,Andre Agassi,Michael Chang,Marc Rosset,A,expert,Tennis
+611,Who was the first to reach 10000 runs in ODIs?,Sachin Tendulkar,Marvan Atapattu,Brian Lara,Hashan Tillakaratne,A,expert,Cricket
+612,Which man has won the most Open era doubles titles?,Mark Woodforde,Mike Bryan,Todd Woodbridge,Daniel Nestor,C,expert,Tennis
+613,Who won the womens 100m gold at the 1992 Olympics?,Irina Privalova,Gwen Torrence,Gail Devers,Merlene Ottey,C,expert,Olympics
+614,Who won the 1988 Formula 1 drivers title?,Ayrton Senna,Gerhard Berger,Alain Prost,Thierry Boutsen,A,expert,Other Sports
+615,Which club won the 1984 European Cup final on penalties?,Liverpool,Roma,Sampdoria,Nottingham Forest,A,expert,Football
+616,Who won the 1997 Finals MVP?,Scottie Pippen,Charles Barkley,John Stockton,Michael Jordan,D,expert,Basketball
+617,Who took the most wickets at the 2019 World Cup?,Lockie Ferguson,Mitchell Starc,Pat Cummins,Jofra Archer,B,expert,Cricket
+618,Who won the 1971 Wimbledon mens title?,Mal Anderson,John Newcombe,Lew Hoad,Rod Laver,C,expert,Tennis
+619,Which ground hosted the 1983 World Cup final?,Old Trafford,Trent Bridge,Lord's,Cardiff Wales Stadium,C,expert,Cricket
 620,Which heavyweight is nicknamed the Real Deal?,Mike Tyson,Riddick Bowe,Vitali Klitschko,Evander Holyfield,D,expert,Other Sports
-621,Who was the first to score 500 in a first class innings?,Brian Lara,Bill Ponsford,Graeme Hick,Charlie Macartney,A,expert,Cricket
-622,Who won the 2000 Wimbledon womens title?,Martina Hingis,Venus Williams,Jelena Dokic,Serena Williams,B,expert,Tennis
-623,Who won the 1969 Ballon dOr?,Gigi Riva,Sandro Mazzola,Gianni Rivera,Angelo Domenghini,C,expert,Football
-624,Which team won the 1990 NBA Finals?,Los Angeles Lakers,Houston Rockets,Dallas Mavericks,Detroit Pistons,D,expert,Basketball
-625,Which spinner has taken the most Test wickets after Murali and Warne?,Anil Kumble,Rangana Herath,Lance Gibbs,Daniel Vettori,A,expert,Cricket
-626,Who won the 1999 Wimbledon womens title?,Lori McNeil,Lindsay Davenport,Helena Sukova,Pam Shriver,B,expert,Tennis
-627,Who won Olympic long jump gold at four straight Games?,Bob Beamon,Mike Powell,Carl Lewis,Ralph Boston,C,expert,Olympics
-628,Which team won the 1979 constructors championship?,Ligier,Wolf,Renault,Ferrari,D,expert,Other Sports
-629,Which club did Marco van Basten join in 1987?,AC Milan,Napoli,Real Madrid,Torino,A,expert,Football
-630,Who won the 1998 NBA MVP?,Gary Payton,Michael Jordan,David Robinson,Shaquille O'Neal,B,expert,Basketball
-631,Who holds the highest Test batting average?,Adam Voges,Graeme Pollock,Don Bradman,George Headley,C,expert,Cricket
-632,Who won the 1974 Wimbledon mens title?,Arthur Ashe,John Newcombe,Roscoe Tanner,Jimmy Connors,D,expert,Tennis
+621,Who was the first to score 500 in a first class innings?,Bill Ponsford,Brian Lara,Charlie Macartney,Graeme Hick,B,expert,Cricket
+622,Who won the 2000 Wimbledon womens title?,Venus Williams,Martina Hingis,Jelena Dokic,Serena Williams,A,expert,Tennis
+623,Who won the 1969 Ballon dOr?,Gigi Riva,Gianni Rivera,Sandro Mazzola,Angelo Domenghini,B,expert,Football
+624,Which team won the 1990 NBA Finals?,Los Angeles Lakers,Dallas Mavericks,Detroit Pistons,Houston Rockets,C,expert,Basketball
+625,Which spinner has taken the most Test wickets after Murali and Warne?,Lance Gibbs,Daniel Vettori,Rangana Herath,Anil Kumble,D,expert,Cricket
+626,Who won the 1999 Wimbledon womens title?,Pam Shriver,Lindsay Davenport,Helena Sukova,Lori McNeil,B,expert,Tennis
+627,Who won Olympic long jump gold at four straight Games?,Bob Beamon,Mike Powell,Ralph Boston,Carl Lewis,D,expert,Olympics
+628,Which team won the 1979 constructors championship?,Renault,Ligier,Ferrari,Wolf,C,expert,Other Sports
+629,Which club did Marco van Basten join in 1987?,Torino,AC Milan,Real Madrid,Napoli,B,expert,Football
+630,Who won the 1998 NBA MVP?,David Robinson,Michael Jordan,Gary Payton,Shaquille O'Neal,B,expert,Basketball
+631,Who holds the highest Test batting average?,Adam Voges,Graeme Pollock,George Headley,Don Bradman,D,expert,Cricket
+632,Who won the 1974 Wimbledon mens title?,Jimmy Connors,John Newcombe,Roscoe Tanner,Arthur Ashe,A,expert,Tennis
 633,Who is the most decorated female US Olympian?,Katie Ledecky,Allyson Felix,Dara Torres,Missy Franklin,A,expert,Olympics
-634,Who was the first Dutch Formula 1 world champion?,Jos Verstappen,Max Verstappen,Robert Doornbos,Nyck de Vries,B,expert,Other Sports
-635,Who scored the first hat trick in World Cup history?,Ernst Wilimowski,Leopold Kielholz,Bert Patenaude,Angelo Schiavio,C,expert,Football
-636,Who won the 1969 Finals MVP?,Bill Russell,Sam Jones,John Havlicek,Jerry West,D,expert,Basketball
-637,Who was the first bowler to reach 400 Test wickets?,Richard Hadlee,Malcolm Marshall,Dennis Lillee,Joel Garner,A,expert,Cricket
-638,Which woman won the most consecutive Wimbledon singles titles?,Martina Navratilova,Dorothea Lambert Chambers,Helen Wills Moody,Suzanne Lenglen,B,expert,Tennis
-639,Who won the decathlon gold at the 1948 Olympics?,Milton Campbell,Ignace Heinrich,Bob Mathias,Bob Richards,C,expert,Olympics
-640,Who was the first boxer to regain the heavyweight title?,Ezzard Charles,Gene Tunney,Jersey Joe Walcott,Floyd Patterson,D,expert,Other Sports
-641,Who has the most double centuries in Test cricket?,Don Bradman,Kumar Sangakkara,Wally Hammond,Mahela Jayawardene,A,expert,Cricket
-642,Which man won five straight US Open titles?,Bill Tilden,Roger Federer,Bill Johnston,Rene Lacoste,B,expert,Tennis
-643,Who won both the pentathlon and decathlon at the 1912 Olympics?,Abebe Bikila,Paavo Nurmi,Jim Thorpe,Emil Zatopek,C,expert,Olympics
+634,Who was the first Dutch Formula 1 world champion?,Robert Doornbos,Max Verstappen,Nyck de Vries,Jos Verstappen,B,expert,Other Sports
+635,Who scored the first hat trick in World Cup history?,Leopold Kielholz,Angelo Schiavio,Bert Patenaude,Ernst Wilimowski,C,expert,Football
+636,Who won the 1969 Finals MVP?,Jerry West,Sam Jones,John Havlicek,Bill Russell,A,expert,Basketball
+637,Who was the first bowler to reach 400 Test wickets?,Dennis Lillee,Richard Hadlee,Joel Garner,Malcolm Marshall,B,expert,Cricket
+638,Which woman won the most consecutive Wimbledon singles titles?,Helen Wills Moody,Dorothea Lambert Chambers,Martina Navratilova,Suzanne Lenglen,B,expert,Tennis
+639,Who won the decathlon gold at the 1948 Olympics?,Ignace Heinrich,Milton Campbell,Bob Mathias,Bob Richards,C,expert,Olympics
+640,Who was the first boxer to regain the heavyweight title?,Ezzard Charles,Floyd Patterson,Jersey Joe Walcott,Gene Tunney,B,expert,Other Sports
+641,Who has the most double centuries in Test cricket?,Don Bradman,Mahela Jayawardene,Wally Hammond,Kumar Sangakkara,A,expert,Cricket
+642,Which man won five straight US Open titles?,Bill Tilden,Rene Lacoste,Bill Johnston,Roger Federer,D,expert,Tennis
+643,Who won both the pentathlon and decathlon at the 1912 Olympics?,Abebe Bikila,Jim Thorpe,Emil Zatopek,Paavo Nurmi,B,expert,Olympics
 644,Which team won the 1995 constructors championship?,Ferrari,Arrows,Jordan,Benetton,D,expert,Other Sports
-645,Who won the 100m gold at the 1980 Olympics?,Allan Wells,Pietro Mennea,Silvio Leonard,Don Quarrie,A,expert,Olympics
+645,Who won the 100m gold at the 1980 Olympics?,Don Quarrie,Pietro Mennea,Silvio Leonard,Allan Wells,D,expert,Olympics
 646,Which boxer is nicknamed the Brown Bomber?,Sonny Liston,Joe Louis,Max Baer,Max Schmeling,B,expert,Other Sports
 647,Who scored the most Test runs in a calendar year?,Gary Sobers,Joe Root,Mohammad Yousuf,Steve Smith,C,expert,Cricket
-648,Who won the 2003 Wimbledon mens title?,Sjeng Schalken,Sebastien Grosjean,Alexander Popp,Roger Federer,D,expert,Tennis
-649,Who won the marathon gold at the 1972 Olympics?,Frank Shorter,Kenny Moore,Derek Clayton,Ron Hill,A,expert,Olympics
-650,Which snooker player has won the most Masters titles?,Steve Davis,Ronnie O'Sullivan,Mark Selby,John Higgins,B,expert,Other Sports
-651,Who managed Argentina at the 1986 World Cup?,Cesar Luis Menotti,Daniel Passarella,Carlos Bilardo,Alfio Basile,C,expert,Football
-652,Who won the 1997 US Open mens title?,Thomas Muster,Magnus Larsson,Carlos Moya,Patrick Rafter,D,expert,Tennis
-653,Which city hosted the 1988 Winter Olympics?,Calgary,Lillehammer,Sarajevo,Grenoble,A,expert,Olympics
-654,Which driver won the 2005 and 2006 Formula 1 titles?,Jenson Button,Fernando Alonso,Giancarlo Fisichella,Mark Webber,B,expert,Other Sports
-655,Which wicketkeeper scored 232 not out in a Test?,Brendon Kuruppu,Tatenda Taibu,Andy Flower,Mushfiqur Rahim,C,expert,Cricket
-656,Who won the 2002 Wimbledon mens title?,Xavier Malisse,Paradorn Srichaphan,Younes El Aynaoui,Lleyton Hewitt,D,expert,Tennis
-657,Who has the most Player of the Match awards in Test cricket?,Jacques Kallis,Graeme Smith,Muttiah Muralitharan,Michael Clarke,A,expert,Cricket
-658,Who won the 1993 US Open mens title?,Thomas Enqvist,Pete Sampras,Alexander Volkov,Petr Korda,B,expert,Tennis
-659,Which player has appeared in the most ODI matches?,Hashim Amla,Ross Taylor,Sachin Tendulkar,Shoaib Malik,C,expert,Cricket
-660,Who won the 2003 US Open mens title?,Juan Carlos Ferrero,Guillermo Coria,Rainer Schuettler,Andy Roddick,D,expert,Tennis
-661,Who was the first bowler to reach 500 ODI wickets?,Wasim Akram,Anil Kumble,Waqar Younis,Chaminda Vaas,A,expert,Cricket
-662,Who won the 1992 Wimbledon mens title?,Henri Leconte,Andre Agassi,David Wheaton,Wayne Ferreira,B,expert,Tennis
-663,Who won the 1984 Olympic womens all around gymnastics gold?,Ecaterina Szabo,Simona Pauca,Mary Lou Retton,Oksana Omelianchik,C,expert,Olympics
-664,Who won the 1997 Formula 1 drivers title?,Heinz Harald Frentzen,Eddie Irvine,Heikki Kovalainen,Jacques Villeneuve,D,expert,Other Sports
-665,Which team won the 2000 ICC KnockOut Trophy?,New Zealand,South Africa,UAE,Hong Kong,A,expert,Cricket
-666,Who won the 1988 US Open womens title?,Manuela Maleeva,Steffi Graf,Claudia Kohde Kilsch,Sandra Cecchini,B,expert,Tennis
-667,Who won the 100m freestyle gold at the 1976 Olympics?,Andy Coan,Jonty Skinner,Jim Montgomery,Gary Hall Jr,C,expert,Olympics
-668,Who won the 1996 Australian Open mens title?,Jason Stoltenberg,Renzo Furlan,Patrick McEnroe,Boris Becker,D,expert,Tennis
+648,Who won the 2003 Wimbledon mens title?,Sjeng Schalken,Alexander Popp,Sebastien Grosjean,Roger Federer,D,expert,Tennis
+649,Who won the marathon gold at the 1972 Olympics?,Frank Shorter,Ron Hill,Kenny Moore,Derek Clayton,A,expert,Olympics
+650,Which snooker player has won the most Masters titles?,Ronnie O'Sullivan,Steve Davis,Mark Selby,John Higgins,A,expert,Other Sports
+651,Who managed Argentina at the 1986 World Cup?,Alfio Basile,Carlos Bilardo,Daniel Passarella,Cesar Luis Menotti,B,expert,Football
+652,Who won the 1997 US Open mens title?,Magnus Larsson,Carlos Moya,Patrick Rafter,Thomas Muster,C,expert,Tennis
+653,Which city hosted the 1988 Winter Olympics?,Grenoble,Lillehammer,Sarajevo,Calgary,D,expert,Olympics
+654,Which driver won the 2005 and 2006 Formula 1 titles?,Mark Webber,Fernando Alonso,Jenson Button,Giancarlo Fisichella,B,expert,Other Sports
+655,Which wicketkeeper scored 232 not out in a Test?,Tatenda Taibu,Mushfiqur Rahim,Brendon Kuruppu,Andy Flower,D,expert,Cricket
+656,Who won the 2002 Wimbledon mens title?,Lleyton Hewitt,Xavier Malisse,Younes El Aynaoui,Paradorn Srichaphan,A,expert,Tennis
+657,Who has the most Player of the Match awards in Test cricket?,Graeme Smith,Muttiah Muralitharan,Jacques Kallis,Michael Clarke,C,expert,Cricket
+658,Who won the 1993 US Open mens title?,Petr Korda,Alexander Volkov,Pete Sampras,Thomas Enqvist,C,expert,Tennis
+659,Which player has appeared in the most ODI matches?,Hashim Amla,Sachin Tendulkar,Ross Taylor,Shoaib Malik,B,expert,Cricket
+660,Who won the 2003 US Open mens title?,Andy Roddick,Juan Carlos Ferrero,Guillermo Coria,Rainer Schuettler,A,expert,Tennis
+661,Who was the first bowler to reach 500 ODI wickets?,Chaminda Vaas,Anil Kumble,Wasim Akram,Waqar Younis,C,expert,Cricket
+662,Who won the 1992 Wimbledon mens title?,Henri Leconte,David Wheaton,Wayne Ferreira,Andre Agassi,D,expert,Tennis
+663,Who won the 1984 Olympic womens all around gymnastics gold?,Oksana Omelianchik,Mary Lou Retton,Simona Pauca,Ecaterina Szabo,B,expert,Olympics
+664,Who won the 1997 Formula 1 drivers title?,Heinz Harald Frentzen,Heikki Kovalainen,Jacques Villeneuve,Eddie Irvine,C,expert,Other Sports
+665,Which team won the 2000 ICC KnockOut Trophy?,South Africa,Hong Kong,New Zealand,UAE,C,expert,Cricket
+666,Who won the 1988 US Open womens title?,Claudia Kohde Kilsch,Steffi Graf,Sandra Cecchini,Manuela Maleeva,B,expert,Tennis
+667,Who won the 100m freestyle gold at the 1976 Olympics?,Jim Montgomery,Andy Coan,Gary Hall Jr,Jonty Skinner,A,expert,Olympics
+668,Who won the 1996 Australian Open mens title?,Patrick McEnroe,Boris Becker,Renzo Furlan,Jason Stoltenberg,B,expert,Tennis
 669,Which nation won the 1984 Olympic womens volleyball gold?,China,Peru,Cuba,Japan,A,expert,Olympics
-670,Which wicketkeeper has the most Test hundreds?,Andy Flower,Adam Gilchrist,Mark Boucher,MS Dhoni,B,expert,Cricket
-671,Who won the 100m and 200m at the 1956 Olympics?,Thane Baker,Hector Hogan,Bobby Morrow,Ira Murchison,C,expert,Olympics
-672,Which manufacturer has won the most MotoGP constructors titles?,Yamaha,Ducati,Suzuki,Honda,D,expert,Other Sports
+670,Which wicketkeeper has the most Test hundreds?,Mark Boucher,Adam Gilchrist,Andy Flower,MS Dhoni,B,expert,Cricket
+671,Who won the 100m and 200m at the 1956 Olympics?,Ira Murchison,Hector Hogan,Thane Baker,Bobby Morrow,D,expert,Olympics
+672,Which manufacturer has won the most MotoGP constructors titles?,Suzuki,Ducati,Honda,Yamaha,C,expert,Other Sports
 673,Who scored the most runs at the 2019 World Cup?,Rohit Sharma,David Warner,Joe Root,Kane Williamson,A,expert,Cricket
-674,Who won the 1993 French Open mens title?,Magnus Gustafsson,Sergi Bruguera,Alberto Berasategui,Carlos Costa,B,expert,Tennis
-675,Who won the 1500m freestyle gold at the 1972 Olympics?,Brad Cooper,Graham Windeatt,Mike Burton,Rick DeMont,C,expert,Olympics
-676,Which golfer is nicknamed the Big Easy?,Retief Goosen,Vijay Singh,Jim Furyk,Ernie Els,D,expert,Other Sports
-677,Who took the first hat trick in Cricket World Cup history?,Chetan Sharma,Madan Lal,Sunil Valson,Sandeep Patil,A,expert,Cricket
-678,Who won the 1988 Wimbledon mens title?,Miloslav Mecir,Stefan Edberg,Guy Forget,Tim Mayotte,B,expert,Tennis
-679,Who won the decathlon gold at the 1968 Olympics?,Hans Joachim Walde,Kurt Bendlin,Bill Toomey,Russ Hodge,C,expert,Olympics
-680,Who won the 1994 US Open golf playoff at Oakmont?,Colin Montgomerie,Frank Nobilo,Loren Roberts,Ernie Els,D,expert,Other Sports
+674,Who won the 1993 French Open mens title?,Magnus Gustafsson,Alberto Berasategui,Sergi Bruguera,Carlos Costa,C,expert,Tennis
+675,Who won the 1500m freestyle gold at the 1972 Olympics?,Mike Burton,Rick DeMont,Brad Cooper,Graham Windeatt,A,expert,Olympics
+676,Which golfer is nicknamed the Big Easy?,Jim Furyk,Vijay Singh,Retief Goosen,Ernie Els,D,expert,Other Sports
+677,Who took the first hat trick in Cricket World Cup history?,Sunil Valson,Madan Lal,Sandeep Patil,Chetan Sharma,D,expert,Cricket
+678,Who won the 1988 Wimbledon mens title?,Guy Forget,Miloslav Mecir,Stefan Edberg,Tim Mayotte,C,expert,Tennis
+679,Who won the decathlon gold at the 1968 Olympics?,Hans Joachim Walde,Bill Toomey,Russ Hodge,Kurt Bendlin,B,expert,Olympics
+680,Who won the 1994 US Open golf playoff at Oakmont?,Ernie Els,Colin Montgomerie,Loren Roberts,Frank Nobilo,A,expert,Other Sports
 681,Which coach won the 1990 World Cup with West Germany?,Franz Beckenbauer,Berti Vogts,Jupp Derwall,Helmut Schoen,A,expert,Football
-682,Who won the 2001 Wimbledon womens title?,Jennifer Capriati,Venus Williams,Amelie Mauresmo,Nathalie Dechy,B,expert,Tennis
-683,Which bowler took the best figures in a single World Cup match?,Andy Bichel,Paul Collingwood,Chaminda Vaas,Ashish Nehra,C,expert,Cricket
-684,Which golfer first completed the modern career Grand Slam?,Bobby Jones,Walter Hagen,Sam Snead,Gene Sarazen,D,expert,Other Sports
-685,Who took the first hat trick in IPL history?,Lakshmipathy Balaji,Yusuf Pathan,Amit Mishra,Pravin Tambe,A,expert,Cricket
-686,Who won the 1991 Formula 1 drivers title?,Nigel Mansell,Ayrton Senna,Riccardo Patrese,Stefano Modena,B,expert,Other Sports
+682,Who won the 2001 Wimbledon womens title?,Jennifer Capriati,Nathalie Dechy,Amelie Mauresmo,Venus Williams,D,expert,Tennis
+683,Which bowler took the best figures in a single World Cup match?,Andy Bichel,Chaminda Vaas,Paul Collingwood,Ashish Nehra,B,expert,Cricket
+684,Which golfer first completed the modern career Grand Slam?,Bobby Jones,Sam Snead,Gene Sarazen,Walter Hagen,C,expert,Other Sports
+685,Who took the first hat trick in IPL history?,Yusuf Pathan,Amit Mishra,Lakshmipathy Balaji,Pravin Tambe,C,expert,Cricket
+686,Who won the 1991 Formula 1 drivers title?,Ayrton Senna,Nigel Mansell,Riccardo Patrese,Stefano Modena,A,expert,Other Sports
 687,Who won the 100m gold at the 1948 Olympics?,Barney Ewell,Lloyd LaBeach,Harrison Dillard,Mel Patton,C,expert,Olympics
-688,Who won the 1999 Australian Open mens title?,Tommy Haas,Nicolas Kiefer,Magnus Norman,Yevgeny Kafelnikov,D,expert,Tennis
-689,Who won the 100m gold at the 1960 Olympics?,Armin Hary,Ray Norton,David Sime,Peter Radford,A,expert,Olympics
-690,Who won the 1990 Open Championship?,Payne Stewart,Nick Faldo,Mark Calcavecchia,Ian Baker Finch,B,expert,Other Sports
-691,Who scored 380 in a Test innings?,Brian Lara,Virender Sehwag,Matthew Hayden,Graham Gooch,C,expert,Cricket
-692,Who won the 1996 Olympic womens singles tennis gold?,Brenda Schultz McCarthy,Sandrine Testud,Irina Spirlea,Lindsay Davenport,D,expert,Tennis
-693,Who won the marathon gold at the 1984 Olympics?,Carlos Lopes,Rob De Castella,Juma Ikangaa,John Treacy,A,expert,Olympics
-694,Which driver won 19 races in a single Formula 1 season?,Sergio Perez,Max Verstappen,Daniel Ricciardo,Kevin Magnussen,B,expert,Other Sports
-695,Who scored New Zealands first Test triple century?,Martin Crowe,Nathan Astle,Brendon McCullum,John Wright,C,expert,Cricket
-696,Who won the 2002 Wimbledon womens title?,Jennifer Capriati,Anastasia Myskina,Nadia Petrova,Serena Williams,D,expert,Tennis
-697,Which ground hosted the 2007 World Cup final?,Kensington Oval,Queen's Park Oval,Sabina Park,Bourda,A,expert,Cricket
-698,Who won the 2002 Australian Open mens title?,Yevgeny Kafelnikov,Thomas Johansson,Andreas Vinciguerra,Mikael Tillstrom,B,expert,Tennis
-699,Who won the 5000m gold at the 1972 Olympics?,Emiel Puttemans,Dave Wottle,Lasse Viren,Mohamed Gammoudi,C,expert,Olympics
-700,Who won the 1989 Masters playoff?,Scott Hoch,Ben Crenshaw,Larry Mize,Nick Faldo,D,expert,Other Sports
-701,Who took the most Test wickets in a single calendar year?,Muttiah Muralitharan,Chaminda Vaas,Richard Hadlee,Jason Gillespie,A,expert,Cricket
-702,Who won the 2006 Wimbledon womens title?,Svetlana Kuznetsova,Amelie Mauresmo,Nicole Vaidisova,Dinara Safina,B,expert,Tennis
-703,Who won the 400m gold at the 1968 Olympics?,Ronald Freeman,Larry James,Lee Evans,Tommie Smith,C,expert,Olympics
-704,Which team won the 2008 constructors championship?,BMW Sauber,Honda,Red Bull,Ferrari,D,expert,Other Sports
-705,Who was the first Englishman to reach 10000 Test runs?,Graham Gooch,Michael Atherton,Alec Stewart,Graham Thorpe,A,expert,Cricket
-706,Who won the 2003 Wimbledon womens title?,Ai Sugiyama,Serena Williams,Jelena Jankovic,Maria Kirilenko,B,expert,Tennis
-707,Who won the long jump gold at the 1988 Olympics?,Larry Myricks,Robert Emmiyan,Carl Lewis,Giovanni Evangelisti,C,expert,Olympics
-708,Who won the 1964 Formula 1 drivers title?,Graham Hill,Dan Gurney,Jim Clark,John Surtees,D,expert,Other Sports
-709,Which fielder has taken the most catches in ODI cricket?,Mohammad Azharuddin,Mark Waugh,Chris Harris,Jonty Rhodes,A,expert,Cricket
-710,Who won the 1994 Wimbledon womens title?,Kimiko Date,Conchita Martinez,Magdalena Maleeva,Naoko Sawamatsu,B,expert,Tennis
-711,Who won the 100m gold at the 1972 Olympics?,Robert Taylor,Lennox Miller,Valeriy Borzov,Eddie Hart,C,expert,Olympics
-712,Who won the 1982 Formula 1 drivers title?,Didier Pironi,John Watson,Rene Arnoux,Keke Rosberg,D,expert,Other Sports
-713,Which West Indian scored 365 at Bridgetown in 1958?,Garfield Sobers,Conrad Hunte,Everton Weekes,Frank Worrell,A,expert,Cricket
-714,Who won the 1991 Wimbledon mens title?,Stefan Edberg,Michael Stich,Derrick Rostagno,Jakob Hlasek,B,expert,Tennis
-715,Who won the womens 200m gold at the 1980 Olympics?,Miriam Goetz,Kathy Smallwood,Barbel Wockel,Sonia Lannaman,C,expert,Olympics
-716,Who won the 1983 Formula 1 drivers title?,Patrick Tambay,Michele Alboreto,Keke Rosberg,Niki Lauda,D,expert,Other Sports
-717,Who holds the record for most ducks in Test cricket?,Courtney Walsh,Danny Morrison,Chris Martin,Bhagwath Chandrasekhar,A,expert,Cricket
-718,Who won the 1987 Wimbledon womens title?,Kathy Jordan,Martina Navratilova,Hana Mandlikova,Bettina Bunge,B,expert,Tennis
-719,Who scored the most runs in a single Test series?,Stan McCabe,Bill Woodfull,Don Bradman,Archie Jackson,C,expert,Cricket
-720,Who won the 1988 French Open mens title?,Jonas Svensson,Kent Carlsson,Alberto Mancini,Mats Wilander,D,expert,Tennis
-721,Who won the decathlon gold at the 1952 Olympics?,Bob Mathias,Milton Campbell,Floyd Simmons,Herb McKenley,A,expert,Olympics
-722,Who won the 2002 Masters at Augusta?,Ernie Els,Tiger Woods,Justin Leonard,Sergio Garcia,B,expert,Other Sports
-723,Who scored the first century in ODI cricket?,John Edrich,Alan Knott,Dennis Amiss,Mike Denness,C,expert,Cricket
-724,Who won the 1995 Wimbledon womens title?,Lisa Raymond,Manuela Maleeva Fragniere,Mary Joe Fernandez,Steffi Graf,D,expert,Tennis
-725,Who won the 100m gold at the 1952 Olympics?,Lindy Remigino,Andy Stanfield,Dean Smith,McDonald Bailey,A,expert,Olympics
-726,Which constructor is the oldest in Formula 1?,Cooper,Ferrari,Vanwall,Maserati,B,expert,Other Sports
-727,Who scored the fastest double century in Test cricket?,Virender Sehwag,Brendon McCullum,Nathan Astle,Misbah Ul Haq,C,expert,Cricket
-728,Which team won the 2010 constructors championship?,Brawn GP,Force India,Toro Rosso,Red Bull,D,expert,Other Sports
-729,Which club won the 1960 European Cup final?,Real Madrid,Eintracht Frankfurt,Rangers,Hibernian,A,expert,Football
-730,Which team drafted Karl Malone in 1985?,Dallas Mavericks,Utah Jazz,Sacramento Kings,New York Knicks,B,expert,Basketball
-731,Who scored Bangladeshs first Test double century?,Shakib Al Hasan,Tamim Iqbal,Mushfiqur Rahim,Mahmudullah,C,expert,Cricket
-732,Who won the 1996 French Open mens title?,Marc Rosset,Albert Costa,Marcelo Rios,Yevgeny Kafelnikov,D,expert,Tennis
-733,Who won the hammer gold at the 1952 Olympics?,Jozsef Csermak,Sverre Strandli,Karl Storch,Imre Nemeth,A,expert,Olympics
-734,Which driver has the most podiums without winning a title?,Stefan Johansson,Rubens Barrichello,Johnny Herbert,Martin Brundle,B,expert,Other Sports
-735,Who took the most wickets at the 2015 World Cup?,Trent Boult,Mitchell Johnson,Mitchell Starc,Imran Tahir,C,expert,Cricket
-736,Which boxer is nicknamed the Shark?,Ernie Els,Nick Price,Ian Woosnam,Greg Norman,D,expert,Other Sports
-737,Who scored 175 in the famous 438 chase of 2006?,Herschelle Gibbs,Mark Boucher,Justin Kemp,Roger Telemachus,A,expert,Cricket
-738,Who won the 2007 Wimbledon womens title?,Marion Bartoli,Venus Williams,Ana Ivanovic,Agnieszka Radwanska,B,expert,Tennis
-739,Which nation won the 1972 Olympic womens volleyball gold?,Japan,North Korea,Soviet Union,South Korea,C,expert,Olympics
-740,Who won the 1971 Formula 1 drivers title?,Denny Hulme,Clay Regazzoni,Peter Revson,Jackie Stewart,D,expert,Other Sports
-741,Who was the first to score a double century in T20 internationals?,Chris Gayle,Aaron Finch,Brendon McCullum,Evin Lewis,A,expert,Cricket
-742,Who won the 1999 French Open womens title?,Ruxandra Dragomir,Steffi Graf,Magui Serna,Silvia Farina Elia,B,expert,Tennis
-743,Who won the 100m gold at the 1964 Olympics?,Harry Jerome,Enrique Figuerola,Bob Hayes,Trenton Jackson,C,expert,Olympics
-744,Who won the 2002 Formula 1 drivers title?,Rubens Barrichello,Juan Pablo Montoya,Ralf Schumacher,Michael Schumacher,D,expert,Other Sports
-745,Who scored 241 not out at Adelaide in 2004?,Rahul Dravid,Damien Martyn,VVS Laxman,Justin Langer,A,expert,Cricket
-746,Who won the 2001 French Open womens title?,Elena Likhovtseva,Jennifer Capriati,Paola Suarez,Tathiana Garbin,B,expert,Tennis
-747,In which country were the 1968 Winter Olympics held?,Austria,Norway,France,Japan,C,expert,Olympics
+688,Who won the 1999 Australian Open mens title?,Tommy Haas,Yevgeny Kafelnikov,Magnus Norman,Nicolas Kiefer,B,expert,Tennis
+689,Who won the 100m gold at the 1960 Olympics?,Peter Radford,Armin Hary,Ray Norton,David Sime,B,expert,Olympics
+690,Who won the 1990 Open Championship?,Payne Stewart,Mark Calcavecchia,Nick Faldo,Ian Baker Finch,C,expert,Other Sports
+691,Who scored 380 in a Test innings?,Brian Lara,Graham Gooch,Virender Sehwag,Matthew Hayden,D,expert,Cricket
+692,Who won the 1996 Olympic womens singles tennis gold?,Irina Spirlea,Sandrine Testud,Brenda Schultz McCarthy,Lindsay Davenport,D,expert,Tennis
+693,Who won the marathon gold at the 1984 Olympics?,Rob De Castella,Juma Ikangaa,Carlos Lopes,John Treacy,C,expert,Olympics
+694,Which driver won 19 races in a single Formula 1 season?,Sergio Perez,Kevin Magnussen,Daniel Ricciardo,Max Verstappen,D,expert,Other Sports
+695,Who scored New Zealands first Test triple century?,Brendon McCullum,Nathan Astle,Martin Crowe,John Wright,A,expert,Cricket
+696,Who won the 2002 Wimbledon womens title?,Serena Williams,Nadia Petrova,Anastasia Myskina,Jennifer Capriati,A,expert,Tennis
+697,Which ground hosted the 2007 World Cup final?,Bourda,Sabina Park,Queen's Park Oval,Kensington Oval,D,expert,Cricket
+698,Who won the 2002 Australian Open mens title?,Yevgeny Kafelnikov,Thomas Johansson,Mikael Tillstrom,Andreas Vinciguerra,B,expert,Tennis
+699,Who won the 5000m gold at the 1972 Olympics?,Emiel Puttemans,Mohamed Gammoudi,Dave Wottle,Lasse Viren,D,expert,Olympics
+700,Who won the 1989 Masters playoff?,Nick Faldo,Ben Crenshaw,Scott Hoch,Larry Mize,A,expert,Other Sports
+701,Who took the most Test wickets in a single calendar year?,Richard Hadlee,Muttiah Muralitharan,Chaminda Vaas,Jason Gillespie,B,expert,Cricket
+702,Who won the 2006 Wimbledon womens title?,Svetlana Kuznetsova,Nicole Vaidisova,Amelie Mauresmo,Dinara Safina,C,expert,Tennis
+703,Who won the 400m gold at the 1968 Olympics?,Larry James,Tommie Smith,Ronald Freeman,Lee Evans,D,expert,Olympics
+704,Which team won the 2008 constructors championship?,BMW Sauber,Ferrari,Red Bull,Honda,B,expert,Other Sports
+705,Who was the first Englishman to reach 10000 Test runs?,Graham Thorpe,Alec Stewart,Graham Gooch,Michael Atherton,C,expert,Cricket
+706,Who won the 2003 Wimbledon womens title?,Serena Williams,Maria Kirilenko,Jelena Jankovic,Ai Sugiyama,A,expert,Tennis
+707,Who won the long jump gold at the 1988 Olympics?,Robert Emmiyan,Larry Myricks,Carl Lewis,Giovanni Evangelisti,C,expert,Olympics
+708,Who won the 1964 Formula 1 drivers title?,Dan Gurney,John Surtees,Graham Hill,Jim Clark,B,expert,Other Sports
+709,Which fielder has taken the most catches in ODI cricket?,Mohammad Azharuddin,Mark Waugh,Jonty Rhodes,Chris Harris,A,expert,Cricket
+710,Who won the 1994 Wimbledon womens title?,Conchita Martinez,Naoko Sawamatsu,Kimiko Date,Magdalena Maleeva,A,expert,Tennis
+711,Who won the 100m gold at the 1972 Olympics?,Robert Taylor,Valeriy Borzov,Lennox Miller,Eddie Hart,B,expert,Olympics
+712,Who won the 1982 Formula 1 drivers title?,Keke Rosberg,Didier Pironi,John Watson,Rene Arnoux,A,expert,Other Sports
+713,Which West Indian scored 365 at Bridgetown in 1958?,Conrad Hunte,Garfield Sobers,Everton Weekes,Frank Worrell,B,expert,Cricket
+714,Who won the 1991 Wimbledon mens title?,Jakob Hlasek,Stefan Edberg,Derrick Rostagno,Michael Stich,D,expert,Tennis
+715,Who won the womens 200m gold at the 1980 Olympics?,Sonia Lannaman,Kathy Smallwood,Barbel Wockel,Miriam Goetz,C,expert,Olympics
+716,Who won the 1983 Formula 1 drivers title?,Keke Rosberg,Niki Lauda,Michele Alboreto,Patrick Tambay,B,expert,Other Sports
+717,Who holds the record for most ducks in Test cricket?,Bhagwath Chandrasekhar,Danny Morrison,Courtney Walsh,Chris Martin,C,expert,Cricket
+718,Who won the 1987 Wimbledon womens title?,Hana Mandlikova,Martina Navratilova,Kathy Jordan,Bettina Bunge,B,expert,Tennis
+719,Who scored the most runs in a single Test series?,Archie Jackson,Bill Woodfull,Stan McCabe,Don Bradman,D,expert,Cricket
+720,Who won the 1988 French Open mens title?,Jonas Svensson,Alberto Mancini,Mats Wilander,Kent Carlsson,C,expert,Tennis
+721,Who won the decathlon gold at the 1952 Olympics?,Bob Mathias,Herb McKenley,Milton Campbell,Floyd Simmons,A,expert,Olympics
+722,Who won the 2002 Masters at Augusta?,Ernie Els,Justin Leonard,Sergio Garcia,Tiger Woods,D,expert,Other Sports
+723,Who scored the first century in ODI cricket?,Dennis Amiss,Alan Knott,Mike Denness,John Edrich,A,expert,Cricket
+724,Who won the 1995 Wimbledon womens title?,Lisa Raymond,Mary Joe Fernandez,Manuela Maleeva Fragniere,Steffi Graf,D,expert,Tennis
+725,Who won the 100m gold at the 1952 Olympics?,Andy Stanfield,Dean Smith,Lindy Remigino,McDonald Bailey,C,expert,Olympics
+726,Which constructor is the oldest in Formula 1?,Maserati,Cooper,Ferrari,Vanwall,C,expert,Other Sports
+727,Who scored the fastest double century in Test cricket?,Virender Sehwag,Brendon McCullum,Misbah Ul Haq,Nathan Astle,D,expert,Cricket
+728,Which team won the 2010 constructors championship?,Force India,Red Bull,Brawn GP,Toro Rosso,B,expert,Other Sports
+729,Which club won the 1960 European Cup final?,Eintracht Frankfurt,Hibernian,Real Madrid,Rangers,C,expert,Football
+730,Which team drafted Karl Malone in 1985?,Utah Jazz,Sacramento Kings,Dallas Mavericks,New York Knicks,A,expert,Basketball
+731,Who scored Bangladeshs first Test double century?,Mahmudullah,Mushfiqur Rahim,Tamim Iqbal,Shakib Al Hasan,B,expert,Cricket
+732,Who won the 1996 French Open mens title?,Marcelo Rios,Marc Rosset,Yevgeny Kafelnikov,Albert Costa,C,expert,Tennis
+733,Who won the hammer gold at the 1952 Olympics?,Imre Nemeth,Jozsef Csermak,Sverre Strandli,Karl Storch,B,expert,Olympics
+734,Which driver has the most podiums without winning a title?,Martin Brundle,Johnny Herbert,Rubens Barrichello,Stefan Johansson,C,expert,Other Sports
+735,Who took the most wickets at the 2015 World Cup?,Mitchell Johnson,Trent Boult,Mitchell Starc,Imran Tahir,C,expert,Cricket
+736,Which boxer is nicknamed the Shark?,Ian Woosnam,Ernie Els,Nick Price,Greg Norman,D,expert,Other Sports
+737,Who scored 175 in the famous 438 chase of 2006?,Herschelle Gibbs,Justin Kemp,Mark Boucher,Roger Telemachus,A,expert,Cricket
+738,Who won the 2007 Wimbledon womens title?,Ana Ivanovic,Marion Bartoli,Agnieszka Radwanska,Venus Williams,D,expert,Tennis
+739,Which nation won the 1972 Olympic womens volleyball gold?,Japan,South Korea,North Korea,Soviet Union,D,expert,Olympics
+740,Who won the 1971 Formula 1 drivers title?,Peter Revson,Denny Hulme,Jackie Stewart,Clay Regazzoni,C,expert,Other Sports
+741,Who was the first to score a double century in T20 internationals?,Chris Gayle,Evin Lewis,Brendon McCullum,Aaron Finch,A,expert,Cricket
+742,Who won the 1999 French Open womens title?,Ruxandra Dragomir,Silvia Farina Elia,Magui Serna,Steffi Graf,D,expert,Tennis
+743,Who won the 100m gold at the 1964 Olympics?,Bob Hayes,Harry Jerome,Enrique Figuerola,Trenton Jackson,A,expert,Olympics
+744,Who won the 2002 Formula 1 drivers title?,Ralf Schumacher,Juan Pablo Montoya,Rubens Barrichello,Michael Schumacher,D,expert,Other Sports
+745,Who scored 241 not out at Adelaide in 2004?,VVS Laxman,Damien Martyn,Justin Langer,Rahul Dravid,D,expert,Cricket
+746,Who won the 2001 French Open womens title?,Elena Likhovtseva,Jennifer Capriati,Tathiana Garbin,Paola Suarez,B,expert,Tennis
+747,In which country were the 1968 Winter Olympics held?,Austria,Japan,Norway,France,D,expert,Olympics
 748,Who won the 1997 US Open golf title at Congressional?,Tom Lehman,Steve Jones,Jeff Maggert,Ernie Els,D,expert,Other Sports
 749,Which team won the 2004 Champions Trophy?,West Indies,South Africa,Australia,Nepal,A,expert,Cricket
-750,Who won the 1987 Wimbledon mens title?,Miloslav Mecir,Pat Cash,Stefan Edberg,Anders Jarryd,B,expert,Tennis
-751,Which club won the 1974 European Cup?,Atletico Madrid,Ujpest Dozsa,Bayern Munich,Saint Etienne,C,expert,Football
-752,Who won the 1993 Formula 1 drivers title?,Christian Fittipaldi,Ayrton Senna,Michael Andretti,Alain Prost,D,expert,Other Sports
-753,Who took the most wickets at the 2011 World Cup?,Shahid Afridi,Zaheer Khan,Umar Gul,Tim Southee,A,expert,Cricket
-754,Who won the 2000 Formula 1 drivers title?,Rubens Barrichello,Michael Schumacher,Jacques Villeneuve,Olivier Panis,B,expert,Other Sports
-755,Which country won the first ever Test match?,South Africa,Australia,England,MCC,C,expert,Cricket
-756,Which team did Alain Prost drive for in 1989?,Ferrari,March,Benetton,McLaren,D,expert,Other Sports
-757,Who hit six sixes in an over at the 2007 World Twenty20?,Yuvraj Singh,Herschelle Gibbs,Chris Gayle,Ross Whiteley,A,expert,Cricket
-758,Who won the 2005 Wimbledon womens title?,Amelie Mauresmo,Venus Williams,Alicia Molik,Tatiana Golovin,B,expert,Tennis
-759,Which bowler has the most Test five wicket hauls?,James Anderson,Courtney Walsh,Muttiah Muralitharan,Wasim Akram,C,expert,Cricket
-760,Who won the 1985 Formula 1 drivers title?,Elio de Angelis,Niki Lauda,Keke Rosberg,Alain Prost,D,expert,Other Sports
+750,Who won the 1987 Wimbledon mens title?,Miloslav Mecir,Pat Cash,Anders Jarryd,Stefan Edberg,B,expert,Tennis
+751,Which club won the 1974 European Cup?,Atletico Madrid,Saint Etienne,Ujpest Dozsa,Bayern Munich,D,expert,Football
+752,Who won the 1993 Formula 1 drivers title?,Ayrton Senna,Alain Prost,Michael Andretti,Christian Fittipaldi,B,expert,Other Sports
+753,Who took the most wickets at the 2011 World Cup?,Tim Southee,Zaheer Khan,Umar Gul,Shahid Afridi,D,expert,Cricket
+754,Who won the 2000 Formula 1 drivers title?,Michael Schumacher,Rubens Barrichello,Jacques Villeneuve,Olivier Panis,A,expert,Other Sports
+755,Which country won the first ever Test match?,England,MCC,South Africa,Australia,A,expert,Cricket
+756,Which team did Alain Prost drive for in 1989?,March,Ferrari,Benetton,McLaren,D,expert,Other Sports
+757,Who hit six sixes in an over at the 2007 World Twenty20?,Herschelle Gibbs,Ross Whiteley,Yuvraj Singh,Chris Gayle,C,expert,Cricket
+758,Who won the 2005 Wimbledon womens title?,Venus Williams,Amelie Mauresmo,Alicia Molik,Tatiana Golovin,A,expert,Tennis
+759,Which bowler has the most Test five wicket hauls?,Courtney Walsh,Wasim Akram,Muttiah Muralitharan,James Anderson,C,expert,Cricket
+760,Who won the 1985 Formula 1 drivers title?,Elio de Angelis,Alain Prost,Niki Lauda,Keke Rosberg,B,expert,Other Sports
 761,Which nation won the 1938 World Cup?,Italy,West Germany,Brazil,Czechoslovakia,A,expert,Football
-762,Which Brazilian driver won three titles in the 1980s?,Ayrton Senna,Nelson Piquet,Rubens Barrichello,Felipe Massa,B,expert,Other Sports
-763,Who was the first bowler to reach 400 ODI wickets?,Brett Lee,Shaun Pollock,Wasim Akram,Chaminda Vaas,C,expert,Cricket
-764,Which driver won the 1987 Formula 1 title?,Alain Prost,Andrea de Cesaris,Teo Fabi,Nelson Piquet,D,expert,Other Sports
-765,Who won the womens heptathlon gold at the 1988 Olympics?,Jackie Joyner Kersee,Sabine Braun,Jane Flemming,Anke Vater Behmer,A,expert,Olympics
-766,Who won the 1987 PGA Championship?,Bob Gilder,Larry Nelson,Lanny Wadkins,David Graham,B,expert,Other Sports
-767,Who was the first bowler to reach 600 Test wickets?,Ishant Sharma,Craig McDermott,Shane Warne,Merv Hughes,C,expert,Cricket
-768,Who won the 1994 US Open womens title?,Iroda Tulyaganova,Samantha Reeves,Ansley Cargill,Arantxa Sanchez Vicario,D,expert,Tennis
-769,Which nation won the most golds at the 1992 Winter Olympics?,Germany,Unified Team,Norway,Austria,A,expert,Olympics
-770,Who won the 1993 Open Championship?,Nick Faldo,Greg Norman,Bernhard Langer,Jesper Parnevik,B,expert,Other Sports
-771,Who scored the most runs at the 1992 World Cup?,Javed Miandad,Peter Kirsten,Martin Crowe,Rameez Raja,C,expert,Cricket
-772,Who won the mens triathlon gold at the 2000 Olympics?,Brad Beven,Dimitri Gaag,Jan Frodeno,Simon Whitfield,D,expert,Olympics
-773,Which driver won the 1996 title for Williams?,Jacques Villeneuve,Eddie Irvine,Heikki Kovalainen,Heinz Harald Frentzen,A,expert,Other Sports
-774,Who won the 1975 Formula 1 drivers title?,Patrick Depailler,Niki Lauda,Jody Scheckter,Mario Andretti,B,expert,Other Sports
-775,Which wicketkeeper has scored the most hundreds in Test cricket?,Andy Flower,Mark Boucher,Adam Gilchrist,MS Dhoni,C,expert,Cricket
-776,Who won the 2000 Open Championship at St Andrews?,Ernie Els,Thomas Bjorn,David Duval,Tiger Woods,D,expert,Other Sports
-777,Who took the best bowling figures of the 2003 World Cup?,Chaminda Vaas,Paul Collingwood,Andy Bichel,Ashish Nehra,A,expert,Cricket
-778,Who won the womens marathon gold at the 2000 Olympics?,Liz McColgan,Naoko Takahashi,Catherine Ndereba,Joyce Chepchumba,B,expert,Olympics
-779,Who scored 365 in a Test innings for the West Indies?,Conrad Hunte,Everton Weekes,Garfield Sobers,Frank Worrell,C,expert,Cricket
-780,Which coach won the Champions League with Porto and Inter?,Carlo Ancelotti,Jupp Heynckes,Ottmar Hitzfeld,Jose Mourinho,D,expert,Football
+762,Which Brazilian driver won three titles in the 1980s?,Felipe Massa,Ayrton Senna,Nelson Piquet,Rubens Barrichello,C,expert,Other Sports
+763,Who was the first bowler to reach 400 ODI wickets?,Brett Lee,Wasim Akram,Shaun Pollock,Chaminda Vaas,B,expert,Cricket
+764,Which driver won the 1987 Formula 1 title?,Nelson Piquet,Andrea de Cesaris,Teo Fabi,Alain Prost,A,expert,Other Sports
+765,Who won the womens heptathlon gold at the 1988 Olympics?,Sabine Braun,Jane Flemming,Jackie Joyner Kersee,Anke Vater Behmer,C,expert,Olympics
+766,Who won the 1987 PGA Championship?,Bob Gilder,Lanny Wadkins,Larry Nelson,David Graham,C,expert,Other Sports
+767,Who was the first bowler to reach 600 Test wickets?,Shane Warne,Ishant Sharma,Craig McDermott,Merv Hughes,A,expert,Cricket
+768,Who won the 1994 US Open womens title?,Arantxa Sanchez Vicario,Iroda Tulyaganova,Samantha Reeves,Ansley Cargill,A,expert,Tennis
+769,Which nation won the most golds at the 1992 Winter Olympics?,Unified Team,Germany,Norway,Austria,B,expert,Olympics
+770,Who won the 1993 Open Championship?,Greg Norman,Nick Faldo,Jesper Parnevik,Bernhard Langer,A,expert,Other Sports
+771,Who scored the most runs at the 1992 World Cup?,Rameez Raja,Peter Kirsten,Martin Crowe,Javed Miandad,C,expert,Cricket
+772,Who won the mens triathlon gold at the 2000 Olympics?,Simon Whitfield,Dimitri Gaag,Jan Frodeno,Brad Beven,A,expert,Olympics
+773,Which driver won the 1996 title for Williams?,Heinz Harald Frentzen,Jacques Villeneuve,Eddie Irvine,Heikki Kovalainen,B,expert,Other Sports
+774,Who won the 1975 Formula 1 drivers title?,Niki Lauda,Patrick Depailler,Jody Scheckter,Mario Andretti,A,expert,Other Sports
+775,Which wicketkeeper has scored the most hundreds in Test cricket?,MS Dhoni,Andy Flower,Mark Boucher,Adam Gilchrist,D,expert,Cricket
+776,Who won the 2000 Open Championship at St Andrews?,David Duval,Ernie Els,Thomas Bjorn,Tiger Woods,D,expert,Other Sports
+777,Who took the best bowling figures of the 2003 World Cup?,Paul Collingwood,Chaminda Vaas,Ashish Nehra,Andy Bichel,B,expert,Cricket
+778,Who won the womens marathon gold at the 2000 Olympics?,Naoko Takahashi,Catherine Ndereba,Liz McColgan,Joyce Chepchumba,A,expert,Olympics
+779,Who scored 365 in a Test innings for the West Indies?,Everton Weekes,Garfield Sobers,Conrad Hunte,Frank Worrell,B,expert,Cricket
+780,Which coach won the Champions League with Porto and Inter?,Ottmar Hitzfeld,Jupp Heynckes,Carlo Ancelotti,Jose Mourinho,D,expert,Football
 781,In which year was the first Cricket World Cup held?,,,,,1975,extreme,Cricket
 782,Which Grand Slam is played at Roland Garros?,,,,,French Open,extreme,Tennis
 783,Which country hosted the 1998 Winter Olympics?,,,,,Japan,extreme,Olympics

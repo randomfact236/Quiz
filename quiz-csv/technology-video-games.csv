@@ -1,100 +1,100 @@
 # Subject: Technology & Video Games
 
 ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
-1,The computer mouse is used to move the cursor on a screen.,True,False,,,A,easy,Computer History
-2,Python is a programming language that can never be used to build websites.,True,False,,,B,easy,Programming
+1,The computer mouse is used to move the cursor on a screen.,False,True,,,B,easy,Computer History
+2,Python is a programming language that can never be used to build websites.,False,True,,,A,easy,Programming
 3,Apple was founded by Steve Jobs and Steve Wozniak.,True,False,,,A,easy,Tech Companies
 4,The PlayStation 5 is made by Sega.,True,False,,,B,easy,Gaming Consoles
-5,Super Mario is a plumber who stars in Nintendo games.,True,False,,,A,easy,Game Franchises
-6,The Nintendo Switch cannot be played in handheld mode.,True,False,,,B,easy,Gaming Consoles
+5,Super Mario is a plumber who stars in Nintendo games.,False,True,,,B,easy,Game Franchises
+6,The Nintendo Switch cannot be played in handheld mode.,False,True,,,A,easy,Gaming Consoles
 7,The internet connects computers around the world.,True,False,,,A,easy,Computer History
 8,Microsoft makes the iPhone.,True,False,,,B,easy,Tech Companies
 9,Tetris is a puzzle game about fitting falling blocks together.,True,False,,,A,easy,Game Franchises
 10,The first electronic computers were small enough to fit in a pocket.,True,False,,,B,easy,Computer History
 11,Esports refers to cooking contests held at gaming events.,False,True,,,A,easy,Esports and Records
-12,HTML is used to build the structure of web pages.,False,True,,,B,easy,Programming
-13,A keyboard is mainly used to print photos on paper.,False,True,,,A,easy,Computer History
-14,The Game Boy was a handheld console made by Nintendo.,False,True,,,B,easy,Gaming Consoles
-15,Amazon started out selling only video games.,False,True,,,A,easy,Tech Companies
+12,HTML is used to build the structure of web pages.,True,False,,,A,easy,Programming
+13,A keyboard is mainly used to print photos on paper.,True,False,,,B,easy,Computer History
+14,The Game Boy was a handheld console made by Nintendo.,True,False,,,A,easy,Gaming Consoles
+15,Amazon started out selling only video games.,True,False,,,B,easy,Tech Companies
 16,Pikachu is an electric type Pokemon.,False,True,,,B,easy,Game Franchises
 17,The World Wide Web and the internet are exactly the same thing.,False,True,,,A,easy,Computer History
-18,Google is best known for its search engine.,False,True,,,B,easy,Tech Companies
-19,Java and JavaScript are two names for the same language.,False,True,,,A,easy,Programming
+18,Google is best known for its search engine.,True,False,,,A,easy,Tech Companies
+19,Java and JavaScript are two names for the same language.,True,False,,,B,easy,Programming
 20,The Xbox is a console brand owned by Microsoft.,False,True,,,B,easy,Gaming Consoles
 21,Lara Croft is the heroine of the Tomb Raider games.,True,False,,,A,easy,Game Franchises
 22,Professional esports players never practice.,True,False,,,B,easy,Esports and Records
 23,A gigabyte is a unit of digital storage.,True,False,,,A,easy,Computer History
-24,The Python language is named after a snake.,True,False,,,B,easy,Programming
-25,Mark Zuckerberg helped create Facebook.,True,False,,,A,easy,Tech Companies
-26,Pac-Man is a racing game set in deep space.,True,False,,,B,easy,Game Franchises
+24,The Python language is named after a snake.,False,True,,,A,easy,Programming
+25,Mark Zuckerberg helped create Facebook.,False,True,,,B,easy,Tech Companies
+26,Pac-Man is a racing game set in deep space.,False,True,,,A,easy,Game Franchises
 27,Wi-Fi lets devices connect without cables.,True,False,,,A,easy,Computer History
-28,The Sega Dreamcast launched before the Atari 2600.,True,False,,,B,easy,Gaming Consoles
-29,Minecraft is among the best selling games ever made.,True,False,,,A,easy,Esports and Records
+28,The Sega Dreamcast launched before the Atari 2600.,False,True,,,A,easy,Gaming Consoles
+29,Minecraft is among the best selling games ever made.,False,True,,,B,easy,Esports and Records
 30,Binary code uses the digits 0 1 and 2.,True,False,,,B,easy,Programming
-31,A printer is used to type text into a game.,False,True,,,A,easy,Computer History
-32,Donkey Kong is a Nintendo game starring a big ape.,False,True,,,B,easy,Game Franchises
+31,A printer is used to type text into a game.,True,False,,,B,easy,Computer History
+32,Donkey Kong is a Nintendo game starring a big ape.,True,False,,,A,easy,Game Franchises
 33,The CEO of Tesla and SpaceX is named Bill Gates.,False,True,,,A,easy,Tech Companies
 34,Software is a general word for computer programs.,False,True,,,B,easy,Programming
-35,Sonic the Hedgehog is the mascot of Nintendo.,False,True,,,A,easy,Game Franchises
-36,Cloud storage keeps files on remote servers.,False,True,,,B,easy,Computer History
+35,Sonic the Hedgehog is the mascot of Nintendo.,True,False,,,B,easy,Game Franchises
+36,Cloud storage keeps files on remote servers.,True,False,,,A,easy,Computer History
 37,The Wii was the first home console ever made.,False,True,,,A,easy,Gaming Consoles
 38,Samsung is a South Korean electronics company.,False,True,,,B,easy,Tech Companies
 39,A bug always makes a game better to play.,False,True,,,A,easy,Programming
 40,The Nintendo DS has two screens.,False,True,,,B,easy,Gaming Consoles
-41,The World Wide Web was invented by Tim Berners-Lee.,True,False,,,A,easy,Computer History
-42,Netflix began as a maker of computer chips.,True,False,,,B,easy,Tech Companies
-43,Minecraft lets players build with blocks.,True,False,,,A,easy,Game Franchises
+41,The World Wide Web was invented by Tim Berners-Lee.,False,True,,,B,easy,Computer History
+42,Netflix began as a maker of computer chips.,False,True,,,A,easy,Tech Companies
+43,Minecraft lets players build with blocks.,False,True,,,B,easy,Game Franchises
 44,HTML stands for Hyper Text Machine Language.,True,False,,,B,easy,Programming
 45,The Wii was known for its motion controls.,True,False,,,A,easy,Gaming Consoles
 46,Email is delivered by the postal service.,True,False,,,B,easy,Computer History
-47,In Pac-Man players eat dots while dodging ghosts.,True,False,,,A,easy,Game Franchises
-48,Esports match winners are picked by a coin flip.,True,False,,,B,easy,Esports and Records
-49,Intel is famous for making processors.,True,False,,,A,easy,Tech Companies
-50,Link stars in the Metroid series.,True,False,,,B,easy,Game Franchises
+47,In Pac-Man players eat dots while dodging ghosts.,False,True,,,B,easy,Game Franchises
+48,Esports match winners are picked by a coin flip.,False,True,,,A,easy,Esports and Records
+49,Intel is famous for making processors.,False,True,,,B,easy,Tech Companies
+50,Link stars in the Metroid series.,False,True,,,A,easy,Game Franchises
 51,A pixel is a kind of computer mouse.,False,True,,,A,easy,Computer History
 52,Python uses indentation to organize code blocks.,False,True,,,B,easy,Programming
-53,The PlayStation 2 launched in the year 2020.,False,True,,,A,easy,Gaming Consoles
-54,Angry Birds flings birds at pigs.,False,True,,,B,easy,Game Franchises
-55,The first video games ran on smartphones.,False,True,,,A,easy,Computer History
-56,Elon Musk leads Tesla and SpaceX.,False,True,,,B,easy,Tech Companies
+53,The PlayStation 2 launched in the year 2020.,True,False,,,B,easy,Gaming Consoles
+54,Angry Birds flings birds at pigs.,True,False,,,A,easy,Game Franchises
+55,The first video games ran on smartphones.,True,False,,,B,easy,Computer History
+56,Elon Musk leads Tesla and SpaceX.,True,False,,,A,easy,Tech Companies
 57,Comments in code always get executed by the computer.,False,True,,,A,easy,Programming
 58,The Sega Genesis rivaled the Super Nintendo.,False,True,,,B,easy,Gaming Consoles
 59,Twitch is a site used only for selling used cars.,False,True,,,A,easy,Esports and Records
-60,A modem links a home network to the internet.,False,True,,,B,easy,Computer History
-61,A loop repeats instructions.,True,False,,,A,easy,Programming
-62,Steve Jobs founded Samsung.,True,False,,,B,easy,Tech Companies
-63,QR codes can be scanned by phone cameras.,True,False,,,A,easy,Computer History
+60,A modem links a home network to the internet.,True,False,,,A,easy,Computer History
+61,A loop repeats instructions.,False,True,,,B,easy,Programming
+62,Steve Jobs founded Samsung.,False,True,,,A,easy,Tech Companies
+63,QR codes can be scanned by phone cameras.,False,True,,,B,easy,Computer History
 64,The Legend of Zelda is a kart racing series.,True,False,,,B,easy,Game Franchises
 65,The Nintendo 64 controller introduced an analog stick.,True,False,,,A,easy,Gaming Consoles
 66,Esports matches are never shown online.,True,False,,,B,easy,Esports and Records
 67,Bluetooth is used for short range wireless links.,True,False,,,A,easy,Computer History
-68,Scratch is a coding tool made only for banks.,True,False,,,B,easy,Programming
-69,Mario Kart is a racing series by Nintendo.,True,False,,,A,easy,Game Franchises
+68,Scratch is a coding tool made only for banks.,False,True,,,A,easy,Programming
+69,Mario Kart is a racing series by Nintendo.,False,True,,,B,easy,Game Franchises
 70,Larry Page and Sergey Brin founded Amazon.,True,False,,,B,easy,Tech Companies
-71,The Xbox 360 launched before the original Xbox.,False,True,,,A,easy,Gaming Consoles
-72,A CPU is often called the brain of the computer.,False,True,,,B,easy,Computer History
+71,The Xbox 360 launched before the original Xbox.,True,False,,,B,easy,Gaming Consoles
+72,A CPU is often called the brain of the computer.,True,False,,,A,easy,Computer History
 73,Pokemon began as a series of board games.,False,True,,,A,easy,Game Franchises
-74,Variables store information in programs.,False,True,,,B,easy,Programming
-75,The first iPhone arrived in the 1980s.,False,True,,,A,easy,Computer History
+74,Variables store information in programs.,True,False,,,A,easy,Programming
+75,The first iPhone arrived in the 1980s.,True,False,,,B,easy,Computer History
 76,The Sims is a life simulation game.,False,True,,,B,easy,Game Franchises
 77,Netflix mainly sells tennis shoes.,False,True,,,A,easy,Tech Companies
 78,Speedrunning means finishing a game as fast as possible.,False,True,,,B,easy,Esports and Records
-79,The Game Boy was built by Atari.,False,True,,,A,easy,Gaming Consoles
-80,RAM is temporary working memory.,False,True,,,B,easy,Computer History
-81,YouTube lets people upload and watch videos.,True,False,,,A,easy,Tech Companies
-82,Frogger is a game about flying fighter jets.,True,False,,,B,easy,Game Franchises
-83,Antivirus software guards against malware.,True,False,,,A,easy,Computer History
-84,Programming is never used to make video games.,True,False,,,B,easy,Programming
+79,The Game Boy was built by Atari.,True,False,,,B,easy,Gaming Consoles
+80,RAM is temporary working memory.,True,False,,,A,easy,Computer History
+81,YouTube lets people upload and watch videos.,False,True,,,B,easy,Tech Companies
+82,Frogger is a game about flying fighter jets.,False,True,,,A,easy,Game Franchises
+83,Antivirus software guards against malware.,False,True,,,B,easy,Computer History
+84,Programming is never used to make video games.,False,True,,,A,easy,Programming
 85,The PlayStation Portable was a Sony handheld.,True,False,,,A,easy,Gaming Consoles
 86,The game industry earns less than the music industry.,True,False,,,B,easy,Esports and Records
 87,Street Fighter is a fighting series by Capcom.,True,False,,,A,easy,Game Franchises
 88,A webcam measures room temperature.,True,False,,,B,easy,Computer History
-89,Tesla builds electric cars.,True,False,,,A,easy,Tech Companies
-90,The Switch was the first console Nintendo ever made.,True,False,,,B,easy,Gaming Consoles
-91,The C language was invented by a shoe company.,False,True,,,A,easy,Programming
-92,USB cables can charge devices.,False,True,,,B,easy,Computer History
-93,Angry Birds battles robot drones.,False,True,,,A,easy,Game Franchises
-94,Speedrunners often use glitches to save time.,False,True,,,B,easy,Esports and Records
+89,Tesla builds electric cars.,False,True,,,B,easy,Tech Companies
+90,The Switch was the first console Nintendo ever made.,False,True,,,A,easy,Gaming Consoles
+91,The C language was invented by a shoe company.,True,False,,,B,easy,Programming
+92,USB cables can charge devices.,True,False,,,A,easy,Computer History
+93,Angry Birds battles robot drones.,True,False,,,B,easy,Game Franchises
+94,Speedrunners often use glitches to save time.,True,False,,,A,easy,Esports and Records
 95,Bill Gates cofounded Apple.,False,True,,,A,easy,Tech Companies
 96,The Wii U was made by Nintendo.,False,True,,,B,easy,Gaming Consoles
 97,A monitor is used to scan paper documents.,False,True,,,A,easy,Computer History
@@ -102,271 +102,271 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 99,Pro gamers never play in front of live crowds.,False,True,,,A,easy,Esports and Records
 100,Spam means unwanted bulk messages online.,False,True,,,B,easy,Computer History
 101,Zelda games star a hero named Link.,True,False,,,A,easy,Game Franchises
-102,Solid state drives contain spinning vinyl records.,True,False,,,B,easy,Computer History
-103,Huawei is a Chinese tech company.,True,False,,,A,easy,Tech Companies
-104,Sony made the Dreamcast.,True,False,,,B,easy,Gaming Consoles
-105,An algorithm is a step by step recipe for a task.,True,False,,,A,easy,Programming
+102,Solid state drives contain spinning vinyl records.,False,True,,,A,easy,Computer History
+103,Huawei is a Chinese tech company.,False,True,,,B,easy,Tech Companies
+104,Sony made the Dreamcast.,False,True,,,A,easy,Gaming Consoles
+105,An algorithm is a step by step recipe for a task.,False,True,,,B,easy,Programming
 106,Grand Theft Auto is a gardening simulator.,True,False,,,B,easy,Game Franchises
 107,Esports teams can have coaches.,True,False,,,A,easy,Esports and Records
-108,One teenager invented the whole internet in a weekend.,True,False,,,B,easy,Computer History
+108,One teenager invented the whole internet in a weekend.,False,True,,,A,easy,Computer History
 109,Python scripts usually end with .exe.,False,True,,,A,easy,Programming
 110,The 3DS needs special glasses for its 3D effect.,True,False,,,B,easy,Gaming Consoles
 111,Creepers in Minecraft explode near players.,True,False,,,A,easy,Game Franchises
 112,Fiber optic cables send data using sound waves.,True,False,,,B,easy,Computer History
 113,IBM is an old company known for mainframe computers.,True,False,,,A,easy,Tech Companies
-114,JavaScript only runs inside microwave ovens.,True,False,,,B,easy,Programming
-115,Twitch chat lets viewers post messages live.,True,False,,,A,easy,Esports and Records
-116,Sonic runs slowly and hates speed.,True,False,,,B,easy,Game Franchises
-117,Two factor login adds extra security.,True,False,,,A,easy,Computer History
-118,The PS4 controller has no buttons at all.,True,False,,,B,easy,Gaming Consoles
-119,Nvidia is known for making graphics cards.,True,False,,,A,easy,Tech Companies
+114,JavaScript only runs inside microwave ovens.,False,True,,,A,easy,Programming
+115,Twitch chat lets viewers post messages live.,False,True,,,B,easy,Esports and Records
+116,Sonic runs slowly and hates speed.,False,True,,,A,easy,Game Franchises
+117,Two factor login adds extra security.,False,True,,,B,easy,Computer History
+118,The PS4 controller has no buttons at all.,False,True,,,A,easy,Gaming Consoles
+119,Nvidia is known for making graphics cards.,False,True,,,B,easy,Tech Companies
 120,Unicode covers characters from many languages.,False,True,,,B,easy,Programming
 121,You should share your passwords with strangers.,False,True,,,A,easy,Computer History
 122,Kirby is a pink puffball who inhales enemies.,False,True,,,B,easy,Game Franchises
 123,Amazon Web Services is a restaurant chain.,False,True,,,A,easy,Tech Companies
 124,The Xbox Series X launched in 2020.,False,True,,,B,easy,Gaming Consoles
-125,Chess.com streams Hollywood movies.,False,True,,,A,easy,Esports and Records
-126,Data centers house racks of servers.,False,True,,,B,easy,Computer History
+125,Chess.com streams Hollywood movies.,True,False,,,B,easy,Esports and Records
+126,Data centers house racks of servers.,True,False,,,A,easy,Computer History
 127,Portal is a series about zombie hordes.,False,True,,,A,easy,Game Franchises
 128,Open source code is public for anyone to read.,False,True,,,B,easy,Programming
-129,The PS5 accepts Super Nintendo cartridges.,False,True,,,A,easy,Gaming Consoles
-130,Malware makes computers run faster.,True,False,,,B,easy,Computer History
+129,The PS5 accepts Super Nintendo cartridges.,True,False,,,B,easy,Gaming Consoles
+130,Malware makes computers run faster.,False,True,,,A,easy,Computer History
 131,Apple sells the iPad and the MacBook.,True,False,,,A,easy,Tech Companies
 132,Fallout is set in cheerful underwater kingdoms.,True,False,,,B,easy,Game Franchises
 133,Faker is a famous League of Legends player.,True,False,,,A,easy,Esports and Records
-134,The Wii remote detects motion only underwater.,True,False,,,B,easy,Gaming Consoles
+134,The Wii remote detects motion only underwater.,False,True,,,A,easy,Gaming Consoles
 135,App stores distribute mobile applications.,True,False,,,A,easy,Programming
 136,QR stands for Quiet Rabbit.,True,False,,,B,easy,Computer History
 137,In Pokemon players catch and train creatures.,True,False,,,A,easy,Game Franchises
 138,Jeff Bezos also founded the Ford Motor Company.,True,False,,,B,easy,Tech Companies
 139,Encryption scrambles data so outsiders cannot read it.,True,False,,,A,easy,Computer History
-140,Doom is a classic shooter about fighting demons.,False,True,,,B,easy,Game Franchises
-141,Sega still sells new home consoles today.,False,True,,,A,easy,Gaming Consoles
+140,Doom is a classic shooter about fighting demons.,True,False,,,A,easy,Game Franchises
+141,Sega still sells new home consoles today.,True,False,,,B,easy,Gaming Consoles
 142,ARPANET was an early forerunner of the internet.,False,True,,,B,easy,Computer History
 143,Programmers always write perfect code on the first try.,False,True,,,A,easy,Programming
 144,Windows is the most used desktop operating system.,False,True,,,B,easy,Tech Companies
-145,Kirby is a green dinosaur that breathes fire.,False,True,,,A,easy,Game Franchises
-146,EVO is a major fighting game tournament.,False,True,,,B,easy,Esports and Records
-147,Pressing Ctrl C wipes your entire computer.,False,True,,,A,easy,Computer History
-148,The Steam Deck is a handheld gaming PC by Valve.,False,True,,,B,easy,Gaming Consoles
+145,Kirby is a green dinosaur that breathes fire.,True,False,,,B,easy,Game Franchises
+146,EVO is a major fighting game tournament.,True,False,,,A,easy,Esports and Records
+147,Pressing Ctrl C wipes your entire computer.,True,False,,,B,easy,Computer History
+148,The Steam Deck is a handheld gaming PC by Valve.,True,False,,,A,easy,Gaming Consoles
 149,Tim Cook is the CEO of Nintendo.,False,True,,,A,easy,Tech Companies
-150,Street Fighter rounds are won by picking flowers.,True,False,,,B,easy,Game Franchises
-151,A firewall blocks unwanted network traffic.,True,False,,,A,easy,Computer History
-152,Nokia is famous for frozen pizza.,True,False,,,B,easy,Tech Companies
-153,A boolean can be true or false.,True,False,,,A,easy,Programming
-154,The Dreamcast was Nintendo's last home console.,True,False,,,B,easy,Gaming Consoles
-155,Esports arenas can pack in thousands of fans.,True,False,,,A,easy,Esports and Records
-156,Wi-Fi only travels through buried cables.,True,False,,,B,easy,Computer History
+150,Street Fighter rounds are won by picking flowers.,False,True,,,A,easy,Game Franchises
+151,A firewall blocks unwanted network traffic.,False,True,,,B,easy,Computer History
+152,Nokia is famous for frozen pizza.,False,True,,,A,easy,Tech Companies
+153,A boolean can be true or false.,False,True,,,B,easy,Programming
+154,The Dreamcast was Nintendo's last home console.,False,True,,,A,easy,Gaming Consoles
+155,Esports arenas can pack in thousands of fans.,False,True,,,B,easy,Esports and Records
+156,Wi-Fi only travels through buried cables.,False,True,,,A,easy,Computer History
 157,Animal Crossing is a relaxing life simulation series.,True,False,,,A,easy,Game Franchises
 158,Adobe is best known for breakfast cereal.,True,False,,,B,easy,Tech Companies
-159,A browser is software for visiting websites.,True,False,,,A,easy,Computer History
+159,A browser is software for visiting websites.,False,True,,,B,easy,Computer History
 160,Pikachu evolves from Pichu.,False,True,,,B,easy,Game Franchises
 161,Java only runs inside coffee machines.,False,True,,,A,easy,Programming
-162,Touchscreens respond to finger taps.,False,True,,,B,easy,Computer History
-163,The International is a Farmville tournament.,False,True,,,A,easy,Esports and Records
+162,Touchscreens respond to finger taps.,True,False,,,A,easy,Computer History
+163,The International is a Farmville tournament.,True,False,,,B,easy,Esports and Records
 164,The PSP competed with the Nintendo DS.,False,True,,,B,easy,Gaming Consoles
 165,Galaxy phones are made by a Norwegian toy company.,False,True,,,A,easy,Tech Companies
 166,Call of Duty games center on military combat.,False,True,,,B,easy,Game Franchises
-167,A virus scan destroys your files on purpose.,False,True,,,A,easy,Computer History
+167,A virus scan destroys your files on purpose.,True,False,,,B,easy,Computer History
 168,Zoom boomed during pandemic lockdowns.,False,True,,,B,easy,Tech Companies
 169,Handheld consoles can never fit in a backpack.,False,True,,,A,easy,Gaming Consoles
-170,Zombies in Minecraft explode when they get close.,True,False,,,B,easy,Game Franchises
-171,Printers make paper copies of documents.,True,False,,,A,easy,Computer History
+170,Zombies in Minecraft explode when they get close.,False,True,,,A,easy,Game Franchises
+171,Printers make paper copies of documents.,False,True,,,B,easy,Computer History
 172,The binary system has ten different digits.,True,False,,,B,easy,Programming
 173,Streamers can earn donations from viewers.,True,False,,,A,easy,Esports and Records
 174,Apple headquarters sits in the Sahara Desert.,True,False,,,B,easy,Tech Companies
-175,Switch controllers are called Joy-Cons.,True,False,,,A,easy,Gaming Consoles
+175,Switch controllers are called Joy-Cons.,False,True,,,B,easy,Gaming Consoles
 176,Halo stars a plumber named Mario.,True,False,,,B,easy,Game Franchises
 177,Algorithms shape social media feeds.,True,False,,,A,easy,Computer History
-178,Google owns the video site Friendster.,True,False,,,B,easy,Tech Companies
-179,The 2019 Fortnite World Cup paid out millions in prizes.,True,False,,,A,easy,Esports and Records
+178,Google owns the video site Friendster.,False,True,,,A,easy,Tech Companies
+179,The 2019 Fortnite World Cup paid out millions in prizes.,False,True,,,B,easy,Esports and Records
 180,Red Dead Redemption is a western series by Rockstar.,False,True,,,B,easy,Game Franchises
 181,Bluetooth was named after a cartoon dog.,False,True,,,A,easy,Computer History
-182,Functions let code be reused.,False,True,,,B,easy,Programming
+182,Functions let code be reused.,True,False,,,A,easy,Programming
 183,The Super Nintendo launched before the NES.,False,True,,,A,easy,Gaming Consoles
 184,Dropbox stores and syncs files.,False,True,,,B,easy,Tech Companies
 185,Chess engines have never beaten grandmasters.,False,True,,,A,easy,Esports and Records
 186,Solid state drives have no moving parts.,False,True,,,B,easy,Computer History
 187,Tetris clears lines by asking quiz questions.,False,True,,,A,easy,Game Franchises
-188,Retro refers to older games and styles.,False,True,,,B,easy,Gaming Consoles
+188,Retro refers to older games and styles.,True,False,,,A,easy,Gaming Consoles
 189,Facebook was created before Google.,False,True,,,A,easy,Tech Companies
 190,AI can only be found in washing machines.,True,False,,,B,easy,Computer History
-191,Zelda games are full of puzzle filled dungeons.,True,False,,,A,easy,Game Franchises
+191,Zelda games are full of puzzle filled dungeons.,False,True,,,B,easy,Game Franchises
 192,A loop can only ever run once.,True,False,,,B,easy,Programming
 193,League of Legends teams field five players.,True,False,,,A,easy,Esports and Records
-194,Steve Wozniak cofounded Netflix.,True,False,,,B,easy,Tech Companies
+194,Steve Wozniak cofounded Netflix.,False,True,,,A,easy,Tech Companies
 195,GPS pinpoints your location using satellites.,True,False,,,A,easy,Computer History
 196,The GameCube was shaped like a rectangular brick.,True,False,,,B,easy,Gaming Consoles
 197,Fortnite mixes shooting with building.,True,False,,,A,easy,Game Franchises
-198,Early computers ran on sunlight for power.,True,False,,,B,easy,Computer History
-199,Guinness World Records tracks gaming achievements.,True,False,,,A,easy,Esports and Records
+198,Early computers ran on sunlight for power.,False,True,,,A,easy,Computer History
+199,Guinness World Records tracks gaming achievements.,False,True,,,B,easy,Esports and Records
 200,Which company created the Windows operating system?,Microsoft,Oracle,,,A,medium,Tech Companies
-201,Who is the mascot of Sega?,Mario,Sonic,,,B,medium,Game Franchises
+201,Who is the mascot of Sega?,Sonic,Mario,,,A,medium,Game Franchises
 202,What does WWW stand for?,World Wide Web,World Wrestling Federation,,,A,medium,Computer History
 203,Which language pairs snake branding with clean indentation?,Perl,Python,,,B,medium,Programming
-204,Which game features blocky worlds and exploding creepers?,Minecraft,Roblox,,,A,medium,Game Franchises
-205,Which input device is named after a rodent?,Trackball,Mouse,,,B,medium,Computer History
-206,Which handheld did Nintendo launch in 1989?,Game Boy,Game Gear,,,A,medium,Gaming Consoles
-207,Which game hosts The International tournament?,League of Legends,Dota 2,,,B,medium,Esports and Records
-208,Which publisher runs the Call of Duty franchise?,Activision,EA,,,A,medium,Game Franchises
-209,Which language styles web pages?,HTML,CSS,,,B,medium,Programming
+204,Which game features blocky worlds and exploding creepers?,Roblox,Minecraft,,,B,medium,Game Franchises
+205,Which input device is named after a rodent?,Mouse,Trackball,,,A,medium,Computer History
+206,Which handheld did Nintendo launch in 1989?,Game Gear,Game Boy,,,B,medium,Gaming Consoles
+207,Which game hosts The International tournament?,Dota 2,League of Legends,,,A,medium,Esports and Records
+208,Which publisher runs the Call of Duty franchise?,EA,Activision,,,B,medium,Game Franchises
+209,Which language styles web pages?,CSS,HTML,,,A,medium,Programming
 210,Which Korean giant makes Galaxy phones?,Samsung,LG,,,A,medium,Tech Companies
-211,Which platform hosts user made hits like Adopt Me?,Steam,Roblox,,,B,medium,Game Franchises
-212,Which console generation does the PS5 belong to?,Ninth,Sixth,,,A,medium,Gaming Consoles
+211,Which platform hosts user made hits like Adopt Me?,Roblox,Steam,,,A,medium,Game Franchises
+212,Which console generation does the PS5 belong to?,Sixth,Ninth,,,B,medium,Gaming Consoles
 213,What does CPU stand for?,Central Power Unit,Central Processing Unit,,,B,medium,Computer History
 214,Which MOBA features champions like Lux and Yasuo?,League of Legends,Valorant,,,A,medium,Esports and Records
-215,Who created Minecraft?,Toby Fox,Markus Persson,,,B,medium,Game Franchises
-216,Which company develops Android?,Google,RIM,,,A,medium,Tech Companies
+215,Who created Minecraft?,Markus Persson,Toby Fox,,,A,medium,Game Franchises
+216,Which company develops Android?,RIM,Google,,,B,medium,Tech Companies
 217,Which series stars Master Chief?,Metroid,Halo,,,B,medium,Game Franchises
 218,Which company bought YouTube in 2006?,Google,Yahoo,,,A,medium,Tech Companies
-219,Which drive has no moving parts?,Hard disk drive,SSD,,,B,medium,Computer History
+219,Which drive has no moving parts?,SSD,Hard disk drive,,,A,medium,Computer History
 220,Which language is a modern Android favorite?,Kotlin,Swift,,,A,medium,Programming
-221,Which was Nintendo's first HD console?,Wii,Wii U,,,B,medium,Gaming Consoles
-222,Which battle royale lets players build cover?,Fortnite,PUBG,,,A,medium,Game Franchises
-223,Who invented the World Wide Web?,Vint Cerf,Tim Berners-Lee,,,B,medium,Computer History
-224,Which country is Faker from?,South Korea,China,,,A,medium,Esports and Records
-225,Which series stars bounty hunter Samus Aran?,Star Fox,Metroid,,,B,medium,Game Franchises
+221,Which was Nintendo's first HD console?,Wii U,Wii,,,A,medium,Gaming Consoles
+222,Which battle royale lets players build cover?,PUBG,Fortnite,,,B,medium,Game Franchises
+223,Who invented the World Wide Web?,Tim Berners-Lee,Vint Cerf,,,A,medium,Computer History
+224,Which country is Faker from?,China,South Korea,,,B,medium,Esports and Records
+225,Which series stars bounty hunter Samus Aran?,Metroid,Star Fox,,,A,medium,Game Franchises
 226,Which symbol starts a Python comment?,#,//,,,A,medium,Programming
 227,Which company is older?,Apple,Nintendo,,,B,medium,Tech Companies
 228,Which game casts you as a crewmate on a spaceship?,Among Us,Celeste,,,A,medium,Game Franchises
 229,Which app did Kevin Systrom cofound?,Snapchat,Instagram,,,B,medium,Tech Companies
-230,What does RAM stand for?,Random Access Memory,Rapid Action Module,,,A,medium,Computer History
-231,Which handheld put a screen on the bottom too?,PSP,Nintendo DS,,,B,medium,Gaming Consoles
-232,Which company makes Street Fighter?,Capcom,SNK,,,A,medium,Game Franchises
+230,What does RAM stand for?,Rapid Action Module,Random Access Memory,,,B,medium,Computer History
+231,Which handheld put a screen on the bottom too?,Nintendo DS,PSP,,,A,medium,Gaming Consoles
+232,Which company makes Street Fighter?,SNK,Capcom,,,B,medium,Game Franchises
 233,Which event is the biggest fighting game championship?,The International,EVO,,,B,medium,Esports and Records
 234,Which arcade game did Atari release in 1972?,Computer Space,Pong,,,A,medium,Computer History
 235,Which game stars a silent tester named Chell?,Half-Life 2,Portal,,,B,medium,Game Franchises
-236,Which company makes the Switch?,Nintendo,Valve,,,A,medium,Gaming Consoles
-237,Which decade popularized home gaming with the Atari 2600?,1950s,1970s,,,B,medium,Gaming Consoles
-238,Which console was sold as the Mega Drive abroad?,Sega Genesis,Sega Saturn,,,A,medium,Gaming Consoles
+236,Which company makes the Switch?,Valve,Nintendo,,,B,medium,Gaming Consoles
+237,Which decade popularized home gaming with the Atari 2600?,1970s,1950s,,,A,medium,Gaming Consoles
+238,Which console was sold as the Mega Drive abroad?,Sega Saturn,Sega Genesis,,,B,medium,Gaming Consoles
 239,Which org did Fortnite star Ninja represent?,FaZe Clan,Luminosity Gaming,,,B,medium,Esports and Records
 240,Which RPG series features Cloud Strife?,Final Fantasy,Dragon Quest,,,A,medium,Game Franchises
-241,Which company built the first iPhone?,Nokia,Apple,,,B,medium,Tech Companies
-242,Who is the CEO of Tesla?,Elon Musk,Mary Barra,,,A,medium,Tech Companies
+241,Which company built the first iPhone?,Apple,Nokia,,,A,medium,Tech Companies
+242,Who is the CEO of Tesla?,Mary Barra,Elon Musk,,,B,medium,Tech Companies
 243,Which type stores true or false values?,String,Boolean,,,B,medium,Programming
 244,Which console debuted with Halo Combat Evolved?,Xbox,GameCube,,,A,medium,Gaming Consoles
-245,Which hero rescues Princess Peach from Bowser?,Crash Bandicoot,Super Mario,,,B,medium,Game Franchises
-246,Where was ENIAC built?,University of Pennsylvania,IBM,,,A,medium,Computer History
-247,Which region led early StarCraft esports?,Brazil,South Korea,,,B,medium,Esports and Records
-248,Which language honors a British comedy troupe?,Python,Ruby,,,A,medium,Programming
-249,Which retailer owns Twitch?,Microsoft,Amazon,,,B,medium,Tech Companies
-250,Which series features the warrior Kratos?,God of War,Horizon Zero Dawn,,,A,medium,Game Franchises
+245,Which hero rescues Princess Peach from Bowser?,Super Mario,Crash Bandicoot,,,A,medium,Game Franchises
+246,Where was ENIAC built?,IBM,University of Pennsylvania,,,B,medium,Computer History
+247,Which region led early StarCraft esports?,South Korea,Brazil,,,A,medium,Esports and Records
+248,Which language honors a British comedy troupe?,Ruby,Python,,,B,medium,Programming
+249,Which retailer owns Twitch?,Amazon,Microsoft,,,A,medium,Tech Companies
+250,Which series features the warrior Kratos?,Horizon Zero Dawn,God of War,,,B,medium,Game Franchises
 251,What does AI stand for?,Automated Internet,Artificial Intelligence,,,B,medium,Computer History
-252,Which console pairs with the DualSense controller?,PS5,Xbox Series X,,,A,medium,Gaming Consoles
-253,Who won the 2019 Fortnite World Cup solo crown?,Ninja,Bugha,,,B,medium,Esports and Records
+252,Which console pairs with the DualSense controller?,Xbox Series X,PS5,,,B,medium,Gaming Consoles
+253,Who won the 2019 Fortnite World Cup solo crown?,Bugha,Ninja,,,A,medium,Esports and Records
 254,Which extension marks a Python file?,.py,.js,,,A,medium,Programming
 255,Which studio publishes The Witcher 3?,Bethesda,CD Projekt Red,,,B,medium,Game Franchises
 256,Which portal led search before Google rose?,Yahoo,Bing,,,A,medium,Computer History
 257,Which firm makes Snapdragon chips?,Intel,Qualcomm,,,B,medium,Tech Companies
-258,Which handheld PC did Valve ship in 2022?,Steam Deck,Nintendo Switch,,,A,medium,Gaming Consoles
+258,Which handheld PC did Valve ship in 2022?,Nintendo Switch,Steam Deck,,,B,medium,Gaming Consoles
 259,Which series format is first to three wins?,Best of one,Best of five,,,B,medium,Esports and Records
 260,Which Capcom series has teams slaying giant beasts?,Monster Hunter,Animal Crossing,,,A,medium,Game Franchises
-261,Which company sold the Commodore 64?,Atari,Commodore,,,B,medium,Computer History
-262,Who cofounded Microsoft with Paul Allen?,Bill Gates,Larry Page,,,A,medium,Tech Companies
-263,Which world is called Hyrule?,Skyrim,The Legend of Zelda,,,B,medium,Game Franchises
+261,Which company sold the Commodore 64?,Commodore,Atari,,,A,medium,Computer History
+262,Who cofounded Microsoft with Paul Allen?,Larry Page,Bill Gates,,,B,medium,Tech Companies
+263,Which world is called Hyrule?,The Legend of Zelda,Skyrim,,,A,medium,Game Franchises
 264,Which generation housed the SNES and the Genesis?,Fourth,Third,,,A,medium,Gaming Consoles
-265,Which studio created the Unreal Engine?,BioWare,Epic Games,,,B,medium,Tech Companies
-266,Which language anchors the .NET platform?,C#,Delphi,,,A,medium,Programming
+265,Which studio created the Unreal Engine?,Epic Games,BioWare,,,A,medium,Tech Companies
+266,Which language anchors the .NET platform?,Delphi,C#,,,B,medium,Programming
 267,Which team won The International in 2018 and 2019?,Team Liquid,OG,,,B,medium,Esports and Records
 268,Which lab created ChatGPT?,OpenAI,Anthropic,,,A,medium,Tech Companies
 269,Which puzzle game paints portals orange and blue?,Half-Life,Portal,,,B,medium,Game Franchises
-270,Which disc format carried 90s PC games?,CD-ROM,Cassette tape,,,A,medium,Computer History
-271,Which console got the MotionPlus attachment?,Dreamcast,Wii,,,B,medium,Gaming Consoles
+270,Which disc format carried 90s PC games?,Cassette tape,CD-ROM,,,B,medium,Computer History
+271,Which console got the MotionPlus attachment?,Wii,Dreamcast,,,A,medium,Gaming Consoles
 272,Which studio developed Elden Ring?,FromSoftware,PlatinumGames,,,A,medium,Game Franchises
-273,Which device records console footage for streaming?,Sound card,Capture card,,,B,medium,Esports and Records
+273,Which device records console footage for streaming?,Capture card,Sound card,,,A,medium,Esports and Records
 274,Who is honored as the first programmer?,Ada Lovelace,Grace Hopper,,,A,medium,Computer History
 275,Which series roams the Capital Wasteland?,Fallout 76,Fallout,,,B,medium,Game Franchises
-276,Which chipmaker sells Ryzen CPUs?,AMD,Nvidia,,,A,medium,Tech Companies
-277,Which language do iPhone apps favor?,Kotlin,Swift,,,B,medium,Programming
-278,Which console suffered the Red Ring of Death?,Xbox 360,PS3,,,A,medium,Gaming Consoles
-279,Where did game streaming settle after Justin TV?,Rumble,Twitch,,,B,medium,Esports and Records
+276,Which chipmaker sells Ryzen CPUs?,Nvidia,AMD,,,B,medium,Tech Companies
+277,Which language do iPhone apps favor?,Swift,Kotlin,,,A,medium,Programming
+278,Which console suffered the Red Ring of Death?,PS3,Xbox 360,,,B,medium,Gaming Consoles
+279,Where did game streaming settle after Justin TV?,Twitch,Rumble,,,A,medium,Esports and Records
 280,Who created Kirby and Smash Bros?,Masahiro Sakurai,Shigeru Miyamoto,,,A,medium,Game Franchises
 281,Which firm sold the Altair 8800 kit?,Heathkit,MITS,,,B,medium,Computer History
 282,What is Microsoft's cloud platform called?,Azure,AWS,,,A,medium,Tech Companies
-283,Which Spider-Man game came from Insomniac?,Shattered Dimensions,Marvels Spider-Man,,,B,medium,Game Franchises
-284,Which tool tracks code versions?,Git,Excel,,,A,medium,Programming
-285,Which maker introduced the Macintosh in 1984?,Commodore,Apple,,,B,medium,Computer History
+283,Which Spider-Man game came from Insomniac?,Marvels Spider-Man,Shattered Dimensions,,,A,medium,Game Franchises
+284,Which tool tracks code versions?,Excel,Git,,,B,medium,Programming
+285,Which maker introduced the Macintosh in 1984?,Apple,Commodore,,,A,medium,Computer History
 286,Which home console holds the sales crown at 155 million?,PS2,PS4,,,A,medium,Gaming Consoles
 287,Which 2014 hit lets you lick things as a goat?,Cat Simulator,Goat Simulator,,,B,medium,Game Franchises
 288,Which founder returned to Apple in 1997?,Steve Jobs,Gil Amelio,,,A,medium,Tech Companies
 289,Which shooter calls a full team wipe an Ace?,Rocket League,Valorant,,,B,medium,Esports and Records
-290,Which studio develops the Pokemon RPGs?,Game Freak,HAL Laboratory,,,A,medium,Game Franchises
-291,Which phone popularized the app slab design?,BlackBerry Curve,iPhone,,,B,medium,Computer History
-292,Which N64 add on shakes the controller?,Rumble Pak,Transfer Pak,,,A,medium,Gaming Consoles
+290,Which studio develops the Pokemon RPGs?,HAL Laboratory,Game Freak,,,B,medium,Game Franchises
+291,Which phone popularized the app slab design?,iPhone,BlackBerry Curve,,,A,medium,Computer History
+292,Which N64 add on shakes the controller?,Transfer Pak,Rumble Pak,,,B,medium,Gaming Consoles
 293,Whose team won the first Overwatch League title?,Shanghai,London,,,B,medium,Esports and Records
 294,Who steers the Python language today?,Python Software Foundation,Oracle Foundation,,,A,medium,Programming
 295,Which early network faded before Facebook rose?,Friendster,LinkedIn,,,B,medium,Computer History
 296,Who publishes Pokemon alongside Game Freak?,Nintendo,Ubisoft,,,A,medium,Game Franchises
 297,Which console reads mini DVDs?,Xbox,GameCube,,,B,medium,Gaming Consoles
-298,Which checkout platform rivals PayPal?,Stripe,Shopify,,,A,medium,Tech Companies
-299,Which series owns the Evo Moment 37 legend?,Tekken,Street Fighter,,,B,medium,Esports and Records
-300,What did Napster users swap in 1999?,MP3 music files,Word documents,,,A,medium,Computer History
-301,Which game features the loan shark Tom Nook?,Harvest Moon,Animal Crossing,,,B,medium,Game Franchises
+298,Which checkout platform rivals PayPal?,Shopify,Stripe,,,B,medium,Tech Companies
+299,Which series owns the Evo Moment 37 legend?,Street Fighter,Tekken,,,A,medium,Esports and Records
+300,What did Napster users swap in 1999?,Word documents,MP3 music files,,,B,medium,Computer History
+301,Which game features the loan shark Tom Nook?,Animal Crossing,Harvest Moon,,,A,medium,Game Franchises
 302,Who made the NES Zapper light gun?,Nintendo,Coleco,,,A,medium,Gaming Consoles
 303,Which keyword defines a Python function?,func,def,,,B,medium,Programming
-304,Which entry took GTA into 3D in 2001?,GTA 3,GTA Vice City,,,A,medium,Game Franchises
-305,Which firm makes ThinkPads today?,Dell,Lenovo,,,B,medium,Tech Companies
+304,Which entry took GTA into 3D in 2001?,GTA Vice City,GTA 3,,,B,medium,Game Franchises
+305,Which firm makes ThinkPads today?,Lenovo,Dell,,,A,medium,Tech Companies
 306,Which OS wears a penguin mascot?,Linux,Windows,,,A,medium,Computer History
 307,Which shooter owns the map Dust 2?,Overwatch,Counter Strike,,,B,medium,Esports and Records
-308,Which studio crafted The Last of Us?,Insomniac,Naughty Dog,,,A,medium,Game Franchises
-309,Which console introduced achievements in 2005?,PSP Go,Xbox 360,,,B,medium,Gaming Consoles
+308,Which studio crafted The Last of Us?,Naughty Dog,Insomniac,,,B,medium,Game Franchises
+309,Which console introduced achievements in 2005?,Xbox 360,PSP Go,,,A,medium,Gaming Consoles
 310,Which language queries databases?,SQL,CSS,,,A,medium,Programming
 311,Which brand ruled the late 70s with its 2600?,Magnavox,Atari,,,B,medium,Computer History
-312,Who runs Apple as of 2026?,Tim Cook,John Sculley,,,A,medium,Tech Companies
-313,Which game follows Joel and Ellie?,Beyond Two Souls,The Last of Us,,,B,medium,Game Franchises
-314,Which handheld answered the 3DS in 2011?,PS Vita,PS TV,,,A,medium,Gaming Consoles
+312,Who runs Apple as of 2026?,John Sculley,Tim Cook,,,B,medium,Tech Companies
+313,Which game follows Joel and Ellie?,The Last of Us,Beyond Two Souls,,,A,medium,Game Franchises
+314,Which handheld answered the 3DS in 2011?,PS TV,PS Vita,,,B,medium,Gaming Consoles
 315,Which protocol encrypts web traffic?,HTTPS,FTP,,,B,medium,Computer History
 316,What is Facebook Inc called now?,Alphabet,Meta Platforms,,,A,medium,Tech Companies
-317,With which org did s1mple lift a Major?,G2,Natus Vincere,,,B,medium,Esports and Records
-318,Which Python call prints text?,echo,print,,,A,medium,Programming
-319,Which computer filled British classrooms?,Amstrad CPC,BBC Micro,,,B,medium,Computer History
+317,With which org did s1mple lift a Major?,Natus Vincere,G2,,,A,medium,Esports and Records
+318,Which Python call prints text?,print,echo,,,B,medium,Programming
+319,Which computer filled British classrooms?,BBC Micro,Amstrad CPC,,,A,medium,Computer History
 320,Which fighting game features Scorpion and Sub Zero?,Killer Instinct,Mortal Kombat,,,A,medium,Game Franchises
 321,Who owns AWS?,Amazon,Rackspace,,,B,medium,Tech Companies
-322,Which Wii pad tracks your balance?,Wii Balance Board,Wii Zapper,,,A,medium,Gaming Consoles
-323,Which farm hit did one developer build alone?,My Time at Portia,Stardew Valley,,,B,medium,Game Franchises
+322,Which Wii pad tracks your balance?,Wii Zapper,Wii Balance Board,,,B,medium,Gaming Consoles
+323,Which farm hit did one developer build alone?,Stardew Valley,My Time at Portia,,,A,medium,Game Franchises
 324,In which year did the first iPhone go on sale?,2007,1997,,,A,medium,Computer History
 325,Which teaching language draws turtle graphics?,Scratch,Logo,,,B,medium,Programming
-326,Which Korean team fields Faker?,T1,Gen G,,,A,medium,Esports and Records
-327,Which pad had three handles?,Dreamcast pad,Nintendo 64 controller,,,B,medium,Gaming Consoles
-328,Which shooter features hat mad classes like the Spy?,Team Fortress 2,Left 4 Dead,,,A,medium,Game Franchises
+326,Which Korean team fields Faker?,Gen G,T1,,,B,medium,Esports and Records
+327,Which pad had three handles?,Nintendo 64 controller,Dreamcast pad,,,A,medium,Gaming Consoles
+328,Which shooter features hat mad classes like the Spy?,Left 4 Dead,Team Fortress 2,,,B,medium,Game Franchises
 329,Which company supplied MS DOS for the IBM PC?,Digital Research,Microsoft,,,B,medium,Computer History
 330,Which giant bought WhatsApp?,Twitter,Meta,,,A,medium,Tech Companies
 331,Which game has you ranching bouncy slimes?,Deep Rock Galactic,Slime Rancher,,,B,medium,Game Franchises
 332,Which developer runs the LoL World Championship?,Blizzard,Psyonix,,,A,medium,Esports and Records
-333,Which company built the 1956 RAMAC drive?,Xerox,IBM,,,B,medium,Computer History
+333,Which company built the 1956 RAMAC drive?,IBM,Xerox,,,A,medium,Computer History
 334,Which language powers WordPress plugins?,Ruby,PHP,,,A,medium,Programming
 335,Which console generation crashed in 1983?,Fourth,Second,,,B,medium,Gaming Consoles
-336,Which series follows Ezio and Altair?,Assassins Creed,Watch Dogs,,,A,medium,Game Franchises
-337,Who started SpaceX?,Gwynne Shotwell,Richard Branson,,,B,medium,Tech Companies
-338,Which streaming site owns the Kappa emote?,Twitch,Kick,,,A,medium,Esports and Records
-339,Which studio launched Crash Bandicoot?,Rare,Naughty Dog,,,B,medium,Game Franchises
-340,Which browser lost the 90s war to Explorer?,Opera,Netscape Navigator,,,A,medium,Computer History
-341,Which console shipped with a built in hard drive in 2001?,PS2,Xbox,,,B,medium,Gaming Consoles
+336,Which series follows Ezio and Altair?,Watch Dogs,Assassins Creed,,,B,medium,Game Franchises
+337,Who started SpaceX?,Richard Branson,Gwynne Shotwell,,,A,medium,Tech Companies
+338,Which streaming site owns the Kappa emote?,Kick,Twitch,,,B,medium,Esports and Records
+339,Which studio launched Crash Bandicoot?,Naughty Dog,Rare,,,A,medium,Game Franchises
+340,Which browser lost the 90s war to Explorer?,Netscape Navigator,Opera,,,B,medium,Computer History
+341,Which console shipped with a built in hard drive in 2001?,Xbox,PS2,,,A,medium,Gaming Consoles
 342,Which popular language enforces indentation?,Python,Elixir,,,A,medium,Programming
 343,Which entry unveils the Institute and its synths?,Fallout New Vegas,Fallout 4,,,B,medium,Game Franchises
-344,Which firm builds Pixel phones?,Sony,Google,,,A,medium,Tech Companies
-345,Which protocol sends email?,SMTP,HTTP,,,B,medium,Computer History
+344,Which firm builds Pixel phones?,Google,Sony,,,B,medium,Tech Companies
+345,Which protocol sends email?,HTTP,SMTP,,,A,medium,Computer History
 346,Which hybrid console arrived in 2017?,Switch,Wii U,,,A,medium,Gaming Consoles
-347,Which country hosted the 2019 Fortnite World Cup finals?,United States,Germany,,,B,medium,Esports and Records
-348,Which Capcom series stars Mega Man?,Mega Man,Kirby,,,A,medium,Game Franchises
+347,Which country hosted the 2019 Fortnite World Cup finals?,Germany,United States,,,A,medium,Esports and Records
+348,Which Capcom series stars Mega Man?,Kirby,Mega Man,,,B,medium,Game Franchises
 349,Which marks an inline comment in JavaScript?,##,//,,,B,medium,Programming
-350,What was Engelbart's 1968 showcase called?,The Mother of All Demos,The Consumer Electronics Show,,,A,medium,Computer History
+350,What was Engelbart's 1968 showcase called?,The Consumer Electronics Show,The Mother of All Demos,,,B,medium,Computer History
 351,Which company owns Xbox?,Panasonic,Microsoft,,,B,medium,Tech Companies
 352,Which brand sells the Pro Controller?,Nintendo,8BitDo,,,A,medium,Gaming Consoles
-353,Which companion dog is named Dogmeat?,Metal Gear Solid,Fallout,,,B,medium,Game Franchises
-354,Where was the transistor invented?,Bell Labs,Philips,,,A,medium,Computer History
-355,Which site ranks CS players by rating?,HLTV,Liquipedia,,,B,medium,Esports and Records
-356,Which language does React build on?,JavaScript,COBOL,,,A,medium,Programming
+353,Which companion dog is named Dogmeat?,Fallout,Metal Gear Solid,,,A,medium,Game Franchises
+354,Where was the transistor invented?,Philips,Bell Labs,,,B,medium,Computer History
+355,Which site ranks CS players by rating?,Liquipedia,HLTV,,,A,medium,Esports and Records
+356,Which language does React build on?,COBOL,JavaScript,,,B,medium,Programming
 357,Which console struggled right before the Switch?,Nintendo 64,Wii U,,,B,medium,Gaming Consoles
 358,Which hedgehog chases Chaos Emeralds?,Sonic,Bubsy,,,A,medium,Game Franchises
 359,Which firm owns Photoshop?,Corel,Adobe,,,B,medium,Tech Companies
 360,Which app surged for workplace video calls in 2020?,Microsoft Teams,ICQ,,,A,medium,Computer History
 361,Which console family hosts Game Pass?,PlayStation,Xbox,,,B,medium,Gaming Consoles
 362,Which indie loops a space explorer through time?,Outer Wilds,Subnautica,,,A,medium,Game Franchises
-363,Which disc format won the HD war?,HD DVD,Blu-ray,,,B,medium,Computer History
+363,Which disc format won the HD war?,Blu-ray,HD DVD,,,A,medium,Computer History
 364,Which command starts a Git repo?,git start,git init,,,A,medium,Programming
 365,Which console bundled Wii Sports at launch?,N64,Wii,,,B,medium,Gaming Consoles
-366,Which NA org is nicknamed C9?,Team SoloMid,Cloud9,,,A,medium,Esports and Records
+366,Which NA org is nicknamed C9?,Cloud9,Team SoloMid,,,B,medium,Esports and Records
 367,Which android drama did Quantic Dream make?,Until Dawn,Detroit Become Human,,,B,medium,Game Franchises
 368,Who runs the Play Store?,Google,Huawei,,,A,medium,Tech Companies
 369,In which year was YouTube founded?,2001,2005,,,B,medium,Computer History
@@ -377,422 +377,422 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 374,Which western epic did Rockstar release in 2018?,Red Dead Redemption 2,Ghost of Tsushima,,,A,medium,Game Franchises
 375,Which team won Worlds 2013 and 2015 with Faker?,Invictus Gaming,SK Telecom T1,,,B,medium,Esports and Records
 376,Which chip firm powers the Switch?,Nvidia,Qualcomm,,,A,medium,Tech Companies
-377,Which mail service launched on April Fool Day 2004?,Hotmail,Gmail,,,B,medium,Computer History
-378,Which PS console played PS2 discs at launch?,PS3,PS5,,,A,medium,Gaming Consoles
-379,Which looter shooter is set on Pandora?,Destiny,Borderlands,,,B,medium,Game Franchises
-380,Which language does TypeScript extend?,JavaScript,CoffeeScript,,,A,medium,Programming
-381,Which voice app did Discord displace for gamers?,Slack,TeamSpeak,,,B,medium,Computer History
-382,Who builds the Edge browser?,Microsoft Edge,Vivaldi,,,A,medium,Tech Companies
-383,Which was Nintendo's first disc based console?,Famicom,GameCube,,,B,medium,Gaming Consoles
-384,Which series stars the agent called 47?,Hitman,Deus Ex,,,A,medium,Game Franchises
-385,Which tactical shooter fields agents with powers?,CS GO,Valorant,,,B,medium,Esports and Records
-386,Which agency created GPS?,US Department of Defense,NASA,,,A,medium,Computer History
+377,Which mail service launched on April Fool Day 2004?,Gmail,Hotmail,,,A,medium,Computer History
+378,Which PS console played PS2 discs at launch?,PS5,PS3,,,B,medium,Gaming Consoles
+379,Which looter shooter is set on Pandora?,Borderlands,Destiny,,,A,medium,Game Franchises
+380,Which language does TypeScript extend?,CoffeeScript,JavaScript,,,B,medium,Programming
+381,Which voice app did Discord displace for gamers?,TeamSpeak,Slack,,,A,medium,Computer History
+382,Who builds the Edge browser?,Vivaldi,Microsoft Edge,,,B,medium,Tech Companies
+383,Which was Nintendo's first disc based console?,GameCube,Famicom,,,A,medium,Gaming Consoles
+384,Which series stars the agent called 47?,Deus Ex,Hitman,,,B,medium,Game Franchises
+385,Which tactical shooter fields agents with powers?,Valorant,CS GO,,,A,medium,Esports and Records
+386,Which agency created GPS?,NASA,US Department of Defense,,,B,medium,Computer History
 387,Who made the Walkman?,Aiwa,Sony,,,B,medium,Tech Companies
 388,Which loop tests its condition first?,Do while,While,,,A,medium,Programming
 389,Which series features Chocobos and Cactuars?,Persona,Final Fantasy,,,B,medium,Game Franchises
 390,Which 1977 console cost 199 dollars at launch?,Atari 2600,Intellivision,,,A,medium,Gaming Consoles
-391,Which app is known for vanishing photos?,Tumblr,Snapchat,,,B,medium,Computer History
+391,Which app is known for vanishing photos?,Snapchat,Tumblr,,,A,medium,Computer History
 392,Which league fielded the Shanghai Dragons?,Call of Duty League,Overwatch League,,,A,medium,Esports and Records
-393,In which year did ARPANET deliver its first message?,1969,1975,1983,,A,hard,Computer History
-394,Who created the C language at Bell Labs?,Ken Thompson,Dennis Ritchie,John Backus,,B,hard,Programming
-395,Which console first used ROM game cartridges?,Atari 2600,Magnavox Odyssey,Fairchild Channel F,,C,hard,Gaming Consoles
-396,Who directed Super Mario Bros and The Legend of Zelda?,Shigeru Miyamoto,Hideo Kojima,Yuji Naka,,A,hard,Game Franchises
-397,What was Google's research project originally called?,Excite,BackRub,AltaVista,,B,hard,Tech Companies
-398,What prize pool did The International 2021 reach?,10 million,25 million,40 million,,C,hard,Esports and Records
-399,Which company completed the first UNIVAC?,Remington Rand,Burroughs,RCA,,A,hard,Computer History
-400,Which language did Niklaus Wirth design?,Ada,Pascal,Fortran,,B,hard,Programming
-401,Which console did Sega launch in Japan in 1998?,Mega Drive,32X,Dreamcast,,C,hard,Gaming Consoles
-402,Who composed the Super Mario Bros theme?,Koji Kondo,Nobuo Uematsu,Yuzo Koshiro,,A,hard,Game Franchises
-403,What did the moth taped in a 1947 logbook become?,First virus,First computer bug,First email attachment,,B,hard,Computer History
+393,In which year did ARPANET deliver its first message?,1975,1969,1983,,B,hard,Computer History
+394,Who created the C language at Bell Labs?,Dennis Ritchie,Ken Thompson,John Backus,,A,hard,Programming
+395,Which console first used ROM game cartridges?,Fairchild Channel F,Atari 2600,Magnavox Odyssey,,A,hard,Gaming Consoles
+396,Who directed Super Mario Bros and The Legend of Zelda?,Hideo Kojima,Shigeru Miyamoto,Yuji Naka,,B,hard,Game Franchises
+397,What was Google's research project originally called?,BackRub,AltaVista,Excite,,A,hard,Tech Companies
+398,What prize pool did The International 2021 reach?,40 million,10 million,25 million,,A,hard,Esports and Records
+399,Which company completed the first UNIVAC?,RCA,Burroughs,Remington Rand,,C,hard,Computer History
+400,Which language did Niklaus Wirth design?,Ada,Fortran,Pascal,,C,hard,Programming
+401,Which console did Sega launch in Japan in 1998?,Mega Drive,Dreamcast,32X,,B,hard,Gaming Consoles
+402,Who composed the Super Mario Bros theme?,Koji Kondo,Yuzo Koshiro,Nobuo Uematsu,,A,hard,Game Franchises
+403,What did the moth taped in a 1947 logbook become?,First email attachment,First computer bug,First virus,,B,hard,Computer History
 404,What service did Netflix launch with in 1997?,Streaming site,Game rentals,DVD rental by mail,,C,hard,Tech Companies
-405,Which game hosted the Evo Moment 37 parry?,Street Fighter III 3rd Strike,Street Fighter II,Marvel vs Capcom 2,,A,hard,Esports and Records
-406,Who created the Ruby language?,Rasmus Lerdorf,Yukihiro Matsumoto,Brendan Eich,,B,hard,Programming
-407,Which color handheld answered the Game Boy in 1990?,WonderSwan,Neo Geo Pocket,Game Gear,,C,hard,Gaming Consoles
-408,Which studio made Hollow Knight?,Team Cherry,Supergiant,Moon Studios,,A,hard,Game Franchises
-409,Which word did the first ARPANET login attempt spell before crashing?,HELLO,LOGIN,HI,,B,hard,Computer History
-410,Which third Apple founder sold his stake for 800 dollars?,Mike Markkula,Mike Scott,Ronald Wayne,,C,hard,Tech Companies
-411,Which team won the first CS GO Major?,NiP,Fnatic,LDLC,,A,hard,Esports and Records
-412,Which language was first named Oak?,JavaScript,Java,C#,,B,hard,Programming
-413,Which console reads GD-ROM discs?,PS1,Neo Geo CD,Dreamcast,,C,hard,Gaming Consoles
-414,Who created the Metal Gear series?,Hideo Kojima,Shinji Mikami,Hideki Kamiya,,A,hard,Game Franchises
-415,Which experimental machine pioneered the GUI?,IBM System 360,Xerox Alto,HP 3000,,B,hard,Computer History
-416,What did Twitter rebrand to in 2023?,Mastodon,Truth Social,X,,C,hard,Tech Companies
-417,Which league is home to T1 and Gen G?,LCK,LPL,LEC,,A,hard,Esports and Records
-418,How fast was JavaScript's first version built?,Five years,About ten days,Ten months,,B,hard,Programming
-419,Which company built the Neo Geo?,Taito,Capcom,SNK,,C,hard,Gaming Consoles
-420,Which game lent its name to the roguelike genre?,Rogue,NetHack,Diablo,,A,hard,Game Franchises
-421,Which 1983 handset was the first commercial mobile phone?,Nokia 1011,Motorola DynaTAC 8000X,IBM Simon,,B,hard,Computer History
+405,Which game hosted the Evo Moment 37 parry?,Marvel vs Capcom 2,Street Fighter II,Street Fighter III 3rd Strike,,C,hard,Esports and Records
+406,Who created the Ruby language?,Yukihiro Matsumoto,Rasmus Lerdorf,Brendan Eich,,A,hard,Programming
+407,Which color handheld answered the Game Boy in 1990?,Neo Geo Pocket,WonderSwan,Game Gear,,C,hard,Gaming Consoles
+408,Which studio made Hollow Knight?,Team Cherry,Moon Studios,Supergiant,,A,hard,Game Franchises
+409,Which word did the first ARPANET login attempt spell before crashing?,LOGIN,HI,HELLO,,A,hard,Computer History
+410,Which third Apple founder sold his stake for 800 dollars?,Mike Scott,Ronald Wayne,Mike Markkula,,B,hard,Tech Companies
+411,Which team won the first CS GO Major?,LDLC,NiP,Fnatic,,B,hard,Esports and Records
+412,Which language was first named Oak?,C#,JavaScript,Java,,C,hard,Programming
+413,Which console reads GD-ROM discs?,Neo Geo CD,PS1,Dreamcast,,C,hard,Gaming Consoles
+414,Who created the Metal Gear series?,Shinji Mikami,Hideki Kamiya,Hideo Kojima,,C,hard,Game Franchises
+415,Which experimental machine pioneered the GUI?,HP 3000,Xerox Alto,IBM System 360,,B,hard,Computer History
+416,What did Twitter rebrand to in 2023?,X,Mastodon,Truth Social,,A,hard,Tech Companies
+417,Which league is home to T1 and Gen G?,LPL,LCK,LEC,,B,hard,Esports and Records
+418,How fast was JavaScript's first version built?,Ten months,About ten days,Five years,,B,hard,Programming
+419,Which company built the Neo Geo?,SNK,Taito,Capcom,,A,hard,Gaming Consoles
+420,Which game lent its name to the roguelike genre?,Diablo,NetHack,Rogue,,C,hard,Game Franchises
+421,Which 1983 handset was the first commercial mobile phone?,Motorola DynaTAC 8000X,Nokia 1011,IBM Simon,,A,hard,Computer History
 422,How much did Microsoft pay for Mojang in 2014?,500 million,1 billion,2.5 billion,,C,hard,Tech Companies
-423,Which team lifted the Aegis at TI 2023?,Team Spirit,OG,Tundra Esports,,A,hard,Esports and Records
+423,Which team lifted the Aegis at TI 2023?,OG,Tundra Esports,Team Spirit,,C,hard,Esports and Records
 424,Who led Java's creation at Sun Microsystems?,Anders Hejlsberg,James Gosling,Alan Kay,,B,hard,Programming
 425,Which PS4 pad added a light bar and touchpad?,Sixaxis,DualShock 3,DualShock 4,,C,hard,Gaming Consoles
-426,Who drew Sonic's original look?,Naoto Ohshima,Hirokazu Yasuhara,Takashi Iizuka,,A,hard,Game Franchises
-427,Who coined the word hypertext in 1965?,Tim Berners-Lee,Ted Nelson,Vannevar Bush,,B,hard,Computer History
-428,Which company did Steve Jobs found in 1985?,Adobe,Pixar,NeXT,,C,hard,Tech Companies
+426,Who drew Sonic's original look?,Takashi Iizuka,Naoto Ohshima,Hirokazu Yasuhara,,B,hard,Game Franchises
+427,Who coined the word hypertext in 1965?,Ted Nelson,Vannevar Bush,Tim Berners-Lee,,A,hard,Computer History
+428,Which company did Steve Jobs found in 1985?,Pixar,NeXT,Adobe,,B,hard,Tech Companies
 429,Which team won the first Overwatch League finals?,London Spitfire,New York Excelsior,Seoul Dynasty,,A,hard,Esports and Records
-430,Who wrote JavaScript in a rush at Netscape?,Bjarne Stroustrup,Brendan Eich,Guido van Rossum,,B,hard,Programming
-431,Which Nintendo console bet on stereoscopic 3D in 1995?,Game Boy Advance,Game Boy Micro,Virtual Boy,,C,hard,Gaming Consoles
+430,Who wrote JavaScript in a rush at Netscape?,Brendan Eich,Bjarne Stroustrup,Guido van Rossum,,A,hard,Programming
+431,Which Nintendo console bet on stereoscopic 3D in 1995?,Game Boy Advance,Virtual Boy,Game Boy Micro,,B,hard,Gaming Consoles
 432,Which game made combos famous in arcades?,Street Fighter II,Fatal Fury,Art of Fighting,,A,hard,Game Franchises
 433,Which operating system came from Thompson and Ritchie?,Multics,Unix,MS-DOS,,B,hard,Computer History
 434,Who bought Oculus for 2 billion dollars in 2014?,Take-Two,Sony,Meta,,C,hard,Tech Companies
-435,Which mid laner owns the most Worlds titles?,Faker,Chovy,Caps,,A,hard,Esports and Records
+435,Which mid laner owns the most Worlds titles?,Chovy,Caps,Faker,,C,hard,Esports and Records
 436,Which tool reformats Python code the opinionated way?,Flake8,Black,Pylint,,B,hard,Programming
 437,Which launch title defined the original Xbox?,Fable,Jet Set Radio,Halo Combat Evolved,,C,hard,Game Franchises
-438,Who directed Ico and Shadow of the Colossus?,Fumito Ueda,Goichi Suda,Hidetaka Miyazaki,,A,hard,Game Franchises
-439,Which protocol wraps most web traffic in encryption today?,DES,TLS,WEP,,B,hard,Computer History
-440,Which billionaire founded Blue Origin?,Jensen Huang,Sundar Pichai,Jeff Bezos,,C,hard,Tech Companies
+438,Who directed Ico and Shadow of the Colossus?,Hidetaka Miyazaki,Goichi Suda,Fumito Ueda,,C,hard,Game Franchises
+439,Which protocol wraps most web traffic in encryption today?,TLS,DES,WEP,,A,hard,Computer History
+440,Which billionaire founded Blue Origin?,Jeff Bezos,Sundar Pichai,Jensen Huang,,A,hard,Tech Companies
 441,Which season finale crowns the Capcom Cup champion?,Capcom Cup,Capcom Pro Tour,EVO Japan,,A,hard,Esports and Records
-442,Which command reveals your current Git branch?,git push,git status,git fetch,,B,hard,Programming
-443,Which Xbox model dropped the disc drive?,Xbox One X,Xbox One S,Xbox Series S,,C,hard,Gaming Consoles
+442,Which command reveals your current Git branch?,git fetch,git push,git status,,C,hard,Programming
+443,Which Xbox model dropped the disc drive?,Xbox Series S,Xbox One S,Xbox One X,,A,hard,Gaming Consoles
 444,Which Zelda reinvented the series as an open world?,Breath of the Wild,Twilight Princess,Skyward Sword,,A,hard,Game Franchises
-445,Which maker shipped the first 1 TB hard drive?,Seagate,Hitachi,Western Digital,,B,hard,Computer History
-446,Which phone brand went to Lenovo in 2014?,BlackBerry,Sony Ericsson,Motorola,,C,hard,Tech Companies
-447,Which Swedish squad ran an 87 map win streak?,NiP,Astralis,Godsent,,A,hard,Esports and Records
-448,Which language is famous for automatic semicolon insertion?,Python,JavaScript,Go,,B,hard,Programming
+445,Which maker shipped the first 1 TB hard drive?,Seagate,Western Digital,Hitachi,,C,hard,Computer History
+446,Which phone brand went to Lenovo in 2014?,Sony Ericsson,BlackBerry,Motorola,,C,hard,Tech Companies
+447,Which Swedish squad ran an 87 map win streak?,NiP,Godsent,Astralis,,A,hard,Esports and Records
+448,Which language is famous for automatic semicolon insertion?,Go,JavaScript,Python,,B,hard,Programming
 449,Which console ran on the Cell processor?,Xbox 360,Xbox One,Wii,,C,hard,Gaming Consoles
 450,Who scored the original Legend of Zelda?,Koji Kondo,Motoi Sakuraba,Manami Matsumae,,A,hard,Game Franchises
-451,Which family of standards is IEEE 802.11?,Bluetooth,Wi-Fi,USB,,B,hard,Computer History
-452,Who introduced the 4004 microprocessor in 1971?,AMD,Fairchild,Texas Instruments,,C,hard,Tech Companies
-453,Which Danish core won four CS Majors?,Astralis,Heroic,North,,A,hard,Esports and Records
-454,Which UI library did Facebook open source in 2013?,Angular,React,Vue,,B,hard,Programming
-455,Which Nintendo handheld line sold about 154 million units?,3DS,Virtual Boy,Nintendo DS,,C,hard,Gaming Consoles
-456,Who scored most Final Fantasy entries?,Nobuo Uematsu,Yasunori Mitsuda,Michiru Yamane,,A,hard,Game Franchises
-457,In which year was the first SMS message sent?,1985,1992,1999,,B,hard,Computer History
-458,Which company maintains the V8 JavaScript engine?,Mozilla,Opera,Google,,C,hard,Tech Companies
-459,Who did T1 sweep in the Worlds 2023 final?,Weibo Gaming,JD Gaming,Bilibili Gaming,,A,hard,Esports and Records
-460,Which SQL clause filters grouped rows?,WHERE,HAVING,ORDER BY,,B,hard,Programming
-461,Which Wii platform doubles as a scale?,Wii Wheel,Wii Speak,Wii Balance Board,,C,hard,Gaming Consoles
-462,Which whimsical series comes from Keita Takahashi?,Katamari Damacy,Okami,Viewtiful Joe,,A,hard,Game Franchises
-463,Which file system did Windows XP adopt by default?,FAT32,NTFS,exFAT,,B,hard,Computer History
-464,Whose Radeon GPUs challenge GeForce?,PowerVR,Matrox,AMD,,C,hard,Tech Companies
-465,Which city hosted the Worlds 2024 final?,London,Berlin,Paris,,A,hard,Esports and Records
-466,Which keyword declares a fixed binding in JavaScript?,var,const,let,,B,hard,Programming
-467,On which PlayStation did trophies first appear?,PSone,PSVR,PS3,,C,hard,Gaming Consoles
-468,Which garden defense game spawned a franchise in 2009?,Plants vs Zombies,Bloons TD,Kingdom Rush,,A,hard,Game Franchises
-469,Which computer famously predicted the 1952 election?,UNIVAC I,ENIAC,Whirlwind,,B,hard,Computer History
-470,Which giant bought Slack in 2021?,SAP,Workday,Salesforce,,C,hard,Tech Companies
-471,Which team won The International 2024?,Team Liquid,Gaimin Gladiators,Falcons,,A,hard,Esports and Records
-472,Which language pairs with Python in data science?,Julia,R,Scala,,B,hard,Programming
-473,Which cable let two Game Boys trade Pokemon?,Parallel Port Cable,GBA Link Cable,Game Link Cable,,C,hard,Gaming Consoles
-474,Which Muay Thai emperor bosses early Street Fighter?,Sagat,M Bison,Akuma,,A,hard,Game Franchises
-475,Which 90s disc held about 700 MB?,Floppy disk,CD-R,Zip disc,,B,hard,Computer History
-476,Who cofounded Tesla with Marc Tarpenning?,Franz von Holzhausen,JB Straubel,Martin Eberhard,,C,hard,Tech Companies
-477,With which lineup did device win four Majors?,Astralis,NiP,Vitality,,A,hard,Esports and Records
-478,Which operator glues strings in JavaScript?,Minus,Asterisk,Plus,,B,hard,Programming
-479,Which Xbox 360 card carried saves between consoles?,Controller Pak,VMU,Memory Unit,,C,hard,Gaming Consoles
+451,Which family of standards is IEEE 802.11?,Wi-Fi,Bluetooth,USB,,A,hard,Computer History
+452,Who introduced the 4004 microprocessor in 1971?,Fairchild,AMD,Texas Instruments,,C,hard,Tech Companies
+453,Which Danish core won four CS Majors?,Heroic,North,Astralis,,C,hard,Esports and Records
+454,Which UI library did Facebook open source in 2013?,React,Angular,Vue,,A,hard,Programming
+455,Which Nintendo handheld line sold about 154 million units?,Virtual Boy,3DS,Nintendo DS,,C,hard,Gaming Consoles
+456,Who scored most Final Fantasy entries?,Yasunori Mitsuda,Nobuo Uematsu,Michiru Yamane,,B,hard,Game Franchises
+457,In which year was the first SMS message sent?,1999,1985,1992,,C,hard,Computer History
+458,Which company maintains the V8 JavaScript engine?,Opera,Google,Mozilla,,B,hard,Tech Companies
+459,Who did T1 sweep in the Worlds 2023 final?,JD Gaming,Weibo Gaming,Bilibili Gaming,,B,hard,Esports and Records
+460,Which SQL clause filters grouped rows?,ORDER BY,WHERE,HAVING,,C,hard,Programming
+461,Which Wii platform doubles as a scale?,Wii Wheel,Wii Balance Board,Wii Speak,,B,hard,Gaming Consoles
+462,Which whimsical series comes from Keita Takahashi?,Viewtiful Joe,Okami,Katamari Damacy,,C,hard,Game Franchises
+463,Which file system did Windows XP adopt by default?,NTFS,FAT32,exFAT,,A,hard,Computer History
+464,Whose Radeon GPUs challenge GeForce?,Matrox,AMD,PowerVR,,B,hard,Tech Companies
+465,Which city hosted the Worlds 2024 final?,Berlin,London,Paris,,B,hard,Esports and Records
+466,Which keyword declares a fixed binding in JavaScript?,const,let,var,,A,hard,Programming
+467,On which PlayStation did trophies first appear?,PS3,PSone,PSVR,,A,hard,Gaming Consoles
+468,Which garden defense game spawned a franchise in 2009?,Bloons TD,Plants vs Zombies,Kingdom Rush,,B,hard,Game Franchises
+469,Which computer famously predicted the 1952 election?,Whirlwind,UNIVAC I,ENIAC,,C,hard,Computer History
+470,Which giant bought Slack in 2021?,Salesforce,SAP,Workday,,A,hard,Tech Companies
+471,Which team won The International 2024?,Gaimin Gladiators,Falcons,Team Liquid,,C,hard,Esports and Records
+472,Which language pairs with Python in data science?,Scala,R,Julia,,B,hard,Programming
+473,Which cable let two Game Boys trade Pokemon?,Game Link Cable,GBA Link Cable,Parallel Port Cable,,A,hard,Gaming Consoles
+474,Which Muay Thai emperor bosses early Street Fighter?,M Bison,Sagat,Akuma,,B,hard,Game Franchises
+475,Which 90s disc held about 700 MB?,Floppy disk,Zip disc,CD-R,,C,hard,Computer History
+476,Who cofounded Tesla with Marc Tarpenning?,Martin Eberhard,Franz von Holzhausen,JB Straubel,,A,hard,Tech Companies
+477,With which lineup did device win four Majors?,NiP,Astralis,Vitality,,B,hard,Esports and Records
+478,Which operator glues strings in JavaScript?,Minus,Plus,Asterisk,,C,hard,Programming
+479,Which Xbox 360 card carried saves between consoles?,VMU,Controller Pak,Memory Unit,,C,hard,Gaming Consoles
 480,Which indie stars the skeleton Sans?,Undertale,Hollow Knight,Cuphead,,A,hard,Game Franchises
-481,In which year did Bluetooth 1.0 ship?,1994,2005,1999,,C,hard,Computer History
+481,In which year did Bluetooth 1.0 ship?,2005,1999,1994,,B,hard,Computer History
 482,Which company sells Quest headsets?,Pico,HTC,Meta,,C,hard,Tech Companies
 483,Which Smash pro floats with Jigglypuff?,Hungrybox,Mango,Zain,,A,hard,Esports and Records
-484,What major feature does TypeScript add to JavaScript?,Async await,Static types,Modules,,B,hard,Programming
-485,Which handheld spins UMD discs?,N-Gage,PS Vita,PSP,,C,hard,Gaming Consoles
-486,Who directed the first Resident Evil?,Shinji Mikami,Koji Oda,Jun Takeuchi,,A,hard,Game Franchises
-487,What codename did the US give its GPS constellation?,GLONASS,NAVSTAR,Galileo,,B,hard,Computer History
-488,Which chip giant does Jensen Huang lead?,Broadcom,Marvell,Nvidia,,C,hard,Tech Companies
-489,Which French org does ZywOo star for?,Vitality,Karmine Corp,Team BDS,,A,hard,Esports and Records
+484,What major feature does TypeScript add to JavaScript?,Modules,Async await,Static types,,C,hard,Programming
+485,Which handheld spins UMD discs?,PSP,PS Vita,N-Gage,,A,hard,Gaming Consoles
+486,Who directed the first Resident Evil?,Jun Takeuchi,Koji Oda,Shinji Mikami,,C,hard,Game Franchises
+487,What codename did the US give its GPS constellation?,Galileo,GLONASS,NAVSTAR,,C,hard,Computer History
+488,Which chip giant does Jensen Huang lead?,Nvidia,Marvell,Broadcom,,A,hard,Tech Companies
+489,Which French org does ZywOo star for?,Team BDS,Vitality,Karmine Corp,,B,hard,Esports and Records
 490,Which package manager ships with Node JS?,pip,npm,gem,,B,hard,Programming
-491,Which firm helped Sony build the Cell processor?,NEC,Motorola,IBM,,C,hard,Gaming Consoles
-492,Which studio made Celeste?,Extremely OK Games,Team Meat,Devolver Digital,,A,hard,Game Franchises
-493,In which year did the NES debut in New York City?,1985,1984,1986,,A,hard,Gaming Consoles
-494,Who is called the father of the PlayStation?,Akio Morita,Kaz Hirai,Ken Kutaragi,,C,hard,Gaming Consoles
+491,Which firm helped Sony build the Cell processor?,Motorola,NEC,IBM,,C,hard,Gaming Consoles
+492,Which studio made Celeste?,Devolver Digital,Team Meat,Extremely OK Games,,C,hard,Game Franchises
+493,In which year did the NES debut in New York City?,1984,1985,1986,,B,hard,Gaming Consoles
+494,Who is called the father of the PlayStation?,Kaz Hirai,Ken Kutaragi,Akio Morita,,B,hard,Gaming Consoles
 495,Which ELIZA script mimicked a therapist?,PARRY,DOCTOR,ALICE,,A,hard,Computer History
-496,Who led the team that created the Game Boy?,Gunpei Yokoi,Shigeru Miyamoto,Genyo Takeda,,B,hard,Gaming Consoles
-497,Who designed Pac-Man after seeing a pizza?,Tomohiro Nishikado,Masaya Nakamura,Toru Iwatani,,C,hard,Game Franchises
-498,Who cofounded Atari in 1972?,Nolan Bushnell,Al Alcorn,Ted Dabney,,A,hard,Tech Companies
-499,Which game did Will Wright ship before SimCity?,SimAnt,Raid on Bungeling Bay,SimCity 2000,,B,hard,Game Franchises
-500,Which language did John McCarthy create?,ALGOL,APL,LISP,,C,hard,Programming
-501,What did Berners-Lee name his first browser?,WorldWideWeb,Navigator,Mosaic,,A,hard,Computer History
-502,What trophy crowns The International winners?,Summoners Cup,Aegis of Champions,Battle Cup,,B,hard,Esports and Records
-503,Who negotiated Tetris onto the Game Boy?,Alexey Pajitnov,Minoru Arakawa,Henk Rogers,,C,hard,Game Franchises
-504,On which machine was Tetris born?,Electronika 60,Apple II,PDP-1,,A,hard,Computer History
-505,Which engineer led the Channel F cartridge system?,Steve Mayer,Jerry Lawson,Gene Amdahl,,B,hard,Gaming Consoles
-506,Which student project inspired Portal?,Tag The Power of Paint,Toblo,Narbacular Drop,,C,hard,Game Franchises
-507,What does the name Mojang mean in Swedish?,Gadget,Plaything,Workshop,,A,hard,Game Franchises
-508,Which webcomic did Toby Fox compose for?,Homestuck,Problem Sleuth,Sweet Bro and Hella Jeff,,B,hard,Game Franchises
-509,What was the Wii called while in development?,Project Cafe,Nitro,Revolution,,C,hard,Gaming Consoles
-510,Which aquatic codename hid the GameCube?,Dolphin,Tiger,Panther,,A,hard,Gaming Consoles
-511,Who is the PS4 and PS5 system architect?,Mark Cerny,Ken Kutaragi,David Reeves,,B,hard,Gaming Consoles
-512,Which Nvidia chip family powers the Switch?,Tegra K1,Tegra 2,Tegra X1,,C,hard,Gaming Consoles
+496,Who led the team that created the Game Boy?,Shigeru Miyamoto,Genyo Takeda,Gunpei Yokoi,,A,hard,Gaming Consoles
+497,Who designed Pac-Man after seeing a pizza?,Masaya Nakamura,Toru Iwatani,Tomohiro Nishikado,,B,hard,Game Franchises
+498,Who cofounded Atari in 1972?,Ted Dabney,Al Alcorn,Nolan Bushnell,,C,hard,Tech Companies
+499,Which game did Will Wright ship before SimCity?,Raid on Bungeling Bay,SimAnt,SimCity 2000,,A,hard,Game Franchises
+500,Which language did John McCarthy create?,ALGOL,LISP,APL,,B,hard,Programming
+501,What did Berners-Lee name his first browser?,Navigator,WorldWideWeb,Mosaic,,B,hard,Computer History
+502,What trophy crowns The International winners?,Summoners Cup,Battle Cup,Aegis of Champions,,C,hard,Esports and Records
+503,Who negotiated Tetris onto the Game Boy?,Henk Rogers,Minoru Arakawa,Alexey Pajitnov,,A,hard,Game Franchises
+504,On which machine was Tetris born?,Electronika 60,PDP-1,Apple II,,A,hard,Computer History
+505,Which engineer led the Channel F cartridge system?,Gene Amdahl,Jerry Lawson,Steve Mayer,,B,hard,Gaming Consoles
+506,Which student project inspired Portal?,Toblo,Tag The Power of Paint,Narbacular Drop,,C,hard,Game Franchises
+507,What does the name Mojang mean in Swedish?,Workshop,Gadget,Plaything,,B,hard,Game Franchises
+508,Which webcomic did Toby Fox compose for?,Homestuck,Sweet Bro and Hella Jeff,Problem Sleuth,,C,hard,Game Franchises
+509,What was the Wii called while in development?,Revolution,Project Cafe,Nitro,,A,hard,Gaming Consoles
+510,Which aquatic codename hid the GameCube?,Panther,Tiger,Dolphin,,C,hard,Gaming Consoles
+511,Who is the PS4 and PS5 system architect?,David Reeves,Mark Cerny,Ken Kutaragi,,C,hard,Gaming Consoles
+512,Which Nvidia chip family powers the Switch?,Tegra 2,Tegra X1,Tegra K1,,B,hard,Gaming Consoles
 513,Which optical trick gives the 3DS depth without glasses?,Parallax barrier,Lenticular lens,Shutter glasses,,A,hard,Gaming Consoles
-514,How many SH-2 CPUs sit inside the Sega Saturn?,One,Two,Four,,B,hard,Gaming Consoles
-515,Which duo designed TCP IP?,Tim Berners-Lee and Paul Mockapetris,Steve Wozniak and Mike Markkula,Vint Cerf and Bob Kahn,,C,hard,Computer History
-516,In which year did the first dot com domain go live?,1985,1991,1987,,A,hard,Computer History
+514,How many SH-2 CPUs sit inside the Sega Saturn?,Two,One,Four,,A,hard,Gaming Consoles
+515,Which duo designed TCP IP?,Tim Berners-Lee and Paul Mockapetris,Vint Cerf and Bob Kahn,Steve Wozniak and Mike Markkula,,B,hard,Computer History
+516,In which year did the first dot com domain go live?,1987,1991,1985,,C,hard,Computer History
 517,Which hacker convention meets yearly in Las Vegas?,SXSW,DEF CON,TED,,B,hard,Computer History
-518,Which tiny studio launched Among Us?,Mediatonic,Team17,Innersloth,,C,hard,Game Franchises
-519,Which Ryzen launch year revived AMD?,2017,2014,2019,,A,hard,Tech Companies
+518,Which tiny studio launched Among Us?,Innersloth,Mediatonic,Team17,,A,hard,Game Franchises
+519,Which Ryzen launch year revived AMD?,2014,2017,2019,,B,hard,Tech Companies
 520,Which engine powers Fortnite?,Source,Unreal Engine,Frostbite,,B,hard,Game Franchises
-521,Which acquisition for 7.5 billion dollars added Doom to Microsoft?,Mojang,Activision,ZeniMax,,C,hard,Tech Companies
-522,Which artist is credited with early Mario pixel designs?,Shigefumi Hino,Yoichi Kotabe,Takashi Tezuka,,A,hard,Game Franchises
-523,In which year did Google acquire Android Inc?,2003,2005,2008,,B,hard,Tech Companies
-524,Which messenger did AOL run in the 90s?,MSN Messenger,Yahoo Messenger,AIM,,C,hard,Computer History
-525,Which arcade cabinet ran on Ultra 64 hardware?,Killer Instinct,Cruis n USA,War Gods,,A,hard,Gaming Consoles
-526,Which GTA studio began life as DMA Design?,Rockstar San Diego,Rockstar North,Rockstar Leeds,,B,hard,Game Franchises
-527,Which 1997 Sega kart racer put Sonic behind the wheel?,Sonic Drift,Sonic All-Stars Racing,Sonic R,,C,hard,Game Franchises
-528,Which law estimates chip transistor growth?,Moores Law,Metcalfes Law,Conways Law,,A,hard,Computer History
-529,Which storefront dominates PC gaming sales?,GOG,Steam,Epic Games Store,,B,hard,Tech Companies
+521,Which acquisition for 7.5 billion dollars added Doom to Microsoft?,Activision,Mojang,ZeniMax,,C,hard,Tech Companies
+522,Which artist is credited with early Mario pixel designs?,Yoichi Kotabe,Takashi Tezuka,Shigefumi Hino,,C,hard,Game Franchises
+523,In which year did Google acquire Android Inc?,2005,2003,2008,,A,hard,Tech Companies
+524,Which messenger did AOL run in the 90s?,Yahoo Messenger,MSN Messenger,AIM,,C,hard,Computer History
+525,Which arcade cabinet ran on Ultra 64 hardware?,Cruis n USA,War Gods,Killer Instinct,,C,hard,Gaming Consoles
+526,Which GTA studio began life as DMA Design?,Rockstar North,Rockstar Leeds,Rockstar San Diego,,A,hard,Game Franchises
+527,Which 1997 Sega kart racer put Sonic behind the wheel?,Sonic Drift,Sonic R,Sonic All-Stars Racing,,B,hard,Game Franchises
+528,Which law estimates chip transistor growth?,Conways Law,Moores Law,Metcalfes Law,,B,hard,Computer History
+529,Which storefront dominates PC gaming sales?,Epic Games Store,Steam,GOG,,B,hard,Tech Companies
 530,Which thatgamecompany hit crosses a desert?,Abzu,Flower,Journey,,C,hard,Game Franchises
-531,Which Zelda shocked fans with cel shaded seas?,The Wind Waker,Ocarina of Time,Majoras Mask,,A,hard,Game Franchises
-532,Which connector carried PC video before DVI?,VGA,SCART,S-Video,,B,hard,Computer History
-533,Which shortcut force quits apps on a Mac?,Shift Escape,Control Alt Delete,Command Option Escape,,C,hard,Computer History
-534,Which EA studio built Dead Space?,BioWare,Visceral Games,Criterion,,A,hard,Game Franchises
-535,Which language did Alan Kay pioneer at Xerox PARC?,Scheme,Smalltalk,Forth,,B,hard,Programming
-536,Which Mattel console dueled the Atari 2600?,Vectrex,ColecoVision,Intellivision,,C,hard,Gaming Consoles
-537,Which 1978 hit supposedly drained Japan of coins?,Space Invaders,Pac-Man,Galaxian,,A,hard,Game Franchises
+531,Which Zelda shocked fans with cel shaded seas?,Majoras Mask,The Wind Waker,Ocarina of Time,,B,hard,Game Franchises
+532,Which connector carried PC video before DVI?,SCART,VGA,S-Video,,A,hard,Computer History
+533,Which shortcut force quits apps on a Mac?,Control Alt Delete,Command Option Escape,Shift Escape,,B,hard,Computer History
+534,Which EA studio built Dead Space?,BioWare,Criterion,Visceral Games,,A,hard,Game Franchises
+535,Which language did Alan Kay pioneer at Xerox PARC?,Smalltalk,Scheme,Forth,,A,hard,Programming
+536,Which Mattel console dueled the Atari 2600?,ColecoVision,Intellivision,Vectrex,,B,hard,Gaming Consoles
+537,Which 1978 hit supposedly drained Japan of coins?,Galaxian,Pac-Man,Space Invaders,,C,hard,Game Franchises
 538,Who scored the original DOOM?,Darren Korb,Bobby Prince,Alec Holowka,,B,hard,Game Franchises
-539,Which computer outplayed Kasparov in 1997?,Watson,Deep Thought,Deep Blue,,C,hard,Computer History
+539,Which computer outplayed Kasparov in 1997?,Deep Thought,Watson,Deep Blue,,C,hard,Computer History
 540,Which digital card game did Blizzard deal in 2014?,Hearthstone,Artifact,Shadowverse,,A,hard,Game Franchises
-541,Which firm pushed the 3.5 inch floppy disk?,Maxell,Sony,Verbatim,,B,hard,Computer History
+541,Which firm pushed the 3.5 inch floppy disk?,Sony,Verbatim,Maxell,,A,hard,Computer History
 542,Which Zelda locked on with Z targeting?,Oracle of Seasons,A Link to the Past,Ocarina of Time,,C,hard,Game Franchises
-543,Which purchase welcomed Steve Jobs home in 1997?,NeXT,Be Inc,Cisco,,A,hard,Tech Companies
-544,Which Riot shooter debuted in 2020?,Apex Legends,Valorant,Overwatch 2,,B,hard,Esports and Records
-545,Which rendering leap defined Quake?,Mode 7,Sprite scaling,True 3D polygons,,C,hard,Game Franchises
-546,Which Dutch firm hosted the infamous Zelda CD games?,Philips,Sanyo,GoldStar,,A,hard,Gaming Consoles
-547,Which team lifted Valorant Champions 2021?,Gambit Esports,Acend,G2 Esports,,B,hard,Esports and Records
+543,Which purchase welcomed Steve Jobs home in 1997?,Cisco,NeXT,Be Inc,,B,hard,Tech Companies
+544,Which Riot shooter debuted in 2020?,Valorant,Apex Legends,Overwatch 2,,A,hard,Esports and Records
+545,Which rendering leap defined Quake?,True 3D polygons,Sprite scaling,Mode 7,,A,hard,Game Franchises
+546,Which Dutch firm hosted the infamous Zelda CD games?,GoldStar,Philips,Sanyo,,B,hard,Gaming Consoles
+547,Which team lifted Valorant Champions 2021?,Acend,Gambit Esports,G2 Esports,,A,hard,Esports and Records
 548,Which console did NEC launch in America in 1989?,Amiga CD32,Atari Lynx,TurboGrafx-16,,C,hard,Gaming Consoles
-549,Which handheld did Sony ship first?,PSP,Xperia Play,Sony Mylo,,A,hard,Gaming Consoles
-550,Which studio built the debut Gears of War engine?,Gearbox,Epic Games,Id Software,,B,hard,Tech Companies
-551,Which saga stars Commander Shepard?,Star Wars The Old Republic,Dragon Age,Mass Effect,,C,hard,Game Franchises
-552,In which year was E3 officially retired?,2021,2023,2012,,B,hard,Esports and Records
-553,Which gacha world did miHoYo open globally in 2020?,Honkai Impact 3rd,Genshin Impact,Punishing Gray Raven,,B,hard,Game Franchises
-554,Which in house engine drives Halo Infinite?,Unreal Engine 5,Anvil,Slipspace,,C,hard,Game Franchises
-555,Which shooter family birthed Apex Legends?,Titanfall,Battlefield,Call of Duty,,A,hard,Game Franchises
-556,Which output does DLSS primarily upscale?,Frame pacing,Resolution,Texture filtering,,B,hard,Tech Companies
-557,Which 1997 Bond shooter came from Rare?,Tomorrow Never Dies,The World Is Not Enough,GoldenEye 007,,C,hard,Game Franchises
-558,Which casino platform funds Kick?,Stake.com,FanDuel,DraftKings,,A,hard,Tech Companies
-559,In which year did Sega leave the console business?,2001,2000,2002,,A,hard,Gaming Consoles
-560,Whose Fortnite concert drew over 12 million players in 2020?,Ariana Grande,Marshmello,Travis Scott,,C,hard,Esports and Records
-561,Which Danish studio made Limbo and Inside?,Playdead,KnapNok Games,IO Interactive,,A,hard,Game Franchises
-562,Which AI conquered six player no limit hold em?,DeepStack,Pluribus,Libratus,,B,hard,Computer History
+549,Which handheld did Sony ship first?,PSP,Sony Mylo,Xperia Play,,A,hard,Gaming Consoles
+550,Which studio built the debut Gears of War engine?,Id Software,Gearbox,Epic Games,,C,hard,Tech Companies
+551,Which saga stars Commander Shepard?,Mass Effect,Dragon Age,Star Wars The Old Republic,,A,hard,Game Franchises
+552,In which year was E3 officially retired?,2012,2023,2021,,B,hard,Esports and Records
+553,Which gacha world did miHoYo open globally in 2020?,Punishing Gray Raven,Genshin Impact,Honkai Impact 3rd,,B,hard,Game Franchises
+554,Which in house engine drives Halo Infinite?,Slipspace,Anvil,Unreal Engine 5,,A,hard,Game Franchises
+555,Which shooter family birthed Apex Legends?,Call of Duty,Titanfall,Battlefield,,B,hard,Game Franchises
+556,Which output does DLSS primarily upscale?,Resolution,Texture filtering,Frame pacing,,A,hard,Tech Companies
+557,Which 1997 Bond shooter came from Rare?,Tomorrow Never Dies,GoldenEye 007,The World Is Not Enough,,B,hard,Game Franchises
+558,Which casino platform funds Kick?,DraftKings,FanDuel,Stake.com,,C,hard,Tech Companies
+559,In which year did Sega leave the console business?,2002,2001,2000,,B,hard,Gaming Consoles
+560,Whose Fortnite concert drew over 12 million players in 2020?,Marshmello,Ariana Grande,Travis Scott,,C,hard,Esports and Records
+561,Which Danish studio made Limbo and Inside?,IO Interactive,KnapNok Games,Playdead,,C,hard,Game Franchises
+562,Which AI conquered six player no limit hold em?,Pluribus,DeepStack,Libratus,,A,hard,Computer History
 563,Which console pairs with the Sega CD add on?,Nomad,Saturn,Genesis,,C,hard,Gaming Consoles
-564,Which US agency fined Epic 275 million dollars?,FTC,SEC,FCC,,A,hard,Tech Companies
-565,Which saga unfolds across Tamriel?,Final Fantasy,Elder Scrolls,Mass Effect,,B,hard,Game Franchises
-566,Which 1999 handheld did Bandai ship?,Watara Supervision,GP32,WonderSwan,,C,hard,Gaming Consoles
-567,Who partnered with Pajitnov to found The Tetris Company?,Satoru Iwata,Henk Rogers,Hiroshi Yamauchi,,A,hard,Game Franchises
-568,Which Apple silicon debuted in 2020?,M2,M1,A14,,B,hard,Tech Companies
+564,Which US agency fined Epic 275 million dollars?,SEC,FTC,FCC,,B,hard,Tech Companies
+565,Which saga unfolds across Tamriel?,Elder Scrolls,Final Fantasy,Mass Effect,,A,hard,Game Franchises
+566,Which 1999 handheld did Bandai ship?,GP32,Watara Supervision,WonderSwan,,C,hard,Gaming Consoles
+567,Who partnered with Pajitnov to found The Tetris Company?,Satoru Iwata,Hiroshi Yamauchi,Henk Rogers,,A,hard,Game Franchises
+568,Which Apple silicon debuted in 2020?,M1,A14,M2,,A,hard,Tech Companies
 569,What currency does Roblox spend?,V-Bucks,Minecoins,Robux,,C,hard,Game Franchises
 570,Which year did OpenAI reveal GPT-4?,2020,2022,2023,,C,hard,Computer History
 571,Which attorney inspired a pink puffballs name?,Louis Nizer,John Kirby,Jack Valenti,,B,hard,Game Franchises
-572,Who founded 100 Thieves?,CouRage,H3CZ,Nadeshot,,C,hard,Esports and Records
-573,Which speedrun type is assembled frame by frame in advance?,Tool assisted,Any percent,Real time attack,,A,hard,Esports and Records
-574,Which firm maintains MATLAB?,Maplesoft,MathWorks,Wolfram,,B,hard,Programming
-575,Which Rare racer starred a Kong?,Jet Moto,Mario Kart 64,Diddy Kong Racing,,C,hard,Game Franchises
-576,Which year rebooted DOOM under id?,2016,2015,2018,,A,hard,Game Franchises
-577,Which firm licensed the DS twin processors?,MIPS,ARM Holdings,RISC V Foundation,,B,hard,Computer History
-578,Which Apex legend rolls as a robot?,Octane,Wraith,Pathfinder,,C,hard,Game Franchises
+572,Who founded 100 Thieves?,Nadeshot,H3CZ,CouRage,,A,hard,Esports and Records
+573,Which speedrun type is assembled frame by frame in advance?,Real time attack,Any percent,Tool assisted,,C,hard,Esports and Records
+574,Which firm maintains MATLAB?,MathWorks,Maplesoft,Wolfram,,A,hard,Programming
+575,Which Rare racer starred a Kong?,Mario Kart 64,Diddy Kong Racing,Jet Moto,,B,hard,Game Franchises
+576,Which year rebooted DOOM under id?,2015,2018,2016,,C,hard,Game Franchises
+577,Which firm licensed the DS twin processors?,RISC V Foundation,ARM Holdings,MIPS,,B,hard,Computer History
+578,Which Apex legend rolls as a robot?,Octane,Pathfinder,Wraith,,B,hard,Game Franchises
 579,Which maker runs Republic of Gamers?,ASUS,MSI,Acer,,A,hard,Tech Companies
-580,Which console rendered pure vector graphics?,CreatiVision,Vectrex,Bally Astrocade,,B,hard,Gaming Consoles
-581,Which level halted classic NES Tetris runs for decades?,Level 99,Level 157,Level 29,,C,hard,Esports and Records
-582,Which mobile giant bought NaturalMotion?,Zynga,Playtika,Glu Mobile,,A,hard,Tech Companies
-583,Which launch price greeted the Dreamcast in America?,249,199,299,,B,hard,Gaming Consoles
-584,Who led design of Black and White at Lionhead?,Tim Schafer,Mark Webley,Peter Molyneux,,C,hard,Game Franchises
-585,Which canine laughs at missed ducks on NES?,Duck Hunt,Wild Gunman,Hogan's Alley,,A,hard,Game Franchises
+580,Which console rendered pure vector graphics?,Vectrex,CreatiVision,Bally Astrocade,,A,hard,Gaming Consoles
+581,Which level halted classic NES Tetris runs for decades?,Level 157,Level 29,Level 99,,B,hard,Esports and Records
+582,Which mobile giant bought NaturalMotion?,Glu Mobile,Zynga,Playtika,,B,hard,Tech Companies
+583,Which launch price greeted the Dreamcast in America?,199,249,299,,A,hard,Gaming Consoles
+584,Who led design of Black and White at Lionhead?,Peter Molyneux,Tim Schafer,Mark Webley,,A,hard,Game Franchises
+585,Which canine laughs at missed ducks on NES?,Wild Gunman,Hogan's Alley,Duck Hunt,,C,hard,Game Franchises
 586,Which web standard carries Discord voice?,RTP,WebRTC,SIP,,B,hard,Computer History
-587,In which year did Steam Machines ship?,2013,2017,2015,,C,hard,Gaming Consoles
-588,Which studio delivered L.A. Noire?,Team Bondi,Sony Santa Monica,Remedy,,A,hard,Game Franchises
-589,Which nation capped minor gaming at three hours weekly?,South Korea,China,Japan,,B,hard,Esports and Records
-590,Which console ran the PowerPC Gekko chip?,Game Boy,Color TV Game,GameCube,,C,hard,Gaming Consoles
-591,Which emulator settled with Nintendo in March 2024?,Yuzu,Citra,Ryujinx,,A,hard,Gaming Consoles
+587,In which year did Steam Machines ship?,2017,2015,2013,,B,hard,Gaming Consoles
+588,Which studio delivered L.A. Noire?,Remedy,Team Bondi,Sony Santa Monica,,B,hard,Game Franchises
+589,Which nation capped minor gaming at three hours weekly?,China,South Korea,Japan,,A,hard,Esports and Records
+590,Which console ran the PowerPC Gekko chip?,Color TV Game,GameCube,Game Boy,,B,hard,Gaming Consoles
+591,Which emulator settled with Nintendo in March 2024?,Citra,Yuzu,Ryujinx,,B,hard,Gaming Consoles
 592,Which firm revealed the Dynamic Island?,Xiaomi,Apple,Samsung,,B,hard,Tech Companies
-593,Which N64 add on powered Majoras Mask?,Expansion Pak,Voice Recognition Unit,64DD,Memory Card,A,expert,Gaming Consoles
-594,Which Sega handheld devoured six AA batteries?,Microvision,Game Gear,TurboExpress,Game Boy Light,B,expert,Gaming Consoles
-595,Which SNES technology spun the F-Zero tracks?,Super FX,SA-1,Mode 7,CX4,C,expert,Gaming Consoles
-596,Which company built the flagship 3DO machine?,Amstrad,Bandai,Fujitsu,Panasonic,D,expert,Gaming Consoles
-597,Which console offered the 3D Imager add on?,Vectrex,Arcadia 2001,RCA Studio II,Mattel Aquarius,A,expert,Gaming Consoles
-598,Which system put SNK arcade boards in living rooms?,CPS Changer,SuperGun,Neo Geo,ST-V,B,expert,Computer History
-599,Who created the Dreamcast VMU memory screen?,Victor,Hitachi,Sega,Toshiba,C,expert,Gaming Consoles
+593,Which N64 add on powered Majoras Mask?,Expansion Pak,Memory Card,64DD,Voice Recognition Unit,A,expert,Gaming Consoles
+594,Which Sega handheld devoured six AA batteries?,Game Gear,Game Boy Light,TurboExpress,Microvision,A,expert,Gaming Consoles
+595,Which SNES technology spun the F-Zero tracks?,SA-1,Mode 7,Super FX,CX4,B,expert,Gaming Consoles
+596,Which company built the flagship 3DO machine?,Panasonic,Bandai,Amstrad,Fujitsu,A,expert,Gaming Consoles
+597,Which console offered the 3D Imager add on?,Arcadia 2001,Vectrex,Mattel Aquarius,RCA Studio II,B,expert,Gaming Consoles
+598,Which system put SNK arcade boards in living rooms?,CPS Changer,ST-V,Neo Geo,SuperGun,D,expert,Computer History
+599,Who created the Dreamcast VMU memory screen?,Hitachi,Toshiba,Sega,Victor,C,expert,Gaming Consoles
 600,Which compact PS1 hit shelves in 2000?,Net Yaroze,PocketStation,PSX,PS one,D,expert,Gaming Consoles
-601,Which cable joined GameCube to Game Boy Advance?,GameCube Game Boy Advance Cable,GameShark,Action Replay,iQue Player,A,expert,Gaming Consoles
-602,Which PSP variant abandoned discs entirely?,PSP 1000,PSP Go,PSP 2000,PSP 3000,B,expert,Gaming Consoles
-603,Which Xbox 360 line dressed in black with 120 GB?,Xbox 360 Pro,Xbox 360 Core,Xbox 360 Elite,Xbox 360 Arcade,C,expert,Gaming Consoles
-604,In which year did the Wii U arrive?,2011,2009,2012,2010,C,expert,Gaming Consoles
-605,Which console trims the Switch to handheld only?,Nintendo Switch Lite,Switch 2,Wii mini,Switch OLED,A,expert,Gaming Consoles
-606,Which publisher adopted Double Fine in 2019?,Embracer,Xbox Game Studios,THQ Nordic,Gearbox Publishing,B,expert,Tech Companies
-607,Which tiny team promised quintillions of planets in No Mans Sky?,Roll7,Ludeon,Hello Games,Boss Key,C,expert,Game Franchises
-608,Which FromSoftware debut did Sony publish?,Dark Souls,Nioh,Bloodborne,Demon's Souls,D,expert,Game Franchises
-609,Which composer scored Halo then left Bungie in 2007?,Martin O'Donnell,Michael Salvatori,Kazuma Jinnouchi,Neil Davidge,A,expert,Game Franchises
-610,Which Minecraft edition plays across phones and consoles?,Java Edition,Bedrock Edition,Legacy Console,Education Edition,B,expert,Programming
-611,Who built Undertale mostly alone?,Temmie Chang,Lena Raine,Toby Fox,Laura Shigihara,C,expert,Game Franchises
-612,Which purple dragon launched on the PS1?,Gex,Ty the Tasmanian Tiger,Blinx,Spyro,D,expert,Game Franchises
-613,Who created Prince of Persia through rotoscoping?,David Perry,Jordan Mechner,Eric Chahi,Chris Sawyer,A,expert,Game Franchises
-614,Which company published King's Quest?,Lucasfilm Games,Sierra On-Line,Infocom,Broderbund,B,expert,Game Franchises
-615,Who designed Centipede alongside Dona Bailey?,David Crane,Toru Iwatani,Ed Logg,Rob Fulop,C,expert,Game Franchises
-616,Which studio built Wolfenstein 3D and Doom?,Apogee,Looking Glass Studios,Raven Software,id Software,D,expert,Game Franchises
-617,Who joined Yasunori Mitsuda on the Chrono Trigger score?,Yuzo Koshiro,Kenji Ito,Koji Kondo,Hitoshi Sakimoto,A,expert,Game Franchises
-618,Which arcade board ran Street Fighter II?,CPS-3,System 16,CPS-1,Neo Geo MVS,B,expert,Game Franchises
-619,Which family studio made Streets of Rage 2?,Overworks,Ancient,Team Andromeda,Sega AM2,C,expert,Game Franchises
-620,Which Konami series birthed the Bemani rhythm brand?,Dance Dance Revolution,Guitar Freaks,Pop n Music,Beatmania,D,expert,Game Franchises
-621,Which artist painted the classic Final Fantasy logos?,Kazushige Nojima,Tetsuya Nomura,Yoshitaka Amano,Akihiko Yoshida,A,expert,Game Franchises
-622,Who directed Sega's Virtua Fighter?,Toshihiro Nagoshi,Yu Suzuki,Hideki Sato,Rieko Kodama,B,expert,Game Franchises
+601,Which cable joined GameCube to Game Boy Advance?,iQue Player,GameShark,Action Replay,GameCube Game Boy Advance Cable,D,expert,Gaming Consoles
+602,Which PSP variant abandoned discs entirely?,PSP Go,PSP 1000,PSP 2000,PSP 3000,A,expert,Gaming Consoles
+603,Which Xbox 360 line dressed in black with 120 GB?,Xbox 360 Arcade,Xbox 360 Pro,Xbox 360 Core,Xbox 360 Elite,D,expert,Gaming Consoles
+604,In which year did the Wii U arrive?,2009,2012,2010,2011,B,expert,Gaming Consoles
+605,Which console trims the Switch to handheld only?,Wii mini,Switch 2,Nintendo Switch Lite,Switch OLED,C,expert,Gaming Consoles
+606,Which publisher adopted Double Fine in 2019?,Gearbox Publishing,THQ Nordic,Xbox Game Studios,Embracer,C,expert,Tech Companies
+607,Which tiny team promised quintillions of planets in No Mans Sky?,Hello Games,Ludeon,Boss Key,Roll7,A,expert,Game Franchises
+608,Which FromSoftware debut did Sony publish?,Demon's Souls,Dark Souls,Bloodborne,Nioh,A,expert,Game Franchises
+609,Which composer scored Halo then left Bungie in 2007?,Neil Davidge,Michael Salvatori,Martin O'Donnell,Kazuma Jinnouchi,C,expert,Game Franchises
+610,Which Minecraft edition plays across phones and consoles?,Legacy Console,Bedrock Edition,Java Edition,Education Edition,B,expert,Programming
+611,Who built Undertale mostly alone?,Laura Shigihara,Temmie Chang,Lena Raine,Toby Fox,D,expert,Game Franchises
+612,Which purple dragon launched on the PS1?,Gex,Spyro,Blinx,Ty the Tasmanian Tiger,B,expert,Game Franchises
+613,Who created Prince of Persia through rotoscoping?,Jordan Mechner,Eric Chahi,Chris Sawyer,David Perry,D,expert,Game Franchises
+614,Which company published King's Quest?,Sierra On-Line,Lucasfilm Games,Infocom,Broderbund,A,expert,Game Franchises
+615,Who designed Centipede alongside Dona Bailey?,David Crane,Ed Logg,Toru Iwatani,Rob Fulop,B,expert,Game Franchises
+616,Which studio built Wolfenstein 3D and Doom?,Raven Software,Looking Glass Studios,id Software,Apogee,C,expert,Game Franchises
+617,Who joined Yasunori Mitsuda on the Chrono Trigger score?,Koji Kondo,Yuzo Koshiro,Kenji Ito,Hitoshi Sakimoto,B,expert,Game Franchises
+618,Which arcade board ran Street Fighter II?,CPS-3,CPS-1,System 16,Neo Geo MVS,C,expert,Game Franchises
+619,Which family studio made Streets of Rage 2?,Team Andromeda,Sega AM2,Overworks,Ancient,A,expert,Game Franchises
+620,Which Konami series birthed the Bemani rhythm brand?,Guitar Freaks,Dance Dance Revolution,Pop n Music,Beatmania,D,expert,Game Franchises
+621,Which artist painted the classic Final Fantasy logos?,Tetsuya Nomura,Akihiko Yoshida,Kazushige Nojima,Yoshitaka Amano,C,expert,Game Franchises
+622,Who directed Sega's Virtua Fighter?,Toshihiro Nagoshi,Yu Suzuki,Rieko Kodama,Hideki Sato,B,expert,Game Franchises
 623,Which handheld debuted Kirby in 1992?,Gamate,Game and Watch,Game Boy,Pokemon Mini,C,expert,Gaming Consoles
-624,Which company co-developed Smash Ultimate with Sora Ltd?,Tose,Koei Tecmo,Artdink,Bandai Namco,D,expert,Game Franchises
-625,Which Texas studio built Metroid Prime?,Naughty Dog,Border House,Irrational Games,Retro Studios,A,expert,Game Franchises
-626,Which publisher owns The Elder Scrolls?,Bethesda Softworks,Take Two,Square Enix,Deep Silver,B,expert,Game Franchises
+624,Which company co-developed Smash Ultimate with Sora Ltd?,Koei Tecmo,Tose,Artdink,Bandai Namco,D,expert,Game Franchises
+625,Which Texas studio built Metroid Prime?,Naughty Dog,Irrational Games,Retro Studios,Border House,A,expert,Game Franchises
+626,Which publisher owns The Elder Scrolls?,Square Enix,Bethesda Softworks,Take Two,Deep Silver,C,expert,Game Franchises
 627,Which scripting language mods Skyrim?,Papyrus,AngelScript,Squirrel,Lua,C,expert,Programming
 628,Which holding company bought id Software in 2009?,Interplay,Vivendi,THQ,ZeniMax Media,D,expert,Tech Companies
-629,Which Raven shooter built on Heretic?,Chasm,Heretic II,Shadowcaster,Hexen,A,expert,Game Franchises
-630,Which Wisconsin studio made Heretic and Hexen?,Shiny Entertainment,Neversoft,Gray Matter Interactive,Ritual Entertainment,B,expert,Game Franchises
-631,Which 2014 Wolfenstein reboot reimagined BJ?,Return to Castle Wolfenstein,Wolfenstein The New Order,Wolfenstein 2009,Wolfenstein Youngblood,C,expert,Game Franchises
-632,Which studio co-developed Left 4 Dead with Valve?,Triptych Games,Certain Affinity,Mechanist Games,Turtle Rock Studios,D,expert,Game Franchises
-633,Who designed Civilization II at MicroProse?,Brian Reynolds,Bruce Shelley,Soren Johnson,Jeff Briggs,A,expert,Game Franchises
-634,Which studio made Alpha Centauri?,MicroProse,Firaxis Games,Mythos Games,Legend Entertainment,B,expert,Game Franchises
-635,Which Meier game sails the seventeenth century Caribbean?,Colonization,Fantasy General,Pirates,Civilization II,C,expert,Game Franchises
-636,Who composed the Grammy winning Baba Yetu?,Michael McCann,Jeremy Soule,Inon Zur,Christopher Tin,D,expert,Game Franchises
-637,Which studio did the Civ team spin away from?,MicroProse,Hasbro,Infogrames,Origin,A,expert,Tech Companies
-638,Which publisher owns the XCOM brand today?,Focus Home Interactive,2K Games,Focus Entertainment,Nordic Games,B,expert,Tech Companies
-639,Which lone coder designed RollerCoaster Tycoon?,Jon Hare,David Braben,Chris Sawyer,Chris Crawford,C,expert,Game Franchises
-640,Which transport sim did Sawyer code before coasters?,Locomotion,Shipping Tycoon,Railroad Tycoon,Transport Tycoon,D,expert,Game Franchises
-641,Which publisher ships The Sims?,EA,Electronic Arts,NCSoft,Bandai Namco,A,expert,Game Franchises
+629,Which Raven shooter built on Heretic?,Shadowcaster,Heretic II,Chasm,Hexen,C,expert,Game Franchises
+630,Which Wisconsin studio made Heretic and Hexen?,Neversoft,Gray Matter Interactive,Shiny Entertainment,Ritual Entertainment,A,expert,Game Franchises
+631,Which 2014 Wolfenstein reboot reimagined BJ?,Wolfenstein The New Order,Wolfenstein 2009,Return to Castle Wolfenstein,Wolfenstein Youngblood,B,expert,Game Franchises
+632,Which studio co-developed Left 4 Dead with Valve?,Triptych Games,Mechanist Games,Turtle Rock Studios,Certain Affinity,C,expert,Game Franchises
+633,Who designed Civilization II at MicroProse?,Brian Reynolds,Jeff Briggs,Soren Johnson,Bruce Shelley,A,expert,Game Franchises
+634,Which studio made Alpha Centauri?,MicroProse,Legend Entertainment,Mythos Games,Firaxis Games,D,expert,Game Franchises
+635,Which Meier game sails the seventeenth century Caribbean?,Civilization II,Fantasy General,Colonization,Pirates,D,expert,Game Franchises
+636,Who composed the Grammy winning Baba Yetu?,Jeremy Soule,Christopher Tin,Michael McCann,Inon Zur,B,expert,Game Franchises
+637,Which studio did the Civ team spin away from?,MicroProse,Origin,Infogrames,Hasbro,A,expert,Tech Companies
+638,Which publisher owns the XCOM brand today?,Nordic Games,Focus Home Interactive,2K Games,Focus Entertainment,C,expert,Tech Companies
+639,Which lone coder designed RollerCoaster Tycoon?,Chris Crawford,Chris Sawyer,Jon Hare,David Braben,B,expert,Game Franchises
+640,Which transport sim did Sawyer code before coasters?,Transport Tycoon,Shipping Tycoon,Locomotion,Railroad Tycoon,A,expert,Game Franchises
+641,Which publisher ships The Sims?,EA,Bandai Namco,NCSoft,Electronic Arts,A,expert,Game Franchises
 642,Which Wright hit launched in 2000?,Spore,The Sims,SimCity Societies,The Sims Online,B,expert,Game Franchises
-643,Who cofounded Maxis with Will Wright?,Robin Hunicke,Lucy Bradshaw,Jeff Braun,Rod Humble,C,expert,Tech Companies
+643,Who cofounded Maxis with Will Wright?,Jeff Braun,Lucy Bradshaw,Rod Humble,Robin Hunicke,A,expert,Tech Companies
 644,Which giant absorbed Maxis in 1997?,Viacom,Cendant,Mattel Interactive,EA,D,expert,Tech Companies
-645,Which Swedish publisher ships Cities Skylines?,Paradox Interactive,Avalanche Studios,Starbreeze,Coffee Stain,A,expert,Tech Companies
-646,Which Finnish studio developed Cities Skylines?,Next Games,Colossal Order,Housemarque,Supercell,B,expert,Tech Companies
-647,Which Paradox saga chronicles medieval dynasties?,Europa Universalis,Hearts of Iron,Crusader Kings,Victoria,C,expert,Game Franchises
-648,Which Paradox 4X reaches for the stars?,Endless Space,Age of Wonders,Sword of the Stars,Stellaris,D,expert,Game Franchises
-649,Which grand strategy saga launched in the year 2000?,Europa Universalis,March of Eagles,Imperator,Crusader Kings,A,expert,Game Franchises
-650,Which Hearts of Iron number shipped in 2016?,Hearts of Iron III,Hearts of Iron IV,Hearts of Iron II,Darkest Hour,B,expert,Game Franchises
-651,Which Victorian sim did Paradox revive in 2022?,Victoria II,Anno 1800,Victoria 3,Imperialism,C,expert,Game Franchises
+645,Which Swedish publisher ships Cities Skylines?,Starbreeze,Paradox Interactive,Avalanche Studios,Coffee Stain,B,expert,Tech Companies
+646,Which Finnish studio developed Cities Skylines?,Next Games,Colossal Order,Supercell,Housemarque,B,expert,Tech Companies
+647,Which Paradox saga chronicles medieval dynasties?,Hearts of Iron,Victoria,Europa Universalis,Crusader Kings,D,expert,Game Franchises
+648,Which Paradox 4X reaches for the stars?,Endless Space,Sword of the Stars,Stellaris,Age of Wonders,C,expert,Game Franchises
+649,Which grand strategy saga launched in the year 2000?,March of Eagles,Crusader Kings,Europa Universalis,Imperator,C,expert,Game Franchises
+650,Which Hearts of Iron number shipped in 2016?,Hearts of Iron IV,Hearts of Iron III,Hearts of Iron II,Darkest Hour,A,expert,Game Franchises
+651,Which Victorian sim did Paradox revive in 2022?,Victoria II,Imperialism,Victoria 3,Anno 1800,C,expert,Game Franchises
 652,Which Stockholm studio crafted Victoria 3?,Paradox Arctic,Tantalus Media,Colossal Order,Paradox Development Studio,D,expert,Game Franchises
-653,Which Namco fighter launched the iron tournament?,Tekken,Soulcalibur,Bloody Roar,Virtua Fighter,A,expert,Esports and Records
-654,Which Namco classic timed laps and flags?,Rally X,Pole Position,Ridge Racer,Burnout,B,expert,Computer History
-655,Which Namco hero pumps monsters till they pop?,Gaplus,Dig Dug,Mr Driller,Motos,C,expert,Computer History
-656,Which Namco series takes jet combat to the skies?,Sky Kid,Air Combat 22,Rail Force,Ace Combat,D,expert,Game Franchises
-657,Which Namco duelist wields Soul Edge?,Soulcalibur,Battle Arena Toshinden,Kakuto Chojin,BloodStorm,A,expert,Esports and Records
-658,Which Mishima patriarch threw his son into a ravine?,Kazuya,Heihachi,Jin,Lars,B,expert,Game Franchises
-659,Which bear brawls in the Tekken ring?,Roger,Panda,Kuma,Umi,C,expert,Game Franchises
-660,Which Tekken fighter carries the Devil Gene?,Ling Xiaoyu,Paul Phoenix,King,Jin Kazama,D,expert,Game Franchises
-661,Which 2024 fighter continued the Mishima saga?,Tekken 8,Tekken 7,Tekken Tag Tournament 2,Tekken 6,A,expert,Esports and Records
+653,Which Namco fighter launched the iron tournament?,Virtua Fighter,Tekken,Soulcalibur,Bloody Roar,B,expert,Esports and Records
+654,Which Namco classic timed laps and flags?,Ridge Racer,Rally X,Pole Position,Burnout,C,expert,Computer History
+655,Which Namco hero pumps monsters till they pop?,Mr Driller,Dig Dug,Motos,Gaplus,A,expert,Computer History
+656,Which Namco series takes jet combat to the skies?,Air Combat 22,Ace Combat,Rail Force,Sky Kid,B,expert,Game Franchises
+657,Which Namco duelist wields Soul Edge?,Battle Arena Toshinden,BloodStorm,Kakuto Chojin,Soulcalibur,D,expert,Esports and Records
+658,Which Mishima patriarch threw his son into a ravine?,Lars,Jin,Kazuya,Heihachi,D,expert,Game Franchises
+659,Which bear brawls in the Tekken ring?,Roger,Kuma,Panda,Umi,B,expert,Game Franchises
+660,Which Tekken fighter carries the Devil Gene?,Paul Phoenix,King,Ling Xiaoyu,Jin Kazama,D,expert,Game Franchises
+661,Which 2024 fighter continued the Mishima saga?,Tekken Tag Tournament 2,Tekken 7,Tekken 8,Tekken 6,C,expert,Esports and Records
 662,In which year did the first Street Fighter arcade appear?,1988,1987,1990,1989,B,expert,Computer History
-663,Which SNK saga gathers fighters each summer?,Garou Mark of the Wolves,World Heroes,The King of Fighters,Samurai Shodown,C,expert,Esports and Records
-664,Which KOF chapter closed the Orochi saga?,King of Fighters 2001,King of Fighters 95,King of Fighters XIII,King of Fighters 97,D,expert,Game Franchises
-665,Which SNK kunoichi fans the flames?,Mai Shiranui,Yuri Sakazaki,Kim Kaphwan,Kasumi,A,expert,Game Franchises
+663,Which SNK saga gathers fighters each summer?,The King of Fighters,Samurai Shodown,World Heroes,Garou Mark of the Wolves,A,expert,Esports and Records
+664,Which KOF chapter closed the Orochi saga?,King of Fighters 95,King of Fighters 2001,King of Fighters 97,King of Fighters XIII,C,expert,Game Franchises
+665,Which SNK kunoichi fans the flames?,Kasumi,Yuri Sakazaki,Mai Shiranui,Kim Kaphwan,C,expert,Game Franchises
 666,Which SNK wolf throws the Burn Knuckle?,Andy Bogard,Terry Bogard,Joe Higashi,Ryo Sakazaki,B,expert,Game Franchises
-667,Which Capcom brawler sets heroes in high school?,Project Justice,Darkstalkers,Rival Schools,Star Gladiator,C,expert,Game Franchises
-668,Which Capcom lawyer shouts Objection?,Apollo Justice,Miles Edgeworth,Godot,Phoenix Wright,D,expert,Game Franchises
-669,Who directed Resident Evil 4 in 2005?,Shinji Mikami,Motohide Eshiro,Hiroyuki Kobayashi,Yoshiaki Hirabayashi,A,expert,Game Franchises
-670,Which Capcom series lets a devil hunter style on demons?,God of War,Devil May Cry,Darksiders,Ninja Gaiden,B,expert,Game Franchises
+667,Which Capcom brawler sets heroes in high school?,Star Gladiator,Rival Schools,Darkstalkers,Project Justice,B,expert,Game Franchises
+668,Which Capcom lawyer shouts Objection?,Phoenix Wright,Miles Edgeworth,Godot,Apollo Justice,A,expert,Game Franchises
+669,Who directed Resident Evil 4 in 2005?,Yoshiaki Hirabayashi,Shinji Mikami,Hiroyuki Kobayashi,Motohide Eshiro,B,expert,Game Franchises
+670,Which Capcom series lets a devil hunter style on demons?,Devil May Cry,God of War,Ninja Gaiden,Darksiders,A,expert,Game Franchises
 671,Which Capcom knight rescues a princess from demons?,Magic Sword,Black Tiger,Ghosts n Goblins,Strider,C,expert,Game Franchises
 672,Which auteur created Viewtiful Joe and Bayonetta?,Yusuke Hashimoto,Atsushi Inaba,Hiroki Kato,Hideki Kamiya,D,expert,Game Franchises
 673,Which Umbrella witch fights with gun feet?,Bayonetta,Jeanne,Rosa,Luka,A,expert,Game Franchises
-674,Which Ninja Gaiden hero throws shuriken?,Hayate,Ryu Hayabusa,Jann Lee,Ayane,B,expert,Game Franchises
-675,Which Team Ninja spin sends fighters to a island resort?,Ninja Gaiden Sigma,Metroid Other M,Dead or Alive Xtreme,Dead or Alive 5,C,expert,Game Franchises
+674,Which Ninja Gaiden hero throws shuriken?,Hayate,Ayane,Jann Lee,Ryu Hayabusa,D,expert,Game Franchises
+675,Which Team Ninja spin sends fighters to a island resort?,Dead or Alive 5,Ninja Gaiden Sigma,Dead or Alive Xtreme,Metroid Other M,C,expert,Game Franchises
 676,Which Metroid entry did Team Ninja direct in 2010?,Metroid Fusion,Metroid Zero Mission,Metroid Prime,Metroid Other M,D,expert,Game Franchises
-677,Which two tailed fox debuts in Sonic 2?,Tails,Knuckles,Mighty,Ray,A,expert,Game Franchises
-678,Which echidna guards the Master Emerald?,Vector,Knuckles,Espio,Charmy,B,expert,Game Franchises
-679,Which moustachioed villain chases the Chaos Emeralds?,Chaos,Metal Sonic,Dr Eggman,Zavok,C,expert,Game Franchises
-680,Which producer heads the Sonic Team today?,Morio Kishimoto,Shun Nakamura,Naoto Ohshima,Takashi Iizuka,D,expert,Game Franchises
-681,Which BioWare RPG put Sonic into story battles?,Sonic Chronicles,Sonic Battle,Sonic Rush Adventure,Sonic Forces,A,expert,Game Franchises
-682,Which 2006 Sonic reboot became a punchline?,Sonic Heroes,Sonic 06,Shadow the Hedgehog,Sonic Unleashed,B,expert,Game Franchises
-683,Which Naka chicken hero hatches eggs?,Alex Kidd,Opa-Opa,Billy Hatcher,Ristar,C,expert,Game Franchises
-684,Which Sega dream flier sails Nightopia?,Fang the Sniper,Billy Hatcher,Aero the Acrobat,NiGHTS,D,expert,Game Franchises
-685,Which Sega cruiser taught arcade drifting?,OutRun,Hang-On,Super Monaco GP,Power Drift,A,expert,Game Franchises
+677,Which two tailed fox debuts in Sonic 2?,Tails,Mighty,Ray,Knuckles,A,expert,Game Franchises
+678,Which echidna guards the Master Emerald?,Vector,Espio,Charmy,Knuckles,D,expert,Game Franchises
+679,Which moustachioed villain chases the Chaos Emeralds?,Zavok,Dr Eggman,Metal Sonic,Chaos,B,expert,Game Franchises
+680,Which producer heads the Sonic Team today?,Shun Nakamura,Morio Kishimoto,Naoto Ohshima,Takashi Iizuka,D,expert,Game Franchises
+681,Which BioWare RPG put Sonic into story battles?,Sonic Chronicles,Sonic Rush Adventure,Sonic Forces,Sonic Battle,A,expert,Game Franchises
+682,Which 2006 Sonic reboot became a punchline?,Shadow the Hedgehog,Sonic 06,Sonic Unleashed,Sonic Heroes,B,expert,Game Franchises
+683,Which Naka chicken hero hatches eggs?,Opa-Opa,Billy Hatcher,Ristar,Alex Kidd,B,expert,Game Franchises
+684,Which Sega dream flier sails Nightopia?,NiGHTS,Aero the Acrobat,Billy Hatcher,Fang the Sniper,A,expert,Game Franchises
+685,Which Sega cruiser taught arcade drifting?,Power Drift,Hang-On,OutRun,Super Monaco GP,C,expert,Game Franchises
 686,Which Sega bike classic leaned into corners?,Enduro Racer,Hang-On,OutRun,GP Rider,B,expert,Game Franchises
-687,Which Sega rail shooter rides armored dragons?,Space Harrier,Gain Ground,Panzer Dragoon,Arrow Flash,C,expert,Game Franchises
-688,Which Dreamcast RPG sails the skies of Arcadia?,Panzer Dragoon Saga,Grandia II,Phantasy Star Online,Skies of Arcadia,D,expert,Game Franchises
-689,Which Sega cel classic sprays graffiti over Tokyo?,Jet Set Radio,Pastel Muses,L.O.L.,Seaman,A,expert,Game Franchises
-690,Which 2019 chapter closed the Shenmue journey?,Shenmue 2,Shenmue 3,Yakuza Kiwami,Shenmue,B,expert,Game Franchises
-691,Which Yakuza dragon of Dojima anchors the series?,Goro Majima,Akira Nishikiyama,Kazuma Kiryu,Ichiban Kasuga,C,expert,Game Franchises
-692,Which detective spinoff watches the Yakuza streets?,Fist of the North Star,Kurohyo,Lost Judgment,Judgment,D,expert,Game Franchises
-693,Which masked phantom leads the Persona 5 heists?,Joker,Queen,Crow,Skull,A,expert,Game Franchises
+687,Which Sega rail shooter rides armored dragons?,Arrow Flash,Gain Ground,Space Harrier,Panzer Dragoon,D,expert,Game Franchises
+688,Which Dreamcast RPG sails the skies of Arcadia?,Phantasy Star Online,Grandia II,Skies of Arcadia,Panzer Dragoon Saga,C,expert,Game Franchises
+689,Which Sega cel classic sprays graffiti over Tokyo?,L.O.L.,Jet Set Radio,Pastel Muses,Seaman,B,expert,Game Franchises
+690,Which 2019 chapter closed the Shenmue journey?,Yakuza Kiwami,Shenmue,Shenmue 2,Shenmue 3,D,expert,Game Franchises
+691,Which Yakuza dragon of Dojima anchors the series?,Kazuma Kiryu,Goro Majima,Ichiban Kasuga,Akira Nishikiyama,A,expert,Game Franchises
+692,Which detective spinoff watches the Yakuza streets?,Judgment,Lost Judgment,Kurohyo,Fist of the North Star,A,expert,Game Franchises
+693,Which masked phantom leads the Persona 5 heists?,Queen,Skull,Joker,Crow,C,expert,Game Franchises
 694,Which not-cat guides the Phantom Thieves?,Teddie,Morgana,Koromaru,Ryuji,B,expert,Game Franchises
-695,Which Tokyo studio crafts the Persona series?,Nippon Ichi,Vanillaware,Atlus,Acquire,C,expert,Game Franchises
-696,Which 2023 tactics spin reimagined P5?,Persona Q2,Persona 5 Strikers,Persona 5 Royal,Persona 5 Tactica,D,expert,Game Franchises
-697,Which Atlus guild maps labyrinth floors?,Etrian Odyssey,Shin Megami Tensei,Digital Devil Saga,Radiant Historia,A,expert,Game Franchises
-698,Which Atlus series lets you operate with the Healing Touch?,Etrian Odyssey,Trauma Center,Catherine,Odin Sphere,B,expert,Game Franchises
-699,Which Vanillaware hit mixes mech drama with sentinels?,Muramasa,GrimGrimoire,13 Sentinels,Dragon's Crown,C,expert,Game Franchises
-700,Which painterly studio drew Dragon's Crown?,Mistwalker,Aksys Games,Marvelous,Vanillaware,D,expert,Game Franchises
-701,Which penguin Prinnies serve in the NIS world?,Prinny,Disgaea,Makai Kingdom,Zettai Hero,A,expert,Game Franchises
+695,Which Tokyo studio crafts the Persona series?,Vanillaware,Acquire,Atlus,Nippon Ichi,C,expert,Game Franchises
+696,Which 2023 tactics spin reimagined P5?,Persona 5 Strikers,Persona Q2,Persona 5 Royal,Persona 5 Tactica,D,expert,Game Franchises
+697,Which Atlus guild maps labyrinth floors?,Etrian Odyssey,Radiant Historia,Digital Devil Saga,Shin Megami Tensei,A,expert,Game Franchises
+698,Which Atlus series lets you operate with the Healing Touch?,Etrian Odyssey,Catherine,Odin Sphere,Trauma Center,D,expert,Game Franchises
+699,Which Vanillaware hit mixes mech drama with sentinels?,GrimGrimoire,Dragon's Crown,13 Sentinels,Muramasa,C,expert,Game Franchises
+700,Which painterly studio drew Dragon's Crown?,Marvelous,Mistwalker,Vanillaware,Aksys Games,C,expert,Game Franchises
+701,Which penguin Prinnies serve in the NIS world?,Makai Kingdom,Zettai Hero,Disgaea,Prinny,D,expert,Game Franchises
 702,Which NIS tactics saga stars overlord Laharl?,Phantom Brave,Disgaea,Soul Nomad,La Pucelle,B,expert,Game Franchises
-703,Which Gust saga brews items in ateliers?,Ar tonelico,Blue Reflection,Atelier,Nights of Azure,C,expert,Game Franchises
-704,Which Koei series mass produces warriors?,Kessen,Samurai Warriors,Warriors Orochi,Dynasty Warriors,D,expert,Game Franchises
-705,Which studio forged Nioh?,Omega Force,Team Ninja,Koei Tokyo,Ruby Party,A,expert,Game Franchises
-706,Which Tecmo gridiron classic let Bo shine?,RBI Baseball,Tecmo Bowl,Blades of Steel,King of the Monsters,B,expert,Game Franchises
-707,Which NES pigskin sequel kept stats famous?,Tecmo Bowl Kickoff,NFL Blitz,Tecmo Super Bowl,ESPN NFL Football,C,expert,Game Franchises
+703,Which Gust saga brews items in ateliers?,Nights of Azure,Atelier,Blue Reflection,Ar tonelico,B,expert,Game Franchises
+704,Which Koei series mass produces warriors?,Warriors Orochi,Samurai Warriors,Dynasty Warriors,Kessen,C,expert,Game Franchises
+705,Which studio forged Nioh?,Omega Force,Team Ninja,Ruby Party,Koei Tokyo,A,expert,Game Franchises
+706,Which Tecmo gridiron classic let Bo shine?,RBI Baseball,Blades of Steel,King of the Monsters,Tecmo Bowl,D,expert,Game Franchises
+707,Which NES pigskin sequel kept stats famous?,Tecmo Super Bowl,ESPN NFL Football,Tecmo Bowl Kickoff,NFL Blitz,A,expert,Game Franchises
 708,Which Konami frog hops traffic since 1981?,Tutankham,Pooyan,Roc n Rope,Frogger,D,expert,Game Franchises
-709,Which Konami cheat starts Up Up Down Down?,Konami Code,Konami Man,Konji Code,Konami Key,A,expert,Game Franchises
-710,Which Konami vampire hunter whips Dracula?,Contra,Castlevania,Gradius,TwinBee,B,expert,Game Franchises
-711,Which Konami Turtle adventure time travels?,Tournament Fighters,TMNT 2003,Turtles in Time,Turtle Ocean,C,expert,Game Franchises
-712,Which Contra commando runs shirtless with Bill?,Sacha,Probotector,Mad Dog,Lance Bean,D,expert,Game Franchises
+709,Which Konami cheat starts Up Up Down Down?,Konami Code,Konami Key,Konami Man,Konji Code,A,expert,Game Franchises
+710,Which Konami vampire hunter whips Dracula?,TwinBee,Contra,Castlevania,Gradius,C,expert,Game Franchises
+711,Which Konami Turtle adventure time travels?,TMNT 2003,Tournament Fighters,Turtles in Time,Turtle Ocean,C,expert,Game Franchises
+712,Which Contra commando runs shirtless with Bill?,Probotector,Lance Bean,Mad Dog,Sacha,B,expert,Game Franchises
 713,Which RE Engine tech powers Street Fighter 6?,RE Engine,Unity,CryEngine,Dunia,A,expert,Programming
-714,Which mansion anchored the first Resident Evil?,Raccoon Hall,Spencer Mansion,Arklay Lodge,Ashford Estate,B,expert,Game Franchises
-715,Which relentless bioweapon stalked Leon in the RPD?,Licker,Nemesis,Mr. X,Cerberus,C,expert,Game Franchises
-716,Which towering lady haunted Castle Dimitrescu?,Karl Heisenberg,Donna Beneviento,Salvatore Moreau,Lady Dimitrescu,D,expert,Game Franchises
-717,Which Capcom dino thriller predates Monster Hunter?,Dino Crisis,Bio Hazard? no,Steel Battalion,Chaos Legion,A,expert,Game Franchises
-718,Which mad doctor builds the Robot Masters?,Dr Light,Dr Wily,Dr Cossack,Dr Cain,B,expert,Game Franchises
-719,Which red Reploid wields the Z-Saber?,Bass,X,Zero,Protoman,C,expert,Game Franchises
+714,Which mansion anchored the first Resident Evil?,Spencer Mansion,Ashford Estate,Arklay Lodge,Raccoon Hall,A,expert,Game Franchises
+715,Which relentless bioweapon stalked Leon in the RPD?,Licker,Mr. X,Nemesis,Cerberus,B,expert,Game Franchises
+716,Which towering lady haunted Castle Dimitrescu?,Lady Dimitrescu,Donna Beneviento,Karl Heisenberg,Salvatore Moreau,A,expert,Game Franchises
+717,Which Capcom dino thriller predates Monster Hunter?,Chaos Legion,Bio Hazard? no,Dino Crisis,Steel Battalion,C,expert,Game Franchises
+718,Which mad doctor builds the Robot Masters?,Dr Light,Dr Cossack,Dr Wily,Dr Cain,C,expert,Game Franchises
+719,Which red Reploid wields the Z-Saber?,Bass,Zero,Protoman,X,B,expert,Game Franchises
 720,Which Maverick commander leads the X villains?,Lumine,Vile,Velgaiger? no,Sigma,D,expert,Game Franchises
-721,Which white wolf goddess wields the Celestial Brush?,Amaterasu,Shiranui,Issun,Sakuya,A,expert,Game Franchises
-722,Which black wyvern crowns Monster Hunter endgames?,Rathalos,Fatalis,Teostra,Kushala Daora,B,expert,Game Franchises
-723,Which feline pals cook and cart in Monster Hunter?,Palamutes,Shakalakas,Palicoes,Gajalaka,C,expert,Game Franchises
-724,Which fiery wyvern is the Monster Hunter mascot?,Diablos,Rathian,Nargacuga,Rathalos,D,expert,Game Franchises
-725,Which Colorado mall hosted the Dead Rising outbreak?,Willamette,Santa Cabeza,Los Perdidos,Fortune City,A,expert,Game Franchises
-726,Which photojournalist documents the Willamette outbreak?,Chuck Greene,Frank West,Nick Ramos,Isabela Keyes,B,expert,Game Franchises
-727,Which Breath of Fire hero morphs into dragons?,Nina,Rand,Ryu,Katt,C,expert,Game Franchises
+721,Which white wolf goddess wields the Celestial Brush?,Shiranui,Issun,Sakuya,Amaterasu,D,expert,Game Franchises
+722,Which black wyvern crowns Monster Hunter endgames?,Rathalos,Teostra,Fatalis,Kushala Daora,C,expert,Game Franchises
+723,Which feline pals cook and cart in Monster Hunter?,Shakalakas,Gajalaka,Palamutes,Palicoes,D,expert,Game Franchises
+724,Which fiery wyvern is the Monster Hunter mascot?,Rathalos,Diablos,Nargacuga,Rathian,A,expert,Game Franchises
+725,Which Colorado mall hosted the Dead Rising outbreak?,Santa Cabeza,Willamette,Fortune City,Los Perdidos,B,expert,Game Franchises
+726,Which photojournalist documents the Willamette outbreak?,Frank West,Nick Ramos,Chuck Greene,Isabela Keyes,A,expert,Game Franchises
+727,Which Breath of Fire hero morphs into dragons?,Ryu,Rand,Nina,Katt,A,expert,Game Franchises
 728,Which succubus rules the Darkstalkers night?,Felicia,Demitri,Lilith,Morrigan,D,expert,Game Franchises
-729,Which catwoman wrestler prowls Darkstalkers?,Felicia,Q-Bee,Rikuo,Sasquatch,A,expert,Game Franchises
-730,Which Alien crossover beat em up did Capcom coin?,AVP Requiem,Alien vs Predator,Aliens Colonial Marines,AVP Evolution,B,expert,Game Franchises
-731,Which D and D arcade tower did Capcom climb?,Shadow over Mystara,Baldurs Gate,Tower of Doom,Pool of Radiance,C,expert,Game Franchises
-732,Which ninja strider slashes through Grandmaster Meio?,Jubei Yagyu,Hanzo Hattori,Galford,Strider Hiryu,D,expert,Game Franchises
-733,Which Capcom hero swings on a bionic arm?,Nathan Spencer,Gene,Captain Commando,Soki,A,expert,Game Franchises
+729,Which catwoman wrestler prowls Darkstalkers?,Q-Bee,Rikuo,Felicia,Sasquatch,C,expert,Game Franchises
+730,Which Alien crossover beat em up did Capcom coin?,AVP Requiem,Alien vs Predator,AVP Evolution,Aliens Colonial Marines,B,expert,Game Franchises
+731,Which D and D arcade tower did Capcom climb?,Pool of Radiance,Shadow over Mystara,Tower of Doom,Baldurs Gate,C,expert,Game Franchises
+732,Which ninja strider slashes through Grandmaster Meio?,Strider Hiryu,Hanzo Hattori,Galford,Jubei Yagyu,A,expert,Game Franchises
+733,Which Capcom hero swings on a bionic arm?,Soki,Captain Commando,Gene,Nathan Spencer,D,expert,Game Franchises
 734,Which mustachioed mayor pile drives in Final Fight?,Cody Travers,Mike Haggar,Guy,Damnd,B,expert,Game Franchises
-735,Which Capcom wrestler game starred a future mayor?,King of Colosseum,Ring of Destruction,Saturday Night Slam Masters,Fire Pro Wrestling,C,expert,Game Franchises
-736,Which digger pilots the Mega Man Legends sky?,Barrell Caskett,Roll Caskett,Tron Bonne,Volnutt,D,expert,Game Franchises
-737,Which Capcom actioner stars a God Hand?,God Hand,Onimusha,Haunting Ground,Breath of Fire,A,expert,Game Franchises
-738,Which Capcom studio built Street Fighter EX?,DreamFactory,Arika,Eighting,Treasure,B,expert,Game Franchises
-739,Which veteran producer founded Arika?,Takashi Nishiyama,Akiman,Akira Nishitani,Yoshiki Okamoto,C,expert,Game Franchises
-740,Which Marvel team up hit arcades in 1998?,Marvel Super Heroes,X-Men vs Street Fighter,Marvel Super Heroes vs Street Fighter,Marvel vs Capcom,D,expert,Game Franchises
-741,Which Neo Geo Pocket duet crossed SNK with Capcom?,Match of the Millennium,SVC Chaos,Card Fighters Clash,Capcom vs SNK 2,A,expert,Game Franchises
-742,Which samurai stars in the first Onimusha?,Jacques Blanc,Samanosuke,Yagyu Jubei,Roberto Frois,B,expert,Game Franchises
+735,Which Capcom wrestler game starred a future mayor?,King of Colosseum,Ring of Destruction,Fire Pro Wrestling,Saturday Night Slam Masters,D,expert,Game Franchises
+736,Which digger pilots the Mega Man Legends sky?,Volnutt,Roll Caskett,Barrell Caskett,Tron Bonne,A,expert,Game Franchises
+737,Which Capcom actioner stars a God Hand?,Haunting Ground,Onimusha,God Hand,Breath of Fire,C,expert,Game Franchises
+738,Which Capcom studio built Street Fighter EX?,Treasure,Arika,Eighting,DreamFactory,B,expert,Game Franchises
+739,Which veteran producer founded Arika?,Takashi Nishiyama,Yoshiki Okamoto,Akiman,Akira Nishitani,D,expert,Game Franchises
+740,Which Marvel team up hit arcades in 1998?,Marvel vs Capcom,X-Men vs Street Fighter,Marvel Super Heroes vs Street Fighter,Marvel Super Heroes,A,expert,Game Franchises
+741,Which Neo Geo Pocket duet crossed SNK with Capcom?,Card Fighters Clash,Match of the Millennium,SVC Chaos,Capcom vs SNK 2,B,expert,Game Franchises
+742,Which samurai stars in the first Onimusha?,Roberto Frois,Jacques Blanc,Yagyu Jubei,Samanosuke,D,expert,Game Franchises
 743,Which French film star joined Onimusha 3?,Takeshi Kaneshiro,Takeshi Kitano,Jean Reno,Hiroyuki Sanada,C,expert,Game Franchises
-744,Which designer fathered Mega Man?,Akira Kitamura,Tokuro Fujiwara,Yoshinori Ono,Keiji Inafune,D,expert,Game Franchises
+744,Which designer fathered Mega Man?,Akira Kitamura,Tokuro Fujiwara,Keiji Inafune,Yoshinori Ono,C,expert,Game Franchises
 745,Which spiritual Mega Man did Inafune kickstart?,Mighty No. 9,Mighty Gunvolt,Azure Striker Gunvolt,Mega Man 11,A,expert,Game Franchises
-746,Which family of cannibals haunts Resident Evil 7?,Molded,Baker family,Los Illuminados,The Family,B,expert,Game Franchises
-747,Which RE3 mode sends mercenaries on timers?,Raid Mode,The Ghost Survivors,The Mercenaries,Mercenaries 3D,C,expert,Game Franchises
-748,Which town did Umbrella erase?,Lanshiang,Kijuju,Harvardville,Raccoon City,D,expert,Game Franchises
-749,Which aristocrat cofounded Umbrella alongside Spencer and Marcus?,Edward Ashford,William Birkin,Albert Wesker,Mikhail Victor,A,expert,Game Franchises
+746,Which family of cannibals haunts Resident Evil 7?,Molded,Baker family,The Family,Los Illuminados,B,expert,Game Franchises
+747,Which RE3 mode sends mercenaries on timers?,Raid Mode,The Ghost Survivors,Mercenaries 3D,The Mercenaries,D,expert,Game Franchises
+748,Which town did Umbrella erase?,Raccoon City,Lanshiang,Kijuju,Harvardville,A,expert,Game Franchises
+749,Which aristocrat cofounded Umbrella alongside Spencer and Marcus?,Albert Wesker,William Birkin,Edward Ashford,Mikhail Victor,C,expert,Game Franchises
 750,Which wolf bot doubles Bass in battle?,Rush,Treble,Auto,Beat,B,expert,Game Franchises
-751,Which Mega Man spin battles over networks?,Mega Man Star Force,Mega Man X Dive,Mega Man Battle Network,Mega Man Zero,C,expert,Game Franchises
-752,Which elder brother whistles before Mega battles?,Zero,Duo,Roll,Proto Man,D,expert,Game Franchises
-753,Which trio cleans up Metro City?,Haggar Cody and Guy,Sodom and Rolento,Belger and Andore,Poison and Roxy,A,expert,Game Franchises
+751,Which Mega Man spin battles over networks?,Mega Man Star Force,Mega Man Zero,Mega Man X Dive,Mega Man Battle Network,D,expert,Game Franchises
+752,Which elder brother whistles before Mega battles?,Duo,Proto Man,Roll,Zero,B,expert,Game Franchises
+753,Which trio cleans up Metro City?,Belger and Andore,Poison and Roxy,Haggar Cody and Guy,Sodom and Rolento,C,expert,Game Franchises
 754,Which spinning Zangief finisher hugs foes?,Banishing Flat,Spinning Piledriver,Double Lariat,Final Atomic Buster,B,expert,Game Franchises
-755,Which blue fireball defines Ryu?,Kikoken,Yoga Fire,Hadoken,Gou Hadoken,C,expert,Game Franchises
-756,Which Capcom artist drew the iconic SF portraits?,Shinkiro,Kinu Nishimura,Daigo Ikeno,Bengus,D,expert,Game Franchises
+755,Which blue fireball defines Ryu?,Kikoken,Yoga Fire,Gou Hadoken,Hadoken,D,expert,Game Franchises
+756,Which Capcom artist drew the iconic SF portraits?,Daigo Ikeno,Bengus,Shinkiro,Kinu Nishimura,B,expert,Game Franchises
 757,Which SNK artist painted Kyo and Iori?,Shinkiro,Eisuke Ogura,Falcoon,Hiroaki,A,expert,Game Franchises
-758,Which Arthurian Capcom brawler quested for Excalibur?,King of Dragons,Knights of the Round,Warriors of Fate,Gargoyles Quest,B,expert,Game Franchises
-759,Which board powered Street Fighter II Champion Edition?,Atomiswave,CPS-2,CPS-1,Sega Model 2,C,expert,Gaming Consoles
-760,Which fighting saga showed off CPS-3 power?,Red Earth,Street Fighter Alpha,JoJo's Bizarre Adventure,Street Fighter III,D,expert,Game Franchises
-761,Which Darkstalkers messiah sought to remake Makai?,Jedah,Anakaris,Bishamon,Huitzil,A,expert,Game Franchises
-762,Which Capcom shooter overloaded with bullets?,1942,Progear,Varth,U.N. Squadron,B,expert,Game Franchises
-763,Which Capcom spin follows the Bonne family?,Mega Man Legends 2,Mega Man 64,The Misadventures of Tron Bonne,Mega Man Battle and Chase,C,expert,Game Franchises
+758,Which Arthurian Capcom brawler quested for Excalibur?,King of Dragons,Warriors of Fate,Gargoyles Quest,Knights of the Round,D,expert,Game Franchises
+759,Which board powered Street Fighter II Champion Edition?,Atomiswave,CPS-1,Sega Model 2,CPS-2,B,expert,Gaming Consoles
+760,Which fighting saga showed off CPS-3 power?,Street Fighter III,Red Earth,Street Fighter Alpha,JoJo's Bizarre Adventure,A,expert,Game Franchises
+761,Which Darkstalkers messiah sought to remake Makai?,Huitzil,Anakaris,Jedah,Bishamon,C,expert,Game Franchises
+762,Which Capcom shooter overloaded with bullets?,U.N. Squadron,1942,Progear,Varth,C,expert,Game Franchises
+763,Which Capcom spin follows the Bonne family?,The Misadventures of Tron Bonne,Mega Man 64,Mega Man Legends 2,Mega Man Battle and Chase,A,expert,Game Franchises
 764,Which Capcom puzzler gem battles chibi fighters?,Magical Tetris Challenge,Super Gem Fighter Mini Mix,Tech Romancer,Super Puzzle Fighter II Turbo,D,expert,Game Franchises
-765,Which 1996 Capcom fighter dueled with plasma swords?,Star Gladiator,Plasma Sword,Cyberbots,Vampire Savior,A,expert,Game Franchises
-766,Which 1994 anime retold the SF2 saga?,Street Fighter,Street Fighter II The Animated Movie,Street Fighter Alpha The Movie,Street Fighter Assassins Fist,B,expert,Game Franchises
-767,Which Chun Li flurry blurs like a hundred hands?,Kikosho,Hazanshu,Hyakuretsukyaku,Renkiko,C,expert,Game Franchises
-768,Which nation does Cammy call home?,Germany,France,Italy,England,D,expert,Game Franchises
-769,Which nation raised Zangief?,Soviet Union,Thailand,Kenya,Canada,A,expert,Game Franchises
-770,Which nation meditates Dhalsim?,Egypt,India,Australia,Hungary,B,expert,Game Franchises
-771,Which nation hides Blanka?,Peru,Venezuela,Brazil,Cuba,C,expert,Game Franchises
-772,Which nation deploys Guile?,Norway,Poland,Greece,USA,D,expert,Game Franchises
-773,Which nation bathes E Honda?,Japan,Mongolia,Nepal,Taiwan,A,expert,Game Franchises
-774,Which nation homes Thunder Hawk?,Chile,Mexico,Bolivia,Guatemala,B,expert,Game Franchises
-775,Which nation grooves Dee Jay?,Barbados,Trinidad,Jamaica,Bahamas,C,expert,Game Franchises
-776,Which nation trains Fei Long?,Macau,Vietnam,Indonesia,China,D,expert,Game Franchises
-777,Which nation unmasks Vega?,Spain,Austria,Portugal,Monaco,A,expert,Game Franchises
-778,Which rising dragon uppercut wins trades?,Hurricane Kick,Shoryuken,Metsu Shoryuken,Focus Attack,B,expert,Game Franchises
-779,Which projectile marks the Muay Thai emperor?,Tiger Genocide,Tiger Knee,Tiger Shot,Tiger Cannon,C,expert,Game Franchises
-780,Which elastic yogi stretches across the SF arena?,Hakan,Oro,F.A.N.G,Dhalsim,D,expert,Game Franchises
-781,Which burning signature defines M Bison?,Psycho Crusher,Scissor Kick,Head Press,Knee Press Nightmare,A,expert,Game Franchises
-782,Which secret choke seals Akuma foes?,Tenma Gou Zankuu,Raging Demon,Kongou Kokuretsuzan,Misogi,B,expert,Game Franchises
-783,Which kanji burns on Akuma's back?,Human,Devil,Heaven,Earth,C,expert,Game Franchises
-784,Which wandering warrior studies under Gouken?,Dan,Ken,Sakura,Ryu,D,expert,Game Franchises
-785,Which SF3 twin shadows Yun?,Yang,Necro,Twelve,Remy,A,expert,Game Franchises
-786,Which producer shepherded Street Fighter II?,Hiroshi Matsumoto,Noritaka Funamizu,Ken Lobb,Katsuhiro Harada,B,expert,Game Franchises
-787,Which SF home port debuted Cammy?,Street Fighter II Plus,Street Fighter II Turbo,Super Street Fighter II,Street Fighter EX Plus,C,expert,Game Franchises
-788,Which year launched Street Fighter Alpha?,1998,1996,1995,2006,C,expert,Game Franchises
-789,Which sister keeps Mega Man's home tidy?,Roll,Kalinka,Iris,Alia,A,expert,Game Franchises
-790,Which Robot Master wields the Rolling Cutter?,Guts Man,Cut Man,Elec Man,Bomb Man,B,expert,Game Franchises
-791,Which serial marks Rock as the first robot?,DRN.000,DLN.002,DLN.001,SWN.001,C,expert,Game Franchises
-792,Which 1987 Capcom fighter started the saga?,Son Son,Vulgus,Pirate Ship Higemaru,Street Fighter,D,expert,Game Franchises
+765,Which 1996 Capcom fighter dueled with plasma swords?,Vampire Savior,Cyberbots,Star Gladiator,Plasma Sword,C,expert,Game Franchises
+766,Which 1994 anime retold the SF2 saga?,Street Fighter II The Animated Movie,Street Fighter,Street Fighter Alpha The Movie,Street Fighter Assassins Fist,A,expert,Game Franchises
+767,Which Chun Li flurry blurs like a hundred hands?,Kikosho,Hyakuretsukyaku,Renkiko,Hazanshu,B,expert,Game Franchises
+768,Which nation does Cammy call home?,England,Germany,France,Italy,A,expert,Game Franchises
+769,Which nation raised Zangief?,Canada,Thailand,Kenya,Soviet Union,D,expert,Game Franchises
+770,Which nation meditates Dhalsim?,Australia,Egypt,India,Hungary,C,expert,Game Franchises
+771,Which nation hides Blanka?,Peru,Brazil,Venezuela,Cuba,B,expert,Game Franchises
+772,Which nation deploys Guile?,Poland,USA,Norway,Greece,B,expert,Game Franchises
+773,Which nation bathes E Honda?,Nepal,Mongolia,Taiwan,Japan,D,expert,Game Franchises
+774,Which nation homes Thunder Hawk?,Mexico,Guatemala,Bolivia,Chile,A,expert,Game Franchises
+775,Which nation grooves Dee Jay?,Jamaica,Barbados,Trinidad,Bahamas,A,expert,Game Franchises
+776,Which nation trains Fei Long?,Vietnam,Macau,China,Indonesia,C,expert,Game Franchises
+777,Which nation unmasks Vega?,Monaco,Austria,Spain,Portugal,C,expert,Game Franchises
+778,Which rising dragon uppercut wins trades?,Focus Attack,Hurricane Kick,Metsu Shoryuken,Shoryuken,D,expert,Game Franchises
+779,Which projectile marks the Muay Thai emperor?,Tiger Genocide,Tiger Shot,Tiger Knee,Tiger Cannon,B,expert,Game Franchises
+780,Which elastic yogi stretches across the SF arena?,Dhalsim,Hakan,Oro,F.A.N.G,A,expert,Game Franchises
+781,Which burning signature defines M Bison?,Knee Press Nightmare,Scissor Kick,Head Press,Psycho Crusher,D,expert,Game Franchises
+782,Which secret choke seals Akuma foes?,Kongou Kokuretsuzan,Raging Demon,Misogi,Tenma Gou Zankuu,B,expert,Game Franchises
+783,Which kanji burns on Akuma's back?,Earth,Heaven,Devil,Human,B,expert,Game Franchises
+784,Which wandering warrior studies under Gouken?,Ryu,Ken,Dan,Sakura,A,expert,Game Franchises
+785,Which SF3 twin shadows Yun?,Twelve,Necro,Yang,Remy,C,expert,Game Franchises
+786,Which producer shepherded Street Fighter II?,Hiroshi Matsumoto,Katsuhiro Harada,Noritaka Funamizu,Ken Lobb,C,expert,Game Franchises
+787,Which SF home port debuted Cammy?,Super Street Fighter II,Street Fighter II Turbo,Street Fighter II Plus,Street Fighter EX Plus,A,expert,Game Franchises
+788,Which year launched Street Fighter Alpha?,2006,1998,1996,1995,D,expert,Game Franchises
+789,Which sister keeps Mega Man's home tidy?,Iris,Alia,Roll,Kalinka,C,expert,Game Franchises
+790,Which Robot Master wields the Rolling Cutter?,Guts Man,Bomb Man,Elec Man,Cut Man,D,expert,Game Franchises
+791,Which serial marks Rock as the first robot?,DLN.002,DLN.001,SWN.001,DRN.000,B,expert,Game Franchises
+792,Which 1987 Capcom fighter started the saga?,Son Son,Street Fighter,Vulgus,Pirate Ship Higemaru,B,expert,Game Franchises
 793,Which English visionary designed the Analytical Engine?,,,,,Charles Babbage,extreme,Computer History
 794,What was the first electronic general purpose computer called?,,,,,ENIAC,extreme,Computer History
 795,Who designed the Altair 8800?,,,,,Ed Roberts,extreme,Computer History

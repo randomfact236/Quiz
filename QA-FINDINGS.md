@@ -147,6 +147,15 @@
 - **Priority:** P2
 - **Reported:** Split the combined "Science & Nature" subject into separate Science and
   Nature subjects (content reassignment + subject rows + landing card).
+- **Status:** PARTIAL — editorial ruling given by owner 2026-09-19: Science = Physics &
+  Chemistry, Space & Astronomy, Scientists & Discoveries (499 q); Nature = Plants &
+  Animals, Human Body & Biology, Earth & Weather (501 q). CSV split executed same day:
+  quiz-csv/science-nature.csv replaced by science.csv + nature.csv (placement fixes and
+  open-ended tiers carried over; audit + chapter balance clean on both). REMAINING
+  ENGINEERING: import the two new subjects to the local DB; remove the old "Science &
+  Nature" subject + its 1,000 questions from local/live DB (the push has no delete — the
+  old subject would keep serving duplicates); add the Nature landing card + subject
+  slugs/routes (app code).
 
 ### BUG-043 — Riddle mode pages: hide category, show only difficulty + Mix
 

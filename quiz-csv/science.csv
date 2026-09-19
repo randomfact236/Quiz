@@ -1,0 +1,502 @@
+# Subject: Science
+
+ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
+1,Water is made of hydrogen and oxygen.,True,False,,,A,easy,Physics & Chemistry
+2,The Sun rises in the west.,True,False,,,B,easy,Space & Astronomy
+3,Thomas Edison invented the telephone.,True,False,,,B,easy,Scientists & Discoveries
+4,Ice is the solid form of water.,False,True,,,B,easy,Physics & Chemistry
+5,Earth is the third planet from the Sun.,True,False,,,A,easy,Space & Astronomy
+6,Albert Einstein developed the theory of relativity.,True,False,,,A,easy,Scientists & Discoveries
+7,Sound travels faster through air than through water.,False,True,,,A,easy,Physics & Chemistry
+8,The Moon makes its own light.,True,False,,,B,easy,Space & Astronomy
+9,Galileo built the first telescope in ancient Egypt.,True,False,,,B,easy,Scientists & Discoveries
+10,Helium is lighter than air.,True,False,,,A,easy,Physics & Chemistry
+11,Jupiter is the largest planet in the solar system.,False,True,,,B,easy,Space & Astronomy
+12,Charles Darwin sailed on a ship called the Beagle.,True,False,,,A,easy,Scientists & Discoveries
+13,Acids taste sweet.,True,False,,,B,easy,Physics & Chemistry
+14,Saturn is famous for its bright rings.,True,False,,,A,easy,Space & Astronomy
+15,Benjamin Franklin invented the steam engine.,True,False,,,B,easy,Scientists & Discoveries
+16,Fire needs oxygen to burn.,True,False,,,A,easy,Physics & Chemistry
+17,A light-year measures time.,False,True,,,A,easy,Space & Astronomy
+18,Isaac Newton discovered X-rays.,False,True,,,A,easy,Scientists & Discoveries
+19,Atoms are the basic building blocks of matter.,False,True,,,B,easy,Physics & Chemistry
+20,The Sun is a planet.,False,True,,,A,easy,Space & Astronomy
+21,Gregor Mendel experimented with pea plants.,False,True,,,B,easy,Scientists & Discoveries
+22,Water boils at 50 degrees Celsius at sea level.,True,False,,,B,easy,Physics & Chemistry
+23,The Moon is larger than the Earth.,True,False,,,B,easy,Space & Astronomy
+24,Guglielmo Marconi invented the printing press.,False,True,,,A,easy,Scientists & Discoveries
+25,Diamonds are made of carbon.,True,False,,,A,easy,Physics & Chemistry
+26,The Milky Way is a galaxy.,True,False,,,A,easy,Space & Astronomy
+27,Marie Curie won two Nobel Prizes.,True,False,,,A,easy,Scientists & Discoveries
+28,Oil and water mix easily.,False,True,,,A,easy,Physics & Chemistry
+29,Earth orbits the Sun.,True,False,,,A,easy,Space & Astronomy
+30,Nikola Tesla discovered gravity.,True,False,,,B,easy,Scientists & Discoveries
+31,Hydrogen is the lightest chemical element.,False,True,,,B,easy,Physics & Chemistry
+32,Humans have built cities on Mars.,True,False,,,B,easy,Space & Astronomy
+33,Copernicus placed the Earth at the center of the universe.,True,False,,,B,easy,Scientists & Discoveries
+34,Salt can be obtained by evaporating sea water.,False,True,,,B,easy,Physics & Chemistry
+35,Comets can grow tails as they approach the Sun.,False,True,,,B,easy,Space & Astronomy
+36,Charles Darwin proposed evolution by natural selection.,True,False,,,A,easy,Scientists & Discoveries
+37,Neon is a liquid metal at room temperature.,False,True,,,A,easy,Physics & Chemistry
+38,The Moon has moons of its own.,False,True,,,A,easy,Space & Astronomy
+39,Alexander Graham Bell invented the airplane.,False,True,,,A,easy,Scientists & Discoveries
+40,Baking soda is a base.,False,True,,,B,easy,Physics & Chemistry
+41,Venus is the hottest planet in the solar system.,False,True,,,B,easy,Space & Astronomy
+42,Watson and Crick described the structure of DNA.,False,True,,,B,easy,Scientists & Discoveries
+43,Glass is a pure form of metal.,True,False,,,B,easy,Physics & Chemistry
+44,Mercury is the closest planet to the Sun.,True,False,,,A,easy,Space & Astronomy
+45,Stephen Hawking invented the telescope.,True,False,,,B,easy,Scientists & Discoveries
+46,Vinegar is a weak acid.,True,False,,,A,easy,Physics & Chemistry
+47,Neptune is the smallest planet in the solar system.,True,False,,,B,easy,Space & Astronomy
+48,Marie Curie discovered the planet Saturn.,False,True,,,A,easy,Scientists & Discoveries
+49,Air is a mixture of gases.,False,True,,,B,easy,Physics & Chemistry
+50,Asteroids are rocky objects orbiting the Sun.,False,True,,,B,easy,Space & Astronomy
+51,Jane Goodall studied wild chimpanzees.,True,False,,,A,easy,Scientists & Discoveries
+52,Bleach is safe to drink.,False,True,,,A,easy,Physics & Chemistry
+53,Stars are clearly visible during the day.,False,True,,,A,easy,Space & Astronomy
+54,Albert Einstein failed mathematics in school.,True,False,,,B,easy,Scientists & Discoveries
+55,Lemon juice is acidic.,True,False,,,A,easy,Physics & Chemistry
+56,The Sun gives Earth light and heat.,False,True,,,B,easy,Space & Astronomy
+57,Isaac Newton described three laws of motion.,False,True,,,B,easy,Scientists & Discoveries
+58,Frozen water is called steam.,True,False,,,B,easy,Physics & Chemistry
+59,Earth is the largest planet in the solar system.,False,True,,,A,easy,Space & Astronomy
+60,Alexander Fleming discovered the planet Neptune.,False,True,,,A,easy,Scientists & Discoveries
+61,Carbon dioxide gives fizzy drinks their bubbles.,True,False,,,A,easy,Physics & Chemistry
+62,Mercury is covered by thick bright rings.,True,False,,,B,easy,Space & Astronomy
+63,Archimedes discovered America.,True,False,,,B,easy,Scientists & Discoveries
+64,The periodic table lists the chemical elements.,True,False,,,A,easy,Physics & Chemistry
+65,The Moon orbits the Earth.,True,False,,,A,easy,Space & Astronomy
+66,Neil Armstrong was the first person to walk on the Moon.,True,False,,,A,easy,Scientists & Discoveries
+67,Oxygen is the most abundant gas in the atmosphere.,True,False,,,B,easy,Physics & Chemistry
+68,The Moon is a star.,False,True,,,A,easy,Space & Astronomy
+69,Galileo discovered the planet Pluto.,False,True,,,A,easy,Scientists & Discoveries
+70,Water expands when it freezes.,True,False,,,A,easy,Physics & Chemistry
+71,Shooting stars are small bits of rock burning in the air.,False,True,,,B,easy,Space & Astronomy
+72,Dmitri Mendeleev created the periodic table.,False,True,,,B,easy,Scientists & Discoveries
+73,Ice melts fastest inside a freezer.,True,False,,,B,easy,Physics & Chemistry
+74,Jupiter has many known moons.,False,True,,,B,easy,Space & Astronomy
+75,Benjamin Franklin was a famous painter.,False,True,,,A,easy,Scientists & Discoveries
+76,The chemical formula of water is H2O.,True,False,,,A,easy,Physics & Chemistry
+77,The Sun orbits the Earth.,False,True,,,A,easy,Space & Astronomy
+78,Thomas Edison invented the computer mouse.,True,False,,,B,easy,Scientists & Discoveries
+79,Gold does not rust.,False,True,,,B,easy,Physics & Chemistry
+80,Saturn is the second largest planet in the solar system.,True,False,,,A,easy,Space & Astronomy
+81,Archimedes famously shouted Eureka.,False,True,,,B,easy,Scientists & Discoveries
+82,Salt water freezes faster than fresh water.,False,True,,,A,easy,Physics & Chemistry
+83,Empty space is full of air.,True,False,,,B,easy,Space & Astronomy
+84,Gregor Mendel studied fruit flies.,True,False,,,B,easy,Scientists & Discoveries
+85,Copper conducts electricity well.,False,True,,,B,easy,Physics & Chemistry
+86,Stars appear to twinkle when seen from Earth.,False,True,,,B,easy,Space & Astronomy
+87,Alfred Wegener proposed that continents drift.,True,False,,,A,easy,Scientists & Discoveries
+88,Water and oil have the same density.,True,False,,,B,easy,Physics & Chemistry
+89,Earth has one natural satellite.,True,False,,,A,easy,Space & Astronomy
+90,Nikola Tesla was born in the year 1950.,False,True,,,A,easy,Scientists & Discoveries
+91,A magnet attracts iron objects.,False,True,,,B,easy,Physics & Chemistry
+92,The constellation Orion is a planet.,False,True,,,A,easy,Space & Astronomy
+93,Charles Darwin studied black holes.,False,True,,,A,easy,Scientists & Discoveries
+94,Sulfur is yellow.,True,False,,,A,easy,Physics & Chemistry
+95,Light travels faster than sound.,False,True,,,B,easy,Space & Astronomy
+96,Thomas Edison held over one thousand patents.,False,True,,,B,easy,Scientists & Discoveries
+97,A block of iron floats in water.,False,True,,,A,easy,Physics & Chemistry
+98,The Moon is about as large as the Sun.,False,True,,,A,easy,Space & Astronomy
+99,Copernicus discovered gravity.,False,True,,,A,easy,Scientists & Discoveries
+100,Vinegar and baking soda fizz when mixed.,False,True,,,B,easy,Physics & Chemistry
+101,Which planet is larger: Jupiter or Venus?,Saturn,Jupiter,,,B,medium,Space & Astronomy
+102,Who described the laws of motion: Isaac Newton or Albert Einstein?,Albert Einstein,Isaac Newton,,,B,medium,Scientists & Discoveries
+103,Which freezes at a lower temperature: fresh water or salt water?,fresh water,salt water,,,B,medium,Physics & Chemistry
+104,Which planet is closer to the Sun: Mars or Mercury?,Mercury,Mars,,,A,medium,Space & Astronomy
+105,Who developed pasteurization: Louis Pasteur or Edward Jenner?,Louis Pasteur,Edward Jenner,,,A,medium,Scientists & Discoveries
+106,Which is lighter: helium or carbon dioxide?,helium,carbon dioxide,,,A,medium,Physics & Chemistry
+107,Which planet is famous for its rings: Mars or Saturn?,Ceres,Saturn,,,B,medium,Space & Astronomy
+108,Who discovered penicillin: Alexander Fleming or Joseph Lister?,Alexander Fleming,Joseph Lister,,,A,medium,Scientists & Discoveries
+109,Which metal is liquid at room temperature: iron or mercury?,mercury,iron,,,A,medium,Physics & Chemistry
+110,What gives Mars its red color?,blue ice,iron oxide,,,B,medium,Space & Astronomy
+111,Who proposed evolution by natural selection: Gregor Mendel or Charles Darwin?,Gregor Mendel,Charles Darwin,,,B,medium,Scientists & Discoveries
+112,Which gas do plants absorb for photosynthesis?,ammonia,carbon dioxide,,,B,medium,Physics & Chemistry
+113,Which star is closest to Earth: Sirius or the Sun?,the Sun,Sirius,,,A,medium,Space & Astronomy
+114,Who improved the steam engine: James Watt or Rudolf Diesel?,James Watt,Rudolf Diesel,,,A,medium,Scientists & Discoveries
+115,Which element has the symbol O: osmium or oxygen?,osmium,oxygen,,,A,medium,Physics & Chemistry
+116,Which is bigger: the Sun or the Moon?,the Moon,the Sun,,,B,medium,Space & Astronomy
+117,Who created the periodic table: Antoine Lavoisier or Dmitri Mendeleev?,Antoine Lavoisier,Dmitri Mendeleev,,,B,medium,Scientists & Discoveries
+118,Which is the hardest natural mineral: talc or diamond?,talc,diamond,,,A,medium,Physics & Chemistry
+119,Which planet has the Great Red Spot: Jupiter or Neptune?,Neptune,Jupiter,,,B,medium,Space & Astronomy
+120,Who studied wild apes in Africa: Marie Curie or Jane Goodall?,Marie Curie,Jane Goodall,,,B,medium,Scientists & Discoveries
+121,Which acid is found in lemons: lactic acid or citric acid?,citric acid,lactic acid,,,B,medium,Physics & Chemistry
+122,Which object orbits Earth: Venus or the International Space Station?,the International Space Station,Venus,,,A,medium,Space & Astronomy
+123,Who invented the telephone: Guglielmo Marconi or Alexander Graham Bell?,Guglielmo Marconi,Alexander Graham Bell,,,A,medium,Scientists & Discoveries
+124,Which is a noble gas: argon or nitrogen?,argon,nitrogen,,,A,medium,Physics & Chemistry
+125,Which is a dwarf planet: Uranus or Pluto?,Pluto,Uranus,,,A,medium,Space & Astronomy
+126,Who discovered radium: Marie Curie or Irene Joliot-Curie?,Irene Joliot-Curie,Marie Curie,,,B,medium,Scientists & Discoveries
+127,Which metal is magnetic: aluminum or iron?,iron,nickel,,,A,medium,Physics & Chemistry
+128,Which planet is nearest the Sun: Earth or Mercury?,Earth,Mercury,,,B,medium,Space & Astronomy
+129,Who developed general relativity: Albert Einstein or Henri Poincare?,Henri Poincare,Albert Einstein,,,B,medium,Scientists & Discoveries
+130,Which state of matter keeps its shape: gas or solid?,solid,gas,,,B,medium,Physics & Chemistry
+131,Which galaxy holds our solar system: Andromeda or the Milky Way?,the Milky Way,Andromeda,,,A,medium,Space & Astronomy
+132,Who discovered the neutron: Ernest Rutherford or James Chadwick?,James Chadwick,Ernest Rutherford,,,A,medium,Scientists & Discoveries
+133,Which gas dominates the Sun: oxygen or hydrogen?,hydrogen,oxygen,,,B,medium,Physics & Chemistry
+134,Which planet orbits tilted almost completely on its side: Titania or Uranus?,Uranus,Titania,,,A,medium,Space & Astronomy
+135,Who made the first powered airplane flight: Amelia Earhart or the Wright brothers?,the Wright brothers,Amelia Earhart,,,B,medium,Scientists & Discoveries
+136,Which metal burns with a bright white flame: zinc or magnesium?,zinc,magnesium,,,A,medium,Physics & Chemistry
+137,Which body is Earth's natural satellite: Phobos or the Moon?,Phobos,the Moon,,,B,medium,Space & Astronomy
+138,Who developed the polio vaccine: Jonas Salk or Louis Pasteur?,Jonas Salk,Louis Pasteur,,,A,medium,Scientists & Discoveries
+139,Which household liquid is acidic: soap or vinegar?,vinegar,soap,,,B,medium,Physics & Chemistry
+140,Which planet has the most known moons: Jupiter or Saturn?,Saturn,Jupiter,,,A,medium,Space & Astronomy
+141,Who discovered blood circulation: Claudius Galen or William Harvey?,William Harvey,Claudius Galen,,,A,medium,Scientists & Discoveries
+142,Which element has the symbol Fe: cadmium or iron?,iron,cadmium,,,A,medium,Physics & Chemistry
+143,Which constellation holds the North Star: Orion or Ursa Minor?,Orion,Ursa Minor,,,B,medium,Space & Astronomy
+144,Who invented dynamite: Thomas Edison or Alfred Nobel?,Thomas Edison,Alfred Nobel,,,A,medium,Scientists & Discoveries
+145,Which gas does breathing mainly add to exhaled air: nitrous oxide or carbon dioxide?,nitrous oxide,carbon dioxide,,,B,medium,Physics & Chemistry
+146,Which space rock burns up as a meteor: a comet or a meteoroid?,a comet,a meteoroid,,,B,medium,Space & Astronomy
+147,Who discovered X-rays: Wilhelm Roentgen or Henri Becquerel?,Henri Becquerel,Wilhelm Roentgen,,,B,medium,Scientists & Discoveries
+148,Which is the lightest metal: lead or lithium?,lithium,lead,,,B,medium,Physics & Chemistry
+149,Which planet has the greatest axial tilt: Mercury or Uranus?,Uranus,Mercury,,,A,medium,Space & Astronomy
+150,Who discovered Uranus: William Herschel or Edwin Hubble?,William Herschel,Edwin Hubble,,,A,medium,Scientists & Discoveries
+151,Which acid is in the human stomach: acetic acid or hydrochloric acid?,acetic acid,hydrochloric acid,,,A,medium,Physics & Chemistry
+152,Which is a gas giant: Pluto or Neptune?,Pluto,Neptune,,,B,medium,Space & Astronomy
+153,Who proposed continental drift: Harry Hess or Alfred Wegener?,Alfred Wegener,Harry Hess,,,B,medium,Scientists & Discoveries
+154,Which solution turns red litmus blue: an acid or a base?,a base,an acid,,,B,medium,Physics & Chemistry
+155,Which mission first landed humans on the Moon: Gemini 3 or Apollo 11?,Apollo 11,Gemini 3,,,A,medium,Space & Astronomy
+156,Who developed the mercury thermometer: Anders Celsius or Daniel Fahrenheit?,Daniel Fahrenheit,Anders Celsius,,,A,medium,Scientists & Discoveries
+157,Which element forms diamond: silicon or carbon?,carbon,silicon,,,B,medium,Physics & Chemistry
+158,Which star is cooler at its surface: Polaris or Betelgeuse?,Betelgeuse,Polaris,,,A,medium,Space & Astronomy
+159,Who coined the word dinosaur: Charles Darwin or Richard Owen?,Richard Owen,Charles Darwin,,,B,medium,Scientists & Discoveries
+160,Which metal is most abundant in the Earth's crust: aluminum or silver?,aluminum,silver,,,A,medium,Physics & Chemistry
+161,Which star is brightest in our night sky: Betelgeuse or Sirius?,Betelgeuse,Sirius,,,B,medium,Space & Astronomy
+162,Who developed the rabies vaccine: Louis Pasteur or Shibasaburo Kitasato?,Louis Pasteur,Shibasaburo Kitasato,,,A,medium,Scientists & Discoveries
+163,Which safe gas fills party balloons: hydrogen or helium?,helium,hydrogen,,,B,medium,Physics & Chemistry
+164,Which dwarf planet orbits in the asteroid belt: Eris or Ceres?,Ceres,Eris,,,A,medium,Space & Astronomy
+165,Who developed the smallpox vaccine: Edward Jenner or Jonas Salk?,Edward Jenner,Jonas Salk,,,A,medium,Scientists & Discoveries
+166,Which element has the symbol Au: silver or gold?,silver,gold,,,A,medium,Physics & Chemistry
+167,Which is more massive: the rest of the solar system combined or the Sun?,the rest of the solar system combined,the Sun,,,B,medium,Space & Astronomy
+168,Who discovered the electron: J. J. Thomson or Ernest Marsden?,Ernest Marsden,J. J. Thomson,,,B,medium,Scientists & Discoveries
+169,Which change is chemical: melting ice or rusting iron?,melting ice,rusting iron,,,A,medium,Physics & Chemistry
+170,Which event can form a black hole: a solar flare or a supernova?,a supernova,a solar flare,,,A,medium,Space & Astronomy
+171,Who proposed the heliocentric model: Ptolemy or Nicolaus Copernicus?,Nicolaus Copernicus,Ptolemy,,,A,medium,Scientists & Discoveries
+172,Which metal conducts heat best: silver or plastic?,plastic,silver,,,B,medium,Physics & Chemistry
+173,Which spacecraft explored Saturn up close: Magellan or Cassini?,Cassini,Magellan,,,A,medium,Space & Astronomy
+174,Who measured Earth's circumference in ancient times: Aristotle or Eratosthenes?,Aristotle,Eratosthenes,,,A,medium,Scientists & Discoveries
+175,Which gas smells like rotten eggs: hydrogen sulfide or water vapor?,water vapor,hydrogen sulfide,,,B,medium,Physics & Chemistry
+176,Which is the largest volcano in the solar system: Mauna Loa or Olympus Mons?,Olympus Mons,Mauna Loa,,,A,medium,Space & Astronomy
+177,Who discovered four moons of Jupiter: Tycho Brahe or Galileo Galilei?,Galileo Galilei,Tycho Brahe,,,B,medium,Scientists & Discoveries
+178,Which pH value is neutral: 2 or 7?,7,2,,,B,medium,Physics & Chemistry
+179,Which moon orbits Saturn: Ganymede or Titan?,Ganymede,Titan,,,B,medium,Space & Astronomy
+180,Who invented the electric battery: Alessandro Volta or Michael Faraday?,Alessandro Volta,Michael Faraday,,,A,medium,Scientists & Discoveries
+181,Which color of light has the shortest wavelength: red or violet?,red,violet,,,A,medium,Physics & Chemistry
+182,Which object is a ball of ice and dust: an asteroid or a comet?,a comet,an asteroid,,,A,medium,Space & Astronomy
+183,Who discovered the first asteroid: Johann Bode or Giuseppe Piazzi?,Giuseppe Piazzi,Johann Bode,,,B,medium,Scientists & Discoveries
+184,Which liquid is denser: vegetable oil or honey?,honey,vegetable oil,,,B,medium,Physics & Chemistry
+185,Which rover explored Mars: Juno or Curiosity?,Juno,Curiosity,,,B,medium,Space & Astronomy
+186,Who formulated the laws of planetary motion: Johannes Kepler or Nicolaus Copernicus?,Johannes Kepler,Nicolaus Copernicus,,,A,medium,Scientists & Discoveries
+187,Which material writes in pencils: aluminum or graphite?,graphite,aluminum,,,B,medium,Physics & Chemistry
+188,Which is a moon of Jupiter: Titan or Europa?,Europa,Titan,,,A,medium,Space & Astronomy
+189,Who discovered electromagnetic induction: Andre Ampere or Michael Faraday?,Andre Ampere,Michael Faraday,,,B,medium,Scientists & Discoveries
+190,Which change turns liquid into gas: condensation or evaporation?,condensation,evaporation,,,A,medium,Physics & Chemistry
+191,Which planet is colder on average: Uranus or Iapetus?,Iapetus,Uranus,,,B,medium,Space & Astronomy
+192,Who mathematically predicted Neptune: William Herschel or Urbain Le Verrier?,Urbain Le Verrier,William Herschel,,,B,medium,Scientists & Discoveries
+193,Which element is a liquid metal: bromine or mercury?,mercury,bromine,,,A,medium,Physics & Chemistry
+194,Which galaxy will merge with the Milky Way: Triangulum or Andromeda?,Andromeda,Triangulum,,,A,medium,Space & Astronomy
+195,Who founded modern taxonomy: Carl Linnaeus or Charles Darwin?,Carl Linnaeus,Charles Darwin,,,A,medium,Scientists & Discoveries
+196,Which noble gas is lightest: neon or helium?,helium,oganesson,,,A,medium,Physics & Chemistry
+197,Which takes about 225 Earth days to orbit the Sun: Comet Encke or Venus?,Comet Encke,Venus,,,B,medium,Space & Astronomy
+198,Who discovered the laws of heredity: Gregor Mendel or Alfred Russel Wallace?,Alfred Russel Wallace,Gregor Mendel,,,B,medium,Scientists & Discoveries
+199,Which acid is in vinegar: citric acid or acetic acid?,acetic acid,citric acid,,,B,medium,Physics & Chemistry
+200,Which shines brighter in our night sky: Altair or Venus?,Altair,Venus,,,B,medium,Space & Astronomy
+201,Who identified the atomic nucleus?,Ernest Rutherford,Niels Bohr,J. J. Thomson,,A,hard,Scientists & Discoveries
+202,What is the atomic number of carbon?,6,4,8,,A,hard,Physics & Chemistry
+203,What is the approximate surface temperature of Venus?,about 120 degrees Celsius,about 460 degrees Celsius,about 800 degrees Celsius,,B,hard,Space & Astronomy
+204,Who proposed the planetary model of the atom?,Werner Heisenberg,Max Planck,Niels Bohr,,C,hard,Scientists & Discoveries
+205,What is the approximate pH of strong hydrochloric acid?,about 1,about 13,about 9,,A,hard,Physics & Chemistry
+206,Which is the largest moon in the solar system?,Oberon,Callisto,Ganymede,,C,hard,Space & Astronomy
+207,Who formulated the uncertainty principle?,Werner Heisenberg,Louis de Broglie,Erwin Schrodinger,,A,hard,Scientists & Discoveries
+208,Which is the most abundant element in the universe?,beryllium,astatine,hydrogen,,C,hard,Physics & Chemistry
+209,How long does sunlight take to reach Earth?,about 8 minutes,about 20 minutes,about 2 minutes,,A,hard,Space & Astronomy
+210,Who first measured the charge-to-mass ratio of the electron?,Eugen Goldstein,J. J. Thomson,Robert Millikan,,B,hard,Scientists & Discoveries
+211,Which element has the chemical symbol K?,potassium,calcium,krypton,,A,hard,Physics & Chemistry
+212,What is the Kuiper Belt?,a band of asteroids between Mars and Jupiter,a ring of icy bodies beyond Neptune,a cloud of gas around the Sun,,B,hard,Space & Astronomy
+213,Who discovered radioactivity?,Paul Villard,Pierre Curie,Henri Becquerel,,C,hard,Scientists & Discoveries
+214,Which ion makes a solution acidic?,the chloride ion,the hydrogen ion,the hydroxide ion,,B,hard,Physics & Chemistry
+215,What is a light-year?,a unit of brightness,a unit of time,a unit of distance,,C,hard,Space & Astronomy
+216,Who discovered the positron?,Patrick Blackett,Clinton Davisson,Carl Anderson,,C,hard,Scientists & Discoveries
+217,What is the atomic number of oxygen?,16,8,2,,B,hard,Physics & Chemistry
+218,Which is the largest object in the asteroid belt?,Vesta,Ceres,Pallas,,B,hard,Space & Astronomy
+219,Who discovered the dwarf planet Pluto?,Clyde Tombaugh,Percival Lowell,William Herschel,,A,hard,Scientists & Discoveries
+220,What is the approximate pH of a strong alkali like sodium hydroxide?,about 7,about 1,about 14,,C,hard,Physics & Chemistry
+221,The planet Neptune is named after the Roman god of what?,the sky,the underworld,the sea,,C,hard,Space & Astronomy
+222,Who coined the biological term cell?,Robert Hooke,Theodor Schwann,Antonie van Leeuwenhoek,,A,hard,Scientists & Discoveries
+223,Which subatomic particle has a negative charge?,the proton,the electron,the neutron,,B,hard,Physics & Chemistry
+224,Which large galaxy is nearest to the Milky Way?,the Andromeda Galaxy,the Triangulum Galaxy,the Sombrero Galaxy,,A,hard,Space & Astronomy
+225,Who invented the lightning rod?,Joseph Henry,Benjamin Franklin,Nikola Tesla,,B,hard,Scientists & Discoveries
+226,What is the boiling point of water in Fahrenheit?,180 degrees Fahrenheit,212 degrees Fahrenheit,100 degrees Fahrenheit,,B,hard,Physics & Chemistry
+227,Which object spins hundreds of times each second?,a neutron star,a red giant,a brown dwarf,,A,hard,Space & Astronomy
+228,Who predicted the existence of antimatter?,Wolfgang Pauli,Enrico Fermi,Paul Dirac,,C,hard,Scientists & Discoveries
+229,Which is the most abundant metal in the Earth's crust?,oxygen,tin,silicon,,A,hard,Physics & Chemistry
+230,What is the largest canyon system on Mars?,Hellas Basin,Valles Marineris,Olympus Rupes,,B,hard,Space & Astronomy
+231,Who proved that microbes cause fermentation?,Louis Pasteur,Ignaz Semmelweis,Robert Koch,,A,hard,Scientists & Discoveries
+232,What is the chemical symbol of tungsten?,Tu,T,W,,C,hard,Physics & Chemistry
+233,Which star is closest to the Sun?,Rigel,Proxima Centauri,Barnard's Star,,B,hard,Space & Astronomy
+234,Who first observed living microorganisms?,Robert Hooke,Antonie van Leeuwenhoek,Francesco Redi,,B,hard,Scientists & Discoveries
+235,Which color flame does copper burn with?,blue,green,crimson,,B,hard,Physics & Chemistry
+236,About what percentage of the Sun is hydrogen?,about 73 percent,about 91 percent,about 55 percent,,A,hard,Space & Astronomy
+237,Who proposed the existence of the neutrino?,Wolfgang Pauli,Hendrik Lorentz,Lise Meitner,,A,hard,Scientists & Discoveries
+238,Which element has atomic number 1?,hydrogen,sulfur,boron,,A,hard,Physics & Chemistry
+239,Which space telescope launched in 2021?,Spitzer,Hubble,the James Webb Space Telescope,,C,hard,Space & Astronomy
+240,Who showed that electric current deflects a compass needle?,Andre Marie Ampere,Hans Christian Oersted,Georg Ohm,,B,hard,Scientists & Discoveries
+241,Which acid fills car batteries?,carbonic acid,nitric acid,sulfuric acid,,C,hard,Physics & Chemistry
+242,What powers the Sun?,nuclear fusion,chemical burning,nuclear fission,,A,hard,Space & Astronomy
+243,Who was the first human in space?,Alan Shepard,Yuri Gagarin,Neil Armstrong,,B,hard,Scientists & Discoveries
+244,What is the chemical symbol of sodium?,S,Na,So,,B,hard,Physics & Chemistry
+245,Where does the main asteroid belt lie?,between Jupiter and Saturn,between Mars and Jupiter,between Earth and Mars,,B,hard,Space & Astronomy
+246,Who invented the petri dish?,Emil von Behring,Elie Metchnikoff,Julius Richard Petri,,C,hard,Scientists & Discoveries
+247,What is the fourth state of matter?,colloid,gas,plasma,,C,hard,Physics & Chemistry
+248,What was the first artificial satellite?,Vostok 1,Explorer 1,Sputnik 1,,C,hard,Space & Astronomy
+249,Who was the first woman to win a Nobel Prize?,Rosalind Franklin,Maria Goeppert Mayer,Marie Curie,,C,hard,Scientists & Discoveries
+250,Which metal conducts electricity best?,bronze,silver,copper,,B,hard,Physics & Chemistry
+251,What did the Voyager probes carry into interstellar space?,solar sails,nuclear fuel rods,the Golden Record,,C,hard,Space & Astronomy
+252,Who produced the famous Photo 51 of DNA?,Rosalind Franklin,Barbara McClintock,Martha Chase,,A,hard,Scientists & Discoveries
+253,Which element is named after the Sun?,selenium,argon,helium,,C,hard,Physics & Chemistry
+254,What is the Oort Cloud?,a layer of the Sun's atmosphere,a distant shell of icy bodies,a ring of asteroids near Mars,,B,hard,Space & Astronomy
+255,Who first identified the cosmic microwave background?,Arno Penzias,Fred Hoyle,Georges Lemaitre,,A,hard,Scientists & Discoveries
+256,Which element is the most electronegative?,fluorine,cesium,iodine,,A,hard,Physics & Chemistry
+257,Which planet has a hexagonal storm at its north pole?,Orcus,Planet Nine,Saturn,,C,hard,Space & Astronomy
+258,Who described Megalosaurus in 1824?,Othniel Marsh,Gideon Mantell,William Buckland,,C,hard,Scientists & Discoveries
+259,What is the SI unit of pressure?,the newton,the pascal,the joule,,B,hard,Physics & Chemistry
+260,What is a parsec?,a unit of distance,a measure of stellar mass,a measure of brightness,,A,hard,Space & Astronomy
+261,Who invented the Geiger counter?,Wilhelm Wien,Hans Geiger,Otto Hahn,,B,hard,Scientists & Discoveries
+262,Which element has the symbol Sn?,tin,antimony,strontium,,A,hard,Physics & Chemistry
+263,Which moon has lakes of liquid methane?,Europa,Titan,Io,,B,hard,Space & Astronomy
+264,Who proposed the primeval atom hypothesis?,Subrahmanyan Chandrasekhar,Fred Whipple,Georges Lemaitre,,C,hard,Scientists & Discoveries
+265,What is the pH of pure water at 25 degrees Celsius?,7,14,5,,A,hard,Physics & Chemistry
+266,Which is among the largest known stars?,UY Scuti,VY Canis Majoris,Stephenson 2-18,,C,hard,Space & Astronomy
+267,Who coined the term biology?,Jean-Baptiste Lamarck,Theophrastus,Thomas Huxley,,A,hard,Scientists & Discoveries
+268,Which element has the symbol Pb?,phosphorus,polonium,lead,,C,hard,Physics & Chemistry
+269,Which spacecraft first entered interstellar space?,Voyager 1,Voyager 2,Pioneer 10,,A,hard,Space & Astronomy
+270,Who predicted the neutron before its discovery?,James Chadwick,Ernest Rutherford,Eugene Wigner,,B,hard,Scientists & Discoveries
+271,What is the SI unit of electric current?,the watt,the ampere,the volt,,B,hard,Physics & Chemistry
+272,What is the temperature of deep space (cosmic background)?,about 27 kelvin,about 2.7 kelvin,about 0 kelvin,,B,hard,Space & Astronomy
+273,Who was the first American to orbit Earth?,John Glenn,Virgil Grissom,Buzz Aldrin,,A,hard,Scientists & Discoveries
+274,Which element is named after Germany?,germanium,gallium,francium,,A,hard,Physics & Chemistry
+275,What did William Herschel discover in 1781?,a new star,a shooting star,the planet Uranus,,C,hard,Space & Astronomy
+276,Who worked out the structure of benzene?,Friedrich Wohler,August Kekule,Justus Liebig,,B,hard,Scientists & Discoveries
+277,Which element was named after a living scientist?,fermium,einsteinium,seaborgium,,C,hard,Physics & Chemistry
+278,Which dwarf planet has a moon named Charon?,Pluto,Makemake,Ixion,,A,hard,Space & Astronomy
+279,Who discovered the radiation belts around Earth?,Robert Goddard,Wernher von Braun,James Van Allen,,C,hard,Scientists & Discoveries
+280,Which element is the densest?,platinum,osmium,iridium,,B,hard,Physics & Chemistry
+281,Which is the nearest open star cluster to Earth?,the Hyades,the Beehive Cluster,the Pleiades,,A,hard,Space & Astronomy
+282,Who discovered nuclear fission?,Otto Frisch,Ida Noddack,Otto Hahn,,C,hard,Scientists & Discoveries
+283,Which element burns with a lilac flame?,potassium,sodium,rubidium,,A,hard,Physics & Chemistry
+284,Which planet has a moon named Enceladus?,Mimas,Saturn,Dione,,B,hard,Space & Astronomy
+285,Who discovered the antibiotic streptomycin?,Selman Waksman,Gerhard Domagk,Alexander Fleming,,A,hard,Scientists & Discoveries
+286,What are atoms of one element with different neutron counts called?,allotropes,ions,isotopes,,C,hard,Physics & Chemistry
+287,What was the Great Dark Spot seen by Voyager 2?,a storm on Neptune,a lunar crater,a storm on Jupiter,,A,hard,Space & Astronomy
+288,Who discovered the Zeeman effect?,Gustav Kirchhoff,Pieter Zeeman,Johannes Stark,,B,hard,Scientists & Discoveries
+289,What is the usual oxidation state of oxygen in compounds?,plus two,minus one,minus two,,C,hard,Physics & Chemistry
+290,Which planet has a moon named Miranda?,Proteus,Uranus,Nereid,,B,hard,Space & Astronomy
+291,Who discovered the ABO blood groups?,Jean Dausset,William Harvey,Karl Landsteiner,,C,hard,Scientists & Discoveries
+292,Which metal has the highest melting point?,molybdenum,tungsten,titanium,,B,hard,Physics & Chemistry
+293,Which spacecraft flew past Pluto in 2015?,OSIRIS-REx,Dawn,New Horizons,,C,hard,Space & Astronomy
+294,Who discovered hydrogen?,Henry Cavendish,Daniel Rutherford,Joseph Black,,A,hard,Scientists & Discoveries
+295,Which gas gives volcanoes their sharp smell?,sulfur dioxide,methane,carbon monoxide,,A,hard,Physics & Chemistry
+296,Which star cluster is nicknamed the Seven Sisters?,the Orion Nebula,the Hyades,the Pleiades,,C,hard,Space & Astronomy
+297,Who discovered pulsars?,Martin Ryle,Jocelyn Bell Burnell,Thomas Gold,,B,hard,Scientists & Discoveries
+298,Which is the lightest radioactive element?,radium,promethium,technetium,,C,hard,Physics & Chemistry
+299,Who predicted the return of a famous comet?,Edmond Halley,Johannes Hevelius,Johann Encke,,A,hard,Space & Astronomy
+300,In which country was the first Neanderthal skull found?,France,Germany,Belgium,,B,hard,Scientists & Discoveries
+301,What is the half-life of carbon-14?,about 1600 years,about 704 million years,about 5730 years,about 12 years,C,expert,Physics & Chemistry
+302,What is the approximate diameter of the Milky Way?,about 100000 light-years,about 1 million light-years,about 500000 light-years,about 10000 light-years,A,expert,Space & Astronomy
+303,In which year did Newton publish the Principia?,1666,1687,1729,1619,B,expert,Scientists & Discoveries
+304,What is the oxidation number of hydrogen in metal hydrides?,minus one,minus three,minus two,minus four,A,expert,Physics & Chemistry
+305,What is the escape velocity of Earth?,about 3.4 kilometers per second,about 7.9 kilometers per second,about 11.2 kilometers per second,about 25 kilometers per second,C,expert,Space & Astronomy
+306,Which region did Alexander von Humboldt explore in 1799?,an expedition to Siberia,a voyage to the South Seas,a survey of the Nile,an expedition to Latin America,D,expert,Scientists & Discoveries
+307,What is the bond angle in a water molecule?,about 120 degrees,about 104.5 degrees,about 90 degrees,about 180 degrees,B,expert,Physics & Chemistry
+308,Which moon is the most volcanically active?,Triton,Io,Enceladus,Rhea,B,expert,Space & Astronomy
+309,Which scientist proposed the laws of inheritance?,Gregor Mendel,Rosalind Franklin,Charles Darwin,Thomas Hunt Morgan,A,expert,Scientists & Discoveries
+310,What is the change from gas directly to solid called?,sublimation,condensation,crystallization,deposition,D,expert,Physics & Chemistry
+311,How strong is gravity on the Moon compared with Earth?,about one sixth,about one third,about one tenth,about one half,A,expert,Space & Astronomy
+312,Who discovered ultraviolet light?,William Herschel,Johann Wilhelm Ritter,Thomas Young,Heinrich Hertz,B,expert,Scientists & Discoveries
+313,What is the name of element 118?,tennessine,nihonium,oganesson,moscovium,C,expert,Physics & Chemistry
+314,Which spacecraft first flew by Jupiter?,Pioneer 11,Galileo,Voyager 1,Pioneer 10,D,expert,Space & Astronomy
+315,Which crop did Barbara McClintock study?,maize,wheat,fruit flies,pea plants,A,expert,Scientists & Discoveries
+316,Which law links gas pressure and volume at constant temperature?,Charles's law,Boyle's law,Gay-Lussac's law,Avogadro's law,B,expert,Physics & Chemistry
+317,What is the approximate age of the universe?,about 4.6 billion years,about 100 billion years,about 1 billion years,about 13.8 billion years,D,expert,Space & Astronomy
+318,In which year was DNA's double helix published?,1951,1962,1953,1944,C,expert,Scientists & Discoveries
+319,Which process splits an atomic nucleus?,alpha decay,nuclear fission,radioactive decay,nuclear fusion,B,expert,Physics & Chemistry
+320,What is the boundary around a black hole called?,the accretion disk,the singularity,the event horizon,the photon sphere,C,expert,Space & Astronomy
+321,Who discovered the Raman effect?,C. V. Raman,Satyendra Bose,Homi Bhabha,Meghnad Saha,A,expert,Scientists & Discoveries
+322,How many electrons fit in an f subshell?,14,6,10,18,A,expert,Physics & Chemistry
+323,Which probe has flown through the Sun's corona?,Solar Orbiter,the Parker Solar Probe,SOHO,Ulysses,B,expert,Space & Astronomy
+324,Who discovered the conservation of mass in reactions?,John Dalton,Joseph Proust,Humphry Davy,Antoine Lavoisier,D,expert,Scientists & Discoveries
+325,Which element ends energy release in ordinary stellar fusion?,chlorine,uranium,aluminum,iron,D,expert,Physics & Chemistry
+326,What was the first interstellar object found in our solar system?,Comet Elenin,Comet Halley,Oumuamua,Comet Borisov,C,expert,Space & Astronomy
+327,Which astronomer lost part of his nose in a duel?,John Flamsteel,Tycho Brahe,Johannes Kepler,Johann Bayer,B,expert,Scientists & Discoveries
+328,What is the chemical name of baking soda?,sodium carbonate,sodium chloride,sodium bicarbonate,sodium hydroxide,C,expert,Physics & Chemistry
+329,What is the largest impact basin on the Moon?,the Orientale basin,the South Pole-Aitken basin,the Tycho crater,the Imbrium basin,B,expert,Space & Astronomy
+330,In which year did Marie Curie win her second Nobel Prize?,1903,1898,1921,1911,D,expert,Scientists & Discoveries
+331,What is the SI unit of electrical resistance?,the farad,the ohm,the henry,the tesla,B,expert,Physics & Chemistry
+332,What are Saturn's rings mostly made of?,water ice,iron dust,methane ice,carbon grains,A,expert,Space & Astronomy
+333,Who first sent radio signals across the Atlantic?,Reginald Fessenden,Oliver Lodge,Guglielmo Marconi,Heinrich Hertz,C,expert,Scientists & Discoveries
+334,What is the typical pH of acid rain?,about 4 to 5,about 6 to 7,about 10 to 11,about 8 to 9,A,expert,Physics & Chemistry
+335,How many planets spin retrograde from a north-side view?,none,two,fifteen,one,B,expert,Space & Astronomy
+336,Who discovered that bacteria cause peptic ulcers?,Barry Marshall,Albert Sabin,Theodor Escherich,Robin Warren,A,expert,Scientists & Discoveries
+337,What is the exact atomic mass of carbon-12?,exactly 12 unified mass units,about 11 unified mass units,about 14 unified mass units,about 13 unified mass units,A,expert,Physics & Chemistry
+338,How fast does the ground move at the equator from Earth's spin?,about 107000 kilometers per hour,about 30 kilometers per hour,about 1670 kilometers per hour,about 300 kilometers per hour,D,expert,Space & Astronomy
+339,Who discovered the Doppler effect?,Leon Foucault,Christian Doppler,Joseph Fourier,Ernst Mach,B,expert,Scientists & Discoveries
+340,What does uranium-238 slowly decay into at the end of its chain?,carbon-14,thorium-232,nitrogen-14,lead-206,D,expert,Physics & Chemistry
+341,What is the outer boundary of the Sun's wind called?,the heliopause,the magnetopause,the termination shock,the Kuiper cliff,A,expert,Space & Astronomy
+342,Who showed that galaxies recede faster with distance?,Edwin Hubble,Vesto Slipher,Henrietta Leavitt,Milton Humason,A,expert,Scientists & Discoveries
+343,Which element has atomic number 26?,chromium,cobalt,manganese,iron,D,expert,Physics & Chemistry
+344,How hot is the Sun's core?,about 15 million kelvin,about 1 billion kelvin,about 1 million kelvin,about 5800 kelvin,C,expert,Space & Astronomy
+345,Who discovered argon with Lord Rayleigh?,William Crookes,Heinrich Geissler,Daniel Bernoulli,William Ramsay,D,expert,Scientists & Discoveries
+346,Which energy unit equals 1000 joules?,the kilojoule,the megajoule,the erg,the calorie,A,expert,Physics & Chemistry
+347,What is the dark center of a shadow called?,the corona,the umbra,the antumbra,the penumbra,B,expert,Space & Astronomy
+348,Who built the first reflecting telescope?,James Gregory,Hans Lippershey,Isaac Newton,Christiaan Huygens,C,expert,Scientists & Discoveries
+349,Which rule fills electron orbitals lowest first?,the octet rule,the Aufbau principle,the Pauli exclusion principle,Hund's rule,B,expert,Physics & Chemistry
+350,Which is the tallest volcano on Venus?,Maat Mons,Ozza Mons,Maxwell Montes,Sapas Mons,A,expert,Space & Astronomy
+351,Who decoded the honeybee waggle dance?,Niko Tinbergen,Konrad Lorenz,Ivan Pavlov,Karl von Frisch,D,expert,Scientists & Discoveries
+352,What is the rest mass of a photon?,zero,negative,small but nonzero,infinite,A,expert,Physics & Chemistry
+353,In about how many billion years will the Milky Way meet Andromeda?,about 45 billion years,about 14 billion years,about 4.5 billion years,about 10 billion years,C,expert,Space & Astronomy
+354,Who first measured Earth's density in 1798?,Nevil Maskelyne,Henry Cavendish,John Michell,Pierre-Simon Laplace,B,expert,Scientists & Discoveries
+355,What is the change from solid directly to gas called?,deposition,freezing,vaporization,sublimation,D,expert,Physics & Chemistry
+356,Which probe first visited Mercury?,Mariner 10,Mariner 4,Mariner 9,MESSENGER,A,expert,Space & Astronomy
+357,Who discovered the moons Titania and Oberon?,William Herschel,Gerard Kuiper,Giovanni Cassini,Johann Bode,A,expert,Scientists & Discoveries
+358,What bond links one water molecule to another?,an ionic bond,a hydrogen bond,a covalent bond,a metallic bond,B,expert,Physics & Chemistry
+359,What was the first American space station?,Salyut 1,Mir,Tiangong,Skylab,D,expert,Space & Astronomy
+360,Who invented the mercury barometer?,Otto von Guericke,Blaise Pascal,Evangelista Torricelli,Denis Papin,C,expert,Scientists & Discoveries
+361,What quarks form a proton?,up up up,up down strange,up down down,up up down,D,expert,Physics & Chemistry
+362,Which probe first landed on an asteroid?,NEAR Shoemaker,Rosetta,Hayabusa,Deep Impact,A,expert,Space & Astronomy
+363,Who invented the Leyden jar?,Charles du Fay,Pieter van Musschenbroek,Luigi Galvani,Alessandro Volta,B,expert,Scientists & Discoveries
+364,What is the decay chain of uranium-238 called?,the neptunium series,the actinium series,the uranium series,the thorium series,C,expert,Physics & Chemistry
+365,Which quasar is the closest bright one to Earth?,PDS 456,3C 273,3C 9,Markarian 231,B,expert,Space & Astronomy
+366,Who discovered cosmic rays?,Victor Hess,Werner Kolhorster,Theodor Wulf,Jacob Clay,A,expert,Scientists & Discoveries
+367,Which thermodynamic process exchanges no heat?,an isobaric process,an adiabatic process,an isochoric process,an isothermal process,B,expert,Physics & Chemistry
+368,Which was the first spacecraft to orbit Mercury?,BepiColombo,Venus Express,MESSENGER,Mariner 2,C,expert,Space & Astronomy
+369,Who coined the word gene?,Erwin Chargaff,Thomas Hunt Morgan,Wilhelm Johannsen,Hugo de Vries,C,expert,Scientists & Discoveries
+370,Which monatomic gas is most common in Earth's atmosphere?,neon,radon,argon,xenon,C,expert,Physics & Chemistry
+371,Which method finds exoplanets by a star's wobble?,the transit method,direct imaging,the microlensing method,the radial velocity method,D,expert,Space & Astronomy
+372,Who discovered jumping genes?,Alfred Hershey,Nettie Stevens,Oswald Avery,Barbara McClintock,D,expert,Scientists & Discoveries
+373,What is the gain of electrons in chemistry called?,reduction,electrolysis,precipitation,electronegativity,A,expert,Physics & Chemistry
+374,Which mission landed a probe on comet 67P?,Rosetta,Vega,New Horizons,Stardust,A,expert,Space & Astronomy
+375,Who led the team that purified penicillin?,Ernst Chain,Howard Florey,Norman Heatley,Rene Dubos,B,expert,Scientists & Discoveries
+376,Which quantity measures disorder in thermodynamics?,enthalpy,specific heat,free energy,entropy,D,expert,Physics & Chemistry
+377,Which dwarf planet triggered Pluto's reclassification?,Sedna,Eris,Haumea,Quaoar,B,expert,Space & Astronomy
+378,Who discovered that chromosomes determine sex?,Nettie Stevens,Clarence McClung,Edmund Beecher Wilson,August Weismann,A,expert,Scientists & Discoveries
+379,Which law says total energy stays constant?,conservation of mass,conservation of momentum,conservation of energy,conservation of charge,C,expert,Physics & Chemistry
+380,What was the 1990 Voyager 1 portrait of Earth called?,the Blue Marble,the Deep Field,Earthrise,the Pale Blue Dot,D,expert,Space & Astronomy
+381,Who mapped fruit fly genes onto chromosomes?,Calvin Bridges,Alfred Sturtevant,Thomas Hunt Morgan,Hermann Muller,C,expert,Scientists & Discoveries
+382,Which process separates crude oil into fractions?,decantation,chromatography,fractional distillation,filtration,C,expert,Physics & Chemistry
+383,Which telescope array imaged the first black hole?,the Keck telescopes,the Very Large Telescope,the Event Horizon Telescope,the ALMA array,C,expert,Space & Astronomy
+384,Who proved citrus cures scurvy?,William Stark,James Lind,James Cook,Gilbert Blane,B,expert,Scientists & Discoveries
+385,Which constant links photon energy and frequency?,the Boltzmann constant,the Rydberg constant,the Avogadro constant,the Planck constant,D,expert,Physics & Chemistry
+386,What was the first detected gravitational wave event called?,GW150914,GW151226,GW190521,GW170817,A,expert,Space & Astronomy
+387,Who isolated sodium and potassium by electrolysis?,Jons Jacob Berzelius,Carl Scheele,Martin Klaproth,Humphry Davy,D,expert,Scientists & Discoveries
+388,What is the triple-point temperature of water?,373.15 kelvin,253.16 kelvin,273.16 kelvin,298.15 kelvin,C,expert,Physics & Chemistry
+389,Which constellation holds the south celestial pole?,Carina,Centaurus,Octans,Crux,C,expert,Space & Astronomy
+390,Who discovered the capillaries?,Giorgio Baglivi,Jan Swammerdam,Marcello Malpighi,Camillo Golgi,C,expert,Scientists & Discoveries
+391,What is light bending around a massive object called?,gravitational redshift,gravitational lensing,frame dragging,tidal locking,B,expert,Physics & Chemistry
+392,Which known black hole is closest to Earth?,Gaia BH3,Cygnus X-1,V404 Cygni,Gaia BH1,D,expert,Space & Astronomy
+393,Who discovered prions?,Stanley Prusiner,Robert Gallo,Carleton Gajdusek,Luc Montagnier,A,expert,Scientists & Discoveries
+394,What is a solution that cannot dissolve more solute called?,an unsaturated solution,a saturated solution,a supersaturated solution,a colloidal solution,B,expert,Physics & Chemistry
+395,Which human-made object is farthest from Earth?,Mariner 10,Pioneer 6,Cassini,Voyager 1,D,expert,Space & Astronomy
+396,Who coined the term ecosystem?,Charles Elton,Aldo Leopold,Arthur Tansley,Ernst Haeckel,C,expert,Scientists & Discoveries
+397,Which particle carries the electromagnetic force?,the photon,the Z boson,the gluon,the W boson,A,expert,Physics & Chemistry
+398,How many constellations does the IAU recognize?,98,88,78,108,B,expert,Space & Astronomy
+399,Who discovered vitamin C?,Casimir Funk,Frederick Hopkins,Christiaan Eijkman,Albert Szent-Gyorgyi,D,expert,Scientists & Discoveries
+400,What is the SI unit of absorbed radiation dose?,the gray,the sievert,the curie,the roentgen,A,expert,Physics & Chemistry
+401,What is the chemical symbol for gold?,,,,,Au,extreme,Space & Astronomy
+402,What gas do plants absorb from the air for photosynthesis?,,,,,Carbon dioxide,extreme,Scientists & Discoveries
+403,What is the lightest chemical element?,,,,,Hydrogen,extreme,Physics & Chemistry
+404,What is the brightest star in the night sky?,,,,,Sirius,extreme,Space & Astronomy
+405,Whose theories of special and general relativity changed physics?,,,,,Einstein,extreme,Scientists & Discoveries
+406,Which gas makes up about 78 percent of the air?,,,,,Nitrogen,extreme,Physics & Chemistry
+407,In which galaxy does Earth lie?,,,,,Milky Way,extreme,Space & Astronomy
+408,Who described universal gravitation?,,,,,Newton,extreme,Scientists & Discoveries
+409,What is the chemical symbol for iron?,,,,,Fe,extreme,Physics & Chemistry
+410,Which star is closest to Earth?,,,,,The Sun,extreme,Space & Astronomy
+411,Who discovered penicillin?,,,,,Fleming,extreme,Scientists & Discoveries
+412,What is the hardest natural substance?,,,,,Diamond,extreme,Physics & Chemistry
+413,What is the largest planet in the solar system?,,,,,Jupiter,extreme,Space & Astronomy
+414,Who created the periodic table?,,,,,Mendeleev,extreme,Scientists & Discoveries
+415,Which gas do plants take in for photosynthesis?,,,,,Carbon dioxide,extreme,Physics & Chemistry
+416,What is a shooting star really?,,,,,Meteor,extreme,Space & Astronomy
+417,Who discovered the neutron?,,,,,Chadwick,extreme,Scientists & Discoveries
+418,What substance is H2O?,,,,,Water,extreme,Physics & Chemistry
+419,Which planet is called the Red Planet?,,,,,Mars,extreme,Space & Astronomy
+420,Who discovered radium with Pierre?,,,,,Curie,extreme,Scientists & Discoveries
+421,What is the chemical symbol for potassium?,,,,,K,extreme,Physics & Chemistry
+422,Which planet orbits closest to the Sun?,,,,,Mercury,extreme,Space & Astronomy
+423,Who patented the telephone?,,,,,Bell,extreme,Scientists & Discoveries
+424,Which metal is most abundant in the Earth's crust?,,,,,Aluminum,extreme,Physics & Chemistry
+425,Which planet is farthest from the Sun?,,,,,Neptune,extreme,Space & Astronomy
+426,Who developed the process of pasteurization?,,,,,Pasteur,extreme,Scientists & Discoveries
+427,What is the lightest metal?,,,,,Lithium,extreme,Physics & Chemistry
+428,Which large galaxy will collide with the Milky Way?,,,,,Andromeda,extreme,Space & Astronomy
+429,Who reached the Americas from Europe in 1492?,,,,,Columbus,extreme,Scientists & Discoveries
+430,What is the chemical symbol for copper?,,,,,Cu,extreme,Physics & Chemistry
+431,What is the largest moon of Saturn?,,,,,Titan,extreme,Space & Astronomy
+432,Who discovered X-rays?,,,,,Roentgen,extreme,Scientists & Discoveries
+433,Which element makes up diamond and graphite?,,,,,Carbon,extreme,Physics & Chemistry
+434,What force keeps planets in orbit?,,,,,Gravity,extreme,Space & Astronomy
+435,Who discovered the electron?,,,,,Thomson,extreme,Scientists & Discoveries
+436,What is the pH of pure water?,,,,,7,extreme,Physics & Chemistry
+437,What is the giant canyon system on Mars called?,,,,,Valles Marineris,extreme,Space & Astronomy
+438,Who perfected the practical light bulb?,,,,,Edison,extreme,Scientists & Discoveries
+439,Which element is the most reactive nonmetal?,,,,,Fluorine,extreme,Physics & Chemistry
+440,Which planet is the hottest in our solar system?,,,,,Venus,extreme,Space & Astronomy
+441,Who first charted the shape of the Milky Way?,,,,,William Herschel,extreme,Scientists & Discoveries
+442,What is the chemical symbol for silver?,,,,,Ag,extreme,Physics & Chemistry
+443,Which planet hosts the Great Red Spot?,,,,,Jupiter,extreme,Space & Astronomy
+444,What gas makes up most of Earth atmosphere?,,,,,Nitrogen,extreme,Scientists & Discoveries
+445,What is the strongest known acid?,,,,,Fluoroantimonic acid,extreme,Physics & Chemistry
+446,Which dwarf planet is the most massive?,,,,,Eris,extreme,Space & Astronomy
+447,Who placed the Sun at the center of the solar system?,,,,,Copernicus,extreme,Scientists & Discoveries
+448,Which gas dominates the Sun by mass?,,,,,Hydrogen,extreme,Physics & Chemistry
+449,Which planet is known to support life?,,,,,Earth,extreme,Space & Astronomy
+450,Who built the first refracting telescope?,,,,,Hans Lippershey,extreme,Scientists & Discoveries
+451,What is the chemical symbol for calcium?,,,,,Ca,extreme,Physics & Chemistry
+452,What is the largest object in the asteroid belt?,,,,,Ceres,extreme,Space & Astronomy
+453,Who discovered the noble gas radon?,,,,,Ernst Dorn,extreme,Scientists & Discoveries
+454,What is the rarest naturally occurring element on Earth?,,,,,Astatine,extreme,Physics & Chemistry
+455,What is the largest constellation in the sky?,,,,,Hydra,extreme,Space & Astronomy
+456,Who invented the vacuum flask?,,,,,James Dewar,extreme,Scientists & Discoveries
+457,Which metal conducts electricity the best?,,,,,Silver,extreme,Physics & Chemistry
+458,What is the nearest star system to the Sun?,,,,,Alpha Centauri,extreme,Space & Astronomy
+459,Who proposed the primeval atom idea behind the Big Bang?,,,,,Georges Lemaitre,extreme,Scientists & Discoveries
+460,What is the lightest of the noble gases?,,,,,Helium,extreme,Physics & Chemistry
+461,What is the largest moon in the solar system?,,,,,Ganymede,extreme,Space & Astronomy
+462,Which group of elements barely reacts at all?,,,,,Noble gases,extreme,Physics & Chemistry
+463,Which planet has the shortest day?,,,,,Jupiter,extreme,Space & Astronomy
+464,Who discovered the malaria parasite?,,,,,Alphonse Laveran,extreme,Scientists & Discoveries
+465,What is the chemical symbol for helium?,,,,,He,extreme,Physics & Chemistry
+466,What is the largest known nebula near our galaxy?,,,,,Tarantula Nebula,extreme,Space & Astronomy
+467,Who solved the structure of DNA together with Crick?,,,,,Watson,extreme,Scientists & Discoveries
+468,Which noble gas is the heaviest?,,,,,Radon,extreme,Physics & Chemistry
+469,What is the most massive known star?,,,,,R136a1,extreme,Space & Astronomy
+470,Who measured the electron's charge with oil drops?,,,,,Robert Millikan,extreme,Scientists & Discoveries
+471,Which element is the only liquid nonmetal at room temperature?,,,,,Bromine,extreme,Physics & Chemistry
+472,What is the largest impact basin on Mars?,,,,,Hellas Basin,extreme,Space & Astronomy
+473,Who invented the Celsius temperature scale?,,,,,Anders Celsius,extreme,Scientists & Discoveries
+474,What is the chemical symbol for nitrogen?,,,,,N,extreme,Physics & Chemistry
+475,Which exoplanet orbits the hottest known star system?,,,,,KELT-9b,extreme,Space & Astronomy
+476,Who coined the phrase Big Bang?,,,,,Fred Hoyle,extreme,Scientists & Discoveries
+477,What is the most abundant organic compound on Earth?,,,,,Cellulose,extreme,Physics & Chemistry
+478,What is the tallest mountain in the solar system?,,,,,Olympus Mons,extreme,Space & Astronomy
+479,Who discovered the proton's home in the nucleus?,,,,,Ernest Rutherford,extreme,Scientists & Discoveries
+480,What is the chemical symbol for lead?,,,,,Pb,extreme,Physics & Chemistry
+481,What is the largest single-dish radio telescope on Earth?,,,,,FAST,extreme,Space & Astronomy
+482,Who explained the true nature of Saturn's rings?,,,,,Christiaan Huygens,extreme,Scientists & Discoveries
+483,What is the lightest solid material known?,,,,,Aerogel,extreme,Physics & Chemistry
+484,Which red supergiant is the nearest supernova candidate?,,,,,Betelgeuse,extreme,Space & Astronomy
+485,Who discovered the laws of electrolysis?,,,,,Michael Faraday,extreme,Scientists & Discoveries
+486,Which stable noble gas is rarest in the air?,,,,,Xenon,extreme,Physics & Chemistry
+487,What is the biggest storm observed in our solar system?,,,,,The Great Red Spot,extreme,Space & Astronomy
+488,Who is called the father of genetics?,,,,,Gregor Mendel,extreme,Scientists & Discoveries
+489,What is the chemical symbol for oxygen?,,,,,O,extreme,Physics & Chemistry
+490,What is the largest known galaxy discovered in 2022?,,,,,Alcyoneus,extreme,Space & Astronomy
+491,Who discovered ultraviolet radiation?,,,,,Johann Ritter,extreme,Scientists & Discoveries
+492,What is the lightest particle that carries electric charge?,,,,,Electron,extreme,Physics & Chemistry
+493,What is the largest moon of Neptune?,,,,,Triton,extreme,Space & Astronomy
+494,Who discovered uranium's natural radioactivity?,,,,,Henri Becquerel,extreme,Scientists & Discoveries
+495,What is the chemical symbol for tin?,,,,,Sn,extreme,Physics & Chemistry
+496,What is the largest impact basin on Mercury?,,,,,Caloris Basin,extreme,Space & Astronomy
+497,Who explained the photoelectric effect in 1905?,,,,,Albert Einstein,extreme,Scientists & Discoveries
+498,Which element makes up most of Earth by mass?,,,,,Iron,extreme,Physics & Chemistry
+499,Which star shines brightest in the constellation Orion?,,,,,Rigel,extreme,Space & Astronomy
