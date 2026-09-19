@@ -299,27 +299,32 @@ function shareText() {
   return t('share1p', { setup, score, url });
 }
 
-function share() {
+function shareUrls() {
+  const url = window.location.origin + window.location.pathname;
   const text = shareText();
-  if (navigator.share) {
-    navigator.share({ title: 'Tic Tac Toe', text }).catch(() => {
-      /* user dismissed the sheet */
-    });
-    return;
-  }
-  copyToClipboard(text);
+  const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
+  const fb = document.getElementById('share-fb');
+  fb.href =
+    'https://www.facebook.com/sharer/sharer.php?u=' +
+    encodeURIComponent(url) +
+    '&quote=' +
+    encodeURIComponent(textNoUrl);
+  document.getElementById('share-x').href =
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  document.getElementById('share-copy').dataset.copy = text;
 }
 
-function copyToClipboard(text) {
-  const done = (ok) => toast(ok ? 'Series copied to clipboard 📋' : 'Could not copy — sorry!');
+function copyResult() {
+  const text = document.getElementById('share-copy').dataset.copy || '';
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
-      () => done(true),
-      () => done(false)
+      () => toast('Series copied to clipboard 📋'),
+      () => window.prompt('Copy your result:', text)
     );
-  } else {
-    done(false);
+    return;
   }
+  window.prompt('Copy your result:', text);
 }
 
 let toastTimer = null;
@@ -457,7 +462,12 @@ function init() {
   });
   document.getElementById('btn-next').addEventListener('click', startRound);
   document.getElementById('btn-menu2').addEventListener('click', () => showScreen('menu'));
-  document.getElementById('btn-share').addEventListener('click', share);
+  const shareRowEl = document.getElementById('share-row');
+  document.getElementById('btn-share').addEventListener('click', () => {
+    shareRowEl.hidden = !shareRowEl.hidden;
+    if (!shareRowEl.hidden) shareUrls();
+  });
+  document.getElementById('share-copy').addEventListener('click', copyResult);
   els.resetSeriesBtn.addEventListener('click', () => {
     state.series = emptyTally();
     saveSeries(currentSetupKey(), state.series);

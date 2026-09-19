@@ -742,7 +742,7 @@ function showGameover() {
 
 /* ---- share (README §2 chain: Web Share → clipboard → prompt) ---------------- */
 
-function share() {
+function shareUrls() {
   const url = window.location.origin + window.location.pathname;
   const vars = { score: state.score, boards: state.boardsCleared, streak: state.bestStreak, url };
   let text;
@@ -760,12 +760,21 @@ function share() {
   } else {
     text = t('share', vars);
   }
-  if (navigator.share) {
-    navigator.share({ title: 'Memory Quiz', text }).catch(() => {
-      /* user dismissed the sheet */
-    });
-    return;
-  }
+  const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
+  const fb = document.getElementById('share-fb');
+  fb.href =
+    'https://www.facebook.com/sharer/sharer.php?u=' +
+    encodeURIComponent(url) +
+    '&quote=' +
+    encodeURIComponent(textNoUrl);
+  document.getElementById('share-x').href =
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  document.getElementById('share-copy').dataset.copy = text;
+}
+
+function copyResult() {
+  const text = document.getElementById('share-copy').dataset.copy || '';
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
       () => toast('Result copied to clipboard 📋'),
@@ -1194,7 +1203,12 @@ function init() {
     .getElementById('btn-retry2')
     .addEventListener('click', () => startRun('campaign', state.levelId));
   document.getElementById('btn-menu4').addEventListener('click', () => showScreen('menu'));
-  document.getElementById('btn-share').addEventListener('click', share);
+  const shareRowEl = document.getElementById('share-row');
+  document.getElementById('btn-share').addEventListener('click', () => {
+    shareRowEl.hidden = !shareRowEl.hidden;
+    if (!shareRowEl.hidden) shareUrls();
+  });
+  document.getElementById('share-copy').addEventListener('click', copyResult);
 
   els.board.addEventListener('pointerdown', handleBoardPointerDown);
   els.board.addEventListener('click', handleBoardClick);

@@ -34,7 +34,7 @@ import {
   localPercentile,
   sparklinePoints,
 } from './core.js';
-import { GAME_CONFIG, t } from './config.js';
+import { GAME_CONFIG, t } from './config.js?v=3';
 import {
   getBest,
   getHistory,
@@ -293,27 +293,38 @@ function gameOver() {
   els.btnRetry.focus(); // keyboard flow lands on the primary action
 }
 
-async function shareScore() {
+function shareUrls() {
+  const url = `${location.origin}/games/${SLUG}/`;
   const bestMs = bestMsThisRun ?? getBest().bestMs;
   const text = t('share', {
     bestMs: bestMs !== null ? `${bestMs}ms` : '??',
     score: score.toLocaleString(GAME_CONFIG.locale),
-    url: `${location.origin}/games/${SLUG}/`,
+    url,
   });
-  try {
-    if (navigator.share) {
-      await navigator.share({ title: "Tap or Don't Tap", text });
-      return;
-    }
-    throw new Error('no web share');
-  } catch (err) {
-    if (err && err.name === 'AbortError') return; // user closed the share sheet
-    try {
-      await navigator.clipboard.writeText(text);
-      els.shareNote.hidden = false;
-    } catch {
-      /* clipboard blocked — nothing else to try */
-    }
+  const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
+  const fb = $('share-fb');
+  fb.href =
+    'https://www.facebook.com/sharer/sharer.php?u=' +
+    encodeURIComponent(url) +
+    '&quote=' +
+    encodeURIComponent(textNoUrl);
+  $('share-x').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  $('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  $('share-copy').dataset.copy = text;
+}
+
+function copyResult() {
+  const text = $('share-copy').dataset.copy || '';
+  const done = (ok) => {
+    if (ok) els.shareNote.hidden = false;
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(
+      () => done(true),
+      () => done(false)
+    );
+  } else {
+    done(false);
   }
 }
 
@@ -411,7 +422,10 @@ function init() {
     shareNote: $('share-note'),
     mute: $('btn-mute'),
     btnRetry: $('btn-retry'),
-    btnShare: $('btn-share'),
+    shareFb: $('share-fb'),
+    shareX: $('share-x'),
+    shareWa: $('share-wa'),
+    shareCopy: $('share-copy'),
     btnMenu: $('btn-menu'),
   });
 
@@ -425,7 +439,14 @@ function init() {
   els.goTitle.textContent = t('goTitle');
   els.goBestText.textContent = t('bestReaction');
   els.goRecord.textContent = t('newRecord');
-  els.btnShare.textContent = t('shareScoreBtn');
+  els.shareFb.textContent = t('shareFb');
+  els.shareX.textContent = t('shareX');
+  els.shareWa.textContent = t('shareWa');
+  els.shareCopy.textContent = t('shareCopy');
+  els.shareFb.setAttribute('aria-label', t('shareFb'));
+  els.shareX.setAttribute('aria-label', t('shareX'));
+  els.shareWa.setAttribute('aria-label', t('shareWa'));
+  els.shareCopy.setAttribute('aria-label', t('shareCopy'));
   els.btnRetry.textContent = t('retryBtn');
   els.btnMenu.textContent = t('backToMenu');
   els.shareNote.textContent = t('copiedNote');
@@ -461,7 +482,12 @@ function init() {
     setState('menu');
     renderMenu();
   });
-  $('btn-share').addEventListener('click', shareScore);
+  const shareRowEl = $('share-row');
+  $('btn-share').addEventListener('click', () => {
+    shareRowEl.hidden = !shareRowEl.hidden;
+    if (!shareRowEl.hidden) shareUrls();
+  });
+  $('share-copy').addEventListener('click', copyResult);
   $('btn-resume').addEventListener('click', resumeRun);
   // Tap anywhere on the overlay to resume — stopPropagation so the fresh wait
   // doesn't immediately eat a "false start" from the same tap bubbling to root.

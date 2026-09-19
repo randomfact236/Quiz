@@ -527,3 +527,7 @@ button:focus-visible {
     transition: none;
   }
 }
+
+.share-row[hidden] {
+  display: none;
+}

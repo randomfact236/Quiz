@@ -621,14 +621,24 @@ function shareText() {
   });
 }
 
-function share() {
+function shareUrls() {
+  const url = window.location.origin + window.location.pathname;
   const text = shareText();
-  if (navigator.share) {
-    navigator.share({ title: 'Word Puzzle', text }).catch(() => {
-      /* user dismissed the sheet */
-    });
-    return;
-  }
+  const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
+  const fb = document.getElementById('share-fb');
+  fb.href =
+    'https://www.facebook.com/sharer/sharer.php?u=' +
+    encodeURIComponent(url) +
+    '&quote=' +
+    encodeURIComponent(textNoUrl);
+  document.getElementById('share-x').href =
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  document.getElementById('share-copy').dataset.copy = text;
+}
+
+function copyResult() {
+  const text = document.getElementById('share-copy').dataset.copy || '';
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
       () => toast(t('copiedToast')),
@@ -824,7 +834,6 @@ function bindEls() {
   els.themeStrip = document.getElementById('theme-strip');
   els.btnNext = document.getElementById('btn-next');
   els.btnReplay = document.getElementById('btn-replay');
-  els.btnShare = document.getElementById('btn-share');
   els.btnMenu3 = document.getElementById('btn-menu3');
   els.themeCards = document.getElementById('theme-cards');
   els.btnContinue = document.getElementById('btn-continue');
@@ -853,7 +862,12 @@ function wire() {
     else startLevel(state.themeIndex, state.levelIndex + 1);
   });
   els.btnReplay.addEventListener('click', () => startLevel(state.themeIndex, state.levelIndex));
-  els.btnShare.addEventListener('click', share);
+  const shareRowEl = document.getElementById('share-row');
+  document.getElementById('btn-share').addEventListener('click', () => {
+    shareRowEl.hidden = !shareRowEl.hidden;
+    if (!shareRowEl.hidden) shareUrls();
+  });
+  document.getElementById('share-copy').addEventListener('click', copyResult);
   els.btnMenu3.addEventListener('click', () => showScreen('menu'));
 
   els.themeCards.addEventListener('click', (e) => {

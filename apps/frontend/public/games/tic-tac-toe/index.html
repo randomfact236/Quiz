@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>Tic Tac Toe — AI Quiz Games</title>
+    <title>Tic Tac Toe — PigZap Games</title>
     <meta
       name="description"
       content="Classic tic tac toe: pass-and-play for two, or take on the computer (easy, medium, or unbeatable hard). Series score included."
@@ -30,8 +30,8 @@
         }
       })();
     </script>
-    <link rel="stylesheet" href="style.css" />
-    <script type="module" src="game.js"></script>
+    <link rel="stylesheet" href="style.css?v=3" />
+    <script type="module" src="game.js?v=3"></script>
   </head>
   <body>
     <main class="app">
@@ -134,6 +134,12 @@
                 <div class="ghost-row">
                   <button type="button" class="ghost" id="btn-share">📤 Share</button>
                   <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+<div class="share-row" id="share-row" hidden>
+                    <a class="share-target" id="share-fb" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a>
+                    <a class="share-target" id="share-x" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+                    <a class="share-target" id="share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a>
+                    <button type="button" class="share-target" id="share-copy" aria-label="Copy result">🔗 Copy</button>
                 </div>
               </div>
             </div>

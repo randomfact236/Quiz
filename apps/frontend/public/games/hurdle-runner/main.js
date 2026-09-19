@@ -240,6 +240,7 @@ function die() {
     blip(659, 90, 'triangle', 0.35);
     blip(784, 160, 'triangle', 0.45);
   }
+  shareUrls();
   showScreen('gameover');
   els.btnRetry.focus();
 }
@@ -492,25 +493,34 @@ function onPress() {
 }
 
 /* ==========================================================================
- * 10. Share (master README §2 chain: Web Share → clipboard → prompt)
+ * 10. Share (BUG-035: explicit Facebook / X / WhatsApp targets on the score
+ *     card, plus clipboard→prompt copy for the link)
  * ======================================================================= */
 
-function share() {
-  const text = shareText(distanceM(), window.location.origin + window.location.pathname);
-  if (navigator.share) {
-    navigator.share({ title: 'Hurdle Runner', text }).catch(() => {
-      /* user dismissed the sheet */
-    });
-    return;
-  }
+function shareUrls() {
+  const url = window.location.origin + window.location.pathname;
+  const text = shareText(distanceM(), url);
+  const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
+  els.shareFb.href =
+    'https://www.facebook.com/sharer/sharer.php?u=' +
+    encodeURIComponent(url) +
+    '&quote=' +
+    encodeURIComponent(textNoUrl);
+  els.shareX.href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+  els.shareWa.href = 'https://wa.me/?text=' + encodeURIComponent(text);
+  els.shareCopy.dataset.copy = text;
+}
+
+function copyResult() {
+  const text = els.shareCopy.dataset.copy || '';
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(
+    navigator.clipboard.writeText(els.shareCopy.dataset.copy || '').then(
       () => toast(t('copied')),
-      () => window.prompt('Copy your result:', text)
+      () => window.prompt('Copy your result:', els.shareCopy.dataset.copy || '')
     );
     return;
   }
-  window.prompt('Copy your result:', text);
+  window.prompt('Copy your result:', els.shareCopy.dataset.copy || '');
 }
 
 let toastTimer = null;
@@ -544,6 +554,10 @@ function init() {
   els.btnRetry = document.getElementById('btn-retry');
   els.backLink = document.getElementById('back-link');
   els.toast = document.getElementById('toast');
+  els.shareFb = document.getElementById('share-fb');
+  els.shareX = document.getElementById('share-x');
+  els.shareWa = document.getElementById('share-wa');
+  els.shareCopy = document.getElementById('share-copy');
 
   state.muted = loadMuted();
   els.btnMute.textContent = state.muted ? '🔇' : '🔊';
@@ -566,7 +580,13 @@ function init() {
     ensureAudio();
     toPlay(); // instant retry: one tap, straight back into the run (plan §10)
   });
-  document.getElementById('btn-share').addEventListener('click', share);
+  els.shareCopy.addEventListener('click', copyResult);
+  const shareRowEl = document.getElementById('share-row');
+  document.getElementById('btn-share').addEventListener('click', () => {
+    shareRowEl.hidden = !shareRowEl.hidden;
+    if (!shareRowEl.hidden) shareUrls();
+  });
+  document.getElementById('share-copy').addEventListener('click', copyResult);
   document.getElementById('btn-omenu').addEventListener('click', toMenu);
   els.btnPause.addEventListener('click', pauseGame);
 
