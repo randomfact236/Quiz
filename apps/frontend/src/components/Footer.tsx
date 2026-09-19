@@ -1,5 +1,6 @@
 import Link from 'next/link';
 
+import { CookieSettingsButton } from '@/components/CookieSettingsButton';
 import { SubscribeForm } from '@/components/newsletter/SubscribeForm';
 import { SocialLinks } from '@/components/SocialLinks';
 
@@ -129,6 +130,7 @@ export default async function Footer(): Promise<JSX.Element> {
                 {link.label}
               </Link>
             ))}
+            <CookieSettingsButton className="hover:text-primary-600 dark:hover:text-primary-400" />
           </nav>
           <p>
             © {currentYear} {siteName}. All rights reserved.

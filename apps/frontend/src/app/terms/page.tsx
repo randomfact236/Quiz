@@ -4,7 +4,7 @@ import { LegalPage } from '@/components/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
-  description: 'The rules for using AI Quiz.',
+  description: 'The rules for using PigZap.',
 };
 
 export default function TermsPage(): JSX.Element {
@@ -15,14 +15,14 @@ export default function TermsPage(): JSX.Element {
       </p>
       <h2 className="text-lg font-bold text-secondary-900 dark:text-white">Acceptance</h2>
       <p>
-        By using AI Quiz you agree to these terms. If you don&apos;t agree with them, please
+        By using PigZap you agree to these terms. If you don&apos;t agree with them, please
         don&apos;t use the site. We may update the terms from time to time; continued use after an
         update means you accept the revised terms.
       </p>
 
       <h2 className="text-lg font-bold text-secondary-900 dark:text-white">The service</h2>
       <p>
-        AI Quiz is a free entertainment and learning platform: quizzes, riddles, jokes and mini
+        PigZap is a free entertainment and learning platform: quizzes, riddles, jokes and mini
         games, provided &quot;as is&quot;. Features may change, be interrupted, or be discontinued
         at any time without notice. We aim for accuracy in our quiz content but provide no guarantee
         that every question, answer or score is error-free.
@@ -56,7 +56,7 @@ export default function TermsPage(): JSX.Element {
         Limitation of liability
       </h2>
       <p>
-        To the maximum extent permitted by law, AI Quiz and its operators are not liable for any
+        To the maximum extent permitted by law, PigZap and its operators are not liable for any
         indirect or consequential damages arising from your use of the site. The site is provided
         without warranties of any kind, except where the law says otherwise.
       </p>

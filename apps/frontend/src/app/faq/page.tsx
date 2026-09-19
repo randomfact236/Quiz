@@ -6,12 +6,12 @@ import { JsonLd } from '@/components/JsonLd';
 export const metadata: Metadata = {
   title: 'FAQ',
   description:
-    'Answers about AI Quiz: how to play, accounts and guests, scoring, mini games, and how your data is handled.',
+    'Answers about PigZap: how to play, accounts and guests, scoring, mini games, and how your data is handled.',
 };
 
 const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   {
-    q: 'What is AI Quiz?',
+    q: 'What is PigZap?',
     a: 'A free brain-training playground: multiple-choice quizzes, riddles, image riddles, dad jokes and a collection of one-handed mini games. Everything runs in your browser — no install, no signup.',
   },
   {
@@ -36,7 +36,7 @@ const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: 'What data do you collect?',
-    a: 'Only first-party, anonymous play analytics (answers, session results and coarse device info) used to improve the site. We do not sell personal data. Details are in the Privacy Policy.',
+    a: 'Only first-party, anonymous play analytics (answers, session results and coarse device info) used to improve the site — plus, only if you accept the cookie banner, Google Analytics traffic cookies. We do not sell personal data. Details are in the Privacy Policy.',
   },
   {
     q: 'How do I give feedback or report a problem?',

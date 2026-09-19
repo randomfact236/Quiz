@@ -115,7 +115,7 @@ export function siteJsonLd(seo: {
   /** Brand logo from the site settings group; falls back to the OG image */
   logo?: string | undefined;
 }): Record<string, unknown>[] {
-  const name = seo.siteName?.trim() || 'AI Quiz';
+  const name = seo.siteName?.trim() || 'PigZap';
   const logo = seo.logo?.trim() || seo.ogImageUrl?.trim() || '';
   const graph: Record<string, unknown>[] = [
     {

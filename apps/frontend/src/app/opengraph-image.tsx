@@ -4,13 +4,13 @@ import { getPublicSettings } from '@/lib/public-settings';
 
 export const size = { width: 1200, height: 630 };
 export const contentType = 'image/png';
-export const alt = 'AI Quiz — interactive quizzes, riddles, dad jokes and image puzzles';
+export const alt = 'PigZap — interactive quizzes, riddles, dad jokes and image puzzles';
 
 export default async function OpengraphImage(): Promise<ImageResponse> {
   // Same cached fetch + fallback as the root layout's generateMetadata
   // (plan/15-seo.md P1) — single shared implementation in lib/public-settings.
   const { seo } = await getPublicSettings();
-  const siteName = seo?.siteName?.trim() || 'AI Quiz';
+  const siteName = seo?.siteName?.trim() || 'PigZap';
   const description =
     seo?.description?.trim() ||
     'Interactive quizzes, riddles, dad jokes and image puzzles — test your knowledge and have fun!';

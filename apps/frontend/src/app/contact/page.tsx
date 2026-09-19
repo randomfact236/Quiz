@@ -4,7 +4,7 @@ import { LegalPage } from '@/components/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'How to reach the AI Quiz team.',
+  description: 'How to reach the PigZap team.',
 };
 
 export default function ContactPage(): JSX.Element {

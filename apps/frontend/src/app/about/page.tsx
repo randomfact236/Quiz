@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'About Us',
-  description: 'Learn about the AI Quiz platform and our mission to make learning fun.',
+  description: 'Learn about the PigZap platform and our mission to make learning fun.',
 };
 
 export default function AboutPage(): JSX.Element {
@@ -10,7 +10,7 @@ export default function AboutPage(): JSX.Element {
     <main className="min-h-screen bg-secondary-50 dark:bg-secondary-900 px-4 py-12">
       <div className="container mx-auto max-w-4xl">
         <h1 className="mb-8 text-center text-4xl font-bold text-secondary-900 dark:text-secondary-100">
-          About AI Quiz
+          About PigZap
         </h1>
 
         <div className="space-y-8">
@@ -19,7 +19,7 @@ export default function AboutPage(): JSX.Element {
               Our Mission
             </h2>
             <p className="text-secondary-600 dark:text-secondary-300 leading-relaxed">
-              AI Quiz is dedicated to making learning fun and accessible for everyone. We believe
+              PigZap is dedicated to making learning fun and accessible for everyone. We believe
               that education should be engaging, interactive, and enjoyable. Our platform combines
               cutting-edge technology with carefully curated content to deliver an unparalleled quiz
               experience.
@@ -46,7 +46,7 @@ export default function AboutPage(): JSX.Element {
               <li className="flex items-start gap-2">
                 <span className="text-primary-600 mt-1">✓</span>
                 <span>
-                  <strong>Brain Teasers:</strong> 20 chapters of riddles from easy to expert
+                  <strong>Brain Teasers:</strong> 10 chapters of riddles from easy to expert
                 </span>
               </li>
               <li className="flex items-start gap-2">
@@ -63,8 +63,9 @@ export default function AboutPage(): JSX.Element {
               Technology
             </h2>
             <p className="text-secondary-600 dark:text-secondary-300 leading-relaxed">
-              Built with enterprise-grade technology including Next.js 15, NestJS 10, PostgreSQL,
-              Redis, and more. Our platform is designed for 99.99% uptime and SOC 2 compliance.
+              Built with modern, production-grade technology including Next.js 15, NestJS 10,
+              PostgreSQL, and Redis. Our platform is designed for speed, reliability, and secure
+              first-party handling of your data.
             </p>
           </section>
 

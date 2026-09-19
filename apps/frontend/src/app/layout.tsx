@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import { Suspense } from 'react';
-import Script from 'next/script';
 
+import { CookieConsent } from '@/components/CookieConsent';
 import Footer from '@/components/Footer';
 import { HideOnAdmin } from '@/components/HideOnAdmin';
 import Header from '@/components/Header';
@@ -133,7 +133,9 @@ export const viewport: Viewport = {
 /** Google Analytics (BUG-013): absent until NEXT_PUBLIC_GA_MEASUREMENT_ID is
  *  set at build time — no ID, no script, no tracking. The strict ID format
  *  guard keeps everything but a well-formed measurement ID out of the inline
- *  script (defense-in-depth; the value is build-time env, i.e. owner-controlled). */
+ *  script (defense-in-depth; the value is build-time env, i.e. owner-controlled).
+ *  The ID is only *loaded* by CookieConsent after the visitor accepts the
+ *  cookie banner — declining keeps GA entirely disabled. */
 const GA_MEASUREMENT_ID = (() => {
   const id = process.env['NEXT_PUBLIC_GA_MEASUREMENT_ID'] || '';
   return /^(G|UA|AW|DC)-[A-Za-z0-9_-]+$/.test(id) ? id : '';
@@ -200,25 +202,7 @@ export default async function RootLayout({
             </HideOnAdmin>
           </Providers>
         </SiteBrandProvider>
-        {GA_MEASUREMENT_ID && (
-          <>
-            <Script
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_MEASUREMENT_ID}`}
-              strategy="afterInteractive"
-            />
-            <Script
-              id="ga-init"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html:
-                  'window.dataLayer = window.dataLayer || [];\n' +
-                  'function gtag(){dataLayer.push(arguments);}\n' +
-                  "gtag('js', new Date());\n" +
-                  `gtag('config', '${GA_MEASUREMENT_ID}');`,
-              }}
-            />
-          </>
-        )}
+        <CookieConsent gaMeasurementId={GA_MEASUREMENT_ID} />
       </body>
     </html>
   );

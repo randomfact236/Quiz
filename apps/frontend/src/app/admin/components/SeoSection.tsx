@@ -62,9 +62,9 @@ type FormState = {
 const EMPTY_SOCIAL: SocialForm = { image: '', title: '', description: '' };
 
 const FALLBACK: FormState = {
-  siteName: 'AI Quiz',
-  titleDefault: 'AI Quiz - Interactive Learning Platform',
-  titleTemplate: '%s | AI Quiz',
+  siteName: 'PigZap',
+  titleDefault: 'PigZap - Interactive Learning Platform',
+  titleTemplate: '%s | PigZap',
   description:
     'Enterprise-grade interactive quiz platform with science quizzes, dad jokes, riddles, and more. Test your knowledge and have fun!',
   keywordsText: 'quiz, trivia, science quiz, dad jokes, riddles, learning, education, interactive',
