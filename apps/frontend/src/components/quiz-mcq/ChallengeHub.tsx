@@ -260,7 +260,7 @@ export function ChallengeHub({
                             initial={{ opacity: 0, height: 0 }}
                             animate={{ opacity: 1, height: 'auto' }}
                             exit={{ opacity: 0, height: 0 }}
-                            className="overflow-hidden"
+                            className="col-span-full overflow-hidden"
                           >
                             <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200 dark:border-blue-500/30">
                               <p className="text-center text-sm text-gray-600 dark:text-secondary-300 mb-3">

@@ -116,7 +116,14 @@ function HubError({ message }: { message: string }): JSX.Element {
 // Shared mode + level picker (used at top level and inside categories)
 // ============================================================================
 
-function ModeLevelPicker({ counts }: { counts: Record<Level, number> }): JSX.Element {
+function ModeLevelPicker({
+  counts,
+  only,
+}: {
+  counts: Record<Level, number>;
+  /** BUG-043: mode-page context — render just this mode's level grid + Mix. */
+  only?: Mode;
+}): JSX.Element {
   // BUG-029: both mode sections render open by default (independently collapsible).
   const [normalOpen, setNormalOpen] = useState(true);
   const [timerOpen, setTimerOpen] = useState(true);
@@ -143,6 +150,47 @@ function ModeLevelPicker({ counts }: { counts: Record<Level, number> }): JSX.Ele
       </div>
     </div>
   );
+
+  // BUG-043: focused (mode-page) view — the mode's level grid + a Mix play
+  // card (all subjects, all levels); no category browsing in this context.
+  if (only) {
+    const focusMeta: Record<Mode, { emoji: string; title: string; tagline: string }> = {
+      practice: { emoji: '🎯', title: 'Normal Mode', tagline: 'Take your time, no pressure' },
+      timer: { emoji: '⏱️', title: 'Timer Mode', tagline: 'Race against the clock!' },
+    };
+    const meta = focusMeta[only];
+    return (
+      <div className="grid items-stretch gap-6 md:grid-cols-2">
+        <div className="overflow-hidden rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg">
+          <div className="bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white">
+            <span className="text-4xl" aria-hidden="true">
+              {meta.emoji}
+            </span>
+            <span className="mt-2 block text-xl font-bold">{meta.title}</span>
+            <span className="text-sm opacity-90">{meta.tagline}</span>
+          </div>
+          {grid('practice')}
+        </div>
+        <div className="flex flex-col overflow-hidden rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg">
+          <div className="bg-gradient-to-r from-purple-500 to-pink-600 p-6 text-white">
+            <span className="text-4xl" aria-hidden="true">
+              🎲
+            </span>
+            <span className="mt-2 block text-xl font-bold">Mix</span>
+            <span className="text-sm opacity-90">All subjects, all levels, shuffled</span>
+          </div>
+          <Link
+            href={`/riddle-mcq/play?subjectId=all&level=all&mode=${only}`}
+            className="flex flex-1 items-center justify-center p-6 text-center"
+          >
+            <span className="rounded-xl bg-gradient-to-r from-purple-500 to-pink-600 px-8 py-4 font-bold text-white shadow-lg transition-all hover:scale-105 hover:shadow-lg">
+              ▶ Start Mix — all levels
+            </span>
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="grid items-start gap-6 md:grid-cols-2">
@@ -198,6 +246,11 @@ function ModeLevelPicker({ counts }: { counts: Record<Level, number> }): JSX.Ele
 function RiddlesPageContent(): JSX.Element {
   const searchParams = useSearchParams();
   const categorySlug = searchParams?.get('category') || '';
+  // BUG-043: /riddle-mcq/practice + /challenge redirect here with ?mode= —
+  // that context hides category browsing (difficulty + Mix only).
+  const modeParam = searchParams?.get('mode');
+  const modeContext: Mode | undefined =
+    modeParam === 'practice' || modeParam === 'timer' ? modeParam : undefined;
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -371,11 +424,14 @@ function RiddlesPageContent(): JSX.Element {
 
         {/* Mode selection */}
         <section aria-label="Game mode selection" className="mb-12">
-          <ModeLevelPicker counts={allSubjectCounts} />
+          <ModeLevelPicker
+            counts={allSubjectCounts}
+            {...(modeContext ? { only: modeContext } : {})}
+          />
         </section>
 
         {/* Categories — subject-listing tile style */}
-        {categories.length > 0 && (
+        {categories.length > 0 && !modeContext && (
           <section aria-label="Browse by category" className="mb-12">
             <h2 className="mb-4 text-center text-2xl font-bold text-white">
               📂 Browse by Category

@@ -519,11 +519,12 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
       ) : (
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {chapters.map((chapter, index) => {
-            // BUG-027: the mode selection (Normal / Timer) lives inline under the
-            // chapter — the first 2 chapters render it expanded, the rest start
-            // collapsed but openable. Picking a mode goes straight to its level
-            // selection, removing the separate mode-selection page hop.
-            const isExpanded = expandedChapters[index] ?? index < 2;
+            // BUG-027 + BUG-039: the mode selection (Normal / Timer) lives inline
+            // under the chapter and EVERY chapter's levels are pre-opened (owner:
+            // "all the levels inside a mode should be pre-opened"). Picking a mode
+            // goes straight to its level selection, removing the separate
+            // mode-selection page hop.
+            const isExpanded = expandedChapters[index] ?? true;
             return (
               <div
                 key={chapter.name}
