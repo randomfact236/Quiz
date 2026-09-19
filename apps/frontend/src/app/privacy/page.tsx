@@ -57,8 +57,10 @@ export default function PrivacyPage(): JSX.Element {
       </p>
       <p>
         With your consent — asked once via the cookie banner — we also use Google Analytics, which
-        sets cookies (such as <code>_ga</code>) to measure site traffic and usage. If you decline,
-        Google Analytics stays disabled. You can change your choice at any time:
+        sets cookies (such as <code>_ga</code>) to measure site traffic and usage (IP addresses are
+        anonymized). The banner offers &quot;Accept all&quot;, &quot;Essential only&quot; (analytics
+        stays off), and a &quot;Customize&quot; option. If you choose essential only, Google
+        Analytics stays disabled. You can change your choice at any time:
       </p>
       <p>
         <CookieSettingsButton className="font-medium text-primary-600 hover:underline dark:text-primary-400" />
