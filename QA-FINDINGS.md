@@ -9,17 +9,21 @@
 
 ## Index
 
-| ID      | Title                                                        | Area                  | Priority | Status   |
-| ------- | ------------------------------------------------------------ | --------------------- | -------- | -------- |
-| BUG-005 | Legal pages not finalized                                    | Legal pages           | P1       | Deferred |
-| BUG-037 | Question like buckets: 1-like / 2-like / 3+-like containers  | quiz-mcq / riddle-mcq | P2       | Fixed    |
-| BUG-038 | Client-side exception while loading ("Application error")    | Frontend (global)     | P1       | Resolved |
-| BUG-039 | Mode selection: pre-open all levels in both modes            | quiz-mcq mode picker  | P2       | Fixed    |
-| BUG-040 | Like + comment section on each question                      | quiz/riddle questions | P2       | Open     |
-| BUG-041 | Easy mode: answers all in the same position; audit placement | quiz/riddle content   | P1       | Fixed    |
-| BUG-042 | Separate "Science & Nature" into Science and Nature          | quiz subjects         | P2       | Open     |
-| BUG-043 | Riddle mode pages: hide category, difficulty + Mix only      | riddle-mcq mode pages | P2       | Fixed    |
-| BUG-044 | Quiz mode pages: level selection block misplaced             | quiz-mcq mode pages   | P2       | Fixed    |
+| ID      | Title                                                         | Area                  | Priority | Status   |
+| ------- | ------------------------------------------------------------- | --------------------- | -------- | -------- |
+| BUG-005 | Legal pages not finalized                                     | Legal pages           | P1       | Deferred |
+| BUG-037 | Question like buckets: 1-like / 2-like / 3+-like containers   | quiz-mcq / riddle-mcq | P2       | Fixed    |
+| BUG-038 | Client-side exception while loading ("Application error")     | Frontend (global)     | P1       | Resolved |
+| BUG-039 | Mode selection: pre-open all levels in both modes             | quiz-mcq mode picker  | P2       | Fixed    |
+| BUG-040 | Like + comment section on each question                       | quiz/riddle questions | P2       | Open     |
+| BUG-041 | Easy mode: answers all in the same position; audit placement  | quiz/riddle content   | P1       | Fixed    |
+| BUG-042 | Separate "Science & Nature" into Science and Nature           | quiz subjects         | P2       | Open     |
+| BUG-043 | Riddle mode pages: hide category, difficulty + Mix only       | riddle-mcq mode pages | P2       | Fixed    |
+| BUG-044 | Quiz mode pages: level selection block misplaced              | quiz-mcq mode pages   | P2       | Fixed    |
+| BUG-045 | Question like not retained after refresh                      | per-question likes    | P1       | Open     |
+| BUG-046 | Question comment not stored after refresh                     | per-question comments | P1       | Open     |
+| BUG-047 | Share does not show the different social media with copy link | share UI (questions)  | P2       | Open     |
+| BUG-048 | Like / comment / share counts visible to all users            | engagement counters   | P2       | Open     |
 
 ---
 
@@ -179,6 +183,53 @@
 - **Fix (2026-09-19):** the difficulty panel was a child of the subjects row grid
   (grid-cols-3/4), squeezing it into a single column. It now spans the full row
   (col-span-full) directly below the expanded subject's row. Verified in the browser.
+
+### BUG-045 — Question like not retained after refresh
+
+- **Date found:** 2026-09-19
+- **Area:** per-question likes (quiz/riddle question flow)
+- **Priority:** P1
+- **Reported:** Liked a question, refreshed the page — the like did not survive the reload
+  (gone on return).
+- **Note:** persistence is broken or keyed to something ephemeral (in-memory state /
+  localStorage without the right key / guest-id not stable). When picked up, check whether
+  the like reaches the API at all and whether it is tied to a stable guest identity.
+
+### BUG-046 — Question comment not stored after refresh
+
+- **Date found:** 2026-09-19
+- **Area:** per-question comments (quiz/riddle question flow)
+- **Priority:** P1
+- **Reported:** Commented on a question, refreshed — the comment is not stored/does not
+  reappear after the reload.
+- **Note:** same suspects as BUG-045 (no API write, or write succeeds but the read path
+  filters it out — e.g., status/guest filtering). Verify the POST response and the list
+  endpoint separately.
+
+### BUG-047 — Share does not show the different social media with copy link
+
+- **Date found:** 2026-09-19
+- **Area:** share UI on the question/result surface
+- **Priority:** P2
+- **Reported:** In share, it does not show the different social media options with the copy
+  link (no Facebook / X / WhatsApp / copy-link choices visible where the owner tested).
+- **Note:** the site already has the 4-target `ShareMenu` (live on jokes/image-riddles and
+  quiz results per BUG-035); the surface the owner tested is either using a plain
+  navigator.share button or not wired to ShareMenu — find which surface and wire it to the
+  same component.
+
+### BUG-048 — Like / comment / share counts should be visible to all users
+
+- **Date found:** 2026-09-19
+- **Area:** question engagement counters (likes / comments / shares)
+- **Priority:** P2
+- **Reported:** All the data should be visible to all users — the number of likes, comments,
+  and shares per question.
+- **Note:** needs public aggregate-count endpoints (or counts embedded in the question
+  payload) + count chips in the question UI. Shares need a counted event (share intents are
+  plain URLs today, so a client-side share event must fire when the target is chosen).
+  Tension to resolve with BUG-037 (likes were specced internal-only with buckets): public
+  per-question like counts are a different surface — owner's call stands as reported here.
 
 ---
 

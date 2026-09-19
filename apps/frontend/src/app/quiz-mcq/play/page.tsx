@@ -19,6 +19,7 @@ import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 import { useQuizMcq } from '@/hooks/useQuizMcq';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz-mcq/QuestionCard';
+import ShareMenu from '@/components/share/ShareMenu';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { getSubjectMeta } from '@/lib/quiz-mcq-api';
 import { SettingsService } from '@/services/settings.service';
@@ -72,9 +73,6 @@ function QuizContent(): JSX.Element {
 
   // Track which questions have shown bubbles (persists across navigation)
   const shownBubblesRef = useRef<Set<string>>(new Set());
-
-  // Share toast state
-  const [shareToast, setShareToast] = useState<string | null>(null);
 
   // Back/exit target shared by pre-quiz and in-game headers
   const backHref =
@@ -315,26 +313,10 @@ function QuizContent(): JSX.Element {
     }
   }, [quiz.currentQuestionIndex, quiz.status, quiz.totalQuestions, hasStarted]);
 
-  // Share handler
+  // BUG-047: share opens the ShareMenu (Facebook / X / WhatsApp / copy link)
+  const [shareMenuOpen, setShareMenuOpen] = useState(false);
   const handleShare = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      const url = new URL(window.location.href);
-      url.searchParams.set('question', String(quiz.currentQuestionIndex + 1));
-      url.searchParams.set('total', String(quiz.sessionSize));
-      url.searchParams.set('shared', 'true');
-      navigator.clipboard
-        .writeText(url.toString())
-        .then(() => {
-          setShareToast(
-            `Link copied! Question ${quiz.currentQuestionIndex + 1} of ${quiz.totalQuestions}`
-          );
-          setTimeout(() => setShareToast(null), 2000);
-        })
-        .catch(() => {
-          setShareToast('Failed to copy link');
-          setTimeout(() => setShareToast(null), 2000);
-        });
-    }
+    setShareMenuOpen(true);
   }, [quiz.currentQuestionIndex, quiz.totalQuestions, quiz.sessionSize]);
 
   // Get next skipped question index
@@ -529,6 +511,20 @@ function QuizContent(): JSX.Element {
             )}
           </AnimatePresence>
 
+          {/* BUG-047: question share menu (Facebook / X / WhatsApp / copy link) */}
+          {shareMenuOpen && quiz.currentQuestion && (
+            <ShareMenu
+              title={`Quiz question ${quiz.currentQuestionIndex + 1}`}
+              text={quiz.currentQuestion.question}
+              url={
+                typeof window !== 'undefined'
+                  ? `${window.location.origin}/quiz-mcq?subject=${subject}`
+                  : `/quiz-mcq?subject=${subject}`
+              }
+              onClose={() => setShareMenuOpen(false)}
+            />
+          )}
+
           {/* Navigation and Progress - Below Question Container */}
           <div className="mt-3 flex items-center justify-between gap-2">
             <button
@@ -592,18 +588,7 @@ function QuizContent(): JSX.Element {
       </div>
 
       {/* Share Toast */}
-      <AnimatePresence>
-        {shareToast && (
-          <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 50 }}
-            className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-gray-800 px-4 py-2 text-sm text-white shadow-lg"
-          >
-            {shareToast}
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <AnimatePresence></AnimatePresence>
 
       {/* Confirm Submit Modal */}
       {showConfirmSubmit && (

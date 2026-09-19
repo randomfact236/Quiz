@@ -44,28 +44,11 @@ export function QuestionComments({
   autoOpen,
 }: QuestionCommentsProps): JSX.Element {
   const [open, setOpen] = useState(!!autoOpen);
-  const [count, setCount] = useState<number | null>(null);
   const [items, setItems] = useState<Comment[] | null>(null);
   const [text, setText] = useState('');
   const [name, setName] = useState('');
   const [posting, setPosting] = useState(false);
   const [deletingIds, setDeletingIds] = useState<Set<string>>(new Set());
-
-  // Count loads eagerly (cheap) so the toggle shows life before expanding.
-  useEffect(() => {
-    if (!UUID_RE.test(questionId)) return;
-    let cancelled = false;
-    getComments(contentType, questionId, 1, 1)
-      .then((feed) => {
-        if (!cancelled) setCount(feed.total);
-      })
-      .catch(() => {
-        if (!cancelled) setCount(0);
-      });
-    return () => {
-      cancelled = true;
-    };
-  }, [contentType, questionId]);
 
   useEffect(() => {
     if (!open || !UUID_RE.test(questionId)) return;
@@ -75,7 +58,6 @@ export function QuestionComments({
       .then((feed) => {
         if (!cancelled) {
           setItems(feed.items);
-          setCount(feed.total);
         }
       })
       .catch(() => {
@@ -120,7 +102,6 @@ export function QuestionComments({
         setItems((prev) =>
           prev ? prev.map((item) => (item.id === optimistic.id ? saved : item)) : prev
         );
-        setCount((prev) => (prev === null ? prev : prev + 1));
       }
       // A failed POST keeps the optimistic local copy (same rule as jokes).
     },
@@ -136,7 +117,6 @@ export function QuestionComments({
     const ok = await deleteMyComment(id);
     if (ok) {
       setItems((prev) => (prev ? prev.filter((item) => item.id !== id) : prev));
-      setCount((prev) => (prev === null ? prev : Math.max(0, prev - 1)));
     } else {
       setDeletingIds((prev) => {
         const next = new Set(prev);
@@ -156,13 +136,7 @@ export function QuestionComments({
         aria-expanded={open}
       >
         <MessageCircle className="h-4 w-4 text-indigo-400" />
-        {open
-          ? 'Hide comments'
-          : count === null
-            ? 'Comments'
-            : count === 0
-              ? 'Be the first to comment'
-              : `Comments (${count})`}
+        {open ? 'Hide comments' : 'Comments'}
       </button>
 
       {open && (
