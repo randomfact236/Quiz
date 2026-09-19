@@ -104,52 +104,81 @@ const TYPES = {
     listPath: '/riddle-mcq/categories/all', listKey: (d) => d.data ?? d,
     create: { path: '/riddle-mcq/categories', bulk: false }, update: { path: (id) => `/riddle-mcq/categories/${id}`, verb: 'PATCH' },
     keyOf: (r) => r.slug,
-    fields: ['name', 'slug', 'emoji', 'description'],
+    // description is NOT sent: CreateRiddleCategoryDto whitelists only these
+    // fields (forbidNonWhitelisted → 400 on extras)
+    fields: ['name', 'slug', 'emoji'],
     localTable: 'riddle_categories',
   },
   'riddle-subjects': {
     listPath: '/riddle-mcq/subjects/all', listKey: (d) => d.data ?? d,
     create: { path: '/riddle-mcq/subjects', bulk: false }, update: { path: (id) => `/riddle-mcq/subjects/${id}`, verb: 'PATCH' },
     keyOf: (r) => r.slug,
-    fields: ['name', 'slug', 'emoji', 'description', 'category_id:categoryId'],
+    // description is NOT sent: not in CreateRiddleSubjectDto's whitelist
+    fields: ['name', 'slug', 'emoji', 'category_id:categoryId'],
     localTable: 'riddle_subjects',
   },
   'riddle-mcqs': {
     listPath: '/riddle-mcq/all', listKey: (d) => d.data ?? d,
-    create: { path: '/riddle-mcq/riddles/bulk', bulk: null }, update: { path: (id) => `/riddle-mcq/riddles/${id}`, verb: 'PATCH' },
+    // live's bulk endpoint takes a BARE array of BulkCreateRiddleDto and
+    // strictly FK-validates subjectId — chunks, subject remap and the
+    // {count, errors} answer are handled in the apply loop
+    create: { path: '/riddle-mcq/riddles/bulk', bulk: 'BARE_ARRAY' }, update: { path: (id) => `/riddle-mcq/riddles/${id}`, verb: 'PATCH' },
     keyOf: (r) => hash(r.question),
     fields: ['question', 'options', 'correct_letter:correctLetter', 'level', 'subject_id:subjectId',
+      'hint', 'explanation', 'answer', 'status', 'importOrder'],
+    // UpdateRiddleMcqDto has no importOrder (forbidNonWhitelisted)
+    updateFields: ['question', 'options', 'correct_letter:correctLetter', 'level', 'subject_id:subjectId',
       'hint', 'explanation', 'answer', 'status'],
     localTable: 'riddle_mcqs',
+    orderBy: '"subjectId", "importOrder"',
   },
   'joke-categories': {
     listPath: '/jokes/classic/categories', listKey: (d) => d.data ?? d,
     create: { path: '/jokes/classic/categories', bulk: false }, update: null,
     keyOf: (r) => r.slug ?? r.name?.toLowerCase(),
-    fields: ['name', 'emoji', 'description'],
+    // description is NOT sent: CreateJokeCategoryDto whitelists name+emoji only
+    fields: ['name', 'emoji'],
     localTable: 'joke_categories',
   },
   'dad-jokes': {
     listPath: '/jokes/classic/all', listKey: (d) => d.data ?? d,
-    create: { path: '/jokes/classic/bulk', bulk: 'jokes' }, update: { path: (id) => `/jokes/classic/${id}`, verb: 'PUT' },
+    // live bulk takes a BARE array (max 100) and FORCES status=DRAFT on create —
+    // status is therefore not sent; created rows are published afterwards via
+    // POST /jokes/classic/bulk-action (UpdateDadJokeDto has no status either)
+    create: { path: '/jokes/classic/bulk', bulk: 'BARE_ARRAY' },
+    update: { path: (id) => `/jokes/classic/${id}`, verb: 'PUT' },
+    publishAfterCreate: { path: '/jokes/classic/bulk-action' },
     keyOf: (r) => hash(r.joke),
-    fields: ['joke', 'category_id:categoryId', 'status'],
+    fields: ['joke', 'category_id:categoryId'],
     localTable: 'dad_jokes',
   },
   'image-riddle-categories': {
     listPath: '/admin/image-riddles/categories/all', listKey: (d) => d.data ?? d,
     create: { path: '/admin/image-riddles/categories', bulk: false }, update: { path: (id) => `/admin/image-riddles/categories/${id}`, verb: 'PUT' },
+    // slug is NOT sent: CreateImageRiddleCategoryDto whitelists name/emoji/description
     keyOf: (r) => r.slug ?? r.name?.toLowerCase(),
-    fields: ['name', 'slug', 'emoji', 'description'],
+    fields: ['name', 'emoji', 'description'],
     localTable: 'image_riddle_categories',
   },
   'image-riddles': {
     listPath: '/admin/image-riddles', listKey: (d) => d.data?.items ?? d.data ?? d,
-    create: { path: '/admin/image-riddles/bulk', bulk: null }, update: { path: (id) => `/admin/image-riddles/${id}`, verb: 'PUT' },
-    keyOf: (r) => r.slug ?? hash(r.title),
+    // live bulk takes a BARE array of CreateImageRiddleDto and the entity
+    // FORCES status=DRAFT on create (isActive defaults true) — created rows
+    // are published afterwards via POST /image-riddles/bulk-action
+    create: { path: '/admin/image-riddles/bulk', bulk: 'BARE_ARRAY' },
+    update: { path: (id) => `/admin/image-riddles/${id}`, verb: 'PUT' },
+    publishAfterCreate: { path: '/image-riddles/bulk-action' },
+    // titles are NOT unique (template prompts reused across images) — the
+    // natural key is title+imageUrl; hashing title alone collapses distinct
+    // riddles and silently PATCHes one live row N times
+    keyOf: (r) => hash(`${r.title ?? ''}|${r.imageUrl ?? r.image_url ?? ''}`),
     fields: ['title', 'image_url:imageUrl', 'answer', 'alternative_answers:alternativeAnswers', 'hint',
       'difficulty', 'alt_text:altText', 'timer_seconds:timerSeconds', 'show_timer:showTimer',
-      'category_id:categoryId', 'is_active:isActive', 'status'],
+      'category_id:categoryId'],
+    // UpdateImageRiddleDto additionally whitelists isActive (but not status)
+    updateFields: ['title', 'image_url:imageUrl', 'answer', 'alternative_answers:alternativeAnswers', 'hint',
+      'difficulty', 'alt_text:altText', 'timer_seconds:timerSeconds', 'show_timer:showTimer',
+      'category_id:categoryId', 'is_active:isActive'],
     localTable: 'image_riddles',
   },
 };
@@ -328,6 +357,63 @@ async function buildQuizCtx(type) {
   };
 }
 
+// ---------- child parent-chain context ----------
+// Riddle/joke/image children have the same per-database UUID problem as quiz
+// children — parents are resolved by SLUG (riddle family) or lowercased NAME
+// (joke/image families, which have no slugs on either side). Built fresh in
+// the apply loop so children reference parents created moments ago.
+const categoryKeyOf = (item) => String(item.slug ?? item.name ?? '').toLowerCase();
+
+async function buildRiddleCtx(type) {
+  if (type === 'riddle-subjects') {
+    const localCats = readLocalTable(TYPES['riddle-categories'].localTable);
+    const catKeyLocal = new Map(localCats.map((c) => [c.id, categoryKeyOf(c)]));
+    const liveCatIdByKey = new Map(
+      (await fetchAllLive(TYPES['riddle-categories'])).map((c) => [categoryKeyOf(c), c.id])
+    );
+    return {
+      remap: (payload) => {
+        if (!payload.categoryId) return;
+        const key = catKeyLocal.get(payload.categoryId);
+        const liveId = key && liveCatIdByKey.get(key);
+        if (!liveId) throw new Error(`parent category not on live (key=${key ?? payload.categoryId})`);
+        payload.categoryId = liveId;
+      },
+    };
+  }
+  if (type === 'dad-jokes' || type === 'image-riddles') {
+    const catType = type === 'dad-jokes' ? 'joke-categories' : 'image-riddle-categories';
+    const localCats = readLocalTable(TYPES[catType].localTable);
+    const catKeyLocal = new Map(localCats.map((c) => [c.id, categoryKeyOf(c)]));
+    const liveCatIdByKey = new Map(
+      (await fetchAllLive(TYPES[catType])).map((c) => [categoryKeyOf(c), c.id])
+    );
+    return {
+      remap: (payload) => {
+        if (!payload.categoryId) return;
+        const key = catKeyLocal.get(payload.categoryId);
+        const liveId = key && liveCatIdByKey.get(key);
+        if (!liveId) throw new Error(`parent category not on live (key=${key ?? payload.categoryId})`);
+        payload.categoryId = liveId;
+      },
+    };
+  }
+  // riddle-mcqs
+  const localSubs = readLocalTable(TYPES['riddle-subjects'].localTable);
+  const subSlugLocal = new Map(localSubs.map((s) => [s.id, s.slug]));
+  const liveSubIdBySlug = new Map(
+    (await fetchAllLive(TYPES['riddle-subjects'])).map((s) => [s.slug, s.id])
+  );
+  return {
+    remap: (payload) => {
+      const slug = subSlugLocal.get(payload.subjectId);
+      const liveId = slug && liveSubIdBySlug.get(slug);
+      if (!liveId) throw new Error(`parent subject not on live (slug=${slug ?? payload.subjectId})`);
+      payload.subjectId = liveId;
+    },
+  };
+}
+
 // ---------- main ----------
 const state = loadState();
 const plan = {};
@@ -443,6 +529,8 @@ for (const type of ORDER) {
     delete quizCache['subjects:live'];
     delete quizCache['chapters:live'];
     actx = await buildQuizCtx(type);
+  } else if (['riddle-subjects', 'riddle-mcqs', 'dad-jokes', 'image-riddles'].includes(type)) {
+    actx = await buildRiddleCtx(type);
   }
   const remap = (e) => {
     if (!actx) return null;
@@ -454,14 +542,36 @@ for (const type of ORDER) {
     }
   };
 
-  // creates — bulk endpoints take chunked arrays; single-item endpoints take
-  // ONE payload per POST (the live DTOs reject arrays with 400 — this lane was
-  // only ever exercised against the permissive local API before 2026-09-18)
+  // creates — bulk endpoints take chunked arrays (bare, or wrapped when the
+  // DTO names the collection); single-item endpoints take ONE payload per
+  // POST (the live DTOs reject arrays with 400 — this lane was only ever
+  // exercised against the permissive local API before 2026-09-18)
   if (T.create.bulk) {
     for (let i = 0; i < creates.length; i += 50) {
-      const chunk = creates.slice(i, i + 50);
+      const chunk = [];
+      for (const e of creates.slice(i, i + 50)) {
+        const remapErr = remap(e);
+        if (remapErr) {
+          failures += 1;
+          console.log(`   ${type}: CREATE skipped [${e.key}]: ${remapErr}`);
+          continue;
+        }
+        chunk.push(e.payload);
+      }
+      if (chunk.length === 0) continue;
       try {
-        await api('POST', T.create.path, { [T.create.bulk]: chunk.map((e) => e.payload) });
+        const body = T.create.bulk === 'BARE_ARRAY' ? chunk : { [T.create.bulk]: chunk };
+        const res = await api('POST', T.create.path, body);
+        // bulk endpoints answer with 2xx even when individual rows were
+        // skipped — dad-jokes {count}, image-riddles {created} — surface the
+        // shortfall either way
+        const made = typeof res?.count === 'number' ? res.count : typeof res?.created === 'number' ? res.created : null;
+        if (made !== null && made < chunk.length) {
+          failures += chunk.length - made;
+          for (const msg of (res.errors ?? []).slice(0, 3)) {
+            console.log(`   ${type}: row skipped: ${String(msg).slice(0, 180)}`);
+          }
+        }
         console.log(`   ${type}: created ${Math.min(i + 50, creates.length)}/${creates.length}`);
       } catch (err) {
         failures += chunk.length;
@@ -491,16 +601,26 @@ for (const type of ORDER) {
     console.log(`   ${type}: created ${ok}/${creates.length}`);
   }
 
-  // updates — one validated call each, paced
+  // updates — one validated call each, paced; payload rebuilt per-call so
+  // update-only field whitelists (T.updateFields) are honored and remap
+  // mutates the payload actually sent
   for (const e of updates) {
-    const remapErr = actx ? remap(e) : null;
+    const payload = pickFields(e.row, T.updateFields ?? T.fields);
+    let remapErr = null;
+    if (actx) {
+      try {
+        actx.remap(payload, e.row);
+      } catch (err) {
+        remapErr = err.message;
+      }
+    }
     if (remapErr) {
       failures += 1;
       console.log(`   ${type}: UPDATE skipped [${e.key}]: ${remapErr}`);
       continue;
     }
     try {
-      await api(T.update.verb, T.update.path(e.liveId), e.payload);
+      await api(T.update.verb, T.update.path(e.liveId), payload);
       console.log(`   ${type}: updated ${e.key}`);
     } catch (err) {
       failures += 1;
@@ -512,6 +632,7 @@ for (const type of ORDER) {
   // record the ACTUAL live state for everything we just wrote — re-fetch the
   // live list once so future conflict detection compares real server data,
   // never our own payload (server may normalize fields)
+  const publishIds = [];
   if (creates.length + updates.length > 0) {
     const written = new Map(creates.concat(updates).map((e) => [e.key, e]));
     try {
@@ -519,19 +640,40 @@ for (const type of ORDER) {
       const sctx = ctxByType[type] ?? null;
       for (const item of fresh) {
         const key = String(sctx ? sctx.keyLive(item) : T.keyOf(item));
-        if (!written.has(key)) continue;
+        const entry = written.get(key);
+        if (!entry) continue;
+        if (entry.action === 'create') publishIds.push(item.id);
         state[type] ??= {};
         state[type][key] = {
           liveId: item.id,
           // pre-remap checksum: computed from the LOCAL-shape payload so future
           // runs comparing freshly-read local rows stay stable across runs
-          localChecksum: written.get(key).localChecksum ?? hash(stable(written.get(key).payload)),
+          localChecksum: entry.localChecksum ?? hash(stable(entry.payload)),
           liveChecksum: hash(stable(pickFields(item, T.fields))),
         };
       }
     } catch (err) {
       console.log(`   ${type}: WARNING could not refresh live state: ${err.message.slice(0, 150)}`);
     }
+  }
+
+  // draft-forcing endpoints (dad-jokes, image-riddles): rows created THIS run
+  // start as DRAFT and are invisible to the public site — publish exactly the
+  // ids we just created via the family's bulk-action endpoint
+  if (T.publishAfterCreate && publishIds.length > 0) {
+    let published = 0;
+    for (let i = 0; i < publishIds.length; i += 50) {
+      const ids = publishIds.slice(i, i + 50);
+      try {
+        await api('POST', T.publishAfterCreate.path, { action: 'publish', ids });
+        published += ids.length;
+      } catch (err) {
+        failures += ids.length;
+        console.log(`   ${type}: PUBLISH failed for ${ids.length} rows: ${err.message.slice(0, 150)}`);
+      }
+      await sleep(700);
+    }
+    console.log(`   ${type}: published ${published}/${publishIds.length}`);
   }
 }
 

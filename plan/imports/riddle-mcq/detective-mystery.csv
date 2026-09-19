@@ -1,5 +1,6 @@
 # Category: Detective & Mystery
-"#","question","optionA","optionB","optionC","optionD","answer","level","subject","hint","explanation","status"
+
+#,question,optionA,optionB,optionC,optionD,answer,level,subject,hint,explanation,status
 "1","The golden pocket watch went missing from the school fete. Ivy was seen jogging past the pond at noon, Hugo signed the guest book at the bakery at noon, and Oscar claims to have been asleep all day. The bakery receipt proves Hugo's alibi, and Ivy's muddy shoes match the pond path. Who took the watch?","","","","","Hugo","expert","Who Did It?","Follow the receipts and the mud.","Hugo had the bakery receipt, so Ivy's muddy alibi is the lie that hides the theft.","published"
 "2","The code word TEKRAM is written backwards. What is the real word?","MARKET","NBSLFU","MARKE","MRKET","A. MARKET","hard","Code-Breaking","Read it from right to left.","TEKRAM reversed spells MARKET.","published"
 "3","The prize-winning pie vanished from the harbor cafe. Footprints in the flowerbed match Pearl's boots, Silas was on the ferry with a ticket stub, and Felix has flour on both hands from the bake sale. Who took it?","","","","","Pearl","expert","Who Did It?","Whose story puts them right at the flowerbed?","The bootprints in the flowerbed match Pearl's boots.","published"

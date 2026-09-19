@@ -33,7 +33,7 @@ QUIZ level: easy=2291 (19%), expert=2251 (19%), extreme=1842 (15%), hard=2366 (2
 QUIZ letter: A=3907 (40%), B=3892 (40%), C=1345 (13%), D=556 (5%)
 QUIZ tf: no=10393 (90%), yes=1148 (9%)
 RIDDLE level: easy=1010 (33%), expert=223 (7%), hard=480 (16%), medium=1287 (42%)
-RIDDLE letter: A=1071 (38%), B=1124 (40%), C=489 (17%), D=93 (3%)
+RIDDLE letter: A=1091 (39%), B=1036 (37%), C=534 (19%), D=116 (4%)
 RIDDLE subjects: Age & Time Puzzles=90, Alphabet Riddles=90, Animal Riddles=100, Classic Riddles=100, Code-Breaking=100, Common-Sense Traps=245, Counting Tricks=90, Crime Scene=100, Easy Kids Riddles=100, Food & Kitchen=100, Gotchas=55, Hidden Words=90, Household Items=100, Lateral Puzzles=154, Logic Puzzles=150, Nature & Weather=100, Number Riddles=120, Pun Riddles=100, Riddles for Adults=100, School Riddles=100, Sequences & Patterns=150, Silly Riddles=200, Situation Puzzles=146, What Am I?=100, Who Did It?=100, Wordplay=120
 
 --- issue counts ---
@@ -132,7 +132,7 @@ riddle everyday-objects.csv: A=39% B=39% C=18% D=3%
 riddle funny-riddles.csv: A=37% B=37% C=23% D=2%
 riddle kids-family.csv: A=39% B=38% C=19% D=2%
 riddle lateral-thinking.csv: A=35% B=35% C=22% D=6%
-riddle logic-deduction.csv: A=38% B=40% C=16% D=5%
-riddle math-numbers.csv: A=43% B=48% C=8% D=0%
-riddle trick-questions.csv: A=42% B=54% C=3% D=0%
-riddle words-letters.csv: A=39% B=41% C=19% D=0%
+riddle logic-deduction.csv: A=37% B=32% C=22% D=6%
+riddle math-numbers.csv: A=40% B=41% C=12% D=6%
+riddle trick-questions.csv: A=54% B=39% C=6% D=0%
+riddle words-letters.csv: A=38% B=40% C=21% D=0%
