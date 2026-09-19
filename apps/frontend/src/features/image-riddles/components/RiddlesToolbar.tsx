@@ -10,7 +10,7 @@
 
 'use client';
 
-import { ChevronDown, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 
 import type { ImageRiddleFilters } from '../hooks/useImageRiddleFilters';
 import type { ImageRiddleScore } from '../hooks/useImageRiddleScore';
@@ -97,12 +97,13 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
           </button>
         </div>
 
-        {/* 3. Difficulty Filter */}
-        <div className="relative group">
+        {/* 3. Difficulty Filter — no custom chevron: the stat card carries a
+            single icon (the search magnifier), owner directive 2026-09-19. */}
+        <div className="relative">
           <select
             value={filters.difficulty}
             onChange={(e) => filters.changeDifficulty(e.target.value)}
-            className="appearance-none rounded-xl border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-5 py-2.5 pr-10 text-xs font-black text-slate-700 dark:text-secondary-200 shadow-sm hover:border-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all cursor-pointer"
+            className="appearance-none rounded-xl border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-5 py-2.5 text-xs font-black text-slate-700 dark:text-secondary-200 shadow-sm hover:border-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all cursor-pointer"
             aria-label="Filter by difficulty"
           >
             <option value="all">All Levels</option>
@@ -112,10 +113,6 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
               </option>
             ))}
           </select>
-          <ChevronDown
-            className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none h-4 w-4 text-slate-400 dark:text-secondary-400"
-            aria-hidden="true"
-          />
         </div>
       </div>
     </div>
