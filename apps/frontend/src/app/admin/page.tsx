@@ -21,6 +21,7 @@ import {
   BarChart3,
   Mail,
   Search,
+  Heart,
 } from 'lucide-react';
 
 import type { Subject, Joke, JokeCategory, MenuSection } from './types';
@@ -42,6 +43,7 @@ import {
   SummarySection,
   NewsletterSection,
 } from './components';
+import QuestionLikesBuckets from './components/QuestionLikesBuckets';
 import { SidebarSubjectGroups } from './components/SidebarSubjectGroups';
 import { QuizMcqContainer } from '@/features/quiz-mcq-admin/components';
 import { RiddleMcqContainer } from '@/features/riddle-mcq/components';
@@ -454,6 +456,13 @@ export default function AdminPage(): JSX.Element {
             onClick={() => goToSection('comments')}
           />
           <MenuItem
+            icon={<Heart className="w-5 h-5" />}
+            label="Question Likes"
+            active={activeSection === 'question-likes'}
+            expanded={sidebarOpen}
+            onClick={() => goToSection('question-likes')}
+          />
+          <MenuItem
             icon={<Mail className="w-5 h-5" />}
             label="Newsletter"
             active={activeSection === 'newsletter'}
@@ -593,6 +602,11 @@ export default function AdminPage(): JSX.Element {
                   <MessageSquare className="w-6 h-6" /> Comments Moderation
                 </>
               )}
+              {activeSection === 'question-likes' && (
+                <>
+                  <Heart className="w-6 h-6" /> Question Like Buckets
+                </>
+              )}
               {activeSection === 'newsletter' && (
                 <>
                   <Mail className="w-6 h-6" /> Newsletter Subscribers
@@ -687,6 +701,7 @@ export default function AdminPage(): JSX.Element {
           {activeSection === 'users' && <AdminUsersSection />}
           {activeSection === 'media' && <MediaLibrarySection />}
           {activeSection === 'comments' && <CommentsSection />}
+          {activeSection === 'question-likes' && <QuestionLikesBuckets />}
           {activeSection === 'newsletter' && <NewsletterSection />}
           {activeSection === 'seo' && <SeoSection />}
           {activeSection === 'settings' && <SettingsSection />}

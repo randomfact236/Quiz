@@ -18,6 +18,7 @@ import {
   BubbleEmojiEffect,
   type BubbleEmojiEffectRef,
 } from '@/components/quiz-mcq/BubbleEmojiEffect';
+import { LikeButton } from '@/components/likes/LikeButton';
 import type { Riddle } from '@/types/riddles';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 
@@ -266,6 +267,11 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
             <RiddleTimerRing timeRemaining={questionTimeRemaining} timeLimit={questionTimeLimit} />
           </div>
         )}
+
+        {/* BUG-037: frictionless one-tap like capture (internal; no counts) */}
+        <div className="absolute right-4 top-4">
+          <LikeButton contentType="riddle" questionId={riddle.id} />
+        </div>
 
         {/* Riddle Question Text */}
         <div className="mb-4 text-center">

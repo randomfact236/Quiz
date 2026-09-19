@@ -16,6 +16,7 @@ import { Share2 } from 'lucide-react';
 import { AnswerOptions } from './AnswerOptions';
 import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffect';
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
+import { LikeButton } from '@/components/likes/LikeButton';
 import type { Question } from '@/types/quiz-mcq';
 
 interface QuestionCardProps {
@@ -283,6 +284,11 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
             />
           </div>
         )}
+
+        {/* BUG-037: frictionless one-tap like capture (internal; no counts) */}
+        <div className="absolute right-4 top-4">
+          <LikeButton contentType="quiz" questionId={question.id} />
+        </div>
 
         {/* Question Text - Top */}
         <div className="mb-4 text-center">
