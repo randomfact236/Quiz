@@ -307,7 +307,33 @@ export abstract class ContentServiceBase<
       },
     });
 
-    return { data, total: data.length };
+    return { data: this.shuffleServedOptions(data), total: data.length };
+  }
+
+  /**
+   * BUG-041: the stored option order is learnable — correctLetter was A or B
+   * for ~every MCQ in the catalog (content was authored correct-answer-first).
+   * Shuffle the option slots at SERVE time and remap correctLetter so the
+   * correct answer distributes uniformly across slots; stored rows (and the
+   * admin view of them) stay untouched. Open-ended items (no letter) pass
+   * through untouched.
+   */
+  private shuffleServedOptions(items: TItem[]): TItem[] {
+    const letters = 'ABCDEFGH';
+    for (const item of items as any[]) {
+      const opts = item.options;
+      if (!Array.isArray(opts) || opts.length < 2 || !item.correctLetter) continue;
+      const letterIdx = letters.indexOf(String(item.correctLetter).trim().toUpperCase());
+      if (letterIdx < 0 || letterIdx >= opts.length) continue;
+      const correctText = opts[letterIdx];
+      for (let i = opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [opts[i], opts[j]] = [opts[j], opts[i]];
+      }
+      const newIdx = opts.indexOf(correctText);
+      if (newIdx >= 0 && newIdx < letters.length) item.correctLetter = letters[newIdx];
+    }
+    return items;
   }
 
   async createItem(dto: Record<string, any>): Promise<TItem> {
