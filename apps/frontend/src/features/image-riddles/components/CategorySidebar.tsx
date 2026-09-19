@@ -14,7 +14,6 @@
 
 'use client';
 
-import { useState } from 'react';
 import { Folder, Globe } from 'lucide-react';
 
 import type { ImageRiddleCategory } from '@/lib/image-riddles-api';
@@ -24,6 +23,10 @@ export interface CategorySidebarProps {
   categoryCounts: Record<string, number>;
   activeCategory: string | null;
   onSelect: (category: string | null) => void;
+  /** Mobile drawer open state — controlled by the page; the trigger lives in
+   *  the RiddlesToolbar controls row (owner: All beside Recent/Mix/All Levels). */
+  drawerOpen: boolean;
+  onDrawerClose: () => void;
 }
 
 /** One topic tile (shared by the desktop sidebar and the mobile drawer). */
@@ -70,10 +73,9 @@ export default function CategorySidebar({
   categoryCounts,
   activeCategory,
   onSelect,
+  drawerOpen,
+  onDrawerClose,
 }: CategorySidebarProps) {
-  const [drawerOpen, setDrawerOpen] = useState(false);
-  const activeName = activeCategory ?? 'All';
-
   const tiles = (
     <div className="grid grid-cols-2 lg:grid-cols-1 xl:grid-cols-2 gap-2">
       <TopicTile
@@ -113,26 +115,12 @@ export default function CategorySidebar({
         {tiles}
       </div>
 
-      {/* Mobile — collapsed trigger + bottom drawer (owner directive) */}
+      {/* Mobile — bottom drawer; the trigger lives in the RiddlesToolbar row */}
       <div className="lg:hidden">
-        <button
-          onClick={() => setDrawerOpen(true)}
-          className="w-full flex items-center justify-between gap-3 rounded-xl border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-4 py-3 shadow-sm transition-colors hover:border-slate-300 dark:hover:border-secondary-600"
-          aria-haspopup="dialog"
-          aria-expanded={drawerOpen}
-        >
-          <span className="flex items-center gap-2 text-sm font-black uppercase tracking-widest text-slate-600 dark:text-secondary-300">
-            <Folder className="h-4 w-4 text-indigo-400" aria-hidden="true" /> Topics
-          </span>
-          <span className="rounded-full bg-indigo-50 dark:bg-indigo-500/10 px-3 py-1 text-xs font-black uppercase tracking-widest text-indigo-500 border border-indigo-100 dark:border-indigo-500/30">
-            {activeName}
-          </span>
-        </button>
-
         {drawerOpen && (
           <div
             className="fixed inset-0 z-[70] flex items-end bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200"
-            onClick={() => setDrawerOpen(false)}
+            onClick={onDrawerClose}
             role="dialog"
             aria-modal="true"
             aria-label="Topics"
@@ -147,7 +135,7 @@ export default function CategorySidebar({
                   <Folder className="h-4 w-4 text-indigo-400" aria-hidden="true" /> Topics
                 </span>
                 <button
-                  onClick={() => setDrawerOpen(false)}
+                  onClick={onDrawerClose}
                   className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-500/20"
                   aria-label="Close topics"
                 >
@@ -155,7 +143,7 @@ export default function CategorySidebar({
                 </button>
               </h2>
               {/* selecting a topic closes the drawer */}
-              <div onClick={() => setDrawerOpen(false)}>{tiles}</div>
+              <div onClick={onDrawerClose}>{tiles}</div>
             </div>
           </div>
         )}

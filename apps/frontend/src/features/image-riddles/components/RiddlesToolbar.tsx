@@ -10,7 +10,7 @@
 
 'use client';
 
-import { Search } from 'lucide-react';
+import { Folder, Search } from 'lucide-react';
 
 import type { ImageRiddleFilters } from '../hooks/useImageRiddleFilters';
 import type { ImageRiddleScore } from '../hooks/useImageRiddleScore';
@@ -26,9 +26,20 @@ export interface RiddlesToolbarProps {
   filters: ImageRiddleFilters;
   score: ImageRiddleScore;
   totalCount: number;
+  /**
+   * Mobile-only topics chip (owner order: All · Recent · Mix · All Levels).
+   * Renders the active topic with a folder icon suggesting it opens the
+   * topics drawer; absent on lg+ where the sticky sidebar owns topics.
+   */
+  topicsChip?: { label: string; onClick: () => void };
 }
 
-export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesToolbarProps) {
+export default function RiddlesToolbar({
+  filters,
+  score,
+  totalCount,
+  topicsChip,
+}: RiddlesToolbarProps) {
   return (
     <div className="sticky top-4 z-30 mb-8 bg-white/95 dark:bg-secondary-800/95 backdrop-blur-md rounded-2xl p-4 shadow-md border border-slate-300 dark:border-secondary-600 flex flex-col sm:flex-row items-center justify-between gap-6 transition-all">
       <div className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto px-1">
@@ -55,8 +66,8 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-4 w-full sm:w-auto justify-end">
-        {/* 1. Search (Visible and on the right, with clear affordance) */}
+      <div className="flex flex-col gap-4 w-full sm:w-auto">
+        {/* 1. Search (full-width row; clear affordance always visible) */}
         <div className="relative flex-1 sm:flex-none min-w-[200px]">
           <input
             type="search"
@@ -81,38 +92,53 @@ export default function RiddlesToolbar({ filters, score, totalCount }: RiddlesTo
           )}
         </div>
 
-        {/* 2. Sort Options (Recent/Mix) */}
-        <div className="flex items-center bg-slate-100 dark:bg-secondary-800/80 p-1 rounded-xl border border-slate-200 dark:border-secondary-700/60">
-          <button
-            onClick={() => filters.changeSortOrder('recent')}
-            className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'recent' ? 'bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-md ring-1 ring-slate-200 dark:ring-secondary-700' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:hover:text-secondary-100 dark:text-secondary-100'}`}
-          >
-            Recent
-          </button>
-          <button
-            onClick={() => filters.changeSortOrder('random')}
-            className={`px-5 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-md ring-1 ring-slate-200 dark:ring-secondary-700' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:hover:text-secondary-100 dark:text-secondary-100'}`}
-          >
-            Mix
-          </button>
-        </div>
+        {/* 2. Controls row — owner order: All · Recent · Mix · All Levels. The
+            All chip (mobile only) opens the topics drawer; the folder icon
+            says "this opens something". */}
+        <div className="flex flex-wrap items-center gap-3 justify-start sm:justify-end">
+          {topicsChip && (
+            <button
+              onClick={topicsChip.onClick}
+              className="lg:hidden flex items-center gap-1 rounded-lg border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-3 py-2 text-xs font-black text-slate-700 dark:text-secondary-200 shadow-sm hover:border-indigo-400 dark:hover:border-indigo-500/60 transition-colors"
+              aria-label={`Open topics — current: ${topicsChip.label}`}
+              aria-haspopup="dialog"
+            >
+              <Folder className="h-4 w-4 text-indigo-400" aria-hidden="true" />
+              {topicsChip.label}
+            </button>
+          )}
+          <div className="flex items-center bg-slate-100 dark:bg-secondary-800/80 p-1 rounded-xl border border-slate-200 dark:border-secondary-700/60">
+            <button
+              onClick={() => filters.changeSortOrder('recent')}
+              className={`px-3 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'recent' ? 'bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-md ring-1 ring-slate-200 dark:ring-secondary-700' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:hover:text-secondary-100 dark:text-secondary-100'}`}
+            >
+              Recent
+            </button>
+            <button
+              onClick={() => filters.changeSortOrder('random')}
+              className={`px-3 py-2 text-xs font-black rounded-lg transition-all ${filters.sortOrder === 'random' ? 'bg-white dark:bg-secondary-800 text-indigo-600 dark:text-indigo-300 shadow-md ring-1 ring-slate-200 dark:ring-secondary-700' : 'text-slate-500 dark:text-secondary-400 hover:text-slate-800 dark:hover:text-secondary-100 dark:text-secondary-100'}`}
+            >
+              Mix
+            </button>
+          </div>
 
-        {/* 3. Difficulty Filter — no custom chevron: the stat card carries a
+          {/* 3. Difficulty Filter — no custom chevron: the stat card carries a
             single icon (the search magnifier), owner directive 2026-09-19. */}
-        <div className="relative">
-          <select
-            value={filters.difficulty}
-            onChange={(e) => filters.changeDifficulty(e.target.value)}
-            className="appearance-none rounded-xl border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-5 py-2.5 text-xs font-black text-slate-700 dark:text-secondary-200 shadow-sm hover:border-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all cursor-pointer"
-            aria-label="Filter by difficulty"
-          >
-            <option value="all">All Levels</option>
-            {DIFFICULTY_OPTIONS.map((opt) => (
-              <option key={opt.value} value={opt.value}>
-                {opt.label}
-              </option>
-            ))}
-          </select>
+          <div className="relative">
+            <select
+              value={filters.difficulty}
+              onChange={(e) => filters.changeDifficulty(e.target.value)}
+              className="appearance-none rounded-lg border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-3 py-2 text-xs font-black text-slate-700 dark:text-secondary-200 shadow-sm hover:border-slate-400 focus:outline-none focus:border-indigo-500 focus:ring-4 focus:ring-indigo-50/50 transition-all cursor-pointer"
+              aria-label="Filter by difficulty"
+            >
+              <option value="all">All Levels</option>
+              {DIFFICULTY_OPTIONS.map((opt) => (
+                <option key={opt.value} value={opt.value}>
+                  {opt.label}
+                </option>
+              ))}
+            </select>
+          </div>
         </div>
       </div>
     </div>

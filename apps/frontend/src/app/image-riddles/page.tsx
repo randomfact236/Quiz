@@ -39,6 +39,8 @@ import { getCommentCounts } from '@/lib/comments-api';
 import ShareMenu from '@/components/share/ShareMenu';
 
 export default function ImageRiddlesPage(): JSX.Element {
+  const [topicsOpen, setTopicsOpen] = useState(false);
+
   const filters = useImageRiddleFilters();
   const catalog = useImageRiddleCatalog({
     search: filters.search,
@@ -137,7 +139,15 @@ export default function ImageRiddlesPage(): JSX.Element {
           </p>
         </div>
 
-        <RiddlesToolbar filters={filters} score={score.score} totalCount={catalog.totalFiltered} />
+        <RiddlesToolbar
+          filters={filters}
+          score={score.score}
+          totalCount={catalog.totalFiltered}
+          topicsChip={{
+            label: filters.activeCategory ?? 'All',
+            onClick: () => setTopicsOpen(true),
+          }}
+        />
 
         {/* Layout: Sidebar + Main Content */}
         <div className="grid gap-10 lg:grid-cols-4 items-start">
@@ -146,6 +156,8 @@ export default function ImageRiddlesPage(): JSX.Element {
             categoryCounts={catalog.categoryCounts}
             activeCategory={filters.activeCategory}
             onSelect={filters.changeCategory}
+            drawerOpen={topicsOpen}
+            onDrawerClose={() => setTopicsOpen(false)}
           />
 
           {/* Main Area: Grid & Pagination */}
