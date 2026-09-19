@@ -115,22 +115,22 @@ export default function CategorySidebar({
         {tiles}
       </div>
 
-      {/* Mobile — bottom drawer; the trigger lives in the RiddlesToolbar row */}
+      {/* Mobile — side drawer (slides in from the right edge, owner directive);
+          the trigger lives in the RiddlesToolbar row */}
       <div className="lg:hidden">
         {drawerOpen && (
           <div
-            className="fixed inset-0 z-[70] flex items-end bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200"
+            className="fixed inset-0 z-[70] flex justify-end bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200"
             onClick={onDrawerClose}
             role="dialog"
             aria-modal="true"
             aria-label="Topics"
           >
             <div
-              className="w-full max-h-[75vh] overflow-y-auto rounded-t-3xl bg-white dark:bg-secondary-900 shadow-2xl animate-in slide-in-from-bottom duration-300 p-5 pb-8"
+              className="h-full w-[85%] max-w-sm overflow-y-auto rounded-l-3xl bg-white dark:bg-secondary-900 shadow-2xl animate-in slide-in-from-right duration-300 p-5 pb-8"
               onClick={(e) => e.stopPropagation()}
             >
-              <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-slate-200 dark:bg-secondary-700" />
-              <h2 className="mb-4 flex items-center justify-between text-sm font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400">
+              <div className="mb-4 flex items-center justify-between text-sm font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400">
                 <span className="flex items-center gap-2">
                   <Folder className="h-4 w-4 text-indigo-400" aria-hidden="true" /> Topics
                 </span>
@@ -141,7 +141,7 @@ export default function CategorySidebar({
                 >
                   ✕
                 </button>
-              </h2>
+              </div>
               {/* selecting a topic closes the drawer */}
               <div onClick={onDrawerClose}>{tiles}</div>
             </div>
