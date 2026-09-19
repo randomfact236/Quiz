@@ -200,13 +200,14 @@ function QuizContent(): JSX.Element {
   }, [clearAutoAdvance]);
   const proceedAfterComments = useCallback(() => {
     setCommentsOpen(false);
+    if (!quiz.hasAnsweredCurrent) return; // unanswered: just close the panel
     questionCardRef.current?.clearBubbles();
     if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
       setShowConfirmSubmit(true);
     } else {
       quiz.goToNext();
     }
-  }, [quiz.currentQuestionIndex, quiz.totalQuestions, quiz.goToNext]);
+  }, [quiz.hasAnsweredCurrent, quiz.currentQuestionIndex, quiz.totalQuestions, quiz.goToNext]);
   const scheduleAutoAdvance = useCallback(() => {
     if (isTimerMode || quiz.status !== 'playing') return;
     clearAutoAdvance();
@@ -516,13 +517,9 @@ function QuizContent(): JSX.Element {
                   maxScore={quiz.totalQuestions}
                   timeUp={isTimeUp}
                   onShare={handleShare}
-                  {...(quiz.hasAnsweredCurrent
-                    ? {
-                        commentsOpen,
-                        onToggleComments: toggleComments,
-                        onCloseComments: proceedAfterComments,
-                      }
-                    : {})}
+                  commentsOpen={commentsOpen}
+                  onToggleComments={toggleComments}
+                  onCloseComments={proceedAfterComments}
                   {...(isTimerMode && {
                     questionTimeRemaining: quiz.timeRemaining,
                     questionTimeLimit: timeLimit ?? 60,
