@@ -52,8 +52,16 @@ export class QuestionLikesController {
   @Get('my')
   @_Public()
   @UseGuards(OptionalJwtAuthGuard)
-  @ApiOperation({ summary: 'Whether the caller already liked a question' })
-  likedByMe(@Query() query: MyQuestionLikeQueryDto): Promise<boolean> {
-    return this.likesService.likedByMe(query.contentType, query.questionId, query.guestId);
+  @ApiOperation({ summary: 'Whether the caller already liked a question (guest or account)' })
+  likedByMe(
+    @Query() query: MyQuestionLikeQueryDto,
+    @Req() req: { user?: { id?: string } }
+  ): Promise<boolean> {
+    return this.likesService.likedByMe(
+      query.contentType,
+      query.questionId,
+      query.guestId,
+      req.user?.id ?? null
+    );
   }
 }

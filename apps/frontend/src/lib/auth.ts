@@ -1,4 +1,5 @@
 import { api } from './api-client';
+import { getGuestId, rotateGuestId } from './guest-id';
 import { getItem, setItem, removeItem, STORAGE_KEYS } from './storage';
 
 export interface AuthUser {
@@ -12,6 +13,24 @@ interface AuthResponse {
   user: AuthUser;
   token: string;
   refreshToken: string;
+}
+
+/**
+ * Attach this browser's guest activity (likes, comments) to the freshly
+ * signed-in account, then retire the guest id: the account owns everything,
+ * and a brand-new guest id keeps this device's future anonymous activity
+ * from flowing back into the account. Best-effort — a failed merge keeps
+ * the guest id so the next sign-in retries it; login itself never blocks.
+ */
+async function mergeGuestIntoAccount(): Promise<void> {
+  const guestId = getGuestId();
+  if (!guestId) return;
+  try {
+    await api.post('/guest-users/merge', { guestId });
+    rotateGuestId();
+  } catch {
+    /* merge retried on next sign-in */
+  }
 }
 
 export const authService = {
@@ -28,6 +47,7 @@ export const authService = {
       setItem(STORAGE_KEYS.ADMIN_TOKEN, token, true);
       setItem(STORAGE_KEYS.ADMIN_REFRESH_TOKEN, refreshToken, true);
     }
+    await mergeGuestIntoAccount();
     return response.data;
   },
 
@@ -36,6 +56,7 @@ export const authService = {
     const { token, refreshToken } = response.data;
     setItem(STORAGE_KEYS.AUTH_TOKEN, token, true);
     setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, true);
+    await mergeGuestIntoAccount();
     return response.data;
   },
 
@@ -50,6 +71,7 @@ export const authService = {
     const { token, refreshToken } = response.data;
     setItem(STORAGE_KEYS.AUTH_TOKEN, token, remember);
     setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, remember);
+    await mergeGuestIntoAccount();
     return response.data;
   },
 
@@ -62,6 +84,9 @@ export const authService = {
     }
     removeItem(STORAGE_KEYS.AUTH_TOKEN);
     removeItem(STORAGE_KEYS.REFRESH_TOKEN);
+    // Fresh guest identity for whoever uses the browser next — a shared
+    // device must not expose (or re-merge) the previous guest's activity.
+    rotateGuestId();
   },
 
   logoutAdmin: (): void => {

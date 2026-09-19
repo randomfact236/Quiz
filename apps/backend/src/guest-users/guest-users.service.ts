@@ -1,14 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { IsNull, Repository } from 'typeorm';
+
+import { Comment } from '../comments/entities/comment.entity';
+import { QuestionLike } from '../question-likes/entities/question-like.entity';
 
 import { GuestUser } from './entities/guest-user.entity';
+
+export interface GuestMergeResult {
+  likesMerged: number;
+  likesDeduped: number;
+  commentsMerged: number;
+}
 
 @Injectable()
 export class GuestUsersService {
   constructor(
     @InjectRepository(GuestUser)
-    private guestUserRepo: Repository<GuestUser>
+    private guestUserRepo: Repository<GuestUser>,
+    @InjectRepository(QuestionLike)
+    private readonly likeRepo: Repository<QuestionLike>,
+    @InjectRepository(Comment)
+    private readonly commentRepo: Repository<Comment>
   ) {}
 
   async findByGuestId(guestId: string): Promise<GuestUser | null> {
@@ -69,5 +82,43 @@ export class GuestUsersService {
    */
   async resetPlayCounters(): Promise<void> {
     await this.guestUserRepo.update({}, { quizAttempts: 0, totalScore: 0 });
+  }
+
+  // ==================== LOGIN MERGE ====================
+
+  /**
+   * Attach a guest's anonymous activity to a signed-in account (called from
+   * POST /guest-users/merge right after login/register/OAuth exchange).
+   *
+   * Likes are deduped against rows the account already owns: where the same
+   * question was liked both as guest and logged-in, the guest duplicate is
+   * DELETED rather than stamped — the (contentType, questionId) unique-ish
+   * pair would otherwise double-count public like totals. Comments have no
+   * uniqueness, so they are stamped in one update. Idempotent: re-merging an
+   * already-merged guest touches nothing.
+   */
+  async mergeGuestIntoUser(guestId: string, userId: string): Promise<GuestMergeResult> {
+    const guestLikes = await this.likeRepo.find({ where: { guestId, userId: IsNull() } });
+    const ownedLikes = await this.likeRepo.find({ where: { userId } });
+    const owned = new Set(ownedLikes.map((row) => `${row.contentType}:${row.questionId}`));
+
+    let likesMerged = 0;
+    let likesDeduped = 0;
+    for (const row of guestLikes) {
+      const key = `${row.contentType}:${row.questionId}`;
+      if (owned.has(key)) {
+        await this.likeRepo.remove(row);
+        likesDeduped++;
+      } else {
+        row.userId = userId;
+        await this.likeRepo.save(row);
+        likesMerged++;
+        owned.add(key);
+      }
+    }
+
+    const stamped = await this.commentRepo.update({ guestId, userId: IsNull() }, { userId });
+
+    return { likesMerged, likesDeduped, commentsMerged: stamped.affected ?? 0 };
   }
 }

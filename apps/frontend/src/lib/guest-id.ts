@@ -32,6 +32,19 @@ export function getGuestId(): string {
 }
 
 /**
+ * Retire this browser's guest identity and mint a fresh one. Called after a
+ * login merge (the old id's likes/comments now belong to the account) and on
+ * logout, so the next person on a shared device can never see — or merge —
+ * the previous guest's activity. Returns the new id.
+ */
+export function rotateGuestId(): string {
+  if (typeof window === 'undefined') return '';
+  const fresh = generateGuestId();
+  window.localStorage.setItem(GUEST_ID_KEY, fresh);
+  return fresh;
+}
+
+/**
  * Display name for comments — set once by the visitor (any name they like)
  * and reused for every comment from this device. Empty string when unset
  * (feeds render those entries as "Guest").

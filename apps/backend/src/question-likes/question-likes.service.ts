@@ -10,7 +10,7 @@
 
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindOptionsWhere, Repository } from 'typeorm';
 
 import { DadJoke } from '../dad-jokes/entities/dad-joke.entity';
 import { Question } from '../quiz-mcq/entities/question.entity';
@@ -101,12 +101,20 @@ export class QuestionLikesService {
     return out;
   }
 
+  /**
+   * Restore check for the heart fill: matches the caller's guest id OR their
+   * account id — after a login merge the rows carry the account id, so the
+   * fill follows the account across devices, not just this browser.
+   */
   async likedByMe(
     contentType: QuestionLikeContentType,
     questionId: string,
-    guestId: string
+    guestId: string,
+    userId?: string | null
   ): Promise<boolean> {
-    const row = await this.likesRepo.findOne({ where: { contentType, questionId, guestId } });
+    const where: FindOptionsWhere<QuestionLike>[] = [{ contentType, questionId, guestId }];
+    if (userId) where.push({ contentType, questionId, userId });
+    const row = await this.likesRepo.findOne({ where });
     return !!row;
   }
 
