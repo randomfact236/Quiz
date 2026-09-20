@@ -7,9 +7,9 @@
  * card renders the same component with `autoOpen` so the feed is expanded
  * immediately in the live flow. Same plumbing as joke replies: shared guest
  * identity (or account id after a login merge), optimistic post, delete-own.
- * Known gap: a failed POST keeps the optimistic copy silently (same rule as
- * jokes) — surfacing that failure is a pending owner-approved fix. Toggle
- * label is a plain 'Comments' (BUG-048).
+ * A failed POST flags its optimistic copy visibly (red, Couldn't post +
+ * Retry) with a toast — silent failures used to read as 'vanished' comments.
+ * Toggle label is a plain 'Comments' (BUG-048).
  * ============================================================================
  */
 
@@ -26,9 +26,13 @@ import {
   type CommentContentType,
 } from '@/lib/comments-api';
 import { getGuestName, setGuestName } from '@/lib/guest-id';
+import { toast } from '@/lib/toast';
 import { timeAgo } from '@/lib/time-ago';
 
 const MAX_LENGTH = 280;
+
+/** Server comment plus the local-only failure flag on an unposted optimistic copy. */
+type FeedItem = Comment & { failed?: boolean };
 
 /** Backend UUIDs only — guards against odd local/resumed session ids. */
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -46,7 +50,7 @@ export function QuestionComments({
   autoOpen,
 }: QuestionCommentsProps): JSX.Element {
   const [open, setOpen] = useState(!!autoOpen);
-  const [items, setItems] = useState<Comment[] | null>(null);
+  const [items, setItems] = useState<FeedItem[] | null>(null);
   const [text, setText] = useState('');
   const [name, setName] = useState('');
   const [posting, setPosting] = useState(false);
@@ -74,13 +78,23 @@ export function QuestionComments({
     setName(getGuestName());
   }, []);
 
+  /** A failed POST must not sit there looking posted — flag it visibly and
+   * say so (audit 2026-09-20: the silent optimistic copy was the source of
+   * 'my comment vanished' confusion whenever the write was rejected). */
+  const flagFailed = useCallback((id: string) => {
+    toast.error("Couldn't post your comment — retry or delete it below.");
+    setItems((prev) =>
+      prev ? prev.map((item) => (item.id === id ? { ...item, failed: true } : item)) : prev
+    );
+  }, []);
+
   const handlePost = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
       const trimmed = text.trim();
       if (trimmed.length === 0 || posting) return;
       setPosting(true);
-      const optimistic: Comment = {
+      const optimistic: FeedItem = {
         id: `local-${Date.now()}`,
         kind: 'comment',
         text: trimmed,
@@ -104,10 +118,37 @@ export function QuestionComments({
         setItems((prev) =>
           prev ? prev.map((item) => (item.id === optimistic.id ? saved : item)) : prev
         );
+      } else {
+        flagFailed(optimistic.id);
       }
-      // A failed POST keeps the optimistic local copy (same rule as jokes).
     },
-    [text, posting, contentType, questionId, name]
+    [text, posting, contentType, questionId, name, flagFailed]
+  );
+
+  const handleRetry = useCallback(
+    async (id: string) => {
+      const item = items?.find((i) => i.id === id);
+      const trimmed = (item?.text ?? '').trim();
+      if (!item || trimmed.length === 0 || posting) return;
+      setPosting(true);
+      setItems((prev) =>
+        prev ? prev.map((i) => (i.id === id ? { ...i, failed: false } : i)) : prev
+      );
+      const saved = await postComment({
+        contentType,
+        contentId: questionId,
+        kind: 'comment',
+        text: trimmed,
+        ...(item.authorName ? { authorName: item.authorName } : {}),
+      });
+      setPosting(false);
+      if (saved) {
+        setItems((prev) => (prev ? prev.map((i) => (i.id === id ? saved : i)) : prev));
+      } else {
+        flagFailed(id);
+      }
+    },
+    [items, posting, contentType, questionId, flagFailed]
   );
 
   const handleDelete = useCallback(async (id: string) => {
@@ -156,7 +197,11 @@ export function QuestionComments({
             items.map((item) => (
               <div
                 key={item.id}
-                className="flex items-start justify-between gap-3 rounded-xl bg-white dark:bg-secondary-800 px-3 py-2"
+                className={`flex items-start justify-between gap-3 rounded-xl px-3 py-2 ${
+                  item.failed
+                    ? 'bg-red-50 ring-1 ring-red-200 dark:bg-red-950/40 dark:ring-red-500/30'
+                    : 'bg-white dark:bg-secondary-800'
+                }`}
               >
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-secondary-400">
@@ -165,9 +210,23 @@ export function QuestionComments({
                   <p className="break-words text-sm font-semibold text-gray-800 dark:text-secondary-100">
                     {item.text}
                   </p>
-                  <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-secondary-400">
-                    {timeAgo(item.createdAt)}
-                  </p>
+                  {item.failed ? (
+                    <p className="mt-0.5 flex items-center gap-2 text-[10px] font-bold uppercase tracking-wider text-red-500">
+                      Couldn&apos;t post
+                      <button
+                        onClick={() => void handleRetry(item.id)}
+                        disabled={posting}
+                        className="rounded-full bg-indigo-500 px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider text-white transition-colors hover:bg-indigo-600 disabled:opacity-40"
+                        aria-label="Retry posting this comment"
+                      >
+                        Retry
+                      </button>
+                    </p>
+                  ) : (
+                    <p className="mt-0.5 text-[10px] font-bold uppercase tracking-wider text-gray-400 dark:text-secondary-400">
+                      {timeAgo(item.createdAt)}
+                    </p>
+                  )}
                 </div>
                 {item.mine && (
                   <button

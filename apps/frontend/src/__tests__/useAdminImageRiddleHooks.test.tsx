@@ -22,6 +22,7 @@ import type { AdminImageRiddleCategory } from '@/features/image-riddles/admin/ho
 
 jest.mock('@/lib/image-riddles-api', () => ({
   getAllImageRiddlesAdmin: jest.fn(),
+  getAllImageRiddlesAdminAllPages: jest.fn(),
   getImageRiddleCategoriesAdmin: jest.fn(),
   bulkActionImageRiddles: jest.fn(),
   bulkCreateImageRiddles: jest.fn(),
@@ -51,6 +52,8 @@ import {
 import { toast } from '@/lib/toast';
 
 const mockGetAll = require('@/lib/image-riddles-api').getAllImageRiddlesAdmin as jest.Mock;
+const mockGetAllPages = require('@/lib/image-riddles-api')
+  .getAllImageRiddlesAdminAllPages as jest.Mock;
 const mockGetCategories = require('@/lib/image-riddles-api')
   .getImageRiddleCategoriesAdmin as jest.Mock;
 const mockBulkAction = require('@/lib/image-riddles-api').bulkActionImageRiddles as jest.Mock;
@@ -88,6 +91,8 @@ function makeCategory(overrides: Partial<AdminImageRiddleCategory> = {}): AdminI
 beforeEach(() => {
   jest.clearAllMocks();
   mockGetAll.mockResolvedValue({ data: [], total: 0 });
+  // The dashboard loads ALL pages since 88159f2 (was capped at 100 of 1,906).
+  mockGetAllPages.mockResolvedValue({ data: [], total: 0 });
   mockGetCategories.mockResolvedValue([]);
   mockBulkAction.mockResolvedValue({});
   mockBulkCreate.mockResolvedValue({ created: 0, failed: 0, errors: [] });
@@ -110,7 +115,7 @@ describe('useAdminImageRiddleData', () => {
   });
 
   it('loads and normalizes riddles + categories, resolves category ids', async () => {
-    mockGetAll.mockResolvedValue({
+    mockGetAllPages.mockResolvedValue({
       data: [
         {
           id: 'r1',

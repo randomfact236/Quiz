@@ -5,6 +5,12 @@
  */
 
 import { render, screen, fireEvent } from '@testing-library/react';
+
+// RiddleCard renders LikeButton, which reads the auth context to decide
+// whether the guest like-prompt may show — tests render the card bare.
+jest.mock('@/contexts/AuthContext', () => ({
+  useAuth: () => ({ user: null, isAuthenticated: false, isLoading: false }),
+}));
 import { createRef } from 'react';
 
 import { RiddleCard, type RiddleCardRef } from '@/app/riddle-mcq/components/RiddleCard';
