@@ -1,0 +1,435 @@
+<!doctype html>
+<!-- font-stack: Inter Variable (Source: linear-app/DESIGN.md L68) -->
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>AI-Quiz (PigZap) — Full-Stack Audit Report</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root{
+    --bg:#08090a; --panel:#0f1011; --surface:#191a1b; --surface-2:#1f2021;
+    --fg:#f7f8f8; --fg-2:#d0d6e0; --muted:#8a8f98; --faint:#62666d;
+    --accent:#7170ff; --accent-bg:#5e6ad2; --accent-hover:#828fff;
+    --border:rgba(255,255,255,.08); --border-subtle:rgba(255,255,255,.05);
+    --ok:#27a644; --warn:#d29922; --danger:#e5534b;
+    --code-bg:#131415;
+    --font: "Inter Variable","Inter",-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;
+    --mono: ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --measure:72ch;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    margin:0;background:var(--bg);color:var(--fg-2);
+    font-family:var(--font);font-size:15px;line-height:1.6;
+    font-feature-settings:"cv01","ss03";-webkit-font-smoothing:antialiased;
+  }
+  a{color:var(--accent);text-decoration:none}
+  a:hover{color:var(--accent-hover);text-decoration:underline}
+  :focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:4px}
+
+  .topbar{
+    position:sticky;top:0;z-index:20;background:var(--panel);
+    border-bottom:1px solid var(--border-subtle);
+    padding:12px 28px;display:flex;justify-content:space-between;align-items:center;
+  }
+  .brand{font-weight:510;font-size:15px;color:var(--fg);letter-spacing:-.01em;display:flex;align-items:center;gap:10px}
+  .brand .mark{width:18px;height:18px;border-radius:5px;background:var(--accent-bg);display:inline-block}
+  .topmeta{font-size:12px;color:var(--faint);letter-spacing:.02em}
+
+  .layout{display:grid;grid-template-columns:264px minmax(0,1fr) 216px;min-height:calc(100vh - 49px)}
+  @media(max-width:1180px){.layout{grid-template-columns:240px minmax(0,1fr)}.toc{display:none}}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}.sidebar{display:none}}
+
+  .sidebar{padding:26px 14px;border-inline-end:1px solid var(--border-subtle);position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto;font-size:13.5px}
+  .sidebar .group{margin-bottom:24px}
+  .sidebar .group-label{font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;padding:0 10px 8px}
+  .sidebar a{display:block;color:var(--fg-2);padding:5px 10px;border-radius:6px;border-inline-start:2px solid transparent}
+  .sidebar a:hover{background:var(--surface);text-decoration:none;color:var(--fg)}
+  .sidebar a.active{background:rgba(94,106,210,.14);color:var(--fg);border-inline-start:2px solid var(--accent);font-weight:510}
+
+  article{padding:44px 56px 96px;max-width:var(--measure)}
+  .crumbs{color:var(--faint);font-size:12px;letter-spacing:.02em;margin-bottom:14px}
+  h1{font-size:38px;font-weight:510;color:var(--fg);letter-spacing:-.028em;line-height:1.06;margin:0 0 14px}
+  .lede{color:var(--muted);font-size:17px;line-height:1.6;letter-spacing:-.011em;margin:0 0 8px}
+  h2{font-size:23px;font-weight:510;color:var(--fg);letter-spacing:-.02em;line-height:1.2;margin:52px 0 12px;padding-top:8px}
+  h2:first-of-type{margin-top:36px}
+  h3{font-size:16.5px;font-weight:590;color:var(--fg);letter-spacing:-.01em;margin:30px 0 8px}
+  p{margin:12px 0}
+  ul,ol{margin:12px 0;padding-inline-start:22px}
+  li{margin:6px 0}
+  strong{color:var(--fg);font-weight:590}
+  code{font-family:var(--mono);background:var(--code-bg);border:1px solid var(--border-subtle);padding:1px 5px;border-radius:4px;font-size:.86em;color:#c9cdd2}
+
+  .meta-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 24px;background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:18px 20px;margin:22px 0;font-size:13.5px}
+  .meta-grid div span{color:var(--faint);display:block;font-size:11px;text-transform:uppercase;letter-spacing:.08em;margin-bottom:2px}
+  .meta-grid div b{color:var(--fg-2);font-weight:510}
+  @media(max-width:820px){.meta-grid{grid-template-columns:1fr}}
+
+  .callout{background:rgba(255,255,255,.02);border:1px solid var(--border);border-inline-start:3px solid var(--accent);border-radius:8px;padding:14px 18px;margin:22px 0;font-size:14px}
+  .callout .label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--accent);margin-bottom:5px;font-weight:510}
+  .callout.warn{border-inline-start-color:var(--warn)}
+  .callout.warn .label{color:var(--warn)}
+  .callout.ok{border-inline-start-color:var(--ok)}
+  .callout.ok .label{color:var(--ok)}
+
+  table{width:100%;border-collapse:collapse;margin:18px 0;font-size:13.5px;display:block;overflow-x:auto}
+  th,td{text-align:start;padding:9px 12px;border-bottom:1px solid var(--border-subtle);vertical-align:top}
+  th{color:var(--faint);font-weight:510;font-size:11px;text-transform:uppercase;letter-spacing:.07em;white-space:nowrap}
+  tbody tr:hover{background:rgba(255,255,255,.02)}
+
+  .sev{display:inline-block;font-size:10.5px;font-weight:590;letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:5px;white-space:nowrap}
+  .sev-h{background:rgba(229,83,75,.15);color:#ff8b84}
+  .sev-m{background:rgba(210,153,34,.15);color:#e8c05c}
+  .sev-l{background:rgba(255,255,255,.06);color:var(--muted)}
+  .grade{font-family:var(--mono);font-size:13px;color:var(--fg);background:rgba(255,255,255,.04);border:1px solid var(--border-subtle);border-radius:5px;padding:1px 7px}
+
+  .finding{border:1px solid var(--border);border-radius:10px;padding:16px 18px;margin:16px 0;background:rgba(255,255,255,.015)}
+  .finding h3{margin:0 0 6px;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+  .finding p{margin:8px 0;font-size:14px}
+
+  .toc{padding:44px 20px 24px;font-size:12.5px;border-inline-start:1px solid var(--border-subtle);position:sticky;top:49px;height:calc(100vh - 49px);overflow-y:auto}
+  .toc .toc-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--faint);margin-bottom:12px}
+  .toc a{display:block;color:var(--muted);padding:4px 0}
+  .toc a:hover{color:var(--fg);text-decoration:none}
+  .toc a.active{color:var(--accent)}
+
+  .pager{display:flex;gap:12px;margin-top:64px;padding-top:24px;border-top:1px solid var(--border-subtle)}
+  .pager a{flex:1;color:var(--fg-2);padding:12px 16px;background:var(--surface);border:1px solid var(--border);border-radius:8px}
+  .pager a:hover{text-decoration:none;border-color:var(--border)}
+  .pager small{display:block;font-size:11px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin-bottom:2px}
+  footer{padding:28px 56px;border-top:1px solid var(--border-subtle);color:var(--faint);font-size:12px}
+</style>
+</head>
+<body>
+<header class="topbar" data-od-id="topbar">
+  <span class="brand"><span class="mark" aria-hidden="true"></span> AI-Quiz · Audit Report</span>
+  <span class="topmeta">2026-09-20 · static review · no live access</span>
+</header>
+
+<div class="layout">
+  <nav class="sidebar" data-od-id="sidebar" aria-label="Report contents">
+    <div class="group">
+      <div class="group-label">Overview</div>
+      <a href="#summary" class="active">Executive summary</a>
+      <a href="#grades">Area grades</a>
+      <a href="#severity">Severity at a glance</a>
+    </div>
+    <div class="group">
+      <div class="group-label">Findings</div>
+      <a href="#high">High severity (launch blockers)</a>
+      <a href="#medium">Medium severity</a>
+      <a href="#missing">What's missing vs plan</a>
+    </div>
+    <div class="group">
+      <div class="group-label">Improvement</div>
+      <a href="#cosmetics">Cosmetics &amp; polish</a>
+      <a href="#checklist">Launch checklist</a>
+      <a href="#good">What's already good</a>
+      <a href="#appendix">Appendix</a>
+    </div>
+  </nav>
+
+  <article data-od-id="article">
+    <div class="crumbs">Audit · AI-Quiz (PigZap) · Full stack</div>
+    <h1>AI-Quiz (PigZap) — Full-Stack Audit Report</h1>
+    <p class="lede">A static review of the entire monorepo: NestJS 10 + Postgres/Redis API, Next.js 15 frontend, Docker/Dokploy + Cloudflare deployment, and the CSV content pipeline — covering what's missing, what's broken, what's cosmetic, and what security is absent for a live site.</p>
+
+    <div class="meta-grid">
+      <div><span>Target</span><b>E:\webiste theme and plugin\Ai-Quiz\Quiz</b></div>
+      <div><span>Stack</span><b>NestJS 10 · Next.js 15 · Postgres · Redis</b></div>
+      <div><span>Method</span><b>Static source review (no live access)</b></div>
+      <div><span>Modules found</span><b>20 feature modules + 30+ migrations</b></div>
+    </div>
+
+    <h2 id="summary">1. Executive summary</h2>
+    <p>This is a <strong>much better-built codebase than its age and scope suggest</strong>. It is not a prototype: 20 wired NestJS feature modules, a real database layer with 30+ migrations, RBAC plus a global default-deny auth guard, refresh-token rotation, Redis brute-force lockout, an idempotent content-push tool, an automated nightly DB backup with a restore test, and a Next.js frontend with a coherent SEO layer, consent-gated analytics and 32 Jest test files.</p>
+    <p>The problems are <strong>not</strong> "the app is broken". They are the classic gap between <em>a well-engineered product</em> and <em>a production-hardened service</em>.</p>
+
+    <h3 id="grades">Area grades</h3>
+    <table>
+      <thead><tr><th>Area</th><th>Grade</th><th>Headline</th></tr></thead>
+      <tbody>
+        <tr><td>Architecture &amp; feature completeness</td><td><span class="grade">A−</span></td><td>All planned backend modules exist; code is consistent and documented</td></tr>
+        <tr><td>Auth / identity core</td><td><span class="grade">A−</span></td><td>Genuinely hardened (bcrypt 12, hashed rotating refresh tokens, Redis lockout)</td></tr>
+        <tr><td>Authorization model</td><td><span class="grade">B+</span></td><td>Global default-deny works; some anonymous writes rely on a bearer "guestId" secret</td></tr>
+        <tr><td>Input validation</td><td><span class="grade">C+</span></td><td>Global pipe is good, but inline TS body types bypass it</td></tr>
+        <tr><td>Data disclosure</td><td><span class="grade">D</span></td><td>Public reads return <strong>answer keys</strong>; admin endpoints return password/token hashes</td></tr>
+        <tr><td>Error handling</td><td><span class="grade">D</span></td><td>Non-HTTP exception <code>message</code> is returned to clients even in production</td></tr>
+        <tr><td>Content / data quality</td><td><span class="grade">C</span></td><td>~620 measured CSV defects (answer leakage / ambiguous options) still open</td></tr>
+        <tr><td>Ops / deploy / docs</td><td><span class="grade">C</span></td><td>Solid compose + backups, but operator scripts/docs are out of sync</td></tr>
+        <tr><td>Frontend UX / a11y / SEO</td><td><span class="grade">B</span></td><td>Strong foundations; error states, canonicals, CSP, <code>aria-live</code> missing</td></tr>
+        <tr><td>Cosmetics / visual consistency</td><td><span class="grade">C+</span></td><td>Token drift, dead font wiring, duplicated classes, overlapping cookie banner</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout warn">
+      <div class="label">Verdict</div>
+      Safe to keep developing; <strong>not yet ready for a public launch</strong> without closing the 8 high-severity items below. Realistically <strong>2–4 focused days</strong> closes everything that would expose data or embarrass you in production.
+    </div>
+
+    <h3 id="severity">Severity at a glance</h3>
+    <table>
+      <thead><tr><th>Severity</th><th>Count</th><th>Examples</th></tr></thead>
+      <tbody>
+        <tr><td><span class="sev sev-h">High</span></td><td>8</td><td>Answer-key disclosure, JWT fallback secret, prod error leak, aborted content push, broken deploy backup, prod origin bypass, token storage + no CSP, pending credential rotation</td></tr>
+        <tr><td><span class="sev sev-m">Medium</span></td><td>~22</td><td>Validation-pipe bypasses, admin entity leakage, weak password policy, thin backend tests, CSV leakage, missing canonicals, no resource limits, CI gaps</td></tr>
+        <tr><td><span class="sev sev-l">Low / polish</span></td><td>~30</td><td>Dead scripts, duplicated classes, emoji-as-icons, manifest icons, gradient drift</td></tr>
+      </tbody>
+    </table>
+
+    <h2 id="high">2. High-severity findings (fix before launch)</h2>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H1</span> Public endpoints return the answer key <code>SEC-03</code></h3>
+      <p>Image-riddle, quiz-MCQ and riddle-MCQ public reads return <strong>full entities</strong> — including <code>answer</code>, <code>correctAnswer</code>, <code>correctLetter</code> and <code>options</code>. Public image-riddle reads return the literal answer column; <code>GET /quiz-mcq/subjects/:slug/questions</code> and <code>GET /quiz-mcq/questions/:chapterId</code> are <code>@_Public()</code> and select all columns.</p>
+      <p><strong>Impact:</strong> the whole answer key is scrapeable with one unauthenticated loop, and it contradicts the deliberate masking the comments module implements.<br/>
+      <strong>Fix:</strong> public DTO projections that omit answer columns; grade server-side (the duels module already does).</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H2</span> Hardcoded JWT secret fallback <code>SEC-01</code></h3>
+      <p><code>auth/auth.module.ts:26</code> uses <code>configService.get('JWT_SECRET', 'your-secret-key')</code>, so any non-<code>production</code> environment signs tokens with a publicly known secret.<br/>
+      <strong>Fix:</strong> <code>getOrThrow('JWT_SECRET')</code> and fail fast for every non-dev environment.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H3</span> Internal error messages leaked in production <code>SEC-02</code></h3>
+      <p><code>common/filters/http-exception.filter.ts:63</code> returns <code>exception.message</code> for non-<code>HttpException</code> errors unconditionally; only <code>stack</code>/<code>details</code> are dev-gated. Raw TypeORM/driver text (constraint names, SQL fragments) reaches clients.<br/>
+      <strong>Fix:</strong> map non-HTTP errors to a generic message in production; log the real one server-side.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H4</span> Content push aborted; conflict gate dead for most types <code>BE-08</code></h3>
+      <p>The quiz push log stops at <code>questions: created 6450/11541</code> then exits 2 with <strong>no "Done."</strong> — ~5,000 questions unpushed. The persisted state file has only <code>subjects</code>/<code>riddle-categories</code>/<code>chapters</code>; there is no <code>questions</code>/<code>riddle-mcqs</code>/<code>dad-jokes</code>/<code>image-riddles</code> baseline, so "live edit wins" conflict detection <strong>can never fire</strong> for those types.<br/>
+      <strong>Fix:</strong> re-run <code>npm run content:push -- --apply</code> to completion and verify the state file; persist state incrementally.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H5</span> Deploy scripts' DB backup is broken <code>OPS-01</code></h3>
+      <p><code>deploy.ps1:230</code> / <code>deploy.sh:200</code> target container <code>quiz-postgres-prod</code>, which does not exist (prod container is <code>quiz-postgres</code>); PowerShell <code>&gt;</code> also writes UTF-16, corrupting a stdout dump. This is the path <code>update</code> runs before redeploying.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H6</span> Prod publishes app ports on all interfaces (origin bypass) <code>OPS-04</code></h3>
+      <p><code>docker-compose.prod.yml</code> maps <code>4004:3012</code> and <code>3001:3010</code> with no host IP, so anyone can hit the origin directly and <strong>bypass Cloudflare</strong> (TLS, WAF, rate limiting). The "restrict origin to Cloudflare IPs" item is still pending.<br/>
+      <strong>Fix:</strong> drop the mappings or bind loopback; restrict the firewall to Cloudflare IPs on 80/443.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H7</span> Deploy scripts health-check the wrong host ports <code>OPS-02</code></h3>
+      <p>Scripts probe <code>localhost:3012</code>/<code>3010</code>, but prod publishes <code>4004</code>/<code>3001</code> → <code>status</code>/<code>start</code>/<code>restart</code> always report "Unhealthy", masking real failures.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H8</span> Frontend: JWT in localStorage + no CSP</h3>
+      <p>User <strong>and</strong> admin JWT + refresh pairs live in <code>localStorage</code>/<code>sessionStorage</code> (XSS-readable), and <code>next.config.mjs</code> ships no <code>Content-Security-Policy</code> despite three inline-script surfaces (theme bootstrap, GA init, JSON-LD).<br/>
+      <strong>Fix:</strong> move refresh tokens to <code>HttpOnly; Secure; SameSite</code> cookies long-term; add a strict CSP with nonces now.</p>
+    </div>
+
+    <div class="finding">
+      <h3><span class="sev sev-h">H9</span> Credential rotation still pending; live OAuth secret on disk</h3>
+      <p><code>apps/backend/.env</code> holds a <strong>live Google OAuth client secret</strong>; root <code>.env</code> and backend <code>.env</code> share one dev <code>JWT_SECRET</code>; <code>plan/STANDARDS.md:56</code> and <code>TODO.md</code> record that rotation (+ possible git-history scrub) is <strong>still pending before any production deploy</strong>. Files are correctly untracked today, but the exposed values have not been rotated.</p>
+    </div>
+
+    <h2 id="medium">3. Medium-severity findings</h2>
+
+    <h3>3.1 Backend — security</h3>
+    <table>
+      <thead><tr><th>ID</th><th>Issue</th><th>Evidence</th></tr></thead>
+      <tbody>
+        <tr><td>SEC-04</td><td>Prod env validation only fires when <code>NODE_ENV==='production'</code>; staging silently falls back to dev CORS + weak secret</td><td><code>main.ts:158-183</code></td></tr>
+        <tr><td>SEC-05</td><td><strong>Literal DB passwords committed</strong> in <code>docker-compose.yml</code> (no interpolation)</td><td>lines 8, 47</td></tr>
+        <tr><td>SEC-06</td><td>Weak password policy — <code>@MinLength(6)</code>, no complexity/breach check</td><td><code>auth/dto/*</code></td></tr>
+        <tr><td>SEC-07</td><td>Email verification never enforced (register issues tokens; login ignores the flag)</td><td><code>auth.service.ts</code></td></tr>
+        <tr><td>SEC-08</td><td><strong>Inline <code>@Body()</code> types bypass the global ValidationPipe</strong> — incl. unauthenticated unvalidated <code>/newsletter/unsubscribe</code></td><td><code>main.ts:61-70</code></td></tr>
+        <tr><td>SEC-09</td><td>Admin user endpoints return <strong>raw User entities</strong> (password + token hashes)</td><td><code>admin-users.controller.ts:29-41</code></td></tr>
+        <tr><td>SEC-10</td><td>Unauthenticated state-changing endpoints (comment flag, guest activity, engage counters, duel nickname)</td><td>public controllers</td></tr>
+        <tr><td>SEC-11</td><td>Rate limiting uses in-memory storage; depends on <code>TRUST_PROXY</code> being set</td><td><code>app.module.ts:56-60</code></td></tr>
+        <tr><td>SEC-12</td><td><code>guestId</code> is a bearer secret authorising destructive guest actions</td><td>multiple services</td></tr>
+        <tr><td>SEC-16/17/18</td><td>Public <code>subjects</code> exposes inactive taxonomy; unescaped name in email HTML; Swagger open in all non-prod</td><td>various</td></tr>
+      </tbody>
+    </table>
+
+    <h3>3.2 Backend — correctness &amp; quality</h3>
+    <ul>
+      <li><strong>BE-09 — CSV content defects.</strong> quiz 11,541 rows / riddle 3,000. "answer text appears in question": <strong>400 quiz + 175 riddle</strong>; "option contained in correct answer": <strong>44 quiz + 58 riddle</strong>; <strong>30</strong> over-long riddle questions. Not covered by any repair script. (The A41%/B39% letter skew is <em>expected</em> — easy/medium show 2 options — and serve-time shuffle mitigates display bias.)</li>
+      <li><strong>BE-11 — thin backend tests.</strong> 12 spec files for ~20 modules; no specs for analytics, duels, achievements, question-likes, riddle-mcq, admin. Jest threshold only 20%. (Frontend has 333 test files.)</li>
+      <li>BE-02 <code>CacheModule</code> is global but never imported by <code>AppModule</code> → multiple ioredis clients.</li>
+      <li>BE-03 <code>settings.updateSettings</code> comment claims an N+1 fix but still loops per key.</li>
+      <li>BE-06 admin image-riddles still uses the sledgehammer <code>delPattern('image-riddles:*')</code>.</li>
+      <li>BE-10 <code>repair-quiz-subject.py</code> references the deleted <code>science-nature.csv</code> → crashes.</li>
+      <li>BE-14 duplicate DTOs in <code>common/dto/base.dto.ts</code> vs <code>riddle-mcq/dto/*</code>.</li>
+      <li>BE-15 unused <code>/guest-users/activity</code>; no <code>change-password</code> endpoint.</li>
+      <li>BE-12 <code>analytics.service.ts</code> = 1,319 LOC, 44 raw queries, zero tests.</li>
+    </ul>
+
+    <h3>3.3 Frontend — UX / a11y / SEO</h3>
+    <ul>
+      <li><strong>FE-01</strong> <code>/quiz-mcq</code> queries have <strong>no error branch</strong> → silent empty screen on API failure (homepage already does it right).</li>
+      <li><strong>FE-02/FE-03</strong> "Coming Soon" cards are <code>&lt;Link href="#"&gt;</code> and zero-question chips keep a working <code>href</code> despite <code>aria-disabled</code> — keyboard users reach dead ends / empty sessions.</li>
+      <li><strong>SEO</strong> only module routes + <code>/games</code> set <code>alternates.canonical</code>; missing on <code>/</code>, <code>/about</code>, <code>/faq</code>, <code>/contact</code>, <code>/privacy</code>, <code>/terms</code>, <code>/jokes</code>, <code>/image-riddles</code>.</li>
+      <li><strong>a11y</strong> no <code>aria-live</code> for question/timer/score; incorrect <code>role="menubar"</code>; mobile drawer <code>role="dialog"</code> has no focus trap; form errors not linked via <code>aria-invalid</code>/<code>role="alert"</code>; white-on-gradient small text likely &lt; 4.5:1.</li>
+      <li>Manifest declares only <code>/icon.svg</code>; <code>images.unoptimized</code> is global (comment says dev-only).</li>
+    </ul>
+
+    <h3>3.4 Ops / deploy / CI</h3>
+    <ul>
+      <li><strong>OPS-03</strong> stale <code>/api/health</code> (missing <code>v1</code>) across 5 scripts + <code>DEPLOYMENT.md</code>.</li>
+      <li><strong>OPS-05</strong> no container resource limits — an OOM can take down an unrelated co-hosted site.</li>
+      <li><strong>OPS-06</strong> prod images ship the full dev <code>node_modules</code> and backend <code>src</code>.</li>
+      <li><strong>OPS-07</strong> <code>.env.production.example</code> omits <code>REDIS_PASSWORD</code>, which prod compose requires → first <code>up</code> errors.</li>
+      <li><strong>OPS-09</strong> staging compose commits weak static secrets + public ports while docs say staging isn't needed.</li>
+      <li><strong>OPS-10</strong> dev compose publishes DB/Redis to all interfaces; dev frontend binds <code>0.0.0.0</code>.</li>
+      <li><strong>OPS-13</strong> <code>docker-startup.*</code> reference profiles/services/paths that don't exist.</li>
+      <li><strong>OPS-14</strong> CI has no secret scanning and no SAST; <code>npm audit</code> is non-blocking.</li>
+      <li><strong>OPS-19</strong> backups are same-host only (no off-box replication, no encryption at rest).</li>
+      <li><strong>OPS-20</strong> docs stale/contradictory: retired Dokploy stack, <code>docker rm -f</code> flow it forbids, sample <code>admin123</code>; <code>PORT-REFERENCE.md</code> omits prod/staging ports.</li>
+      <li><strong>OPS-21</strong> no uptime/error alerting, log retention, or incident runbook.</li>
+      <li><strong>OPS-22</strong> Cloudflare posture solid, but auth rate-limit, Dokploy-panel restriction and <strong>origin firewall</strong> remain unapplied.</li>
+    </ul>
+
+    <h2 id="missing">4. What's missing (vs plan / product intent)</h2>
+    <p>Genuinely absent or unwired — not defects, but gaps to decide on:</p>
+    <table>
+      <thead><tr><th>Item</th><th>Source</th><th>Status</th></tr></thead>
+      <tbody>
+        <tr><td>Riddle <strong>server-side sessions</strong></td><td>BUILD-BACKLOG #2</td><td>Not built (quiz-mcq sessions exist)</td></tr>
+        <tr><td>Achievements for image-riddles / jokes</td><td>plan/06</td><td>Definitions absent (owner-deferred)</td></tr>
+        <tr><td>Newsletter campaigns / double opt-in</td><td>plan/14</td><td>Deferred (subscribe/unsubscribe/export exist)</td></tr>
+        <tr><td>Settings restore-defaults / delete</td><td>plan/11</td><td>Absent</td></tr>
+        <tr><td>Change-password endpoint</td><td>future-features A5</td><td>Absent</td></tr>
+        <tr><td>Feature 16 "liked-categories"</td><td>plan/16</td><td>Documented "Proposal / not built"</td></tr>
+        <tr><td><strong>Web UI for Duels</strong></td><td>future-features A1</td><td>Backend complete + live, zero web UI, zero tests</td></tr>
+        <tr><td>Analytics funnel UI, retention purge, ops metrics</td><td>plan/13</td><td>Deferred</td></tr>
+        <tr><td>Admin user-editing UI</td><td>plan/01 P2</td><td>Endpoints exist, UI read-only</td></tr>
+        <tr><td>S3 media storage · SEO P2/P3</td><td>plan/08, plan/15</td><td>Owner-deferred / owner-gated</td></tr>
+      </tbody>
+    </table>
+    <p><strong>Open QA bugs</strong> (<code>QA-FINDINGS.md</code>): BUG-042 (Science/Nature split — CSV done, DB import/removal + Nature landing card pending), BUG-045/046 (like/comment not retained after refresh — P1), BUG-047 (share menu not wired on the tested surface), BUG-048 (public engagement counts), BUG-005 (legal pages not finalized — deferred).</p>
+
+    <h2 id="cosmetics">5. Cosmetics &amp; polish (what can be applied)</h2>
+    <ol>
+      <li><strong>Wire <code>--font-inter</code> into Tailwind.</strong> <code>layout.tsx</code> loads Inter with <code>variable: '--font-inter'</code> but <code>tailwind.config.ts</code> hardcodes <code>['Inter','system-ui',…]</code> — the optimized font is <em>never applied</em> (dead optimization).</li>
+      <li><strong>Unify page background gradients.</strong> Home/quiz use <code>#A5A3E4 → #BF7076</code>; <code>/play</code> and <code>/games</code> use <code>#E8E4F3 → #D4C5E8</code>. Extract <code>--grad-page</code> / a <code>PageShell</code>.</li>
+      <li><strong>Purge duplicated/contradictory <code>dark:</code> classes</strong> (repeated backgrounds, two hover backgrounds on one element, duplicated badge classes). <code>npm run check:theme</code> already flags these.</li>
+      <li><strong>Migrate auth pages off <code>slate-*</code></strong> onto semantic tokens for consistent dark mode.</li>
+      <li><strong>Centralize the mode/picker card grids</strong> (home <code>ModeCards</code>, <code>/play</code> <code>MODES</code>, quiz "Special Quiz Modes") into one <code>&lt;ChoiceCard&gt;</code>.</li>
+      <li><strong>Standardize radius &amp; shadow scales</strong> (currently mixes <code>rounded-xl/2xl/[3rem]</code> and <code>shadow-lg/md/soft</code> + arbitrary values).</li>
+      <li><strong>Skeleton parity</strong> — <code>LevelSelection</code> shows plain "Loading…" while siblings shimmer.</li>
+      <li><strong>Replace emoji-as-UI-icons</strong> on primary picker glyphs with <code>lucide-react</code> (already a dependency).</li>
+      <li><strong>Fix the cookie-banner / mobile bottom-nav overlap</strong> (both <code>fixed bottom-0 z-50</code>).</li>
+      <li><strong>Introduce content-width tokens</strong> (<code>wide</code>/<code>default</code>/<code>narrow</code>) — pages mix <code>max-w-2xl/4xl/5xl</code> arbitrarily.</li>
+      <li><strong>Expand <code>manifest.ts</code> icons</strong> (192/512 PNG + maskable + apple-touch-icon).</li>
+      <li><strong>Reconcile <code>designs/*.html</code> tokens with <code>tailwind.config.ts</code></strong> so the shipped theme matches the design exploration.</li>
+    </ol>
+
+    <h2 id="checklist">6. Production launch checklist</h2>
+
+    <h3>6.1 Must-fix before opening to the public (blockers)</h3>
+    <ul>
+      <li>H1 strip answer keys from public DTOs</li>
+      <li>H2 <code>getOrThrow('JWT_SECRET')</code>; fail fast for all non-dev envs</li>
+      <li>H3 stop leaking non-<code>HttpException</code> messages in production</li>
+      <li>H5/H7 fix <code>deploy.ps1</code>/<code>deploy.sh</code> DB container name + health ports</li>
+      <li>H6 unbind prod app ports + restrict origin firewall to Cloudflare IPs</li>
+      <li>H8 add a CSP; plan token-storage hardening</li>
+      <li>H9 rotate dev/prod credentials and move the OAuth secret off disk</li>
+      <li>H4 finish <code>content:push</code> and verify the state file covers all families</li>
+      <li>SEC-05 replace literal DB passwords with <code>${…}</code> from an untracked <code>.env</code></li>
+      <li>SEC-08/09 convert inline body types to DTOs; return <code>toProfile()</code> from admin user endpoints</li>
+    </ul>
+
+    <h3>6.2 Should-fix immediately after</h3>
+    <ul>
+      <li>SEC-06 password policy ≥ 8 + breach check; SEC-07 decide email-verification gate</li>
+      <li>SEC-11 shared throttler storage + mandate <code>TRUST_PROXY</code> everywhere</li>
+      <li>SEC-10/SEC-12 bind anonymous writes to a server-signed guest token</li>
+      <li>OPS-05/06/07 resource limits, pruned images, complete prod env template</li>
+      <li>OPS-14 add gitleaks + CodeQL (± blocking critical <code>npm audit</code>)</li>
+      <li>FE-01 error states; FE-02/03 kill fake links; canonicals; <code>aria-live</code> + drawer focus trap; fix <code>role="menubar"</code></li>
+      <li>BE-09 run CSV leakage/ambiguity repairs and re-audit</li>
+    </ul>
+
+    <h3>6.3 Backlog / quality</h3>
+    <ul>
+      <li>BE-11 backend specs for analytics, duels, question-likes, riddle-mcq; raise the threshold</li>
+      <li>BE-02/03/05/06 single cache module, batched writes, family-scoped invalidation</li>
+      <li>OPS-13/18 rewrite or delete broken ops scripts; OPS-12/24 delete orphaned entrypoint + root Dockerfile</li>
+      <li>OPS-19 off-box backup replication + documented restore drills</li>
+      <li>OPS-21 uptime/error alerting + incident/rollback runbook</li>
+      <li>Cosmetics §5</li>
+    </ul>
+
+    <div class="callout">
+      <div class="label">Also missing: one authoritative Production Runbook</div>
+      Cover <strong>secret rotation</strong> (admin/DB/Redis/JWT/OAuth + git-history decision), <strong>rollback</strong> (pin a known-good image/commit), <strong>incident response</strong>, <strong>origin-firewall / Cloudflare-IP</strong> steps, <strong>monitoring/log retention</strong>, and the <strong>CI/CD topology</strong>. Consolidate <code>DEPLOYMENT.md</code> + <code>docs/cloudflare-config-runbook.md</code> + <code>CONTENT-PUSH-RUNBOOK.md</code> + <code>PORT-REFERENCE.md</code>, and correct the stale content.
+    </div>
+
+    <h2 id="good">7. What's already good (keep doing this)</h2>
+    <div class="callout ok">
+      <div class="label">Verified strengths</div>
+      <ul>
+        <li><strong>Auth core:</strong> bcrypt cost 12; refresh tokens random 32-byte, stored only as SHA-256 hashes with 7-day expiry + rotation-on-use + server-side revoke; 15-min access tokens; Redis brute-force lockout; hashed one-time reset/verification tokens; enumeration-safe flows.</li>
+        <li><strong>Authorization:</strong> global default-deny <code>JwtAuthGuard</code> as <code>APP_GUARD</code> with explicit <code>@_Public()</code> opt-outs; every <code>/admin/*</code> controller guarded with <code>@Roles('admin')</code>; IDOR checked on <code>users/:id</code>.</li>
+        <li><strong>Transport &amp; input:</strong> helmet, CORS allow-list, 1 MB/50 MB body-size split, global <code>ValidationPipe</code> (whitelist + forbidNonWhitelisted), <code>javascript:</code>/<code>data:</code> URL validator, parameterized SQL everywhere, 5 MB upload cap + MIME allow-list + sharp re-decode.</li>
+        <li><strong>DB:</strong> <code>synchronize</code> off by default and forbidden in production; migrations auto-run on prod boot; optional SSL with <code>rejectUnauthorized</code> default true.</li>
+        <li><strong>Content pipeline:</strong> env-file credentials (never argv), no secret logging, dry-run default, typed <code>PUSH</code> confirmation, natural-key idempotency, conflict detection, <strong>no deletes ever</strong>, 10-table allowlist.</li>
+        <li><strong>Frontend:</strong> skip link + single <code>&lt;main&gt;</code>; global <code>:focus-visible</code> ring + reduced-motion; a genuinely correct focus-trapped <code>Modal</code>; consent-gated + anonymized GA; <code>dangerouslySetInnerHTML</code> safe at all three sites; <code>normalizeExternalUrl()</code> blocks <code>javascript:</code>/<code>data:</code>.</li>
+        <li><strong>Deployment:</strong> multi-stage non-root images; prod DB/Redis not published; Redis password + healthchecks + <code>restart: unless-stopped</code>; nightly gzipped backup with a <strong>restore test</strong>; Cloudflare strict TLS + HSTS + HTTP/2-3; <code>TRUST_PROXY=true</code> behind the proxy.</li>
+      </ul>
+    </div>
+
+    <h2 id="appendix">8. Appendix — evidence &amp; sources</h2>
+    <p><strong>Read in this audit (non-exhaustive):</strong> backend <code>src/**</code> (main.ts, app.module.ts, auth/*, common/guards/*, common/filters/*, media/*, settings/*, users/*, guest-users/*, all migrations); frontend <code>src/**</code> (lib/*, components/*, app/**); <code>next.config.mjs</code>, <code>tailwind.config.ts</code>; all <code>docker-compose*.yml</code> and Dockerfiles; <code>deploy.ps1</code>/<code>deploy.sh</code>; <code>.github/workflows/*</code>; <code>.husky/*</code>; <code>scripts/push-content.mjs</code>, <code>csv-quality-report.txt</code>, <code>audit-csv-quality.py</code>, <code>repair-*.py</code>; <code>plan/*.md</code>, <code>QA-FINDINGS.md</code>, <code>TODO.md</code>, <code>DEPLOYMENT.md</code>, <code>CONTENT-PUSH-RUNBOOK.md</code>, <code>docs/cloudflare-config-runbook.md</code>, <code>PORT-REFERENCE.md</code>.</p>
+    <p><strong>Not verifiable here (no live access):</strong> actual live content counts and whether the aborted quiz push was later completed; whether the CSV defect counts still match current CSVs (re-run <code>python scripts/audit-csv-quality.py</code>); rendered Lighthouse/axe scores; runtime env values for the live deployment.</p>
+    <p>Severity IDs (<code>SEC-*</code>, <code>BE-*</code>, <code>FE-*</code>, <code>OPS-*</code>) map to the detailed per-area audit appendices retained alongside this report.</p>
+
+    <div class="pager">
+      <a href="#summary"><small>↑ Top</small>Executive summary</a>
+      <a href="#checklist" style="text-align:end"><small>Next →</small>Launch checklist</a>
+    </div>
+  </article>
+
+  <aside class="toc" data-od-id="toc" aria-label="On this page">
+    <div class="toc-label">On this page</div>
+    <a href="#summary" class="active">1. Executive summary</a>
+    <a href="#grades">Area grades</a>
+    <a href="#severity">Severity at a glance</a>
+    <a href="#high">2. High severity</a>
+    <a href="#medium">3. Medium severity</a>
+    <a href="#missing">4. What's missing</a>
+    <a href="#cosmetics">5. Cosmetics &amp; polish</a>
+    <a href="#checklist">6. Launch checklist</a>
+    <a href="#good">7. What's already good</a>
+    <a href="#appendix">8. Appendix</a>
+  </aside>
+</div>
+
+<footer>AI-Quiz (PigZap) full-stack audit · generated 2026-09-20 · static review only — re-verify live counts and runtime env before acting.</footer>
+
+<script>
+// Scroll-spy only: highlight the active nav + TOC entry.
+(function(){
+  var links = [].concat(
+    [].slice.call(document.querySelectorAll('.sidebar a')),
+    [].slice.call(document.querySelectorAll('.toc a'))
+  );
+  var sections = [].slice.call(document.querySelectorAll('h2[id], h3[id]'));
+  if(!sections.length) return;
+  function onScroll(){
+    var y = window.scrollY + 140, current = sections[0].id;
+    sections.forEach(function(s){ if(s.offsetTop <= y) current = s.id; });
+    links.forEach(function(a){
+      a.classList.toggle('active', a.getAttribute('href') === '#'+current);
+    });
+  }
+  window.addEventListener('scroll', onScroll, {passive:true});
+  onScroll();
+})();
+</script>
+</body>
+</html>
