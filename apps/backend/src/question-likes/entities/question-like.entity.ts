@@ -1,11 +1,13 @@
 /**
  * QuestionLike — one player's like on a quiz/riddle question (BUG-037).
  *
- * Internal-only feature: likes are COLLECTED here and classified into
- * 1-like / 2-like / 3+-like buckets for the owner (derived by count, never
- * stored). Nothing like-related is exposed on the public site beyond the
- * one-tap capture itself. Dedupe: one row per (contentType, questionId,
- * guestId); logged-in likes additionally record the account id.
+ * Like TOTALS are public since BUG-048 (GET /question-likes/counts, shown
+ * beside the heart); the 1-like / 2-like / 3+-like BUCKETS derived from
+ * these rows remain internal (admin controller only, never stored).
+ * Dedupe: one row per (contentType, questionId, guestId); logged-in likes
+ * additionally record the account id, and the login merge
+ * (POST /guest-users/merge) stamps prior guest rows with it — deduped
+ * against account-owned rows so totals never double-count.
  */
 
 import { Column, Entity, Index, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';

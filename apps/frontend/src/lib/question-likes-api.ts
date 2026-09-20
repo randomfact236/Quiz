@@ -1,9 +1,12 @@
 /**
  * ============================================================================
- * Question Likes API (BUG-037 — internal like capture)
+ * Question Likes API (BUG-037 — one-tap heart; BUG-048 — public totals)
  * ============================================================================
- * One-tap heart on quiz/riddle questions. Idempotent per guest; counts are
- * NOT shown to players (the 1/2/3+ buckets are internal admin data).
+ * One-tap heart on quiz/riddle questions. Idempotent per guest identity;
+ * like TOTALS are public (LikeButton shows them beside the heart). The
+ * 1/2/3+ BUCKETS derived from the same rows stay internal (admin view only).
+ * After a login merge the server matches the account id as well, so the
+ * filled heart follows the user across devices.
  * ============================================================================
  */
 
@@ -60,10 +63,13 @@ export async function likedByMe(
   const guestId = getGuestId();
   if (!guestId || !/^[0-9a-f-]{36}$/i.test(questionId)) return false;
   try {
-    const response = await api.get<{ liked: boolean }>(
+    // The endpoint returns a BARE boolean — reading `.liked` off it always
+    // yielded undefined, so the heart never restored (found in manual
+    // verification 2026-09-20).
+    const response = await api.get<boolean>(
       `/question-likes/my?contentType=${contentType}&questionId=${questionId}&guestId=${encodeURIComponent(guestId)}`
     );
-    return !!response.data?.liked;
+    return response.data === true;
   } catch {
     return false;
   }

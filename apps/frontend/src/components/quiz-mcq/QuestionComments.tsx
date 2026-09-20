@@ -1,13 +1,15 @@
 /**
  * ============================================================================
- * QuestionComments — per-question comments on the quiz REVIEW screen
+ * QuestionComments — per-question comments (review screen + play flow)
  * ============================================================================
- * BUG-036, owner-scoped 2026-09-18: commenting lives on the results/review
- * screen, never in the live play flow. Inline (not a modal) — it expands under
- * a question the player just reviewed, so there is something concrete to
- * react to. Same plumbing as joke replies: shared guest identity, optimistic
- * post, delete-own. The toggle collapses to a 💬 count so empty threads never
- * clutter the review.
+ * BUG-036 (2026-09-18): inline comment threads on the results/review screen,
+ * expanding under each reviewed question. BUG-040 (2026-09-20): the play
+ * card renders the same component with `autoOpen` so the feed is expanded
+ * immediately in the live flow. Same plumbing as joke replies: shared guest
+ * identity (or account id after a login merge), optimistic post, delete-own.
+ * Known gap: a failed POST keeps the optimistic copy silently (same rule as
+ * jokes) — surfacing that failure is a pending owner-approved fix. Toggle
+ * label is a plain 'Comments' (BUG-048).
  * ============================================================================
  */
 

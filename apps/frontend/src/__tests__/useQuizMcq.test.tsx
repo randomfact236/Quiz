@@ -185,6 +185,29 @@ describe('useQuizMcq engine', () => {
     expect(result.current.manuallySkipped.has('q2')).toBe(true);
   });
 
+  it('writes initial progress at session start (pre-answer refresh can resume)', async () => {
+    const { saveQuizResume } = require('@/lib/quiz-mcq-resume');
+    await renderPlayingHook();
+
+    // The per-change effect skips writing until the first answer/skip, so the
+    // only call must be the loader's initial write — identical identity on
+    // both keys, index 0, nothing answered. loadQuizResume needs BOTH keys to
+    // resume; without this write a refresh before answering dealt a fresh
+    // random set and orphaned any like/comment made on question 1.
+    expect(saveQuizResume).toHaveBeenCalledWith(
+      expect.objectContaining({
+        subject: 'science',
+        chapter: 'Physics',
+        level: 'easy',
+        mode: 'normal',
+        currentQuestionIndex: 0,
+        sessionSize: expect.any(Number),
+        answers: {},
+        score: 0,
+      })
+    );
+  });
+
   it('pause/resume toggles status without losing progress', async () => {
     const { result } = await renderPlayingHook();
 

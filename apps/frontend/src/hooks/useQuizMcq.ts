@@ -269,6 +269,24 @@ export function useQuizMcq(
         },
         all
       );
+
+      // Persist initial progress too. saveQuizResume's effect deliberately
+      // skips writing until the first answer/skip, but loadQuizResume needs
+      // BOTH keys — without this, a refresh before answering could not resume,
+      // dealt a fresh random set, and any like/comment made on question 1 was
+      // orphaned on a question the player never saw again.
+      saveQuizResume({
+        subject,
+        chapter,
+        level,
+        mode: initialMode as QuizResumeState['mode'],
+        currentQuestionIndex: decision.startIndex,
+        sessionSize: decision.sessionSize,
+        answers: {},
+        score: 0,
+        manuallySkipped: [],
+        startedAt: sessionRef.current.startedAt,
+      });
     };
 
     load();
