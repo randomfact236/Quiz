@@ -10,7 +10,29 @@
  * ============================================================================
  */
 
+import { readFileSync } from 'node:fs';
+import path from 'node:path';
+
 import { API_BASE_URL } from './api-client';
+
+/**
+ * The brand pig icon as a base64 PNG data URL for satori (which cannot render
+ * the site's SVG logo). Converted once from public/brand/pigzap-icon.svg into
+ * public/brand/og-pig-icon.png; the data URL is cached module-side so the
+ * 33KB base64 string is read at most once per server process.
+ */
+let pigIconDataUrlCache: string | null | undefined;
+
+export function pigIconDataUrl(): string | null {
+  if (pigIconDataUrlCache !== undefined) return pigIconDataUrlCache;
+  try {
+    const png = readFileSync(path.join(process.cwd(), 'public', 'brand', 'og-pig-icon.png'));
+    pigIconDataUrlCache = `data:image/png;base64,${png.toString('base64')}`;
+  } catch {
+    pigIconDataUrlCache = null; // caller falls back to the 🐷 emoji mark
+  }
+  return pigIconDataUrlCache;
+}
 
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {

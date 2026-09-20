@@ -10,7 +10,7 @@
 import { ImageResponse } from 'next/og';
 
 import { HomeShareImage, OG_1200x600 } from '@/components/og/share-templates';
-import { homeStats } from '@/lib/og-data';
+import { homeStats, pigIconDataUrl } from '@/lib/og-data';
 import { getPublicSettings } from '@/lib/public-settings';
 
 export const size = OG_1200x600;
@@ -25,6 +25,7 @@ export default async function TwitterImage(): Promise<ImageResponse> {
   return new ImageResponse(
     HomeShareImage({
       siteName,
+      iconSrc: pigIconDataUrl(),
       height: OG_1200x600.height,
       stats: await homeStats(),
     }),

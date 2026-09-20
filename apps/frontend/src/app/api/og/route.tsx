@@ -107,10 +107,12 @@ export async function GET(request: Request): Promise<Response> {
       case 'riddle-question': {
         const share = await ogData.riddleQuestionShare(searchParams.get('id') ?? '');
         if (!share) break;
+        // Chip uses the riddle TOKEN emoji (🧩 per design tokens), not the
+        // subject's emoji — brand-consistent across every riddle share.
         return new ImageResponse(
           QuestionShareImage({
             family: 'riddle',
-            chip: `${share.subjectEmoji} Riddles`.trim() || 'Riddles',
+            chip: '🧩 Riddles',
             question: share.question,
             options: share.options,
             hook: 'solve it → pigzap.com',

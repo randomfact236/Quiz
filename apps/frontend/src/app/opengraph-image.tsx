@@ -11,7 +11,7 @@
 import { ImageResponse } from 'next/og';
 
 import { HomeShareImage, OG_1200x630 } from '@/components/og/share-templates';
-import { homeStats } from '@/lib/og-data';
+import { homeStats, pigIconDataUrl } from '@/lib/og-data';
 import { getPublicSettings } from '@/lib/public-settings';
 
 export const size = OG_1200x630;
@@ -28,6 +28,7 @@ export default async function OpengraphImage(): Promise<ImageResponse> {
   return new ImageResponse(
     HomeShareImage({
       siteName,
+      iconSrc: pigIconDataUrl(),
       height: OG_1200x630.height,
       stats: await homeStats(),
     }),

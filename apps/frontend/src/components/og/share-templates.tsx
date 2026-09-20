@@ -222,10 +222,13 @@ export function HomeShareImage({
   siteName,
   stats,
   height,
+  iconSrc,
 }: {
   siteName: string;
   stats: Array<{ value: string; label: string }>;
   height: number;
+  /** The real pig icon as a PNG data URL (satori cannot render the SVG logo). */
+  iconSrc?: string | null;
 }) {
   const compact = height < 630; // X's 1200×600 crop tightens vertical rhythm
   return (
@@ -257,7 +260,12 @@ export function HomeShareImage({
         🧩
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
-        <div style={{ fontSize: 112, lineHeight: 1 }}>🐷</div>
+        {iconSrc ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={iconSrc} width={112} height={112} alt="" />
+        ) : (
+          <div style={{ fontSize: 112, lineHeight: 1 }}>🐷</div>
+        )}
         <div style={{ fontSize: 96, fontWeight: 900, letterSpacing: -2 }}>{siteName}</div>
       </div>
       <div style={{ marginTop: compact ? 12 : 20, display: 'flex', gap: 12 }}>
