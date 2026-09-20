@@ -22,6 +22,8 @@ export enum CommentContentType {
    * (deliberately not the live play flow — owner scoping 2026-09-18). */
   QUIZ_QUESTION = 'quiz-question',
   RIDDLE_QUESTION = 'riddle-question',
+  /** BUG-053: static-game feedback — contentId is the game slug. */
+  GAME = 'game',
 }
 
 /** Feed entry kinds: riddle guesses, reveal-chip taps, plain comments. */
@@ -29,6 +31,8 @@ export enum CommentKind {
   GUESS = 'guess',
   CHIP = 'chip',
   COMMENT = 'comment',
+  /** BUG-053: in-game emoji-rating feedback from the pause/game-over cards. */
+  FEEDBACK = 'feedback',
 }
 
 /** Allow-list for chip-to-reveal taps (comments-system plan §1). */
@@ -48,7 +52,9 @@ export class Comment {
   @Column({ type: 'enum', enum: CommentContentType })
   contentType: CommentContentType;
 
-  @Column({ type: 'uuid' })
+  // text (was uuid): BUG-053 game feedback stores the game slug here, while
+  // question/joke surfaces keep storing their UUIDs.
+  @Column({ type: 'text' })
   contentId: string;
 
   /** FK → guest_users.guestId (client-issued guest identity). */
@@ -86,9 +92,12 @@ export class Comment {
   @Column({ type: 'enum', enum: ContentStatus, default: ContentStatus.PUBLISHED })
   status: ContentStatus;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  // timestamptz: stored values are UTC wall-clock (migration
+  // CommentsTimestampsTz1792000000000); the tz-aware type keeps displayed
+  // comment ages correct on servers in any timezone.
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   createdAt: Date;
 
-  @UpdateDateColumn({ type: 'timestamp' })
+  @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 }

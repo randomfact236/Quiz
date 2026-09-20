@@ -357,3 +357,18 @@ button {
 .share-row[hidden] {
   display: none;
 }
+
+/* BUG-051: smooth share-row expand/collapse — no layout jump on toggle */
+.share-row {
+  overflow: hidden;
+  max-height: 0;
+  opacity: 0;
+  transition:
+    max-height 0.25s ease,
+    opacity 0.18s ease;
+}
+
+.share-row.share-row--open {
+  max-height: 96px;
+  opacity: 1;
+}

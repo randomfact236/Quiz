@@ -34,8 +34,13 @@ export class CreateCommentDto {
   @IsEnum(CommentContentType)
   contentType: CommentContentType;
 
-  @ApiProperty({ description: 'Riddle or joke ID', format: 'uuid' })
-  @IsUUID()
+  @ApiProperty({
+    description:
+      'Content id — a UUID for riddle/joke/question surfaces, the game slug for game feedback',
+  })
+  @IsString()
+  @IsNotEmpty()
+  @MaxLength(100)
   contentId: string;
 
   @ApiProperty({ enum: CommentKind, example: CommentKind.GUESS })

@@ -256,6 +256,13 @@ export class CommentsService {
     await this.guestUsersService.findOrCreate(guestId);
 
     let isCorrect = false;
+    const isGame = dto.contentType === CommentContentType.GAME;
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!isGame && !uuidRe.test(dto.contentId)) {
+      // Every non-game surface is a DB id — a non-UUID would throw a raw
+      // postgres error in the lookup, so guard it up front.
+      throw new NotFoundException('Content not found');
+    }
     if (dto.contentType === CommentContentType.IMAGE_RIDDLE) {
       const riddle = await this.imageRiddleRepo.findOne({ where: { id: dto.contentId } });
       if (riddle === null) {
@@ -274,7 +281,7 @@ export class CommentsService {
       if (question === null) {
         throw new NotFoundException('Riddle question not found');
       }
-    } else {
+    } else if (!isGame) {
       const joke = await this.jokeRepo.findOne({ where: { id: dto.contentId } });
       if (joke === null) {
         throw new NotFoundException('Joke not found');
@@ -327,12 +334,16 @@ export class CommentsService {
   }
 
   /**
-   * kind vs contentType matrix: jokes accept free-text comments only;
-   * riddles accept guesses, chip taps, and comments.
+   * kind vs contentType matrix: jokes accept free-text comments only; game
+   * content accepts feedback only; riddles accept guesses, chip taps, and
+   * comments.
    */
   private validateKindForContentType(contentType: CommentContentType, kind: CommentKind): void {
     if (contentType === CommentContentType.JOKE && kind !== CommentKind.COMMENT) {
       throw new BadRequestException(`Jokes accept kind='${CommentKind.COMMENT}' only`);
+    }
+    if (contentType === CommentContentType.GAME && kind !== CommentKind.FEEDBACK) {
+      throw new BadRequestException(`Games accept kind='${CommentKind.FEEDBACK}' only`);
     }
   }
 

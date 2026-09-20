@@ -17,7 +17,7 @@ import { Comment, CommentChip, CommentContentType, CommentKind } from './entitie
 describe('CommentsService', () => {
   const makeRiddle = (overrides: Partial<ImageRiddle> = {}): ImageRiddle =>
     ({
-      id: 'riddle-1',
+      id: '00000000-0000-4000-8000-000000000001',
       answer: 'Ice Cream',
       alternativeAnswers: ['icecream'],
       ...overrides,
@@ -27,7 +27,7 @@ describe('CommentsService', () => {
     ({
       id: 'c1',
       contentType: CommentContentType.IMAGE_RIDDLE,
-      contentId: 'riddle-1',
+      contentId: '00000000-0000-4000-8000-000000000001',
       guestId: 'guest_a',
       kind: CommentKind.GUESS,
       text: 'some guess',
@@ -67,7 +67,9 @@ describe('CommentsService', () => {
     const imageRiddleRepo = {
       findOne: jest.fn(async () => (options.riddle === undefined ? makeRiddle() : options.riddle)),
     };
-    const jokeRepo = { findOne: jest.fn(async () => ({ id: 'joke-1' }) as DadJoke) };
+    const jokeRepo = {
+      findOne: jest.fn(async () => ({ id: '00000000-0000-4000-8000-000000000002' }) as DadJoke),
+    };
     const guestUsersService = { findOrCreate: jest.fn(async (id: string) => ({ guestId: id })) };
     const cacheService = {
       getOrSet: jest.fn((_key: string, fn: () => unknown) => fn()),
@@ -97,7 +99,7 @@ describe('CommentsService', () => {
       const { service, commentRepo } = setup();
       const result = await service.create('guest_a', {
         contentType: CommentContentType.IMAGE_RIDDLE,
-        contentId: 'riddle-1',
+        contentId: '00000000-0000-4000-8000-000000000001',
         kind: CommentKind.GUESS,
         text: '  the ICE CREAM ',
       });
@@ -114,7 +116,7 @@ describe('CommentsService', () => {
       const { service, commentRepo } = setup();
       await service.create('guest_a', {
         contentType: CommentContentType.IMAGE_RIDDLE,
-        contentId: 'riddle-1',
+        contentId: '00000000-0000-4000-8000-000000000001',
         kind: CommentKind.GUESS,
         text: 'ICECREAM',
       });
@@ -125,7 +127,7 @@ describe('CommentsService', () => {
       const { service } = setup();
       const result = await service.create('guest_a', {
         contentType: CommentContentType.IMAGE_RIDDLE,
-        contentId: 'riddle-1',
+        contentId: '00000000-0000-4000-8000-000000000001',
         kind: CommentKind.GUESS,
         text: 'pancakes',
       });
@@ -138,7 +140,7 @@ describe('CommentsService', () => {
       await expect(
         service.create('guest_a', {
           contentType: CommentContentType.IMAGE_RIDDLE,
-          contentId: 'riddle-1',
+          contentId: '00000000-0000-4000-8000-000000000001',
           kind: CommentKind.GUESS,
           text: '   ',
         })
@@ -151,7 +153,7 @@ describe('CommentsService', () => {
       const { service, commentRepo } = setup();
       const result = await service.create('guest_a', {
         contentType: CommentContentType.IMAGE_RIDDLE,
-        contentId: 'riddle-1',
+        contentId: '00000000-0000-4000-8000-000000000001',
         kind: CommentKind.CHIP,
         chip: CommentChip.NEVER_GOT,
       });
@@ -166,7 +168,7 @@ describe('CommentsService', () => {
       await expect(
         service.create('guest_a', {
           contentType: CommentContentType.IMAGE_RIDDLE,
-          contentId: 'riddle-1',
+          contentId: '00000000-0000-4000-8000-000000000001',
           kind: CommentKind.CHIP,
         })
       ).rejects.toThrow(BadRequestException);
@@ -179,7 +181,7 @@ describe('CommentsService', () => {
       await expect(
         service.create('guest_a', {
           contentType: CommentContentType.JOKE,
-          contentId: 'joke-1',
+          contentId: '00000000-0000-4000-8000-000000000002',
           kind: CommentKind.GUESS,
           text: 'ha',
         })
@@ -190,7 +192,7 @@ describe('CommentsService', () => {
       const { service, commentRepo } = setup();
       await service.create('guest_a', {
         contentType: CommentContentType.JOKE,
-        contentId: 'joke-1',
+        contentId: '00000000-0000-4000-8000-000000000002',
         kind: CommentKind.COMMENT,
         text: 'classic',
       });

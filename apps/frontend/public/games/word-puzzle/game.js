@@ -863,9 +863,21 @@ function wire() {
   });
   els.btnReplay.addEventListener('click', () => startLevel(state.themeIndex, state.levelIndex));
   const shareRowEl = document.getElementById('share-row');
+  let shareRowTimer = null;
   document.getElementById('btn-share').addEventListener('click', () => {
-    shareRowEl.hidden = !shareRowEl.hidden;
-    if (!shareRowEl.hidden) shareUrls();
+    if (shareRowEl.classList.contains('share-row--open')) {
+      shareRowEl.classList.remove('share-row--open');
+      clearTimeout(shareRowTimer);
+      shareRowTimer = setTimeout(() => {
+        shareRowEl.hidden = true;
+      }, 260);
+    } else {
+      clearTimeout(shareRowTimer);
+      shareRowEl.hidden = false;
+      void shareRowEl.offsetHeight;
+      shareRowEl.classList.add('share-row--open');
+      shareUrls();
+    }
   });
   document.getElementById('share-copy').addEventListener('click', copyResult);
   els.btnMenu3.addEventListener('click', () => showScreen('menu'));

@@ -483,9 +483,21 @@ function init() {
     renderMenu();
   });
   const shareRowEl = $('share-row');
+  let shareRowTimer = null;
   $('btn-share').addEventListener('click', () => {
-    shareRowEl.hidden = !shareRowEl.hidden;
-    if (!shareRowEl.hidden) shareUrls();
+    if (shareRowEl.classList.contains('share-row--open')) {
+      shareRowEl.classList.remove('share-row--open');
+      clearTimeout(shareRowTimer);
+      shareRowTimer = setTimeout(() => {
+        shareRowEl.hidden = true;
+      }, 260);
+    } else {
+      clearTimeout(shareRowTimer);
+      shareRowEl.hidden = false;
+      void shareRowEl.offsetHeight;
+      shareRowEl.classList.add('share-row--open');
+      shareUrls();
+    }
   });
   $('share-copy').addEventListener('click', copyResult);
   $('btn-resume').addEventListener('click', resumeRun);
