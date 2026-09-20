@@ -190,11 +190,11 @@ export function ResultShareImage({
   name: string;
   hook: string;
 }) {
+  // Satori requires string children — raw numbers crash the render.
+  const scoreLine = `${score}/${total}`;
   return (
     <Canvas family={family}>
-      <div style={{ fontSize: 200, fontWeight: 900, lineHeight: 1 }}>
-        {score}/{total}
-      </div>
+      <div style={{ fontSize: 200, fontWeight: 900, lineHeight: 1 }}>{scoreLine}</div>
       <div style={{ fontSize: 60, marginTop: 10 }}>{emoji}</div>
       <div style={{ fontSize: 50, fontWeight: 800, marginTop: 8 }}>{name}</div>
       <div style={{ fontSize: 28, opacity: 0.9, marginTop: 14 }}>{hook}</div>

@@ -86,3 +86,25 @@ export const GAMES_COUNT = 8;
 export function formatCount(n: number | null): string {
   return n === null ? '—' : n.toLocaleString('en-US');
 }
+
+/** Assembled home stats line (WP0) — LIVE totals + the static games count.
+ *  Shared by opengraph-image and twitter-image so the two variants can never
+ *  drift apart. */
+export async function homeStats(): Promise<Array<{ value: string; label: string }>> {
+  const [quizCounts, riddleTotal, jokesTotal, imageRiddlesTotal] = await Promise.all([
+    ogData.quizCounts(),
+    ogData.riddleTotal(),
+    ogData.jokesTotal(),
+    ogData.imageRiddlesTotal(),
+  ]);
+  const quizTotal = quizCounts
+    ? Object.values(quizCounts.bySubject).reduce((sum, n) => sum + (Number(n) || 0), 0)
+    : null;
+  return [
+    { value: formatCount(quizTotal), label: 'questions' },
+    { value: formatCount(riddleTotal), label: 'riddles' },
+    { value: formatCount(jokesTotal), label: 'jokes' },
+    { value: formatCount(imageRiddlesTotal), label: 'image puzzles' },
+    { value: String(GAMES_COUNT), label: 'games' },
+  ];
+}
