@@ -1,27 +1,24 @@
 /**
  * ============================================================================
- * opengraph-image.tsx — Home master share image (share-design-system WP0)
+ * twitter-image.tsx — Home X/Twitter variant (share-design-system WP0)
  * ============================================================================
- * The owner-approved multi-platform template: pig icon + wordmark + pillars +
- * LIVE DB stats + domain pill on the brand gradient. Counts revalidate every
- * 15 min so content pushes show up without any cache purging.
+ * Same approved template as the home master image, cropped to X's 2:1
+ * (1200×600) — pillars and stats stay inside the safe zone.
  * ============================================================================
  */
 
 import { ImageResponse } from 'next/og';
 
-import { HomeShareImage, OG_1200x630 } from '@/components/og/share-templates';
+import { HomeShareImage, OG_1200x600 } from '@/components/og/share-templates';
 import { formatCount, ogData } from '@/lib/og-data';
 import { getPublicSettings } from '@/lib/public-settings';
 
-export const size = OG_1200x630;
+export const size = OG_1200x600;
 export const contentType = 'image/png';
 export const alt = 'PigZap — interactive quizzes, riddles, dad jokes and image puzzles';
 export const revalidate = 900;
 
-export default async function OpengraphImage(): Promise<ImageResponse> {
-  // Same cached fetch + fallback as the root layout's generateMetadata
-  // (plan/15-seo.md P1) — single shared implementation in lib/public-settings.
+export default async function TwitterImage(): Promise<ImageResponse> {
   const { seo } = await getPublicSettings();
   const siteName = seo?.siteName?.trim() || 'PigZap';
 
@@ -38,7 +35,7 @@ export default async function OpengraphImage(): Promise<ImageResponse> {
   return new ImageResponse(
     HomeShareImage({
       siteName,
-      height: OG_1200x630.height,
+      height: OG_1200x600.height,
       stats: [
         { value: formatCount(quizTotal), label: 'questions' },
         { value: formatCount(riddleTotal), label: 'riddles' },
@@ -47,6 +44,6 @@ export default async function OpengraphImage(): Promise<ImageResponse> {
         { value: '8', label: 'games' },
       ],
     }),
-    OG_1200x630
+    OG_1200x600
   );
 }

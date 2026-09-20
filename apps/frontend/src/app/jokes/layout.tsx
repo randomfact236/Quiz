@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: 'Dad Jokes — 😄 Laugh Out Loud Collection',
   description:
     'Browse our collection of hilarious dad jokes. Filter by category, vote on your favourites, and reveal the punchline with a card flip. New Joke of the Day every day!',
+  // share-design-system §3 #9: amber joke template as the share image
+  openGraph: { images: ['/api/og?type=joke'] },
+  twitter: { images: ['/api/og?type=joke'] },
 };
 
 export default function Layout({ children }: { children: ReactNode }): JSX.Element {

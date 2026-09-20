@@ -90,6 +90,37 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
 
   // ==================== PUBLIC READS ====================
 
+  /** Public payload for one riddle's share image (share-design-system §3 #6):
+   *  question + options + subject identity — the answer never leaves the
+   *  service (same invariant as gameplay). */
+  async getPublicShareById(id: string): Promise<{
+    id: string;
+    question: string;
+    options: string[];
+    subjectName: string;
+    subjectEmoji: string;
+  }> {
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRe.test(id)) throw new NotFoundException('Riddle not found');
+
+    const riddle = await this.deps.itemRepo.findOne({
+      where: { id, status: RiddleStatus.PUBLISHED },
+    });
+    if (!riddle) throw new NotFoundException('Riddle not found');
+
+    const subject = riddle.subjectId
+      ? await this.deps.subjectRepo.findOne({ where: { id: riddle.subjectId } })
+      : null;
+
+    return {
+      id: riddle.id,
+      question: riddle.question,
+      options: riddle.options ?? [],
+      subjectName: subject?.name ?? '',
+      subjectEmoji: subject?.emoji ?? '',
+    };
+  }
+
   async findRiddlesBySubject(
     subjectId: string,
     pagination: { page?: number; limit?: number } = {},

@@ -81,12 +81,16 @@ function ResultsContent(): JSX.Element {
   // BUG-035: result share — the challenge line ("…— beat you!") plus a link to
   // the subject's quiz (not the results URL: that renders only from the
   // sharer's localStorage, a friend would just get redirected away).
+  // score/total params make the linked page's og:image render the score-badge
+  // share design (share-design-system §3 #4).
   const shareText =
     result &&
     `I scored ${result.session.score}/${result.session.maxScore} on ${result.session.subjectName} — beat you! 🧠`;
   const shareUrl =
     typeof window !== 'undefined' && sessionSubject(result)
-      ? `${window.location.origin}/quiz-mcq?subject=${sessionSubject(result)}`
+      ? `${window.location.origin}/quiz-mcq?subject=${sessionSubject(result)}&score=${
+          result?.session.score ?? 0
+        }&total=${result?.session.maxScore ?? 10}`
       : undefined;
 
   // Loading state

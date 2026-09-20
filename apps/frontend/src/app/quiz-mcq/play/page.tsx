@@ -511,15 +511,17 @@ function QuizContent(): JSX.Element {
             )}
           </AnimatePresence>
 
-          {/* BUG-047: question share menu (Facebook / X / WhatsApp / copy link) */}
+          {/* BUG-047: question share menu (Facebook / X / WhatsApp / copy link).
+              The &q= param makes the linked page's og:image render this exact
+              question (share-design-system §3 #3); the answer never travels. */}
           {shareMenuOpen && quiz.currentQuestion && (
             <ShareMenu
               title={`Quiz question ${quiz.currentQuestionIndex + 1}`}
               text={quiz.currentQuestion.question}
               url={
                 typeof window !== 'undefined'
-                  ? `${window.location.origin}/quiz-mcq?subject=${subject}`
-                  : `/quiz-mcq?subject=${subject}`
+                  ? `${window.location.origin}/quiz-mcq?subject=${subject}&q=${quiz.currentQuestion.id}`
+                  : `/quiz-mcq?subject=${subject}&q=${quiz.currentQuestion.id}`
               }
               onClose={() => setShareMenuOpen(false)}
             />

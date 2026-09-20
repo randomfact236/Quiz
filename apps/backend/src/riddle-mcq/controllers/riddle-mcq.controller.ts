@@ -86,6 +86,16 @@ export class RiddleMcqController {
 
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Get('questions/:id/share')
+  @ApiOperation({
+    summary: 'Public share payload for one riddle (question + options — never the answer)',
+  })
+  async getPublicShare(@Param('id') id: string) {
+    return this.questionService.getPublicShareById(id);
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('subjects/:subjectId/riddles')
   @ApiOperation({ summary: 'Get riddles by subject ID (Public)' })
   async getRiddlesBySubject(

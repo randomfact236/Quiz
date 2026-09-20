@@ -1,785 +1,95 @@
-'use client';
+/**
+ * ============================================================================
+ * Quiz hub page — server wrapper (share-design-system WP1)
+ * ============================================================================
+ * The hub view itself is a client component (searchParams-driven pickers);
+ * this server page exists so generateMetadata can read the URL params and
+ * point og:image at the matching share design:
+ *   ?subject=<slug>              → subject share image (live question count)
+ *   ?subject=<slug>&q=<uuid>     → question share image (question + options)
+ *   ?subject=<slug>&score=S&total=T → result score-badge image
+ * ============================================================================ */
 
-import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState, useMemo } from 'react';
-import { useQuery } from '@tanstack/react-query';
-import {
-  GraduationCap,
-  Briefcase,
-  Gamepad2,
-  Home,
-  CheckCircle,
-  Trophy,
-  ChevronDown,
-  ChevronUp,
-  BookOpen,
-  Puzzle,
-} from 'lucide-react';
-import { getSubjects, getSubjectBySlug, getQuestionCounts } from '@/lib/quiz-mcq-api';
-import type { QuizSubject } from '@/lib/quiz-mcq-api';
-import { getChapterProgress } from '@/lib/progress';
-import {
-  QUIZ_LEVELS as levels,
-  QUIZ_LEVEL_EMOJIS as levelEmojis,
-  QUIZ_LEVEL_COLORS as levelColors,
-  QUIZ_MCQ_PUBLIC_QUERY_PREFIX,
-} from '@/lib/quiz-mcq-constants';
-import QuizCardSkeleton from '@/components/quiz-mcq/QuizCardSkeleton';
+import type { Metadata } from 'next';
 
-type SubjectCategory = 'academic' | 'professional' | 'entertainment';
+import { formatCount, ogData } from '@/lib/og-data';
+import { MODULE_META } from '@/lib/seo';
 
-interface Subject extends QuizSubject {
-  category: SubjectCategory;
-  order?: number;
+import QuizHubView from './QuizHubView';
+
+type SearchParams = Promise<Record<string, string | string[] | undefined>>;
+
+function first(value: string | string[] | undefined): string {
+  return Array.isArray(value) ? (value[0] ?? '') : (value ?? '');
 }
 
-// Map of icon keys to emoji or icon display
-const iconDisplayMap: Record<string, string> = {
-  science: '🔬',
-  math: '🔢',
-  history: '📜',
-  geography: '🌍',
-  english: '📖',
-  environment: '🌱',
-  technology: '💻',
-  business: '💼',
-  health: '💪',
-  parenting: '👶',
-  'book-open': '📚',
-  'help-circle': '❓',
-  puzzle: '🧩',
-  image: '🖼️',
-  sparkles: '✨',
-  'graduation-cap': '🎓',
-  briefcase: '💼',
-  'gamepad-2': '🎮',
-};
-
-function getSubjectDisplay(emoji: string): string {
-  // If it's a known icon key, use the mapped emoji
-  if (iconDisplayMap[emoji]) {
-    return iconDisplayMap[emoji];
-  }
-  // Otherwise, assume it's already an emoji
-  return emoji;
-}
-
-function SubjectCard({
-  slug,
-  emoji,
-  name,
-  questionCount,
-  isLive,
-  isActive,
+export async function generateMetadata({
+  searchParams,
 }: {
-  slug: string;
-  emoji: string;
-  name: string;
-  questionCount: number;
-  isLive: boolean;
-  isActive: boolean;
-}): JSX.Element {
-  const display = getSubjectDisplay(emoji);
-  const isAvailable = isActive && isLive;
+  searchParams: SearchParams;
+}): Promise<Metadata> {
+  const params = await searchParams;
+  const subject = first(params['subject']);
+  const questionId = first(params['q']);
+  const score = parseInt(first(params['score']), 10);
+  const total = parseInt(first(params['total']), 10);
 
-  return (
-    <Link
-      href={isAvailable ? `/quiz-mcq?subject=${slug}` : '#'}
-      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100 dark:bg-secondary-800/50 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
-      aria-label={isAvailable ? `Select ${name} subject` : `${name} - Coming Soon`}
-    >
-      <span className="text-4xl" aria-hidden="true">
-        {display}
-      </span>
-      <span className="mt-2 font-bold text-gray-800 dark:text-secondary-100">{name}</span>
-      {isAvailable ? (
-        <span className="mt-1 text-xs font-medium text-green-600 dark:text-green-300">
-          ✓ {questionCount} questions
-        </span>
-      ) : (
-        <span className="mt-1 text-xs font-medium text-gray-500 dark:text-secondary-400">
-          Coming Soon
-        </span>
-      )}
-    </Link>
-  );
-}
-
-function CategorySection({
-  title,
-  icon,
-  colorClass,
-  subjects,
-  questionCounts,
-  isOpen,
-  onToggle,
-}: {
-  title: string;
-  icon: React.ReactNode;
-  colorClass: string;
-  subjects: Subject[];
-  questionCounts: Record<string, number>;
-  isOpen: boolean;
-  onToggle: () => void;
-}): JSX.Element | null {
-  if (subjects.length === 0) {
-    return null;
-  }
-
-  const totalQuestions = subjects.reduce(
-    (sum, subject) => sum + (questionCounts[subject.slug] || 0),
-    0
-  );
-
-  return (
-    <div className="mb-6">
-      <button
-        onClick={onToggle}
-        className={`w-full flex items-center justify-between mb-4 p-4 rounded-xl bg-white/20 dark:bg-secondary-800/20 backdrop-blur-sm transition-all hover:bg-white dark:hover:bg-secondary-700/30 ${colorClass}`}
-      >
-        <div className="flex items-center gap-3">
-          {icon}
-          <h2 className="text-xl font-bold text-white">{title.toUpperCase()}</h2>
-          <span className="ml-2 px-2 py-0.5 text-xs font-medium bg-white/20 dark:bg-secondary-800/20 rounded-full text-white">
-            {subjects.length} subjects • {totalQuestions} questions
-          </span>
-        </div>
-        {isOpen ? (
-          <ChevronUp className="h-5 w-5 text-white" />
-        ) : (
-          <ChevronDown className="h-5 w-5 text-white" />
-        )}
-      </button>
-
-      {isOpen && (
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
-          {subjects.map((subject) => (
-            <SubjectCard
-              key={subject.id}
-              slug={subject.slug}
-              emoji={subject.emoji}
-              name={subject.name}
-              questionCount={questionCounts[subject.slug] || 0}
-              isLive={(questionCounts[subject.slug] || 0) > 0}
-              isActive={subject.isActive}
-            />
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Helper to determine styling for categories dynamically
-function getCategoryDesign(categoryName: string) {
-  const name = categoryName.toLowerCase();
-
-  if (
-    name.includes('academic') ||
-    name.includes('science') ||
-    name.includes('math') ||
-    name.includes('school')
-  ) {
-    return {
-      colorClass: 'text-blue-600',
-      icon: <GraduationCap className="h-5 w-5" />,
-    };
-  }
-  if (
-    name.includes('professional') ||
-    name.includes('life') ||
-    name.includes('business') ||
-    name.includes('tech')
-  ) {
-    return {
-      colorClass: 'text-teal-600',
-      icon: <Briefcase className="h-5 w-5" />,
-    };
-  }
-  if (
-    name.includes('entertainment') ||
-    name.includes('culture') ||
-    name.includes('game') ||
-    name.includes('fun')
-  ) {
-    return {
-      colorClass: 'text-purple-600',
-      icon: <Gamepad2 className="h-5 w-5" />,
-    };
-  }
-
-  return {
-    colorClass: 'text-gray-600',
-    icon: <BookOpen className="h-5 w-5" />,
-  };
-}
-
-const QUIZ_QUERY_STALE_TIME = 60 * 1000;
-
-function SubjectSelection(): JSX.Element {
-  const [openCategories, setOpenCategories] = useState<Set<string>>(new Set());
-
-  const subjectsQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subjects'],
-    queryFn: () => getSubjects(false),
-    staleTime: QUIZ_QUERY_STALE_TIME,
-  });
-
-  const sortedSubjects = useMemo(
-    () => ((subjectsQuery.data ?? []) as Subject[]).sort((a, b) => (a.order ?? 0) - (b.order ?? 0)),
-    [subjectsQuery.data]
-  );
-
-  // Single cached counts request — replaces the per-subject full-list fetch loop.
-  const countsQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
-    queryFn: getQuestionCounts,
-    staleTime: QUIZ_QUERY_STALE_TIME,
-  });
-
-  const toggleCategory = (categoryName: string) => {
-    setOpenCategories((prev) => {
-      const newSet = new Set(prev);
-      if (newSet.has(categoryName)) {
-        newSet.delete(categoryName);
-      } else {
-        newSet.add(categoryName);
-      }
-      return newSet;
-    });
-  };
-
-  // Group subjects dynamically based on category string
-  const subjectsByCategory = useMemo(() => {
-    const grouped: Record<string, Subject[]> = {};
-
-    sortedSubjects.forEach((subject) => {
-      const category = subject.category || 'Other';
-      if (!grouped[category]) {
-        grouped[category] = [];
-      }
-      grouped[category].push(subject);
-    });
-
-    return grouped;
-  }, [sortedSubjects]);
-
-  const sortedCategories = Object.keys(subjectsByCategory).sort();
-
-  // Initialize all categories as open by default
-  useEffect(() => {
-    if (sortedCategories.length > 0 && openCategories.size === 0) {
-      setOpenCategories(new Set(sortedCategories));
-    }
-  }, [sortedCategories]);
-
-  const questionCounts = countsQuery.data?.bySubject ?? {};
-  const isLoading = subjectsQuery.isPending || countsQuery.isPending;
-
-  if (isLoading) {
-    return (
-      <div>
-        {/* Special Quiz Modes */}
-        <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-          <Link
-            href="/"
-            className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-          >
-            <Home className="mb-2 h-8 w-8" />
-            <span className="font-bold">Back to Home</span>
-          </Link>
-
-          <Link
-            href="/quiz-mcq/timer-challenge"
-            className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-          >
-            <Puzzle className="mb-2 h-8 w-8" />
-            <span className="font-bold">Timer Challenge</span>
-          </Link>
-
-          <Link
-            href="/quiz-mcq/practice-mode"
-            className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-          >
-            <BookOpen className="mb-2 h-8 w-8" />
-            <span className="font-bold">Practice Mode</span>
-          </Link>
-        </div>
-
-        {/* Subject card skeletons (categories unknown until load) */}
-        <h1 className="mb-6 text-center text-3xl font-bold text-white">📚 Choose a Subject</h1>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3" role="list">
-          {Array.from({ length: 9 }, (_, i) => (
-            <QuizCardSkeleton key={i} />
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  return (
-    <div>
-      {/* Special Quiz Modes */}
-      <div className="mb-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        <Link
-          href="/"
-          className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-        >
-          <Home className="mb-2 h-8 w-8" />
-          <span className="font-bold">Back to Home</span>
-        </Link>
-
-        <Link
-          href="/quiz-mcq/timer-challenge"
-          className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-orange-500 to-red-500 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-        >
-          <Puzzle className="mb-2 h-8 w-8" />
-          <span className="font-bold">Timer Challenge</span>
-        </Link>
-
-        <Link
-          href="/quiz-mcq/practice-mode"
-          className="flex flex-col items-center rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 p-5 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl"
-        >
-          <BookOpen className="mb-2 h-8 w-8" />
-          <span className="font-bold">Practice Mode</span>
-        </Link>
-      </div>
-
-      {/* Subjects by Category */}
-      <h1 className="mb-6 text-center text-3xl font-bold text-white">📚 Choose a Subject</h1>
-
-      <div>
-        {sortedCategories.map((categoryName) => {
-          const catSubjects = subjectsByCategory[categoryName] || [];
-          const design = getCategoryDesign(categoryName);
-
-          return (
-            <CategorySection
-              key={categoryName}
-              title={categoryName}
-              icon={design.icon}
-              colorClass={design.colorClass}
-              subjects={catSubjects}
-              questionCounts={questionCounts}
-              isOpen={openCategories.has(categoryName)}
-              onToggle={() => toggleCategory(categoryName)}
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-interface ChapterInfo {
-  name: string;
-  questionCount: number;
-  levels: Set<string>;
-  /** Per-level published counts (keyed lowercase, e.g. 'easy') for the
-   *  inline mode/difficulty picker (BUG-027). */
-  levelCounts: Record<string, number>;
-  isCompleted: boolean;
-  bestScore: number;
-  attempts: number;
-}
-
-function ChapterSelection({ subject }: { subject: string }): JSX.Element {
-  const [expandedChapters, setExpandedChapters] = useState<Record<number, boolean>>({});
-  const subjectQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subject', subject],
-    queryFn: () => getSubjectBySlug(subject),
-    enabled: !!subject && subject !== 'all',
-    staleTime: QUIZ_QUERY_STALE_TIME,
-  });
-
-  const chapterList = useMemo(
-    () =>
-      (subjectQuery.data?.chapters ?? [])
-        .map((chapter) => {
-          const progress = getChapterProgress(subject, chapter.name);
-          return {
-            id: chapter.id,
-            info: {
-              name: chapter.name,
-              questionCount: 0,
-              levels: new Set<string>(),
-              levelCounts: {},
-              isCompleted: progress?.completed ?? false,
-              bestScore: progress?.bestScore ?? 0,
-              attempts: progress?.attempts ?? 0,
-            } satisfies ChapterInfo,
-          };
-        })
-        .sort((a, b) => a.info.name.localeCompare(b.info.name)),
-    [subjectQuery.data, subject]
-  );
-
-  // Single cached counts request covers every chapter (count + level breakdown)
-  // — replaces the per-chapter full question-list fetches.
-  const countsQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
-    queryFn: getQuestionCounts,
-    staleTime: QUIZ_QUERY_STALE_TIME,
-  });
-
-  // Order level chips canonically (easy → extreme) instead of raw key order.
-  const levelOrder = (a: string, b: string): number => {
-    const lower = levels.map((l) => l.toLowerCase());
-    return lower.indexOf(a) - lower.indexOf(b);
-  };
-
-  const chapters = useMemo<ChapterInfo[]>(() => {
-    const countsById = countsQuery.data?.byChapter;
-    return chapterList.map(({ id, info }) => {
-      const stats = countsById?.[id];
-      if (!stats) return info;
+  // Question share (★ design §3 #3): the platform card shows the real
+  // question + its options; the answer never leaves the site.
+  if (questionId) {
+    const share = await ogData.quizQuestionShare(questionId);
+    if (share) {
+      const title = `Can you answer this? 🧠 ${share.subjectName} Quiz`;
+      const image = `/api/og?type=quiz-question&id=${questionId}`;
       return {
-        ...info,
-        questionCount: stats.count,
-        levels: new Set(Object.keys(stats.levels).sort(levelOrder)),
-        levelCounts: stats.levels,
+        ...MODULE_META['quiz-mcq'],
+        title,
+        openGraph: { title, images: [image] },
+        twitter: { title, images: [image] },
       };
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chapterList, countsQuery.data]);
-
-  const isLoading = subjectQuery.isPending || countsQuery.isPending;
-
-  if (isLoading && chapters.length === 0) {
-    return (
-      <div>
-        <div className="flex gap-2 mb-6">
-          <Link
-            href="/"
-            className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-          >
-            🏠 Back to Home
-          </Link>
-          <Link
-            href="/quiz-mcq"
-            className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-          >
-            ← Back to Subjects
-          </Link>
-        </div>
-        {/* Chapter card skeletons */}
-        <h1 className="mb-8 text-center text-3xl font-bold text-white">
-          📖 {subject.charAt(0).toUpperCase() + subject.slice(1)} - Select Chapter
-        </h1>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {Array.from({ length: 4 }, (_, i) => (
-            <div
-              key={i}
-              aria-hidden="true"
-              className="flex items-center gap-4 rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-5 shadow-lg"
-            >
-              <div className="h-12 w-12 shrink-0 rounded-full bg-gray-200 dark:bg-secondary-700 animate-pulse" />
-              <div className="flex-1">
-                <div className="h-4 w-2/3 rounded bg-gray-200 dark:bg-secondary-700 animate-pulse" />
-                <div className="mt-2 h-3 w-1/2 rounded bg-gray-100 dark:bg-secondary-800 animate-pulse" />
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-    );
+    }
   }
 
-  return (
-    <div>
-      <div className="flex gap-2 mb-6">
-        <Link
-          href="/"
-          className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-        >
-          🏠 Back to Home
-        </Link>
-        <Link
-          href="/quiz-mcq"
-          className="inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-        >
-          ← Back to Subjects
-        </Link>
-      </div>
-      <h1 className="mb-8 text-center text-3xl font-bold text-white">
-        📖 {subject.charAt(0).toUpperCase() + subject.slice(1)} - Select Chapter
-      </h1>
-
-      {chapters.length === 0 ? (
-        <div className="rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-8 text-center shadow-lg">
-          <p className="text-gray-600 dark:text-secondary-300">
-            No chapters available for this subject yet.
-          </p>
-          <p className="mt-2 text-sm text-gray-500 dark:text-secondary-400">
-            Questions need to be added in the admin panel.
-          </p>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          {chapters.map((chapter, index) => {
-            // BUG-027 + BUG-039: the mode selection (Normal / Timer) lives inline
-            // under the chapter and EVERY chapter's levels are pre-opened (owner:
-            // "all the levels inside a mode should be pre-opened"). Picking a mode
-            // goes straight to its level selection, removing the separate
-            // mode-selection page hop.
-            const isExpanded = expandedChapters[index] ?? true;
-            return (
-              <div
-                key={chapter.name}
-                className="overflow-hidden rounded-2xl bg-white/95 dark:bg-secondary-800/95 shadow-lg transition-all hover:bg-white dark:hover:bg-secondary-700"
-              >
-                <button
-                  type="button"
-                  onClick={() => setExpandedChapters((prev) => ({ ...prev, [index]: !isExpanded }))}
-                  aria-expanded={isExpanded}
-                  className="flex w-full items-center gap-4 p-5 text-left"
-                >
-                  <div
-                    className={`flex h-12 w-12 shrink-0 items-center justify-center rounded-full text-xl font-bold ${chapter.isCompleted ? 'bg-green-200 dark:bg-green-500/30 dark:bg-green-500/20 text-green-600 dark:text-green-300' : chapter.attempts > 0 ? 'bg-yellow-200 dark:bg-yellow-500/30 dark:bg-yellow-500/20 text-yellow-600 dark:text-yellow-300' : 'bg-indigo-200 dark:bg-indigo-500/30 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300'}`}
-                  >
-                    {chapter.isCompleted ? <CheckCircle className="h-6 w-6" /> : index + 1}
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="font-bold text-gray-800 dark:text-secondary-100">
-                      {chapter.name}
-                    </h3>
-                    <p className="text-sm text-gray-500 dark:text-secondary-400">
-                      {chapter.questionCount} questions • {Array.from(chapter.levels).join(', ')}
-                    </p>
-                    {chapter.attempts > 0 && (
-                      <div className="mt-1 flex items-center gap-2 text-xs">
-                        <span className="flex items-center gap-1 text-green-600 dark:text-green-300">
-                          <Trophy className="h-3 w-3" />
-                          Best: {chapter.bestScore}
-                        </span>
-                        <span className="text-gray-400 dark:text-secondary-400">
-                          ({chapter.attempts} attempt{chapter.attempts !== 1 ? 's' : ''})
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                  <ChevronDown
-                    className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
-                  />
-                </button>
-
-                {isExpanded && (
-                  <div className="space-y-4 border-t border-gray-100 p-4 dark:border-secondary-700">
-                    {[
-                      {
-                        mode: 'normal' as const,
-                        icon: '🎯',
-                        title: 'Normal Mode',
-                        tint: 'font-bold text-indigo-600 dark:text-indigo-300',
-                      },
-                      {
-                        mode: 'timer' as const,
-                        icon: '⏱️',
-                        title: 'Timer Mode',
-                        tint: 'font-bold text-orange-600 dark:text-orange-300',
-                      },
-                    ].map(({ mode, icon, title, tint }) => (
-                      <div key={mode}>
-                        <p className={`mb-2 text-sm ${tint}`}>
-                          {icon} {title} — select difficulty:
-                        </p>
-                        <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
-                          {levels.map((level) => {
-                            const count = chapter.levelCounts[level.toLowerCase()] ?? 0;
-                            return (
-                              <Link
-                                key={`${mode}-${level}`}
-                                href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}&level=${level.toLowerCase()}&mode=${mode}`}
-                                className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'pointer-events-none opacity-50' : ''}`}
-                                aria-disabled={count === 0}
-                              >
-                                <span className="mb-1 text-xl">{levelEmojis[level]}</span>
-                                <span className="text-xs font-semibold capitalize">{level}</span>
-                                <span className="mt-1 text-[10px] opacity-90">
-                                  {count} questions
-                                </span>
-                              </Link>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// Shared level metadata (levels/levelEmojis/levelColors) imported at top.
-
-function ModeSelection({ subject, chapter }: { subject: string; chapter: string }): JSX.Element {
-  return (
-    <div>
-      <Link
-        href={`/quiz-mcq?subject=${subject}`}
-        className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-      >
-        ← Back to Chapters
-      </Link>
-      <h1 className="mb-8 text-center text-3xl font-bold text-white">🎮 Select Mode</h1>
-
-      <div className="grid gap-6 sm:grid-cols-2">
-        {/* Normal Mode */}
-        <Link
-          href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}&mode=normal`}
-          className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-blue-500 to-indigo-600 p-6 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
-        >
-          <span className="text-4xl">🎯</span>
-          <div>
-            <span className="block text-xl font-bold">Normal Mode</span>
-            <span className="text-sm opacity-90">Take your time, no pressure</span>
-          </div>
-          <span className="ml-auto text-2xl opacity-80">→</span>
-        </Link>
-
-        {/* Timer Mode */}
-        <Link
-          href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}&mode=timer`}
-          className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-orange-500 to-red-500 p-6 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl"
-        >
-          <span className="text-4xl">⏱️</span>
-          <div>
-            <span className="block text-xl font-bold">Timer Mode</span>
-            <span className="text-sm opacity-90">
-              30 seconds per question - Race against the clock!
-            </span>
-          </div>
-          <span className="ml-auto text-2xl opacity-80">→</span>
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-function LevelSelection({
-  subject,
-  chapter,
-  mode,
-}: {
-  subject: string;
-  chapter: string;
-  mode: 'normal' | 'timer';
-}): JSX.Element {
-  // Uses module-level shared level constants (levels/levelEmojis/levelColors).
-
-  const subjectQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'subject', subject],
-    queryFn: () => getSubjectBySlug(subject),
-    enabled: !!subject && subject !== 'all',
-    staleTime: QUIZ_QUERY_STALE_TIME,
-  });
-
-  const foundChapter = subjectQuery.data?.chapters?.find((c) => c.name === chapter);
-
-  // Per-level counts from the shared counts endpoint — no full question fetch.
-  const countsQuery = useQuery({
-    queryKey: [QUIZ_MCQ_PUBLIC_QUERY_PREFIX, 'question-counts'],
-    queryFn: getQuestionCounts,
-    staleTime: QUIZ_QUERY_STALE_TIME,
-  });
-
-  const questionCounts = useMemo(() => {
-    const counts: Record<string, number> = {};
-    const chapterLevels = foundChapter
-      ? countsQuery.data?.byChapter[foundChapter.id]?.levels
-      : undefined;
-    if (!chapterLevels) return counts;
-    levels.forEach((level) => {
-      counts[level] = chapterLevels[level.toLowerCase()] ?? 0;
-    });
-    return counts;
-  }, [countsQuery.data, foundChapter]);
-
-  const isLoading = subjectQuery.isPending || countsQuery.isPending;
-
-  return (
-    <div>
-      <Link
-        href={`/quiz-mcq?subject=${subject}&chapter=${encodeURIComponent(chapter)}`}
-        className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
-      >
-        ← Back to Mode
-      </Link>
-      <h1 className="mb-4 text-center text-3xl font-bold text-white">
-        {mode === 'timer' ? '⏱️ Timer Mode' : '🎯 Normal Mode'}
-      </h1>
-      <p className="mb-8 text-center text-white/80">Select difficulty level</p>
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
-        {levels.map((level) => {
-          const count = questionCounts[level] || 0;
-          return (
-            <Link
-              key={level}
-              href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter)}&level=${level.toLowerCase()}&mode=${mode}`}
-              className={`flex flex-col items-center rounded-2xl bg-gradient-to-br ${levelColors[level]} p-6 text-center text-white shadow-lg transition-all hover:scale-105 hover:shadow-xl ${count === 0 ? 'opacity-50' : ''}`}
-            >
-              <span className="text-3xl mb-2">{levelEmojis[level]}</span>
-              <span className="font-bold">{level}</span>
-              <span className="mt-1 text-xs opacity-90">
-                {!isLoading ? `${count} questions` : 'Loading...'}
-              </span>
-            </Link>
-          );
-        })}
-      </div>
-    </div>
-  );
-}
-
-function QuizContent(): JSX.Element {
-  const searchParams = useSearchParams();
-  const subject = searchParams?.get('subject') || '';
-  const chapter = searchParams?.get('chapter') || '';
-  const mode = searchParams?.get('mode') || '';
-
-  // If chapter + mode is selected, show level selection
-  if (subject && chapter && (mode === 'normal' || mode === 'timer')) {
-    return <LevelSelection subject={subject} chapter={chapter} mode={mode} />;
+  // Result share (§3 #4): score badge; the session itself is never shared.
+  if (!Number.isNaN(score) && !Number.isNaN(total) && subject) {
+    const meta = await ogData.quizSubjectMeta(subject);
+    const name = meta?.name ?? 'Quiz';
+    const title = `I scored ${score}/${total} on ${name} — beat you! 🧠`;
+    const image = `/api/og?type=quiz-result&subject=${encodeURIComponent(subject)}&score=${score}&total=${total}`;
+    return {
+      ...MODULE_META['quiz-mcq'],
+      title,
+      openGraph: { title, images: [image] },
+      twitter: { title, images: [image] },
+    };
   }
 
-  // If chapter is selected, show mode selection
-  if (subject && chapter) {
-    return <ModeSelection subject={subject} chapter={chapter} />;
-  }
-
-  // If subject is selected, show chapter selection
+  // Subject share (§3 #2): live published-question count baked into the URL
+  // so platforms refetch the image after content pushes.
   if (subject) {
-    return <ChapterSelection subject={subject} />;
+    const [meta, counts] = await Promise.all([
+      ogData.quizSubjectMeta(subject),
+      ogData.quizCounts(),
+    ]);
+    if (meta) {
+      const count = counts?.bySubject[subject];
+      const countPart = count !== undefined ? ` — ${formatCount(count)} Questions` : '';
+      const title = `${meta.name} Quiz${countPart}`;
+      const image = `/api/og?type=quiz-subject&subject=${encodeURIComponent(subject)}${
+        count !== undefined ? `&v=${count}` : ''
+      }`;
+      return {
+        ...MODULE_META['quiz-mcq'],
+        title,
+        openGraph: { title, images: [image] },
+        twitter: { title, images: [image] },
+      };
+    }
   }
 
-  // Default: show subject selection
-  return <SubjectSelection />;
+  return MODULE_META['quiz-mcq'];
 }
 
-export default function QuizPage(): JSX.Element {
-  const searchParams = useSearchParams();
-  const key = searchParams?.toString() || '';
-
-  return (
-    <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
-      <div className="mx-auto max-w-4xl">
-        <Suspense
-          fallback={
-            <div className="flex h-screen items-center justify-center">
-              <div className="text-2xl text-white">Loading...</div>
-            </div>
-          }
-        >
-          <QuizContent key={key} />
-        </Suspense>
-      </div>
-    </main>
-  );
+export default function QuizMcqPage() {
+  return <QuizHubView />;
 }

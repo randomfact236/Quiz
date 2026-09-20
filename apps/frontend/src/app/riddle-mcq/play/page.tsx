@@ -341,8 +341,8 @@ function RiddlePlayPageContent(): JSX.Element {
               ].join('\n')}
               url={
                 typeof window !== 'undefined'
-                  ? `${window.location.origin}/riddle-mcq`
-                  : `/riddle-mcq`
+                  ? `${window.location.origin}/riddle-mcq?q=${play.currentRiddle.id}`
+                  : `/riddle-mcq?q=${play.currentRiddle.id}`
               }
               onClose={() => setShareMenu(null)}
             />

@@ -174,6 +174,17 @@ export class QuizMcqController {
   }
 
   @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Get('questions/:id/share')
+  @ApiOperation({
+    summary:
+      'Public share payload for one question (question + options + subject — never the answer)',
+  })
+  async getPublicQuestionShare(@Param('id') id: string) {
+    return this.quizService.getPublicQuestionShare(id);
+  }
+
+  @_Public()
   @Get('subjects/:slug')
   @ApiOperation({ summary: 'Get subject by slug with chapters' })
   @ApiParam({ name: 'slug', example: 'science' })

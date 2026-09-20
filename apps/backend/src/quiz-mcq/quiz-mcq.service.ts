@@ -89,6 +89,44 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     }:${filters.status || 'all'}:${page}:${limit}`;
   }
 
+  // ==================== PUBLIC SHARE PAYLOAD ====================
+
+  /**
+   * Public payload for one question's share image (share-design-system §3 #3):
+   * question + options + subject identity only — the answer never leaves the
+   * service (same invariant as the play flow).
+   */
+  async getPublicQuestionShare(id: string): Promise<{
+    id: string;
+    question: string;
+    options: string[];
+    subjectSlug: string;
+    subjectName: string;
+    subjectEmoji: string;
+  }> {
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRe.test(id)) throw new NotFoundException('Question not found');
+
+    const question = await this.deps.itemRepo.findOne({
+      where: { id, status: ContentStatus.PUBLISHED },
+      relations: { chapter: true },
+    });
+    if (!question) throw new NotFoundException('Question not found');
+
+    const subject = question.chapter
+      ? await this.deps.subjectRepo.findOne({ where: { id: question.chapter.subjectId } })
+      : null;
+
+    return {
+      id: question.id,
+      question: question.question,
+      options: question.options ?? [],
+      subjectSlug: subject?.slug ?? '',
+      subjectName: subject?.name ?? '',
+      subjectEmoji: subject?.emoji ?? '',
+    };
+  }
+
   // ==================== SUBJECTS ====================
 
   async findAllSubjects(
