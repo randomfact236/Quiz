@@ -29,6 +29,7 @@ import {
 
 import { useRiddlePlay } from '@/hooks/use-riddle-play/useRiddlePlay';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
+import ShareMenu from '@/components/share/ShareMenu';
 import { ResumePromptModal } from './components/ResumePromptModal';
 import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { ExtendSessionModal } from './components/ExtendSessionModal';
@@ -84,17 +85,19 @@ function RiddlePlayPageContent(): JSX.Element {
 
   // Pre-game picker state
   const [extraRiddles, setExtraRiddles] = useState(0);
-  // Share toast state
-  const [shareToast, setShareToast] = useState<string | null>(null);
+  // BUG-054: which ShareMenu is open — the header's riddle-mix share or the
+  // per-riddle share from the card's action row. Replaces the clipboard-only
+  // header share (same upgrade BUG-047 gave the quiz play card).
+  const [shareMenu, setShareMenu] = useState<null | 'mix' | 'question'>(null);
 
   const play = useRiddlePlay({ subjectId, level, mode, chapterNameParam });
 
   // Refs for RiddleCard animations — UI concern, stays in the page
   const riddleCardRef = useRef<RiddleCardRef>(null);
 
-  // BUG-040: comments after answering — open blocks advancing; close proceeds.
+  // BUG-040: comments — available from the action row at any point; open
+  // blocks advancing; close proceeds.
   const [commentsOpen, setCommentsOpen] = useState(false);
-  const answered = !!(play.currentRiddle && play.answers[play.currentRiddle.id]);
   const toggleComments = () => setCommentsOpen((p) => !p);
   const closeAndProceed = () => {
     setCommentsOpen(false);
@@ -111,19 +114,11 @@ function RiddlePlayPageContent(): JSX.Element {
   const backPath = mode === 'timer' ? '/riddle-mcq/challenge' : '/riddle-mcq/practice';
 
   // Share current mix config link
-  const handleShare = useCallback(() => {
-    if (typeof window === 'undefined') return;
-    navigator.clipboard
-      .writeText(window.location.href)
-      .then(() => {
-        setShareToast(`Link copied! Riddle ${play.currentIndex + 1} of ${play.riddles.length}`);
-        setTimeout(() => setShareToast(null), 2000);
-      })
-      .catch(() => {
-        setShareToast('Failed to copy link');
-        setTimeout(() => setShareToast(null), 2000);
-      });
-  }, [play.currentIndex, play.riddles.length]);
+  // BUG-054: header shares the riddle mix (durable play surface); the card's
+  // action row shares the individual riddle (share-design-system §3 #6 —
+  // riddle text + compact options, never the answer).
+  const openMixShare = useCallback(() => setShareMenu('mix'), []);
+  const openQuestionShare = useCallback(() => setShareMenu('question'), []);
 
   // Guard: not mounted yet
   if (!play.isMounted) {
@@ -266,9 +261,9 @@ function RiddlePlayPageContent(): JSX.Element {
                 </div>
               )}
 
-              {/* Share button (normal mode keeps the saved indicator slot) */}
+              {/* Share button — opens the riddle-mix ShareMenu (BUG-054) */}
               <button
-                onClick={handleShare}
+                onClick={openMixShare}
                 title="Share this riddle mix"
                 className="rounded-full bg-white/20 dark:bg-secondary-800/20 p-1.5 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
               >
@@ -323,17 +318,47 @@ function RiddlePlayPageContent(): JSX.Element {
                       : undefined
                   }
                   onHintShown={play.handleHintShown}
-                  {...(answered
-                    ? {
-                        commentsOpen,
-                        onToggleComments: toggleComments,
-                        onCloseComments: closeAndProceed,
-                      }
-                    : {})}
+                  onShare={openQuestionShare}
+                  commentsOpen={commentsOpen}
+                  onToggleComments={toggleComments}
+                  onCloseComments={closeAndProceed}
                 />
               </motion.div>
             )}
           </AnimatePresence>
+
+          {/* BUG-054: per-riddle ShareMenu (share-design-system §3 #6 — riddle
+              text + compact options; the answer never leaves the site) and the
+              header's riddle-mix ShareMenu (durable play URL). */}
+          {shareMenu === 'question' && play.currentRiddle && (
+            <ShareMenu
+              title={`Riddle ${play.currentIndex + 1}`}
+              text={[
+                play.currentRiddle.question,
+                ...(play.currentRiddle.options ?? []).map(
+                  (opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`
+                ),
+              ].join('\n')}
+              url={
+                typeof window !== 'undefined'
+                  ? `${window.location.origin}/riddle-mcq`
+                  : `/riddle-mcq`
+              }
+              onClose={() => setShareMenu(null)}
+            />
+          )}
+          {shareMenu === 'mix' && (
+            <ShareMenu
+              title="Riddle Mix"
+              text={`Can you solve these riddles? 🧩 ${level !== 'all' ? `(${level})` : ''}`.trim()}
+              url={
+                typeof window !== 'undefined'
+                  ? window.location.href
+                  : `/riddle-mcq/play?subjectId=${subjectId}&level=${level}&mode=${mode}`
+              }
+              onClose={() => setShareMenu(null)}
+            />
+          )}
 
           {/* Back + N / Total + Next Navigation — mirrors quiz page exactly */}
           <div className="mt-4 flex items-center justify-between gap-4 pb-4">
@@ -389,20 +414,6 @@ function RiddlePlayPageContent(): JSX.Element {
               </button>
             </div>
           </div>
-
-          {/* Share Toast */}
-          <AnimatePresence>
-            {shareToast && (
-              <motion.div
-                initial={{ opacity: 0, y: 50 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: 50 }}
-                className="fixed bottom-20 left-1/2 z-50 -translate-x-1/2 rounded-full bg-gray-800 px-4 py-2 text-sm text-white shadow-lg"
-              >
-                {shareToast}
-              </motion.div>
-            )}
-          </AnimatePresence>
         </div>
       </div>
 

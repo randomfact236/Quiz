@@ -4,7 +4,8 @@
  * ============================================================================
  * Displays a single riddle with answer options and instant feedback.
  * Mirrors QuestionCard structure — uses shared AnswerOptions component.
- * Layout: Question → Floating Emojis → Score + Progress → Answers
+ * Layout: Question → Floating Emojis → Score + action row (like · comment ·
+ * share, BUG-054) + Progress → Answers → comments panel
  * Features: Randomized feedback, bubble emoji effects
  * ============================================================================
  */
@@ -15,12 +16,13 @@ import { useState, useEffect, useCallback, useRef, forwardRef, useImperativeHand
 import { motion } from 'framer-motion';
 import { AnswerOptions } from '@/components/quiz-mcq/AnswerOptions';
 import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Share2 } from 'lucide-react';
 import {
   BubbleEmojiEffect,
   type BubbleEmojiEffectRef,
 } from '@/components/quiz-mcq/BubbleEmojiEffect';
 import { LikeButton } from '@/components/likes/LikeButton';
+import { getCommentCounts } from '@/lib/comments-api';
 import type { Riddle } from '@/types/riddles';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 
@@ -58,6 +60,8 @@ interface RiddleCardProps {
   commentsOpen?: boolean;
   onToggleComments?: () => void;
   onCloseComments?: () => void;
+  /** BUG-054: opens the per-riddle ShareMenu on the play page. */
+  onShare?: () => void;
 }
 
 export interface RiddleCardRef {
@@ -160,6 +164,7 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     commentsOpen,
     onToggleComments,
     onCloseComments,
+    onShare,
   },
   ref
 ): JSX.Element {
@@ -167,6 +172,20 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
   // compare for MCQ, normalized text compare for expert)
   const isCorrect = isRiddleAnswerCorrect(riddle, selectedAnswer ?? undefined);
   const isWrong = !!selectedAnswer && !isCorrect;
+
+  // BUG-048/BUG-054: public comment count for the action-row chip
+  const [commentCount, setCommentCount] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    getCommentCounts('riddle-question', [riddle.id])
+      .then((c) => {
+        if (!cancelled) setCommentCount(c[riddle.id] ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [riddle.id]);
 
   // Randomized feedback state
   const [feedback, setFeedback] = useState<{ text: string; emoji: string } | null>(null);
@@ -278,11 +297,6 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           </div>
         )}
 
-        {/* BUG-037: frictionless one-tap like capture (internal; no counts) */}
-        <div className="absolute right-4 top-4">
-          <LikeButton contentType="riddle" questionId={riddle.id} />
-        </div>
-
         {/* Riddle Question Text */}
         <div className="mb-4 text-center">
           <h2 className="text-lg font-medium leading-relaxed text-gray-800 dark:text-secondary-100 sm:text-xl sm:leading-relaxed">
@@ -336,12 +350,45 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           </div>
         )}
 
-        {/* Score Display */}
+        {/* Score Display + riddle actions (BUG-054: like · comment · share together,
+            mirroring the quiz-mcq question card action row) */}
         {score !== undefined && maxScore !== undefined && (
-          <div className="mb-2 text-center">
+          <div className="mb-2 flex items-center justify-center gap-3">
             <span className="text-base font-semibold text-indigo-600 dark:text-indigo-300">
               Score: {score}/{maxScore}
             </span>
+            <div className="flex items-center gap-2">
+              <LikeButton contentType="riddle" questionId={riddle.id} />
+              {onToggleComments && (
+                <button
+                  onClick={onToggleComments}
+                  aria-expanded={commentsOpen}
+                  aria-label={commentsOpen ? 'Hide comments' : 'Comment on this riddle'}
+                  title={commentsOpen ? 'Hide comments' : 'Comment on this riddle'}
+                  className={`flex h-7 items-center gap-1 rounded-full px-2.5 py-1 text-xs font-medium transition-colors ${
+                    commentsOpen
+                      ? 'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300'
+                      : 'bg-indigo-50 text-indigo-600 hover:bg-indigo-100 dark:bg-indigo-500/10 dark:text-indigo-300 dark:hover:bg-indigo-500/20'
+                  }`}
+                >
+                  <MessageCircle className="h-3.5 w-3.5" />
+                  Comment
+                  {commentCount !== null && commentCount > 0 && (
+                    <span className="font-black">{commentCount}</span>
+                  )}
+                </button>
+              )}
+              {onShare && (
+                <button
+                  onClick={onShare}
+                  className="inline-flex items-center gap-1 rounded-full bg-indigo-50 dark:bg-indigo-500/10 px-2.5 py-1 text-xs font-medium text-indigo-600 dark:text-indigo-300 transition-colors hover:bg-indigo-100 dark:hover:bg-indigo-500/20"
+                  title="Share this riddle"
+                >
+                  <Share2 className="h-3.5 w-3.5" />
+                  Share
+                </button>
+              )}
+            </div>
           </div>
         )}
 
@@ -393,21 +440,17 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
 
         {/* BUG-040: comments after answering — while open, the play page blocks
             advancing; closing it proceeds to the next riddle. */}
-        {showFeedback && selectedAnswer && onToggleComments && (
+        {/* BUG-054: comments panel — opened from the action row above; while
+            open, the play page blocks advancing; closing proceeds onward. */}
+        {commentsOpen && (
           <div className="mt-4 border-t border-gray-100 pt-3 dark:border-secondary-700">
+            <QuestionComments contentType="riddle-question" questionId={riddle.id} autoOpen />
             <button
-              onClick={() => (commentsOpen ? onCloseComments?.() : onToggleComments?.())}
-              aria-expanded={!!commentsOpen}
-              className="flex items-center gap-1.5 rounded-full bg-slate-100 px-3 py-1.5 text-xs font-bold text-slate-500 transition-colors hover:text-indigo-500 dark:bg-secondary-800 dark:text-secondary-300"
+              onClick={() => onCloseComments?.()}
+              className="mt-3 w-full rounded-lg bg-slate-100 px-3 py-2 text-xs font-black uppercase tracking-widest text-slate-500 transition-colors hover:bg-indigo-50 hover:text-indigo-500 dark:bg-secondary-800 dark:text-secondary-300 dark:hover:bg-indigo-500/10"
             >
-              <MessageCircle className="h-3.5 w-3.5" />
-              {commentsOpen ? 'Hide comments' : 'Comments'}
+              Close
             </button>
-            {commentsOpen && (
-              <div className="mt-3">
-                <QuestionComments contentType="riddle-question" questionId={riddle.id} autoOpen />
-              </div>
-            )}
           </div>
         )}
       </motion.div>
