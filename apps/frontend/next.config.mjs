@@ -24,6 +24,13 @@ const imageHosts = (process.env.NEXT_PUBLIC_IMAGE_HOSTS || 'localhost,127.0.0.1'
   .map((h) => h.trim())
   .filter(Boolean);
 
+// BUG-fix (login/dev): the CSP blocked the plain-http dev API
+// (http://localhost:3012) from the http-served frontend, so login and every
+// admin call failed with 'Failed to fetch' in development. Production
+// (https://api.pigzap.com) is covered by the https: entry and stays strict.
+const connectSrc =
+  "'self' https: wss:" + (isProdBuild ? '' : ' http://localhost:3012 http://127.0.0.1:3012');
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
@@ -79,7 +86,7 @@ const nextConfig = {
             // directive is locked down (self + Google Tag Manager only).
             key: 'Content-Security-Policy',
             value:
-              "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+              `default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src ${connectSrc}; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'`,
           },
         ],
       },
