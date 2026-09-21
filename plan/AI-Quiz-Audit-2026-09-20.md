@@ -131,7 +131,7 @@ Scripts probe `localhost:3012` / `localhost:3010`, but prod publishes `4004` / `
 - **FE-02/FE-03 (S2)** "Coming Soon" subject cards are `<Link href="#">` (focusable, jumps to top) and zero-question level chips are `aria-disabled` but keep a working `href` (keyboard users can enter empty sessions).
 - **SEO (S2)** Only `MODULE_META` routes + `/games` set `alternates.canonical`. Missing on `/`, `/about`, `/faq`, `/contact`, `/privacy`, `/terms`, `/jokes`, `/image-riddles`. Drive from `INDEXABLE_ROUTES`.
 - **a11y (S2)** no `aria-live` region for quiz question/timer/score changes; incorrect `role="menubar"` on the header nav; mobile drawer `role="dialog"` has no focus trap/scroll lock (the `Modal` component does it correctly); form errors not linked via `aria-invalid`/`role="alert"`; white `<100%`-opacity text on light-purple/pink gradients likely fails 4.5:1; decorative status SVGs lack `aria-hidden`.
-- Manifest declares only `/icon.svg` (no 192/512 PNG, no maskable, no apple-touch-icon).
+- Manifest declares only `/icon.svg` (no 192/512 PNG, no maskable, no apple-touch-icon). - FIXED 2026-09-21: added icon-192/512 PNG, icon-maskable-512 and apple-icon (generated with sharp); manifest lists them.
 - `images.unoptimized: true` is global (comment says dev-only) — disables the image optimizer in production too.
 
 ### 3.4 Ops / deploy / CI
@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 7 (2026-09-21): PWA icon set (192/512/maskable/apple-touch) + manifest; SEC-11 TRUST_PROXY documented.
 Wave 6 (2026-09-21): login/register a11y error semantics + password-rule parity; runbook alerting/off-box-backup guidance.
 Wave 5 (2026-09-21): mobile drawer focus trap + scroll lock; quiz play aria-live announcements.
 Wave 4 (2026-09-21): BE-02 single global CacheModule (boot-verified); cosmetics #9 consent banner no longer overlaps the mobile bottom nav.
