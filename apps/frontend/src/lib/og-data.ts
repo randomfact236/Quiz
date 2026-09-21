@@ -46,6 +46,27 @@ async function fetchJson<T>(path: string): Promise<T | null> {
 
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
+/**
+ * The quiz share endpoint sends `options` as an array, but the riddle one
+ * serialises it as a JSON string. Normalise both to string[] - the share
+ * template iterates the list, and a string crashed the OG render (the proxy
+ * surfaced that as a 502, so shared riddle links had no preview image).
+ */
+function normalizeOptions(value: unknown): string[] {
+  const onlyStrings = (arr: unknown[]): string[] =>
+    arr.filter((v): v is string => typeof v === 'string');
+  if (Array.isArray(value)) return onlyStrings(value);
+  if (typeof value === 'string') {
+    try {
+      const parsed: unknown = JSON.parse(value);
+      return Array.isArray(parsed) ? onlyStrings(parsed) : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 export interface OgQuestionShare {
   id: string;
   question: string;
@@ -66,16 +87,22 @@ export const ogData = {
   quizCounts: () => fetchJson<{ bySubject: Record<string, number> }>('/quiz-mcq/question-counts'),
 
   /** { id, question, options, subjectName, subjectEmoji } — never the answer. */
-  quizQuestionShare: (id: string) =>
-    UUID_RE.test(id)
-      ? fetchJson<OgQuestionShare>(`/quiz-mcq/questions/${id}/share`)
-      : Promise.resolve(null),
+  quizQuestionShare: async (id: string): Promise<OgQuestionShare | null> => {
+    if (!UUID_RE.test(id)) return null;
+    const raw = await fetchJson<OgQuestionShare & { options: unknown }>(
+      `/quiz-mcq/questions/${id}/share`
+    );
+    return raw ? { ...raw, options: normalizeOptions(raw.options) } : null;
+  },
 
   /** { id, question, options, subjectName, subjectEmoji } — never the answer. */
-  riddleQuestionShare: (id: string) =>
-    UUID_RE.test(id)
-      ? fetchJson<OgQuestionShare>(`/riddle-mcq/questions/${id}/share`)
-      : Promise.resolve(null),
+  riddleQuestionShare: async (id: string): Promise<OgQuestionShare | null> => {
+    if (!UUID_RE.test(id)) return null;
+    const raw = await fetchJson<OgQuestionShare & { options: unknown }>(
+      `/riddle-mcq/questions/${id}/share`
+    );
+    return raw ? { ...raw, options: normalizeOptions(raw.options) } : null;
+  },
 
   /** Riddle categories (public hub payload) — { id, name, slug, emoji, isActive }. */
   riddleCategories: () =>

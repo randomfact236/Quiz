@@ -31,6 +31,7 @@
 | BUG-053   | Feedback inside games when paused or at game over              | static games (pause/over) | P2       | Fixed             |
 | BUG-054   | Riddle-mcq has no like, comment or share options               | riddle-mcq questions      | P2       | Fixed             |
 | BUG-055   | Home share image: build approved multi-platform design (WP0)   | website share (home)      | P2       | Fixed             |
+| BUG-056   | Integrate Google Search Console (data API) into the website    | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                       | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs               | ops / VPS                 | P1       | Open (owner)      |
 | H8        | CSP lacks nonces; JWTs in localStorage                         | frontend security         | P2       | Open (mine)       |
@@ -413,6 +414,25 @@ Everything else in that report is fixed - see its "Remediation log". These are t
   (metadata + platform cards) · `og-website-1200x630.png` (reference render).
 
 ---
+
+### BUG-056 — Integrate Google Search Console (data API) into the website
+
+- **Date found:** 2026-09-21
+- **Area:** SEO / monitoring — frontend `apps/frontend/src/app/admin/components/SeoSection.tsx` + backend (no ingest service exists yet)
+- **Priority:** P3
+- **Reported:** The site can be _verified_ in Google Search Console with a meta token, but Search Console is **not integrated into the website** — the owner wants the Search Console data actually surfaced in the app, not just verification.
+- **Current state (verified 2026-09-21):**
+  - **Verification IS supported:** the admin field "Google Search Console verification token" stores `seo.googleSiteVerification` (`apps/frontend/src/types/settings.types.ts`) and Next renders it as `<meta name="google-site-verification">` via `metadata.verification.google` (`apps/frontend/src/app/layout.tsx`).
+  - **Data integration is NOT built:** the admin SEO panel shows an explicit placeholder — "No GSC service account is linked to this site. Once connected (plan/15 P3)…" (`SeoSection.tsx`). There is no service account, no `GSC_SERVICE_ACCOUNT_PATH`, and no Search Console API service.
+  - Tracked as an open P3 in `plan/15-seo.md`: "Search Console | verification token only; no API integration" and the P3 item "Search Console integration — service-account or OAuth ingestion of coverage/click data".
+- **Reference implementation to reuse:** the sibling ProfitBenefit affiliate monorepo already ships this — `apps/api/src/seo/search-console.service.ts` (scope `webmasters.readonly`, in-memory ~1h cache) + `search-console.controller.ts` (ADMIN-guarded `GET /seo/search-console/queries`), with env `GSC_SERVICE_ACCOUNT_PATH` (path to the JSON key) and `GSC_SITE_URL` (e.g. `sc-domain:pigzap.com`). The key file is git-ignored and docker-ignored, so it must be mounted on the host at runtime.
+- **Action when picked up:**
+  1. GCP: create a service account for pigzap (e.g. `gsc-reader@pigzap-…`), download its JSON key; enable the **Search Console API** (and the **Analytics Data API** if GA4 data is also pulled).
+  2. Search Console: add the service-account email as a **Restricted** user on the pigzap property.
+  3. Backend: port the `seo` module (service + controller + module wiring); add `GSC_SERVICE_ACCOUNT_PATH` / `GSC_SITE_URL` to env; mount the key at runtime (never commit — add to `.gitignore` and `.dockerignore`).
+  4. Frontend: replace the `SeoSection` placeholder with a live Top-Queries panel, with proper not-configured / loading / empty / error states.
+  5. Confirm GA4: ensure `NEXT_PUBLIC_GA_MEASUREMENT_ID` (currently `G-D4VPRXEYCX` in `apps/frontend/.env.local`) is also set in the **production** environment, otherwise GA fires in dev only.
+- **Evidence:** repo grep finds no `gsc` / service-account references; `plan/15-seo.md:23`; `SeoSection.tsx` placeholder; `apps/frontend/src/app/layout.tsx` verification metadata.
 
 ## Template for new findings
 
