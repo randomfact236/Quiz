@@ -223,8 +223,8 @@ Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inlin
 - [ ] SEC-11 shared throttler storage + mandate `TRUST_PROXY` in every deploy path
 - [ ] SEC-10/SEC-12 bind anonymous writes to a server-signed guest token
 - [x] OPS-05 container resource limits; OPS-07 add `REDIS_PASSWORD` to the prod template; OPS-06 prune prod images - PARTIAL 2026-09-21: per-service memory limits added to docker-compose.prod.yml; OPS-06 (prune prod images) remains.
-- [ ] OPS-14 add gitleaks + CodeQL + (optional) blocking critical `npm audit`
-- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21: error + retry states added to the quiz hub subject/chapter queries; fake-link/a11y/canonical items remain.
+- [x] OPS-14 add gitleaks + CodeQL + (optional) blocking critical `npm audit` - PARTIAL 2026-09-21: gitleaks secret-scan job added to CI (green); CodeQL and a blocking critical-audit gate remain.
+- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21 (wave 3): hub error+retry states, FE-02/03 fake-link removal, canonicals on /about /faq /contact /privacy /terms, and the menubar fix are DONE; aria-live / drawer focus-trap / contrast remain.
 - [ ] BE-09 run the CSV leakage/ambiguity repairs and re-audit
 
 ### 6.3 Backlog / quality
