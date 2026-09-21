@@ -136,7 +136,7 @@ export default function CategorySidebar({
                 </span>
                 <button
                   onClick={onDrawerClose}
-                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-500/20"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 dark:bg-secondary-800 text-gray-400 dark:text-secondary-400 transition-colors hover:bg-red-100 hover:text-red-500 dark:hover:bg-red-500/20"
                   aria-label="Close topics"
                 >
                   ✕

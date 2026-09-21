@@ -599,7 +599,7 @@ export function SettingsSection(): JSX.Element {
                   type="checkbox"
                   checked={formData.site?.mobileShowSiteName ?? true}
                   onChange={(e) => updateField('site.mobileShowSiteName', e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 dark:border-gray-600"
+                  className="h-4 w-4 rounded border-gray-300 text-blue-600 dark:border-gray-600 dark:text-blue-400"
                 />
                 <label
                   htmlFor="mobile-show-site-name"

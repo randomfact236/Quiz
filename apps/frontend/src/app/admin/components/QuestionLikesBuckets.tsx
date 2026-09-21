@@ -40,7 +40,9 @@ function BucketTable({ title, entries }: { title: string; entries: BucketEntry[]
         </span>
       </h3>
       {entries.length === 0 ? (
-        <p className="py-4 text-center text-sm font-semibold text-secondary-400">Empty</p>
+        <p className="py-4 text-center text-sm font-semibold text-secondary-400 dark:text-secondary-500">
+          Empty
+        </p>
       ) : (
         <ul className="divide-y divide-secondary-100 dark:divide-secondary-700">
           {entries.map((e) => (
@@ -90,7 +92,7 @@ export default function QuestionLikesBuckets(): JSX.Element {
               className={`rounded-lg px-4 py-1.5 text-xs font-black uppercase tracking-wider transition-colors ${
                 family === f
                   ? 'bg-primary-600 text-white'
-                  : 'text-secondary-500 hover:text-secondary-700 dark:text-secondary-400'
+                  : 'text-secondary-500 hover:text-secondary-700 dark:text-secondary-400 dark:hover:text-secondary-200'
               }`}
             >
               {f}

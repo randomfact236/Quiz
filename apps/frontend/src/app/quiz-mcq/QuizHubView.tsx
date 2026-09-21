@@ -561,7 +561,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
                     )}
                   </div>
                   <ChevronDown
-                    className={`h-5 w-5 shrink-0 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                    className={`h-5 w-5 shrink-0 text-gray-400 dark:text-secondary-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
                   />
                 </button>
 
