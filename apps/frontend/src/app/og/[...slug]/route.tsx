@@ -31,8 +31,11 @@ export async function GET(
   if (type === 'quiz-question' || type === 'riddle-question') {
     query.set('id', last);
   } else if (type === 'joke') {
-    // /og/joke.png -> generic card; /og/joke/<id>.png -> that joke's setup
-    if (last) query.set('id', last);
+    // /og/joke.png            -> generic section card
+    // /og/joke/<id>.png       -> that joke's setup
+    // /og/joke/<id>/vN.png    -> same, with a version segment for cache-busting
+    const jokeId = strip(rest[0] ?? '');
+    if (jokeId) query.set('id', jokeId);
   } else if (type === 'quiz-subject') {
     // optional "-<count>" suffix lets the URL change when content does
     const m = /^(.*)-(\d+)$/.exec(last);

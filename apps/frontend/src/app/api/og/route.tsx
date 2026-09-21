@@ -39,7 +39,7 @@ async function asFixedPng(image: ImageResponse): Promise<Response> {
     headers: {
       'Content-Type': 'image/png',
       'Content-Length': String(buffer.byteLength),
-      'Cache-Control': 'public, max-age=31536000, immutable, no-transform',
+      'Cache-Control': 'public, max-age=3600, s-maxage=3600, no-transform',
     },
   });
 }

@@ -27,7 +27,7 @@ export async function generateMetadata({
     110
   );
   const url = `${APP_URL}/jokes/${id}`;
-  const image = `/og/joke/${id}.png`;
+  const image = `/og/joke/${id}/v2.png`;
   return {
     title,
     description,
