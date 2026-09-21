@@ -99,11 +99,12 @@ function toForm(seo: Partial<SeoSettings> | undefined): FormState {
   };
 }
 
-type SeoTab = 'dashboard' | 'general' | 'social' | 'technical';
+type SeoTab = 'dashboard' | 'gsc' | 'general' | 'social' | 'technical';
 
 /** Tabs — single source of truth, mirrored by the sidebar SEO sub-menu. */
 export const SEO_TABS: { id: SeoTab; label: string; emoji: string }[] = [
   { id: 'dashboard', label: 'Dashboard', emoji: '📊' },
+  { id: 'gsc', label: 'Search Console', emoji: '🔍' },
   { id: 'general', label: 'General', emoji: '⚙️' },
   { id: 'social', label: 'Social Sharing', emoji: '📱' },
   { id: 'technical', label: 'Technical', emoji: '🛠️' },
@@ -645,11 +646,12 @@ export function SeoSection(): JSX.Element {
         ))}
       </div>
 
+      {/* ==================== SEARCH CONSOLE ==================== */}
+      {tab === 'gsc' && <GscPanel />}
+
       {/* ==================== DASHBOARD ==================== */}
       {tab === 'dashboard' && (
         <div className="space-y-5">
-          <GscPanel />
-
           {/* KPI cards */}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <KpiCard

@@ -18,6 +18,7 @@ import { BarChart3, Download, RefreshCw, Trash2 } from 'lucide-react';
 
 import { adminApi, ApiError } from '@/lib/api-client';
 import { EventsBrowser } from './EventsBrowser';
+import GscPanel from './GscPanel';
 import { downloadCsv } from './analytics/csv';
 import {
   exportRowsForTab,
@@ -38,6 +39,7 @@ import type { AdminDashboard, RetentionCohort, ConversionFunnel } from './analyt
  *  (Users / Audience & Geo / Journey / Clicks / Retention), then per-game tabs. */
 export const ANALYTICS_TABS = [
   { id: 'overview', label: 'Overview' },
+  { id: 'gsc', label: 'Search Console' },
   { id: 'users', label: 'Users' },
   { id: 'audience', label: 'Audience & Geo' },
   { id: 'journey', label: 'Journey' },
@@ -273,6 +275,7 @@ export function AnalyticsSection() {
               </p>
             )}
             {tab === 'overview' && <OverviewTab data={data} />}
+            {tab === 'gsc' && <GscPanel />}
             {tab === 'quiz-mcq' && <ModuleTab data={data} moduleKey="quiz-mcq" />}
             {tab === 'riddle-mcq' && <ModuleTab data={data} moduleKey="riddle-mcq" />}
             {tab === 'image-riddles' && <ImageRiddlesTab data={data} />}
