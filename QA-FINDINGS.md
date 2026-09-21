@@ -13,86 +13,123 @@
 
 ## Index
 
-| ID      | Title                                                        | Area                 | Pri | Status |
-| ------- | ------------------------------------------------------------ | -------------------- | --- | ------ |
-| BUG-048 | Like / comment / share counts visible to all users           | engagement counters  | P2  | Open   |
-| BUG-051 | Games share flickers when clicked                            | static games (share) | P2  | Open   |
-| BUG-055 | Home share image: build approved multi-platform design (WP0) | website share (home) | P2  | Open   |
+| ID      | Title                                                                          | Area                | Pri | Status   |
+| ------- | ------------------------------------------------------------------------------ | ------------------- | --- | -------- |
+| TASK-01 | Question-likes do not survive a refresh                                        | engagement          | P1  | Open     |
+| TASK-02 | Analytics ingest retry can double-count events (C4)                            | analytics           | P1  | Open     |
+| TASK-03 | BE-09 CSV leakage/ambiguity repairs + re-audit                                 | content data        | P1  | Open     |
+| TASK-04 | H8 remainder: CSP nonces + HttpOnly token storage                              | security            | P2  | Open     |
+| TASK-05 | Bulk import lacks status (image riddles, jokes) / hint (riddles)               | import (3 modules)  | P2  | Open     |
+| TASK-06 | Analytics gaps: A5 events, A10 resume, A7 anchor, C1 purge, C2 tests, C3 cache | analytics           | P2  | Open     |
+| TASK-07 | Analytics deferred: funnels, accuracy join, retention tests, ops metrics       | analytics           | P3  | Open     |
+| TASK-08 | 10 TODO/FIXME markers in src                                                   | code cleanup        | P3  | Open     |
+| TASK-09 | Games debt: AA contrast, reduced-motion, focus, daily picture, phone QA        | games               | P3  | Open     |
+| TASK-10 | Dad jokes: saved jokes, JotD SSR, trending + share buttons                     | jokes (decision)    | P2  | Open     |
+| TASK-11 | SEO: RSC landing pages, per-content routes, JSON-LD, OG, audit panel           | seo (decision)      | P2  | Open     |
+| TASK-12 | Comments on quiz/riddle content (decision)                                     | comments (decision) | P3  | Open     |
+| TASK-13 | SEC-07 email-verification gate (decision)                                      | auth (decision)     | P2  | Open     |
+| TASK-14 | SEC-10/12 signed guest token for anonymous writes (decision)                   | security (decision) | P2  | Open     |
+| TASK-15 | H1 server-side grading phase 2c (decision)                                     | security (decision) | P1  | Open     |
+| TASK-16 | Admin user-mgmt UI; dashboard unification; guest-users activity                | admin (decision)    | P3  | Open     |
+| TASK-17 | Installability: full manifest / theme-color (decision)                         | pwa (decision)      | P3  | Open     |
+| TASK-18 | H9 rotate credentials + SSH/secrets hygiene                                    | ops (owner)         | P1  | Open     |
+| TASK-19 | H6 restrict origin firewall to Cloudflare IPs                                  | ops (owner)         | P1  | Open     |
+| TASK-20 | OPS-19 off-box backup replication + restore drill                              | ops (owner)         | P2  | Open     |
+| TASK-21 | OPS-21 uptime/error alerting wiring                                            | ops (owner)         | P2  | Open     |
+| TASK-22 | R2: confirm upload, custom domain, migrate media, token hygiene                | media (owner)       | P2  | Open     |
+| TASK-23 | Deferred by owner (no action unless re-opened)                                 | various             | P3  | Deferred |
 
 ---
 
 ## Open
 
-### BUG-048 — Like / comment / share counts should be visible to all users
+### TASK-01 - Question-likes do not survive a refresh
 
-- **Date found:** 2026-09-19
-- **Area:** question engagement counters (likes / comments / shares)
+- **Date found:** 2026-09-22 (source: plan/17-question-engagement.md)
+- **Area:** question engagement
+- **Priority:** P1
+- **Reported:** likes live in component state only - a refresh loses them; needs persistence.
+
+### TASK-02 - Analytics ingest retry can double-count events
+
+- **Date found:** 2026-09-22 (source: plan/13-analytics.md, C4)
+- **Area:** analytics ingest
+- **Priority:** P1
+- **Reported:** client flush() re-queues the whole batch on POST failure; if the server persisted it, the retry double-counts. Needs an idempotency key.
+
+### TASK-03 - BE-09 CSV leakage/ambiguity repairs + re-audit
+
+- **Date found:** 2026-09-22 (source: audit)
+- **Area:** content data
+- **Priority:** P1
+- **Reported:** measured leakage/ambiguity rows in the quiz/riddle CSVs; no repair script exists. Repair, re-audit, then push.
+
+### TASK-04 - H8 remainder: CSP nonces + HttpOnly token storage
+
+- **Date found:** 2026-09-22 (source: audit)
+- **Area:** security / frontend
 - **Priority:** P2
-- **Reported:** All the data should be visible to all users — the number of likes, comments,
-  and shares per question.
-- **Note:** needs public aggregate-count endpoints (or counts embedded in the question
-  payload) + count chips in the question UI. Shares need a counted event (share intents are
-  plain URLs today, so a client-side share event must fire when the target is chosen).
-  Tension to resolve with BUG-037 (likes were specced internal-only with buckets): public
-  per-question like counts are a different surface — owner's call stands as reported here.
-- **Verified in code (2026-09-20) — PARTIAL:** like counts public (LikeButton +
-  `question-likes/counts`) and comment count chip live; **share counts still missing** (no
-  share-count event anywhere). Remaining: count share-target clicks + expose totals.
+- **Reported:** baseline CSP ships with unsafe-inline; tokens sit in localStorage. Nonce the inline scripts; plan HttpOnly refresh cookies.
 
-### BUG-051 — Games share flickers when clicked
+### TASK-05 - Bulk import lacks status / hint
 
-- **Date found:** 2026-09-19
-- **Area:** static games — share toggle (all 8)
+- **Date found:** 2026-09-22 (source: plan/03, 04, 05)
+- **Area:** import (3 modules)
 - **Priority:** P2
-- **Reported:** Clicking the Share option in the games causes flickering.
-- **Note:** likely suspects: the reveal toggling layout (card height jump) or touch devices
-  firing both pointerdown- and click-driven updates. Reproduce, then consider a
-  smooth expand/collapse (no layout jump) and a single toggle event.
-- **Resolved (2026-09-21):** both suspects confirmed — the row toggled `hidden` instantly
-  (card height jump) and the runner games bound `copyResult` twice (double toast). All 8 games
-  now animate the row (max-height/opacity collapse, `hidden` re-applied after the transition)
-  with a single copy listener; asset URLs bumped to `?v=4`.
-- **Verified in code (2026-09-20) — STILL OPEN:** the toggle is an instant `hidden` flip
-  (`.share-row[hidden]{display:none}`) with no transition — the card height jump on
-  expand/collapse is the flicker. Fix: animate the reveal, keep the single click handler.
+- **Reported:** imported image riddles/jokes land DRAFT with no publish step; riddle bulk import drops hint (no hint button / hint_used analytics).
 
-### BUG-055 — Home share image: build the approved multi-platform design
+### TASK-06 - Analytics coverage gaps
 
-- **Date found:** 2026-09-20
-- **Area:** website share (home `og:image` + metadata)
+- **Date found:** 2026-09-22 (source: plan/13: A5, A7 partial, A10, C1, C2, C3, D1)
+- **Area:** analytics
 - **Priority:** P2
-- **Reported:** Owner finalised and approved a new home share design (supersedes the earlier
-  "do not touch" — this entry is the tracked build). Current home image is the old text-only
-  dynamic render; the approved design adds the pig icon, five product pillars, live totals and
-  the domain pill.
-- **Approved design:** ONE percentage-driven HTML template rendered by `next/og` for every
-  platform — master 1200×630 1.91:1 (`og:image` for all surfaces) · 1200×600 2:1
-  (`twitter:image`) · optional 1200×1200 1:1 (WhatsApp/iMessage thumb). Content (all inside the
-  safe zone): pig icon + `siteName` wordmark (SEO settings) · tagline "Quizzes · Riddles · Dad
-  Jokes · Image Puzzles · **Games**" (Games LAST, aligned with the stats line) · DYNAMIC stats
-  line "11,541 questions · 3,000 riddles · 1,013 jokes · 1,906 image puzzles · 8 games"
-  (live DB counts; count baked into the image URL so platforms refetch after content pushes) ·
-  "PIGZAP.COM" pill. Decorative emojis 🧠🧩😂🖼️ in the bleed (opacity .12–.16).
-- **Metadata (approved wording):** og:title "PigZap — Interactive Quizzes, Riddles & Dad Jokes" ·
-  og:description "Play interactive quizzes, brain-teasing riddles, dad jokes and image puzzles on
-  PigZap — test your knowledge and have fun!" · og:url https://pigzap.com · twitter:card
-  summary_large_image (+ twitter title/description/image).
-- **Implementation:** report WP0 (`designs/share-design-system-report.md`) — keep the dynamic
-  `opengraph-image.tsx` mechanism, swap in this template; embed the icon for next/og.
-- **Design references:** `designs/og-website-redesign-multiplatform.html` (all-platform template
-  render) · `og-website-design-format.html` (annotated spec sheet) · `og-website-share-demo.html`
-  (metadata + platform cards) · `og-website-1200x630.png` (reference render).
+- **Reported:** no content_viewed/search_performed events; resume-prompt decisions untracked; guest->registered anchor partial; no retention purge job; module has zero tests; 60s cache only; one stale doc section.
 
----
+### TASK-07 - Analytics deferred items (rationale recorded)
 
-- **Verified in code (2026-09-20) — STILL OPEN:** `opengraph-image.tsx` still renders the
-  old text-only design; the approved multi-platform template (WP0) is not applied yet.
+- **Date found:** 2026-09-22 (source: plan/13: funnels, accuracy join, retention tests, B6/B7)
+- **Area:** analytics
+- **Priority:** P3
+- **Reported:** additive once picked up; collection already in place.
 
----
+### TASK-08 - TODO/FIXME markers in source (10)
 
-## Template for new findings
+- **Date found:** 2026-09-22 (code scan)
+- **Area:** code cleanup
+- **Priority:** P3
 
-```markdown
+### TASK-09 - Games quality debt
+
+- **Date found:** 2026-09-22 (source: plan/games/\*)
+- **Area:** games
+- **Priority:** P3
+- **Reported:** AA contrast, reduced-motion variants, roving focus/arrow keys, daily-picture determinism, plus the owner""s 10-minute phone QA.
+
+### TASK-10 to TASK-17 - Owner decisions (scope choices)
+
+- **Date found:** 2026-09-22 (source: plan/05, 15, 07, audit, 01/12, 09)
+- **Priority:** P1-P3
+- **Reported:** dad-joke surfaces (saved jokes, JotD SSR, trending/share); SEO big rock (RSC landing pages, per-content routes+metadata, JSON-LD, per-module OG, audit panel, organic segmentation, robots control); comments on quiz/riddle; SEC-07 gate; SEC-10/12 guest token; H1 phase 2c grading; admin user-mgmt UI + dashboard unification; installability manifest.
+
+### TASK-18 to TASK-21 - Owner / VPS operations
+
+- **Date found:** 2026-09-22 (source: audit + plan/push-ownership-contract.md)
+- **Priority:** P1-P2
+- **Reported:** rotate credentials (admin/DB/Redis/JWT/OAuth) + SSH hardening + secret-history scan + audit logging; restrict origin firewall to Cloudflare IPs; off-box backups + restore drill; uptime/error alerting.
+
+### TASK-22 - R2 media follow-ups
+
+- **Date found:** 2026-09-22 (source: plan/17-r2-storage-setup.md)
+- **Area:** media
+- **Priority:** P2
+- **Reported:** confirm one admin Media upload end-to-end; move off r2.dev to a custom domain; rclone-migrate existing media; token hygiene.
+
+### TASK-23 - Deferred by owner (no action unless re-opened)
+
+- **Date found:** 2026-09-22 (various plans, marked deferred/owner-accepted)
+- **Priority:** P3
+- **Reported:** riddle-mcq session persistence / JSON import-export / cache tuning; image-riddle server-side progress; admin-dashboard unification; games R2-2/R2-3 extras; LinkedIn + Pinterest share previews.
+
 ### BUG-XXX — <title>
 
 - **Date found:** YYYY-MM-DD
@@ -100,4 +137,7 @@
 - **Priority:** P0–P3
 - **Reported:** <what is wrong, from the owner's or tester's view>
 - **Evidence:** <screenshot filenames / notes in `gui-test-screenshots/`>
+
+```
+
 ```
