@@ -630,8 +630,8 @@ export default function JokesPage(): JSX.Element {
               }
               url={
                 typeof window !== 'undefined'
-                  ? `${window.location.origin}/jokes?joke=${shareJoke.id}`
-                  : `/jokes?joke=${shareJoke.id}`
+                  ? `${window.location.origin}/jokes/${shareJoke.id}`
+                  : `/jokes/${shareJoke.id}`
               }
               saveNamespace="jokes"
               saveId={shareJoke.id}

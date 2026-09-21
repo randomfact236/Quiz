@@ -13,6 +13,7 @@ import {
   UseGuards,
   BadRequestException,
   Req,
+  NotFoundException,
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
@@ -116,6 +117,19 @@ export class DadJokesController {
     @Query() pagination: PaginationDto
   ): Promise<{ data: DadJoke[]; total: number }> {
     return this.jokesService.findJokesByCategory(id, pagination);
+  }
+
+  @_Public()
+  @Get('classic/:id')
+  @ApiOperation({ summary: 'Get a single published dad joke (SHARE-01 share card)' })
+  @ApiResponse({ status: 200, description: 'Returns the joke' })
+  @ApiResponse({ status: 404, description: 'Joke not found' })
+  async findOneClassic(@Param('id') id: string): Promise<DadJoke> {
+    const joke = await this.jokesService.findJokeById(id);
+    if (!joke) {
+      throw new NotFoundException('Joke not found');
+    }
+    return joke;
   }
 
   @_Public()

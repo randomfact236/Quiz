@@ -116,6 +116,16 @@ export const ogData = {
     return stats ? Number(stats.totalRiddleMcqs) || 0 : null;
   },
 
+  /** A single dad joke for the per-joke share card (SHARE-01). */
+  jokeShare: async (id: string): Promise<{ setup: string; punchline: string | null } | null> => {
+    if (!UUID_RE.test(id)) return null;
+    const raw = await fetchJson<{ setup?: string; punchline?: string | null }>(
+      `/jokes/classic/${id}`
+    );
+    if (!raw?.setup) return null;
+    return { setup: raw.setup, punchline: raw.punchline ?? null };
+  },
+
   /** Total published dad jokes (pagination total of the public classic list). */
   jokesTotal: async (): Promise<number | null> => {
     const page = await fetchJson<{ total: number }>('/jokes/classic?limit=1');

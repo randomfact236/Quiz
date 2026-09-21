@@ -74,6 +74,14 @@ export class DadJokesService {
     return { data, total };
   }
 
+  /** Public single joke (SHARE-01): used by the per-joke share card + metadata. */
+  async findJokeById(id: string): Promise<DadJoke | null> {
+    return this.jokeRepo.findOne({
+      where: { id, status: ContentStatus.PUBLISHED },
+      relations: ['category'],
+    });
+  }
+
   async findRandomJoke(): Promise<DadJoke> {
     // More efficient random selection using offset with count
     const count = await this.jokeRepo.count({

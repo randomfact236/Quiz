@@ -155,5 +155,9 @@ export async function GET(request: Request): Promise<Response> {
     // fall through to the generic joke/family image below
   }
 
-  return asFixedPng(new ImageResponse(<JokeShareImage />, OG_1200x630));
+  // SHARE-01: /og/joke/<id>.png renders the joke setup; the plain /og/joke.png
+  // (and any failure) keeps the generic family card.
+  const jokeId = searchParams.get('id') ?? '';
+  const jokeShare = jokeId ? await ogData.jokeShare(jokeId) : null;
+  return asFixedPng(new ImageResponse(<JokeShareImage setup={jokeShare?.setup} />, OG_1200x630));
 }

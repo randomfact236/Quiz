@@ -203,13 +203,14 @@ export function ResultShareImage({
 }
 
 /** Joke share (§3 #9): amber family template (the payload carries the joke). */
-export function JokeShareImage() {
+export function JokeShareImage({ setup }: { setup?: string | undefined } = {}) {
+  const jokeLine = (setup ?? '').trim().slice(0, 120);
   return (
     <Canvas family="joke">
-      <div style={{ fontSize: 150, lineHeight: 1.1 }}>😂</div>
-      <div style={{ marginTop: 18, fontSize: 66, fontWeight: 800 }}>Dad Jokes</div>
-      <div style={{ marginTop: 12, fontSize: 34, fontWeight: 600, opacity: 0.92 }}>
-        laugh out loud — new one every day
+      <div style={{ fontSize: jokeLine ? 110 : 150, lineHeight: 1.1 }}>😂</div>
+      <div style={{ marginTop: 18, fontSize: jokeLine ? 54 : 66, fontWeight: 800 }}>Dad Jokes</div>
+      <div style={{ marginTop: 12, fontSize: jokeLine ? 40 : 34, fontWeight: 600, opacity: 0.95 }}>
+        {jokeLine || 'laugh out loud - new one every day'}
       </div>
       <div style={{ marginTop: 18, fontSize: 26, opacity: 0.88 }}>pigzap.com/jokes</div>
     </Canvas>

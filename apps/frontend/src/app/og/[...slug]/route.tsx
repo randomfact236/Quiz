@@ -22,13 +22,17 @@ export async function GET(
   { params }: { params: Promise<{ slug: string[] }> }
 ): Promise<Response> {
   const { slug } = await params;
-  const [type = 'joke', ...rest] = slug;
   const strip = (value: string): string => value.replace(/\.png$/i, '');
+  const type = strip(slug[0] ?? 'joke');
+  const rest = slug.slice(1);
   const query = new URLSearchParams({ type });
   const last = strip(rest[rest.length - 1] ?? '');
 
   if (type === 'quiz-question' || type === 'riddle-question') {
     query.set('id', last);
+  } else if (type === 'joke') {
+    // /og/joke.png -> generic card; /og/joke/<id>.png -> that joke's setup
+    if (last) query.set('id', last);
   } else if (type === 'quiz-subject') {
     // optional "-<count>" suffix lets the URL change when content does
     const m = /^(.*)-(\d+)$/.exec(last);
