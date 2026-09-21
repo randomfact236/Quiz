@@ -240,7 +240,7 @@ export function ChallengeHub({
                                 {subject.name}
                               </span>
                               <span
-                                className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : config.showComingSoon && totalQuestions === 0 ? 'text-orange-500' : 'text-gray-500 dark:text-secondary-400 dark:text-secondary-400'}`}
+                                className={`text-xs mt-1 ${isExpanded ? 'text-white/80' : config.showComingSoon && totalQuestions === 0 ? 'text-orange-500' : 'text-gray-500 dark:text-secondary-400'}`}
                               >
                                 {config.showComingSoon && totalQuestions === 0
                                   ? 'Coming Soon'

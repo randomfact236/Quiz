@@ -35,7 +35,7 @@ function AchievementCard({
     >
       {/* Icon */}
       <div
-        className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full text-2xl ${achievement.unlocked ? 'bg-yellow-100 dark:bg-yellow-500/20 dark:bg-yellow-500/20' : 'bg-gray-200 dark:bg-secondary-700 dark:bg-secondary-700'}`}
+        className={`mb-3 flex h-12 w-12 items-center justify-center rounded-full text-2xl ${achievement.unlocked ? 'bg-yellow-100 dark:bg-yellow-500/20' : 'bg-gray-200 dark:bg-secondary-700'}`}
       >
         {achievement.unlocked ? (
           achievement.icon
@@ -46,7 +46,7 @@ function AchievementCard({
 
       {/* Name */}
       <h3
-        className={`mb-1 font-bold ${achievement.unlocked ? 'text-gray-900 dark:text-secondary-100 dark:text-secondary-50' : 'text-gray-500 dark:text-secondary-400 dark:text-secondary-400'}`}
+        className={`mb-1 font-bold ${achievement.unlocked ? 'text-gray-900 dark:text-secondary-100 dark:text-secondary-50' : 'text-gray-500 dark:text-secondary-400'}`}
       >
         {achievement.name}
       </h3>

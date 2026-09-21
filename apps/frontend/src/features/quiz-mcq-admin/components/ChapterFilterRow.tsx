@@ -21,7 +21,7 @@ export function ChapterFilterRow({
 }: ChapterFilterRowProps) {
   return (
     <div
-      className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${isSelected ? 'bg-indigo-500 border-indigo-600' : 'bg-white dark:bg-secondary-800 border-gray-300 dark:border-secondary-600 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:bg-indigo-500/10'}`}
+      className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${isSelected ? 'bg-indigo-500 border-indigo-600' : 'bg-white dark:bg-secondary-800 border-gray-300 dark:border-secondary-600 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10'}`}
     >
       <button
         onClick={onSelect}
@@ -29,7 +29,7 @@ export function ChapterFilterRow({
       >
         {chapter.name}
         <span
-          className={`ml-1 text-xs ${isSelected ? 'text-indigo-200' : 'text-gray-400 dark:text-secondary-400 dark:text-secondary-400'}`}
+          className={`ml-1 text-xs ${isSelected ? 'text-indigo-200' : 'text-gray-400 dark:text-secondary-400'}`}
         >
           ({count})
         </span>

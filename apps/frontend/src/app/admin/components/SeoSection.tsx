@@ -766,7 +766,7 @@ export function SeoSection(): JSX.Element {
             ) : (
               <table className="w-full min-w-[820px] text-left text-sm">
                 <thead>
-                  <tr className="border-b border-border bg-gray-950/60 text-xs uppercase tracking-wide text-gray-500 dark:text-secondary-400">
+                  <tr className="border-border bg-gray-950/60 text-xs uppercase tracking-wide text-gray-500 dark:text-secondary-400">
                     <th className="px-4 py-3">#</th>
                     <th className="px-4 py-3">Page</th>
                     <th className="px-4 py-3">Type</th>
@@ -782,7 +782,7 @@ export function SeoSection(): JSX.Element {
                     return (
                       <tr
                         key={row.path}
-                        className="border-b border-border/60 transition-colors last:border-0 hover:bg-gray-950/60"
+                        className="border-border/60 transition-colors last:border-0 hover:bg-gray-950/60"
                       >
                         <td className="px-4 py-3 text-gray-500 dark:text-secondary-400">{i + 1}</td>
                         <td className="px-4 py-3">

@@ -203,7 +203,7 @@ export default function JokeCommentsModal({
                   <button
                     onClick={() => void handleDelete(item.id)}
                     disabled={deletingIds.has(item.id)}
-                    className="shrink-0 rounded-full p-1 text-gray-300 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10 dark:hover:bg-red-500/10 hover:text-red-500 disabled:opacity-40"
+                    className="shrink-0 rounded-full p-1 text-gray-300 transition-colors hover:bg-red-200 dark:hover:bg-red-500/30 hover:text-red-500 disabled:opacity-40"
                     aria-label="Delete my reply"
                     title="Delete my reply"
                   >

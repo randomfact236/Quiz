@@ -21,7 +21,7 @@ export function SubjectFilterRow({
 }: SubjectFilterRowProps) {
   return (
     <div
-      className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${isSelected ? 'bg-purple-500 border-purple-600' : 'bg-white dark:bg-secondary-800 border-gray-300 dark:border-secondary-600 hover:bg-purple-200 dark:hover:bg-purple-500/30 dark:hover:bg-purple-500/10 dark:hover:bg-purple-500/10'}`}
+      className={`flex items-center gap-1 rounded-lg border px-2 py-1 transition-colors ${isSelected ? 'bg-purple-500 border-purple-600' : 'bg-white dark:bg-secondary-800 border-gray-300 dark:border-secondary-600 hover:bg-purple-200 dark:hover:bg-purple-500/30 dark:hover:bg-purple-500/10'}`}
     >
       <button
         onClick={onSelect}

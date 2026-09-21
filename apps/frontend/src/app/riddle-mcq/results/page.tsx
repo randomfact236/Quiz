@@ -195,7 +195,7 @@ function ResultsContent(): JSX.Element {
                     {level}
                   </p>
                   <p
-                    className={`text-2xl font-black ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
+                    className={`text-2xl font-black ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
                   >
                     {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                   </p>

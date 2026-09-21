@@ -513,7 +513,7 @@ export function JokesSection({
           {/* All Categories chip */}
           <button
             onClick={() => _setJokeFilterCategory('')}
-            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${jokeFilterCategory === '' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
+            className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${jokeFilterCategory === '' ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
           >
             All Categories <span className="opacity-70">({allJokes.length})</span>
           </button>
@@ -531,7 +531,7 @@ export function JokesSection({
                 <button
                   onClick={() => _setJokeFilterCategory(isActive ? '' : cat.name)}
                   disabled={isPendingDelete}
-                  className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${isActive ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700 dark:hover:bg-secondary-700'}`}
+                  className={`px-3 py-1.5 rounded-l-lg text-sm font-medium transition-colors ${isActive ? 'bg-green-500 text-white' : 'bg-gray-100 dark:bg-secondary-800 text-gray-700 dark:text-secondary-200 hover:bg-gray-200 dark:hover:bg-secondary-700'}`}
                 >
                   {cat.emoji} {cat.name} <span className="opacity-70">({count})</span>
                 </button>
@@ -577,7 +577,7 @@ export function JokesSection({
                     // Mark as pending — no timer, waits for user to confirm
                     setPendingCategoryDelete({ category: cat, originalStatuses });
                   }}
-                  className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${isActive ? 'bg-green-400 text-white hover:bg-red-400' : 'bg-gray-200 dark:bg-secondary-700 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-500/30 dark:hover:bg-red-500/10'}`}
+                  className={`px-1.5 py-1.5 rounded-r-lg transition-colors ${isActive ? 'bg-green-400 text-white hover:bg-red-400' : 'bg-gray-200 dark:bg-secondary-700 text-red-600 dark:text-red-300 hover:bg-red-200 dark:hover:bg-red-500/30'}`}
                   title={`Delete ${cat.name}`}
                 >
                   <Trash2 className="w-3.5 h-3.5" />
@@ -592,7 +592,7 @@ export function JokesSection({
               setCategoryForm({ name: '', emoji: '', description: '' });
               setShowAddCategoryModal(true);
             }}
-            className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-300 dark:border-indigo-500/40 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 dark:hover:bg-indigo-500/10 dark:hover:bg-indigo-500/10 transition-colors"
+            className="px-3 py-1.5 rounded-lg text-sm font-medium border-2 border-dashed border-indigo-300 dark:border-indigo-500/40 text-indigo-500 hover:border-indigo-500 hover:text-indigo-700 dark:hover:text-indigo-300 hover:bg-indigo-200 dark:hover:bg-indigo-500/30 transition-colors"
           >
             + Add Category
           </button>

@@ -311,13 +311,13 @@ function ResultsContent(): JSX.Element {
               return (
                 <div
                   key={level}
-                  className={`rounded-xl p-3 text-center ${data.total === 0 ? 'bg-gray-100 dark:bg-secondary-800 dark:bg-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10 dark:bg-green-500/10' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10 dark:bg-yellow-500/10' : 'bg-red-50 dark:bg-red-500/10 dark:bg-red-500/10'}`}
+                  className={`rounded-xl p-3 text-center ${data.total === 0 ? 'bg-gray-100 dark:bg-secondary-800' : pct >= 70 ? 'bg-green-50 dark:bg-green-500/10' : pct >= 50 ? 'bg-yellow-50 dark:bg-yellow-500/10' : 'bg-red-50 dark:bg-red-500/10'}`}
                 >
                   <p className="mb-1 text-xs font-medium uppercase text-gray-500 dark:text-secondary-400">
                     {level}
                   </p>
                   <p
-                    className={`text-xl font-bold ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
+                    className={`text-xl font-bold ${data.total === 0 ? 'text-gray-400 dark:text-secondary-400' : pct >= 70 ? 'text-green-600 dark:text-green-300' : pct >= 50 ? 'text-yellow-600 dark:text-yellow-300' : 'text-red-600 dark:text-red-300'}`}
                   >
                     {data.total === 0 ? '-' : `${data.correct}/${data.total}`}
                   </p>
