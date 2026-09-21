@@ -22,7 +22,24 @@ import { RiddleMcqCategory } from '../../riddle-mcq/entities/riddle-category.ent
  */
 jest.setTimeout(60000);
 
-describe('duplicate detection (integration)', () => {
+// These are integration tests: they require the gitignored backend .env and a
+// running local Postgres. When that config is absent - e.g. in CI, which has no
+// database - the suite skips itself instead of failing the whole run. Run it
+// locally with the dev database up: docker-compose -f docker-compose.local.yml up -d
+const REQUIRED_DB_ENV = ['DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_DATABASE'];
+
+const hasLocalDatabaseConfig = (): boolean => {
+  try {
+    const env = readFileSync('.env', 'utf8');
+    return REQUIRED_DB_ENV.every((k) => env.split(/\r?\n/).some((l) => l.startsWith(`${k}=`)));
+  } catch {
+    return false;
+  }
+};
+
+const describeIntegration = hasLocalDatabaseConfig() ? describe : describe.skip;
+
+describeIntegration('duplicate detection (integration)', () => {
   let dataSource: DataSource;
   let quizService: QuizMcqService;
   let riddleImport: RiddleMcqImportService;
