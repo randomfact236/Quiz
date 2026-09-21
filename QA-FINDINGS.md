@@ -11,7 +11,7 @@
 
 | ID      | Title                                                          | Area                      | Priority | Status   |
 | ------- | -------------------------------------------------------------- | ------------------------- | -------- | -------- |
-| BUG-005 | Legal pages not finalized                                      | Legal pages               | P1       | Deferred |
+| BUG-005 | Legal pages not finalized                                      | Legal pages               | P1       | Resolved |
 | BUG-037 | Question like buckets: 1-like / 2-like / 3+-like containers    | quiz-mcq / riddle-mcq     | P2       | Fixed    |
 | BUG-038 | Client-side exception while loading ("Application error")      | Frontend (global)         | P1       | Resolved |
 | BUG-039 | Mode selection: pre-open all levels in both modes              | quiz-mcq mode picker      | P2       | Fixed    |
@@ -36,7 +36,7 @@
 
 ## Audit snapshot — 2026-09-21 (all open engagement bugs fixed and verified)
 
-Full tracker: **20 findings tracked — 18 Fixed/Resolved · 1 Deferred · 1 Open (BUG-042, content
+Full tracker: **20 findings tracked — 19 Fixed/Resolved · 1 Open (BUG-042, content
 side already shipped in CSVs — kept Open only pending owner confirmation of the live data).**
 
 - **Fixed in the 2026-09-20/21 social + share wave (all GUI-verified):**
@@ -49,8 +49,9 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Also fixed in the same wave:** comment timestamps migrated to timestamptz (fresh comments no
   longer display ~5h45m old); share images render the real pig logo (SVG rasterized to PNG for
   next/og) and the 🧩 riddle chip per design tokens.
-- **Deferred:** BUG-005 (legal pages — owner sign-off only)
-- **Fixed/Resolved (18):** BUG-037–BUG-055 except BUG-042 (Open) and BUG-005 (Deferred), plus
+- **Deferred:** none - BUG-005 signed off 2026-09-21.
+- **BUG-005 resolved (2026-09-21) - legal review + sign-off:** copy re-verified against the shipped implementation: Google Analytics loads only after consent (CookieConsent gate, anonymize_ip), first-party play analytics store a /24 (IPv4) / /48 (IPv6) anonymized IP, the guest ID is a random localStorage value with no PII, newsletter unsubscribe is live (idempotent endpoint), and /contact is a real mailto page. No placeholder copy remains. Non-blocking additions the owner may still want later: governing-law / legal-entity / minimum-age clauses in Terms; retention + children's-privacy notes in Privacy; the banner's marketing toggle is future-only (no marketing cookies are set today, so the Privacy wording stays accurate).
+- **Fixed/Resolved (19):** BUG-037–BUG-055 except BUG-042 (Open) and BUG-005 (Resolved), plus
   BUG-038.
 - **Related non-bug work — remaining share-design packages:** WP2 (per-game accent OG images),
   WP3 (share-count events), WP4 (riddle results screen), WP5 (answer-reveal share, optional) —
@@ -59,18 +60,6 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 ---
 
 ## Open
-
-### BUG-005 — Legal pages not finalized
-
-- **Date found:** 2026-09-16
-- **Area:** Legal pages
-- **Priority:** P1
-- **Reported:** Legal pages need to be finalized (content review + sign-off).
-- **Status:** DEFERRED by owner (2026-09-17). Drafts were completed 2026-09-16 — the
-  PLACEHOLDER banners are gone and both pages carry full copy reflecting the site's actual
-  practices (guest IDs, account data, first-party truncated-IP analytics, local-storage
-  prefs, newsletter, comments). Re-opens only for the final legal review + sign-off when
-  the owner resumes it.
 
 ### BUG-037 — Question like buckets: 1-like / 2-like / 3+-like containers
 
