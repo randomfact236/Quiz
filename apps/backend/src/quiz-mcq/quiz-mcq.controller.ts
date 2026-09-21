@@ -28,6 +28,8 @@ import {
 } from '@nestjs/swagger';
 import { IsOptional, IsString } from 'class-validator';
 
+import { CreateChapterDto, UpdateChapterDto } from './dto/chapter.dto';
+
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 import { ContentStatus } from '../common/enums/content-status.enum';
@@ -299,7 +301,7 @@ export class QuizMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Create new chapter (Admin only)' })
-  async createChapter(@Body() dto: { name: string; subjectId: string }): Promise<Chapter> {
+  async createChapter(@Body() dto: CreateChapterDto): Promise<Chapter> {
     return this.quizService.createChapter(dto.name, dto.subjectId);
   }
 
@@ -308,10 +310,7 @@ export class QuizMcqController {
   @Roles('admin')
   @ApiBearerAuth()
   @ApiOperation({ summary: 'Update chapter (Admin only)' })
-  async updateChapter(
-    @Param('id') id: string,
-    @Body() dto: { name?: string; subjectId?: string }
-  ): Promise<Chapter> {
+  async updateChapter(@Param('id') id: string, @Body() dto: UpdateChapterDto): Promise<Chapter> {
     return this.quizService.updateChapter(id, dto);
   }
 

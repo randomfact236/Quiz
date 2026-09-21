@@ -16,6 +16,8 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
 
+import { VoteClassicDto } from './dto/vote-classic.dto';
+
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
@@ -126,20 +128,20 @@ export class DadJokesController {
   @ApiResponse({ status: 400, description: 'Invalid vote type' })
   voteClassic(
     @Param('id') id: string,
-    @Body() body: { voteType: 'like' | 'dislike'; remove?: boolean; guestId?: string },
+    @Body() dto: VoteClassicDto,
     @Req() req?: any
   ): Promise<DadJoke> {
-    if (!body?.voteType) {
+    if (!dto?.voteType) {
       throw new BadRequestException('voteType is required');
     }
     // Per-voter persistence (plan/05-dad-jokes.md P1 #1): logged-in users vote
     // under their userId, anonymous voters under the client-issued guestId.
     const voterKey = req?.user?.id
       ? (`user:${req.user.id}` as const)
-      : body.guestId
-        ? (`guest:${body.guestId}` as const)
+      : dto.guestId
+        ? (`guest:${dto.guestId}` as const)
         : undefined;
-    return this.jokesService.voteForJoke(id, body.voteType, body.remove === true, voterKey);
+    return this.jokesService.voteForJoke(id, dto.voteType, dto.remove === true, voterKey);
   }
 
   // ==================== CLASSIC FORMAT - ADMIN ====================

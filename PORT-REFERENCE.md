@@ -1,19 +1,19 @@
 # AI Quiz Platform - Port Reference
 
 **Version:** 2.0 - Merged  
-**Last Updated:** 2026-03-17  
+**Last Updated:** 2026-09-21  
 **Project:** AI Quiz Platform (NestJS + Next.js + PostgreSQL + Redis)
 
 ---
 
 ## 📋 Quick Reference
 
-| Port | Service | Status | Purpose |
-|------|---------|--------|---------|
-| **3010** | Frontend (Next.js) | ✅ Active | Main frontend development server |
-| **3012** | Backend API (NestJS) | ✅ Active | REST API server |
-| **5432** | PostgreSQL | ✅ Active | Primary database |
-| **6379** | Redis | ✅ Active | Cache layer |
+| Port     | Service              | Status    | Purpose                          |
+| -------- | -------------------- | --------- | -------------------------------- |
+| **3010** | Frontend (Next.js)   | ✅ Active | Main frontend development server |
+| **3012** | Backend API (NestJS) | ✅ Active | REST API server                  |
+| **5432** | PostgreSQL           | ✅ Active | Primary database                 |
+| **6379** | Redis                | ✅ Active | Cache layer                      |
 
 ---
 
@@ -21,12 +21,12 @@
 
 These **4 ports** are required and currently in use:
 
-| Port | Service | Status | Description |
-|------|---------|--------|-------------|
+| Port     | Service            | Status    | Description   |
+| -------- | ------------------ | --------- | ------------- |
 | **3010** | Frontend (Next.js) | ✅ Active | Main frontend |
-| **3012** | Backend (NestJS) | ✅ Active | API server |
-| **5432** | PostgreSQL | ✅ Active | Database |
-| **6379** | Redis | ✅ Active | Cache |
+| **3012** | Backend (NestJS)   | ✅ Active | API server    |
+| **5432** | PostgreSQL         | ✅ Active | Database      |
+| **6379** | Redis              | ✅ Active | Cache         |
 
 ### Port 3010 - Frontend (Next.js)
 
@@ -116,3 +116,21 @@ The following ports are mentioned in documentation but are **NOT required**:
 
 - ✅ 4/4 required ports configured
 - ✅ Website works with ports 3010, 3012, 5432, 6379
+
+---
+
+## Production & staging host mappings (docker-compose.prod.yml / staging)
+
+Production runs behind the Dokploy proxy + Cloudflare; these host ports exist only for
+loopback debugging and are bound to `127.0.0.1` so they are **not** reachable from the
+public internet (see the audit H6 fix, 2026-09-21).
+
+| Host port | Container | Service     | Notes                                                          |
+| --------- | --------- | ----------- | -------------------------------------------------------------- |
+| **4004**  | 3012      | Backend API | Prod only, bound to 127.0.0.1; domains route via Dokploy       |
+| **3001**  | 3010      | Frontend    | Prod only, bound to 127.0.0.1; domains route via Dokploy       |
+| **3013**  | 3012      | Backend API | Staging (`docker-compose.staging.yml`) - staging is not in use |
+| **3011**  | 3010      | Frontend    | Staging - not in use                                           |
+
+Local development uses 3010/3012 (see the tables above). Scripts that probe the prod stack
+(`deploy.ps1`, `deploy.sh`) must use 4004/3001.

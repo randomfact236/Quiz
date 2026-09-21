@@ -277,6 +277,30 @@ function SubjectSelection(): JSX.Element {
   const questionCounts = countsQuery.data?.bySubject ?? {};
   const isLoading = subjectsQuery.isPending || countsQuery.isPending;
 
+  // FE-01: an API failure must not render a silent, near-empty hub.
+  if (subjectsQuery.isError || countsQuery.isError) {
+    return (
+      <div className="mx-auto max-w-2xl rounded-2xl bg-white/95 p-8 text-center shadow-lg dark:bg-secondary-800/95">
+        <p className="text-lg font-bold text-secondary-900 dark:text-white">
+          Couldn&apos;t load the quiz subjects
+        </p>
+        <p className="mt-1 text-sm text-secondary-500 dark:text-secondary-400">
+          Something went wrong talking to the server. Check your connection and try again.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            void subjectsQuery.refetch();
+            void countsQuery.refetch();
+          }}
+          className="mt-4 rounded-lg bg-primary-600 px-4 py-2 font-medium text-white transition-colors hover:bg-primary-700"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
+
   if (isLoading) {
     return (
       <div>
@@ -446,6 +470,30 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
   }, [chapterList, countsQuery.data]);
 
   const isLoading = subjectQuery.isPending || countsQuery.isPending;
+
+  // FE-01: surface an API failure instead of a silent empty chapter list.
+  if (subjectQuery.isError || countsQuery.isError) {
+    return (
+      <div className="mx-auto max-w-2xl rounded-2xl bg-white/95 p-8 text-center shadow-lg dark:bg-secondary-800/95">
+        <p className="text-lg font-bold text-secondary-900 dark:text-white">
+          Couldn&apos;t load the chapters
+        </p>
+        <p className="mt-1 text-sm text-secondary-500 dark:text-secondary-400">
+          Something went wrong talking to the server. Try again.
+        </p>
+        <button
+          type="button"
+          onClick={() => {
+            void subjectQuery.refetch();
+            void countsQuery.refetch();
+          }}
+          className="mt-4 rounded-lg bg-primary-600 px-4 py-2 font-medium text-white transition-colors hover:bg-primary-700"
+        >
+          Try again
+        </button>
+      </div>
+    );
+  }
 
   if (isLoading && chapters.length === 0) {
     return (

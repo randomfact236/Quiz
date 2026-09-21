@@ -317,7 +317,7 @@ docker exec quiz-postgres psql -U aiquiz -d aiquiz -c "\dt"
 docker exec quiz-postgres psql -U aiquiz -d aiquiz -c "INSERT INTO users (email, password, name, role, \"createdAt\", \"updatedAt\") VALUES ('admin@aiquiz.com', '\$2b\$12\$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/LewKyDAF3Dj/T1LGS', 'Admin User', 'admin', NOW(), NOW());"
 ```
 
-Password: `admin123`
+Password: `CHANGE_ME_strong_password`
 
 ### Reset database (delete and recreate)
 
@@ -328,7 +328,7 @@ docker exec quiz-postgres dropdb -U aiquiz aiquiz && docker exec quiz-postgres c
 ### Create Admin via CLI (npm)
 
 ```bash
-docker exec quiz-backend sh -c "cd /app/apps/backend && npm run create-admin -- --email=admin@aiquiz.com --password=admin123"
+docker exec quiz-backend sh -c "cd /app/apps/backend && npm run create-admin -- --email=admin@aiquiz.com --password=CHANGE_ME_strong_password"
 ```
 
 ---
@@ -392,7 +392,7 @@ DB_DATABASE: aiquiz
 3. **Create admin account (if no admin exists):**
 
    ```bash
-   cd apps/backend && npm run create-admin -- --email=admin@aiquiz.com --password=admin123
+   cd apps/backend && npm run create-admin -- --email=admin@aiquiz.com --password=CHANGE_ME_strong_password
    ```
 
 4. **Check backend logs for errors:**

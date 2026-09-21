@@ -16,6 +16,7 @@ import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
 
 import { UsersService } from './users.service';
+import { ProfileUpdateDto } from './dto/profile-update.dto';
 
 /**
  * Interface for authenticated user in request
@@ -31,14 +32,6 @@ interface RequestUser {
  */
 interface AuthenticatedRequest extends Request {
   user?: RequestUser;
-}
-
-/**
- * Interface for profile update data
- */
-interface ProfileUpdateData {
-  name?: string;
-  avatar?: string;
 }
 
 @ApiTags('Users')
@@ -82,7 +75,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Update user profile' })
   async updateProfile(
     @Request() req: AuthenticatedRequest,
-    @Body() data: ProfileUpdateData
+    @Body() data: ProfileUpdateDto
   ): Promise<unknown> {
     if (!req.user?.id) {
       throw new UnauthorizedException('User not authenticated');

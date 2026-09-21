@@ -5,6 +5,10 @@ services:
   postgres:
     image: postgres:15-alpine
     container_name: quiz-postgres
+    deploy:
+      resources:
+        limits:
+          memory: 1g
     restart: unless-stopped
     environment:
       POSTGRES_USER: aiquiz
@@ -23,6 +27,10 @@ services:
   redis:
     image: redis:7-alpine
     container_name: quiz-redis
+    deploy:
+      resources:
+        limits:
+          memory: 256m
     restart: unless-stopped
     command: ['redis-server', '--requirepass', '${REDIS_PASSWORD:?set REDIS_PASSWORD in .env}']
     environment:
@@ -40,6 +48,10 @@ services:
       context: .
       dockerfile: apps/backend/Dockerfile
     container_name: quiz-backend
+    deploy:
+      resources:
+        limits:
+          memory: 768m
     restart: unless-stopped
     # Host port for direct-IP access/debugging only — domain traffic routes via
     # the Dokploy proxy over the internal network, not through this mapping.
@@ -91,6 +103,10 @@ services:
         NEXT_PUBLIC_API_URL: https://api.pigzap.com/api/v1
         NEXT_PUBLIC_IMAGE_HOSTS: api.pigzap.com
     container_name: quiz-frontend
+    deploy:
+      resources:
+        limits:
+          memory: 512m
     restart: unless-stopped
     # Container port is 3010, NOT Next's default 3000: the Dockerfile sets
     # ENV PORT=3010 / EXPOSE 3010 and package.json runs "next start -p 3010".

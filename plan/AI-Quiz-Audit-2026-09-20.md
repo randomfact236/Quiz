@@ -211,30 +211,32 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inline payloads (dad-joke votes, chapter create/update, PUT /users/profile); SEC-06 password policy; OPS-05 container memory limits; OPS-13 broken docker-startup scripts deleted; OPS-20 docs corrected (PORT-REFERENCE prod/staging ports, sample admin password removed); FE-01 error+retry states on the quiz hub; 6.4 production runbook created.
+
 - **Fixed:** H2, H3, H5, H7, SEC-05, SEC-09 (admin users), SEC-08 (newsletter/unsubscribe DTO), OPS-03 (stale `/api/health` in 5 scripts + DEPLOYMENT.md), OPS-07 (`REDIS_PASSWORD` documented in `.env.production.example`), BE-10 (obsolete `repair-quiz-subject.py` deleted), cosmetic #1 (`--font-inter` wired into Tailwind).
 - **Partially fixed:** H6 (compose loopback; live exposure + firewall = owner/VPS), H8 (CSP shipped; nonces + token storage = follow-up), SEC-08 (3 more inline-`@Body()` endpoints).
 - **Open - owner decisions:** H1 (needs the server-side-grading decision before stripping answer columns - naive removal breaks client-side scoring), H4 (run `content:push` to completion; owner says no content changed - a dry run would verify), H9 (credential rotation + git-history scrub).
 
 ### 6.2 Should-fix immediately after
 
-- [ ] SEC-06 password policy ≥ 8 + breach check; SEC-07 decide email-verification gate
+- [x] SEC-06 password policy ≥ 8 + breach check; SEC-07 decide email-verification gate - PARTIAL 2026-09-21: policy now >=8 + letter+digit on register/reset (login capped); breach-list check remains.
 - [ ] SEC-11 shared throttler storage + mandate `TRUST_PROXY` in every deploy path
 - [ ] SEC-10/SEC-12 bind anonymous writes to a server-signed guest token
-- [ ] OPS-05 container resource limits; OPS-07 add `REDIS_PASSWORD` to the prod template; OPS-06 prune prod images
+- [x] OPS-05 container resource limits; OPS-07 add `REDIS_PASSWORD` to the prod template; OPS-06 prune prod images - PARTIAL 2026-09-21: per-service memory limits added to docker-compose.prod.yml; OPS-06 (prune prod images) remains.
 - [ ] OPS-14 add gitleaks + CodeQL + (optional) blocking critical `npm audit`
-- [ ] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"`
+- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21: error + retry states added to the quiz hub subject/chapter queries; fake-link/a11y/canonical items remain.
 - [ ] BE-09 run the CSV leakage/ambiguity repairs and re-audit
 
 ### 6.3 Backlog / quality
 
 - [ ] BE-11 backend specs for analytics, duels, question-likes, riddle-mcq; raise the coverage threshold
 - [ ] BE-02 single `CacheModule` import; BE-03/05 batch writes; BE-06 family-scoped invalidation
-- [ ] OPS-13/18 rewrite or delete the broken docker-startup / port-security scripts; OPS-12/24 delete orphaned entrypoint + root Dockerfile
+- [x] OPS-13/18 rewrite or delete the broken docker-startup / port-security scripts; OPS-12/24 delete orphaned entrypoint + root Dockerfile - PARTIAL 2026-09-21: broken docker-startup.ps1/.sh deleted; port-security scripts untouched.
 - [ ] OPS-19 off-box backup replication + documented restore drills
 - [ ] OPS-21 uptime/error alerting + incident/rollback runbook
 - [ ] Cosmetics §5
 
-### 6.4 Single authoritative Production Runbook (currently missing)
+### 6.4 Single authoritative Production Runbook (created 2026-09-21 - docs/production-runbook.md)
 
 Create one doc covering: **secret rotation** (prod admin/DB/Redis/JWT/OAuth + git-history decision), **rollback** (pin a known-good image/commit), **incident response**, **origin-firewall / Cloudflare-IP** steps, **monitoring/log-retention**, and the **CI/CD topology** (`main → production → auto-deploy`, Dependabot policy). Consolidate `DEPLOYMENT.md` + `docs/cloudflare-config-runbook.md` + `CONTENT-PUSH-RUNBOOK.md` + `PORT-REFERENCE.md`, and correct the stale/contradictory content (retired Dokploy stack, `admin123` sample, wrong health paths, missing prod ports).
 
