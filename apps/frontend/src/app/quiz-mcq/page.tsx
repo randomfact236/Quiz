@@ -13,7 +13,7 @@
 import type { Metadata } from 'next';
 
 import { formatCount, ogData } from '@/lib/og-data';
-import { MODULE_META } from '@/lib/seo';
+import { APP_URL, MODULE_META } from '@/lib/seo';
 
 import QuizHubView from './QuizHubView';
 
@@ -41,10 +41,14 @@ export async function generateMetadata({
     if (share) {
       const title = `Can you answer this? 🧠 ${share.subjectName} Quiz`;
       const image = `/api/og?type=quiz-question&id=${questionId}`;
+      // Self-canonical + og:url: scrapers obey rel=canonical, so pointing it at
+      // /quiz-mcq made Facebook preview the hub instead of this question card.
+      const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&q=${questionId}`;
       return {
         ...MODULE_META['quiz-mcq'],
         title,
-        openGraph: { title, images: [image] },
+        alternates: { canonical: url },
+        openGraph: { title, url, images: [image] },
         twitter: { title, images: [image] },
       };
     }
@@ -56,10 +60,12 @@ export async function generateMetadata({
     const name = meta?.name ?? 'Quiz';
     const title = `I scored ${score}/${total} on ${name} — beat you! 🧠`;
     const image = `/api/og?type=quiz-result&subject=${encodeURIComponent(subject)}&score=${score}&total=${total}`;
+    const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&score=${score}&total=${total}`;
     return {
       ...MODULE_META['quiz-mcq'],
       title,
-      openGraph: { title, images: [image] },
+      alternates: { canonical: url },
+      openGraph: { title, url, images: [image] },
       twitter: { title, images: [image] },
     };
   }
@@ -78,10 +84,12 @@ export async function generateMetadata({
       const image = `/api/og?type=quiz-subject&subject=${encodeURIComponent(subject)}${
         count !== undefined ? `&v=${count}` : ''
       }`;
+      const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}`;
       return {
         ...MODULE_META['quiz-mcq'],
         title,
-        openGraph: { title, images: [image] },
+        alternates: { canonical: url },
+        openGraph: { title, url, images: [image] },
         twitter: { title, images: [image] },
       };
     }

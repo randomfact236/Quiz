@@ -13,7 +13,7 @@
 import type { Metadata } from 'next';
 
 import { ogData } from '@/lib/og-data';
-import { MODULE_META } from '@/lib/seo';
+import { APP_URL, MODULE_META } from '@/lib/seo';
 
 import RiddlesHubView from './RiddlesHubView';
 
@@ -40,10 +40,13 @@ export async function generateMetadata({
       const base = share.subjectName || 'Riddles';
       const title = `Can you solve this riddle? 🧩 ${base}`;
       const image = `/api/og?type=riddle-question&id=${questionId}`;
+      // Self-canonical + og:url (see quiz-mcq page): scrapers obey rel=canonical.
+      const url = `${APP_URL}/riddle-mcq?q=${questionId}`;
       return {
         ...MODULE_META['riddle-mcq'],
         title,
-        openGraph: { title, images: [image] },
+        alternates: { canonical: url },
+        openGraph: { title, url, images: [image] },
         twitter: { title, images: [image] },
       };
     }
@@ -56,10 +59,12 @@ export async function generateMetadata({
     if (match) {
       const title = `Riddles · ${match.name} — brain teasers`;
       const image = `/api/og?type=riddle-category&category=${encodeURIComponent(category)}`;
+      const url = `${APP_URL}/riddle-mcq?category=${encodeURIComponent(category)}`;
       return {
         ...MODULE_META['riddle-mcq'],
         title,
-        openGraph: { title, images: [image] },
+        alternates: { canonical: url },
+        openGraph: { title, url, images: [image] },
         twitter: { title, images: [image] },
       };
     }
