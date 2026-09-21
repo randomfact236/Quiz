@@ -211,6 +211,8 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 4 (2026-09-21): BE-02 single global CacheModule (boot-verified); cosmetics #9 consent banner no longer overlaps the mobile bottom nav.
+Wave 3 (2026-09-21): FE-02/03 fake-link + focus fixes, canonicals on 5 static pages, menubar role removed, OPS-14 gitleaks job in CI.
 Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inline payloads (dad-joke votes, chapter create/update, PUT /users/profile); SEC-06 password policy; OPS-05 container memory limits; OPS-13 broken docker-startup scripts deleted; OPS-20 docs corrected (PORT-REFERENCE prod/staging ports, sample admin password removed); FE-01 error+retry states on the quiz hub; 6.4 production runbook created.
 
 - **Fixed:** H2, H3, H5, H7, SEC-05, SEC-09 (admin users), SEC-08 (newsletter/unsubscribe DTO), OPS-03 (stale `/api/health` in 5 scripts + DEPLOYMENT.md), OPS-07 (`REDIS_PASSWORD` documented in `.env.production.example`), BE-10 (obsolete `repair-quiz-subject.py` deleted), cosmetic #1 (`--font-inter` wired into Tailwind).
@@ -230,7 +232,7 @@ Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inlin
 ### 6.3 Backlog / quality
 
 - [ ] BE-11 backend specs for analytics, duels, question-likes, riddle-mcq; raise the coverage threshold
-- [ ] BE-02 single `CacheModule` import; BE-03/05 batch writes; BE-06 family-scoped invalidation
+- [x] BE-02 single `CacheModule` import; BE-03/05 batch writes; BE-06 family-scoped invalidation - PARTIAL 2026-09-21 (wave 4): CacheModule registered once in AppModule, per-module CacheService providers removed (verified by a full app boot in prod); BE-03/05/06 remain.
 - [x] OPS-13/18 rewrite or delete the broken docker-startup / port-security scripts; OPS-12/24 delete orphaned entrypoint + root Dockerfile - PARTIAL 2026-09-21: broken docker-startup.ps1/.sh deleted; port-security scripts untouched.
 - [ ] OPS-19 off-box backup replication + documented restore drills
 - [ ] OPS-21 uptime/error alerting + incident/rollback runbook
