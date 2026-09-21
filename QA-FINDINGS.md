@@ -38,6 +38,7 @@
 | BUG-061   | FB "Corrupted Image": share PNGs streamed without Content-Length    | share / OG (headers)      | P1       | Fixed 2026-09-21  |
 | BUG-062   | FB showed the small icon card (og:image:width/height missing)       | share / OG (meta)         | P1       | Fixed 2026-09-21  |
 | BUG-063   | FB still showed the icon for /api/og?...&v=N (query-string path)    | share / OG (image path)   | P1       | Fixed 2026-09-21  |
+| BUG-064   | Image-riddle / joke share copied the section link, not the item     | share (copy link)         | P2       | Fixed 2026-09-21  |
 | DEFER-01  | LinkedIn + Pinterest share previews (deferred by owner)             | share / social previews   | P3       | Deferred - no ETA |
 | BUG-056   | Integrate Google Search Console (data API) into the website         | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                            | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
@@ -152,6 +153,16 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Root cause (working theory, evidence-backed):** every failing image lived at `/api/og?type=...&id=...&v=N` (a query string under `/api`), while the one image FB always rendered - the home card - lives at a plain path `/opengraph-image` with no query string. Same bytes, headers and metadata on both.
 - **Fix (e799c90):** the generator is exposed at `/og/quiz-question/<id>.png`, `/og/riddle-question/<id>.png`, `/og/quiz-subject/<slug>[-<count>].png`, `/og/riddle-category/<slug>.png`, `/og/quiz-result/<subject>/<score>-<total>.png`, `/og/joke.png`; the new route delegates to the existing `/api/og` renderer. All share metadata points at the clean path.
 - **Verified live:** all clean paths return 200 image/png with an explicit Content-Length; the page emits `og:image` (clean path) + `og:image:width/height` + `og:type`.
+
+### BUG-064 - image-riddle / dad-joke share copied the section link instead of the item
+
+- **Date found:** 2026-09-21 (owner: "when I copy the link the whole image riddle link is copied, not the individual image link - same in dad jokes")
+- **Area:** share (copy link) - `app/jokes/page.tsx`, `app/image-riddles/page.tsx`, `features/image-riddles/components/RiddleModal.tsx`
+- **Priority:** P2
+- **Root cause:** `ShareMenu` falls back to `window.location.href` when no `url` prop is given, and none of the joke/image-riddle share menus passed one - so they copied `/jokes` / `/image-riddles`. (Quiz play, riddle play and the games share all pass an explicit per-item URL, which is why those were fine.)
+- **Fix (c90da6b):** all three spots now pass `/jokes?joke=<id>` and `/image-riddles?riddle=<id>`.
+- **Verified:** build + 553/553 tests; `/jokes`, `/image-riddles` and both `?<param>` variants return 200 in production.
+- **Still open (follow-up):** those pages do not yet _open/highlight_ the item from the param, and neither section has a per-item preview card yet (design rows #8 image-riddle + a per-joke card; also #5 riddle-category wiring, #7 riddle-result).
 
 ### DEFER-01 - LinkedIn + Pinterest share previews (deferred by owner, 2026-09-21)
 
