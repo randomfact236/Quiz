@@ -31,6 +31,7 @@
 | BUG-053   | Feedback inside games when paused or at game over              | static games (pause/over) | P2       | Fixed             |
 | BUG-054   | Riddle-mcq has no like, comment or share options               | riddle-mcq questions      | P2       | Fixed             |
 | BUG-055   | Home share image: build approved multi-platform design (WP0)   | website share (home)      | P2       | Fixed             |
+| BUG-057   | Riddle question share image returned 502 (no preview)          | share / OG (riddle)       | P1       | Fixed 2026-09-21  |
 | BUG-056   | Integrate Google Search Console (data API) into the website    | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                       | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs               | ops / VPS                 | P1       | Open (owner)      |
@@ -72,6 +73,16 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 ---
 
 ## Open
+
+### BUG-057 - Riddle question share image returned 502
+
+- **Date found:** 2026-09-21
+- **Area:** share / OG (riddle question, `/api/og?type=riddle-question`)
+- **Priority:** P1
+- **Reported:** Sharing a riddle link showed no preview image at all.
+- **Root cause:** the riddle share endpoint (`/riddle-mcq/questions/:id/share`) serialises `options` as a JSON **string** while the quiz one sends an **array**. `QuestionShareImage` iterates the list, so the lazy satori render threw and the proxy surfaced it as **502** - the image never rendered. The route's try/catch could not help: `ImageResponse` renders lazily, after the handler returns.
+- **Fix (64e5168):** `og-data.ts` normalises `options` to `string[]` for both `quizQuestionShare` and `riddleQuestionShare` (array passthrough / JSON.parse / [] fallback).
+- **Verified:** `/api/og?type=riddle-question&id=<uuid>` returns **200 / image/png (~203 KB)** in production; quiz-question, quiz-subject and the home OG image all still 200. **Not** a design problem - BUG-055 (the home share design) was fine; this was the riddle card's data shape.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
