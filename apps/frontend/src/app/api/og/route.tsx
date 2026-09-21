@@ -27,6 +27,22 @@ import {
 } from '@/components/og/share-templates';
 import { formatCount, ogData } from '@/lib/og-data';
 
+/**
+ * Facebook's crawler rejects a chunked PNG that has no Content-Length as a
+ * "corrupted image" - which silently killed every share preview even though the
+ * bytes were a valid PNG. Buffer the render and answer with an explicit length.
+ */
+async function asFixedPng(image: ImageResponse): Promise<Response> {
+  const buffer = await image.arrayBuffer();
+  return new Response(buffer, {
+    status: 200,
+    headers: {
+      'Content-Type': 'image/png',
+      'Content-Length': String(buffer.byteLength),
+      'Cache-Control': 'public, max-age=31536000, immutable, no-transform',
+    },
+  });
+}
 export async function GET(request: Request): Promise<Response> {
   const { searchParams } = new URL(request.url);
   const type = searchParams.get('type') ?? 'joke';
@@ -42,32 +58,36 @@ export async function GET(request: Request): Promise<Response> {
         const count = counts?.bySubject[slug];
         const emoji = meta?.emoji ?? '🌍';
         const name = meta?.name ?? 'Quiz';
-        return new ImageResponse(
-          SubjectShareImage({
-            family: 'quiz',
-            emoji,
-            title:
-              count !== undefined
-                ? `${name} Quiz — ${formatCount(count)} Questions`
-                : `${name} Quiz`,
-            hook: 'play now → pigzap.com',
-          }),
-          OG_1200x630
+        return asFixedPng(
+          new ImageResponse(
+            SubjectShareImage({
+              family: 'quiz',
+              emoji,
+              title:
+                count !== undefined
+                  ? `${name} Quiz — ${formatCount(count)} Questions`
+                  : `${name} Quiz`,
+              hook: 'play now → pigzap.com',
+            }),
+            OG_1200x630
+          )
         );
       }
 
       case 'quiz-question': {
         const share = await ogData.quizQuestionShare(searchParams.get('id') ?? '');
         if (!share) break;
-        return new ImageResponse(
-          QuestionShareImage({
-            family: 'quiz',
-            chip: `${share.subjectEmoji} ${share.subjectName}`.trim() || 'Quiz',
-            question: share.question,
-            options: share.options,
-            hook: 'can you answer this? → pigzap.com',
-          }),
-          OG_1200x630
+        return asFixedPng(
+          new ImageResponse(
+            QuestionShareImage({
+              family: 'quiz',
+              chip: `${share.subjectEmoji} ${share.subjectName}`.trim() || 'Quiz',
+              question: share.question,
+              options: share.options,
+              hook: 'can you answer this? → pigzap.com',
+            }),
+            OG_1200x630
+          )
         );
       }
 
@@ -76,16 +96,18 @@ export async function GET(request: Request): Promise<Response> {
         const meta = await ogData.quizSubjectMeta(slug);
         const score = Math.max(0, parseInt(searchParams.get('score') ?? '0', 10) || 0);
         const total = Math.max(1, parseInt(searchParams.get('total') ?? '10', 10) || 10);
-        return new ImageResponse(
-          ResultShareImage({
-            family: 'quiz',
-            score: Math.min(score, total),
-            total,
-            emoji: meta?.emoji ?? '🧠',
-            name: `${meta?.name ?? 'Quiz'} Quiz`,
-            hook: 'beat you! → pigzap.com',
-          }),
-          OG_1200x630
+        return asFixedPng(
+          new ImageResponse(
+            ResultShareImage({
+              family: 'quiz',
+              score: Math.min(score, total),
+              total,
+              emoji: meta?.emoji ?? '🧠',
+              name: `${meta?.name ?? 'Quiz'} Quiz`,
+              hook: 'beat you! → pigzap.com',
+            }),
+            OG_1200x630
+          )
         );
       }
 
@@ -93,14 +115,16 @@ export async function GET(request: Request): Promise<Response> {
         const slug = searchParams.get('category') ?? '';
         const categories = await ogData.riddleCategories();
         const category = categories?.find((c) => c.slug === slug);
-        return new ImageResponse(
-          SubjectShareImage({
-            family: 'riddle',
-            emoji: category?.emoji ?? '🧩',
-            title: `Riddles · ${category?.name ?? 'Brain Teasers'} — brain teasers`,
-            hook: 'solve now → pigzap.com',
-          }),
-          OG_1200x630
+        return asFixedPng(
+          new ImageResponse(
+            SubjectShareImage({
+              family: 'riddle',
+              emoji: category?.emoji ?? '🧩',
+              title: `Riddles · ${category?.name ?? 'Brain Teasers'} — brain teasers`,
+              hook: 'solve now → pigzap.com',
+            }),
+            OG_1200x630
+          )
         );
       }
 
@@ -109,15 +133,17 @@ export async function GET(request: Request): Promise<Response> {
         if (!share) break;
         // Chip uses the riddle TOKEN emoji (🧩 per design tokens), not the
         // subject's emoji — brand-consistent across every riddle share.
-        return new ImageResponse(
-          QuestionShareImage({
-            family: 'riddle',
-            chip: '🧩 Riddles',
-            question: share.question,
-            options: share.options,
-            hook: 'solve it → pigzap.com',
-          }),
-          OG_1200x630
+        return asFixedPng(
+          new ImageResponse(
+            QuestionShareImage({
+              family: 'riddle',
+              chip: '🧩 Riddles',
+              question: share.question,
+              options: share.options,
+              hook: 'solve it → pigzap.com',
+            }),
+            OG_1200x630
+          )
         );
       }
 
@@ -129,5 +155,5 @@ export async function GET(request: Request): Promise<Response> {
     // fall through to the generic joke/family image below
   }
 
-  return new ImageResponse(<JokeShareImage />, OG_1200x630);
+  return asFixedPng(new ImageResponse(<JokeShareImage />, OG_1200x630));
 }
