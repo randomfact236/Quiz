@@ -33,6 +33,7 @@
 | BUG-055   | Home share image: build approved multi-platform design (WP0)   | website share (home)      | P2       | Fixed             |
 | BUG-057   | Riddle question share image returned 502 (no preview)          | share / OG (riddle)       | P1       | Fixed 2026-09-21  |
 | BUG-058   | Share URLs declared canonical=hub, so FB showed the wrong card | share / SEO (canonical)   | P1       | Fixed 2026-09-21  |
+| BUG-059   | robots.txt blocked /api, so crawlers skipped the share images  | share / SEO (robots)      | P1       | Fixed 2026-09-21  |
 | BUG-056   | Integrate Google Search Console (data API) into the website    | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                       | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs               | ops / VPS                 | P1       | Open (owner)      |
@@ -95,6 +96,16 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Fix (96ebb2b):** question / result / subject (quiz) and question / category (riddle) branches now set `alternates.canonical` **and** `og:url` to their own URL.
 - **Verified live:** `quiz-mcq?subject=geography&q=03791990-...` -> canonical + og:url = that URL, og:image = `type=quiz-question`; `riddle-mcq?q=34670b3e-...` -> same pattern with `type=riddle-question`.
 - **Next for the owner:** re-scrape the URL in the Facebook Sharing Debugger ("Scrape Again") to refresh FB's cache.
+
+### BUG-059 - robots.txt blocked /api, so crawlers skipped every share image
+
+- **Date found:** 2026-09-21 (second FB debugger screenshot: preview showed the app icon + title, no image)
+- **Area:** share / SEO - `apps/frontend/src/app/robots.ts`
+- **Priority:** P1
+- **Root cause:** `robots.txt` had a blanket `Disallow: /api`, but every social share image is generated at **`/api/og`**. Facebook/Twitter respect robots.txt, so they refused the image and fell back to the favicon. The home card worked because its image lives at `/opengraph-image` (outside /api).
+- **Fix (f0b411b):** `allow: ['/', '/api/og']` (longest-match wins over the `/api` disallow).
+- **Verified live:** `robots.txt` now lists `Allow: /api/og`; the image returns 200 image/png with a `facebookexternalhit` user-agent.
+- **Still open (design gap):** the spec says a question share's _description_ should be the question text; the page still emits the generic module description.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
