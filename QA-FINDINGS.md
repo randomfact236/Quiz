@@ -36,6 +36,7 @@
 | BUG-059   | robots.txt blocked /api, so crawlers skipped the share images       | share / SEO (robots)      | P1       | Fixed 2026-09-21  |
 | BUG-060   | /riddle-mcq crashed: (riddle.options \|\| []).map is not a function | riddle-mcq (data shape)   | P0       | Fixed 2026-09-21  |
 | BUG-061   | FB "Corrupted Image": share PNGs streamed without Content-Length    | share / OG (headers)      | P1       | Fixed 2026-09-21  |
+| BUG-062   | FB showed the small icon card (og:image:width/height missing)       | share / OG (meta)         | P1       | Fixed 2026-09-21  |
 | BUG-056   | Integrate Google Search Console (data API) into the website         | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                            | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs                    | ops / VPS                 | P1       | Open (owner)      |
@@ -131,6 +132,15 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Fix (06f9948):** all six renders go through an `asFixedPng()` helper that buffers the PNG and returns it with an explicit `Content-Length` and `Cache-Control: public, max-age=31536000, immutable, no-transform`.
 - **Verified live:** `Content-Type: image/png` + `Content-Length: 184192` (no chunked transfer) with a `facebookexternalhit` user-agent.
 - **Note:** the home card (`/opengraph-image`) always worked because it is served differently - which is why only the `/api/og` cards were affected.
+
+### BUG-062 - Facebook rendered the small icon card instead of the 1200x630 card
+
+- **Date found:** 2026-09-21 (after BUG-061, the debugger stopped warning but still showed only the app icon)
+- **Area:** share / OG meta - `app/quiz-mcq/page.tsx`, `app/riddle-mcq/page.tsx`
+- **Priority:** P1
+- **Root cause:** the share branches declared `og:image` but not `og:image:width` / `og:image:height` (and no `og:type`). With the dimensions absent, Facebook falls back to the small icon-style card even though the served PNG is a valid 1200x630.
+- **Fix (ef19aa0):** all five share branches now emit `og:type=website` and `images: [{ url, width: 1200, height: 630 }]`.
+- **Verified live:** `og:type`, `og:image`, `og:image:width=1200`, `og:image:height=630`, question-text `og:description`, self `og:url`, `twitter:card=summary_large_image`.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
