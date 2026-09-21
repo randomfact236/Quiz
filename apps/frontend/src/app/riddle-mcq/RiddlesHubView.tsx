@@ -139,6 +139,7 @@ function ModeLevelPicker({
               key={`${mode}-${level.key}`}
               href={`/riddle-mcq/play?subjectId=all&level=${level.key}&mode=${mode}`}
               aria-disabled={count === 0}
+              tabIndex={count === 0 ? -1 : undefined}
               className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${level.color} p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'pointer-events-none opacity-50' : ''}`}
             >
               <span className="mb-1 text-xl">{level.emoji}</span>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
   title: 'About Us',
+  alternates: { canonical: '/about' },
   description: 'Learn about the PigZap platform and our mission to make learning fun.',
 };
 

@@ -5,6 +5,7 @@ import { JsonLd } from '@/components/JsonLd';
 
 export const metadata: Metadata = {
   title: 'FAQ',
+  alternates: { canonical: '/faq' },
   description:
     'Answers about PigZap: how to play, accounts and guests, scoring, mini games, and how your data is handled.',
 };

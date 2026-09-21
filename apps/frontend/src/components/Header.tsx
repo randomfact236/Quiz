@@ -153,7 +153,7 @@ export default function Header(): JSX.Element {
             <BrandLink />
 
             <div className="hidden items-center gap-4 md:flex">
-              <ul className="flex items-center gap-6" role="menubar">
+              <ul className="flex items-center gap-6">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.href}>
                     <Link
@@ -273,7 +273,7 @@ export default function Header(): JSX.Element {
             <BrandLink />
 
             <div className="hidden items-center gap-4 md:flex">
-              <ul className="flex items-center gap-6" role="menubar">
+              <ul className="flex items-center gap-6">
                 {NAV_ITEMS.map((item) => (
                   <li key={item.href}>
                     <Link

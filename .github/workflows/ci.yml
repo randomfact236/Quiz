@@ -45,3 +45,20 @@ jobs:
         env:
           # Smoke value for CI only — production deploys set the real origin
           NEXT_PUBLIC_API_URL: http://localhost:3012/api
+
+  secret-scan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # OPS-14: fail the build if a committed secret slips in (the audit found
+      # literal DB passwords in docker-compose.yml). Scans full history.
+      - name: gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

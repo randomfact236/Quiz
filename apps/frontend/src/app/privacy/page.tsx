@@ -5,6 +5,7 @@ import { LegalPage } from '@/components/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
+  alternates: { canonical: '/privacy' },
   description: 'How PigZap collects, uses, and protects your data.',
 };
 

@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
-import { Suspense, useEffect, useState, useMemo } from 'react';
+import { Suspense, useEffect, useState, useMemo, type ElementType } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   GraduationCap,
@@ -83,10 +83,13 @@ function SubjectCard({
   const display = getSubjectDisplay(emoji);
   const isAvailable = isActive && isLive;
 
+  // FE-02: a "Coming Soon" card must not be a link (it used to point at "#").
+  const Card: ElementType = isAvailable ? Link : 'div';
+
   return (
-    <Link
-      href={isAvailable ? `/quiz-mcq?subject=${slug}` : '#'}
-      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100 dark:bg-secondary-800/50 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
+    <Card
+      {...(isAvailable ? { href: `/quiz-mcq?subject=${slug}` } : { tabIndex: -1 })}
+      className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
       aria-label={isAvailable ? `Select ${name} subject` : `${name} - Coming Soon`}
     >
       <span className="text-4xl" aria-hidden="true">
@@ -102,7 +105,7 @@ function SubjectCard({
           Coming Soon
         </span>
       )}
-    </Link>
+    </Card>
   );
 }
 
@@ -642,6 +645,7 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
                                 href={`/quiz-mcq/play?subject=${subject}&chapter=${encodeURIComponent(chapter.name)}&level=${level.toLowerCase()}&mode=${mode}`}
                                 className={`flex flex-col items-center rounded-xl bg-gradient-to-br ${levelColors[level]} p-3 text-center text-white shadow-md transition-all hover:scale-105 hover:shadow-lg ${count === 0 ? 'pointer-events-none opacity-50' : ''}`}
                                 aria-disabled={count === 0}
+                                tabIndex={count === 0 ? -1 : undefined}
                               >
                                 <span className="mb-1 text-xl">{levelEmojis[level]}</span>
                                 <span className="text-xs font-semibold capitalize">{level}</span>

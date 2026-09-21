@@ -4,6 +4,7 @@ import { LegalPage } from '@/components/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Contact',
+  alternates: { canonical: '/contact' },
   description: 'How to reach the PigZap team.',
 };
 

@@ -4,6 +4,7 @@ import { LegalPage } from '@/components/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Terms of Service',
+  alternates: { canonical: '/terms' },
   description: 'The rules for using PigZap.',
 };
 
