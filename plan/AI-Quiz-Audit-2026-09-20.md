@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 12 (2026-09-21): H1 phase 2c prep - frontend graders (checkQuizAnswer/checkRiddleAnswer/checkImageRiddleGuess) added; call-site switch is next.
 Wave 11 (2026-09-21): H1 phase 2b - riddle + image-riddle server-side graders (live-verified).
 Wave 10 (2026-09-21): H1 phase 2a - POST /quiz-mcq/answers/check (server-side grading), live-verified.
 Wave 9 (2026-09-21): H1 phase 1 - public quiz list endpoints stripped of answer keys (live-verified; play endpoints untouched).
