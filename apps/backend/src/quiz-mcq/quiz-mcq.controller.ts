@@ -207,11 +207,16 @@ export class QuizMcqController {
     @Query('chapter') chapter?: string,
     @Query('search') search?: string,
     @Query('limit') limit?: number
-  ): Promise<{ data: Question[]; total: number }> {
+  ): Promise<{ data: Record<string, unknown>[]; total: number }> {
     // If no limit sent → return ALL questions (no limit)
     // If limit sent → apply it for future flexibility
     const filters = { status: ContentStatus.PUBLISHED, level, chapter, search, subjectSlug: slug };
-    return this.quizService.findAllQuestions({ page: 1, limit: limit || 0 }, filters);
+    const result = await this.quizService.findAllQuestions({ page: 1, limit: limit || 0 }, filters);
+    // H1: this public list must never ship the answer key (audit: bulk harvesting).
+    return {
+      data: result.data.map((question) => this.toPublicQuestion(question)),
+      total: result.total,
+    };
   }
 
   @Get('filter-counts')
@@ -374,9 +379,26 @@ export class QuizMcqController {
   @ApiOperation({ summary: 'Get questions by chapter ID (PUBLIC - always returns PUBLISHED only)' })
   async getQuestionsByChapter(
     @Param('chapterId') chapterId: string
-  ): Promise<{ data: Question[]; total: number }> {
+  ): Promise<{ data: Record<string, unknown>[]; total: number }> {
     // PUBLIC ENDPOINT: Already filtered by PUBLISHED in service
-    return this.quizService.findAllQuestionsByChapter(chapterId);
+    const result = await this.quizService.findAllQuestionsByChapter(chapterId);
+    // H1: strip the answer key from this public list before it leaves the server.
+    return {
+      data: result.data.map((question) => this.toPublicQuestion(question)),
+      total: result.total,
+    };
+  }
+
+  /**
+   * H1 (audit SEC-03): public question reads must not expose `correctAnswer` /
+   * `correctLetter`. Guesses are graded server-side; these list endpoints are
+   * browse-only and now return the question payload without the key.
+   */
+  private toPublicQuestion(question: Question): Record<string, unknown> {
+    const safe: Record<string, unknown> = { ...question };
+    delete safe['correctAnswer'];
+    delete safe['correctLetter'];
+    return safe;
   }
 
   private validateCount(count: string | undefined, defaultValue: number, max: number = 50): number {
