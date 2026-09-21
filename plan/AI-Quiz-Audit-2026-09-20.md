@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 5 (2026-09-21): mobile drawer focus trap + scroll lock; quiz play aria-live announcements.
 Wave 4 (2026-09-21): BE-02 single global CacheModule (boot-verified); cosmetics #9 consent banner no longer overlaps the mobile bottom nav.
 Wave 3 (2026-09-21): FE-02/03 fake-link + focus fixes, canonicals on 5 static pages, menubar role removed, OPS-14 gitleaks job in CI.
 Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inline payloads (dad-joke votes, chapter create/update, PUT /users/profile); SEC-06 password policy; OPS-05 container memory limits; OPS-13 broken docker-startup scripts deleted; OPS-20 docs corrected (PORT-REFERENCE prod/staging ports, sample admin password removed); FE-01 error+retry states on the quiz hub; 6.4 production runbook created.
@@ -226,7 +227,7 @@ Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inlin
 - [ ] SEC-10/SEC-12 bind anonymous writes to a server-signed guest token
 - [x] OPS-05 container resource limits; OPS-07 add `REDIS_PASSWORD` to the prod template; OPS-06 prune prod images - PARTIAL 2026-09-21: per-service memory limits added to docker-compose.prod.yml; OPS-06 (prune prod images) remains.
 - [x] OPS-14 add gitleaks + CodeQL + (optional) blocking critical `npm audit` - PARTIAL 2026-09-21: gitleaks secret-scan job added to CI (green); CodeQL and a blocking critical-audit gate remain.
-- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21 (wave 3): hub error+retry states, FE-02/03 fake-link removal, canonicals on /about /faq /contact /privacy /terms, and the menubar fix are DONE; aria-live / drawer focus-trap / contrast remain.
+- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21 (wave 3): hub error+retry states, FE-02/03 fake-link removal, canonicals on /about /faq /contact /privacy /terms, and the menubar fix are DONE; aria-live + drawer focus-trap are DONE in wave 5; the gradient-contrast review remains.
 - [ ] BE-09 run the CSV leakage/ambiguity repairs and re-audit
 
 ### 6.3 Backlog / quality
