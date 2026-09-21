@@ -18,6 +18,7 @@ import { BubbleEmojiEffect, type BubbleEmojiEffectRef } from './BubbleEmojiEffec
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
 import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
 import { getCommentCounts } from '@/lib/comments-api';
+import { getShareCounts } from '@/lib/share-counts-api';
 import { MessageCircle } from 'lucide-react';
 import { LikeButton } from '@/components/likes/LikeButton';
 import type { Question } from '@/types/quiz-mcq';
@@ -237,6 +238,20 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
     };
   }, [question.id]);
 
+  // BUG-048: public share count for the action-row chip
+  const [shareCount, setShareCount] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    getShareCounts('quiz-question', [question.id])
+      .then((c) => {
+        if (!cancelled) setShareCount(c[question.id] ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [question.id]);
+
   // Handle question navigation - clear bubbles when question changes
   useEffect(() => {
     if (question.id !== prevQuestionIdRef.current) {
@@ -376,6 +391,9 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
                 >
                   <Share2 className="h-3.5 w-3.5" />
                   Share
+                  {shareCount !== null && shareCount > 0 && (
+                    <span className="font-black">{shareCount}</span>
+                  )}
                 </button>
               )}
             </div>
@@ -418,17 +436,19 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
         )}
 
         {/* Answer Options - Smaller */}
-        <AnswerOptions
-          options={options}
-          selectedKey={selectedAnswer}
-          correctKey={
-            showFeedback ? (isOpenEnded ? question.correctAnswer : correctLetter || '') : ''
-          }
-          onSelect={handleSelectAnswer}
-          disabled={disabled || timeUp}
-          showFeedback={showFeedback || false}
-          level={question.level}
-        />
+        <div className="-mx-5 sm:-mx-8">
+          <AnswerOptions
+            options={options}
+            selectedKey={selectedAnswer}
+            correctKey={
+              showFeedback ? (isOpenEnded ? question.correctAnswer : correctLetter || '') : ''
+            }
+            onSelect={handleSelectAnswer}
+            disabled={disabled || timeUp}
+            showFeedback={showFeedback || false}
+            level={question.level}
+          />
+        </div>
 
         {/* BUG-040: comments panel — opened from the action row above; while
             open, the play page blocks advancing; closing proceeds onward. */}

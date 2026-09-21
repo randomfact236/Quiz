@@ -30,6 +30,7 @@ import {
 import { useRiddlePlay } from '@/hooks/use-riddle-play/useRiddlePlay';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
 import ShareMenu from '@/components/share/ShareMenu';
+import { SITE_URL } from '@/lib/site-url';
 import { ResumePromptModal } from './components/ResumePromptModal';
 import { SubmitConfirmModal } from './components/SubmitConfirmModal';
 import { ExtendSessionModal } from './components/ExtendSessionModal';
@@ -339,11 +340,8 @@ function RiddlePlayPageContent(): JSX.Element {
                   (opt, i) => `${String.fromCharCode(65 + i)}) ${opt}`
                 ),
               ].join('\n')}
-              url={
-                typeof window !== 'undefined'
-                  ? `${window.location.origin}/riddle-mcq?q=${play.currentRiddle.id}`
-                  : `/riddle-mcq?q=${play.currentRiddle.id}`
-              }
+              url={`${SITE_URL}/riddle-mcq?q=${play.currentRiddle.id}`}
+              countKey={{ contentType: 'riddle-question', contentId: play.currentRiddle.id }}
               onClose={() => setShareMenu(null)}
             />
           )}
@@ -351,11 +349,8 @@ function RiddlePlayPageContent(): JSX.Element {
             <ShareMenu
               title="Riddle Mix"
               text={`Can you solve these riddles? 🧩 ${level !== 'all' ? `(${level})` : ''}`.trim()}
-              url={
-                typeof window !== 'undefined'
-                  ? window.location.href
-                  : `/riddle-mcq/play?subjectId=${subjectId}&level=${level}&mode=${mode}`
-              }
+              url={`${SITE_URL}/riddle-mcq/play?subjectId=${subjectId}&level=${level}&mode=${mode}`}
+              countKey={{ contentType: 'riddle-category', contentId: 'mix' }}
               onClose={() => setShareMenu(null)}
             />
           )}

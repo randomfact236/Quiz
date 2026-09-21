@@ -11,6 +11,7 @@ import { AuthModule } from './auth/auth.module';
 import { OAuthPlatformMiddleware } from './auth/oauth-platform.middleware';
 import { CommentsModule } from './comments/comments.module';
 import { QuestionLikesModule } from './question-likes/question-likes.module';
+import { ShareCountsModule } from './share-counts/share-counts.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
 import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
 import { CacheModule } from './common/cache/cache.module';
@@ -119,6 +120,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     AdminImageRiddlesModule,
     CommentsModule,
     QuestionLikesModule,
+    ShareCountsModule,
     MediaModule,
     AnalyticsModule,
     AdminUsersModule,

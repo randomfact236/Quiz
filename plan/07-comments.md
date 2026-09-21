@@ -75,3 +75,4 @@ Tests: `__tests__/image-riddle-comments.test.tsx` (frontend) + backend `comments
 - **Image Riddles (04)** — comments double as the guess feed (`GUESS`) and chip-reveal (`CHIP`) gameplay data.
 - **User Accounts (01)** — guest identity via `guest_users`; `findOrCreate` is called on comment write. No `userId` linkage yet (P1).
 - **Admin Dashboard (12)** — CommentsSection moderation over `/admin/comments`.
+- **Riddle MCQ (03)** — riddle question cards embed the comments panel (contentType `riddle-question`, guest-scoped) with public count chips (BUG-054, 2026-09-20).

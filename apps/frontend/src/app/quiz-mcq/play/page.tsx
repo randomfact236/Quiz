@@ -20,6 +20,7 @@ import { ArrowLeft, AlertCircle } from 'lucide-react';
 import { useQuizMcq } from '@/hooks/useQuizMcq';
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz-mcq/QuestionCard';
 import ShareMenu from '@/components/share/ShareMenu';
+import { SITE_URL } from '@/lib/site-url';
 import { FloatingBackground } from '@/components/quiz-mcq/FloatingBackground';
 import { getSubjectMeta } from '@/lib/quiz-mcq-api';
 import { SettingsService } from '@/services/settings.service';
@@ -523,11 +524,8 @@ function QuizContent(): JSX.Element {
             <ShareMenu
               title={`Quiz question ${quiz.currentQuestionIndex + 1}`}
               text={quiz.currentQuestion.question}
-              url={
-                typeof window !== 'undefined'
-                  ? `${window.location.origin}/quiz-mcq?subject=${subject}&q=${quiz.currentQuestion.id}`
-                  : `/quiz-mcq?subject=${subject}&q=${quiz.currentQuestion.id}`
-              }
+              url={`${SITE_URL}/quiz-mcq?subject=${subject}&q=${quiz.currentQuestion.id}`}
+              countKey={{ contentType: 'quiz-question', contentId: quiz.currentQuestion.id }}
               onClose={() => setShareMenuOpen(false)}
             />
           )}

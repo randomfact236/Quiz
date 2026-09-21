@@ -61,7 +61,7 @@ export function AnswerOptions({
 
   const getOptionStyle = (key: string, hasSelection: boolean): string => {
     const baseStyle =
-      'relative flex items-center justify-center rounded-xl border-2 py-3 px-4 text-center text-base font-medium transition-all duration-200 w-full ';
+      'relative flex items-center justify-center rounded-xl border-2 py-3 px-4 text-center text-base font-medium transition-all duration-200 w-full break-words ';
 
     // If selection made, show feedback colors
     if (hasSelection && showFeedback && correctKey) {
@@ -132,12 +132,20 @@ export function AnswerOptions({
   );
   const hasSelection = selectedKey !== null;
 
-  // Get grid columns based on number of options
+  // Grid columns (BUG-052 follow-up, owner 2026-09-21): mobile ALSO gets two
+  // columns — unless an option is too long to fit half the card width (length
+  // heuristic ~18 chars at text-base), in which case that view stacks to a
+  // single full-width column. Desktop keeps the sm: layout per option count.
   const getGridClass = () => {
     const count = displayOptions.length;
-    if (count === 2) return 'grid-cols-1 sm:grid-cols-2';
-    if (count === 3) return 'grid-cols-1 sm:grid-cols-3';
-    if (count === 4) return 'grid-cols-1 sm:grid-cols-2';
+    const longest = displayOptions.reduce(
+      (max, option) => Math.max(max, option.text.trim().length),
+      0
+    );
+    const fitsHalf = longest <= 18;
+    if (count === 2) return fitsHalf ? 'grid-cols-2' : 'grid-cols-1';
+    if (count === 3) return fitsHalf ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-1 sm:grid-cols-3';
+    if (count === 4) return fitsHalf ? 'grid-cols-2' : 'grid-cols-1 sm:grid-cols-2';
     return 'grid-cols-1';
   };
 

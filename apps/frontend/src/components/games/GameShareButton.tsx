@@ -15,6 +15,7 @@ import { useState } from 'react';
 import { Share2 } from 'lucide-react';
 
 import ShareMenu from '@/components/share/ShareMenu';
+import { SITE_URL } from '@/lib/site-url';
 
 export interface GameShareButtonProps {
   slug: string;
@@ -44,12 +45,9 @@ export function GameShareButton({ slug, title, blurb }: GameShareButtonProps): J
       {open && (
         <ShareMenu
           title={title}
+          countKey={{ contentType: 'game', contentId: slug }}
           text={`🎮 ${title} on PigZap — ${blurb}`}
-          url={
-            typeof window !== 'undefined'
-              ? `${window.location.origin}/games/${slug}`
-              : `/games/${slug}`
-          }
+          url={`${SITE_URL}/games/${slug}`}
           onClose={() => setOpen(false)}
         />
       )}

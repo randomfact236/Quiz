@@ -23,6 +23,7 @@ import {
 } from '@/components/quiz-mcq/BubbleEmojiEffect';
 import { LikeButton } from '@/components/likes/LikeButton';
 import { getCommentCounts } from '@/lib/comments-api';
+import { getShareCounts } from '@/lib/share-counts-api';
 import type { Riddle } from '@/types/riddles';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
 
@@ -175,6 +176,19 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
 
   // BUG-048/BUG-054: public comment count for the action-row chip
   const [commentCount, setCommentCount] = useState<number | null>(null);
+  // BUG-048: public share count for the action-row chip
+  const [shareCount, setShareCount] = useState<number | null>(null);
+  useEffect(() => {
+    let cancelled = false;
+    getShareCounts('riddle-question', [riddle.id])
+      .then((c) => {
+        if (!cancelled) setShareCount(c[riddle.id] ?? 0);
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, [riddle.id]);
   useEffect(() => {
     let cancelled = false;
     getCommentCounts('riddle-question', [riddle.id])
@@ -385,6 +399,9 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
                   title="Share this riddle"
                 >
                   <Share2 className="h-3.5 w-3.5" />
+                  {shareCount !== null && shareCount > 0 && (
+                    <span className="font-black">{shareCount}</span>
+                  )}
                   Share
                 </button>
               )}
@@ -427,16 +444,18 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
 
         {/* Answer Options — shared component with the riddle option-count spec
             (easy 2 · medium 3 · hard 4 — BUG-016) */}
-        <AnswerOptions
-          options={options}
-          selectedKey={selectedAnswer}
-          correctKey={showFeedback ? riddle.correctOption : ''}
-          onSelect={handleSelectAnswer}
-          disabled={disabled || timeUp}
-          showFeedback={showFeedback || false}
-          level={level}
-          game="riddle"
-        />
+        <div className="-mx-5 sm:-mx-8">
+          <AnswerOptions
+            options={options}
+            selectedKey={selectedAnswer}
+            correctKey={showFeedback ? riddle.correctOption : ''}
+            onSelect={handleSelectAnswer}
+            disabled={disabled || timeUp}
+            showFeedback={showFeedback || false}
+            level={level}
+            game="riddle"
+          />
+        </div>
 
         {/* BUG-040: comments after answering — while open, the play page blocks
             advancing; closing it proceeds to the next riddle. */}

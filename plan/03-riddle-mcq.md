@@ -109,3 +109,19 @@ Frontend (`apps/frontend/src/`):
 - **MCQ Quiz** — shares the content-kit base (`ContentServiceBase` flat mode), shared UI components (AnswerOptions, BubbleEmojiEffect), and the two-key resume pattern; deliberately no shared session persistence yet.
 
 - **Sample import file:** `plan/imports/riddle-mcq-lateral-thinking.csv` (+ `.json` for the bulk API) — 20 'Lateral Thinking' riddles ready for the Import modal.
+
+## 6 · QA-pass refinements (resolved 2026-09-19/20 — from QA-FINDINGS)
+
+- **Focused mode view (BUG-043)** — `/riddle-mcq?mode=practice|timer` renders only the matching
+  mode's difficulty grid plus a Mix card (all subjects, all levels); the Browse-by-Category grid is
+  hidden in that context. Verified in the browser.
+- **Unified question action row (BUG-054)** — the riddle question card carries the quiz-style action
+  row: `LikeButton` + comment toggle with public count chip + share → ShareMenu (riddle payload:
+  riddle text + compact options, durable `/riddle-mcq` URL, answer never included); comments panel
+  below, available pre-answer; open blocks advancing. GUI-verified; riddle-card suite 10/10.
+- **Answer options grid (BUG-052, shared with quiz-mcq)** — the same `AnswerOptions.tsx` adaptive
+  grid (2 → 1×2 · 3 → row · 4 → 2×2 on sm+, full-width stacked on small screens).
+  Adaptive refinement (owner 2026-09-21): mobile ALSO renders two columns; a question whose
+  longest option exceeds ~18 chars (won't fit half a phone width) stacks single-column on mobile.
+  Side gap: the answer grid stretches edge-to-edge inside the question card (-mx cancels the card
+  padding), so there is no horizontal gap between the question container's sides and the options.

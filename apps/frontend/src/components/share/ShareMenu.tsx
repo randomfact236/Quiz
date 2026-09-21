@@ -14,6 +14,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
 
 import { isSaved, toggleSaved } from '@/lib/saved-items';
 import { toast } from '@/lib/toast';
@@ -31,6 +32,8 @@ interface ShareMenuProps {
   saveNamespace?: string;
   /** Bookmark id within the namespace (joke/riddle id). */
   saveId?: string;
+  /** BUG-048: when set, every target click fires a share-count event. */
+  countKey?: { contentType: string; contentId: string };
   onClose: () => void;
 }
 
@@ -82,9 +85,18 @@ export default function ShareMenu({
   url,
   saveNamespace,
   saveId,
+  countKey,
   onClose,
 }: ShareMenuProps) {
   const shareUrl = url ?? (typeof window !== 'undefined' ? window.location.href : '');
+
+  const countShare = (platform: string) => {
+    if (countKey) {
+      void import('@/lib/share-counts-api').then((m) =>
+        m.fireShareEvent(countKey.contentType, countKey.contentId, platform as never)
+      );
+    }
+  };
 
   // Close on Escape.
   useEffect(() => {
@@ -96,6 +108,7 @@ export default function ShareMenu({
   }, [onClose]);
 
   const handleCopyLink = () => {
+    countShare('copy');
     if (!navigator.clipboard) {
       toast.error('Copy not supported');
       return;
@@ -120,7 +133,9 @@ export default function ShareMenu({
     onClose();
   };
 
-  return (
+  // Portal to <body>: hosts like the games-hub cards use hover:scale transforms, which
+  // would otherwise re-anchor this fixed overlay to the card and make it flicker.
+  return createPortal(
     <div
       className="fixed inset-0 z-[80] flex items-center justify-center bg-slate-900/60 p-4 backdrop-blur-sm animate-in fade-in duration-200"
       onClick={onClose}
@@ -145,7 +160,10 @@ export default function ShareMenu({
               href={target.href?.(text, shareUrl) ?? '#'}
               target="_blank"
               rel="noopener noreferrer"
-              onClick={onClose}
+              onClick={() => {
+                countShare(target.key);
+                onClose();
+              }}
               className="flex items-center gap-3 rounded-2xl px-4 py-3 transition-colors hover:bg-gray-50 dark:hover:bg-secondary-800/70 dark:hover:bg-secondary-800"
             >
               <span
@@ -191,6 +209,7 @@ export default function ShareMenu({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    typeof document !== 'undefined' ? document.body : (null as unknown as HTMLElement)
   );
 }

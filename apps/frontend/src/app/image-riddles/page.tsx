@@ -275,6 +275,7 @@ export default function ImageRiddlesPage(): JSX.Element {
             }
             saveNamespace="image-riddles"
             saveId={shareRiddle.id}
+            countKey={{ contentType: 'image-riddle', contentId: shareRiddle.id }}
             onClose={() => setShareRiddle(null)}
           />
         )}

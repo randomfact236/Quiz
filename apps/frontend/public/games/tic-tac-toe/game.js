@@ -289,7 +289,7 @@ function showOverlay(isDraw, winner) {
 /* ---- share (plan §6) ----------------------------------------------------------- */
 
 function shareText() {
-  const url = window.location.origin + window.location.pathname;
+  const url = 'https://pigzap.com/games/tic-tac-toe/';
   const score = '✕ ' + state.series.x + ' · ◯ ' + state.series.o + ' · draws ' + state.series.draw;
   if (state.mode === '2p') {
     return t('share2p', { score, url });
@@ -300,7 +300,7 @@ function shareText() {
 }
 
 function shareUrls() {
-  const url = window.location.origin + window.location.pathname;
+  const url = 'https://pigzap.com/games/tic-tac-toe/';
   const text = shareText();
   const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
   const fb = document.getElementById('share-fb');
@@ -536,3 +536,55 @@ function init() {
 if (typeof document !== 'undefined' && document.getElementById('board')) {
   init();
 }
+
+/* BUG-048: share-count pings (prod API; fire-and-forget, best-effort). */
+(function () {
+  var API = 'https://api.pigzap.com/api/v1/share-counts';
+  var SLUG = 'tic-tac-toe';
+  var wired = new WeakSet();
+  var ping = function (platform) {
+    try {
+      fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contentType: 'game', contentId: SLUG, platform: platform }),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {
+      /* counting is best-effort */
+    }
+  };
+  var wire = function () {
+    [
+      ['share-fb', 'facebook'],
+      ['share-x', 'x'],
+      ['share-wa', 'whatsapp'],
+    ].forEach(function (pair) {
+      var a = document.getElementById(pair[0]);
+      if (a && !wired.has(a)) {
+        wired.add(a);
+        a.addEventListener(
+          'click',
+          function () {
+            ping(pair[1]);
+          },
+          { once: true, capture: true }
+        );
+      }
+    });
+    var copy = document.getElementById('share-copy');
+    if (copy && !wired.has(copy)) {
+      wired.add(copy);
+      copy.addEventListener(
+        'click',
+        function () {
+          ping('copy');
+        },
+        { once: true, capture: true }
+      );
+    }
+  };
+  var btn = document.getElementById('btn-share');
+  if (btn) btn.addEventListener('click', wire);
+  wire();
+})();

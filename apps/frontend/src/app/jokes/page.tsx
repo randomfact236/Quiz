@@ -660,6 +660,7 @@ export default function JokesPage(): JSX.Element {
               }
               saveNamespace="jokes"
               saveId={shareJoke.id}
+              countKey={{ contentType: 'joke', contentId: shareJoke.id }}
               onClose={() => setShareJokeId(null)}
             />
           );

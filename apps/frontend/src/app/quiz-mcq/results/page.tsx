@@ -130,6 +130,7 @@ function ResultsContent(): JSX.Element {
           title={`${session.subjectName} quiz`}
           text={shareText ?? 'Beat my quiz score!'}
           {...(shareUrl ? { url: shareUrl } : {})}
+          countKey={{ contentType: 'quiz-subject', contentId: session.subject }}
           onClose={() => setShowShareMenu(false)}
         />
       )}

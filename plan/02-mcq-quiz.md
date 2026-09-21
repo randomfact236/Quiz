@@ -107,3 +107,19 @@ Frontend (`apps/frontend/src/`):
 - **Admin Dashboard** — gameplay content managed via `features/quiz-mcq-admin` under the admin shell.
 
 - **Sample import file:** `plan/imports/quiz-mcq-space-astronomy.csv` (+ `.json` for the bulk API) — 24 'Space & Astronomy' questions ready for the Import modal.
+
+## 6 · QA-pass refinements (resolved 2026-09-19 — from QA-FINDINGS)
+
+- **All inline mode+level pickers expanded by default (BUG-039)** — every chapter's picker renders
+  open on load (`expandedChapters[index] ?? true`), in both Timer and Practice; verified 6/6 open.
+- **Difficulty panel placement (BUG-044)** — the panel spans the full row (`col-span-full`) directly
+  below its expanded subject row (was a child of the subjects grid, squeezed into one column).
+- **Answer placement shuffle (BUG-041)** — audit found `correctLetter` was A-or-B for every MCQ
+  level (never C/D) and easy mode pinned 'True' first; a serve-time shuffle was added at the shared
+  random fetch (`ContentServiceBase.findRandom`) so correct answers distribute across slots at all levels.
+- **Answer options grid (BUG-052, shared with riddle-mcq)** — `components/quiz-mcq/AnswerOptions.tsx`
+  renders 2 options → 1×2 · 3 → row · 4 → 2×2 on sm+, stacked full-width on small screens.
+  Adaptive refinement (owner 2026-09-21): mobile ALSO renders two columns; a question whose
+  longest option exceeds ~18 chars (won't fit half a phone width) stacks single-column on mobile.
+  Side gap: the answer grid stretches edge-to-edge inside the question card (-mx cancels the card
+  padding), so there is no horizontal gap between the question container's sides and the options.

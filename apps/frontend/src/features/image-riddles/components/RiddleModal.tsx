@@ -130,6 +130,7 @@ export default function RiddleModal({
           }
           saveNamespace="image-riddles"
           saveId={riddle.id}
+          countKey={{ contentType: 'image-riddle', contentId: riddle.id }}
           onClose={game.closeShare}
         />
       )}
