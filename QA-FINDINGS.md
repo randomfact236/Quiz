@@ -35,6 +35,7 @@
 | BUG-058   | Share URLs declared canonical=hub, so FB showed the wrong card      | share / SEO (canonical)   | P1       | Fixed 2026-09-21  |
 | BUG-059   | robots.txt blocked /api, so crawlers skipped the share images       | share / SEO (robots)      | P1       | Fixed 2026-09-21  |
 | BUG-060   | /riddle-mcq crashed: (riddle.options \|\| []).map is not a function | riddle-mcq (data shape)   | P0       | Fixed 2026-09-21  |
+| BUG-061   | FB "Corrupted Image": share PNGs streamed without Content-Length    | share / OG (headers)      | P1       | Fixed 2026-09-21  |
 | BUG-056   | Integrate Google Search Console (data API) into the website         | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                            | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs                    | ops / VPS                 | P1       | Open (owner)      |
@@ -120,6 +121,16 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Backend follow-up (not done):** the riddle read endpoints should return a real array for consistency; the client normalisation covers it either way.
 
 **Design gap CLOSED (2026-09-21, c49ea03):** question/riddle share metadata now sets title + `description` (the question text, 110-char cap) + a per-question dynamic `og:image` + self-canonical. Verified live.
+
+### BUG-061 - Facebook reported "Corrupted Image" for every share image
+
+- **Date found:** 2026-09-21 (FB debugger warning: "Provided og:image URL ... could not be processed as an image")
+- **Area:** share / OG - `apps/frontend/src/app/api/og/route.tsx`
+- **Priority:** P1
+- **Root cause:** the bytes were a valid PNG (magic bytes correct, decode fine) but Next's `ImageResponse` **streams** the body (`Transfer-Encoding: chunked`, no `Content-Length`). Facebook's crawler refuses that and reports the image as corrupted/unprocessable.
+- **Fix (06f9948):** all six renders go through an `asFixedPng()` helper that buffers the PNG and returns it with an explicit `Content-Length` and `Cache-Control: public, max-age=31536000, immutable, no-transform`.
+- **Verified live:** `Content-Type: image/png` + `Content-Length: 184192` (no chunked transfer) with a `facebookexternalhit` user-agent.
+- **Note:** the home card (`/opengraph-image`) always worked because it is served differently - which is why only the `/api/og` cards were affected.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
