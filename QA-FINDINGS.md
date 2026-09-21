@@ -9,28 +9,39 @@
 
 ## Index
 
-| ID      | Title                                                          | Area                      | Priority | Status   |
-| ------- | -------------------------------------------------------------- | ------------------------- | -------- | -------- |
-| BUG-005 | Legal pages not finalized                                      | Legal pages               | P1       | Resolved |
-| BUG-037 | Question like buckets: 1-like / 2-like / 3+-like containers    | quiz-mcq / riddle-mcq     | P2       | Fixed    |
-| BUG-038 | Client-side exception while loading ("Application error")      | Frontend (global)         | P1       | Resolved |
-| BUG-039 | Mode selection: pre-open all levels in both modes              | quiz-mcq mode picker      | P2       | Fixed    |
-| BUG-040 | Like + comment section on each question                        | quiz/riddle questions     | P2       | Fixed    |
-| BUG-041 | Easy mode: answers all in the same position; audit placement   | quiz/riddle content       | P1       | Fixed    |
-| BUG-042 | Separate "Science & Nature" into Science and Nature            | quiz subjects             | P2       | Open     |
-| BUG-043 | Riddle mode pages: hide category, difficulty + Mix only        | riddle-mcq mode pages     | P2       | Fixed    |
-| BUG-044 | Quiz mode pages: level selection block misplaced               | quiz-mcq mode pages       | P2       | Fixed    |
-| BUG-045 | Question like not retained after refresh                       | per-question likes        | P1       | Fixed    |
-| BUG-046 | Question comment not stored after refresh                      | per-question comments     | P1       | Fixed    |
-| BUG-047 | Share does not show the different social media with copy link  | share UI (questions)      | P2       | Fixed    |
-| BUG-048 | Like / comment / share counts visible to all users             | engagement counters       | P2       | Fixed    |
-| BUG-049 | Make each question shareable with an icon                      | quiz-mcq play page        | P2       | Fixed    |
-| BUG-050 | Comment click doesn't reach comments; can't delete own comment | per-question comments     | P1       | Fixed    |
-| BUG-051 | Games share flickers when clicked                              | static games (share)      | P2       | Fixed    |
-| BUG-052 | Answers in 2-column layout; full-width on small screens        | quiz/riddle answers UI    | P2       | Fixed    |
-| BUG-053 | Feedback inside games when paused or at game over              | static games (pause/over) | P2       | Fixed    |
-| BUG-054 | Riddle-mcq has no like, comment or share options               | riddle-mcq questions      | P2       | Fixed    |
-| BUG-055 | Home share image: build approved multi-platform design (WP0)   | website share (home)      | P2       | Fixed    |
+| ID        | Title                                                          | Area                      | Priority | Status            |
+| --------- | -------------------------------------------------------------- | ------------------------- | -------- | ----------------- |
+| BUG-005   | Legal pages not finalized                                      | Legal pages               | P1       | Resolved          |
+| BUG-037   | Question like buckets: 1-like / 2-like / 3+-like containers    | quiz-mcq / riddle-mcq     | P2       | Fixed             |
+| BUG-038   | Client-side exception while loading ("Application error")      | Frontend (global)         | P1       | Resolved          |
+| BUG-039   | Mode selection: pre-open all levels in both modes              | quiz-mcq mode picker      | P2       | Fixed             |
+| BUG-040   | Like + comment section on each question                        | quiz/riddle questions     | P2       | Fixed             |
+| BUG-041   | Easy mode: answers all in the same position; audit placement   | quiz/riddle content       | P1       | Fixed             |
+| BUG-042   | Separate "Science & Nature" into Science and Nature            | quiz subjects             | P2       | Open              |
+| BUG-043   | Riddle mode pages: hide category, difficulty + Mix only        | riddle-mcq mode pages     | P2       | Fixed             |
+| BUG-044   | Quiz mode pages: level selection block misplaced               | quiz-mcq mode pages       | P2       | Fixed             |
+| BUG-045   | Question like not retained after refresh                       | per-question likes        | P1       | Fixed             |
+| BUG-046   | Question comment not stored after refresh                      | per-question comments     | P1       | Fixed             |
+| BUG-047   | Share does not show the different social media with copy link  | share UI (questions)      | P2       | Fixed             |
+| BUG-048   | Like / comment / share counts visible to all users             | engagement counters       | P2       | Fixed             |
+| BUG-049   | Make each question shareable with an icon                      | quiz-mcq play page        | P2       | Fixed             |
+| BUG-050   | Comment click doesn't reach comments; can't delete own comment | per-question comments     | P1       | Fixed             |
+| BUG-051   | Games share flickers when clicked                              | static games (share)      | P2       | Fixed             |
+| BUG-052   | Answers in 2-column layout; full-width on small screens        | quiz/riddle answers UI    | P2       | Fixed             |
+| BUG-053   | Feedback inside games when paused or at game over              | static games (pause/over) | P2       | Fixed             |
+| BUG-054   | Riddle-mcq has no like, comment or share options               | riddle-mcq questions      | P2       | Fixed             |
+| BUG-055   | Home share image: build approved multi-platform design (WP0)   | website share (home)      | P2       | Fixed             |
+| H1        | Answer key still ships on the play reads                       | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
+| H6        | Origin firewall not restricted to Cloudflare IPs               | ops / VPS                 | P1       | Open (owner)      |
+| H8        | CSP lacks nonces; JWTs in localStorage                         | frontend security         | P2       | Open (mine)       |
+| H9        | Prod credentials not rotated                                   | ops / security            | P1       | Open (owner)      |
+| H4        | content:push baseline incomplete                               | content pipeline          | P2       | Open (your call)  |
+| SEC-07    | Email verification not enforced (decision)                     | auth                      | P2       | Open (your call)  |
+| SEC-10/12 | Anonymous writes not bound to a signed token                   | backend security          | P2       | Open (mine)       |
+| SEC-11    | Throttler storage is in-memory (single instance)               | backend security          | P3       | Open (mine)       |
+| BE-09     | CSV leakage/ambiguity content defects                          | content data              | P2       | Open (mine)       |
+| BE-11     | Backend tests thin (analytics / duels / riddle-mcq)            | backend tests             | P3       | Open (mine)       |
+| POLISH    | Visual polish list (10 items)                                  | frontend polish           | P3       | Open (needs eyes) |
 
 ---
 
@@ -60,6 +71,22 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 ---
 
 ## Open
+
+### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
+
+Everything else in that report is fixed - see its "Remediation log". These are the still-open items, with the action each needs.
+
+- **H1 - answer key still ships on the play reads** (P1; mine + your go). Public quiz LIST endpoints are already stripped and the quiz/riddle/image-riddle graders are live. Action: switch the play loops to the graders (quiz play + review, riddle play + review, image-riddle guess panel incl. the "N letters" hint), then drop `correctAnswer` / `correctLetter` / `answer` from the play reads. Spec: `docs/h1-phase2c-plan.md`. Needs a browser pass on the three games.
+- **H8 - CSP nonces + token storage** (P2; mine). Baseline CSP shipped; inline scripts still run under `'unsafe-inline'` and user/admin JWTs sit in localStorage. Action: nonce the three inline-script surfaces; plan HttpOnly refresh cookies.
+- **H6 - origin firewall** (P1; owner/VPS). Compose ports are loopback-bound; still to do: restrict inbound 80/443 to Cloudflare IPs and allowlist the Dokploy panel.
+- **H9 - credential rotation** (P1; owner). Rotate admin/DB/Redis/JWT/Google OAuth and decide on the git-history scrub. Steps: `docs/production-runbook.md` section 4.
+- **H4 - content:push baseline** (P2; your call). The last full run stopped at 6450/11541 and the state file has no `questions` baseline. Action: dry run to confirm the gap, then push to completion.
+- **SEC-07 - email-verification gate** (P2; your call). The verification flow exists but login ignores `emailVerified`. Decide: keep non-blocking (today) or 403 until verified.
+- **SEC-10/12 - anonymous writes** (P2; mine). Comment flag, guest activity, image-riddle engage and duel display-name rely on a client-supplied guestId. Action: bind them to a server-signed guest token.
+- **SEC-11 - throttler storage** (P3; mine). Rate limiting is per-instance, correct for the current single API container. Action: Redis-backed storage if we ever run replicas. `TRUST_PROXY` is now documented.
+- **BE-09 - CSV content defects** (P2; mine + a push). Measured leakage/ambiguity rows; no repair script exists. Action: write the repair pass, re-audit the CSVs, then push.
+- **BE-11 - thin backend tests** (P3; mine). question-likes + riddle validators covered (14 suites / 109 tests). Remaining: analytics, duels, riddle-mcq services; raise the Jest threshold above 20%.
+- **POLISH - cosmetics A5** (P3; needs your eyes). 10 visual items (unify page gradients, radius/shadow scale, auth-page tokens, card-grid centralization, emoji -> lucide icons, content-width tokens, skeleton parity, token audit vs `designs/*`). All visual: I implement, you review.
 
 ### BUG-037 — Question like buckets: 1-like / 2-like / 3+-like containers
 
