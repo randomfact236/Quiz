@@ -67,7 +67,7 @@ export async function generateMetadata({
   const totalParam = first(params['total']);
   if (scoreParam && totalParam) {
     const label = first(params['label']) || 'Mixed';
-    const image = `/og/riddle-result/${encodeURIComponent(label)}/${scoreParam}-${totalParam}.png`;
+    const image = `/og/riddle-result/${encodeURIComponent(label)}/${scoreParam}-${totalParam}-v2.png`;
     const url = `${APP_URL}/riddle-mcq?label=${encodeURIComponent(label)}&score=${scoreParam}&total=${totalParam}`;
     const title = `I scored ${scoreParam}/${totalParam} on ${label} Riddles ${'🧩'}`;
     const description = `Beat my score in the ${label} Riddles - can you do better?`;
