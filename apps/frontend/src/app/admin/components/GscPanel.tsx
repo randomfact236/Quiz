@@ -96,7 +96,7 @@ export default function GscPanel(): JSX.Element {
           <button
             type="button"
             onClick={() => void load(days)}
-            className="flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 transition-colors hover:text-gray-200"
+            className="flex items-center gap-1 rounded-full px-2 py-1 text-xs font-semibold text-gray-400 dark:text-secondary-400 transition-colors hover:text-gray-200"
             title="Refresh"
           >
             <RefreshCw className={`h-3.5 w-3.5 ${loading ? 'animate-spin' : ''}`} />
@@ -119,7 +119,7 @@ export default function GscPanel(): JSX.Element {
           <p className="text-sm font-semibold text-red-300">{error}</p>
         </div>
       ) : loading ? (
-        <div className="mt-3 flex items-center gap-2 rounded-lg bg-gray-500/5 p-4 text-xs text-gray-400">
+        <div className="mt-3 flex items-center gap-2 rounded-lg bg-gray-500/5 p-4 text-xs text-gray-400 dark:text-secondary-400">
           <RefreshCw className="h-4 w-4 animate-spin" /> Loading Search Console data…
         </div>
       ) : !data?.connected ? (
@@ -171,7 +171,7 @@ export default function GscPanel(): JSX.Element {
               Top queries
             </p>
             {(data.queries?.length ?? 0) === 0 ? (
-              <p className="rounded-lg bg-gray-500/5 p-3 text-xs text-gray-400">
+              <p className="rounded-lg bg-gray-500/5 p-3 text-xs text-gray-400 dark:text-secondary-400">
                 No query data for this range yet — Search Console lags ~2 days.
               </p>
             ) : (
@@ -214,7 +214,7 @@ export default function GscPanel(): JSX.Element {
               Top pages
             </p>
             {(data.pages?.length ?? 0) === 0 ? (
-              <p className="rounded-lg bg-gray-500/5 p-3 text-xs text-gray-400">
+              <p className="rounded-lg bg-gray-500/5 p-3 text-xs text-gray-400 dark:text-secondary-400">
                 No page data for this range yet.
               </p>
             ) : (

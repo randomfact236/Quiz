@@ -159,7 +159,7 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 
 Live today (7/10 rows): home, quiz subject/question/result, riddle category, riddle question, dad-joke section card. All fixed share bugs (BUG-057..064) are deployed and verified.
 
-**#9-per-item - dad-joke card must show the joke setup** (owner: "in jokes, joke question should be visible in the image"). Current `/jokes?joke=<id>` previews the _generic_ Dad Jokes card; the joke text appears nowhere. Work:
+**#9-per-item - dad-joke card shows the joke setup - DONE 2026-09-21** (backend `GET /jokes/classic/:id`, `JokeShareImage({setup})`, ogData.jokeShare, `/og/joke/<id>/v2.png`, new `app/jokes/[id]` metadata route; verified live: `/jokes/<id>` title/desc = the joke, card renders the joke text). Originally: (owner: "in jokes, joke question should be visible in the image"). Current `/jokes?joke=<id>` previews the _generic_ Dad Jokes card; the joke text appears nowhere. Work:
 
 1. Backend: add a public `GET /jokes/classic/:id` (only list/search/category exist today) so a single joke can be fetched server-side.
 2. `JokeShareImage`: accept a `setup` prop and render it (truncated) instead of the generic line; keep the generic fallback for the section URL.
