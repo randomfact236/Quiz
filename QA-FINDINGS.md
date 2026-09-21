@@ -119,7 +119,7 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Also in the same commit:** question/result/category share image URLs now carry `&v=2` so Facebook re-fetches instead of serving its cached imageless result (BUG-059 follow-up).
 - **Backend follow-up (not done):** the riddle read endpoints should return a real array for consistency; the client normalisation covers it either way.
 
-**Open design gap (from `share-design-system-report.md`):** question shares should set the _description_ to the question text; both pages still emit the generic module description.
+**Design gap CLOSED (2026-09-21, c49ea03):** question/riddle share metadata now sets title + `description` (the question text, 110-char cap) + a per-question dynamic `og:image` + self-canonical. Verified live.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
