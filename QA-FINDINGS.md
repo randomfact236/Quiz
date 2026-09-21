@@ -13,31 +13,34 @@
 
 ## Index
 
-| ID      | Title                                                                          | Area                | Pri | Status   |
-| ------- | ------------------------------------------------------------------------------ | ------------------- | --- | -------- |
-| TASK-01 | Question-likes do not survive a refresh                                        | engagement          | P1  | Open     |
-| TASK-02 | Analytics ingest retry can double-count events (C4)                            | analytics           | P1  | Open     |
-| TASK-03 | BE-09 CSV leakage/ambiguity repairs + re-audit                                 | content data        | P1  | Open     |
-| TASK-04 | H8 remainder: CSP nonces + HttpOnly token storage                              | security            | P2  | Open     |
-| TASK-05 | Bulk import lacks status (image riddles, jokes) / hint (riddles)               | import (3 modules)  | P2  | Open     |
-| TASK-06 | Analytics gaps: A5 events, A10 resume, A7 anchor, C1 purge, C2 tests, C3 cache | analytics           | P2  | Open     |
-| TASK-07 | Analytics deferred: funnels, accuracy join, retention tests, ops metrics       | analytics           | P3  | Open     |
-| TASK-08 | 10 TODO/FIXME markers in src                                                   | code cleanup        | P3  | Open     |
-| TASK-09 | Games debt: AA contrast, reduced-motion, focus, daily picture, phone QA        | games               | P3  | Open     |
-| TASK-10 | Dad jokes: saved jokes, JotD SSR, trending + share buttons                     | jokes (decision)    | P2  | Open     |
-| TASK-11 | SEO: RSC landing pages, per-content routes, JSON-LD, OG, audit panel           | seo (decision)      | P2  | Open     |
-| TASK-12 | Comments on quiz/riddle content (decision)                                     | comments (decision) | P3  | Open     |
-| TASK-13 | SEC-07 email-verification gate (decision)                                      | auth (decision)     | P2  | Open     |
-| TASK-14 | SEC-10/12 signed guest token for anonymous writes (decision)                   | security (decision) | P2  | Open     |
-| TASK-15 | H1 server-side grading phase 2c (decision)                                     | security (decision) | P1  | Open     |
-| TASK-16 | Admin user-mgmt UI; dashboard unification; guest-users activity                | admin (decision)    | P3  | Open     |
-| TASK-17 | Installability: full manifest / theme-color (decision)                         | pwa (decision)      | P3  | Open     |
-| TASK-18 | H9 rotate credentials + SSH/secrets hygiene                                    | ops (owner)         | P1  | Open     |
-| TASK-19 | H6 restrict origin firewall to Cloudflare IPs                                  | ops (owner)         | P1  | Open     |
-| TASK-20 | OPS-19 off-box backup replication + restore drill                              | ops (owner)         | P2  | Open     |
-| TASK-21 | OPS-21 uptime/error alerting wiring                                            | ops (owner)         | P2  | Open     |
-| TASK-22 | R2: confirm upload, custom domain, migrate media, token hygiene                | media (owner)       | P2  | Open     |
-| TASK-23 | Deferred by owner (no action unless re-opened)                                 | various             | P3  | Deferred |
+| ID      | Title                                                                          | Area                | Pri | Status           |
+| ------- | ------------------------------------------------------------------------------ | ------------------- | --- | ---------------- |
+| TASK-01 | Question-likes do not survive a refresh                                        | engagement          | P1  | Open             |
+| TASK-02 | Analytics ingest retry can double-count events (C4)                            | analytics           | P1  | Open             |
+| TASK-03 | BE-09 CSV leakage/ambiguity repairs + re-audit                                 | content data        | P1  | Open             |
+| TASK-04 | H8 remainder: CSP nonces + HttpOnly token storage                              | security            | P2  | Open             |
+| TASK-05 | Bulk import lacks status (image riddles, jokes) / hint (riddles)               | import (3 modules)  | P2  | Open             |
+| TASK-06 | Analytics gaps: A5 events, A10 resume, A7 anchor, C1 purge, C2 tests, C3 cache | analytics           | P2  | Open             |
+| TASK-07 | Analytics deferred: funnels, accuracy join, retention tests, ops metrics       | analytics           | P3  | Open             |
+| TASK-08 | 10 TODO/FIXME markers in src                                                   | code cleanup        | P3  | Open             |
+| TASK-09 | Games debt: AA contrast, reduced-motion, focus, daily picture, phone QA        | games               | P3  | Open             |
+| TASK-10 | Dad jokes: saved jokes, JotD SSR, trending + share buttons                     | jokes (decision)    | P2  | Open             |
+| TASK-11 | SEO: RSC landing pages, per-content routes, JSON-LD, OG, audit panel           | seo (decision)      | P2  | Open             |
+| TASK-12 | Comments on quiz/riddle content (decision)                                     | comments (decision) | P3  | Open             |
+| TASK-13 | SEC-07 email-verification gate (decision)                                      | auth (decision)     | P2  | Open             |
+| TASK-14 | SEC-10/12 signed guest token for anonymous writes (decision)                   | security (decision) | P2  | Open             |
+| TASK-15 | H1 server-side grading phase 2c (decision)                                     | security (decision) | P1  | Open             |
+| TASK-16 | Admin user-mgmt UI; dashboard unification; guest-users activity                | admin (decision)    | P3  | Open             |
+| TASK-17 | Installability: full manifest / theme-color (decision)                         | pwa (decision)      | P3  | Open             |
+| TASK-18 | H9 rotate credentials + SSH/secrets hygiene                                    | ops (owner)         | P1  | Open             |
+| TASK-19 | H6 restrict origin firewall to Cloudflare IPs                                  | ops (owner)         | P1  | Open             |
+| TASK-20 | OPS-19 off-box backup replication + restore drill                              | ops (owner)         | P2  | Open             |
+| TASK-21 | OPS-21 uptime/error alerting wiring                                            | ops (owner)         | P2  | Open             |
+| TASK-22 | R2: confirm upload, custom domain, migrate media, token hygiene                | media (owner)       | P2  | Open             |
+| TASK-23 | Deferred by owner (no action unless re-opened)                                 | various             | P3  | Deferred         |
+| TASK-24 | Memory Quiz: grid-answer questions (where/swap) unanswerable by tap            | games / memory-quiz | P1  | Fixed 2026-09-22 |
+| TASK-25 | Memory Quiz: swap reveal announced the pre-swap layout                         | games / memory-quiz | P2  | Fixed 2026-09-22 |
+| TASK-26 | Memory Quiz: level-clear crash (focus on undefined btnRetry2)                  | games / memory-quiz | P2  | Fixed 2026-09-22 |
 
 ---
 
@@ -129,6 +132,33 @@
 - **Date found:** 2026-09-22 (various plans, marked deferred/owner-accepted)
 - **Priority:** P3
 - **Reported:** riddle-mcq session persistence / JSON import-export / cache tuning; image-riddle server-side progress; admin-dashboard unification; games R2-2/R2-3 extras; LinkedIn + Pinterest share previews.
+
+### TASK-24 - Memory Quiz: grid-answer questions could not be answered by tapping
+
+- **Date found:** 2026-09-22 (owner: "in memory quiz when I click the box it doesn't show what was hidden")
+- **Area:** games / memory-quiz - `public/games/memory-quiz/game.js`
+- **Priority:** P1
+- **Root cause:** `where` ("Where is the pizza?") and `swap` questions declare `answerUi: 'grid'` and `answer(picked)` takes a **cell index** for them - but the board cells (created as `<button>`s) had **no click listener**, so those questions were unanswerable: taps did nothing and the timer expired (losing a heart).
+- **Fix:** each cell answers when the active question is a grid type, with the plan's 50 ms double-tap debounce (commit `bf55e38` + follow-ups).
+- **Verified:** the repo Playwright driver `verify-memory-quiz.mjs` clicks `.cell[data-index=...]` for exactly these types - **39/39 checks pass**.
+
+### TASK-25 - Memory Quiz: swap reveal announced the pre-swap layout
+
+- **Date found:** 2026-09-22 (E2E check "l04: swap hit reveals the exchange")
+- **Area:** games / memory-quiz - `game.js` (`gradeHit` / `gradeMiss`)
+- **Priority:** P2
+- **Root cause:** `applyTruth(...)` ran **before** `setBoardHidden(false)`, and the un-hide re-applies the **canonical** board aria labels - clobbering `swap`'s phantom exchange (item visually moved, announcement reverted to pre-swap).
+- **Fix:** un-hide first, then reveal (both paths) so the truth wins over the canonical aria.
+- **Verified:** E2E l04 check passes.
+
+### TASK-26 - Memory Quiz: level-clear crash focusing an undefined button
+
+- **Date found:** 2026-09-22 (E2E: "pageerror: Cannot read properties of undefined (reading 'focus')")
+- **Area:** games / memory-quiz - `game.js` (`showLevelClear`)
+- **Priority:** P2
+- **Root cause:** `els.btnRetry2` is referenced but never assigned (unlike `#btn-next` / `#btn-cards`), so the level-clear focus chain called `.focus()` on `undefined`.
+- **Fix:** guarded focus target (`clearTarget?.focus?.()`); the missing `#btn-retry2` mapping remains the underlying gap if that button is added later.
+- **Verified:** E2E "zero console/page errors across the session" passes.
 
 ### BUG-XXX — <title>
 

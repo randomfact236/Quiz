@@ -373,8 +373,11 @@ function answer(picked) {
 }
 
 function gradeHit(points) {
-  applyTruth(activeTruth(false));
+  // Un-hide first, THEN reveal: setBoardHidden(false) re-applies the CANONICAL
+  // board's aria labels, so applying the truth first let it clobber `swap`'s
+  // phantom exchange (the item visually moved but was announced pre-swap).
   setBoardHidden(false); // BUG-021: the clicked answer reveals the board images
+  applyTruth(activeTruth(false));
   showFeedback(true, t('feedbackHit', { points }));
   announce('Correct. Plus ' + points + ' points.');
   blip(523, 70);
@@ -395,8 +398,8 @@ function gradeMiss(heartsLost, reason = 'wrong') {
           return t(m.key, m.vars);
         })();
   // The truth is always revealed (plan §10), pulsing on a miss.
-  applyTruth(activeTruth(true));
   setBoardHidden(false); // BUG-021: the clicked answer reveals the board images
+  applyTruth(activeTruth(true)); // truth last so the reveal wins over canonical aria
   showFeedback(false, message);
   state.hearts -= heartsLost;
   state.streak = 0;
@@ -704,14 +707,16 @@ function showLevelClear() {
     els.clearItems.appendChild(chip);
   }
   openOverlay('levelclear');
-  (blockedByTimeout
+  // els.btnRetry2 has no DOM mapping, so this could be undefined and crashed
+  // the level-clear path (pageerror: reading 'focus').
+  const clearTarget = blockedByTimeout
     ? els.btnRetry2
     : nextId
       ? els.btnNext
       : onShuffleCard
         ? els.btnCards
-        : els.btnRetry2
-  ).focus();
+        : els.btnRetry2;
+  clearTarget?.focus?.();
   blip(523, 90, 'triangle', 0);
   blip(659, 90, 'triangle', 0.1);
   blip(784, 160, 'triangle', 0.2);
