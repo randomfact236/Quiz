@@ -181,7 +181,7 @@ These are cheap, high-visibility wins:
 
 1. **Wire the `--font-inter` variable into Tailwind.** `layout.tsx` loads Inter with `variable: '--font-inter'` but `tailwind.config.ts` `fontFamily.sans` hardcodes `['Inter','system-ui','sans-serif']` — so the optimized self-hosted font is **never actually applied** (dead optimization). Fix: `sans: ['var(--font-inter)', …]`.
 2. **Unify page background gradients.** Home/quiz use `#A5A3E4 → #BF7076`; `/play` and `/games` use `#E8E4F3 → #D4C5E8`. Extract `--grad-page` / a `PageShell` so a design tweak is one edit.
-3. **Purge duplicated/contradictory `dark:` classes** (e.g. `dark:bg-secondary-800/50` twice; two `dark:hover:bg-*` on one element; badge classes duplicated). `npm run check:theme` already flags these.
+3. **Purge duplicated/contradictory `dark:` classes** (e.g. `dark:bg-secondary-800/50` twice; two `dark:hover:bg-*` on one element; badge classes duplicated). `npm run check:theme` already flags these. - FIXED 2026-09-21: 29 duplicate utilities removed across 14 components and the contradictory dark:hover stacks collapsed to one value.
 4. **Migrate auth pages off `slate-*`** onto the app's semantic tokens (`bg-card`, `text-foreground`, `secondary-*`) for consistent dark mode.
 5. **Centralize the mode/picker card grids** (home `ModeCards`, `/play` `MODES`, quiz "Special Quiz Modes" — three hand-rolled near-identical grids). Extract one `<ChoiceCard>`.
 6. **Standardize radius & shadow scales** (currently mixes `rounded-xl/2xl/[3rem]` and `shadow-lg/md/soft` + arbitrary values). Pick 2 radii + 3 shadows.
@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 8 (2026-09-21): duplicated/contradictory dark: utilities purged (29 removals, 14 files).
 Wave 7 (2026-09-21): PWA icon set (192/512/maskable/apple-touch) + manifest; SEC-11 TRUST_PROXY documented.
 Wave 6 (2026-09-21): login/register a11y error semantics + password-rule parity; runbook alerting/off-box-backup guidance.
 Wave 5 (2026-09-21): mobile drawer focus trap + scroll lock; quiz play aria-live announcements.
