@@ -207,7 +207,7 @@ These are cheap, high-visibility wins:
 - [ ] H9 rotate dev/prod credentials (admin, DB, Redis, JWT, Google OAuth) and move the OAuth secret off disk
 - [ ] H4 finish `content:push` and verify the state file covers all content families
 - [x] SEC-05 replace literal DB passwords in `docker-compose.yml` with `${…}` from an untracked `.env` - FIXED 2026-09-21: compose interpolates POSTGRES_PASSWORD from the untracked root .env (value preserved for existing dev volumes).
-- [ ] SEC-08/09: convert inline `@Body()` types to DTOs (esp. `newsletter/unsubscribe`); return `toProfile()` from admin user endpoints - PARTIAL 2026-09-21: newsletter/unsubscribe DTO + admin toProfile() done; joke votes / chapter CRUD / PUT users/profile DTOs remain.
+- [x] SEC-08/09: convert inline `@Body()` types to DTOs (esp. `newsletter/unsubscribe`); return `toProfile()` from admin user endpoints - FIXED 2026-09-21: newsletter/unsubscribe, dad-joke votes, chapter CRUD and PUT /users/profile all use validated DTOs; admin user endpoints return toProfile().
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
