@@ -339,3 +339,21 @@ export async function recordImageRiddleEngagement(
     // Counters are best-effort; failures are swallowed by design.
   }
 }
+
+/** H1 (audit SEC-03): grade one image-riddle guess server-side. */
+export interface ImageRiddleGuessResult {
+  correct: boolean;
+  answer: string;
+}
+
+export async function checkImageRiddleGuess(
+  riddleId: string,
+  guess: string
+): Promise<ImageRiddleGuessResult> {
+  const response = await apiRequest<ImageRiddleGuessResult>('/image-riddles/answers/check', {
+    method: 'POST',
+    body: JSON.stringify({ riddleId, guess }),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  return response.data;
+}

@@ -454,3 +454,21 @@ export async function getRiddleStats(): Promise<RiddleStats> {
   const response = await api.get<RiddleStats>('/riddle-mcq/stats/overview');
   return response.data;
 }
+
+/** H1 (audit SEC-03): grade one riddle answer server-side. */
+export interface RiddleAnswerCheckResult {
+  correct: boolean;
+  correctAnswer: string | null;
+  correctLetter: string | null;
+}
+
+export async function checkRiddleAnswer(
+  riddleId: string,
+  answer: string
+): Promise<RiddleAnswerCheckResult> {
+  const response = await api.post<RiddleAnswerCheckResult>('/riddle-mcq/answers/check', {
+    riddleId,
+    answer,
+  });
+  return response.data;
+}

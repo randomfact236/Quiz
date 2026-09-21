@@ -434,3 +434,25 @@ export async function getQuizSessionHistory(guestId?: string): Promise<QuizSessi
     return [];
   }
 }
+
+/**
+ * H1 (audit SEC-03): grade one quiz answer server-side. Public reads can then
+ * stop shipping the answer key; the revealed answer comes back only after a
+ * submission (used by the play flow + review screen).
+ */
+export interface AnswerCheckResult {
+  correct: boolean;
+  correctAnswer: string | null;
+  correctLetter: string | null;
+}
+
+export async function checkQuizAnswer(
+  questionId: string,
+  answer: string
+): Promise<AnswerCheckResult> {
+  const response = await api.post<AnswerCheckResult>('/quiz-mcq/answers/check', {
+    questionId,
+    answer,
+  });
+  return response.data;
+}
