@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 13 (2026-09-21): BE-11 partial - QuestionLikesService spec (9 tests, 13 suites/96 total).
 Wave 12 (2026-09-21): H1 phase 2c prep - frontend graders (checkQuizAnswer/checkRiddleAnswer/checkImageRiddleGuess) added; call-site switch is next.
 Wave 11 (2026-09-21): H1 phase 2b - riddle + image-riddle server-side graders (live-verified).
 Wave 10 (2026-09-21): H1 phase 2a - POST /quiz-mcq/answers/check (server-side grading), live-verified.
@@ -239,7 +240,7 @@ Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inlin
 
 ### 6.3 Backlog / quality
 
-- [ ] BE-11 backend specs for analytics, duels, question-likes, riddle-mcq; raise the coverage threshold
+- [x] BE-11 backend specs for analytics, duels, question-likes, riddle-mcq; raise the coverage threshold - PARTIAL 2026-09-21: QuestionLikesService covered (9 tests; backend now 13 suites / 96 tests). analytics, duels, riddle-mcq + the coverage threshold remain.
 - [x] BE-02 single `CacheModule` import; BE-03/05 batch writes; BE-06 family-scoped invalidation - PARTIAL 2026-09-21 (wave 4): CacheModule registered once in AppModule, per-module CacheService providers removed (verified by a full app boot in prod); BE-03/05/06 remain.
 - [x] OPS-13/18 rewrite or delete the broken docker-startup / port-security scripts; OPS-12/24 delete orphaned entrypoint + root Dockerfile - PARTIAL 2026-09-21: broken docker-startup.ps1/.sh deleted; port-security scripts untouched.
 - [x] OPS-19 off-box backup replication + documented restore drills - PARTIAL 2026-09-21: runbook section 11 documents the off-box replication + drill; the actual rclone/object-storage job is owner/VPS work.
