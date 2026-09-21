@@ -44,12 +44,15 @@ export async function generateMetadata({
       // Self-canonical + og:url: scrapers obey rel=canonical, so pointing it at
       // /quiz-mcq made Facebook preview the hub instead of this question card.
       const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&q=${questionId}`;
+      // Spec A3 #3: the description IS the question text (FB/LinkedIn display it).
+      const description = share.question.slice(0, 110);
       return {
         ...MODULE_META['quiz-mcq'],
         title,
+        description,
         alternates: { canonical: url },
-        openGraph: { title, url, images: [image] },
-        twitter: { title, images: [image] },
+        openGraph: { title, description, url, images: [image] },
+        twitter: { title, description, images: [image] },
       };
     }
   }

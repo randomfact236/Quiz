@@ -42,12 +42,15 @@ export async function generateMetadata({
       const image = `/api/og?type=riddle-question&id=${questionId}&v=2`;
       // Self-canonical + og:url (see quiz-mcq page): scrapers obey rel=canonical.
       const url = `${APP_URL}/riddle-mcq?q=${questionId}`;
+      // Spec A3 #6: the description IS the riddle text.
+      const description = share.question.slice(0, 110);
       return {
         ...MODULE_META['riddle-mcq'],
         title,
+        description,
         alternates: { canonical: url },
-        openGraph: { title, url, images: [image] },
-        twitter: { title, images: [image] },
+        openGraph: { title, description, url, images: [image] },
+        twitter: { title, description, images: [image] },
       };
     }
   }
