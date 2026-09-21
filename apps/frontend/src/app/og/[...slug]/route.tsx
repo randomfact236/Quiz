@@ -12,6 +12,9 @@
  *   /og/riddle-category/<slug>.png
  *   /og/quiz-result/<subject>/<score>-<total>.png
  *   /og/joke.png
+ *   /og/image-riddle/<id>.png        (SHARE-01 #8)
+ *   /og/game/<slug>.png              (SHARE-01 #10, per-game accents)
+ *   /og/games.png · /og/play.png     (hub cards)
  *
  * It delegates to the existing /api/og handler, so rendering stays in one place.
  */
@@ -28,8 +31,10 @@ export async function GET(
   const query = new URLSearchParams({ type });
   const last = strip(rest[rest.length - 1] ?? '');
 
-  if (type === 'quiz-question' || type === 'riddle-question') {
+  if (type === 'quiz-question' || type === 'riddle-question' || type === 'image-riddle') {
     query.set('id', last);
+  } else if (type === 'game') {
+    query.set('slug', last);
   } else if (type === 'joke') {
     // /og/joke.png            -> generic section card
     // /og/joke/<id>.png       -> that joke's setup

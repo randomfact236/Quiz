@@ -107,6 +107,20 @@ export async function getImageRiddleCategories(): Promise<ImageRiddleCategory[]>
   return response.data;
 }
 
+/**
+ * GET /image-riddles/:id — one published riddle, for the per-riddle deep
+ * link (legacy ?riddle=<id> and the /image-riddles/<id> share URLs): it
+ * opens the riddle's modal even when it is not on the current grid page.
+ */
+export async function getImageRiddle(id: string): Promise<ImageRiddle | null> {
+  try {
+    const response = await api.get<ImageRiddle>(`/image-riddles/${id}`);
+    return response.data;
+  } catch {
+    return null;
+  }
+}
+
 interface ImageRiddlesStats {
   totalRiddles: number;
   totalCategories: number;

@@ -18,6 +18,7 @@ import { Sparkles } from 'lucide-react';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
+import { getImageRiddle } from '@/lib/image-riddles-api';
 
 import {
   CategorySidebar,
@@ -36,10 +37,17 @@ import {
 import { ITEMS_PER_PAGE, applyMixSort } from '@/features/image-riddles/lib/game';
 import { useSavedItems } from '@/hooks/useSavedItems';
 import { getCommentCounts } from '@/lib/comments-api';
+import { readImageRiddleDeepLinkId } from '@/lib/deep-links';
 import ShareMenu from '@/components/share/ShareMenu';
 
 export default function ImageRiddlesPage(): JSX.Element {
   const [topicsOpen, setTopicsOpen] = useState(false);
+
+  // 🔗 Deep link (BUG-064 follow-up): the legacy ?riddle=<id> share links and
+  // the new per-riddle /image-riddles/<id> URLs open that riddle's modal.
+  // Captured during FIRST RENDER — the filters hook's URL write-back strips
+  // unknown params from the address bar before effects run.
+  const [deepLinkRiddleId] = useState(readImageRiddleDeepLinkId);
 
   const filters = useImageRiddleFilters();
   const catalog = useImageRiddleCatalog({
@@ -98,6 +106,23 @@ export default function ImageRiddlesPage(): JSX.Element {
     onSolved: score.recordSolved,
     onRevealed: score.recordRevealed,
   });
+
+  // 🔗 Deep link: fetch the linked riddle directly so the modal opens even
+  // when the riddle is not on the current grid page (mount-once).
+  useEffect(() => {
+    if (!deepLinkRiddleId) return;
+    let cancelled = false;
+    getImageRiddle(deepLinkRiddleId)
+      .then((riddle) => {
+        if (!cancelled && riddle) game.openRiddle(riddle);
+      })
+      .catch(() => {
+        /* bad/dead link — just show the grid */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [deepLinkRiddleId, game.openRiddle]);
 
   /**
    * Card "Reveal" request — routed through the MODAL, never inline. Showing
@@ -245,8 +270,8 @@ export default function ImageRiddlesPage(): JSX.Element {
             text={`Can you solve this image riddle: "${shareRiddle.title}"?`}
             url={
               typeof window !== 'undefined'
-                ? `${window.location.origin}/image-riddles?riddle=${shareRiddle.id}`
-                : `/image-riddles?riddle=${shareRiddle.id}`
+                ? `${window.location.origin}/image-riddles/${shareRiddle.id}`
+                : `/image-riddles/${shareRiddle.id}`
             }
             saveNamespace="image-riddles"
             saveId={shareRiddle.id}

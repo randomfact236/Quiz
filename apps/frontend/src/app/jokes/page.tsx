@@ -13,6 +13,7 @@ import {
   type AdaptedJoke,
 } from '@/lib/jokes-api';
 import { getCommentCounts } from '@/lib/comments-api';
+import { readJokeDeepLinkId } from '@/lib/deep-links';
 import { useSavedItems } from '@/hooks/useSavedItems';
 import { getItem, setItem, STORAGE_KEYS } from '@/lib/storage';
 import { track } from '@/lib/analytics';
@@ -589,6 +590,30 @@ export default function JokesPage(): JSX.Element {
     currentPage * ITEMS_PER_PAGE
   );
 
+  // 🔗 Deep link (BUG-064 follow-up): the legacy ?joke=<id> share links and
+  // the per-joke /jokes/<id> URLs flip that card open and scroll to it. Runs
+  // once, after the list lands; jumps to the card's page when it is not on
+  // the current one.
+  const deepLinkJokeDone = useRef(false);
+  useEffect(() => {
+    if (loading || deepLinkJokeDone.current || typeof window === 'undefined') return;
+    const id = readJokeDeepLinkId();
+    if (!id) return;
+    const index = displayedJokes.findIndex((j) => j.id === id);
+    if (index === -1) return;
+    deepLinkJokeDone.current = true;
+    const targetPage = Math.floor(index / ITEMS_PER_PAGE) + 1;
+    if (targetPage !== currentPage) setCurrentPage(targetPage);
+    toggleFlip(id);
+    // Wait for the (possible) page switch to render before scrolling.
+    setTimeout(() => {
+      document
+        .getElementById(`joke-${id}`)
+        ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }, 150);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, displayedJokes]);
+
   // Scroll to the top of the grid, clearing the site header + sticky section bar
   const scrollToGrid = () => {
     const el = document.getElementById('jokes-grid');
@@ -1040,7 +1065,8 @@ export default function JokesPage(): JSX.Element {
                   return (
                     <div
                       key={joke.id}
-                      className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2"
+                      id={`joke-${joke.id}`}
+                      className="group relative min-h-[120px] grid grid-cols-1 w-full perspective-1000 cursor-pointer rounded-2xl focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-orange-500 focus-visible:ring-offset-2 scroll-mt-32"
                       onClick={() => toggleFlip(joke.id)}
                       tabIndex={0}
                       role="article"

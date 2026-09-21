@@ -23,7 +23,16 @@ const FAMILY_GRADIENT: Record<OgFamily, string> = {
 
 const PILLARS = ['Quizzes', 'Riddles', 'Dad Jokes', 'Image Puzzles', 'Games'];
 
-function Canvas({ family, children }: { family: OgFamily; children: React.ReactNode }) {
+function Canvas({
+  family,
+  background,
+  children,
+}: {
+  family: OgFamily;
+  /** Overrides the family gradient (per-game accents, WP2). */
+  background?: string;
+  children: React.ReactNode;
+}) {
   return (
     <div
       style={{
@@ -33,7 +42,7 @@ function Canvas({ family, children }: { family: OgFamily; children: React.ReactN
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        background: FAMILY_GRADIENT[family],
+        background: background ?? FAMILY_GRADIENT[family],
         color: '#ffffff',
         textAlign: 'center',
         position: 'relative',
@@ -213,6 +222,105 @@ export function JokeShareImage({ setup }: { setup?: string | undefined } = {}) {
         {jokeLine || 'laugh out loud - new one every day'}
       </div>
       <div style={{ marginTop: 18, fontSize: 26, opacity: 0.88 }}>pigzap.com/jokes</div>
+    </Canvas>
+  );
+}
+
+/** Image-riddle share (§3 #8): teal family, the riddle's own picture + title —
+ *  never the answer. `imageSrc` is a pre-fetched data URL (og-data reads the
+ *  bytes server-side); without it the card degrades to the 🖼️ mark. The
+ *  picture sits in a padded white frame with objectFit contain so no riddle
+ *  image is ever cropped at the frame edges. */
+export function ImageRiddleShareImage({
+  title,
+  imageSrc,
+}: {
+  title?: string | undefined;
+  imageSrc?: string | null;
+}) {
+  const titleLine = (title ?? '').trim().slice(0, 80);
+  const titleSize = titleLine.length > 60 ? 36 : 44;
+  return (
+    <Canvas family="riddle">
+      {imageSrc ? (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            width: 600,
+            height: 330,
+            background: '#ffffff',
+            borderRadius: 24,
+            border: '3px solid rgba(255,255,255,0.65)',
+            padding: 24,
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={imageSrc}
+            width={552}
+            height={282}
+            alt=""
+            style={{ width: '100%', height: '100%', objectFit: 'contain' }}
+          />
+        </div>
+      ) : (
+        <div style={{ fontSize: 150, lineHeight: 1 }}>🖼️</div>
+      )}
+      <div
+        style={{
+          marginTop: 24,
+          fontSize: titleSize,
+          fontWeight: 800,
+          maxWidth: '86%',
+          textAlign: 'center',
+        }}
+      >
+        {titleLine || 'Image Riddles'}
+      </div>
+      <div style={{ marginTop: 16, fontSize: 26, opacity: 0.88, textAlign: 'center' }}>
+        can you solve it? → pigzap.com
+      </div>
+    </Canvas>
+  );
+}
+
+/** Game share (§3 #10 / WP2): per-game accent gradient + emoji + blurb. */
+export function GameShareImage({
+  emoji,
+  title,
+  blurb,
+  gradient,
+  hook,
+}: {
+  emoji: string;
+  title: string;
+  blurb?: string | undefined;
+  gradient: string;
+  hook: string;
+}) {
+  const blurbLine = (blurb ?? '').trim().slice(0, 110);
+  return (
+    <Canvas family="quiz" background={gradient}>
+      <div style={{ fontSize: 140, lineHeight: 1.15 }}>{emoji}</div>
+      <div style={{ marginTop: 14, fontSize: 62, fontWeight: 800, textAlign: 'center' }}>
+        {title}
+      </div>
+      {blurbLine ? (
+        <div
+          style={{
+            marginTop: 12,
+            fontSize: 28,
+            opacity: 0.92,
+            maxWidth: '84%',
+            textAlign: 'center',
+          }}
+        >
+          {blurbLine}
+        </div>
+      ) : null}
+      <div style={{ marginTop: 18, fontSize: 26, opacity: 0.88, textAlign: 'center' }}>{hook}</div>
     </Canvas>
   );
 }

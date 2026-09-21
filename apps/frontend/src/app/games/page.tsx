@@ -12,77 +12,7 @@
 import Link from 'next/link';
 
 import { GameShareButton } from '@/components/games/GameShareButton';
-
-interface GameCard {
-  slug: string;
-  emoji: string;
-  title: string;
-  blurb: string;
-  gradient: string;
-}
-
-const GAMES: GameCard[] = [
-  {
-    slug: 'tap-or-dont-tap',
-    emoji: '🚦',
-    title: "Tap or Don't Tap",
-    blurb:
-      'Tap the green, resist the red. A Go/No-Go reaction test — how fast are you in milliseconds?',
-    gradient: 'from-emerald-500 to-teal-600',
-  },
-  {
-    slug: 'tic-tac-toe',
-    emoji: '⭕',
-    title: 'Tic Tac Toe',
-    blurb: 'Pass-and-play or take on the computer — hard is unbeatable. Misère rule for the brave.',
-    gradient: 'from-cyan-500 to-blue-600',
-  },
-  {
-    slug: 'sliding-puzzle',
-    emoji: '🧩',
-    title: 'Sliding Puzzle',
-    blurb:
-      'Slide the tiles into order — 3×3 to 5×5, picture mode, hard mode and a new daily challenge.',
-    gradient: 'from-amber-500 to-orange-600',
-  },
-  {
-    slug: 'word-puzzle',
-    emoji: '🔤',
-    title: 'Word Puzzle',
-    blurb:
-      'Drag to find hidden words in themed letter grids — hints, stars and beatable best times.',
-    gradient: 'from-rose-500 to-pink-600',
-  },
-  {
-    slug: 'hurdle-runner',
-    emoji: '🏃',
-    title: 'Hurdle Runner',
-    blurb: 'Endless hurdle sprint — jump, grab 💚 hearts and chase the day-to-night horizon.',
-    gradient: 'from-lime-500 to-green-600',
-  },
-  {
-    slug: 'flying-snake',
-    emoji: '🐍',
-    title: 'Flying Snake',
-    blurb: 'Flappy-style flying snake — thread the gaps and climb from bronze to platinum medals.',
-    gradient: 'from-sky-500 to-indigo-600',
-  },
-  {
-    slug: 'spirit-runner',
-    emoji: '🌲',
-    title: 'Spirit Runner',
-    blurb:
-      'Mystical forest runner — rune gates, orbs and powers, and the shadow realm for the bold.',
-    gradient: 'from-violet-500 to-purple-600',
-  },
-  {
-    slug: 'memory-quiz',
-    emoji: '🧠',
-    title: 'Memory Quiz',
-    blurb: 'Memorize the snack grid before the timer runs out — then prove where everything was.',
-    gradient: 'from-fuchsia-500 to-rose-600',
-  },
-];
+import { GAMES } from '@/lib/games-registry';
 
 export default function GamesPage(): JSX.Element {
   return (

@@ -57,6 +57,25 @@ async function fetchJson<T>(path: string): Promise<T | null> {
   }
 }
 
+/**
+ * Fetch an image and convert it to a data URL for satori (the pig icon uses
+ * the same trick). Pre-reading the bytes here means a storage blip degrades
+ * to the template's emoji fallback instead of a broken og:image.
+ */
+export async function imageDataUrl(url: string): Promise<string | null> {
+  try {
+    const response = await fetch(url, { next: { revalidate: 900 } });
+    if (!response.ok) return null;
+    const type = (response.headers.get('content-type') ?? '').split(';')[0] ?? '';
+    if (!type.startsWith('image/')) return null;
+    const buffer = Buffer.from(await response.arrayBuffer());
+    if (buffer.byteLength === 0 || buffer.byteLength > 4 * 1024 * 1024) return null;
+    return `data:${type};base64,${buffer.toString('base64')}`;
+  } catch {
+    return null;
+  }
+}
+
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 
 /**
@@ -122,6 +141,26 @@ export const ogData = {
     fetchJson<Array<{ id: string; name: string; slug: string; emoji: string; isActive: boolean }>>(
       '/riddle-mcq/categories'
     ),
+
+  /**
+   * A single image riddle for the per-riddle share card (SHARE-01 #8). Only
+   * title + image URL leave the entity — the answer field is never read.
+   * Relative /uploads paths are resolved against the backend origin.
+   */
+  imageRiddleShare: async (
+    id: string
+  ): Promise<{ title: string; imageUrl: string | null } | null> => {
+    if (!UUID_RE.test(id)) return null;
+    const raw = await fetchJson<{ title?: string; imageUrl?: string }>(`/image-riddles/${id}`);
+    const title = (raw?.title ?? '').trim();
+    if (!title) return null;
+    const imageUrl = (raw?.imageUrl ?? '').trim();
+    if (!imageUrl) return { title, imageUrl: null };
+    return {
+      title,
+      imageUrl: /^https?:\/\//i.test(imageUrl) ? imageUrl : `${API_BASE_URL}${imageUrl}`,
+    };
+  },
 
   /** Total published riddles (public stats overview). */
   riddleTotal: async (): Promise<number | null> => {

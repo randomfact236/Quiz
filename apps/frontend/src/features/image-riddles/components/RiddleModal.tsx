@@ -125,8 +125,8 @@ export default function RiddleModal({
           text={`Can you solve this image riddle: "${riddle.title}"?`}
           url={
             typeof window !== 'undefined'
-              ? `${window.location.origin}/image-riddles?riddle=${riddle.id}`
-              : `/image-riddles?riddle=${riddle.id}`
+              ? `${window.location.origin}/image-riddles/${riddle.id}`
+              : `/image-riddles/${riddle.id}`
           }
           saveNamespace="image-riddles"
           saveId={riddle.id}

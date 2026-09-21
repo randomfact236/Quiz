@@ -78,6 +78,21 @@ export const MODULE_META: {
     description:
       'Everything in one place: knowledge quizzes, brain-teaser riddles, dad jokes and visual puzzles. Pick a module and start playing.',
     alternates: { canonical: '/play' },
+    // SHARE-01 #10: the Play Hub gets its own card instead of the home one.
+    openGraph: {
+      type: 'website',
+      title: 'Play on PigZap — Quizzes, Riddles, Image Puzzles, Dad Jokes & Games',
+      description:
+        'Everything in one place: knowledge quizzes, brain-teaser riddles, dad jokes and visual puzzles. Pick a module and start playing.',
+      url: `${APP_URL}/play`,
+      images: [{ url: '/og/play.png', width: 1200, height: 630 }],
+    },
+    twitter: {
+      title: 'Play on PigZap — Quizzes, Riddles, Image Puzzles, Dad Jokes & Games',
+      description:
+        'Everything in one place: knowledge quizzes, brain-teaser riddles, dad jokes and visual puzzles. Pick a module and start playing.',
+      images: ['/og/play.png'],
+    },
   },
   achievements: {
     title: 'Achievements — Unlock Badges as You Play',

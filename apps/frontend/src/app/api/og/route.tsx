@@ -9,6 +9,9 @@
  *   type=quiz-result     &subject&score&total → score badge
  *   type=riddle-category &category=<slug>     → teal 🧩 category card
  *   type=riddle-question &id=<uuid>           → real riddle + options
+ *   type=image-riddle    &id=<uuid>           → riddle picture + title (SHARE-01 #8)
+ *   type=game            &slug=<slug>         → per-game accent card (WP2)
+ *   type=games / type=play                    → hub cards
  * Every displayed value is fetched server-side from the backend — URL params
  * only select what to render (and let platforms refetch when they change).
  * The answer never renders. Failures degrade to the generic family image so
@@ -19,13 +22,16 @@
 import { ImageResponse } from 'next/og';
 
 import {
+  GameShareImage,
+  ImageRiddleShareImage,
   JokeShareImage,
   OG_1200x630,
   QuestionShareImage,
   ResultShareImage,
   SubjectShareImage,
 } from '@/components/og/share-templates';
-import { formatCount, ogData } from '@/lib/og-data';
+import { GAMES_HUB_GRADIENT, PLAY_HUB_GRADIENT, findGame } from '@/lib/games-registry';
+import { formatCount, imageDataUrl, ogData } from '@/lib/og-data';
 
 /**
  * Facebook's crawler rejects a chunked PNG that has no Content-Length as a
@@ -41,6 +47,17 @@ async function asFixedPng(image: ImageResponse): Promise<Response> {
       'Content-Length': String(buffer.byteLength),
       'Cache-Control': 'public, max-age=3600, s-maxage=3600, no-transform',
     },
+  });
+}
+
+/** The /games hub card — also the degradation target for an unknown game slug. */
+function gamesHubCard() {
+  return GameShareImage({
+    emoji: '🎮',
+    title: 'PigZap Games',
+    blurb: '8 free brain games — no install, no signup',
+    gradient: GAMES_HUB_GRADIENT,
+    hook: 'play now → pigzap.com',
   });
 }
 export async function GET(request: Request): Promise<Response> {
@@ -160,6 +177,70 @@ export async function GET(request: Request): Promise<Response> {
               question: share.question,
               options: share.options,
               hook: 'solve it → pigzap.com',
+            }),
+            OG_1200x630
+          )
+        );
+      }
+
+      case 'image-riddle': {
+        // SHARE-01 #8: teal card with the riddle's own picture + title; the
+        // answer is never read. A missing riddle or image keeps the generic
+        // teal family card instead of the wrong-family joke fallback below.
+        const share = await ogData.imageRiddleShare(searchParams.get('id') ?? '');
+        if (!share) {
+          return asFixedPng(
+            new ImageResponse(
+              SubjectShareImage({
+                family: 'riddle',
+                emoji: '🖼️',
+                title: 'Image Riddles — guess the picture',
+                hook: 'play now → pigzap.com',
+              }),
+              OG_1200x630
+            )
+          );
+        }
+        const imageSrc = share.imageUrl ? await imageDataUrl(share.imageUrl) : null;
+        return asFixedPng(
+          new ImageResponse(ImageRiddleShareImage({ title: share.title, imageSrc }), OG_1200x630)
+        );
+      }
+
+      case 'game': {
+        // SHARE-01 #10 (WP2): per-game accent card. An unknown slug degrades
+        // to the games-hub card rather than the wrong-family joke fallback.
+        const game = findGame(searchParams.get('slug') ?? '');
+        if (game) {
+          return asFixedPng(
+            new ImageResponse(
+              GameShareImage({
+                emoji: game.emoji,
+                title: game.title,
+                blurb: game.blurb,
+                gradient: game.cssGradient,
+                hook: 'play now → pigzap.com',
+              }),
+              OG_1200x630
+            )
+          );
+        }
+        return asFixedPng(new ImageResponse(gamesHubCard(), OG_1200x630));
+      }
+
+      case 'games': {
+        return asFixedPng(new ImageResponse(gamesHubCard(), OG_1200x630));
+      }
+
+      case 'play': {
+        return asFixedPng(
+          new ImageResponse(
+            GameShareImage({
+              emoji: '🎯',
+              title: 'Play on PigZap',
+              blurb: 'Quizzes · Riddles · Image Puzzles · Dad Jokes · Games',
+              gradient: PLAY_HUB_GRADIENT,
+              hook: 'start now → pigzap.com',
             }),
             OG_1200x630
           )
