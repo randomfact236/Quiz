@@ -119,11 +119,16 @@ export const ogData = {
   /** A single dad joke for the per-joke share card (SHARE-01). */
   jokeShare: async (id: string): Promise<{ setup: string; punchline: string | null } | null> => {
     if (!UUID_RE.test(id)) return null;
-    const raw = await fetchJson<{ setup?: string; punchline?: string | null }>(
-      `/jokes/classic/${id}`
-    );
-    if (!raw?.setup) return null;
-    return { setup: raw.setup, punchline: raw.punchline ?? null };
+    // The public joke endpoint returns a single `joke` string (one-liners have
+    // no split); split setup/punchline shapes are also accepted.
+    const raw = await fetchJson<{
+      joke?: string;
+      setup?: string;
+      punchline?: string | null;
+    }>(`/jokes/classic/${id}`);
+    const setup = (raw?.setup ?? raw?.joke ?? '').trim();
+    if (!setup) return null;
+    return { setup, punchline: raw?.punchline ?? null };
   },
 
   /** Total published dad jokes (pagination total of the public classic list). */
