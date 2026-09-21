@@ -12,6 +12,8 @@ import {
   voteJoke,
   type AdaptedJoke,
 } from '@/lib/jokes-api';
+import { Folder } from 'lucide-react';
+import { JokeCategoryDrawer } from '@/components/jokes/JokeCategoryDrawer';
 import { getCommentCounts } from '@/lib/comments-api';
 import { readJokeDeepLinkId } from '@/lib/deep-links';
 import { useSavedItems } from '@/hooks/useSavedItems';
@@ -191,6 +193,8 @@ export default function JokesPage(): JSX.Element {
   const [serverFiltered, setServerFiltered] = useState<Joke[] | null>(null);
   const [apiOnline, setApiOnline] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  // BUG-058: mobile categories drawer, opened from the Focus header icon
+  const [catDrawerOpen, setCatDrawerOpen] = useState(false);
   const [sortOrder, setSortOrder] = useState<'newest' | 'unseen' | 'random' | 'top'>('newest');
   const [randomSeed, setRandomSeed] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(1);
@@ -695,6 +699,16 @@ export default function JokesPage(): JSX.Element {
               </span>{' '}
               Focus
             </h2>
+            {/* BUG-058: mobile-only icon — opens the joke categories drawer */}
+            <button
+              onClick={() => setCatDrawerOpen(true)}
+              className="lg:hidden mt-2 inline-flex items-center gap-2 rounded-lg border-2 border-slate-200 dark:border-secondary-700 bg-white dark:bg-secondary-800 px-3 py-2 text-xs font-black text-slate-700 dark:text-secondary-200 shadow-sm hover:border-orange-400 dark:hover:border-orange-500/60 transition-colors"
+              aria-haspopup="dialog"
+              aria-label="Open joke categories"
+            >
+              <Folder className="h-4 w-4 text-orange-400" aria-hidden="true" />
+              Categories
+            </button>
           </div>
 
           {/* Main Grid Header Portion */}
@@ -938,6 +952,26 @@ export default function JokesPage(): JSX.Element {
                   </div>
                 )}
               </div>
+
+              {/* BUG-058: mobile categories drawer */}
+              <JokeCategoryDrawer
+                open={catDrawerOpen}
+                onClose={() => setCatDrawerOpen(false)}
+                categories={jokeCategories
+                  .filter((c) => (categoryCounts[c.id] || 0) > 0)
+                  .map((c) => ({
+                    id: c.id,
+                    name: c.name,
+                    emoji: c.emoji,
+                    count: categoryCounts[c.id] || 0,
+                  }))}
+                totalJokes={jokes.length}
+                activeCategory={activeCategory}
+                onSelect={(id) => {
+                  setCatDrawerOpen(false);
+                  setActiveCategory(id);
+                }}
+              />
 
               {/* Topics / Categories with counts */}
               <div className="space-y-4">
