@@ -128,6 +128,25 @@ export async function GET(request: Request): Promise<Response> {
         );
       }
 
+      case 'riddle-result': {
+        const label = searchParams.get('label') ?? 'Mixed';
+        const score = Math.max(0, parseInt(searchParams.get('score') ?? '0', 10) || 0);
+        const total = Math.max(1, parseInt(searchParams.get('total') ?? '10', 10) || 10);
+        return asFixedPng(
+          new ImageResponse(
+            ResultShareImage({
+              family: 'riddle',
+              score: Math.min(score, total),
+              total,
+              emoji: '🧩',
+              name: `${label.slice(0, 28)} Riddles`,
+              hook: 'beat me -> pigzap.com',
+            }),
+            OG_1200x630
+          )
+        );
+      }
+
       case 'riddle-question': {
         const share = await ogData.riddleQuestionShare(searchParams.get('id') ?? '');
         if (!share) break;

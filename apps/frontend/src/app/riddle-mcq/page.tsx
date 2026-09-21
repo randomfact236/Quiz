@@ -62,6 +62,31 @@ export async function generateMetadata({
   }
 
   // Category share (§3 #5): teal 🧩 card with the category name.
+  // Riddle result share (SHARE-01 row #7): score card, mirroring the quiz result.
+  const scoreParam = first(params['score']);
+  const totalParam = first(params['total']);
+  if (scoreParam && totalParam) {
+    const label = first(params['label']) || 'Mixed';
+    const image = `/og/riddle-result/${encodeURIComponent(label)}/${scoreParam}-${totalParam}.png`;
+    const url = `${APP_URL}/riddle-mcq?label=${encodeURIComponent(label)}&score=${scoreParam}&total=${totalParam}`;
+    const title = `I scored ${scoreParam}/${totalParam} on ${label} Riddles ${'🧩'}`;
+    const description = `Beat my score in the ${label} Riddles - can you do better?`;
+    return {
+      ...MODULE_META['riddle-mcq'],
+      title,
+      description,
+      alternates: { canonical: url },
+      openGraph: {
+        type: 'website',
+        title,
+        description,
+        url,
+        images: [{ url: image, width: 1200, height: 630 }],
+      },
+      twitter: { title, description, images: [image] },
+    };
+  }
+
   if (category) {
     const categories = await ogData.riddleCategories();
     const match = categories?.find((c) => c.slug === category);

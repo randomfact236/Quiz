@@ -95,7 +95,12 @@ function ResultsContent(): JSX.Element {
     if (!result) return;
 
     const gameMode = result.session.mode === 'timer' ? 'Challenge' : 'Practice';
-    const text = `I scored ${result.correctCount}/${result.session.riddles.length} (${Math.round(result.percentage)}%) in the ${result.session.subjectName} Riddle ${gameMode}! Grade: ${result.grade}`;
+    // SHARE-01 row #7: share a score-card URL, not just text, so the preview
+    // renders the riddle result card (/riddle-mcq?label=&score=&total=).
+    const scoreCard = `${window.location.origin}/riddle-mcq?label=${encodeURIComponent(
+      result.session.subjectName
+    )}&score=${result.correctCount}&total=${result.session.riddles.length}`;
+    const text = `I scored ${result.correctCount}/${result.session.riddles.length} (${Math.round(result.percentage)}%) in the ${result.session.subjectName} Riddle ${gameMode}! Grade: ${result.grade}\n${scoreCard}`;
 
     try {
       await navigator.clipboard.writeText(text);

@@ -42,6 +42,12 @@ export async function GET(
     query.set('subject', m ? m[1]! : last);
   } else if (type === 'riddle-category') {
     query.set('category', last);
+  } else if (type === 'riddle-result') {
+    // /og/riddle-result/<label>/<score>-<total>.png
+    const [score = '0', total = '0'] = last.split('-');
+    query.set('label', strip(rest[0] ?? ''));
+    query.set('score', score);
+    query.set('total', total);
   } else if (type === 'quiz-result') {
     const [score = '0', total = '0'] = last.split('-');
     query.set('subject', strip(rest[0] ?? ''));
