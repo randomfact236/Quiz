@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 6 (2026-09-21): login/register a11y error semantics + password-rule parity; runbook alerting/off-box-backup guidance.
 Wave 5 (2026-09-21): mobile drawer focus trap + scroll lock; quiz play aria-live announcements.
 Wave 4 (2026-09-21): BE-02 single global CacheModule (boot-verified); cosmetics #9 consent banner no longer overlaps the mobile bottom nav.
 Wave 3 (2026-09-21): FE-02/03 fake-link + focus fixes, canonicals on 5 static pages, menubar role removed, OPS-14 gitleaks job in CI.
@@ -227,7 +228,7 @@ Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inlin
 - [ ] SEC-10/SEC-12 bind anonymous writes to a server-signed guest token
 - [x] OPS-05 container resource limits; OPS-07 add `REDIS_PASSWORD` to the prod template; OPS-06 prune prod images - PARTIAL 2026-09-21: per-service memory limits added to docker-compose.prod.yml; OPS-06 (prune prod images) remains.
 - [x] OPS-14 add gitleaks + CodeQL + (optional) blocking critical `npm audit` - PARTIAL 2026-09-21: gitleaks secret-scan job added to CI (green); CodeQL and a blocking critical-audit gate remain.
-- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21 (wave 3): hub error+retry states, FE-02/03 fake-link removal, canonicals on /about /faq /contact /privacy /terms, and the menubar fix are DONE; aria-live + drawer focus-trap are DONE in wave 5; the gradient-contrast review remains.
+- [x] FE-01 error states; FE-02/03 kill fake links; add per-page canonicals; `aria-live` + drawer focus trap; fix `role="menubar"` - PARTIAL 2026-09-21 (wave 3): hub error+retry states, FE-02/03 fake-link removal, canonicals on /about /faq /contact /privacy /terms, and the menubar fix are DONE; aria-live + drawer focus-trap (wave 5) and form error semantics role=alert/aria-invalid (wave 6) are DONE; the gradient-contrast review remains.
 - [ ] BE-09 run the CSV leakage/ambiguity repairs and re-audit
 
 ### 6.3 Backlog / quality
@@ -235,8 +236,8 @@ Wave 2 (2026-09-21, same commit chain): SEC-08 completed for the remaining inlin
 - [ ] BE-11 backend specs for analytics, duels, question-likes, riddle-mcq; raise the coverage threshold
 - [x] BE-02 single `CacheModule` import; BE-03/05 batch writes; BE-06 family-scoped invalidation - PARTIAL 2026-09-21 (wave 4): CacheModule registered once in AppModule, per-module CacheService providers removed (verified by a full app boot in prod); BE-03/05/06 remain.
 - [x] OPS-13/18 rewrite or delete the broken docker-startup / port-security scripts; OPS-12/24 delete orphaned entrypoint + root Dockerfile - PARTIAL 2026-09-21: broken docker-startup.ps1/.sh deleted; port-security scripts untouched.
-- [ ] OPS-19 off-box backup replication + documented restore drills
-- [ ] OPS-21 uptime/error alerting + incident/rollback runbook
+- [x] OPS-19 off-box backup replication + documented restore drills - PARTIAL 2026-09-21: runbook section 11 documents the off-box replication + drill; the actual rclone/object-storage job is owner/VPS work.
+- [x] OPS-21 uptime/error alerting + incident/rollback runbook - PARTIAL 2026-09-21: incident/rollback runbook exists (docs/production-runbook.md) and alerting setup is documented; wiring the monitor is owner work.
 - [ ] Cosmetics §5
 
 ### 6.4 Single authoritative Production Runbook (created 2026-09-21 - docs/production-runbook.md)
