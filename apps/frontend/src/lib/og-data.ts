@@ -34,6 +34,19 @@ export function pigIconDataUrl(): string | null {
   return pigIconDataUrlCache;
 }
 
+/** Setup half of a one-string joke (mirrors the client `splitJoke`). */
+function splitJokeSetup(fullJoke: string): string {
+  const full = fullJoke.trim();
+  if (full.includes('?')) {
+    return full.slice(0, full.indexOf('?') + 1).trim();
+  }
+  const parts = full.split('Because');
+  if (parts.length > 1) {
+    return (parts[0] ?? '').trim();
+  }
+  return full;
+}
+
 async function fetchJson<T>(path: string): Promise<T | null> {
   try {
     const response = await fetch(`${API_BASE_URL}${path}`, { next: { revalidate: 900 } });
@@ -119,16 +132,18 @@ export const ogData = {
   /** A single dad joke for the per-joke share card (SHARE-01). */
   jokeShare: async (id: string): Promise<{ setup: string; punchline: string | null } | null> => {
     if (!UUID_RE.test(id)) return null;
-    // The public joke endpoint returns a single `joke` string (one-liners have
-    // no split); split setup/punchline shapes are also accepted.
+    // The public joke endpoint returns a single `joke` string; split it with the
+    // same rule the client uses. Only the SETUP is ever returned - the punchline
+    // must not leak into the share card, title or description.
     const raw = await fetchJson<{
       joke?: string;
       setup?: string;
       punchline?: string | null;
     }>(`/jokes/classic/${id}`);
-    const setup = (raw?.setup ?? raw?.joke ?? '').trim();
+    const full = (raw?.setup ?? raw?.joke ?? '').trim();
+    const setup = splitJokeSetup(full);
     if (!setup) return null;
-    return { setup, punchline: raw?.punchline ?? null };
+    return { setup, punchline: null };
   },
 
   /** Total published dad jokes (pagination total of the public classic list). */

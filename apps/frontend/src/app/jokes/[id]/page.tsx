@@ -20,14 +20,12 @@ export async function generateMetadata({
   if (!joke) {
     return { title: 'Dad Jokes | PigZap' };
   }
-  const setup = joke.setup.slice(0, 60);
-  const title = `${setup} | PigZap Dad Jokes`;
-  const description = (joke.punchline ? `${joke.setup} - ${joke.punchline}` : joke.setup).slice(
-    0,
-    110
-  );
+  // Only the setup leaves the server: the punchline is the answer to the joke.
+  const setup = joke.setup.slice(0, 110);
+  const title = `${setup.slice(0, 60)} | PigZap Dad Jokes`;
+  const description = setup;
   const url = `${APP_URL}/jokes/${id}`;
-  const image = `/og/joke/${id}/v2.png`;
+  const image = `/og/joke/${id}/v3.png`;
   return {
     title,
     description,
