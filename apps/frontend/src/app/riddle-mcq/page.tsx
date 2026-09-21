@@ -39,7 +39,7 @@ export async function generateMetadata({
     if (share) {
       const base = share.subjectName || 'Riddles';
       const title = `Can you solve this riddle? 🧩 ${base}`;
-      const image = `/api/og?type=riddle-question&id=${questionId}&v=2`;
+      const image = `/og/riddle-question/${questionId}.png`;
       // Self-canonical + og:url (see quiz-mcq page): scrapers obey rel=canonical.
       const url = `${APP_URL}/riddle-mcq?q=${questionId}`;
       // Spec A3 #6: the description IS the riddle text.
@@ -67,7 +67,7 @@ export async function generateMetadata({
     const match = categories?.find((c) => c.slug === category);
     if (match) {
       const title = `Riddles · ${match.name} — brain teasers`;
-      const image = `/api/og?type=riddle-category&category=${encodeURIComponent(category)}&v=2`;
+      const image = `/og/riddle-category/${encodeURIComponent(category)}.png`;
       const url = `${APP_URL}/riddle-mcq?category=${encodeURIComponent(category)}`;
       return {
         ...MODULE_META['riddle-mcq'],

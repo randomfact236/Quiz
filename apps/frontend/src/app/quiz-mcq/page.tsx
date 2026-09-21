@@ -40,7 +40,7 @@ export async function generateMetadata({
     const share = await ogData.quizQuestionShare(questionId);
     if (share) {
       const title = `Can you answer this? 🧠 ${share.subjectName} Quiz`;
-      const image = `/api/og?type=quiz-question&id=${questionId}&v=2`;
+      const image = `/og/quiz-question/${questionId}.png`;
       // Self-canonical + og:url: scrapers obey rel=canonical, so pointing it at
       // /quiz-mcq made Facebook preview the hub instead of this question card.
       const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&q=${questionId}`;
@@ -68,7 +68,7 @@ export async function generateMetadata({
     const meta = await ogData.quizSubjectMeta(subject);
     const name = meta?.name ?? 'Quiz';
     const title = `I scored ${score}/${total} on ${name} — beat you! 🧠`;
-    const image = `/api/og?type=quiz-result&subject=${encodeURIComponent(subject)}&score=${score}&total=${total}&v=2`;
+    const image = `/og/quiz-result/${encodeURIComponent(subject)}/${score}-${total}.png`;
     const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&score=${score}&total=${total}`;
     return {
       ...MODULE_META['quiz-mcq'],
@@ -95,9 +95,9 @@ export async function generateMetadata({
       const count = counts?.bySubject[subject];
       const countPart = count !== undefined ? ` — ${formatCount(count)} Questions` : '';
       const title = `${meta.name} Quiz${countPart}`;
-      const image = `/api/og?type=quiz-subject&subject=${encodeURIComponent(subject)}${
-        count !== undefined ? `&v=${count}` : ''
-      }`;
+      const image = `/og/quiz-subject/${encodeURIComponent(subject)}${
+        count !== undefined ? `-${count}` : ''
+      }.png`;
       const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}`;
       return {
         ...MODULE_META['quiz-mcq'],
