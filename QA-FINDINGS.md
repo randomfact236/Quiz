@@ -37,6 +37,7 @@
 | BUG-060   | /riddle-mcq crashed: (riddle.options \|\| []).map is not a function | riddle-mcq (data shape)   | P0       | Fixed 2026-09-21  |
 | BUG-061   | FB "Corrupted Image": share PNGs streamed without Content-Length    | share / OG (headers)      | P1       | Fixed 2026-09-21  |
 | BUG-062   | FB showed the small icon card (og:image:width/height missing)       | share / OG (meta)         | P1       | Fixed 2026-09-21  |
+| BUG-063   | FB still showed the icon for /api/og?...&v=N (query-string path)    | share / OG (image path)   | P1       | Fixed 2026-09-21  |
 | BUG-056   | Integrate Google Search Console (data API) into the website         | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                            | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs                    | ops / VPS                 | P1       | Open (owner)      |
@@ -141,6 +142,15 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Root cause:** the share branches declared `og:image` but not `og:image:width` / `og:image:height` (and no `og:type`). With the dimensions absent, Facebook falls back to the small icon-style card even though the served PNG is a valid 1200x630.
 - **Fix (ef19aa0):** all five share branches now emit `og:type=website` and `images: [{ url, width: 1200, height: 630 }]`.
 - **Verified live:** `og:type`, `og:image`, `og:image:width=1200`, `og:image:height=630`, question-text `og:description`, self `og:url`, `twitter:card=summary_large_image`.
+
+### BUG-063 - share images moved to a clean /og/<type>/<id>.png path
+
+- **Date found:** 2026-09-21 (after BUG-061/062, FB showed no warning but still the icon card)
+- **Area:** share / OG - new `app/og/[...slug]/route.tsx`
+- **Priority:** P1
+- **Root cause (working theory, evidence-backed):** every failing image lived at `/api/og?type=...&id=...&v=N` (a query string under `/api`), while the one image FB always rendered - the home card - lives at a plain path `/opengraph-image` with no query string. Same bytes, headers and metadata on both.
+- **Fix (e799c90):** the generator is exposed at `/og/quiz-question/<id>.png`, `/og/riddle-question/<id>.png`, `/og/quiz-subject/<slug>[-<count>].png`, `/og/riddle-category/<slug>.png`, `/og/quiz-result/<subject>/<score>-<total>.png`, `/og/joke.png`; the new route delegates to the existing `/api/og` renderer. All share metadata points at the clean path.
+- **Verified live:** all clean paths return 200 image/png with an explicit Content-Length; the page emits `og:image` (clean path) + `og:image:width/height` + `og:type`.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
