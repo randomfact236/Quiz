@@ -49,7 +49,13 @@ export async function generateMetadata({
         title,
         description,
         alternates: { canonical: url },
-        openGraph: { title, description, url, images: [image] },
+        openGraph: {
+          type: 'website',
+          title,
+          description,
+          url,
+          images: [{ url: image, width: 1200, height: 630 }],
+        },
         twitter: { title, description, images: [image] },
       };
     }
@@ -67,7 +73,12 @@ export async function generateMetadata({
         ...MODULE_META['riddle-mcq'],
         title,
         alternates: { canonical: url },
-        openGraph: { title, url, images: [image] },
+        openGraph: {
+          type: 'website',
+          title,
+          url,
+          images: [{ url: image, width: 1200, height: 630 }],
+        },
         twitter: { title, images: [image] },
       };
     }
