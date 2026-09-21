@@ -98,3 +98,22 @@ completion and confirm the state file gains the missing families.
 - Workflows: `CI` (main/PR), `Sync branches` (production -> fast-forward main + backup branch).
 - Dependabot opens grouped/individual PRs; merge only when CI is green on the PR.
 - Do not push directly to `production` except through `main` (keeps main == production on deploy).
+
+## 11. Alerting & off-box backups (OPS-19 / OPS-21)
+
+**Uptime / error alerting (not yet wired).** Concrete setup:
+
+1. Add an external uptime monitor (UptimeRobot / Better Stack / Cloudflare Health Checks) on
+   `https://api.pigzap.com/api/v1/health/liveness` and `https://pigzap.com`, 60s interval,
+   alerting to email/Slack after 2 consecutive failures.
+2. Route any error webhook to the same alert channel so 5xx spikes page you.
+3. Set container log rotation on the VPS (Docker `log-opts max-size=10m max-file=3`) so logs
+   cannot fill the disk.
+
+**Off-box backup replication (not yet wired).**
+
+1. After the nightly dump, push the newest `.sql.gz` off the VPS:
+   `rclone copy /opt/quiz-backups remote:pigzap-backups --max-age 1d` (or an `scp` to a second host).
+2. Keep 30 days there; keep the existing 7 locally.
+3. Run a documented restore drill (quarterly): restore the newest off-box dump into a scratch
+   database, compare row counts, drop it.

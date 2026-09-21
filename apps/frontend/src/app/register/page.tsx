@@ -49,8 +49,13 @@ export default function RegisterPage() {
       return;
     }
 
-    if (password.length < 6) {
-      setError('Password must be at least 6 characters');
+    if (password.length < 8) {
+      setError('Password must be at least 8 characters');
+      return;
+    }
+
+    if (!/[A-Za-z]/.test(password) || !/\d/.test(password)) {
+      setError('Password must include at least one letter and one number');
       return;
     }
 
@@ -97,7 +102,11 @@ export default function RegisterPage() {
         <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
           <form className="space-y-5" onSubmit={handleSubmit}>
             {error && (
-              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-4 rounded-md flex items-start gap-3">
+              <div
+                role="alert"
+                id="register-error"
+                className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-4 rounded-md flex items-start gap-3"
+              >
                 <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
               </div>
@@ -116,6 +125,7 @@ export default function RegisterPage() {
                 </div>
                 <input
                   id="name"
+                  aria-describedby={error ? 'register-error' : undefined}
                   type="text"
                   required
                   autoComplete="name"
@@ -140,6 +150,7 @@ export default function RegisterPage() {
                 </div>
                 <input
                   id="email"
+                  aria-describedby={error ? 'register-error' : undefined}
                   type="email"
                   required
                   autoComplete="email"
@@ -174,6 +185,7 @@ export default function RegisterPage() {
                 </div>
                 <input
                   id="password"
+                  aria-describedby={error ? 'register-error' : undefined}
                   type={showPassword ? 'text' : 'password'}
                   required
                   autoComplete="new-password"

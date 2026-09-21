@@ -111,7 +111,11 @@ export default function LoginPage() {
         <div className="bg-white dark:bg-slate-800 py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-white/20">
           <form className="space-y-5" onSubmit={handleSubmit}>
             {(error || oauthError) && (
-              <div className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-4 rounded-md flex items-start gap-3">
+              <div
+                role="alert"
+                id="login-error"
+                className="bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 p-4 rounded-md flex items-start gap-3"
+              >
                 <AlertCircle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
                 <p className="text-sm text-red-700 dark:text-red-400">{oauthError || error}</p>
               </div>
@@ -130,6 +134,8 @@ export default function LoginPage() {
                 </div>
                 <input
                   id="email"
+                  aria-invalid={isEmailValid === false}
+                  aria-describedby={error || oauthError ? 'login-error' : undefined}
                   type="email"
                   required
                   autoComplete="email"
@@ -164,6 +170,7 @@ export default function LoginPage() {
                 </div>
                 <input
                   id="password"
+                  aria-describedby={error || oauthError ? 'login-error' : undefined}
                   type={showPassword ? 'text' : 'password'}
                   required
                   autoComplete="current-password"
