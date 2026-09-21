@@ -88,7 +88,7 @@ export class MediaService {
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}-${sanitizeFilename(
       path.parse(file.originalname).name
     )}.webp`;
-    const url = this.storageService.uploadFile(webpBuffer, filename);
+    const url = await this.storageService.uploadFile(webpBuffer, filename);
 
     const media = this.mediaRepo.create({
       filename,
@@ -122,7 +122,7 @@ export class MediaService {
     const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 9)}-${sanitizeFilename(
       path.parse(file.originalname).name
     )}.svg`;
-    const url = this.storageService.uploadFile(Buffer.from(sanitized, 'utf8'), filename);
+    const url = await this.storageService.uploadFile(Buffer.from(sanitized, 'utf8'), filename);
 
     const media = this.mediaRepo.create({
       filename,
@@ -193,7 +193,7 @@ export class MediaService {
     }
 
     await this.mediaRepo.delete(id);
-    this.storageService.deleteFile(media.url);
+    await this.storageService.deleteFile(media.url);
   }
 
   async getStats(): Promise<ConversionStats> {
