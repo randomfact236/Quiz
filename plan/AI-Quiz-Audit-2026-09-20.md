@@ -198,7 +198,7 @@ These are cheap, high-visibility wins:
 
 ### 6.1 Must-fix before opening to the public (blockers)
 
-- [ ] H1 public reads: strip answer keys (`answer`, `correctAnswer`, `correctLetter`, `options`) from public DTOs - PARTIAL 2026-09-21 (phase 1): the two public quiz LIST endpoints (`subjects/:slug/questions`, `questions/:chapterId`, both uncalled) no longer ship correctAnswer/correctLetter (verified live). The play endpoints (random/mixed) still ship the key because grading is client-side. Phase 2a (2026-09-21): `POST /quiz-mcq/answers/check` added (public, throttled 120/min) - live-verified correct/wrong/invalid = true/false/400. Next: riddle + image-riddle check endpoints, frontend switch, then strip the play reads.
+- [ ] H1 public reads: strip answer keys (`answer`, `correctAnswer`, `correctLetter`, `options`) from public DTOs - PARTIAL 2026-09-21 (phase 1): the two public quiz LIST endpoints (`subjects/:slug/questions`, `questions/:chapterId`, both uncalled) no longer ship correctAnswer/correctLetter (verified live). The play endpoints (random/mixed) still ship the key because grading is client-side. Phase 2a (2026-09-21): `POST /quiz-mcq/answers/check` added (public, throttled 120/min) - live-verified correct/wrong/invalid = true/false/400. Phase 2b (2026-09-21): riddle + image-riddle graders added and live-verified (correct/wrong/rejected). Next: frontend switch to the graders, then strip the play reads.
 - [x] H2 `getOrThrow('JWT_SECRET')` in the JWT module; fail fast for all non-dev envs - FIXED 2026-09-21: getOrThrow + SEC-04 non-dev fail-fast in main.ts.
 - [x] H3 stop leaking non-`HttpException` messages in production - FIXED 2026-09-21: production returns a generic message; the real stack stays in server logs.
 - [x] H5/H7 fix `deploy.ps1`/`deploy.sh` DB container name + health ports - FIXED 2026-09-21: correct container name, UTF-16-safe dump (in-container + docker cp), health/URL ports 4004/3001.
@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 11 (2026-09-21): H1 phase 2b - riddle + image-riddle server-side graders (live-verified).
 Wave 10 (2026-09-21): H1 phase 2a - POST /quiz-mcq/answers/check (server-side grading), live-verified.
 Wave 9 (2026-09-21): H1 phase 1 - public quiz list endpoints stripped of answer keys (live-verified; play endpoints untouched).
 Wave 8 (2026-09-21): duplicated/contradictory dark: utilities purged (29 removals, 14 files).
