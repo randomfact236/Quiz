@@ -379,4 +379,46 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
       item.subjectId = dto.subjectId;
     }
   }
+  /**
+   * H1 (audit SEC-03): grade one riddle answer server-side so the public play
+   * reads can stop shipping `correctLetter` / `answer`. Mirrors the shared
+   * frontend riddle scorer (expert/extreme = normalized text, else letter).
+   */
+  async checkAnswer(
+    riddleId: string,
+    answer: string
+  ): Promise<{ correct: boolean; correctAnswer: string | null; correctLetter: string | null }> {
+    const riddle = await this.deps.itemRepo.findOne({
+      where: { id: riddleId, status: RiddleStatus.PUBLISHED } as never,
+    });
+    if (!riddle) {
+      throw new NotFoundException('Riddle not found');
+    }
+    const given = (answer ?? '').trim();
+    const level = String(riddle.level ?? '').toLowerCase();
+    const openEnded = level === 'expert' || level === 'extreme';
+    const correct =
+      given !== '' &&
+      (openEnded
+        ? this.normalizeFreeText(given) ===
+          this.normalizeFreeText(riddle.answer ?? riddle.correctLetter ?? '')
+        : riddle.correctLetter != null && given === riddle.correctLetter);
+    return {
+      correct,
+      correctAnswer: riddle.answer ?? null,
+      correctLetter: riddle.correctLetter ?? null,
+    };
+  }
+
+  /** Mirrors the frontend free-text normalization so grading cannot drift. */
+  private normalizeFreeText(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/["'']/g, '')
+      .replace(/[.!?]+\s*$/, '')
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/^(the|a|an)\s+/i, '')
+      .trim();
+  }
 }

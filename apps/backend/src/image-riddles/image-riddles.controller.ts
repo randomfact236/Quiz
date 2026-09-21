@@ -38,6 +38,7 @@ import { ImageRiddlesService } from './image-riddles.service';
 import { _Public } from '../common/decorators/public.decorator';
 import { Throttle } from '@nestjs/throttler';
 import { EngagementDto } from './dto/engagement.dto';
+import { GuessCheckDto } from './dto/guess-check.dto';
 
 @ApiTags('Image Riddles')
 @Controller('image-riddles')
@@ -139,5 +140,14 @@ export class ImageRiddlesController {
   @ApiResponse({ status: 404, description: 'Image riddle not found' })
   findById(@Param('id', ParseUUIDPipe) id: string): Promise<ImageRiddle> {
     return this.imageRiddlesService.findRiddleById(id);
+  }
+  /** H1: grade one image-riddle guess server-side. */
+  @_Public()
+  @Throttle({ default: { limit: 120, ttl: 60000 } })
+  @Post('answers/check')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Grade one image-riddle guess server-side (H1)' })
+  checkGuess(@Body() dto: GuessCheckDto) {
+    return this.imageRiddlesService.checkGuess(dto.riddleId, dto.guess);
   }
 }

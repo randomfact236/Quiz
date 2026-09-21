@@ -218,4 +218,33 @@ export class ImageRiddlesService {
       .where('"id" = :id AND "status" = :status', { id, status: ContentStatus.PUBLISHED })
       .execute();
   }
+  /**
+   * H1 (audit SEC-03): grade an image-riddle guess server-side (forgiving
+   * matching: case/whitespace/articles/punctuation ignored + synonyms).
+   */
+  async checkGuess(riddleId: string, guess: string): Promise<{ correct: boolean; answer: string }> {
+    const riddle = await this.imageRiddleRepo.findOne({
+      where: { id: riddleId, status: ContentStatus.PUBLISHED },
+    });
+    if (!riddle) {
+      throw new NotFoundException('Image riddle not found');
+    }
+    const normalizedGuess = this.normalizeGuess(guess);
+    const candidates = [riddle.answer, ...(riddle.alternativeAnswers ?? [])];
+    const correct =
+      normalizedGuess.length > 0 &&
+      candidates.some((candidate) => this.normalizeGuess(candidate) === normalizedGuess);
+    return { correct, answer: riddle.answer };
+  }
+
+  /** Mirrors the frontend image-riddle answer normalization. */
+  private normalizeGuess(value: string): string {
+    return (value ?? '')
+      .toLowerCase()
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/^(a|an|the)\s+/, '')
+      .replace(/^["'(]+|["'.,!?;:)\]]+$/g, '')
+      .trim();
+  }
 }

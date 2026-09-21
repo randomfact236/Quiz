@@ -30,6 +30,7 @@ import { RiddleMcqStatsService } from '../services/riddle-mcq-stats.service';
 import { PaginationValidator } from '../validators/pagination.validator';
 import { DifficultyValidator } from '../validators/difficulty.validator';
 import { CreateRiddleMcqDto, UpdateRiddleMcqDto, BulkCreateRiddleDto } from '../dto/riddle-mcq.dto';
+import { RiddleAnswerCheckDto } from '../dto/riddle-answer-check.dto';
 
 @ApiTags('Riddle MCQ')
 @Controller('riddle-mcq')
@@ -238,5 +239,14 @@ export class RiddleMcqController {
     total: number;
   }> {
     return this.statsService.getFilterCounts({ category, subject, level });
+  }
+  /** H1: grade one riddle answer server-side. */
+  @_Public()
+  @Throttle({ default: { limit: 120, ttl: 60000 } })
+  @Post('answers/check')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Grade one riddle answer server-side (H1)' })
+  checkAnswer(@Body() dto: RiddleAnswerCheckDto) {
+    return this.questionService.checkAnswer(dto.riddleId, dto.answer);
   }
 }
