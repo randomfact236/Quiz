@@ -198,7 +198,7 @@ These are cheap, high-visibility wins:
 
 ### 6.1 Must-fix before opening to the public (blockers)
 
-- [ ] H1 public reads: strip answer keys (`answer`, `correctAnswer`, `correctLetter`, `options`) from public DTOs
+- [ ] H1 public reads: strip answer keys (`answer`, `correctAnswer`, `correctLetter`, `options`) from public DTOs - PARTIAL 2026-09-21 (phase 1): the two public quiz LIST endpoints (`subjects/:slug/questions`, `questions/:chapterId`, both uncalled) no longer ship correctAnswer/correctLetter (verified live). The play endpoints (random/mixed) still ship the key because grading is client-side; closing that needs the server-side grading endpoints + a frontend switch.
 - [x] H2 `getOrThrow('JWT_SECRET')` in the JWT module; fail fast for all non-dev envs - FIXED 2026-09-21: getOrThrow + SEC-04 non-dev fail-fast in main.ts.
 - [x] H3 stop leaking non-`HttpException` messages in production - FIXED 2026-09-21: production returns a generic message; the real stack stays in server logs.
 - [x] H5/H7 fix `deploy.ps1`/`deploy.sh` DB container name + health ports - FIXED 2026-09-21: correct container name, UTF-16-safe dump (in-container + docker cp), health/URL ports 4004/3001.
@@ -211,6 +211,7 @@ These are cheap, high-visibility wins:
 
 ##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
 
+Wave 9 (2026-09-21): H1 phase 1 - public quiz list endpoints stripped of answer keys (live-verified; play endpoints untouched).
 Wave 8 (2026-09-21): duplicated/contradictory dark: utilities purged (29 removals, 14 files).
 Wave 7 (2026-09-21): PWA icon set (192/512/maskable/apple-touch) + manifest; SEC-11 TRUST_PROXY documented.
 Wave 6 (2026-09-21): login/register a11y error semantics + password-rule parity; runbook alerting/off-box-backup guidance.
