@@ -38,6 +38,7 @@
 | BUG-061   | FB "Corrupted Image": share PNGs streamed without Content-Length    | share / OG (headers)      | P1       | Fixed 2026-09-21  |
 | BUG-062   | FB showed the small icon card (og:image:width/height missing)       | share / OG (meta)         | P1       | Fixed 2026-09-21  |
 | BUG-063   | FB still showed the icon for /api/og?...&v=N (query-string path)    | share / OG (image path)   | P1       | Fixed 2026-09-21  |
+| DEFER-01  | LinkedIn + Pinterest share previews (deferred by owner)             | share / social previews   | P3       | Deferred - no ETA |
 | BUG-056   | Integrate Google Search Console (data API) into the website         | SEO / monitoring          | P3       | Open (owner+mine) |
 | H1        | Answer key still ships on the play reads                            | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
 | H6        | Origin firewall not restricted to Cloudflare IPs                    | ops / VPS                 | P1       | Open (owner)      |
@@ -151,6 +152,21 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Root cause (working theory, evidence-backed):** every failing image lived at `/api/og?type=...&id=...&v=N` (a query string under `/api`), while the one image FB always rendered - the home card - lives at a plain path `/opengraph-image` with no query string. Same bytes, headers and metadata on both.
 - **Fix (e799c90):** the generator is exposed at `/og/quiz-question/<id>.png`, `/og/riddle-question/<id>.png`, `/og/quiz-subject/<slug>[-<count>].png`, `/og/riddle-category/<slug>.png`, `/og/quiz-result/<subject>/<score>-<total>.png`, `/og/joke.png`; the new route delegates to the existing `/api/og` renderer. All share metadata points at the clean path.
 - **Verified live:** all clean paths return 200 image/png with an explicit Content-Length; the page emits `og:image` (clean path) + `og:image:width/height` + `og:type`.
+
+### DEFER-01 - LinkedIn + Pinterest share previews (deferred by owner, 2026-09-21)
+
+- **Status:** DEFERRED by the owner - "LinkedIn is not the priority, defer this for later, and Pinterest too. Do not remind me, I will do it whenever I feel like."
+- **No reminder/cron is set** - explicitly requested. Pick this up on request only.
+
+**LinkedIn:** the shared link renders as a **compact card with a small thumbnail** (the thumbnail does show the designed question card). X/Twitter and WhatsApp already render the full 1200x630 card from the same URL, so the page side is correct. LinkedIn's compact layout is its own behaviour/caching; when revisited:
+
+1. Run the link through the [LinkedIn Post Inspector](https://www.linkedin.com/post-inspector/) and re-analyse (LinkedIn keeps its own cache).
+2. Note the tested post used an `lnkd.in` short link - shortened/wrapped links can also influence the card style; test the raw URL.
+3. Our image is 1.91:1 (1200x630) with `og:image:width/height` declared, which is what LinkedIn needs for the wide card.
+
+- **Pinterest:** not tested. Pinterest relies on `og:image` plus its own rich-pin handling; check `og:image` (already correct) and Pinterest's Rich Pins validator when picked up.
+
+**Not to be confused with the fixed share bugs:** BUG-057/058/059/061/062/063 are all fixed and verified (X + WhatsApp render the card).
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
