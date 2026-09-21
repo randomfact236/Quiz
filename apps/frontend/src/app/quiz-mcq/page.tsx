@@ -40,7 +40,7 @@ export async function generateMetadata({
     const share = await ogData.quizQuestionShare(questionId);
     if (share) {
       const title = `Can you answer this? 🧠 ${share.subjectName} Quiz`;
-      const image = `/api/og?type=quiz-question&id=${questionId}`;
+      const image = `/api/og?type=quiz-question&id=${questionId}&v=2`;
       // Self-canonical + og:url: scrapers obey rel=canonical, so pointing it at
       // /quiz-mcq made Facebook preview the hub instead of this question card.
       const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&q=${questionId}`;
@@ -59,7 +59,7 @@ export async function generateMetadata({
     const meta = await ogData.quizSubjectMeta(subject);
     const name = meta?.name ?? 'Quiz';
     const title = `I scored ${score}/${total} on ${name} — beat you! 🧠`;
-    const image = `/api/og?type=quiz-result&subject=${encodeURIComponent(subject)}&score=${score}&total=${total}`;
+    const image = `/api/og?type=quiz-result&subject=${encodeURIComponent(subject)}&score=${score}&total=${total}&v=2`;
     const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}&score=${score}&total=${total}`;
     return {
       ...MODULE_META['quiz-mcq'],

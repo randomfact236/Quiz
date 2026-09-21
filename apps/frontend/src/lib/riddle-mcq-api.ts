@@ -242,6 +242,26 @@ export async function deleteSubject(id: string): Promise<void> {
 // ============================================================================
 
 /**
+ * The riddle API serialises `options` as a JSON string (the quiz API sends an
+ * array). Every consumer expects string[]; a string reached
+ * `(riddle.options || []).map(...)` in RiddleCard and crashed the page, so
+ * normalise once, at the boundary.
+ */
+function withNormalizedOptions<T extends { options?: unknown }>(riddle: T): T {
+  const raw = riddle.options;
+  if (Array.isArray(raw)) return riddle;
+  let parsed: unknown = [];
+  if (typeof raw === 'string') {
+    try {
+      parsed = JSON.parse(raw);
+    } catch {
+      parsed = [];
+    }
+  }
+  return { ...riddle, options: Array.isArray(parsed) ? parsed : [] };
+}
+
+/**
  * Get riddle MCQs by subject ID (Public)
  */
 export async function getRiddlesBySubject(
@@ -255,7 +275,7 @@ export async function getRiddlesBySubject(
     url += `&level=${level}`;
   }
   const response = await apiRequest<{ data: RiddleMcq[]; total: number }>(url);
-  return response.data;
+  return { ...response.data, data: response.data.data.map(withNormalizedOptions) };
 }
 
 /**
@@ -263,7 +283,7 @@ export async function getRiddlesBySubject(
  */
 export async function getRandomRiddles(level: string, count: number = 10): Promise<RiddleMcq[]> {
   const response = await api.get<RiddleMcq[]>(`/riddle-mcq/random/${level}?count=${count}`);
-  return response.data;
+  return response.data.map(withNormalizedOptions);
 }
 
 /**
@@ -271,7 +291,7 @@ export async function getRandomRiddles(level: string, count: number = 10): Promi
  */
 export async function getMixedRiddles(count: number = 50): Promise<RiddleMcq[]> {
   const response = await api.get<RiddleMcq[]>(`/riddle-mcq/mixed?count=${count}`);
-  return response.data;
+  return response.data.map(withNormalizedOptions);
 }
 
 /**
@@ -305,7 +325,7 @@ export async function getAllRiddles(
 
   const url = `/riddle-mcq/all?${queryParams.toString()}`;
   const response = await api.get<{ data: RiddleMcq[]; total: number }>(url, { isAdmin: true });
-  return response.data;
+  return { ...response.data, data: response.data.data.map(withNormalizedOptions) };
 }
 
 /**
