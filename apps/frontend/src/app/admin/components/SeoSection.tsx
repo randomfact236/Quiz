@@ -24,6 +24,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { AlertTriangle, CheckCircle2, ExternalLink, Globe, RefreshCw, Save } from 'lucide-react';
 
 import { adminApi, ApiError } from '@/lib/api-client';
+import GscPanel from './GscPanel';
 import {
   SEO_GROUPS,
   auditRoute,
@@ -647,40 +648,7 @@ export function SeoSection(): JSX.Element {
       {/* ==================== DASHBOARD ==================== */}
       {tab === 'dashboard' && (
         <div className="space-y-5">
-          {/* GSC panel — honest placeholder until the P3 integration lands */}
-          <div className="rounded-xl bg-card p-5 ring-1 ring-border">
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <h4 className="font-semibold text-gray-100">Google Search Console — Top Queries</h4>
-                <p className="mt-0.5 text-xs text-gray-500 dark:text-secondary-400">
-                  What people searched on Google when they found your site.
-                </p>
-              </div>
-              <span className="rounded-full bg-gray-100 dark:bg-secondary-800 px-2 py-0.5 text-xs font-semibold text-gray-400 dark:text-secondary-400">
-                Not connected
-              </span>
-            </div>
-            <div className="mt-3 rounded-lg bg-amber-500/5 p-4 ring-1 ring-amber-500/30">
-              <p className="flex items-center gap-2 text-sm font-semibold text-amber-300">
-                <AlertTriangle className="h-4 w-4" /> Search Console data unavailable
-              </p>
-              <p className="mt-1 text-xs text-amber-200/70">
-                No GSC service account is linked to this site. Once connected (plan/15 P3), this
-                panel shows the top queries, clicks and impressions for your pages.
-              </p>
-            </div>
-            <p className="mt-3 text-xs text-gray-600 dark:text-secondary-300">
-              Data source: Google Search Console API · property: not linked ·{' '}
-              <a
-                href="https://search.google.com/search-console"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-cyan-400 hover:underline"
-              >
-                open GSC ↗
-              </a>
-            </p>
-          </div>
+          <GscPanel />
 
           {/* KPI cards */}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
