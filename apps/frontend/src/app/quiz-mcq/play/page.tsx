@@ -471,6 +471,11 @@ function QuizContent(): JSX.Element {
             onPauseToggle={() => (quiz.status === 'paused' ? quiz.resumeQuiz() : quiz.pauseQuiz())}
           />
 
+          {/* a11y (audit): announce question + score changes to screen readers */}
+          <p role="status" aria-live="polite" className="sr-only">
+            {`Question ${quiz.currentQuestionIndex + 1} of ${quiz.totalQuestions}. Score ${quiz.score}.`}
+          </p>
+
           {/* Question Card */}
           <AnimatePresence mode="wait">
             {quiz.currentQuestion && (

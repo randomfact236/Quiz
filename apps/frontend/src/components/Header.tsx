@@ -91,6 +91,7 @@ export default function Header(): JSX.Element {
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
   const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const drawerRef = useRef<HTMLElement | null>(null);
   const pathname = usePathname();
   const router = useRouter();
 
@@ -98,14 +99,41 @@ export default function Header(): JSX.Element {
 
   useClickOutside(userMenuRef, () => setIsUserMenuOpen(false), isUserMenuOpen);
 
-  // Close the mobile menu drawer on Escape (matches the MobileFooter drawers).
+  // Mobile drawer a11y (audit): Escape closes, body scroll locks, focus moves
+  // into the drawer, Tab is trapped inside it, and focus is restored on close.
   useEffect(() => {
     if (!isMenuOpen) return;
+    const drawer = drawerRef.current;
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    const FOCUSABLE =
+      'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    drawer?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setIsMenuOpen(false);
+      if (e.key === 'Escape') {
+        setIsMenuOpen(false);
+        return;
+      }
+      if (e.key !== 'Tab' || !drawer) return;
+      const focusable = Array.from(drawer.querySelectorAll<HTMLElement>(FOCUSABLE));
+      if (focusable.length === 0) return;
+      const first = focusable[0]!;
+      const last = focusable[focusable.length - 1]!;
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
     };
     window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    return () => {
+      window.removeEventListener('keydown', onKey);
+      document.body.style.overflow = previousOverflow;
+      previouslyFocused?.focus?.();
+    };
   }, [isMenuOpen]);
 
   useEffect(() => {
@@ -423,6 +451,7 @@ export default function Header(): JSX.Element {
             animate={{ x: 0 }}
             exit={{ x: '100%' }}
             transition={{ type: 'tween', duration: 0.25, ease: 'easeOut' }}
+            ref={drawerRef}
             className="fixed inset-y-0 right-0 z-[70] w-4/5 max-w-xs overflow-y-auto bg-white p-4 shadow-2xl md:hidden dark:bg-secondary-900"
             role="dialog"
             aria-modal="true"
