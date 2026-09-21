@@ -243,6 +243,11 @@ export default function ImageRiddlesPage(): JSX.Element {
           <ShareMenu
             title={shareRiddle.title}
             text={`Can you solve this image riddle: "${shareRiddle.title}"?`}
+            url={
+              typeof window !== 'undefined'
+                ? `${window.location.origin}/image-riddles?riddle=${shareRiddle.id}`
+                : `/image-riddles?riddle=${shareRiddle.id}`
+            }
             saveNamespace="image-riddles"
             saveId={shareRiddle.id}
             onClose={() => setShareRiddle(null)}

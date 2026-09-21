@@ -628,6 +628,11 @@ export default function JokesPage(): JSX.Element {
                   ? shareJoke.setup
                   : `${shareJoke.setup} — ${shareJoke.punchline}`
               }
+              url={
+                typeof window !== 'undefined'
+                  ? `${window.location.origin}/jokes?joke=${shareJoke.id}`
+                  : `/jokes?joke=${shareJoke.id}`
+              }
               saveNamespace="jokes"
               saveId={shareJoke.id}
               onClose={() => setShareJokeId(null)}

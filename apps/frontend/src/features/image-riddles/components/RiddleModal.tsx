@@ -123,6 +123,11 @@ export default function RiddleModal({
         <ShareMenu
           title={riddle.title}
           text={`Can you solve this image riddle: "${riddle.title}"?`}
+          url={
+            typeof window !== 'undefined'
+              ? `${window.location.origin}/image-riddles?riddle=${riddle.id}`
+              : `/image-riddles?riddle=${riddle.id}`
+          }
           saveNamespace="image-riddles"
           saveId={riddle.id}
           onClose={game.closeShare}
