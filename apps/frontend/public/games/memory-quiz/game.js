@@ -98,6 +98,7 @@ const shuffleRevealed = new Set();
 
 const els = {};
 let cellEls = [];
+let lastCellTapAt = 0; // 50 ms de-bounce so a rapid double-tap is one answer (plan 4)
 
 const RING_CIRCUMFERENCE = 62.83; // 2π × r(10) — matches the viewBox in index.html
 
@@ -460,6 +461,20 @@ function renderBoard() {
     cell.type = 'button';
     cell.className = 'cell';
     cell.dataset.index = String(i);
+    // Grid-answer question types ("Where is the pizza?") are answered by tapping
+    // the cell that holds the item (plan 4: taps target cells; the docstring on
+    // answer() takes a cell index for grid types). Without this, those questions
+    // could not be answered at all - taps did nothing.
+    cell.addEventListener('click', () => {
+      const active = state.questions[state.questionIndex];
+      if (!active) return;
+      const activeType = QUESTION_TYPES[active.type];
+      if (!activeType || activeType.answerUi !== 'grid') return; // candidate types ignore cell taps
+      const now = Date.now();
+      if (now - lastCellTapAt < 50) return;
+      lastCellTapAt = now;
+      answer(i);
+    });
     const glyph = document.createElement('span');
     glyph.setAttribute('aria-hidden', 'true');
     glyph.className = 'glyph';
@@ -743,7 +758,7 @@ function showGameover() {
 /* ---- share (README §2 chain: Web Share → clipboard → prompt) ---------------- */
 
 function shareUrls() {
-  const url = window.location.origin + window.location.pathname;
+  const url = 'https://pigzap.com/games/memory-quiz/';
   const vars = { score: state.score, boards: state.boardsCleared, streak: state.bestStreak, url };
   let text;
   if (isCampaign() && state.levelId) {
@@ -1271,3 +1286,55 @@ function init() {
 if (typeof document !== 'undefined' && document.getElementById('board')) {
   init();
 }
+
+/* BUG-048: share-count pings (prod API; fire-and-forget, best-effort). */
+(function () {
+  var API = 'https://api.pigzap.com/api/v1/share-counts';
+  var SLUG = 'memory-quiz';
+  var wired = new WeakSet();
+  var ping = function (platform) {
+    try {
+      fetch(API, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ contentType: 'game', contentId: SLUG, platform: platform }),
+        keepalive: true,
+      }).catch(function () {});
+    } catch (e) {
+      /* counting is best-effort */
+    }
+  };
+  var wire = function () {
+    [
+      ['share-fb', 'facebook'],
+      ['share-x', 'x'],
+      ['share-wa', 'whatsapp'],
+    ].forEach(function (pair) {
+      var a = document.getElementById(pair[0]);
+      if (a && !wired.has(a)) {
+        wired.add(a);
+        a.addEventListener(
+          'click',
+          function () {
+            ping(pair[1]);
+          },
+          { once: true, capture: true }
+        );
+      }
+    });
+    var copy = document.getElementById('share-copy');
+    if (copy && !wired.has(copy)) {
+      wired.add(copy);
+      copy.addEventListener(
+        'click',
+        function () {
+          ping('copy');
+        },
+        { once: true, capture: true }
+      );
+    }
+  };
+  var btn = document.getElementById('btn-share');
+  if (btn) btn.addEventListener('click', wire);
+  wire();
+})();
