@@ -13,6 +13,7 @@ import { CommentsModule } from './comments/comments.module';
 import { QuestionLikesModule } from './question-likes/question-likes.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
 import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
+import { CacheModule } from './common/cache/cache.module';
 
 // Modules
 import { GlobalExceptionFilter } from './common/filters/http-exception.filter';
@@ -59,6 +60,10 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
         limit: 100,
       },
     ]),
+
+    // Cache (BE-02): registered once here so the @Global CacheModule provides a
+    // single shared ioredis client instead of per-module instances.
+    CacheModule,
 
     // Database
     TypeOrmModule.forRootAsync({

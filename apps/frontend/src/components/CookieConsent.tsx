@@ -131,7 +131,7 @@ export function CookieConsent({
 
       {showBanner && (
         <div
-          className="fixed inset-x-0 bottom-0 z-50 px-4 pb-4"
+          className="fixed inset-x-0 bottom-[4.5rem] z-50 px-4 pb-4 md:bottom-0"
           role="region"
           aria-label="Cookie consent"
         >

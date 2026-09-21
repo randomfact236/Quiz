@@ -11,7 +11,6 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { CacheService } from '../common/cache/cache.service';
 import { BulkActionService } from '../common/services/bulk-action.service';
 import { DadJoke } from '../dad-jokes/entities/dad-joke.entity';
 import { GuestUsersModule } from '../guest-users/guest-users.module';
@@ -32,6 +31,6 @@ import { CommentsService } from './comments.service';
     AnalyticsModule,
   ],
   controllers: [CommentsController, CommentsAdminController],
-  providers: [CommentsService, CacheService, BulkActionService],
+  providers: [CommentsService, BulkActionService],
 })
 export class CommentsModule {}
