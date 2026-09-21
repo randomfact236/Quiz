@@ -9,43 +9,44 @@
 
 ## Index
 
-| ID        | Title                                                          | Area                      | Priority | Status            |
-| --------- | -------------------------------------------------------------- | ------------------------- | -------- | ----------------- |
-| BUG-005   | Legal pages not finalized                                      | Legal pages               | P1       | Resolved          |
-| BUG-037   | Question like buckets: 1-like / 2-like / 3+-like containers    | quiz-mcq / riddle-mcq     | P2       | Fixed             |
-| BUG-038   | Client-side exception while loading ("Application error")      | Frontend (global)         | P1       | Resolved          |
-| BUG-039   | Mode selection: pre-open all levels in both modes              | quiz-mcq mode picker      | P2       | Fixed             |
-| BUG-040   | Like + comment section on each question                        | quiz/riddle questions     | P2       | Fixed             |
-| BUG-041   | Easy mode: answers all in the same position; audit placement   | quiz/riddle content       | P1       | Fixed             |
-| BUG-042   | Separate "Science & Nature" into Science and Nature            | quiz subjects             | P2       | Open              |
-| BUG-043   | Riddle mode pages: hide category, difficulty + Mix only        | riddle-mcq mode pages     | P2       | Fixed             |
-| BUG-044   | Quiz mode pages: level selection block misplaced               | quiz-mcq mode pages       | P2       | Fixed             |
-| BUG-045   | Question like not retained after refresh                       | per-question likes        | P1       | Fixed             |
-| BUG-046   | Question comment not stored after refresh                      | per-question comments     | P1       | Fixed             |
-| BUG-047   | Share does not show the different social media with copy link  | share UI (questions)      | P2       | Fixed             |
-| BUG-048   | Like / comment / share counts visible to all users             | engagement counters       | P2       | Fixed             |
-| BUG-049   | Make each question shareable with an icon                      | quiz-mcq play page        | P2       | Fixed             |
-| BUG-050   | Comment click doesn't reach comments; can't delete own comment | per-question comments     | P1       | Fixed             |
-| BUG-051   | Games share flickers when clicked                              | static games (share)      | P2       | Fixed             |
-| BUG-052   | Answers in 2-column layout; full-width on small screens        | quiz/riddle answers UI    | P2       | Fixed             |
-| BUG-053   | Feedback inside games when paused or at game over              | static games (pause/over) | P2       | Fixed             |
-| BUG-054   | Riddle-mcq has no like, comment or share options               | riddle-mcq questions      | P2       | Fixed             |
-| BUG-055   | Home share image: build approved multi-platform design (WP0)   | website share (home)      | P2       | Fixed             |
-| BUG-057   | Riddle question share image returned 502 (no preview)          | share / OG (riddle)       | P1       | Fixed 2026-09-21  |
-| BUG-058   | Share URLs declared canonical=hub, so FB showed the wrong card | share / SEO (canonical)   | P1       | Fixed 2026-09-21  |
-| BUG-059   | robots.txt blocked /api, so crawlers skipped the share images  | share / SEO (robots)      | P1       | Fixed 2026-09-21  |
-| BUG-056   | Integrate Google Search Console (data API) into the website    | SEO / monitoring          | P3       | Open (owner+mine) |
-| H1        | Answer key still ships on the play reads                       | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
-| H6        | Origin firewall not restricted to Cloudflare IPs               | ops / VPS                 | P1       | Open (owner)      |
-| H8        | CSP lacks nonces; JWTs in localStorage                         | frontend security         | P2       | Open (mine)       |
-| H9        | Prod credentials not rotated                                   | ops / security            | P1       | Open (owner)      |
-| H4        | content:push baseline incomplete                               | content pipeline          | P2       | Open (your call)  |
-| SEC-07    | Email verification not enforced (decision)                     | auth                      | P2       | Open (your call)  |
-| SEC-10/12 | Anonymous writes not bound to a signed token                   | backend security          | P2       | Open (mine)       |
-| SEC-11    | Throttler storage is in-memory (single instance)               | backend security          | P3       | Open (mine)       |
-| BE-09     | CSV leakage/ambiguity content defects                          | content data              | P2       | Open (mine)       |
-| BE-11     | Backend tests thin (analytics / duels / riddle-mcq)            | backend tests             | P3       | Open (mine)       |
-| POLISH    | Visual polish list (10 items)                                  | frontend polish           | P3       | Open (needs eyes) |
+| ID        | Title                                                               | Area                      | Priority | Status            |
+| --------- | ------------------------------------------------------------------- | ------------------------- | -------- | ----------------- |
+| BUG-005   | Legal pages not finalized                                           | Legal pages               | P1       | Resolved          |
+| BUG-037   | Question like buckets: 1-like / 2-like / 3+-like containers         | quiz-mcq / riddle-mcq     | P2       | Fixed             |
+| BUG-038   | Client-side exception while loading ("Application error")           | Frontend (global)         | P1       | Resolved          |
+| BUG-039   | Mode selection: pre-open all levels in both modes                   | quiz-mcq mode picker      | P2       | Fixed             |
+| BUG-040   | Like + comment section on each question                             | quiz/riddle questions     | P2       | Fixed             |
+| BUG-041   | Easy mode: answers all in the same position; audit placement        | quiz/riddle content       | P1       | Fixed             |
+| BUG-042   | Separate "Science & Nature" into Science and Nature                 | quiz subjects             | P2       | Open              |
+| BUG-043   | Riddle mode pages: hide category, difficulty + Mix only             | riddle-mcq mode pages     | P2       | Fixed             |
+| BUG-044   | Quiz mode pages: level selection block misplaced                    | quiz-mcq mode pages       | P2       | Fixed             |
+| BUG-045   | Question like not retained after refresh                            | per-question likes        | P1       | Fixed             |
+| BUG-046   | Question comment not stored after refresh                           | per-question comments     | P1       | Fixed             |
+| BUG-047   | Share does not show the different social media with copy link       | share UI (questions)      | P2       | Fixed             |
+| BUG-048   | Like / comment / share counts visible to all users                  | engagement counters       | P2       | Fixed             |
+| BUG-049   | Make each question shareable with an icon                           | quiz-mcq play page        | P2       | Fixed             |
+| BUG-050   | Comment click doesn't reach comments; can't delete own comment      | per-question comments     | P1       | Fixed             |
+| BUG-051   | Games share flickers when clicked                                   | static games (share)      | P2       | Fixed             |
+| BUG-052   | Answers in 2-column layout; full-width on small screens             | quiz/riddle answers UI    | P2       | Fixed             |
+| BUG-053   | Feedback inside games when paused or at game over                   | static games (pause/over) | P2       | Fixed             |
+| BUG-054   | Riddle-mcq has no like, comment or share options                    | riddle-mcq questions      | P2       | Fixed             |
+| BUG-055   | Home share image: build approved multi-platform design (WP0)        | website share (home)      | P2       | Fixed             |
+| BUG-057   | Riddle question share image returned 502 (no preview)               | share / OG (riddle)       | P1       | Fixed 2026-09-21  |
+| BUG-058   | Share URLs declared canonical=hub, so FB showed the wrong card      | share / SEO (canonical)   | P1       | Fixed 2026-09-21  |
+| BUG-059   | robots.txt blocked /api, so crawlers skipped the share images       | share / SEO (robots)      | P1       | Fixed 2026-09-21  |
+| BUG-060   | /riddle-mcq crashed: (riddle.options \|\| []).map is not a function | riddle-mcq (data shape)   | P0       | Fixed 2026-09-21  |
+| BUG-056   | Integrate Google Search Console (data API) into the website         | SEO / monitoring          | P3       | Open (owner+mine) |
+| H1        | Answer key still ships on the play reads                            | quiz/riddle/image-riddle  | P1       | Open (mine + go)  |
+| H6        | Origin firewall not restricted to Cloudflare IPs                    | ops / VPS                 | P1       | Open (owner)      |
+| H8        | CSP lacks nonces; JWTs in localStorage                              | frontend security         | P2       | Open (mine)       |
+| H9        | Prod credentials not rotated                                        | ops / security            | P1       | Open (owner)      |
+| H4        | content:push baseline incomplete                                    | content pipeline          | P2       | Open (your call)  |
+| SEC-07    | Email verification not enforced (decision)                          | auth                      | P2       | Open (your call)  |
+| SEC-10/12 | Anonymous writes not bound to a signed token                        | backend security          | P2       | Open (mine)       |
+| SEC-11    | Throttler storage is in-memory (single instance)                    | backend security          | P3       | Open (mine)       |
+| BE-09     | CSV leakage/ambiguity content defects                               | content data              | P2       | Open (mine)       |
+| BE-11     | Backend tests thin (analytics / duels / riddle-mcq)                 | backend tests             | P3       | Open (mine)       |
+| POLISH    | Visual polish list (10 items)                                       | frontend polish           | P3       | Open (needs eyes) |
 
 ---
 
@@ -106,6 +107,19 @@ side already shipped in CSVs — kept Open only pending owner confirmation of th
 - **Fix (f0b411b):** `allow: ['/', '/api/og']` (longest-match wins over the `/api` disallow).
 - **Verified live:** `robots.txt` now lists `Allow: /api/og`; the image returns 200 image/png with a `facebookexternalhit` user-agent.
 - **Still open (design gap):** the spec says a question share's _description_ should be the question text; the page still emits the generic module description.
+
+### BUG-060 - /riddle-mcq crashed: `(riddle.options || []).map is not a function`
+
+- **Date found:** 2026-09-21 (owner: "riddle-mcq is broken")
+- **Area:** riddle-mcq (client data shape) - `RiddleCard.tsx:212` via `lib/riddle-mcq-api.ts`
+- **Priority:** P0
+- **Root cause:** the riddle API serialises `options` as a JSON **string** (the quiz API returns an array). `(riddle.options || []).map(...)` therefore threw and the whole riddle page errored. Same underlying shape bug as BUG-057.
+- **Fix (1e510de):** `lib/riddle-mcq-api.ts` normalises `options` to `string[]` at the boundary for `getRiddlesBySubject`, `getRandomRiddles`, `getMixedRiddles` and `getAllRiddles`.
+- **Verified:** frontend tsc + 553/553 tests; `/riddle-mcq` and `/riddle-mcq?subjectId=all` return 200 after deploy.
+- **Also in the same commit:** question/result/category share image URLs now carry `&v=2` so Facebook re-fetches instead of serving its cached imageless result (BUG-059 follow-up).
+- **Backend follow-up (not done):** the riddle read endpoints should return a real array for consistency; the client normalisation covers it either way.
+
+**Open design gap (from `share-design-system-report.md`):** question shares should set the _description_ to the question text; both pages still emit the generic module description.
 
 ### Audit follow-ups (transcribed 2026-09-21 from `plan/AI-Quiz-Audit-2026-09-20.md`)
 
