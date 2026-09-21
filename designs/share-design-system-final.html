@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PigZap Share Design System — FINAL</title>
+<style>
+  :root{--card:#181a3f;--ink:#eef0ff;--dim:#9aa0c8;--line:#2c2f63;--accent:#7c6ee4;
+        --good:#4ade80;--live:#14532d}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:linear-gradient(160deg,#0f1030,#1a1140 60%,#301438);color:var(--ink);
+       font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;padding:32px 20px 80px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin-bottom:4px}
+  h2{font-size:18px;margin:36px 0 10px;color:#c9c4ff}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:10px}
+  .final{display:inline-block;background:#14532d66;color:#86efac;border:1px solid #4ade8055;
+         font-size:12px;font-weight:800;letter-spacing:1px;padding:4px 14px;border-radius:999px;margin-bottom:14px}
+
+  .master{position:relative;width:100%;aspect-ratio:1.91;border-radius:12px;overflow:hidden;
+          display:flex;align-items:center;justify-content:center;box-shadow:0 8px 24px rgba(0,0,0,.35)}
+  .master img.photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .safe{position:absolute;width:60%;aspect-ratio:1;border:2.5px dashed rgba(255,255,255,.8);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center;padding:10px}
+  .safe .em{font-size:34px}
+  .safe .score{font-size:34px;font-weight:900;text-shadow:0 2px 6px rgba(0,0,0,.4)}
+  .safe .t{font-weight:800;font-size:14px;line-height:1.25;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+  .safe .hook{font-size:10px;opacity:.85}
+  .chip{position:absolute;top:10px;left:10px;background:rgba(17,20,56,.65);border-radius:999px;
+        font-size:10px;font-weight:700;padding:2px 10px;color:#fff;z-index:2}
+  .qgrad{background:linear-gradient(135deg,#A5A3E4,#BF7076)}
+  .rgrad{background:linear-gradient(135deg,#2dd4bf,#0369a1)}
+  .jgrad{background:linear-gradient(135deg,#fbbf24,#f97316)}
+  .hgrad{background:linear-gradient(135deg,#84cc16,#16a34a)}
+  .iphoto{background:radial-gradient(circle at 30% 70%,rgba(255,255,255,.14),transparent 45%),linear-gradient(160deg,#312e81,#0f172a)}
+
+  .entry{display:grid;grid-template-columns:400px 1fr;gap:18px;background:var(--card);
+         border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:16px}
+  .entry h3{font-size:15px;color:#fff;margin-bottom:2px}
+  .entry .id{font-size:10.5px;color:var(--dim);letter-spacing:.5px;margin-bottom:8px}
+  .entry table{width:100%;border-collapse:collapse;font-size:12px}
+  .entry td{padding:4px 0;vertical-align:top;line-height:1.45}
+  .entry td:first-child{color:var(--dim);width:92px;padding-right:8px;white-space:nowrap}
+  .entry code{background:#111438;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:11px;color:#a5f3c8}
+  .status{display:inline-block;font-size:10px;font-weight:800;padding:2px 9px;border-radius:999px;letter-spacing:.5px;margin-left:6px;vertical-align:1px}
+  .st-live{background:#14532d66;color:#86efac;border:1px solid #4ade8055}
+  .st-design{background:#1e3a8a66;color:#93c5fd;border:1px solid #60a5fa55}
+  .st-ready{background:#78350f66;color:#fcd34d;border:1px solid #fbbf2455}
+
+  table.matrix{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
+        border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  table.matrix th,table.matrix td{border-bottom:1px solid var(--line);padding:8px 11px;text-align:left;line-height:1.45}
+  table.matrix th{background:#20225a;color:#cfd3ff;font-size:11px;text-transform:uppercase;letter-spacing:.5px}
+  .rules{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+         border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.75;margin-bottom:14px}
+  .rules b{color:#c9c4ff}
+  .opts2{display:grid;grid-template-columns:1fr 1fr;gap:5px;width:94%}
+  .opt{display:flex;gap:6px;align-items:center;background:rgba(17,20,56,.38);
+       border:1.2px solid rgba(255,255,255,.45);border-radius:9px;padding:4px 8px;font-size:11px;font-weight:600;text-align:left}
+  .opt .k{flex:0 0 auto;width:17px;height:17px;border-radius:5px;background:rgba(255,255,255,.92);color:#1e1b4b;
+          font-weight:800;font-size:10px;display:flex;align-items:center;justify-content:center}
+  .opts2 .opt{justify-content:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <span class="final">✓ FINALIZED — owner-approved 2026-09-19</span>
+  <h1>PigZap Share Design System</h1>
+  <div class="sub">The complete, consolidated specification: every share surface, its image, its text, and the rules that keep them consistent.
+    One master image per item (1200×630, brand gradient, content in the SAFE ZONE) auto-resizes across platforms —
+    Facebook/LinkedIn 1.91:1 · X 2:1 · WhatsApp/iMessage near-square thumb.</div>
+
+  <h2>1 · Platform behavior (what each network actually displays)</h2>
+  <table class="matrix">
+    <tr><th>Platform</th><th>Image crop</th><th>Title</th><th>Description</th><th>Share message</th><th>Design consequence</th></tr>
+    <tr><td>Facebook / LinkedIn</td><td>1.91:1</td><td>✔ shown</td><td>✔ shown (≤110 chars)</td><td>as caption</td><td>title + description both carry weight</td></tr>
+    <tr><td>X / Twitter</td><td>2:1 large card</td><td>✔ shown</td><td><b>✖ hidden</b></td><td>in tweet text</td><td><b>hook must live in the image/title</b></td></tr>
+    <tr><td>WhatsApp / iMessage</td><td>~square thumb</td><td>✖ hidden</td><td>✖ hidden</td><td><b>✔ the readable text</b></td><td>only SAFE ZONE legible + message carries the content</td></tr>
+  </table>
+
+  <h2>2 · Finalized share configurations</h2>
+
+  <!-- 1 HOME -->
+  <div class="entry">
+    <div class="master qgrad"><span class="chip">🏠 WEBSITE / HOME</span>
+      <div class="safe"><span class="em">🐷</span><span class="t">PigZap — interactive quizzes, riddles, dad jokes and image puzzles</span></div></div>
+    <div>
+      <h3>Website / Home <span class="status st-live">LIVE — DO NOT TOUCH</span></h3>
+      <div class="id">opengraph-image.tsx · 1200×630</div>
+      <table>
+        <tr><td>Image</td><td>brand gradient + logo + site name (already generated)</td></tr>
+        <tr><td>Title</td><td>PigZap site name</td></tr>
+        <tr><td>Description</td><td>site description</td></tr>
+        <tr><td>URL</td><td><code>pigzap.com</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 2 QUIZ SUBJECT -->
+  <div class="entry">
+    <div class="master qgrad"><span class="chip">📦 QUIZ — SUBJECT</span>
+      <div class="safe"><span class="em">🌍</span><span class="t">Animals Quiz — 263 Questions</span></div></div>
+    <div>
+      <h3>Quiz — subject share <span class="status st-design">DESIGNED</span></h3>
+      <div class="id">template: brand gradient + subject emoji + “&lt;Subject&gt; Quiz — N Questions”</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“&lt;Subject&gt; Quiz — N Questions”</td></tr>
+        <tr><td>Description ≤ 110</td><td>site-style description line</td></tr>
+        <tr><td>URL</td><td><code>/quiz-mcq?subject=&lt;slug&gt;</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 3 QUIZ QUESTION -->
+  <div class="entry">
+    <div class="master qgrad"><span class="chip">📦 QUIZ — QUESTION</span>
+      <div class="safe"><span class="chip" style="position:absolute;top:-24px;left:0">Animals · Q · 4 options</span>
+        <span class="t" style="font-size:13.5px">How many chambers does a mammal heart have?</span>
+        <div class="opts2">
+          <div class="opt"><span class="k">A</span>Four chambers</div><div class="opt"><span class="k">B</span>Two chambers</div>
+          <div class="opt"><span class="k">C</span>One chamber</div><div class="opt"><span class="k">D</span>Three chambers</div>
+        </div>
+        <span class="hook">can you answer this? → pigzap.com</span></div></div>
+    <div>
+      <h3>Quiz — question share <span class="status st-design">DESIGNED ★ favorite</span></h3>
+      <div class="id">real question + real options INSIDE the image · option grid mirrors the site (2/3/4/open · 2×2 for four) · answer never shown</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“Can you answer this? 🧠 &lt;Subject&gt; Quiz”</td></tr>
+        <tr><td>Description ≤ 110</td><td>question text (options already visible in image)</td></tr>
+        <tr><td>WA message</td><td>question + A)… D)… options + link</td></tr>
+        <tr><td>URL</td><td><code>/quiz-mcq?subject=&lt;slug&gt;</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 4 QUIZ RESULT -->
+  <div class="entry">
+    <div class="master qgrad"><span class="chip">📦 QUIZ — RESULT</span>
+      <div class="safe"><span class="score">8/10</span><span class="em" style="font-size:24px">🧠</span><span class="t">Animals Quiz</span></div></div>
+    <div>
+      <h3>Quiz — result share <span class="status st-live">LIVE</span> <span class="status st-design">IMAGE UPGRADE = SCORE BADGE</span></h3>
+      <div class="id">big score in the safe zone + subject emoji — the strongest viral loop</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“I scored 8/10 on &lt;Subject&gt; — beat you! 🧠”</td></tr>
+        <tr><td>Description ≤ 110</td><td>site-style line</td></tr>
+        <tr><td>URL</td><td><code>/quiz-mcq?subject=&lt;slug&gt;</code> (results render on the sharer's device)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 5 RIDDLE CATEGORY -->
+  <div class="entry">
+    <div class="master rgrad"><span class="chip">📦 RIDDLE — CATEGORY</span>
+      <div class="safe"><span class="em">🧩</span><span class="t">Riddles · Logic — brain teasers</span></div></div>
+    <div>
+      <h3>Riddle — category share <span class="status st-design">DESIGNED</span></h3>
+      <div class="id">template: riddle teal gradient + 🧩 + “Riddles · &lt;Category&gt;”</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“Riddles · &lt;Category&gt; — brain teasers”</td></tr>
+        <tr><td>Description ≤ 110</td><td>riddle challenge line</td></tr>
+        <tr><td>URL</td><td><code>/riddle-mcq?category=&lt;slug&gt;</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 6 RIDDLE QUESTION -->
+  <div class="entry">
+    <div class="master rgrad"><span class="chip">📦 RIDDLE — QUESTION</span>
+      <div class="safe"><span class="chip" style="position:absolute;top:-24px;left:0">Riddles · Logic · R · 4 options</span>
+        <span class="t" style="font-size:12.5px">“I am carried everywhere you go, yet I was given to you before you left home.”</span>
+        <div class="opts2">
+          <div class="opt"><span class="k">A</span>Your phone</div><div class="opt"><span class="k">B</span>Your name</div>
+          <div class="opt"><span class="k">C</span>Your shoes</div><div class="opt"><span class="k">D</span>Your shadow</div>
+        </div>
+        <span class="hook">solve it → pigzap.com</span></div></div>
+    <div>
+      <h3>Riddle — question share <span class="status st-design">DESIGNED</span></h3>
+      <div class="id">teal accent distinguishes riddles from quizzes · real riddle text + options in the image · answer never shown</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“Can you solve this riddle? 🧩 &lt;Category&gt;”</td></tr>
+        <tr><td>Description ≤ 110</td><td>riddle text (the puzzle itself)</td></tr>
+        <tr><td>WA message</td><td>riddle + A)… options + link</td></tr>
+        <tr><td>URL</td><td><code>/riddle-mcq?category=&lt;slug&gt;</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 7 RIDDLE RESULT -->
+  <div class="entry">
+    <div class="master rgrad"><span class="chip">📦 RIDDLE — RESULT</span>
+      <div class="safe"><span class="score">7/10</span><span class="em" style="font-size:24px">🧩</span><span class="t">Riddles</span></div></div>
+    <div>
+      <h3>Riddle — result share <span class="status st-ready">WAITS FOR RIDDLE RESULTS SCREEN</span></h3>
+      <div class="id">score badge on the riddle teal gradient</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“I solved 7/10 riddles — beat that! 🧩”</td></tr>
+        <tr><td>Description ≤ 110</td><td>riddle challenge line</td></tr>
+        <tr><td>URL</td><td><code>/riddle-mcq</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 8 IMAGE RIDDLE -->
+  <div class="entry">
+    <div class="master"><span class="chip">📦 IMAGE RIDDLE</span>
+      <img class="photo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Camouflaged_squirrel.gk.jpg/960px-Camouflaged_squirrel.gk.jpg" alt="">
+      <div class="safe" style="border:none"><span style="background:rgba(17,20,56,.55);border-radius:8px;padding:4px 10px;font-size:11px;font-weight:700">A camouflaged animal is hiding in this photo. Find it.</span></div></div>
+    <div>
+      <h3>Image riddle — question share <span class="status st-design">DESIGNED</span></h3>
+      <div class="id">the riddle's own photo IS the preview (subject centred, open guess — no options)</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>“Can you solve this image riddle: "&lt;title&gt;"?”</td></tr>
+        <tr><td>Description ≤ 110</td><td>short teaser</td></tr>
+        <tr><td>WA message</td><td>“Can you solve this? 👀 &lt;title&gt;” + link</td></tr>
+        <tr><td>URL</td><td><code>/image-riddles</code></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 9 JOKE -->
+  <div class="entry">
+    <div class="master jgrad"><span class="chip">📦 DAD JOKE</span>
+      <div class="safe"><span class="em">😂</span><span class="t">Dad Jokes — laugh out loud</span></div></div>
+    <div>
+      <h3>Dad joke — share <span class="status st-live">LIVE</span> <span class="status st-design">IMAGE TEMPLATE ONLY</span></h3>
+      <div class="id">the one content type sharing its full payload — the punchline is the joke</div>
+      <table>
+        <tr><td>Title ≤ 60</td><td>setup (truncated)</td></tr>
+        <tr><td>Description ≤ 110</td><td>“setup — punchline”</td></tr>
+        <tr><td>URL</td><td><code>/jokes</code></td></tr>
+        <tr><td>Save target</td><td>✔ (jokes namespace — bookmark the joke)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- 10 GAMES -->
+  <div class="entry">
+    <div class="master hgrad"><span class="chip">🛠 GAME — HUB CARD + IN-GAME SCORE</span>
+      <div class="safe"><span class="em">🏃</span><span class="t">Hurdle Runner</span>
+        <span class="hook" style="font-size:12px;font-weight:800">Ran 120 m — beat that! 🏃</span></div></div>
+    <div>
+      <h3>Games — hub card &amp; in-game score <span class="status st-live">HUB LIVE</span> <span class="status st-live">IN-GAME BAR LIVE</span> <span class="status st-design">IMAGE TEMPLATE</span></h3>
+      <div class="id">per-game accent gradient + game emoji · in-game bar: FB / X / WA / Copy inside the 📤 Share toggle</div>
+      <table>
+        <tr><td>Hub card</td><td>“🎮 &lt;Game&gt; on PigZap — &lt;blurb&gt;” → <code>/games/&lt;slug&gt;</code></td></tr>
+        <tr><td>In-game score</td><td>per-game result line (“Ran 120 m…”, “Best reaction 210 ms…”) → <code>/games/&lt;slug&gt;/</code></td></tr>
+        <tr><td>Static-games rule</td><td>dependency-free; asset URLs version-bumped <code>?v=N</code> (4 h prod cache)</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <h2>3 · Consistency rules (final)</h2>
+  <div class="rules">
+    <b>One master image per item</b> — 1200×630, family gradient (quiz = brand purple · riddle = teal · joke = amber · game = per-game accent), item emoji/text inside the central square SAFE ZONE.<br>
+    <b>Answer visibility:</b> tease what requires participation — quiz questions and riddles share <b>without answers</b>;
+    deliver what is consumption — dad jokes share <b>with the punchline</b>; image riddles share the photo only.<br>
+    <b>Options in the image</b> render per question type (yes/no → 2 pills · 2/3/4 → grid matching the site's AnswerOptions layout · open-ended → none) and the <b>correct option is never marked</b>.<br>
+    <b>Text:</b> title ≤ 60 · description ≤ 110 · WhatsApp message carries the personal line + link. Less or more is fine — platforms truncate gracefully.<br>
+    <b>URLs:</b> always the durable surface (subject / category / game), never a rotting session link. <b>Games stay dependency-free</b>; bump <code>?v=N</code> when editing their files.
+  </div>
+
+  <h2>4 · Implementation map</h2>
+  <div class="rules">
+    <b>Home</b> — live, untouched. <b>Jokes / image-riddles / quiz results / quiz question / games hub / in-game bars</b> — live.
+    <b>To build:</b> two dynamic image generators (Products template, Tools template — same <code>next/og</code> pattern as the homepage),
+    per-surface meta tags per this spec, score-badge variants for quiz + riddle results, and the riddle results screen that unlocks
+    riddle question/result shares. Share-count events (BUG-048) fire on target selection once counters are built.
+  </div>
+</div>
+</body>
+</html>

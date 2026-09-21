@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PigZap — Share Preview Configuration (Products & Tools)</title>
+<style>
+  :root{
+    --bg:#0f1030; --card:#181a3f; --ink:#eef0ff; --dim:#9aa0c8; --line:#2c2f63;
+    --brand1:#A5A3E4; --brand2:#BF7076; --accent:#7c6ee4; --good:#4ade80; --warn:#fbbf24;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:linear-gradient(160deg,#0f1030 0%,#1a1140 60%,#301438 100%);color:var(--ink);
+       font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;padding:32px 20px 80px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin-bottom:6px}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:28px}
+  h2{font-size:19px;margin:36px 0 6px;color:#c9c4ff}
+  .note{color:var(--dim);font-size:13px;margin-bottom:14px}
+  .tag{display:inline-block;background:#242765;border:1px solid var(--line);border-radius:999px;
+       padding:3px 12px;font-size:11.5px;color:#cfd3ff;margin:0 6px 8px 0}
+  .grid{display:grid;gap:18px}
+  .cols3{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+  .cols2{grid-template-columns:repeat(auto-fit,minmax(420px,1fr))}
+
+  /* ---- master image template with safe zone ---- */
+  .master{position:relative;width:100%;aspect-ratio:1.91;border-radius:14px;overflow:hidden;
+          background:linear-gradient(135deg,var(--brand1),var(--brand2));
+          display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.35)}
+  .safe{position:absolute;width:52%;aspect-ratio:1;border:2.5px dashed rgba(255,255,255,.85);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;text-align:center}
+  .safe .em{font-size:54px}
+  .safe .t{font-weight:800;font-size:20px;text-shadow:0 2px 6px rgba(0,0,0,.35);padding:0 16px}
+  .safe .lab{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#111438;
+             border:1px solid var(--line);color:#cfd3ff;font-size:10.5px;padding:2px 10px;border-radius:999px;white-space:nowrap}
+  .bleed{position:absolute;bottom:10px;right:14px;font-size:11px;color:rgba(255,255,255,.85);
+         background:rgba(17,20,56,.55);padding:3px 10px;border-radius:999px}
+
+  /* ---- platform frames ---- */
+  .frame{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+  .frame h3{font-size:13px;color:#cfd3ff;margin-bottom:4px}
+  .frame .ratio{font-size:11px;color:var(--dim);margin-bottom:10px}
+  .pill{display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:999px;margin-right:5px}
+  .pill.f{background:#1877f233;color:#8ab4ff}.pill.x{background:#ffffff22;color:#e7e9ea}
+  .pill.w{background:#25d36633;color:#7ff0ab}.pill.i{background:#8a8a8e33;color:#c9c9ce}
+
+  /* Facebook-style link card */
+  .fb{background:#242526;border-radius:10px;overflow:hidden;font-size:13px}
+  .fb .img{position:relative;aspect-ratio:1.91;display:flex;align-items:center;justify-content:center;
+           flex-direction:column;gap:4px;text-align:center;padding:10px}
+  .fb .img .em{font-size:40px}.fb .img .t{font-weight:800;font-size:16px;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+  .fb .body{padding:9px 11px;background:#3a3b3c}
+  .fb .body .bt{font-weight:700;font-size:13.5px;line-height:1.25;color:#e4e6eb}
+  .fb .body .bd{font-size:12px;color:#b0b3b8;margin-top:3px;line-height:1.3}
+  .fb .body .dom{font-size:10.5px;color:#8a8d91;text-transform:uppercase;margin-top:5px;letter-spacing:.4px}
+
+  /* X-style large card */
+  .x{background:#000;border:1px solid #2f3336;border-radius:14px;overflow:hidden;font-size:13px}
+  .x .img{position:relative;aspect-ratio:2;display:flex;align-items:center;justify-content:center;
+          flex-direction:column;gap:4px;text-align:center;padding:10px}
+  .x .img .em{font-size:38px}.x .img .t{font-weight:800;font-size:15px;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+  .x .body{padding:9px 12px}
+  .x .body .bt{font-weight:600;font-size:14px;color:#e7e9ea;line-height:1.25}
+  .x .body .dom{font-size:12px;color:#71767b;margin-top:3px}
+  .x .noscript{font-size:10.5px;color:#f87171;margin-top:8px}
+
+  /* WhatsApp bubble */
+  .wa{background:#0b141a;border-radius:12px;padding:10px}
+  .wa .bubble{background:#005c4b;border-radius:10px 10px 10px 2px;padding:8px 10px;max-width:100%}
+  .wa .thumb{width:100%;aspect-ratio:1.6;border-radius:7px;overflow:hidden;position:relative;
+             display:flex;align-items:center;justify-content:center;flex-direction:column;gap:3px;margin-bottom:7px}
+  .wa .thumb .em{font-size:30px}.wa .thumb .t{font-weight:800;font-size:13px;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+  .wa .msg{font-size:12.5px;color:#e9edef;line-height:1.35}
+  .wa .dom{font-size:10.5px;color:#8696a0;margin-top:4px}
+  .wa .meta{font-size:10px;color:#8696a0;text-align:right;margin-top:3px}
+
+  /* config table */
+  table{width:100%;border-collapse:collapse;font-size:12.5px;background:var(--card);
+        border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+  th,td{border-bottom:1px solid var(--line);padding:9px 11px;text-align:left;vertical-align:top;line-height:1.45}
+  th{background:#20225a;color:#cfd3ff;font-size:11.5px;text-transform:uppercase;letter-spacing:.5px}
+  td .sm{color:var(--dim);font-size:11px}
+  code{background:#111438;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:11.5px;color:#a5f3c8}
+  .rules{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+         border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.7}
+  .rules b{color:#c9c4ff}
+  .home{border-left-color:var(--good)}
+  .sect{margin-top:10px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Share preview configuration — Products &amp; Tools</h1>
+  <div class="sub">One master image per item → auto-resizes per platform · Home page already configured (untouched)</div>
+
+  <div>
+    <span class="tag">🏠 Website / Home — ✅ already configured, NOT touching</span>
+    <span class="tag">📦 Products = Quizzes · Riddles · Jokes · Image Riddles</span>
+    <span class="tag">🛠 Tools = Games (hub cards + in-game score)</span>
+  </div>
+
+  <h2>1 · The one master image (1200 × 630) and how it auto-resizes</h2>
+  <div class="note">One image per item, always generated the same way: brand gradient + item emoji + item title.
+    Every platform crops it differently — so all words and the emoji live inside the central square
+    <b>safe zone</b>; the gradient bleeds outward to cover any crop. Nothing ever gets cut off.</div>
+  <div class="master">
+    <div class="safe">
+      <span class="lab">SAFE ZONE — keep emoji + title inside (survives every crop)</span>
+      <span class="em">🌍</span>
+      <span class="t">Animals — 263 Questions</span>
+    </div>
+    <span class="bleed">gradient bleeds to full 1200×630</span>
+  </div>
+
+  <div class="grid cols3 sect">
+    <div class="frame"><h3><span class="pill f">Facebook / LinkedIn</span></h3><div class="ratio">crops to 1.91 : 1 — full image shows, small trim top &amp; bottom</div></div>
+    <div class="frame"><h3><span class="pill x">X / Twitter</span></h3><div class="ratio">crops to 2 : 1 large card — trims a little more</div></div>
+    <div class="frame"><h3><span class="pill w">WhatsApp</span> <span class="pill i">iMessage</span></h3><div class="ratio">tiny square-ish thumb — only the SAFE ZONE is readable → that is why text lives there</div></div>
+  </div>
+
+  <h2>2 · Products — one template, item data injected (quiz · riddle · joke · image riddle)</h2>
+  <div class="note">Same image template for every content item — only emoji + title change. Text is written to fit
+    every platform: <b>title ≤ 60 chars</b> (X shows only title + domain), <b>description ≤ 110 chars</b>
+    (Facebook shows it), <b>share message = the personal line</b> (WhatsApp shows mainly this). Less or more text is fine — it truncates gracefully.</div>
+
+  <div class="grid cols3">
+    <div class="frame"><h3><span class="pill f">Facebook</span> — image + title + description</h3>
+      <div class="fb">
+        <div class="img" style="background:linear-gradient(135deg,#A5A3E4,#BF7076)">
+          <span class="em">🧠</span><span class="t">Animals Quiz — 263 Questions</span>
+        </div>
+        <div class="body">
+          <div class="bt">I scored 8/10 on Animals — beat you! 🧠</div>
+          <div class="bd">Interactive quizzes on PigZap — test your knowledge and have fun!</div>
+          <div class="dom">pigzap.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame"><h3><span class="pill x">X / Twitter</span> — image + title only (no description!)</h3>
+      <div class="x">
+        <div class="img" style="background:linear-gradient(135deg,#A5A3E4,#BF7076)">
+          <span class="em">🧠</span><span class="t">Animals Quiz — 263 Questions</span>
+        </div>
+        <div class="body">
+          <div class="bt">Animals Quiz — 263 Questions</div>
+          <div class="dom">pigzap.com</div>
+          <div class="noscript">⚠ hook must be in the image/title — X hides description text</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame"><h3><span class="pill w">WhatsApp</span> — thumb + your message text</h3>
+      <div class="wa">
+        <div class="bubble">
+          <div class="thumb" style="background:linear-gradient(135deg,#A5A3E4,#BF7076)">
+            <span class="em">🧠</span><span class="t">Animals Quiz</span>
+          </div>
+          <div class="msg">I scored 8/10 on Animals — beat you! 🧠<br>pigzap.com/quiz-mcq?subject=animals</div>
+          <div class="meta">10:42 ✓✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>3 · Tools (Games) — same idea, game accent + score challenge</h2>
+  <div class="note">Hub cards share the game (emoji + game name + blurb). The in-game score share uses the same
+    game image with the score line as the message. Same 1200×630 master, same safe zone, game-color gradient.</div>
+
+  <div class="grid cols3">
+    <div class="frame"><h3><span class="pill f">Facebook</span> — hub card share</h3>
+      <div class="fb">
+        <div class="img" style="background:linear-gradient(135deg,#84cc16,#16a34a)">
+          <span class="em">🏃</span><span class="t">Hurdle Runner</span>
+        </div>
+        <div class="body">
+          <div class="bt">🎮 Hurdle Runner on PigZap — endless hurdle sprint!</div>
+          <div class="bd">Jump, grab 💚 hearts and chase the day-to-night horizon.</div>
+          <div class="dom">pigzap.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame"><h3><span class="pill x">X / Twitter</span> — game card</h3>
+      <div class="x">
+        <div class="img" style="background:linear-gradient(135deg,#84cc16,#16a34a)">
+          <span class="em">🏃</span><span class="t">Hurdle Runner</span>
+        </div>
+        <div class="body">
+          <div class="bt">🎮 Hurdle Runner on PigZap — endless hurdle sprint!</div>
+          <div class="dom">pigzap.com</div>
+        </div>
+      </div>
+    </div>
+    <div class="frame"><h3><span class="pill w">WhatsApp</span> — in-game score share</h3>
+      <div class="wa">
+        <div class="bubble">
+          <div class="thumb" style="background:linear-gradient(135deg,#84cc16,#16a34a)">
+            <span class="em">🏃</span><span class="t">Hurdle Runner</span>
+          </div>
+          <div class="msg">Ran 120 m in Hurdle Runner — beat that! 🏃<br>pigzap.com/games/hurdle-runner</div>
+          <div class="meta">10:42 ✓✓</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2>4 · Exact configuration per surface</h2>
+  <table>
+    <tr><th>Surface</th><th>Image (one master, auto-resize)</th><th>Title ≤ 60</th><th>Description ≤ 110 / share message</th><th>URL</th></tr>
+    <tr><td><b>🏠 Website / Home</b><br><span class="sm">already live — not touching</span></td><td>brand gradient + logo + site name (opengraph-image.tsx, 1200×630)</td><td>PigZap site name</td><td>site description</td><td>pigzap.com</td></tr>
+    <tr><td><b>📦 Quiz — subject / result / question</b></td><td>brand gradient + subject emoji + “&lt;Subject&gt; Quiz — N Questions”</td><td>“I scored 8/10 on &lt;Subject&gt; — beat you! 🧠” (result)<br>“&lt;Subject&gt; Quiz — N Questions” (subject)</td><td>site-style description line</td><td><code>/quiz-mcq?subject=…</code></td></tr>
+    <tr><td><b>📦 Text riddle</b><br><span class="sm">future — riddle results screen</span></td><td>brand gradient + 🧩 + “Riddle Mix”</td><td>“Can you solve this riddle?”</td><td>riddle-flavoured challenge line</td><td><code>/riddle-mcq…</code></td></tr>
+    <tr><td><b>📦 Joke</b></td><td>brand gradient + 😂 + “Dad Jokes”</td><td>joke setup (≤ 60, else truncated)</td><td>“setup — punchline” as description</td><td><code>/jokes</code></td></tr>
+    <tr><td><b>📦 Image riddle</b></td><td><b>the riddle image itself</b> (cover-crop, safe zone = image centre) — the picture IS the puzzle</td><td>“Can you solve this image riddle: <title>?”</td><td>— (image carries it)</td><td><code>/image-riddles</code></td></tr>
+    <tr><td><b>🛠 Game — hub card</b></td><td>game-color gradient + game emoji + game name</td><td>“🎮 <game> on PigZap — <blurb short>”</td><td>game blurb</td><td><code>/games/&lt;slug&gt;</code></td></tr>
+    <tr><td><b>🛠 Game — in-game score</b></td><td>same game image as hub (reused)</td><td>game name</td><td><b>message</b>: per-game result line (“Ran 120 m …”, “Best reaction 210 ms …”)</td><td><code>/games/&lt;slug&gt;/</code></td></tr>
+  </table>
+
+  <h2>5 · Rules that keep it consistent</h2>
+  <div class="rules">
+    <b>One image per item</b> — 1200×630 master, brand gradient, item emoji + short title inside the central
+    square safe zone; platforms crop automatically (1.91:1 / 2:1 / square thumb). <b>One content template</b>
+    (brand purple) for all Products, <b>one tool template</b> (game accent) for all Games — only emoji, name and
+    score change. <b>Image riddles are the exception</b>: the riddle's real image is the preview. <b>Text:</b>
+    title ≤ 60 chars, description ≤ 110, share message carries the personal challenge — less or more is fine,
+    platforms truncate gracefully. <b>Home page stays as-is</b> — already configured.
+  </div>
+</div>
+</body>
+</html>

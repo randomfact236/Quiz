@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PigZap — share designs with real content (quiz · riddle · image riddle)</title>
+<style>
+  :root{--card:#181a3f;--ink:#eef0ff;--dim:#9aa0c8;--line:#2c2f63;--accent:#7c6ee4}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:linear-gradient(160deg,#0f1030,#1a1140 60%,#301438);color:var(--ink);
+       font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;padding:32px 20px 80px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:25px;margin-bottom:6px}
+  .sub{color:var(--dim);font-size:14px;margin-bottom:20px}
+  h2{font-size:18px;margin:32px 0 4px;color:#c9c4ff}
+  .real{font-size:11px;font-weight:700;padding:2px 10px;border-radius:999px;margin-left:8px;vertical-align:2px;
+        background:#14532d66;color:#86efac;border:1px solid #4ade8055}
+  .cfg{color:var(--dim);font-size:12.5px;margin-bottom:12px;line-height:1.5}
+  .grid{display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+
+  .master{position:relative;width:100%;aspect-ratio:1.91;border-radius:14px;overflow:hidden;
+          display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(0,0,0,.35);margin-bottom:6px}
+  .safe{position:absolute;width:60%;aspect-ratio:1;border:2.5px dashed rgba(255,255,255,.85);
+        display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;padding:12px}
+  .safe .lab{position:absolute;top:-11px;left:50%;transform:translateX(-50%);background:#111438;
+             border:1px solid var(--line);color:#cfd3ff;font-size:10px;padding:2px 10px;border-radius:999px;white-space:nowrap}
+  .chip{position:absolute;top:-24px;left:0;background:#111438;border:1px solid var(--line);border-radius:999px;
+        font-size:10.5px;font-weight:700;padding:2px 10px;color:#fff;white-space:nowrap}
+  .safe .q{font-weight:800;font-size:16px;line-height:1.25;text-shadow:0 2px 6px rgba(0,0,0,.35)}
+  .safe .hook{font-size:11px;opacity:.85}
+  .opts{display:grid;grid-template-columns:1fr 1fr;gap:7px;width:100%}
+  .opt{display:flex;gap:7px;align-items:center;background:rgba(17,20,56,.38);
+       border:1.2px solid rgba(255,255,255,.45);border-radius:10px;padding:6px 9px;font-size:12px;font-weight:600;text-align:left}
+  .opt .k{flex:0 0 auto;width:19px;height:19px;border-radius:6px;background:rgba(255,255,255,.92);color:#1e1b4b;
+          font-weight:800;font-size:10.5px;display:flex;align-items:center;justify-content:center}
+  .qgrad{background:linear-gradient(135deg,#A5A3E4,#BF7076)}
+  .rgrad{background:linear-gradient(135deg,#2dd4bf,#0369a1)}
+
+  .frame{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px}
+  .frame h3{font-size:12.5px;color:#cfd3ff;margin-bottom:8px}
+  .pill{display:inline-block;font-size:10.5px;padding:2px 9px;border-radius:999px;margin-right:5px}
+  .pill.f{background:#1877f233;color:#8ab4ff}.pill.x{background:#ffffff22;color:#e7e9ea}
+  .pill.w{background:#25d36633;color:#7ff0ab}
+  .fb{background:#242526;border-radius:10px;overflow:hidden;font-size:13px}
+  .fb .img{position:relative;aspect-ratio:1.91;display:flex;align-items:center;justify-content:center;
+           flex-direction:column;gap:5px;text-align:center;padding:8px}
+  .fb .img .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .fb .img .em{font-size:32px}.fb .img .t{font-weight:800;font-size:13.5px;text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative}
+  .fb .img .opts2{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:5px;width:88%}
+  .fb .body{padding:8px 11px;background:#3a3b3c}
+  .fb .body .bt{font-weight:700;font-size:13px;line-height:1.25;color:#e4e6eb}
+  .fb .body .bd{font-size:11.5px;color:#b0b3b8;margin-top:3px;line-height:1.3}
+  .fb .body .dom{font-size:10px;color:#8a8d91;text-transform:uppercase;margin-top:4px;letter-spacing:.4px}
+  .x{background:#000;border:1px solid #2f3336;border-radius:14px;overflow:hidden;font-size:13px}
+  .x .img{position:relative;aspect-ratio:2;display:flex;align-items:center;justify-content:center;
+          flex-direction:column;gap:5px;text-align:center;padding:8px}
+  .x .img .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .x .img .em{font-size:30px}.x .img .t{font-weight:800;font-size:12.5px;text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative}
+  .x .img .opts2{position:relative;display:grid;grid-template-columns:1fr 1fr;gap:5px;width:86%}
+  .x .body{padding:8px 12px}
+  .x .body .bt{font-weight:600;font-size:13.5px;color:#e7e9ea;line-height:1.25}
+  .x .body .dom{font-size:11.5px;color:#71767b;margin-top:2px}
+  .wa{background:#0b141a;border-radius:12px;padding:10px}
+  .wa .bubble{background:#005c4b;border-radius:10px 10px 10px 2px;padding:8px 10px}
+  .wa .thumb{width:100%;aspect-ratio:1.6;border-radius:7px;overflow:hidden;position:relative;
+             display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;margin-bottom:7px}
+  .wa .thumb .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .wa .thumb .em{font-size:26px}.wa .thumb .t{font-weight:800;font-size:12px;text-shadow:0 1px 3px rgba(0,0,0,.4);position:relative}
+  .wa .msg{font-size:12px;color:#e9edef;line-height:1.4;word-break:break-word}
+  .wa .meta{font-size:10px;color:#8696a0;text-align:right;margin-top:3px}
+  .rules{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent);
+         border-radius:12px;padding:14px 16px;font-size:13px;line-height:1.7;margin-top:8px}
+  .rules b{color:#c9c4ff}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Share designs with real content — quiz · riddle · image riddle</h1>
+  <div class="sub">Options render in the 2-column format (same as the site's implemented AnswerOptions grid:
+    2 options → 1×2 · 3 → row · 4 → 2×2 · open-ended → none) · correct option never marked · answer never in the share.</div>
+
+  <h2>1 · quiz-mcq question share <span class="real">REAL CONTENT — live DB row</span></h2>
+  <div class="cfg">Q: “How many chambers does a mammal heart have?” · 4 options → 2×2 grid ·
+    title <code>Can you answer this? 🧠 Animals Quiz</code> · URL <code>/quiz-mcq?subject=animals</code></div>
+  <div class="master qgrad">
+    <div class="safe"><span class="lab">SAFE ZONE — 2-column options (4 → 2×2)</span>
+      <span class="chip">Animals · Q · 4 options</span>
+      <span class="q">How many chambers does a mammal heart have?</span>
+      <div class="opts">
+        <div class="opt"><span class="k">A</span>Four chambers</div>
+        <div class="opt"><span class="k">B</span>Two chambers</div>
+        <div class="opt"><span class="k">C</span>One chamber</div>
+        <div class="opt"><span class="k">D</span>Three chambers</div>
+      </div>
+      <span class="hook">can you answer this? → pigzap.com</span>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:10px">
+    <div class="frame"><h3><span class="pill f">Facebook</span></h3>
+      <div class="fb"><div class="img qgrad"><span class="em">🫀</span><span class="t">How many chambers does a mammal heart have?</span>
+        <div class="opts2">
+          <div class="opt"><span class="k">A</span>Four chambers</div><div class="opt"><span class="k">B</span>Two chambers</div>
+          <div class="opt"><span class="k">C</span>One chamber</div><div class="opt"><span class="k">D</span>Three chambers</div>
+        </div></div>
+        <div class="body"><div class="bt">Can you answer this? 🧠 Animals Quiz</div>
+        <div class="bd">How many chambers does a mammal heart have?</div><div class="dom">pigzap.com</div></div></div>
+    </div>
+    <div class="frame"><h3><span class="pill x">X / Twitter</span></h3>
+      <div class="x"><div class="img qgrad"><span class="em">🫀</span><span class="t">How many chambers does a mammal heart have?</span>
+        <div class="opts2">
+          <div class="opt"><span class="k">A</span>Four chambers</div><div class="opt"><span class="k">B</span>Two chambers</div>
+          <div class="opt"><span class="k">C</span>One chamber</div><div class="opt"><span class="k">D</span>Three chambers</div>
+        </div></div>
+        <div class="body"><div class="bt">Can you answer this? 🧠 Animals Quiz</div><div class="dom">pigzap.com</div></div></div>
+    </div>
+    <div class="frame"><h3><span class="pill w">WhatsApp</span></h3>
+      <div class="wa"><div class="bubble">
+        <div class="thumb qgrad"><span class="em">🫀</span><span class="t">Animals Quiz</span></div>
+        <div class="msg">How many chambers does a mammal heart have? 🤔<br>A) Four chambers B) Two chambers C) One chamber D) Three chambers<br>Answer → pigzap.com/quiz-mcq?subject=animals</div>
+        <div class="meta">10:42 ✓✓</div></div></div>
+    </div>
+  </div>
+
+  <h2>2 · riddle-mcq question share <span class="real">REAL CONTENT — live DB row</span></h2>
+  <div class="cfg">Q: “I am carried everywhere you go, yet I was given to you before you left home.” · 4 options → 2×2 ·
+    title <code>Can you solve this riddle? 🧩 Riddles</code> · URL <code>/riddle-mcq</code></div>
+  <div class="master rgrad">
+    <div class="safe"><span class="lab">SAFE ZONE — 2-column options</span>
+      <span class="chip">Riddles · R · 4 options</span>
+      <span class="q">“I am carried everywhere you go, yet I was given to you before you left home.”</span>
+      <div class="opts">
+        <div class="opt"><span class="k">A</span>Your phone</div>
+        <div class="opt"><span class="k">B</span>Your name</div>
+        <div class="opt"><span class="k">C</span>Your shoes</div>
+        <div class="opt"><span class="k">D</span>Your shadow</div>
+      </div>
+      <span class="hook">solve it → pigzap.com</span>
+    </div>
+  </div>
+  <div class="grid" style="margin-top:10px">
+    <div class="frame"><h3><span class="pill f">Facebook</span></h3>
+      <div class="fb"><div class="img rgrad"><span class="em">🧩</span><span class="t">“I am carried everywhere you go, yet I was given to you before you left home.”</span>
+        <div class="opts2">
+          <div class="opt"><span class="k">A</span>Your phone</div><div class="opt"><span class="k">B</span>Your name</div>
+          <div class="opt"><span class="k">C</span>Your shoes</div><div class="opt"><span class="k">D</span>Your shadow</div>
+        </div></div>
+        <div class="body"><div class="bt">Can you solve this riddle? 🧩 Riddles</div>
+        <div class="bd">I am carried everywhere you go, yet I was given to you before you left home.</div><div class="dom">pigzap.com</div></div></div>
+    </div>
+    <div class="frame"><h3><span class="pill x">X / Twitter</span></h3>
+      <div class="x"><div class="img rgrad"><span class="em">🧩</span><span class="t">“I am carried everywhere you go, yet I was given to you before you left home.”</span>
+        <div class="opts2">
+          <div class="opt"><span class="k">A</span>Your phone</div><div class="opt"><span class="k">B</span>Your name</div>
+          <div class="opt"><span class="k">C</span>Your shoes</div><div class="opt"><span class="k">D</span>Your shadow</div>
+        </div></div>
+        <div class="body"><div class="bt">Can you solve this riddle? 🧩 Riddles</div><div class="dom">pigzap.com</div></div></div>
+    </div>
+    <div class="frame"><h3><span class="pill w">WhatsApp</span></h3>
+      <div class="wa"><div class="bubble">
+        <div class="thumb rgrad"><span class="em">🧩</span><span class="t">Riddles</span></div>
+        <div class="msg">I am carried everywhere you go, yet I was given to you before you left home. 🤔<br>A) Your phone B) Your name C) Your shoes D) Your shadow<br>Answer → pigzap.com/riddle-mcq</div>
+        <div class="meta">10:42 ✓✓</div></div></div>
+    </div>
+  </div>
+
+  <h2>3 · image-riddles question share <span class="real">REAL CONTENT — live DB row</span></h2>
+  <div class="cfg">Title: “A camouflaged animal is hiding in this photo. Find it.” · the actual riddle photo is the preview
+    (open guess — no options) · URL <code>/image-riddles</code></div>
+  <div class="master">
+    <img class="photo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Camouflaged_squirrel.gk.jpg/960px-Camouflaged_squirrel.gk.jpg" alt="camouflaged squirrel" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+    <span class="chip" style="z-index:2">Image Riddles</span>
+  </div>
+  <div class="grid" style="margin-top:10px">
+    <div class="frame"><h3><span class="pill f">Facebook</span></h3>
+      <div class="fb"><div class="img"><img class="photo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Camouflaged_squirrel.gk.jpg/960px-Camouflaged_squirrel.gk.jpg" alt=""></div>
+        <div class="body"><div class="bt">A camouflaged animal is hiding in this photo. Find it. 🐿️</div>
+        <div class="bd">Look closer — the answer is hiding in plain sight.</div><div class="dom">pigzap.com</div></div></div>
+    </div>
+    <div class="frame"><h3><span class="pill x">X / Twitter</span></h3>
+      <div class="x"><div class="img"><img class="photo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Camouflaged_squirrel.gk.jpg/960px-Camouflaged_squirrel.gk.jpg" alt=""></div>
+        <div class="body"><div class="bt">A camouflaged animal is hiding in this photo. Find it. 🐿️</div><div class="dom">pigzap.com</div></div></div>
+    </div>
+    <div class="frame"><h3><span class="pill w">WhatsApp</span></h3>
+      <div class="wa"><div class="bubble">
+        <div class="thumb"><img class="photo" src="https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Camouflaged_squirrel.gk.jpg/960px-Camouflaged_squirrel.gk.jpg" alt=""></div>
+        <div class="msg">A camouflaged animal is hiding in this photo. Find it. 🐿️<br>pigzap.com/image-riddles</div>
+        <div class="meta">10:42 ✓✓</div></div></div>
+    </div>
+  </div>
+
+  <div class="rules">
+    <b>Layout parity:</b> the 2-column option grid mirrors the site's implemented
+    <code>AnswerOptions</code> grid (2 options → 1×2 · 3 → row · 4 → 2×2 · open-ended → none;
+    stacked full-width on small screens). <b>Correct option never marked</b>; <b>answer never in the share</b>.
+    Options text = live DB values; long options truncate in the image, full text always on the site.
+  </div>
+</div>
+</body>
+</html>

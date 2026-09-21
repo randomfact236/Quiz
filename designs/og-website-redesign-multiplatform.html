@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Home share — one HTML template, all platforms</title>
+<style>
+  :root{--card:#181a3f;--ink:#eef0ff;--dim:#9aa0c8;--line:#2c2f63}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:linear-gradient(160deg,#0f1030,#1a1140 60%,#301438);color:var(--ink);
+       font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;padding:30px 20px 70px}
+  .wrap{max-width:1024px;margin:0 auto}
+  h1{font-size:24px;margin-bottom:4px}
+  .sub{color:var(--dim);font-size:13.5px;margin-bottom:8px}
+  h2{font-size:16.5px;margin:30px 0 10px;color:#c9c4ff}
+  .frame{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:18px}
+  .frame .lab{font-size:11.5px;color:#cfd3ff;margin-bottom:4px}
+  .frame .px{font-size:10.5px;color:var(--dim);margin-bottom:10px}
+
+  /* ---- the ONE share design, parameterised by container ---- */
+  .og{position:relative;overflow:hidden;margin:0 auto;
+      background:linear-gradient(135deg,#A5A3E4 0%,#8f7fd8 45%,#BF7076 100%);
+      font-family:Inter,system-ui,Segoe UI,Arial,sans-serif;color:#fff;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2.2%;
+      border-radius:8px;box-shadow:0 10px 26px rgba(0,0,0,.38)}
+  .og .deco{position:absolute;opacity:.14;filter:drop-shadow(0 6px 12px rgba(30,20,80,.25))}
+  .og .d1{top:-4%;left:-2%;transform:rotate(-12deg)}
+  .og .d2{bottom:-5%;right:-2%;transform:rotate(10deg)}
+  .og .center{position:relative;display:flex;flex-direction:column;align-items:center;
+              justify-content:center;gap:2.2%;width:56%;text-align:center}
+  .og .logo{display:flex;align-items:center;gap:4%}
+  .og .logo img{filter:drop-shadow(0 6px 12px rgba(30,20,80,.35))}
+  .og .word{font-weight:900;letter-spacing:-0.02em;line-height:1;text-shadow:0 4px 14px rgba(30,20,80,.35)}
+  .og .tagline{font-weight:700;opacity:.96;text-shadow:0 2px 8px rgba(30,20,80,.3)}
+  .og .tagline .sep{opacity:.55}
+  .og .stats{font-weight:600;opacity:.95;text-shadow:0 2px 8px rgba(30,20,80,.3)}
+  .og .stats b{font-weight:900}
+  .og .stats .sep{opacity:.55}
+  .og .domain{background:rgba(17,20,56,.5);border:1.2px solid rgba(255,255,255,.55);
+              border-radius:999px;font-weight:800;letter-spacing:.1em}
+
+  /* size variants — same markup, percentage-driven so any canvas works */
+  .v191{width:100%;aspect-ratio:1.91}
+  .v2{width:100%;aspect-ratio:2}
+  .v1{width:560px;max-width:100%;aspect-ratio:1}
+  .v191 .logo img{width:88px}.v191 .logo{gap:16px}
+  .v191 .word{font-size:68px}.v191 .tagline{font-size:20px}.v191 .stats{font-size:14.5px}.v191 .stats b{font-size:16px}
+  .v191 .domain{font-size:16px;padding:5px 18px}.v191 .d1{font-size:100px}.v191 .d2{font-size:100px}
+  .v2 .word{font-size:52px}.v2 .tagline{font-size:18px}.v2 .stats{font-size:13.5px}.v2 .stats b{font-size:15px}
+  .v2 .domain{font-size:15px;padding:5px 16px}.v2 .logo img{width:60px}.v2 .logo{gap:12px}
+  .v2 .d1{font-size:84px}.v2 .d2{font-size:84px}
+  .v1 .center{width:80%;gap:3.5%}
+  .v1 .word{font-size:64px}.v1 .tagline{font-size:17px}.v1 .tagline .sep{margin:0 5px}
+  .v1 .stats{font-size:12.5px;line-height:1.6}.v1 .stats b{font-size:14px}
+  .v1 .domain{font-size:14px;padding:5px 16px;margin-top:2%}.v1 .logo img{width:76px}.v1 .logo{gap:14px}
+  .v1 .d1{font-size:110px}.v1 .d2{font-size:110px}
+
+  .rules{background:var(--card);border:1px solid var(--line);border-left:4px solid var(--accent,#7c6ee4);
+         border-radius:12px;padding:13px 15px;font-size:12.5px;line-height:1.7}
+  .rules b{color:#c9c4ff}
+  code{background:#111438;border:1px solid var(--line);border-radius:5px;padding:1px 6px;font-size:11px;color:#a5f3c8}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Home share — one HTML template, every platform</h1>
+  <div class="sub">The approved design as pure HTML/CSS (this is exactly what <code>next/og</code> renders to PNG).
+    Percentage-driven layout, so the same template renders every platform's ratio — no separate designs to maintain.</div>
+
+  <h2>1 · Default OG — Facebook · LinkedIn · WhatsApp fetch · WhatsApp/iMessage thumb crop</h2>
+  <div class="frame">
+    <div class="lab">★ MASTER — serves as <code>og:image</code> for all surfaces</div>
+    <div class="px">1200 × 630 · 1.91:1</div>
+    <div class="og v191">
+      <span class="deco d1">🧠</span><span class="deco d2">🧩</span>
+      <div class="center">
+        <div class="logo"><img src="/icon.svg" alt=""><span class="word">PigZap</span></div>
+        <div class="tagline"><b>Quizzes</b><span class="sep">·</span><b>Riddles</b><span class="sep">·</span><b>Dad Jokes</b><span class="sep">·</span><b>Image Puzzles</b><span class="sep">·</span><b>Games</b></div>
+        <div class="stats"><b>11,541</b> questions<span class="sep">·</span><b>3,000</b> riddles<span class="sep">·</span><b>1,013</b> jokes<span class="sep">·</span><b>1,906</b> image puzzles<span class="sep">·</span><b>8</b> games</div>
+        <div class="domain">PIGZAP.COM</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>2 · X / Twitter — 2:1 large card</h2>
+  <div class="frame">
+    <div class="lab">same template, <code>twitter:image</code> variant</div>
+    <div class="px">1200 × 600 · 2:1</div>
+    <div class="og v2">
+      <span class="deco d1">🧠</span><span class="deco d2">🧩</span>
+      <div class="center">
+        <div class="logo"><img src="/icon.svg" alt=""><span class="word">PigZap</span></div>
+        <div class="tagline"><b>Quizzes</b><span class="sep">·</span><b>Riddles</b><span class="sep">·</span><b>Dad Jokes</b><span class="sep">·</span><b>Image Puzzles</b><span class="sep">·</span><b>Games</b></div>
+        <div class="stats"><b>11,541</b> questions<span class="sep">·</span><b>3,000</b> riddles<span class="sep">·</span><b>1,013</b> jokes<span class="sep">·</span><b>1,906</b> image puzzles<span class="sep">·</span><b>8</b> games</div>
+        <div class="domain">PIGZAP.COM</div>
+      </div>
+    </div>
+  </div>
+
+  <h2>3 · Square — WhatsApp / iMessage thumb optimisation</h2>
+  <div class="frame">
+    <div class="lab">optional square variant — everything re-centres automatically</div>
+    <div class="px">1200 × 1200 · 1:1</div>
+    <div class="og v1">
+      <span class="deco d1">🧠</span><span class="deco d2">🧩</span>
+      <div class="center">
+        <div class="logo"><img src="/icon.svg" alt=""><span class="word">PigZap</span></div>
+        <div class="tagline"><b>Quizzes</b><span class="sep">·</span><b>Riddles</b><span class="sep">·</span><b>Dad Jokes</b><span class="sep">·</span><b>Image Puzzles</b><span class="sep">·</span><b>Games</b></div>
+        <div class="stats"><b>11,541</b> questions · <b>3,000</b> riddles · <b>1,013</b> jokes · <b>1,906</b> image puzzles · <b>8</b> games</div>
+        <div class="domain">PIGZAP.COM</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rules">
+    <b>Why this is "suitable for all platforms":</b> the template is percentage-driven — logo, pillars,
+    stats and domain scale with the canvas, so the same HTML renders 1.91:1, 2:1 and 1:1 without
+    redesign. <b>Implementation = <code>next/og</code></b>: the generator accepts a size parameter and renders
+    this markup as PNG (<code>og:image</code> keeps the 1200×630 master; the 2:1 and square variants are
+    optional extras). <b>Dynamic:</b> siteName (SEO settings) + the five live totals (DB counts,
+    count baked into the image URL so platforms refetch after content pushes).
+  </div>
+</div>
+</body>
+</html>
