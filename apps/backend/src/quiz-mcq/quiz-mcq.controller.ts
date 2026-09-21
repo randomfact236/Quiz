@@ -29,6 +29,7 @@ import {
 import { IsOptional, IsString } from 'class-validator';
 
 import { CreateChapterDto, UpdateChapterDto } from './dto/chapter.dto';
+import { AnswerCheckDto } from './dto/answer-check.dto';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
@@ -387,6 +388,17 @@ export class QuizMcqController {
       data: result.data.map((question) => this.toPublicQuestion(question)),
       total: result.total,
     };
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 120, ttl: 60000 } })
+  @Post('answers/check')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Grade one answer server-side (H1 - lets public reads drop the answer key)',
+  })
+  checkAnswer(@Body() dto: AnswerCheckDto) {
+    return this.quizService.checkAnswer(dto.questionId, dto.answer);
   }
 
   /**

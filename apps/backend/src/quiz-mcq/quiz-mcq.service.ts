@@ -954,4 +954,44 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
       sessions: Number(r.sessions),
     }));
   }
+  /**
+   * H1 (audit SEC-03): grade a single guess server-side so the public play
+   * reads never have to ship `correctAnswer` / `correctLetter`. Mirrors the
+   * shared frontend scorer: MCQ levels compare the selected letter exactly;
+   * the `extreme` level compares normalized free text.
+   */
+  async checkAnswer(
+    questionId: string,
+    answer: string
+  ): Promise<{ correct: boolean; correctAnswer: string | null; correctLetter: string | null }> {
+    const question = await this.deps.itemRepo.findOne({
+      where: { id: questionId, status: ContentStatus.PUBLISHED } as never,
+    });
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
+    const given = (answer ?? '').trim();
+    const correct =
+      given !== '' &&
+      (question.level === 'extreme'
+        ? this.normalizeFreeText(given) === this.normalizeFreeText(question.correctAnswer ?? '')
+        : question.correctLetter != null && given === question.correctLetter);
+    return {
+      correct,
+      correctAnswer: question.correctAnswer ?? null,
+      correctLetter: question.correctLetter ?? null,
+    };
+  }
+
+  /** Mirrors the frontend `normalizeExtremeAnswer` so grading cannot drift. */
+  private normalizeFreeText(text: string): string {
+    return text
+      .toLowerCase()
+      .replace(/["'']/g, '')
+      .replace(/[.!?]+\s*$/, '')
+      .trim()
+      .replace(/\s+/g, ' ')
+      .replace(/^(the|a|an)\s+/i, '')
+      .trim();
+  }
 }
