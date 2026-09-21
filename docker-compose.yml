@@ -5,7 +5,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: aiquiz
-      POSTGRES_PASSWORD: aiquiz_password
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: aiquiz
     volumes:
       - postgres_data:/var/lib/postgresql/data
@@ -44,7 +44,7 @@ services:
       DB_HOST: postgres
       DB_PORT: 5432
       DB_USERNAME: aiquiz
-      DB_PASSWORD: aiquiz_password
+      DB_PASSWORD: ${POSTGRES_PASSWORD}
       DB_DATABASE: aiquiz
       REDIS_HOST: redis
       REDIS_PORT: 6379

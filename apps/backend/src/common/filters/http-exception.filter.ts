@@ -60,8 +60,15 @@ export class GlobalExceptionFilter implements ExceptionFilter {
         message = exceptionResponse;
       }
     } else if (exception instanceof Error) {
-      message = exception.message;
-      error = exception.name;
+      // H3 (SEC-02): raw driver/service text must not reach clients in production.
+      // The real stack is still logged below; clients get a generic message.
+      if (process.env.NODE_ENV === 'production') {
+        message = 'Internal server error';
+        error = 'Internal Server Error';
+      } else {
+        message = exception.message;
+        error = exception.name;
+      }
       stack = exception.stack;
     }
 
@@ -88,8 +95,12 @@ export class GlobalExceptionFilter implements ExceptionFilter {
 
     // Include details in development
     if (process.env.NODE_ENV !== 'production') {
-      if (details) {errorResponse.details = details;}
-      if (stack) {errorResponse.stack = stack;}
+      if (details) {
+        errorResponse.details = details;
+      }
+      if (stack) {
+        errorResponse.stack = stack;
+      }
     }
 
     response.status(status).json(errorResponse);

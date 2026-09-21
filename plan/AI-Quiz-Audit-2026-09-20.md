@@ -199,15 +199,21 @@ These are cheap, high-visibility wins:
 ### 6.1 Must-fix before opening to the public (blockers)
 
 - [ ] H1 public reads: strip answer keys (`answer`, `correctAnswer`, `correctLetter`, `options`) from public DTOs
-- [ ] H2 `getOrThrow('JWT_SECRET')` in the JWT module; fail fast for all non-dev envs
-- [ ] H3 stop leaking non-`HttpException` messages in production
-- [ ] H5/H7 fix `deploy.ps1`/`deploy.sh` DB container name + health ports
-- [ ] H6 unbind prod app ports (or loopback-bind) + restrict origin firewall to Cloudflare IPs
-- [ ] H8 add a CSP and (at minimum) plan token-storage hardening
+- [x] H2 `getOrThrow('JWT_SECRET')` in the JWT module; fail fast for all non-dev envs - FIXED 2026-09-21: getOrThrow + SEC-04 non-dev fail-fast in main.ts.
+- [x] H3 stop leaking non-`HttpException` messages in production - FIXED 2026-09-21: production returns a generic message; the real stack stays in server logs.
+- [x] H5/H7 fix `deploy.ps1`/`deploy.sh` DB container name + health ports - FIXED 2026-09-21: correct container name, UTF-16-safe dump (in-container + docker cp), health/URL ports 4004/3001.
+- [ ] H6 unbind prod app ports (or loopback-bind) + restrict origin firewall to Cloudflare IPs - PARTIAL 2026-09-21: compose ports loopback-bound (127.0.0.1); the live Dokploy exposure + origin firewall need owner/VPS action.
+- [ ] H8 add a CSP and (at minimum) plan token-storage hardening - PARTIAL 2026-09-21: baseline CSP shipped (self + GTM; unsafe-inline while inline scripts are un-nonced); token storage hardening remains.
 - [ ] H9 rotate dev/prod credentials (admin, DB, Redis, JWT, Google OAuth) and move the OAuth secret off disk
 - [ ] H4 finish `content:push` and verify the state file covers all content families
-- [ ] SEC-05 replace literal DB passwords in `docker-compose.yml` with `${…}` from an untracked `.env`
-- [ ] SEC-08/09: convert inline `@Body()` types to DTOs (esp. `newsletter/unsubscribe`); return `toProfile()` from admin user endpoints
+- [x] SEC-05 replace literal DB passwords in `docker-compose.yml` with `${…}` from an untracked `.env` - FIXED 2026-09-21: compose interpolates POSTGRES_PASSWORD from the untracked root .env (value preserved for existing dev volumes).
+- [ ] SEC-08/09: convert inline `@Body()` types to DTOs (esp. `newsletter/unsubscribe`); return `toProfile()` from admin user endpoints - PARTIAL 2026-09-21: newsletter/unsubscribe DTO + admin toProfile() done; joke votes / chapter CRUD / PUT users/profile DTOs remain.
+
+##### Remediation log - 2026-09-21 (security + ops wave, all verified: backend tsc + 87/87 tests, frontend tsc + 553/553 tests, theme guard, production build)
+
+- **Fixed:** H2, H3, H5, H7, SEC-05, SEC-09 (admin users), SEC-08 (newsletter/unsubscribe DTO), OPS-03 (stale `/api/health` in 5 scripts + DEPLOYMENT.md), OPS-07 (`REDIS_PASSWORD` documented in `.env.production.example`), BE-10 (obsolete `repair-quiz-subject.py` deleted), cosmetic #1 (`--font-inter` wired into Tailwind).
+- **Partially fixed:** H6 (compose loopback; live exposure + firewall = owner/VPS), H8 (CSP shipped; nonces + token storage = follow-up), SEC-08 (3 more inline-`@Body()` endpoints).
+- **Open - owner decisions:** H1 (needs the server-side-grading decision before stripping answer columns - naive removal breaks client-side scoring), H4 (run `content:push` to completion; owner says no content changed - a dry run would verify), H9 (credential rotation + git-history scrub).
 
 ### 6.2 Should-fix immediately after
 

@@ -72,6 +72,15 @@ const nextConfig = {
           { key: 'X-Content-Type-Options', value: 'nosniff' },
           { key: 'Referrer-Policy', value: 'strict-origin-when-cross-origin' },
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=()' },
+          {
+            // H8 (FE Sec #2): baseline Content-Security-Policy. 'unsafe-inline' in
+            // script-src is required by the inline theme bootstrap, GA init and
+            // JSON-LD until they are nonced (tracked follow-up); every other
+            // directive is locked down (self + Google Tag Manager only).
+            key: 'Content-Security-Policy',
+            value:
+              "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data:; connect-src 'self' https: wss:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'",
+          },
         ],
       },
       {

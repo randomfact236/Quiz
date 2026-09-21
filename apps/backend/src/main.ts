@@ -156,7 +156,10 @@ async function startServer(app: INestApplication, port: number): Promise<void> {
  * dev defaults and ships an insecure or broken API.
  */
 function validateProductionEnv(configService: ConfigService): void {
-  if (configService.get('NODE_ENV') !== 'production') return;
+  // SEC-04: validate every non-development environment (staging/preview included),
+  // not just NODE_ENV=production - a typo like "prod" must not fall back to dev defaults.
+  const nodeEnv = configService.get<string>('NODE_ENV') ?? 'development';
+  if (nodeEnv === 'development' || nodeEnv === 'test') return;
 
   const problems: string[] = [];
   const jwtSecret = configService.get<string>('JWT_SECRET');
@@ -175,7 +178,12 @@ function validateProductionEnv(configService: ConfigService): void {
     );
   }
   if (problems.length > 0) {
-    throw new Error(`Production environment validation failed:\n  - ${problems.join('\n  - ')}`);
+    throw new Error(
+      'Environment validation failed [' +
+        (nodeEnv ?? 'unknown') +
+        ']:\n  - ' +
+        problems.join('\n  - ')
+    );
   }
 }
 

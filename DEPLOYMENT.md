@@ -451,12 +451,12 @@ DB_DATABASE: aiquiz
 
 ## Health Checks (VPS)
 
-| Service    | Check                  | Interval |
-| ---------- | ---------------------- | -------- |
-| PostgreSQL | `pg_isready`           | 10s      |
-| Redis      | `redis-cli ping`       | 10s      |
-| Backend    | HTTP GET `/api/health` | 30s      |
-| Frontend   | HTTP GET `/`           | 30s      |
+| Service    | Check                     | Interval |
+| ---------- | ------------------------- | -------- |
+| PostgreSQL | `pg_isready`              | 10s      |
+| Redis      | `redis-cli ping`          | 10s      |
+| Backend    | HTTP GET `/api/v1/health` | 30s      |
+| Frontend   | HTTP GET `/`              | 30s      |
 
 All of these are wired as compose healthchecks in `docker-compose.prod.yml`.
 

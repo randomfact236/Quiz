@@ -157,7 +157,7 @@ function Get-Status {
     
     # Check backend
     try {
-        $response = Invoke-WebRequest -Uri "http://localhost:3012/api/v1/health" -UseBasicParsing -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri "http://localhost:4004/api/v1/health" -UseBasicParsing -ErrorAction Stop
         if ($response.StatusCode -eq 200) {
             Write-Success "Backend API: Healthy"
         }
@@ -168,7 +168,7 @@ function Get-Status {
     
     # Check frontend
     try {
-        $response = Invoke-WebRequest -Uri "http://localhost:3010/" -UseBasicParsing -ErrorAction Stop
+        $response = Invoke-WebRequest -Uri "http://localhost:3001/" -UseBasicParsing -ErrorAction Stop
         if ($response.StatusCode -eq 200) {
             Write-Success "Frontend: Healthy"
         }
@@ -185,8 +185,8 @@ function Invoke-Deploy {
     Invoke-Build
     Invoke-Start
     Write-Success "Deployment completed!"
-    Write-Info "Frontend: http://localhost:3010"
-    Write-Info "Backend API: http://localhost:3012/api"
+    Write-Info "Frontend: http://localhost:3001"
+    Write-Info "Backend API: http://localhost:4004/api"
 }
 
 # Update and redeploy
@@ -227,7 +227,11 @@ function Invoke-Backup {
     }
     
     # Create backup
-    docker exec quiz-postgres-prod pg_dump -U $envVars['POSTGRES_USER'] -d $envVars['POSTGRES_DB'] > $backupFile
+    # H5: `>` in PowerShell writes UTF-16 and corrupts the dump - dump inside the
+    # container and copy the file out byte-for-byte instead.
+    docker exec quiz-postgres pg_dump -U $envVars['POSTGRES_USER'] -d $envVars['POSTGRES_DB'] -f /tmp/quiz-backup.sql
+    docker cp quiz-postgres:/tmp/quiz-backup.sql $backupFile
+    docker exec quiz-postgres rm -f /tmp/quiz-backup.sql
     
     Write-Success "Backup created: $backupFile"
     

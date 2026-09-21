@@ -141,14 +141,14 @@ cmd_status() {
     log_info "\nHealth Checks:"
     
     # Check backend health
-    if curl -sf http://localhost:3012/api/v1/health &> /dev/null; then
+    if curl -sf http://localhost:4004/api/v1/health &> /dev/null; then
         log_success "Backend API: Healthy"
     else
         log_error "Backend API: Unhealthy"
     fi
     
     # Check frontend health
-    if curl -sf http://localhost:3010/ &> /dev/null; then
+    if curl -sf http://localhost:3001/ &> /dev/null; then
         log_success "Frontend: Healthy"
     else
         log_error "Frontend: Unhealthy"
@@ -162,8 +162,8 @@ cmd_deploy() {
     cmd_build
     cmd_start
     log_success "Deployment completed!"
-    log_info "Frontend: http://localhost:3010"
-    log_info "Backend API: http://localhost:3012/api"
+    log_info "Frontend: http://localhost:3001"
+    log_info "Backend API: http://localhost:4004/api"
 }
 
 # Update and redeploy
@@ -197,7 +197,7 @@ cmd_backup() {
     source "$ENV_FILE"
     
     # Create backup
-    docker exec quiz-postgres-prod pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" > "$BACKUP_FILE"
+    docker exec quiz-postgres pg_dump -U "$POSTGRES_USER" -d "$POSTGRES_DB" > "$BACKUP_FILE"
     
     log_success "Backup created: $BACKUP_FILE"
     

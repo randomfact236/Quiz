@@ -196,7 +196,7 @@ function Start-Monitoring {
             
             # Periodic HTTP health check every 60 seconds
             if ((Get-Date).Second -lt 10) {
-                $backendHttp = Test-HttpEndpoint $BackendPort "/api/health"
+                $backendHttp = Test-HttpEndpoint $BackendPort "/api/v1/health"
                 $frontendHttp = Test-HttpEndpoint $FrontendPort "/"
                 
                 if (-not $backendHttp) {

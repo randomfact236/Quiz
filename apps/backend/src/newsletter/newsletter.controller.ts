@@ -16,6 +16,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Roles } from '../common/decorators/roles.decorator';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { SubscribeDto } from './dto/subscribe.dto';
+import { UnsubscribeDto } from './dto/unsubscribe.dto';
 import { NewsletterService } from './newsletter.service';
 
 @ApiTags('Newsletter')
@@ -37,8 +38,8 @@ export class NewsletterController {
   @Post('unsubscribe')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Unsubscribe an email (idempotent)' })
-  unsubscribe(@Body() body: { email: string }) {
-    return this.newsletterService.unsubscribe(body.email ?? '');
+  unsubscribe(@Body() dto: UnsubscribeDto) {
+    return this.newsletterService.unsubscribe(dto.email);
   }
 
   @Get()

@@ -56,7 +56,7 @@ $waited = 0
 while (-not $backendReady -and $waited -lt $maxWaitSeconds) {
     Start-Sleep -Seconds 2
     $waited += 2
-    $backendReady = Test-ServerReady $backendPort "/api/health"
+    $backendReady = Test-ServerReady $backendPort "/api/v1/health"
     Write-Host "." -NoNewline
 }
 Write-Host ""
@@ -133,7 +133,7 @@ try {
         }
         
         # Check health endpoints
-        $backendHealthy = Test-ServerReady $backendPort "/api/health"
+        $backendHealthy = Test-ServerReady $backendPort "/api/v1/health"
         $frontendHealthy = Test-ServerReady $frontendPort "/"
         
         if (-not $backendHealthy) {

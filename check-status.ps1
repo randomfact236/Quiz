@@ -50,7 +50,7 @@ Write-Host ""
 # Check HTTP endpoints
 Write-Host "HTTP Endpoint Tests:" -ForegroundColor Yellow
 $results = @()
-$results += Test-Endpoint "http://127.0.0.1:$BackendPort/api/health" "Backend Health"
+$results += Test-Endpoint "http://127.0.0.1:$BackendPort/api/v1/health" "Backend Health"
 $results += Test-Endpoint "http://127.0.0.1:$FrontendPort" "Frontend"
 $results += Test-Endpoint "http://127.0.0.1:$FrontendPort/admin" "Admin Panel"
 

@@ -105,7 +105,7 @@ Write-Status "✅ Frontend is running on port $FrontendPort" "Green"
 Write-Status "Performing HTTP health checks..." "Yellow"
 Start-Sleep -Seconds 2
 
-$backendHealthy = Test-HttpEndpoint $BackendPort "/api/health"
+$backendHealthy = Test-HttpEndpoint $BackendPort "/api/v1/health"
 $frontendHealthy = Test-HttpEndpoint $FrontendPort "/"
 
 if (-not $backendHealthy) {

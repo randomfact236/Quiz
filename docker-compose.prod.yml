@@ -45,7 +45,7 @@ services:
     # the Dokploy proxy over the internal network, not through this mapping.
     # Container port 3012 = the PORT env below (app default in common/constants/ports.ts).
     ports:
-      - '4004:3012'
+      - '127.0.0.1:4004:3012'
     environment:
       NODE_ENV: production
       PORT: 3012
@@ -96,7 +96,7 @@ services:
     # ENV PORT=3010 / EXPOSE 3010 and package.json runs "next start -p 3010".
     # Host port for direct-IP access/debugging only — domains route via Dokploy.
     ports:
-      - '3001:3010'
+      - '127.0.0.1:3001:3010'
     environment:
       NODE_ENV: production
       NEXT_PUBLIC_API_URL: https://api.pigzap.com/api/v1

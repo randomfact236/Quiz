@@ -83,7 +83,10 @@ const config: Config = {
         },
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        // Cosmetic #1: consume the next/font self-hosted variable (layout.tsx sets
+        // --font-inter) instead of hardcoding the family name, which made the
+        // optimized font a dead optimisation.
+        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'monospace'],
       },
       fontSize: {

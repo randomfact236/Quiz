@@ -81,7 +81,7 @@ function Start-Backend() {
     
     # Wait for health check
     Write-Status "Waiting for backend health check..." "info"
-    if (Test-ServerHealth "http://localhost:$backendPort/api/health" "Backend") {
+    if (Test-ServerHealth "http://localhost:$backendPort/api/v1/health" "Backend") {
         Write-Status "Backend is healthy on port $backendPort" "success"
         return $true
     } else {

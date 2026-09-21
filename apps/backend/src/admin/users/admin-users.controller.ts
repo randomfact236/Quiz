@@ -17,7 +17,8 @@ export class AdminUsersController {
   async getAllUsers() {
     const users = await this.usersService.getAll();
     return {
-      data: users,
+      // SEC-09: never expose password/refresh/reset/verification hashes.
+      data: users.map((user) => this.usersService.toProfile(user)),
       total: users.length,
     };
   }
@@ -27,7 +28,7 @@ export class AdminUsersController {
   @ApiResponse({ status: 200, description: 'User retrieved successfully' })
   @ApiResponse({ status: 404, description: 'User not found' })
   async getUserById(@Param('id') id: string) {
-    return this.usersService.findById(id);
+    return this.usersService.toProfile(await this.usersService.findById(id));
   }
 
   @Put(':id')
@@ -38,7 +39,11 @@ export class AdminUsersController {
     if (dto.role) {
       await this.usersService.updateRole(id, dto.role);
     }
-    return this.usersService.updateProfile(id, { name: dto.name, avatar: dto.avatar });
+    const updated = await this.usersService.updateProfile(id, {
+      name: dto.name,
+      avatar: dto.avatar,
+    });
+    return this.usersService.toProfile(updated);
   }
 
   @Delete(':id')
