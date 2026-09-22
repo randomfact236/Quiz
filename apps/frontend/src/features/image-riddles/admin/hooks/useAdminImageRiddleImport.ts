@@ -152,6 +152,9 @@ export function useAdminImageRiddleImport({
           answer: r.answer,
           alternativeAnswers: r.alternativeAnswers ?? [],
           hint: r.hint || undefined,
+          // HARD-04: optional status column — publish on import instead of a
+          // per-riddle toggle afterwards.
+          status: (r.status as 'draft' | 'published' | 'trash' | undefined) || undefined,
           difficulty: r.difficulty,
           timerSeconds: r.timerSeconds ?? null,
           showTimer: r.showTimer ?? true,

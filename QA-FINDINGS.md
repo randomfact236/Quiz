@@ -33,10 +33,10 @@
 
 | ID      | Title                                                              | Was                     | Type      | Pri  | Work by    |
 | ------- | ------------------------------------------------------------------ | ----------------------- | --------- | ---- | ---------- |
-| HARD-01 | CSP nonces + HttpOnly token storage                                | TASK-04                 | security  | P2   | code       |
+| HARD-01 | ✅ CSP: games gap closed + nonce assessment — PARTIAL 2026-09-22   | TASK-04                 | security  | P2   | code       |
 | HARD-02 | Server-side grading phase 2c                                       | TASK-15                 | security  | P1\* | code       |
 | HARD-03 | ✅ Signed guest token for anonymous writes — FIXED 2026-09-22      | TASK-14                 | security  | P2   | code       |
-| HARD-04 | Bulk import status/hint gaps                                       | TASK-05                 | quality   | P2   | code       |
+| HARD-04 | ✅ Bulk import status/hint gaps — FIXED 2026-09-22                 | TASK-05                 | quality   | P2   | code       |
 | HARD-05 | R2 media follow-ups                                                | TASK-22                 | media/ops | P2   | owner+code |
 | HARD-06 | Games a11y polish: AA contrast, roving focus + phone QA            | TASK-09 rem.            | a11y      | P3   | code+owner |
 | HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01)        | decision  | P2   | decision   |
@@ -252,7 +252,7 @@
 - **Verified:** backend tsc clean; guest-token spec 6/6; full frontend suite 561/561;
   full backend suite green.
 
-### HARD-04 - Bulk import status/hint gaps (was TASK-05)
+### HARD-04 - Bulk import status/hint gaps (was TASK-05) - FIXED 2026-09-22
 
 - **Date found:** 2026-09-22 (source: plan/03, 04, 05)
 - **Area:** import (3 modules) — **code work**
@@ -260,6 +260,17 @@
 - **Reported:** imported image riddles/jokes land DRAFT with no publish step; riddle bulk
   import drops hint (no hint button / hint_used analytics). Only bites the admin
   bulk-import path — the content pipeline (push-content.mjs) is unaffected.
+- **Fixed 2026-09-22 (audit found the finding partly stale):**
+  - Riddles: bulk import already carried hint AND status end-to-end (import service
+    honours `dto.hint`/`dto.status`; admin ImportModal maps both columns).
+  - Image riddles: `CreateImageRiddleDto` gained optional validated `status`;
+    createRiddle (single + bulk) applies `dto.status ?? DRAFT`; the admin import hook
+    maps an optional `status` column (previously: toggle each riddle after import).
+  - Jokes: `CreateDadJokeDto` gained optional `status`; single + bulk creation honour
+    it. The jokes import modal ADVERTISED a `status` column but the mapping dropped it —
+    now passed through.
+  - Default remains DRAFT everywhere when no status is supplied (safe-by-default).
+- **Verified:** backend tsc clean; frontend tsc clean.
 
 ### HARD-05 - R2 media follow-ups (was TASK-22)
 

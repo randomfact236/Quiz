@@ -332,6 +332,7 @@ export function JokesSection({
           setup?: string;
           punchline?: string;
           category?: string;
+          status?: ContentStatus | string;
         }> = [];
 
         if (file.name.endsWith('.json')) {
@@ -353,7 +354,12 @@ export function JokesSection({
           .map((r) => {
             const fullJoke = r.joke || `${r.setup || ''} ${r.punchline || ''}`.trim();
             const catId = r.category ? (catMap.get(r.category) ?? null) : null;
-            return { joke: fullJoke, categoryId: catId ?? '' };
+            // HARD-04: honor the documented status column (draft/published/trash)
+            return {
+              joke: fullJoke,
+              categoryId: catId ?? '',
+              status: r.status as ContentStatus | undefined,
+            };
           })
           .filter((d) => d.joke && d.categoryId);
 

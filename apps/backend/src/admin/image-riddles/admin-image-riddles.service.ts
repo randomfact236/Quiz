@@ -17,6 +17,7 @@ import {
 } from '../../common/dto/base.dto';
 import { ImageRiddleCategory } from '../../image-riddles/entities/image-riddle-category.entity';
 import { ImageRiddle } from '../../image-riddles/entities/image-riddle.entity';
+import { ContentStatus } from '../../common/enums/content-status.enum';
 
 /** Mirrors settings.imageRiddles.defaults.timerSeconds (entity getDefaultTimer). */
 const DEFAULT_TIMER_SECONDS = 90;
@@ -142,6 +143,8 @@ export class AdminImageRiddlesService {
       altText: dto.altText ?? null,
       categoryId: dto.categoryId ?? null,
       isActive: true,
+      // HARD-04: imports can publish in one step; default stays DRAFT.
+      status: dto.status ?? ContentStatus.DRAFT,
     });
 
     const saved = await this.saveRiddleSafely(riddle);

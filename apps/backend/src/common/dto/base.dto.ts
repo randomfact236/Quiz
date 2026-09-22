@@ -134,6 +134,15 @@ export class CreateDadJokeDto {
   @IsString()
   @IsNotEmpty()
   categoryId: string;
+
+  @ApiPropertyOptional({
+    enum: ContentStatus,
+    default: ContentStatus.DRAFT,
+    description: 'Content status at creation (HARD-04: lets imports publish in one step)',
+  })
+  @IsOptional()
+  @IsEnum(ContentStatus)
+  status?: ContentStatus;
 }
 
 export class UpdateDadJokeDto {
@@ -491,6 +500,15 @@ export class CreateImageRiddleDto {
   @ApiProperty({ example: 'medium', enum: ['easy', 'medium', 'hard', 'expert'] })
   @IsEnum(['easy', 'medium', 'hard', 'expert'])
   difficulty: string;
+
+  @ApiPropertyOptional({
+    enum: ContentStatus,
+    default: ContentStatus.DRAFT,
+    description: 'Content status at creation (HARD-04: lets imports publish in one step)',
+  })
+  @IsOptional()
+  @IsEnum(ContentStatus)
+  status?: ContentStatus;
 
   @ApiPropertyOptional({
     example: 60,

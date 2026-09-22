@@ -157,7 +157,12 @@ export class DadJokesService {
     if (category === null) {
       throw new NotFoundException('Category not found');
     }
-    const joke = this.jokeRepo.create({ joke: dto.joke, category, status: ContentStatus.DRAFT });
+    // HARD-04: status at creation lets an import publish in one step.
+    const joke = this.jokeRepo.create({
+      joke: dto.joke,
+      category,
+      status: (dto as { status?: ContentStatus }).status ?? ContentStatus.DRAFT,
+    });
     const saved = await this.jokeRepo.save(joke);
     await invalidateCacheFamilies(this.cacheService, ['jokes:categories:hasContent']);
     return saved;
@@ -205,7 +210,9 @@ export class DadJokesService {
         const joke = transactionalEntityManager.create(DadJoke, {
           joke: j.joke,
           category,
-          status: ContentStatus.DRAFT,
+          // HARD-04: an import row may carry its own status (publish in one
+          // step); absence keeps the safe DRAFT default.
+          status: (j as { status?: ContentStatus }).status ?? ContentStatus.DRAFT,
         });
         jokes.push(joke);
       }
