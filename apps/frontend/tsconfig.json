@@ -18,9 +18,10 @@
   "include": [
     "**/*.ts",
     "**/*.tsx",
+    ".next.prod-build/types/**/*.ts",
     ".next/types/**/*.ts",
     "next-env.d.ts",
-    ".next.prod-build/types/**/*.ts"
+    ".next-verify/types/**/*.ts"
   ],
   "exclude": ["node_modules", "src/__tests__"]
 }

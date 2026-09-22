@@ -28,8 +28,14 @@ import {
   getMixedQuestions,
   getRandomQuestions,
   getQuizQuestionById,
+  checkQuizAnswer,
 } from '@/lib/quiz-mcq-api';
-import { calculateScore, calculateResult, isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
+import {
+  calculateScore,
+  calculateResult,
+  isAnswerCorrect,
+  quizOptionText,
+} from '@/lib/quiz-mcq-scoring';
 import { recordChallengeAnswer, resetChallengeStreak } from '@/lib/challenge-streak';
 import { saveQuizResult } from '@/lib/progress';
 import { saveQuizSession } from '@/lib/quiz-mcq-api';
@@ -411,19 +417,42 @@ export function useQuizMcq(
     setState((prev) => ({ ...prev, status: 'completed' }));
   }, []);
 
-  const selectAnswer = useCallback(
-    (option: string) => {
-      setState((prev) => {
-        const currentQuestion = prev.questions[prev.currentQuestionIndex];
-        if (!currentQuestion) return prev;
+  // ==================== Answering (HARD-02 / H1 server-side grading) ====================
+  // The server is the grader: every answer goes through answers/check and the
+  // verdict is attached to the question object — isAnswerCorrect() reads it,
+  // so scoring, streaks, review and analytics all become verdict-driven. A
+  // grader failure falls back to an embedded key when one exists (old resume
+  // snapshots); with keys stripped a failed check grades incorrect.
+  const [verdicts, setVerdicts] = useState<Record<string, boolean>>({});
 
+  const selectAnswerAsync = useCallback(
+    async (option: string) => {
+      const currentQuestion = state.questions[state.currentQuestionIndex];
+      if (!currentQuestion) return;
+
+      let verdict: boolean;
+      try {
+        // Grade by option TEXT (BUG-041 shuffles served slots - letters are
+        // per-serve). Extreme/free-text answers send the text as-is.
+        const answerText = quizOptionText(currentQuestion, option) ?? option;
+        const result = await checkQuizAnswer(currentQuestion.id, answerText);
+        verdict = !!result.correct;
+      } catch {
+        verdict = isAnswerCorrect(currentQuestion, option);
+      }
+      setVerdicts((prev) => ({ ...prev, [currentQuestion.id]: verdict }));
+
+      setState((prev) => {
+        const questions = prev.questions.map((q) =>
+          q.id === currentQuestion.id ? { ...q, verdict } : q
+        );
         const newAnswers = { ...prev.answers, [currentQuestion.id]: option };
-        const newScore = calculateScore(prev.questions, newAnswers);
+        const newScore = calculateScore(questions, newAnswers);
 
         // Challenge streak (plan/02-mcq-quiz.md P1 #2): consecutive correct
         // answers in challenge mode feed the 'streak' achievement condition.
         if (type === 'challenge') {
-          recordChallengeAnswer(isAnswerCorrect(currentQuestion, option));
+          recordChallengeAnswer(verdict);
         }
 
         const newSkipped = new Set(prev.manuallySkipped);
@@ -436,13 +465,22 @@ export function useQuizMcq(
 
         return {
           ...prev,
+          questions,
           answers: newAnswers,
           score: newScore,
           manuallySkipped: newSkipped,
         };
       });
     },
-    [type]
+    [state.questions, state.currentQuestionIndex, type]
+  );
+
+  const selectAnswer = useCallback(
+    (option: string) => {
+      void selectAnswerAsync(option);
+    },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [selectAnswerAsync]
   );
 
   const goToPrevious = useCallback(() => {
@@ -609,6 +647,7 @@ export function useQuizMcq(
       answers: state.answers,
       score: state.score,
       manuallySkipped: Array.from(state.manuallySkipped),
+      verdicts,
       startedAt: new Date(state.startTime).toISOString(),
     });
   }, [
@@ -617,6 +656,7 @@ export function useQuizMcq(
     state.manuallySkipped,
     state.sessionSize,
     state.status,
+    verdicts,
   ]);
 
   const handleResumeSession = useCallback(() => {
@@ -630,7 +670,10 @@ export function useQuizMcq(
       subjectName: saved.subject,
       chapter: saved.chapter,
       level: saved.level,
-      questions: saved.availableQuestions.slice(0, saved.sessionSize),
+      questions: saved.availableQuestions.slice(0, saved.sessionSize).map((q) => {
+        const v = saved.verdicts?.[q.id];
+        return v === undefined ? q : { ...q, verdict: v };
+      }),
       answers: saved.answers,
       score: saved.score,
       maxScore: saved.sessionSize,
@@ -641,7 +684,10 @@ export function useQuizMcq(
 
     setState((prev) => ({
       ...prev,
-      availableQuestions: saved.availableQuestions,
+      availableQuestions: saved.availableQuestions.map((q) => {
+        const v = saved.verdicts?.[q.id];
+        return v === undefined ? q : { ...q, verdict: v };
+      }),
       questions: saved.availableQuestions.slice(0, saved.sessionSize),
       sessionSize: saved.sessionSize,
       currentQuestionIndex: saved.currentQuestionIndex,

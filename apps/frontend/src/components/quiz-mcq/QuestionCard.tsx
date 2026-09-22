@@ -440,6 +440,7 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
           <AnswerOptions
             options={options}
             selectedKey={selectedAnswer}
+            answerVerdict={selectedAnswer ? isCorrect : undefined}
             correctKey={
               showFeedback ? (isOpenEnded ? question.correctAnswer : correctLetter || '') : ''
             }

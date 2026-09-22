@@ -30,7 +30,7 @@ import { RiddleMcqStatsService } from '../services/riddle-mcq-stats.service';
 import { PaginationValidator } from '../validators/pagination.validator';
 import { DifficultyValidator } from '../validators/difficulty.validator';
 import { CreateRiddleMcqDto, UpdateRiddleMcqDto, BulkCreateRiddleDto } from '../dto/riddle-mcq.dto';
-import { RiddleAnswerCheckDto } from '../dto/riddle-answer-check.dto';
+import { RiddleAnswerCheckDto, RevealAnswerDto } from '../dto/riddle-answer-check.dto';
 
 @ApiTags('Riddle MCQ')
 @Controller('riddle-mcq')
@@ -248,5 +248,14 @@ export class RiddleMcqController {
   @ApiOperation({ summary: 'Grade one riddle answer server-side (H1)' })
   checkAnswer(@Body() dto: RiddleAnswerCheckDto) {
     return this.questionService.checkAnswer(dto.riddleId, dto.answer);
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Post('answers/reveal')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Post-session review reveal: key for ONE published riddle (H1)' })
+  revealAnswer(@Body() dto: RevealAnswerDto) {
+    return this.questionService.revealAnswer(dto.riddleId);
   }
 }

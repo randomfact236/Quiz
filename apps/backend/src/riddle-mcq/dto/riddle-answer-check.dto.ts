@@ -13,3 +13,10 @@ export class RiddleAnswerCheckDto {
   @MaxLength(500)
   answer: string;
 }
+
+/** HARD-02 (H1): post-session review reveal — key for ONE riddle. */
+export class RevealAnswerDto {
+  @IsString()
+  @IsNotEmpty()
+  riddleId: string;
+}

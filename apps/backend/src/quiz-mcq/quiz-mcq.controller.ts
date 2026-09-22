@@ -29,7 +29,7 @@ import {
 import { IsOptional, IsString } from 'class-validator';
 
 import { CreateChapterDto, UpdateChapterDto } from './dto/chapter.dto';
-import { AnswerCheckDto } from './dto/answer-check.dto';
+import { AnswerCheckDto, RevealAnswerDto } from './dto/answer-check.dto';
 
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
@@ -192,10 +192,11 @@ export class QuizMcqController {
   @Get('questions/:id/play')
   @ApiOperation({
     summary:
-      'Public play payload for one published question (same shape/exposure as the random play feed — carries the answer key the play flow grades against, options served-shuffled)',
+      'Public play payload for one published question (options served-shuffled; the answer key stays server-side - grading is via answers/check)',
   })
   async getPublicQuestionPlay(@Param('id') id: string) {
-    return this.quizService.findPlayItemById(id);
+    const question = await this.quizService.findPlayItemById(id);
+    return this.toPublicQuestion(question);
   }
 
   @_Public()
@@ -412,6 +413,17 @@ export class QuizMcqController {
     return this.quizService.checkAnswer(dto.questionId, dto.answer);
   }
 
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Post('answers/reveal')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Post-session review reveal: the key for ONE published question (H1)',
+  })
+  revealAnswer(@Body() dto: RevealAnswerDto) {
+    return this.quizService.revealAnswer(dto.questionId);
+  }
+
   /**
    * H1 (audit SEC-03): public question reads must not expose `correctAnswer` /
    * `correctLetter`. Guesses are graded server-side; these list endpoints are
@@ -450,13 +462,15 @@ export class QuizMcqController {
     @Query('count') count?: string,
     @Query('level') level?: string,
     @Query('chapterId') chapterId?: string
-  ): Promise<{ data: Question[]; total: number }> {
-    return this.quizService.findRandomQuestions({
+  ): Promise<{ data: Record<string, unknown>[]; total: number }> {
+    const result = await this.quizService.findRandomQuestions({
       subjectSlug: slug,
       level,
       chapterId,
       count: this.validateCount(count, 20),
     });
+    // H1: play grading is server-side now - the key stays on the server.
+    return { data: result.data.map((q) => this.toPublicQuestion(q)), total: result.total };
   }
 
   @Get('subject-clicks')
@@ -473,8 +487,9 @@ export class QuizMcqController {
   @ApiOperation({ summary: 'Get mixed questions from all subjects' })
   async getMixedQuestions(
     @Query('count') count?: string
-  ): Promise<{ data: Question[]; total: number }> {
-    return this.quizService.findAllMixedQuestions(this.validateCount(count, 20));
+  ): Promise<{ data: Record<string, unknown>[]; total: number }> {
+    const result = await this.quizService.findAllMixedQuestions(this.validateCount(count, 20));
+    return { data: result.data.map((q) => this.toPublicQuestion(q)), total: result.total };
   }
 
   @_Public()
@@ -483,8 +498,9 @@ export class QuizMcqController {
   @ApiOperation({ summary: 'Get random questions by difficulty level' })
   async getRandomQuestions(
     @Param('level') level: string
-  ): Promise<{ data: Question[]; total: number }> {
-    return this.quizService.findAllRandomQuestionsByLevel(level);
+  ): Promise<{ data: Record<string, unknown>[]; total: number }> {
+    const result = await this.quizService.findAllRandomQuestionsByLevel(level);
+    return { data: result.data.map((q) => this.toPublicQuestion(q)), total: result.total };
   }
 
   @Post('questions')

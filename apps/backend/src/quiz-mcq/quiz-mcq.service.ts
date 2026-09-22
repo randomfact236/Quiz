@@ -980,10 +980,7 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
    * shared frontend scorer: MCQ levels compare the selected letter exactly;
    * the `extreme` level compares normalized free text.
    */
-  async checkAnswer(
-    questionId: string,
-    answer: string
-  ): Promise<{ correct: boolean; correctAnswer: string | null; correctLetter: string | null }> {
+  async checkAnswer(questionId: string, answer: string): Promise<{ correct: boolean }> {
     const question = await this.deps.itemRepo.findOne({
       where: { id: questionId, status: ContentStatus.PUBLISHED } as never,
     });
@@ -991,13 +988,51 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
       throw new NotFoundException('Question not found');
     }
     const given = (answer ?? '').trim();
-    const correct =
-      given !== '' &&
-      (question.level === 'extreme'
-        ? this.normalizeFreeText(given) === this.normalizeFreeText(question.correctAnswer ?? '')
-        : question.correctLetter != null && given === question.correctLetter);
+    let correct = false;
+    if (given !== '') {
+      if (question.level === 'extreme') {
+        correct =
+          this.normalizeFreeText(given) === this.normalizeFreeText(question.correctAnswer ?? '');
+      } else if (question.correctLetter != null) {
+        // Grade by OPTION TEXT, not by letter: the served payload's options are
+        // shuffled per response (BUG-041), so the served letter and the stored
+        // letter disagree whenever the correct value moved slots. Option values
+        // are the same set in both views, so text is the stable key.
+        const storedText = this.optionTextForLetter(question, question.correctLetter);
+        correct =
+          storedText != null &&
+          this.normalizeFreeText(given) === this.normalizeFreeText(storedText);
+      }
+    }
+    // Verdict ONLY — leaking the key here would let any client grade-or-harvest
+    // answers without ever answering (H1). Post-session review uses reveal().
+    return { correct };
+  }
+
+  private optionTextForLetter(question: Question, letter: string): string | null {
+    const letters = 'ABCDEFGH';
+    const idx = letters.indexOf(String(letter).trim().toUpperCase());
+    const opts = Array.isArray(question.options) ? question.options : [];
+    const value = idx >= 0 && idx < opts.length ? opts[idx] : null;
+    return typeof value === 'string' && value.trim() !== '' ? value : null;
+  }
+
+  /**
+   * Post-session review reveal (H1): returns the key for ONE published
+   * question so results review can show what was right. Public but throttled;
+   * this is the deliberate, documented compromise — the grader itself no
+   * longer doubles as a key oracle.
+   */
+  async revealAnswer(
+    questionId: string
+  ): Promise<{ correctAnswer: string | null; correctLetter: string | null }> {
+    const question = await this.deps.itemRepo.findOne({
+      where: { id: questionId, status: ContentStatus.PUBLISHED } as never,
+    });
+    if (!question) {
+      throw new NotFoundException('Question not found');
+    }
     return {
-      correct,
       correctAnswer: question.correctAnswer ?? null,
       correctLetter: question.correctLetter ?? null,
     };

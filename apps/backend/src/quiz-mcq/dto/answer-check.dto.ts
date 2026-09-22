@@ -16,3 +16,10 @@ export class AnswerCheckDto {
   @MaxLength(500)
   answer: string;
 }
+
+/** HARD-02 (H1): post-session review reveal — key for ONE question. */
+export class RevealAnswerDto {
+  @IsString()
+  @IsNotEmpty()
+  questionId: string;
+}

@@ -33,6 +33,10 @@ export function normalizeExtremeAnswer(text: string): string {
 export function isAnswerCorrect(question: Question, userAnswer: string | undefined): boolean {
   if (!userAnswer) return false;
 
+  // HARD-02 (H1): when the server verdict is attached, it is the single
+  // source of truth — the key no longer ships in play payloads.
+  if (typeof question.verdict === 'boolean') return question.verdict;
+
   const isOpenEnded = question.level === 'extreme';
   if (isOpenEnded) {
     return (
@@ -41,6 +45,17 @@ export function isAnswerCorrect(question: Question, userAnswer: string | undefin
   }
 
   return question.correctLetter != null && userAnswer === question.correctLetter;
+}
+
+/**
+ * HARD-02 (H1): the option TEXT for a served letter. The grader compares
+ * text (BUG-041 shuffles the served slots, so letters are not stable across
+ * serve/grade views).
+ */
+export function quizOptionText(question: Question, letter: string): string | null {
+  const key = `option${(letter || '').trim().toUpperCase()}`;
+  const value = (question as unknown as Record<string, unknown>)[key];
+  return typeof value === 'string' && value.trim() !== '' ? value : null;
 }
 
 /** Total score across a set of answered questions. */

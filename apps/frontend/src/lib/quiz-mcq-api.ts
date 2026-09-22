@@ -453,8 +453,6 @@ export async function getQuizSessionHistory(guestId?: string): Promise<QuizSessi
  */
 export interface AnswerCheckResult {
   correct: boolean;
-  correctAnswer: string | null;
-  correctLetter: string | null;
 }
 
 export async function checkQuizAnswer(
@@ -465,5 +463,19 @@ export async function checkQuizAnswer(
     questionId,
     answer,
   });
+  return response.data;
+}
+
+/**
+ * HARD-02 (H1): post-session review reveal - the key for ONE question.
+ * Throttled server-side; the grader itself no longer doubles as a key oracle.
+ */
+export async function revealQuizAnswer(
+  questionId: string
+): Promise<{ correctAnswer: string | null; correctLetter: string | null }> {
+  const response = await api.post<{ correctAnswer: string | null; correctLetter: string | null }>(
+    '/quiz-mcq/answers/reveal',
+    { questionId }
+  );
   return response.data;
 }

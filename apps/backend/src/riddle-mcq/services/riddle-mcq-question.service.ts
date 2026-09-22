@@ -384,10 +384,7 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
    * reads can stop shipping `correctLetter` / `answer`. Mirrors the shared
    * frontend riddle scorer (expert/extreme = normalized text, else letter).
    */
-  async checkAnswer(
-    riddleId: string,
-    answer: string
-  ): Promise<{ correct: boolean; correctAnswer: string | null; correctLetter: string | null }> {
+  async checkAnswer(riddleId: string, answer: string): Promise<{ correct: boolean }> {
     const riddle = await this.deps.itemRepo.findOne({
       where: { id: riddleId, status: RiddleStatus.PUBLISHED } as never,
     });
@@ -397,15 +394,42 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
     const given = (answer ?? '').trim();
     const level = String(riddle.level ?? '').toLowerCase();
     const openEnded = level === 'expert' || level === 'extreme';
-    const correct =
-      given !== '' &&
-      (openEnded
-        ? this.normalizeFreeText(given) ===
-          this.normalizeFreeText(riddle.answer ?? riddle.correctLetter ?? '')
-        : riddle.correctLetter != null && given === riddle.correctLetter);
+    let correct = false;
+    if (given !== '') {
+      if (openEnded) {
+        correct =
+          this.normalizeFreeText(given) ===
+          this.normalizeFreeText(riddle.answer ?? riddle.correctLetter ?? '');
+      } else if (riddle.correctLetter != null) {
+        // Grade by OPTION TEXT: served options are shuffled per response
+        // (BUG-041), so the letter is not stable across views - text is.
+        const letters = 'ABCDEFGH';
+        const idx = letters.indexOf(String(riddle.correctLetter).trim().toUpperCase());
+        const opts = Array.isArray(riddle.options) ? riddle.options : [];
+        const storedText = idx >= 0 && idx < opts.length ? String(opts[idx] ?? '') : '';
+        correct =
+          storedText !== '' && this.normalizeFreeText(given) === this.normalizeFreeText(storedText);
+      }
+    }
+    // Verdict ONLY (H1) - review uses the reveal endpoint.
+    return { correct };
+  }
+
+  /**
+   * Post-session review reveal (H1): key for ONE published riddle. Public but
+   * throttled; the grader itself no longer doubles as a key oracle.
+   */
+  async revealAnswer(
+    riddleId: string
+  ): Promise<{ answer: string | null; correctLetter: string | null }> {
+    const riddle = await this.deps.itemRepo.findOne({
+      where: { id: riddleId, status: RiddleStatus.PUBLISHED } as never,
+    });
+    if (!riddle) {
+      throw new NotFoundException('Riddle not found');
+    }
     return {
-      correct,
-      correctAnswer: riddle.answer ?? null,
+      answer: riddle.answer ?? null,
       correctLetter: riddle.correctLetter ?? null,
     };
   }

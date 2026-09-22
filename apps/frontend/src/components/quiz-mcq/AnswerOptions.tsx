@@ -33,6 +33,9 @@ interface AnswerOptionsProps {
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   /** Which game's option-count spec to apply (defaults to quiz) */
   game?: 'quiz' | 'riddle';
+  /** HARD-02: server grading verdict for the selected answer. When defined it
+   *  drives feedback colors; when absent the legacy correctKey compare runs. */
+  answerVerdict?: boolean | undefined;
 }
 
 /** Fallback pair for easy questions authored without stored options */
@@ -51,6 +54,7 @@ export function AnswerOptions({
   options,
   selectedKey,
   correctKey,
+  answerVerdict,
   onSelect,
   disabled = false,
   showFeedback = false,
@@ -64,15 +68,17 @@ export function AnswerOptions({
       'relative flex items-center justify-center rounded-xl border-2 py-3 px-4 text-center text-base font-medium transition-all duration-200 w-full break-words ';
 
     // If selection made, show feedback colors
-    if (hasSelection && showFeedback && correctKey) {
-      if (key === correctKey) {
+    if (hasSelection && showFeedback && (answerVerdict !== undefined || correctKey)) {
+      const selectedIsCorrect =
+        answerVerdict !== undefined ? answerVerdict : selectedKey === correctKey;
+      if (selectedIsCorrect && key === selectedKey) {
         // Correct answer - green
         return (
           baseStyle +
           'border-green-500 bg-green-50 text-green-800 dark:border-green-500/50 dark:bg-green-500/10 dark:text-green-300'
         );
       }
-      if (key === selectedKey && key !== correctKey) {
+      if (key === selectedKey && !selectedIsCorrect) {
         // Wrong selection - red
         return (
           baseStyle +

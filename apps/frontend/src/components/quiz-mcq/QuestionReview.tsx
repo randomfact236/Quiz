@@ -8,11 +8,12 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, CheckCircle, XCircle, MinusCircle } from 'lucide-react';
 import type { Question } from '@/types/quiz-mcq';
 import { isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
+import { revealQuizAnswer } from '@/lib/quiz-mcq-api';
 import { QuestionComments } from '@/components/quiz-mcq/QuestionComments';
 
 interface QuestionReviewProps {
@@ -31,12 +32,37 @@ export function QuestionReview({
 }: QuestionReviewProps): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
 
+  // HARD-02 (H1): play payloads no longer ship the key, so post-session review
+  // fetches the reveal once per question (throttled endpoint).
+  const [reveal, setReveal] = useState<{
+    correctAnswer: string | null;
+    correctLetter: string | null;
+  } | null>(null);
+  const [revealFailed, setRevealFailed] = useState(false);
+  useEffect(() => {
+    if (question.correctLetter != null || question.correctAnswer) return; // legacy snapshot
+    let cancelled = false;
+    revealQuizAnswer(question.id)
+      .then((r) => {
+        if (!cancelled) setReveal(r);
+      })
+      .catch(() => {
+        if (!cancelled) setRevealFailed(true);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [question.id, question.correctLetter, question.correctAnswer]);
+
   const isAnswered = userAnswer !== undefined && userAnswer !== null && userAnswer.trim() !== '';
   const isCorrect = isAnswered && isAnswerCorrect(question, userAnswer);
   const isExtreme = question.level === 'extreme';
   // MCQ: correct answer is identified by its letter (correctLetter holds the
   // text in correctAnswer, which never matches an option key).
-  const correctKey = isExtreme ? null : question.correctLetter;
+  const correctKey = isExtreme ? null : (question.correctLetter ?? reveal?.correctLetter ?? null);
+  const revealedCorrectText = isExtreme
+    ? question.correctAnswer || reveal?.correctAnswer || null
+    : null;
   const options = [
     { key: 'A', text: question.optionA },
     { key: 'B', text: question.optionB },
@@ -146,7 +172,9 @@ export function QuestionReview({
                   <p className="text-sm font-medium">Your answer:</p>
                   <p className="text-lg">{isAnswered ? userAnswer : '(not answered)'}</p>
                   <p className="mt-2 text-sm font-medium">Correct answer:</p>
-                  <p className="text-lg font-semibold">{question.correctAnswer}</p>
+                  <p className="text-lg font-semibold">
+                    {revealedCorrectText ?? (revealFailed ? '(unavailable)' : '…')}
+                  </p>
                 </div>
               )}
 

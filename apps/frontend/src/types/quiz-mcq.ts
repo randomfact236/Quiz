@@ -16,6 +16,9 @@ export interface Question {
   optionD: string;
   correctAnswer: string;
   correctLetter: string | null;
+  /** HARD-02/H1: server grading verdict, attached after checkQuizAnswer.
+   *  Absent on pre-upgrade resume snapshots (those still carry the key). */
+  verdict?: boolean;
   level: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme';
   /** Optional explanation shown after answering (plan/02-mcq-quiz.md P1 #4) */
   explanation?: string | null;

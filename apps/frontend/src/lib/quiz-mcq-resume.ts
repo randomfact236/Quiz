@@ -37,6 +37,9 @@ interface QuizResumeProgress {
   score: number;
   manuallySkipped: string[];
   startedAt: string;
+  /** HARD-02: server verdicts per question id (pre-verdict snapshots lack it
+   *  but embed the key inside their question snapshot, so they still grade). */
+  verdicts?: Record<string, boolean>;
 }
 
 interface StoredResumeProgress extends QuizResumeIdentity, QuizResumeProgress {
@@ -75,6 +78,7 @@ export function saveQuizResume(state: QuizResumeIdentity & QuizResumeProgress): 
     score: state.score,
     manuallySkipped: state.manuallySkipped,
     startedAt: state.startedAt,
+    ...(state.verdicts ? { verdicts: state.verdicts } : {}),
     savedAt: Date.now(),
   };
   setItem(RESUME_KEY, progress);
