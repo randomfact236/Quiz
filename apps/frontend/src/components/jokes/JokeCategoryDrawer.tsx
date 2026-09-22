@@ -12,9 +12,12 @@
  * mojibake, one line carried a corrupted character, the card classes had a
  * contradictory duplicate dark background, and the dialog had none of the
  * app's modal a11y (Escape, focus move + trap, scroll lock, focus restore).
+ * Compact 2026-09-22: single-line rows so every category fits the viewport
+ * with no drawer scrolling; the on-page mobile category list is hidden.
  */
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { Folder, Library, X } from 'lucide-react';
 
 export interface JokeCategoryDrawerProps {
@@ -40,11 +43,28 @@ export function JokeCategoryDrawer({
   onSelect,
 }: JokeCategoryDrawerProps): JSX.Element {
   const panelRef = useRef<HTMLDivElement>(null);
+  // Mount/visibility split: `mounted` keeps the portal in the DOM while the
+  // exit transition plays; `shown` drives the CSS transition both ways.
+  const [mounted, setMounted] = useState(open);
+  const [shown, setShown] = useState(false);
+
+  // Open: mount, then flip `shown` on the next frame so the transition runs.
+  // Close: hide first, unmount after the exit transition finishes.
+  useEffect(() => {
+    if (open) {
+      setMounted(true);
+      return;
+    }
+    setShown(false);
+    const unmountTimer = setTimeout(() => setMounted(false), 320);
+    return () => clearTimeout(unmountTimer);
+  }, [open]);
 
   // Escape closes, body scroll locks, focus moves in and Tab is trapped inside
   // the panel, then focus is restored on close (matches the header drawer).
   useEffect(() => {
-    if (!open) return;
+    if (!open || !mounted) return;
+    const raf = requestAnimationFrame(() => setShown(true));
     const panel = panelRef.current;
     const previouslyFocused = document.activeElement as HTMLElement | null;
     panel?.querySelector<HTMLElement>(FOCUSABLE)?.focus();
@@ -70,24 +90,30 @@ export function JokeCategoryDrawer({
     };
     window.addEventListener('keydown', onKey);
     return () => {
+      cancelAnimationFrame(raf);
       window.removeEventListener('keydown', onKey);
       document.body.style.overflow = previousOverflow;
       previouslyFocused?.focus?.();
     };
-  }, [open, onClose]);
+  }, [open, mounted, onClose]);
 
-  if (!open) return <></>;
+  if (!mounted) return null as unknown as JSX.Element;
 
   const tileClass = (isActive: boolean) =>
-    `flex w-full cursor-pointer items-center gap-4 rounded-xl border-2 bg-white p-4 text-left shadow-sm transition-all hover:translate-x-1 hover:shadow-md dark:bg-secondary-800/60 ${
+    `flex w-full cursor-pointer items-center gap-3 rounded-xl border-2 bg-white px-3 py-2 text-left shadow-sm transition-all hover:translate-x-0.5 hover:shadow-md dark:bg-secondary-800/60 ${
       isActive
         ? 'border-orange-500 ring-1 ring-orange-200 dark:ring-orange-500/30'
         : 'border-transparent'
     }`;
 
-  return (
+  // Portal to <body>: rendering inside the sticky sidebar traps the overlay in
+  // that stacking context - the site header painted above the backdrop and the
+  // backdrop's top edge started below the header (measured top: 40 instead of 0).
+  return createPortal(
     <div
-      className="fixed inset-0 z-[70] flex justify-end bg-slate-900/70 backdrop-blur-sm animate-in fade-in duration-200"
+      className={`fixed inset-0 z-[70] flex justify-end bg-slate-900/70 backdrop-blur-sm transition-opacity duration-300 ${
+        shown ? 'opacity-100' : 'pointer-events-none opacity-0'
+      }`}
       onClick={onClose}
       role="dialog"
       aria-modal="true"
@@ -95,81 +121,81 @@ export function JokeCategoryDrawer({
     >
       <div
         ref={panelRef}
-        className="h-full w-[85%] max-w-sm overflow-y-auto rounded-l-3xl bg-white p-5 pb-8 shadow-2xl animate-in slide-in-from-right duration-300 dark:bg-secondary-900"
+        className={`flex h-[calc(100%-4.5rem)] w-[85%] max-w-sm flex-col overflow-y-auto rounded-l-3xl bg-white p-4 shadow-2xl transition-transform duration-300 ease-out md:h-full dark:bg-secondary-900 ${
+          shown ? 'translate-x-0' : 'translate-x-full'
+        }`}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="mb-4 flex items-center justify-between text-sm font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400">
-          <span className="flex items-center gap-2">
-            <Folder className="h-4 w-4 text-orange-400" aria-hidden="true" /> Joke Categories
-          </span>
-          <button
-            type="button"
-            onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-500 dark:bg-secondary-800 dark:text-secondary-400 dark:hover:bg-red-500/20"
-            aria-label="Close joke categories"
-          >
-            <X className="h-4 w-4" aria-hidden="true" />
-          </button>
-        </div>
+        <div className="my-auto">
+          <div className="mb-3 flex items-center justify-between text-sm font-black uppercase tracking-widest text-slate-400 dark:text-secondary-400">
+            <span className="flex items-center gap-2">
+              <Folder className="h-4 w-4 text-orange-400" aria-hidden="true" /> Joke Categories
+            </span>
+            <button
+              type="button"
+              onClick={onClose}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-100 text-gray-400 transition-colors hover:bg-red-100 hover:text-red-500 dark:bg-secondary-800 dark:text-secondary-400 dark:hover:bg-red-500/20"
+              aria-label="Close joke categories"
+            >
+              <X className="h-4 w-4" aria-hidden="true" />
+            </button>
+          </div>
 
-        <div className="flex flex-col gap-3">
-          <button
-            type="button"
-            onClick={() => {
-              onSelect(null);
-              onClose();
-            }}
-            aria-pressed={activeCategory === null}
-            className={tileClass(activeCategory === null)}
-          >
-            <Library className="h-7 w-7 shrink-0 text-orange-500" aria-hidden="true" />
-            <span>
-              <span className="block text-base font-semibold text-gray-800 dark:text-secondary-100">
+          <div className="flex flex-col gap-1.5">
+            <button
+              type="button"
+              onClick={() => {
+                onSelect(null);
+                onClose();
+              }}
+              aria-pressed={activeCategory === null}
+              className={tileClass(activeCategory === null)}
+            >
+              <Library className="h-5 w-5 shrink-0 text-orange-500" aria-hidden="true" />
+              <span className="truncate text-sm font-semibold text-gray-800 dark:text-secondary-100">
                 All Jokes
               </span>
-              <span className="block text-xs text-gray-500 dark:text-secondary-400">
-                The full collection ·{' '}
-                <span className="font-bold text-orange-500">{totalJokes}</span>
+              <span className="ml-auto shrink-0 text-xs font-bold text-orange-500">
+                {totalJokes}
               </span>
-            </span>
-          </button>
+            </button>
 
-          {categories.length === 0 ? (
-            <p className="rounded-xl bg-gray-50 p-4 text-sm text-gray-500 dark:bg-secondary-800/60 dark:text-secondary-400">
-              No joke categories yet.
-            </p>
-          ) : (
-            categories.map((category) => {
-              const isActive = activeCategory === category.id;
-              return (
-                <button
-                  key={category.id}
-                  type="button"
-                  onClick={() => {
-                    onSelect(category.id);
-                    onClose();
-                  }}
-                  aria-pressed={isActive}
-                  aria-label={`Filter by ${category.name}. ${category.count} jokes`}
-                  className={tileClass(isActive)}
-                >
-                  <span className="shrink-0 text-3xl" aria-hidden="true">
-                    {category.emoji}
-                  </span>
-                  <span>
-                    <span className="block text-base font-semibold text-gray-800 dark:text-secondary-100">
+            {categories.length === 0 ? (
+              <p className="rounded-xl bg-gray-50 p-4 text-sm text-gray-500 dark:bg-secondary-800/60 dark:text-secondary-400">
+                No joke categories yet.
+              </p>
+            ) : (
+              categories.map((category) => {
+                const isActive = activeCategory === category.id;
+                return (
+                  <button
+                    key={category.id}
+                    type="button"
+                    onClick={() => {
+                      onSelect(category.id);
+                      onClose();
+                    }}
+                    aria-pressed={isActive}
+                    aria-label={`Filter by ${category.name}. ${category.count} jokes`}
+                    className={tileClass(isActive)}
+                  >
+                    <span className="shrink-0 text-xl leading-none" aria-hidden="true">
+                      {category.emoji}
+                    </span>
+                    <span className="truncate text-sm font-semibold text-gray-800 dark:text-secondary-100">
                       {category.name}
                     </span>
-                    <span className="block text-xs text-gray-500 dark:text-secondary-400">
-                      <span className="font-bold text-orange-500">{category.count}</span> jokes
+                    <span className="ml-auto shrink-0 text-xs font-bold text-orange-500">
+                      {category.count}
                     </span>
-                  </span>
-                </button>
-              );
-            })
-          )}
+                  </button>
+                );
+              })
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 }

@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { Bookmark } from 'lucide-react';
+import { Bookmark, Search, X } from 'lucide-react';
 import { useState, useEffect, useMemo, useRef } from 'react';
 
 import {
@@ -199,6 +199,25 @@ export default function JokesPage(): JSX.Element {
   const [randomSeed, setRandomSeed] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [searchQuery, setSearchQuery] = useState('');
+  // Mobile: collapsed to an icon; expanding drops a search panel right below it.
+  // mounted/shown split gives the dropdown a smooth enter AND exit transition.
+  const [searchExpanded, setSearchExpanded] = useState(false);
+  const [searchBoxMounted, setSearchBoxMounted] = useState(false);
+  const [searchBoxShown, setSearchBoxShown] = useState(false);
+  useEffect(() => {
+    if (searchExpanded) {
+      setSearchBoxMounted(true);
+      return;
+    }
+    setSearchBoxShown(false);
+    const unmountTimer = setTimeout(() => setSearchBoxMounted(false), 240);
+    return () => clearTimeout(unmountTimer);
+  }, [searchExpanded]);
+  useEffect(() => {
+    if (!searchExpanded || !searchBoxMounted) return;
+    const raf = requestAnimationFrame(() => setSearchBoxShown(true));
+    return () => cancelAnimationFrame(raf);
+  }, [searchExpanded, searchBoxMounted]);
 
   const [jokeOfTheDay, setJokeOfTheDay] = useState<Joke | null>(null);
   const [flippedCards, setFlippedCards] = useState<Record<string, boolean>>({});
@@ -733,9 +752,24 @@ export default function JokesPage(): JSX.Element {
                 )}
               </div>
 
-              <div className="flex items-center gap-2 w-full sm:w-auto">
+              <div className="relative flex items-center gap-2 w-full sm:w-auto">
                 {/* Search bar — filters by setup or punchline keyword */}
-                <div className="relative flex-1 sm:w-48 sm:flex-none">
+                {/* Mobile search: icon only; tapping drops the search panel right below it */}
+                <button
+                  type="button"
+                  onClick={() => setSearchExpanded(true)}
+                  aria-label="Search jokes"
+                  aria-expanded={searchExpanded}
+                  className={`sm:hidden flex h-9 w-9 shrink-0 items-center justify-center rounded-full border shadow-sm transition-colors ${
+                    searchQuery
+                      ? 'border-orange-400 bg-orange-50 text-orange-500 dark:bg-orange-500/10'
+                      : 'border-gray-200 bg-white text-gray-500 hover:border-orange-400 hover:text-orange-500 dark:border-secondary-700 dark:bg-secondary-800 dark:text-secondary-300'
+                  }`}
+                >
+                  <Search className="h-4 w-4" aria-hidden="true" />
+                </button>
+                {/* Desktop/tablet inline search input (unchanged) */}
+                <div className="relative hidden w-48 flex-none sm:block">
                   <input
                     type="search"
                     placeholder="Search jokes..."
@@ -747,13 +781,56 @@ export default function JokesPage(): JSX.Element {
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 dark:hover:text-secondary-200 text-xs font-bold"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 text-xs font-bold"
                       aria-label="Clear search"
                     >
-                      ✕
+                      &times;
                     </button>
                   )}
                 </div>
+                {/* Mobile expanded search: animated dropdown anchored under the icon row */}
+                {searchBoxMounted && (
+                  <div
+                    className={`sm:hidden absolute left-0 right-0 top-full z-40 mt-2 origin-top rounded-2xl border-2 border-orange-300 bg-white p-2 shadow-xl transition-all duration-200 ease-out dark:border-orange-500/50 dark:bg-secondary-800 ${
+                      searchBoxShown
+                        ? 'translate-y-0 scale-100 opacity-100'
+                        : 'pointer-events-none -translate-y-2 scale-[0.98] opacity-0'
+                    }`}
+                  >
+                    <div className="relative">
+                      <Search
+                        className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                        aria-hidden="true"
+                      />
+                      <input
+                        autoFocus
+                        type="search"
+                        placeholder="Search jokes..."
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        className="w-full rounded-xl border border-gray-200 bg-white py-2.5 pl-10 pr-10 text-base shadow-inner focus:outline-none focus:ring-2 focus:ring-orange-400 dark:border-secondary-700 dark:bg-secondary-900 dark:text-secondary-100"
+                        aria-label="Search jokes by keyword"
+                      />
+                      {searchQuery && (
+                        <button
+                          onClick={() => setSearchQuery('')}
+                          aria-label="Clear search"
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-700 dark:text-secondary-400 dark:hover:text-secondary-200"
+                        >
+                          <X className="h-5 w-5" aria-hidden="true" />
+                        </button>
+                      )}
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setSearchExpanded(false)}
+                      aria-label="Close search"
+                      className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gray-100 py-2 text-xs font-bold text-gray-500 transition-colors hover:bg-orange-100 hover:text-orange-600 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-orange-500/20"
+                    >
+                      <X className="h-4 w-4" aria-hidden="true" /> Close search
+                    </button>
+                  </div>
+                )}
 
                 {/* Sort controls: Newest | 🔥 Top (most liked) | Shuffle */}
                 <div className="flex bg-gray-200 dark:bg-secondary-700/50 p-1 rounded-xl shadow-inner">
@@ -975,7 +1052,7 @@ export default function JokesPage(): JSX.Element {
 
               {/* Topics / Categories with counts */}
               <div className="space-y-4">
-                <h2 className="text-xl font-bold text-gray-800 dark:text-secondary-100 flex items-center gap-2">
+                <h2 className="text-xl font-bold text-gray-800 dark:text-secondary-100 hidden items-center gap-2 lg:flex">
                   <span className="text-xl" aria-hidden="true">
                     📁
                   </span>{' '}
@@ -1010,7 +1087,11 @@ export default function JokesPage(): JSX.Element {
                     </button>
                   </div>
                 )}
-                <div className="flex flex-col gap-3" role="list" aria-label="Joke categories">
+                <div
+                  className="hidden flex-col gap-3 lg:flex"
+                  role="list"
+                  aria-label="Joke categories"
+                >
                   {/* "All Jokes" — now has aria-pressed and onKeyDown (was missing both) */}
                   <div
                     onClick={() => setActiveCategory(null)}

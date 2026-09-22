@@ -47,7 +47,7 @@ export default function MobileFooter() {
   return (
     <>
       <nav
-        className="fixed bottom-0 left-0 right-0 z-50 block border-t border-gray-200 bg-white/95 px-2 pb-1 pt-1 backdrop-blur-lg md:hidden dark:border-gray-700 dark:bg-gray-900/95 h-[4.5rem]"
+        className="fixed bottom-0 left-0 right-0 z-[75] block border-t border-gray-200 bg-white/95 px-2 pb-1 pt-1 backdrop-blur-lg md:hidden dark:border-gray-700 dark:bg-gray-900/95 h-[4.5rem]"
         role="navigation"
         aria-label="Mobile navigation"
       >
