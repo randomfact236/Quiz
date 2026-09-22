@@ -176,6 +176,14 @@ to any port 3000 proto tcp` (or front it with a Cloudflare-proxied hostname).
   `scripts/overlong-riddle-rewrites-DRAFT.tsv` for owner review. **Nothing has been
   pushed** — apply only after the owner approves wording, then the standing post-push
   rule: flush `quiz:*`/`riddle-mcq:*` redis keys (BUG-038).
+- **⚠️ New finding from the drafting pass (owner must judge):** the 30 open-answer rows
+  are **self-contradictory as stored in prod** — the question says the bakery receipt
+  _clears_ the culprit, yet the stored answer IS that culprit (explanations blame a
+  jogger instead). Confirmed 30/30. The draft rewrites them as "stale/fake alibi" so the
+  stored answer becomes deducible, flagged CAUTION per row. Additionally, the 30 MCQ
+  rows' stored **explanations are inverted** (they praise the answer's alibi the puzzle
+  refutes). Both need an owner decision + an explanation-rewrite pass in the same
+  content push.
 
 ---
 
