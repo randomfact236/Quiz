@@ -34,11 +34,11 @@
 | ID      | Title                                                              | Was                     | Type      | Pri  | Work by    |
 | ------- | ------------------------------------------------------------------ | ----------------------- | --------- | ---- | ---------- |
 | HARD-01 | ✅ CSP: games gap closed + nonce assessment — PARTIAL 2026-09-22   | TASK-04                 | security  | P2   | code       |
-| HARD-02 | Server-side grading phase 2c                                       | TASK-15                 | security  | P1\* | code       |
+| HARD-02 | ✅ Server-side grading phase 2c — FIXED 2026-09-23                 | TASK-15                 | security  | P1\* | code       |
 | HARD-03 | ✅ Signed guest token for anonymous writes — FIXED 2026-09-22      | TASK-14                 | security  | P2   | code       |
 | HARD-04 | ✅ Bulk import status/hint gaps — FIXED 2026-09-22                 | TASK-05                 | quality   | P2   | code       |
 | HARD-05 | R2 media follow-ups                                                | TASK-22                 | media/ops | P2   | owner+code |
-| HARD-06 | Games a11y polish: AA contrast, roving focus + phone QA            | TASK-09 rem.            | a11y      | P3   | code+owner |
+| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                  | TASK-09 rem.            | a11y      | P3   | code+owner |
 | HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01)        | decision  | P2   | decision   |
 | HARD-08 | Comments on quiz/riddle content                                    | TASK-12 (DEC-02)        | decision  | P3   | decision   |
 | HARD-09 | SEC-07 email-verification gate                                     | TASK-13 (DEC-03)        | decision  | P2   | decision   |
@@ -220,11 +220,31 @@
 - **HttpOnly refresh-cookie half:** remains a design decision (changes the guest/auth
   flow the owner deliberately kept friction-free) — parked with the owner.
 
-### HARD-02 - Server-side grading phase 2c (was TASK-15)
+### HARD-02 - Server-side grading phase 2c (was TASK-15) - FIXED 2026-09-23
 
 - **Date found:** 2026-09-22 (source: audit, H1 phase 2c)
 - **Area:** security — **code work**
 - **Priority:** P1 by audit; practical stakes low (devtools can manipulate a fun-quiz score)
+- **Fixed 2026-09-23 (H1 phase 2c complete — see plan/02 H1 todo):**
+  - All three graders (quiz / riddle / image-riddle answers-check) now return the
+    VERDICT ONLY — they previously echoed the answer key on every call.
+  - Graders grade by OPTION TEXT (shuffle-proof): the BUG-041 serve-shuffle remaps the
+    served letter per response, so the old letter-vs-stored-letter grading was wrong
+    whenever the correct value moved slots — latent bug fixed en route.
+  - New throttled reveal endpoints (quiz/riddle answers/reveal, image-riddles
+    answers/reveal) serve the key ONLY for post-session review / give-up reveal.
+  - Play reads stripped of the key: quiz random/mixed/by-level/by-id play; riddle
+    subject riddles/mixed/random/by-id; image-riddle search ships `answerLength`
+    instead of the answer.
+  - Frontend: quiz + riddle engines grade via the server (verdict attached to the
+    question objects — scoring/streaks/review/analytics switch automatically);
+    verdicts persist in resume snapshots (old snapshots keep their embedded keys as
+    fallback); image-riddle game grades via the server and reveals on correct guess
+    or explicit give-up.
+- **Verified:** backend 129/129 + tsc; frontend 561/561 + tsc; Playwright play-throughs
+  quiz 7/7 and riddle 4/4 (grader called per answer, verdict-only responses, feedback
+  rendered, zero page errors); image-riddle API probes (catalog stripped, wrong guess
+  verdict-only, reveal serves the answer).
 
 ### HARD-03 - Signed guest token for anonymous writes (was TASK-14) - FIXED 2026-09-22
 
@@ -281,13 +301,20 @@
   `r2.dev` (rate-limited, not meant for prod) to a custom domain; rclone-migrate existing
   media; token hygiene.
 
-### HARD-06 - Games a11y polish + phone QA (was TASK-09 remainder)
+### HARD-06 - Games a11y polish + phone QA (was TASK-09 remainder) - FIXED 2026-09-23 (owner phone QA remains)
 
 - **Date found:** 2026-09-22 (source: plan/games/\*)
 - **Area:** games — **code + owner 10-min phone QA**
 - **Priority:** P3
-- **Remaining after the partial fix (`6b0b7bc`: daily-picture determinism + spirit-runner
-  reduced-motion):** AA contrast pass, roving focus/arrow-key navigation, owner phone QA.
+- **Fixed 2026-09-23:**
+  - AA contrast (computed WCAG audit, 7 games): muted text #64748b failed on the page
+    gradient (2.93-3.81:1) → #475569 (worst case 4.67:1); dark-theme primary buttons
+    #3b82f6 failed with white text (3.68:1) → #2563eb (5.17:1).
+  - Sliding-puzzle: segmented radio groups (picture-mode, size-cards) got roving
+    tabindex + arrow-key selection; round start focuses the board (board focusable).
+  - All 8 games verified zero JS errors and zero CSP violations (games CSP completed
+    with the two inline theme-loader script hashes).
+- **Remaining (owner):** the 10-minute phone QA pass.
 
 ### HARD-07 - Dad jokes surfaces (was TASK-10, briefly DEC-01) — DECISION
 
