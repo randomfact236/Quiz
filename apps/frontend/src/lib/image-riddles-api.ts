@@ -59,6 +59,8 @@ export interface ImageRiddle {
   useDefaultActions?: boolean;
   createdAt?: string;
   updatedAt?: string;
+  /** HARD-02: length of the answer (the answer itself is not shipped). */
+  answerLength?: number;
 }
 
 export interface Paginated<T> {
@@ -357,7 +359,8 @@ export async function recordImageRiddleEngagement(
 /** H1 (audit SEC-03): grade one image-riddle guess server-side. */
 export interface ImageRiddleGuessResult {
   correct: boolean;
-  answer: string;
+  /** Present only when the guess was right (reveal earned). */
+  answer?: string;
 }
 
 export async function checkImageRiddleGuess(
@@ -367,6 +370,16 @@ export async function checkImageRiddleGuess(
   const response = await apiRequest<ImageRiddleGuessResult>('/image-riddles/answers/check', {
     method: 'POST',
     body: JSON.stringify({ riddleId, guess }),
+    headers: { 'Content-Type': 'application/json' },
+  });
+  return response.data;
+}
+
+/** HARD-02 (H1): explicit give-up reveal — throttled server endpoint. */
+export async function revealImageRiddleAnswer(riddleId: string): Promise<{ answer: string }> {
+  const response = await apiRequest<{ answer: string }>('/image-riddles/answers/reveal', {
+    method: 'POST',
+    body: JSON.stringify({ riddleId }),
     headers: { 'Content-Type': 'application/json' },
   });
   return response.data;

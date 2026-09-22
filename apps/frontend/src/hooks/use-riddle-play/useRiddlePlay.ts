@@ -28,7 +28,8 @@ import {
 import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
 import { saveRiddleResult } from '@/lib/riddle-progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
-import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
+import { isRiddleAnswerCorrect, riddleOptionText } from '@/lib/riddle-scoring';
+import { checkRiddleAnswer } from '@/lib/riddle-mcq-api';
 import { registerExitHook, track } from '@/lib/analytics';
 import { toast } from '@/lib/toast';
 import { shuffle } from '@/lib/utils';
@@ -253,7 +254,10 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   const resumeSession = useCallback(() => {
     const resume = loadRiddleResume();
     if (resume) {
-      const resumedRiddles = (resume.availableRiddles ?? []) as Riddle[];
+      const resumedRiddles = ((resume.availableRiddles ?? []) as Riddle[]).map((r) => {
+        const v = resume.verdicts?.[r.id];
+        return v === undefined ? r : { ...r, verdict: v };
+      });
       setSession({
         ...createRiddleSession(
           mode,
@@ -397,6 +401,10 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   // Auto-save — lightweight progress key only (riddle snapshot written once at
   // session start); refs keep the interval from resetting on every answer
   const progressRef = useRef({ answers, timeRemaining, currentIndex, manuallySkipped });
+  // HARD-02 (H1): server grading verdicts, persisted with the resume payload
+  // so a resumed session grades/reviews identically.
+  const verdictsRef = useRef<Record<string, boolean>>({});
+
   useEffect(() => {
     progressRef.current = { answers, timeRemaining, currentIndex, manuallySkipped };
   }, [answers, timeRemaining, currentIndex, manuallySkipped]);
@@ -412,6 +420,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
           timeRemaining: progressRef.current.timeRemaining,
           currentIndex: progressRef.current.currentIndex,
           skippedRiddles: Array.from(progressRef.current.manuallySkipped),
+          verdicts: verdictsRef.current,
           startedAt: session.startedAt,
         }
       );
@@ -444,21 +453,45 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
       if (!session || status !== 'playing') return;
       const currentRiddle = riddles[currentIndex];
       if (!currentRiddle) return;
-      // Analytics plan §4.2: question_answered (before the state flip, using
-      // the shared scorer so correctness matches results-page logic).
-      track(
-        'question_answered',
-        {
-          questionId: currentRiddle.id,
-          subject: session.subjectId,
-          chapter: session.subjectName,
-          level: session.difficulty,
-          selectedOption: optionLetter,
-          correct: isRiddleAnswerCorrect(currentRiddle, optionLetter),
-        },
-        { module: 'riddle-mcq', sessionId: session.id }
-      );
-      setAnswers((prev) => ({ ...prev, [currentRiddle.id]: optionLetter }));
+      void (async () => {
+        // HARD-02 (H1): the server grades; the verdict drives scoring,
+        // feedback and the results page (isRiddleAnswerCorrect reads it).
+        let verdict: boolean;
+        try {
+          const answerText = riddleOptionText(currentRiddle, optionLetter) ?? optionLetter;
+          const result = await checkRiddleAnswer(currentRiddle.id, answerText);
+          verdict = !!result.correct;
+        } catch {
+          verdict = isRiddleAnswerCorrect(currentRiddle, optionLetter);
+        }
+        verdictsRef.current[currentRiddle.id] = verdict;
+        setRiddles((prev) => prev.map((r) => (r.id === currentRiddle.id ? { ...r, verdict } : r)));
+        setSession((prev) =>
+          prev
+            ? {
+                ...prev,
+                riddles: prev.riddles.map((r) =>
+                  r.id === currentRiddle.id ? { ...r, verdict } : r
+                ),
+              }
+            : prev
+        );
+        setAnswers((prev) => ({ ...prev, [currentRiddle.id]: optionLetter }));
+
+        // Analytics plan §4.2: question_answered with the server verdict.
+        track(
+          'question_answered',
+          {
+            questionId: currentRiddle.id,
+            subject: session.subjectId,
+            chapter: session.subjectName,
+            level: session.difficulty,
+            selectedOption: optionLetter,
+            correct: verdict,
+          },
+          { module: 'riddle-mcq', sessionId: session.id }
+        );
+      })();
     },
     [session, status, riddles, currentIndex]
   );

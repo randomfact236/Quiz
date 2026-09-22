@@ -70,6 +70,8 @@ export interface Riddle {
   level?: 'easy' | 'medium' | 'hard' | 'expert' | 'extreme'; // For AnswerOptions component
   hint?: string;
   explanation?: string;
+  /** HARD-02/H1: server grading verdict (absent on pre-upgrade snapshots). */
+  verdict?: boolean;
 }
 
 // ============================================================================

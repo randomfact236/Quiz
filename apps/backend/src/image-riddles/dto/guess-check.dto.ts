@@ -13,3 +13,10 @@ export class GuessCheckDto {
   @MaxLength(500)
   guess: string;
 }
+
+/** HARD-02 (H1): explicit give-up reveal — no guess required. */
+export class RiddleRevealDto {
+  @IsString()
+  @IsNotEmpty()
+  riddleId: string;
+}

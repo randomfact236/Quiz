@@ -136,7 +136,13 @@ export class ImageRiddlesService {
       .orderBy('riddle.createdAt', 'DESC')
       .getManyAndCount();
 
-    return { data, total };
+    // HARD-02/H1: the catalog must not ship the answer key — the game grades
+    // server-side and reveals only on a correct guess or explicit reveal.
+    const safe = data.map((riddle) => {
+      const { answer, alternativeAnswers, ...rest } = riddle as unknown as Record<string, unknown>;
+      return { ...rest, answerLength: typeof answer === 'string' ? answer.length : 0 };
+    });
+    return { data: safe as unknown as ImageRiddle[], total };
   }
 
   // ==================== BULK STATUS ACTIONS ====================
@@ -222,7 +228,10 @@ export class ImageRiddlesService {
    * H1 (audit SEC-03): grade an image-riddle guess server-side (forgiving
    * matching: case/whitespace/articles/punctuation ignored + synonyms).
    */
-  async checkGuess(riddleId: string, guess: string): Promise<{ correct: boolean; answer: string }> {
+  async checkGuess(
+    riddleId: string,
+    guess: string
+  ): Promise<{ correct: boolean; answer?: string }> {
     const riddle = await this.imageRiddleRepo.findOne({
       where: { id: riddleId, status: ContentStatus.PUBLISHED },
     });
@@ -234,7 +243,23 @@ export class ImageRiddlesService {
     const correct =
       normalizedGuess.length > 0 &&
       candidates.some((candidate) => this.normalizeGuess(candidate) === normalizedGuess);
-    return { correct, answer: riddle.answer };
+    // The answer is revealed once the guess is RIGHT. Wrong guesses get a
+    // verdict only — the explicit reveal endpoint serves the give-up flow.
+    return correct ? { correct: true, answer: riddle.answer } : { correct: false };
+  }
+
+  /**
+   * HARD-02 (H1): explicit give-up reveal — serves the answer for ONE
+   * published riddle (throttled route).
+   */
+  async revealAnswer(riddleId: string): Promise<{ answer: string }> {
+    const riddle = await this.imageRiddleRepo.findOne({
+      where: { id: riddleId, status: ContentStatus.PUBLISHED },
+    });
+    if (!riddle) {
+      throw new NotFoundException('Image riddle not found');
+    }
+    return { answer: riddle.answer };
   }
 
   /** Mirrors the frontend image-riddle answer normalization. */

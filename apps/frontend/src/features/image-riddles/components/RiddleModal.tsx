@@ -291,7 +291,7 @@ export default function RiddleModal({
           ) : (
             <>
               <RiddleAnswerPanel
-                answer={riddle.answer}
+                answer={game.revealedAnswers[riddle.id] ?? riddle.answer}
                 revealSource={game.revealSource}
                 attemptCount={game.attempts[riddle.id] || 0}
                 onNext={() => game.navigateRiddle('next')}

@@ -17,7 +17,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { IActionOption } from '@/components/image-riddles/ActionOptions';
 import { postComment, type CommentChipValue } from '@/lib/comments-api';
-import { isImageRiddleAnswerCorrect } from '@/lib/image-riddle-answer';
+import { checkImageRiddleGuess, revealImageRiddleAnswer } from '@/lib/image-riddles-api';
 import { recordImageRiddleEngagement } from '@/lib/image-riddles-api';
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 
@@ -40,6 +40,9 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
   const [selectedRiddle, setSelectedRiddle] = useState<ImageRiddle | null>(null);
   const [userAnswer, setUserAnswer] = useState('');
   const [showAnswer, setShowAnswer] = useState(false);
+  // HARD-02 (H1): the catalog no longer ships the answer; the revealed text
+  // arrives from the grader (correct guess) or the reveal endpoint.
+  const [revealedAnswers, setRevealedAnswers] = useState<Record<string, string>>({});
   // Bumped when a guess/chip lands server-side so the wall refetches.
   const [guessFeedVersion, setGuessFeedVersion] = useState(0);
   const [showHint, setShowHint] = useState(false);
@@ -152,23 +155,34 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
         if (saved) setGuessFeedVersion((v) => v + 1);
       });
     }
-    const isCorrect = isImageRiddleAnswerCorrect({
-      answer: selectedRiddle.answer,
-      alternativeAnswers: selectedRiddle.alternativeAnswers,
-      guess: userAnswer,
-    });
-    if (isCorrect) {
-      setShowAnswer(true);
-      setRevealSource('correct');
-      setWrongAnswer(false);
-      onSolved(selectedRiddle.id);
-      onRevealed(selectedRiddle.id);
-      void recordImageRiddleEngagement(selectedRiddle.id, 'solve');
-    } else {
-      setWrongAnswer(true);
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-    }
+    void (async () => {
+      // HARD-02 (H1): the server grades and reveals only on a correct guess.
+      let correct = false;
+      let revealed: string | null = null;
+      try {
+        const result = await checkImageRiddleGuess(selectedRiddle.id, userAnswer);
+        correct = !!result.correct;
+        revealed = result.answer ?? null;
+      } catch {
+        // Grader unreachable — keep gameplay flowing without a reveal.
+        correct = false;
+      }
+      if (correct) {
+        if (revealed) {
+          setRevealedAnswers((prev) => ({ ...prev, [selectedRiddle.id]: revealed as string }));
+        }
+        setShowAnswer(true);
+        setRevealSource('correct');
+        setWrongAnswer(false);
+        onSolved(selectedRiddle.id);
+        onRevealed(selectedRiddle.id);
+        void recordImageRiddleEngagement(selectedRiddle.id, 'solve');
+      } else {
+        setWrongAnswer(true);
+        setShake(true);
+        setTimeout(() => setShake(false), 500);
+      }
+    })();
   }, [selectedRiddle, showAnswer, userAnswer, onSolved, onRevealed]);
 
   const performReveal = useCallback(() => {
@@ -177,6 +191,12 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     setRevealSource('revealed');
     setWrongAnswer(false);
     onRevealed(selectedRiddle.id);
+    // HARD-02: fetch the answer (the catalog no longer carries it).
+    void revealImageRiddleAnswer(selectedRiddle.id)
+      .then((r) => {
+        setRevealedAnswers((prev) => ({ ...prev, [selectedRiddle.id]: r.answer }));
+      })
+      .catch(() => undefined);
   }, [selectedRiddle, onRevealed]);
 
   /** Give-up reveal: zero submitted guesses → chip picker first (plan §3.2). */
@@ -272,6 +292,7 @@ export function useImageRiddleGame({ riddles, onSolved, onRevealed }: UseImageRi
     guessFeedVersion,
     shake,
     attempts,
+    revealedAnswers,
     shareOpen,
     chipPrompt,
     timeLeft,

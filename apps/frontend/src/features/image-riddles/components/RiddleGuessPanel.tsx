@@ -49,7 +49,7 @@ export default function RiddleGuessPanel({ riddle, game }: RiddleGuessPanelProps
               title="Toggle letter-count hint"
             >
               {game.showLetterCount
-                ? `${countAnswerLetters(riddle.answer)} letters`
+                ? `${riddle.answerLength ?? countAnswerLetters(riddle.answer)} letters`
                 : 'Letter count'}
             </button>
           </div>

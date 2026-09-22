@@ -153,7 +153,11 @@ export default function RiddleCard({
           <div
             className={`text-sm font-bold overflow-hidden line-clamp-1 ${isRevealed ? 'text-indigo-600 dark:text-indigo-300' : 'text-slate-300'}`}
           >
-            {isRevealed ? riddle.answer : isSolved ? '✓ Solved' : 'Answer Hidden'}
+            {isRevealed
+              ? riddle.answer || 'Answer revealed'
+              : isSolved
+                ? '✓ Solved'
+                : 'Answer Hidden'}
           </div>
           <button
             onClick={(e) => {

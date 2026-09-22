@@ -205,6 +205,8 @@ interface RiddleResumeProgress {
    *  back to the answers-count heuristic. */
   currentIndex?: number;
   skippedRiddles?: string[];
+  /** HARD-02: server verdicts per riddle id (absent on old payloads). */
+  verdicts?: Record<string, boolean>;
 }
 
 interface StoredResumeProgress extends RiddleResumeIdentity, RiddleResumeProgress {
@@ -247,6 +249,7 @@ export function saveRiddleResume(
   };
   if (progress.currentIndex !== undefined) stored.currentIndex = progress.currentIndex;
   if (progress.skippedRiddles !== undefined) stored.skippedRiddles = progress.skippedRiddles;
+  if (progress.verdicts !== undefined) stored.verdicts = progress.verdicts;
   setItem(PROGRESS_KEY, stored);
 }
 

@@ -38,7 +38,7 @@ import { ImageRiddlesService } from './image-riddles.service';
 import { _Public } from '../common/decorators/public.decorator';
 import { Throttle } from '@nestjs/throttler';
 import { EngagementDto } from './dto/engagement.dto';
-import { GuessCheckDto } from './dto/guess-check.dto';
+import { GuessCheckDto, RiddleRevealDto } from './dto/guess-check.dto';
 
 @ApiTags('Image Riddles')
 @Controller('image-riddles')
@@ -149,5 +149,16 @@ export class ImageRiddlesController {
   @ApiOperation({ summary: 'Grade one image-riddle guess server-side (H1)' })
   checkGuess(@Body() dto: GuessCheckDto) {
     return this.imageRiddlesService.checkGuess(dto.riddleId, dto.guess);
+  }
+
+  @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Post('answers/reveal')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Explicit give-up reveal - the answer for ONE published riddle (HARD-02/H1)',
+  })
+  revealAnswer(@Body() dto: RiddleRevealDto) {
+    return this.imageRiddlesService.revealAnswer(dto.riddleId);
   }
 }

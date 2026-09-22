@@ -45,6 +45,18 @@ export class RiddleMcqController {
     private readonly statsService: RiddleMcqStatsService
   ) {}
 
+  /**
+   * H1 (audit SEC-03) / HARD-02: public play reads stop shipping the key —
+   * grading goes through answers/check, review through answers/reveal.
+   */
+  private toPublicRiddle(riddle: RiddleMcq): Record<string, unknown> {
+    const safe: Record<string, unknown> = { ...riddle };
+    delete safe['correctAnswer'];
+    delete safe['correctLetter'];
+    delete safe['answer'];
+    return safe;
+  }
+
   @Get('all')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('admin')
@@ -104,21 +116,23 @@ export class RiddleMcqController {
     @Query('page') page?: string,
     @Query('limit') limit?: string,
     @Query('level') level?: string
-  ): Promise<{ data: RiddleMcq[]; total: number }> {
+  ): Promise<{ data: Record<string, unknown>[]; total: number }> {
     const pagination = {
       page: page ? parseInt(page, 10) : 1,
       limit: limit ? parseInt(limit, 10) : DEFAULT_PAGE_SIZE,
     };
-    return this.questionService.findRiddlesBySubject(subjectId, pagination, level);
+    const result = await this.questionService.findRiddlesBySubject(subjectId, pagination, level);
+    return { data: result.data.map((r) => this.toPublicRiddle(r)), total: result.total };
   }
 
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('mixed')
   @ApiOperation({ summary: 'Get mixed riddles from all subjects (Public)' })
-  async getMixedRiddles(@Query('count') count?: string): Promise<RiddleMcq[]> {
+  async getMixedRiddles(@Query('count') count?: string): Promise<Record<string, unknown>[]> {
     const parsedCount = this.paginationValidator.validateCount(count, DEFAULT_PAGE_SIZE, 1, 100);
-    return this.questionService.findMixedRiddles(parsedCount);
+    const riddles = await this.questionService.findMixedRiddles(parsedCount);
+    return riddles.map((r) => this.toPublicRiddle(r));
   }
 
   @_Public()
@@ -129,18 +143,20 @@ export class RiddleMcqController {
   async getRandomRiddles(
     @Param('level') level: string,
     @Query('count') count?: string
-  ): Promise<RiddleMcq[]> {
+  ): Promise<Record<string, unknown>[]> {
     const parsedCount = this.paginationValidator.validateCount(count, 10, 1, 50);
     this.difficultyValidator.validate(level);
-    return this.questionService.findRandomRiddles(level, parsedCount);
+    const riddles = await this.questionService.findRandomRiddles(level, parsedCount);
+    return riddles.map((r) => this.toPublicRiddle(r));
   }
 
   @_Public()
   @Throttle({ default: { limit: 60, ttl: 60000 } })
   @Get('riddles/:id')
   @ApiOperation({ summary: 'Get a single published riddle by ID (Public)' })
-  async getRiddleById(@Param('id') id: string): Promise<RiddleMcq> {
-    return this.questionService.findPublishedRiddleById(id);
+  async getRiddleById(@Param('id') id: string): Promise<Record<string, unknown>> {
+    const riddle = await this.questionService.findPublishedRiddleById(id);
+    return this.toPublicRiddle(riddle);
   }
 
   @Post('riddles')
