@@ -13,7 +13,7 @@
   --card: #ffffff;
   --card-border: rgba(148, 163, 184, 0.35);
   --text: #1e293b;
-  --muted: #64748b;
+  --muted: #475569; /* AA on gradient (4.67:1) */
   --grid-line: #94a3b8;
   --cell: #f8fafc;
   --cell-hover: #eef2ff;
@@ -40,7 +40,7 @@
   --o: #fb7185;
   --win: #34d399;
   --win-glow: rgba(52, 211, 153, 0.25);
-  --primary-a: #3b82f6;
+  --primary-a: #2563eb; /* AA with white text (5.17:1) */
   --primary-b: #6366f1;
   --shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
 }

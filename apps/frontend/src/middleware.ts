@@ -91,7 +91,12 @@ const API_ORIGIN = (() => {
 })();
 
 const GAMES_CSP =
-  "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +
+  // The two sha256 hashes are the games' inline theme-loader scripts (fixed
+  // content per game — collected by probing all eight games).
+  "default-src 'self'; script-src 'self' " +
+  "'sha256-x8n9zHOItWYXzKEW7pxTk40Fp+ISErZbT3GSH2HCyuI=' " +
+  "'sha256-1BmS27UYSimo8gSUTIkRpmW36+iWT0/uKfSVjj8R5EI='; " +
+  "style-src 'self' 'unsafe-inline'; " +
   "img-src 'self' data: blob:; font-src 'self' data:; media-src 'self'; " +
   `connect-src 'self' ${API_ORIGIN}; object-src 'none'; base-uri 'self'; ` +
   "form-action 'none'; frame-ancestors 'none'";

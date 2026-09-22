@@ -252,6 +252,10 @@ function startRound(daily = false) {
   els.hudTime.textContent = formatTime(0);
   els.hudMoves.textContent = '0';
   showScreen('playing');
+  // HARD-06: keyboard players land on the board the moment a round starts.
+  if (els.board && !els.board.contains(document.activeElement)) {
+    els.board.focus({ preventScroll: true });
+  }
 }
 
 /**
@@ -550,14 +554,39 @@ function handleKeys(e) {
  * ======================================================================= */
 
 function bindSegmented(container, attr, onPick) {
+  const buttons = () => Array.from(container.querySelectorAll('button[' + attr + ']'));
+
+  const activate = (btn) => {
+    for (const b of buttons()) {
+      const checked = b === btn;
+      b.setAttribute('aria-checked', checked ? 'true' : 'false');
+      b.tabIndex = checked ? 0 : -1;
+    }
+    onPick(btn.getAttribute(attr));
+  };
+
+  // HARD-06 roving focus: only the checked option is a tab stop.
+  for (const b of buttons()) {
+    b.tabIndex = b.getAttribute('aria-checked') === 'true' ? 0 : -1;
+  }
+
   container.addEventListener('click', (e) => {
     const btn = e.target.closest('button[' + attr + ']');
     if (!btn) return;
-    const buttons = container.querySelectorAll('button[' + attr + ']');
-    for (let i = 0; i < buttons.length; i++) {
-      buttons[i].setAttribute('aria-checked', buttons[i] === btn ? 'true' : 'false');
-    }
-    onPick(btn.getAttribute(attr));
+    activate(btn);
+  });
+
+  // HARD-06: arrow keys move focus AND selection (radio-group semantics).
+  container.addEventListener('keydown', (e) => {
+    if (!['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'].includes(e.key)) return;
+    const list = buttons();
+    const current = list.indexOf(document.activeElement);
+    if (current === -1) return;
+    e.preventDefault();
+    const delta = e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 1;
+    const next = list[(current + delta + list.length) % list.length];
+    next.focus();
+    activate(next);
   });
 }
 

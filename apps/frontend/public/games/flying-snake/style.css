@@ -15,7 +15,7 @@
   --card: #ffffff;
   --card-border: rgba(148, 163, 184, 0.35);
   --text: #1e293b;
-  --muted: #64748b;
+  --muted: #475569; /* AA on gradient (4.67:1) */
   --primary-a: #2563eb;
   --primary-b: #4f46e5;
   --gold: #b45309;
@@ -31,7 +31,7 @@
   --card-border: rgba(148, 163, 184, 0.3);
   --text: #e2e8f0;
   --muted: #94a3b8;
-  --primary-a: #3b82f6;
+  --primary-a: #2563eb; /* AA with white text (5.17:1) */
   --primary-b: #6366f1;
   --gold: #fcd34d;
   --gold-bg: rgba(252, 211, 77, 0.14);
