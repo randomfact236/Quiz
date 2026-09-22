@@ -11,7 +11,7 @@
  */
 
 import { api } from './api-client';
-import { getGuestId } from './guest-id';
+import { ensureGuestToken, getGuestId, invalidateGuestToken } from './guest-id';
 
 export type QuestionLikeContentType = 'quiz' | 'riddle';
 
@@ -20,7 +20,11 @@ export interface LikeResponse {
   alreadyLiked: boolean;
 }
 
-/** Capture a like. Idempotent server-side; safe to call optimistically. */
+/**
+ * Capture a like. Idempotent server-side; safe to call optimistically.
+ * HARD-03 (SEC-12): the write carries the server-signed guest pair; a 403
+ * (stale/missing token — e.g. an old cached tab) re-issues once and retries.
+ */
 export async function likeQuestion(
   contentType: QuestionLikeContentType,
   questionId: string
@@ -28,14 +32,31 @@ export async function likeQuestion(
   const guestId = getGuestId();
   if (!guestId || !/^[0-9a-f-]{36}$/i.test(questionId)) return null;
   try {
+    const guestToken = (await ensureGuestToken())?.token;
     const response = await api.post<LikeResponse>('/question-likes', {
       contentType,
       questionId,
       guestId,
+      guestToken,
     });
     return response.data;
   } catch {
-    return null;
+    // One recovery pass: the cached pair may be stale (backend re-keyed or
+    // token rotated server-side) — re-issue and retry a single time.
+    invalidateGuestToken();
+    const guestToken = (await ensureGuestToken())?.token;
+    if (!guestToken) return null;
+    try {
+      const response = await api.post<LikeResponse>('/question-likes', {
+        contentType,
+        questionId,
+        guestId,
+        guestToken,
+      });
+      return response.data;
+    } catch {
+      return null;
+    }
   }
 }
 

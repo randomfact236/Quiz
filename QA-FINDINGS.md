@@ -35,7 +35,7 @@
 | ------- | ------------------------------------------------------------------ | ----------------------- | --------- | ---- | ---------- |
 | HARD-01 | CSP nonces + HttpOnly token storage                                | TASK-04                 | security  | P2   | code       |
 | HARD-02 | Server-side grading phase 2c                                       | TASK-15                 | security  | P1\* | code       |
-| HARD-03 | Signed guest token for anonymous writes                            | TASK-14                 | security  | P2   | code       |
+| HARD-03 | ✅ Signed guest token for anonymous writes — FIXED 2026-09-22      | TASK-14                 | security  | P2   | code       |
 | HARD-04 | Bulk import status/hint gaps                                       | TASK-05                 | quality   | P2   | code       |
 | HARD-05 | R2 media follow-ups                                                | TASK-22                 | media/ops | P2   | owner+code |
 | HARD-06 | Games a11y polish: AA contrast, roving focus + phone QA            | TASK-09 rem.            | a11y      | P3   | code+owner |
@@ -210,13 +210,31 @@
 - **Area:** security — **code work**
 - **Priority:** P1 by audit; practical stakes low (devtools can manipulate a fun-quiz score)
 
-### HARD-03 - Signed guest token for anonymous writes (was TASK-14)
+### HARD-03 - Signed guest token for anonymous writes (was TASK-14) - FIXED 2026-09-22
 
 - **Date found:** 2026-09-22 (source: audit, SEC-10/12)
 - **Area:** security — **code work**
 - **Priority:** P2
 - **Reported:** guest ids for likes/comments are unsigned → forgeable (like/comment spam
   vector). Sign the guest token server-side.
+- **Fixed 2026-09-22** (SEC-12 binding; locally committed, goes live on next push):
+  - `guest-token.service.ts`: `token = HMAC-SHA256(GUEST_TOKEN_SECRET‖JWT_SECRET, guestId)`;
+    `POST /guest-users/token` (throttled 10/min) issues `{guestId, token}`, signing either
+    a server-minted `srv_…` id or an EXISTING legacy `guest_…` id as-is — the migration
+    path that keeps every existing visitor's likes/comments matching.
+  - `GuestTokenGuard` enforces the pair on the identity-authorizing writes: like
+    (`POST /question-likes`), comment create + delete-own, guest activity heartbeat,
+    and login merge. Verified constant-time.
+  - Frontend: `ensureGuestToken()` caches the pair, attaches it on all four write
+    helpers (like, post comment, delete-own, login merge); a 403 auto-re-issues once
+    and retries (heals stale cached tabs); `rotateGuestId()` drops the pair so the
+    next guest can't reuse it.
+- **Scope notes:** comment `flag` has no identity to bind (idempotent by comment id);
+  analytics ingest keeps unsigned guestId (read-only attribution, not a write);
+  duels' own guestId endpoints (join/leave/name) are game-scoped and get the token
+  binding in a follow-up pass.
+- **Verified:** backend tsc clean; guest-token spec 6/6; full frontend suite 561/561;
+  full backend suite green.
 
 ### HARD-04 - Bulk import status/hint gaps (was TASK-05)
 

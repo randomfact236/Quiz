@@ -12,6 +12,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Throttle } from '@nestjs/throttler';
 
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
+import { GuestTokenGuard } from '../guest-users/guest-token.guard';
 import { _Public } from '../common/decorators/public.decorator';
 import { CreateQuestionLikeDto, MyQuestionLikeQueryDto } from './dto/question-like.dto';
 import { QuestionLikeContentType } from './entities/question-like.entity';
@@ -24,9 +25,9 @@ export class QuestionLikesController {
 
   @Post()
   @_Public()
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @Throttle({ default: { limit: 20, ttl: 60_000 } })
-  @ApiOperation({ summary: 'Like a question (idempotent per guest)' })
+  @ApiOperation({ summary: 'Like a question (idempotent per guest, signed guest pair required)' })
   like(
     @Body() dto: CreateQuestionLikeDto,
     @Req() req: { user?: { id?: string } }

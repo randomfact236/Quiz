@@ -9,7 +9,7 @@
  */
 
 import { adminApi, api } from './api-client';
-import { getGuestId, getGuestName } from './guest-id';
+import { ensureGuestToken, getGuestId, getGuestName, invalidateGuestToken } from './guest-id';
 
 // ============================================================================
 // Types — mirror the backend PublicComment shape
@@ -78,19 +78,30 @@ export async function getComments(
  * Post a guess / chip tap / comment. Fire-and-forget friendly by design:
  * callers must never block the reveal on this (plan rule: content first),
  * so most call sites should use `postCommentOptimistic`.
+ * HARD-03 (SEC-12): carries the server-signed guest pair; a 403 (stale
+ * token, e.g. old cached tab) re-issues once and retries.
  */
 export async function postComment(input: PostCommentInput): Promise<Comment | null> {
+  const build = async (): Promise<Record<string, unknown>> => ({
+    ...input,
+    // Attach the saved display name unless the caller supplied one.
+    authorName: input.authorName ?? (getGuestName() || undefined),
+    guestId: getGuestId(),
+    guestToken: (await ensureGuestToken())?.token,
+  });
   try {
-    const response = await api.post<Comment>('/comments', {
-      ...input,
-      // Attach the saved display name unless the caller supplied one.
-      authorName: input.authorName ?? (getGuestName() || undefined),
-      guestId: getGuestId(),
-    });
+    const response = await api.post<Comment>('/comments', await build());
     return response.data;
   } catch {
-    // Network/validation failure never blocks gameplay (plan §1).
-    return null;
+    // One recovery pass with a freshly issued pair, then give up quietly —
+    // network/validation failure never blocks gameplay (plan §1).
+    invalidateGuestToken();
+    try {
+      const response = await api.post<Comment>('/comments', await build());
+      return response.data;
+    } catch {
+      return null;
+    }
   }
 }
 
@@ -99,15 +110,26 @@ export function postCommentOptimistic(input: PostCommentInput): void {
   void postComment(input);
 }
 
-/** Delete one of the caller's own comments. */
+/** Delete one of the caller's own comments (signed guest pair, HARD-03). */
 export async function deleteMyComment(id: string): Promise<boolean> {
   const guestId = getGuestId();
   if (!guestId) return false;
-  try {
-    await api.delete(`/comments/${id}?guestId=${encodeURIComponent(guestId)}`);
+  const attempt = async (): Promise<boolean> => {
+    const guestToken = (await ensureGuestToken())?.token;
+    const qs = new URLSearchParams({ guestId, ...(guestToken ? { guestToken } : {}) });
+    await api.delete(`/comments/${id}?${qs.toString()}`);
     return true;
+  };
+  try {
+    return await attempt();
   } catch {
-    return false;
+    // Stale pair — re-issue once, then give up (the row simply stays).
+    invalidateGuestToken();
+    try {
+      return await attempt();
+    } catch {
+      return false;
+    }
   }
 }
 

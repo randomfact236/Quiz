@@ -1,5 +1,5 @@
 import { api } from './api-client';
-import { getGuestId, rotateGuestId } from './guest-id';
+import { ensureGuestToken, getGuestId, rotateGuestId } from './guest-id';
 import { getItem, setItem, removeItem, STORAGE_KEYS } from './storage';
 import { track } from './analytics';
 
@@ -29,7 +29,10 @@ async function mergeGuestIntoAccount(): Promise<void> {
   const guestId = getGuestId();
   if (!guestId) return;
   try {
-    await api.post('/guest-users/merge', { guestId });
+    // HARD-03 (SEC-12): the merge moves the guest's likes/comments into the
+    // account, so it must prove the guestId with its signed pair.
+    const guestToken = (await ensureGuestToken())?.token;
+    await api.post('/guest-users/merge', { guestId, guestToken });
     rotateGuestId();
   } catch {
     /* merge retried on next sign-in */

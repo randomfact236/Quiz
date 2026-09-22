@@ -26,6 +26,7 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { _Public } from '../common/decorators/public.decorator';
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
 import { UseGuards, Req } from '@nestjs/common';
+import { GuestTokenGuard } from '../guest-users/guest-token.guard';
 
 import {
   CommentCountsQueryDto,
@@ -104,7 +105,7 @@ export class CommentsController {
 
   @Post()
   @_Public()
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({ summary: 'Post a guess / chip tap / comment (guest or logged-in, 20/min)' })
   create(
@@ -129,7 +130,7 @@ export class CommentsController {
 
   @Delete(':id')
   @_Public()
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({ summary: 'Delete own comment (guestId query or logged-in identity)' })
   remove(
