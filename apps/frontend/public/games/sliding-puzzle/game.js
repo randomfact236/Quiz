@@ -228,7 +228,15 @@ function startRound(daily = false) {
   state.nudgeShown = false; // one-swap-away banner: once per round (suggestion 03)
   // Picture mode renders a fresh procedural scene every round (plan P3);
   // a null result (no canvas) silently falls back to the numbers look.
-  state.picture = wantPicture ? makePicture(Math.floor(Math.random() * SCENES.length)) : null;
+  // TASK-09: daily determinism - the board shuffle is seeded, so the daily
+  // PICTURE must be too, or the same day renders a different scene per player.
+  state.picture = wantPicture
+    ? makePicture(
+        daily
+          ? mulberry32(dailySeed(new Date()))() % SCENES.length
+          : Math.floor(Math.random() * SCENES.length)
+      )
+    : null;
   els.btnPeek.classList.toggle('hidden', !state.picture || state.hardActive);
   els.btnPeek.setAttribute('aria-pressed', 'false');
   // Daily boards are seeded, so shuffling cannot change them — hide the

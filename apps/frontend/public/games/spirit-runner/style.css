@@ -573,3 +573,10 @@ button {
   max-height: 96px;
   opacity: 1;
 }
+
+/* TASK-09: respect prefers-reduced-motion (matches the other games) */
+@media (prefers-reduced-motion: reduce) {
+  .power-btn.charged {
+    animation: none;
+  }
+}
