@@ -53,18 +53,26 @@
 
 ### P2 — integration / quality (next tier; needs the RSC decision or new routes)
 
-- [ ] **Server-rendered content (the big one)** — convert the module landing pages to RSC data
-      fetching (subjects/categories rendered server-side), then gameplay surfaces as feasible. This is
-      the plan/09 "server-rendering strategy" owner decision — **do not start without the owner's
-      go-ahead**. Prerequisite for items below.
-- [ ] **Per-content route segments + metadata** — subjects/categories are query params today
-      (`/quiz-mcq?subject=…`), so per-subject titles/canonicals are impossible. Introduce real
-      segments (`/quiz-mcq/[subject]`) with `generateMetadata` (title/description from content,
-      canonical, `EXCLUDE_DATE`-style lastmod in sitemap) once RSC lands.
-- [ ] **Content-level JSON-LD** — `Quiz`/`Question` schema on quiz pages, `FAQPage` where
-      content fits, per-item breadcrumbs. Client-computed JotD needs SSR first.
-- [ ] **Per-page dynamic OG images** — `opengraph-image.tsx` per module segment rendering the
-      content name into the card (reusable `OgCard` builder extracted from the root one).
+- [ ] **Server-rendered content (the big one)** — PARTIAL 2026-09-22 (owner go via
+      "implement group 1"): the per-content landings below are server routes that
+      server-fetch subject/category meta, emit metadata + BreadcrumbList JSON-LD, and 404
+      unknown slugs; the hub bodies themselves still hydrate client-side. Full RSC
+      conversion of the hub grid/section bodies remains future work.
+- [x] **Per-content route segments + metadata** — DONE 2026-09-22: `/quiz-mcq/[subject]`
+      and `/riddle-mcq/[category]` (server pages, `revalidate = 3600`, `notFound()` on
+      unknown slugs) with `generateMetadata` (title/description/canonical/per-page OG via
+      the existing `/api/og` types). Hub views accept `initialSubject`/`initialCategory`
+      props (?subject=/​?category= still win, so share/play links are unchanged);
+      subject cards, category cards and back-links now link the segment form; sitemap
+      emits segment URLs (and its riddle section was fixed — it emitted `?subject=` URLs
+      the riddle hub never read); the `?subject=`/`?category=` wrappers canonicalize onto
+      the segments while `?q=`/`?score=` share surfaces stay self-canonical (SHARE-01).
+- [x] **Content-level JSON-LD** — DONE 2026-09-22 (scoped): BreadcrumbList on the
+      per-content landings. `Quiz`/`FAQPage` on gameplay surfaces still deferred —
+      gameplay stays client-side/noindex by design.
+- [x] **Per-page dynamic OG images** — DONE 2026-09-22: landings reuse the existing
+      `/api/og` generators (`quiz-subject` with live count, `riddle-category`) instead of
+      a new per-segment `opengraph-image.tsx` — same card, no duplication.
 
 ### P3 — polish / monitoring (owner decision: external accounts / scope)
 

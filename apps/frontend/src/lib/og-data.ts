@@ -136,11 +136,18 @@ export const ogData = {
     return raw ? { ...raw, options: normalizeOptions(raw.options) } : null;
   },
 
-  /** Riddle categories (public hub payload) — { id, name, slug, emoji, isActive }. */
+  /** Riddle categories (public hub payload) — { id, name, slug, emoji, isActive, riddleTotal? }. */
   riddleCategories: () =>
-    fetchJson<Array<{ id: string; name: string; slug: string; emoji: string; isActive: boolean }>>(
-      '/riddle-mcq/categories'
-    ),
+    fetchJson<
+      Array<{
+        id: string;
+        name: string;
+        slug: string;
+        emoji: string;
+        isActive: boolean;
+        riddleTotal?: number;
+      }>
+    >('/riddle-mcq/categories'),
 
   /**
    * A single image riddle for the per-riddle share card (SHARE-01 #8). Only

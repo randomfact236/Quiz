@@ -31,6 +31,7 @@ import {
   type RiddleStats,
 } from '@/lib/riddle-mcq-api';
 import type { RiddlePlayMode as Mode } from '@/lib/riddle-mode-param';
+import { track } from '@/lib/analytics';
 
 // ============================================================================
 // Level metadata (riddles have 4 levels)
@@ -59,10 +60,14 @@ function emptyLevelCounts(): Record<Level, number> {
 // Page shell with Suspense (useSearchParams requires it during prerender)
 // ============================================================================
 
-export default function RiddlesPage(): JSX.Element {
+export default function RiddlesPage({
+  initialCategory,
+}: {
+  initialCategory?: string | undefined;
+}): JSX.Element {
   return (
     <Suspense fallback={<HubLoading label="Loading riddles..." />}>
-      <RiddlesPageContent />
+      <RiddlesPageContent initialCategory={initialCategory} />
     </Suspense>
   );
 }
@@ -244,9 +249,15 @@ function ModeLevelPicker({
 // Main content
 // ============================================================================
 
-function RiddlesPageContent(): JSX.Element {
+function RiddlesPageContent({
+  initialCategory,
+}: {
+  initialCategory?: string | undefined;
+}): JSX.Element {
   const searchParams = useSearchParams();
-  const categorySlug = searchParams?.get('category') || '';
+  // SEO per-content routes (plan/15 P2): /riddle-mcq/<category> passes the slug
+  // as a path-segment prop; ?category= still wins for existing share links.
+  const categorySlug = searchParams?.get('category') || initialCategory || '';
   // BUG-043: /riddle-mcq/practice + /challenge redirect here with ?mode= —
   // that context hides category browsing (difficulty + Mix only).
   const modeParam = searchParams?.get('mode');
@@ -339,6 +350,17 @@ function RiddlesPageContent(): JSX.Element {
     () => categories.find((c) => c.slug === categorySlug) || null,
     [categories, categorySlug]
   );
+
+  // A5 (plan/13 §4b): dimension event for riddle category views — the
+  // ?category= path was previously only an opaque page_viewed URL.
+  useEffect(() => {
+    if (!activeCategory) return;
+    track(
+      'content_viewed',
+      { contentType: 'riddle_category', slug: activeCategory.slug, name: activeCategory.name },
+      { module: 'riddle-mcq' }
+    );
+  }, [activeCategory]);
 
   /** Per-category level counts = sum of subjectWise over the category's subjects */
   const categoryCounts = useMemo((): Record<Level, number> => {
@@ -441,7 +463,7 @@ function RiddlesPageContent(): JSX.Element {
               {categories.map((cat) => (
                 <Link
                   key={cat.id}
-                  href={`/riddle-mcq?category=${encodeURIComponent(cat.slug)}`}
+                  href={`/riddle-mcq/${encodeURIComponent(cat.slug)}`}
                   className="flex flex-col items-center rounded-2xl bg-white/95 dark:bg-secondary-800/95 p-6 text-center shadow-md transition-all hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl"
                 >
                   <span className="text-4xl" aria-hidden="true">

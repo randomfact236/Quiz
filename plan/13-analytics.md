@@ -108,12 +108,22 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
 - [x] **A2. `session_extended`**
 - [x] **A3. Riddle `hint_used`**
 - [x] **A4. Inert image-riddle actions**
-- [ ] **A5. `content_viewed` / `search_performed`** — subject/chapter views exist only as opaque `page_viewed` paths; no dimension events, so content performance (views per published item, dead content) isn't computable (plan docs §5.2).
+- [x] **A5. `content_viewed` / `search_performed`** — DONE 2026-09-22: hub surfaces emit
+      `content_viewed` (`{contentType, slug}`: quiz subject view, riddle category, image-riddle
+      category, joke category) and `search_performed` (`{query}` on settled searches — dad-jokes
+      server search + image-riddles client-side search). Content performance is computable.
 - [x] **A6. Client error + API-failure tracking**
-- [ ] **A7. Guest→registered conversion anchor** — **partially done**: password registration now emits `signup_completed` (module `site`) from the register page, carrying the device guestId — giving the visitor→register funnel its join key (guest-attributed pre-signup events → `signup_completed` → post-login JWT-attributed events). **Remaining:** Google OAuth registrations complete server-side via redirect, so they never hit the register page; those need either a server-side `record()` call on the OAuth path or an event from the OAuth callback page.
+- [x] **A7. Guest→registered conversion anchor** — DONE 2026-09-22. Register page emits
+      `signup_completed` with the device guestId; the Google-only path (server redirect, never
+      touches the register page) is closed by returning `isNewUser` from `googleLogin` through
+      the one-time-code exchange, with the client emitting `signup_completed` (method `google`)
+      BEFORE `mergeGuestIntoAccount()` rotates the guest id — same join key as pre-signup events.
 - [ ] **A8. Minor env dimensions** — no UTM/campaign params (referrerDomain only), no screen-size or theme usage (plan docs §6.2). Cheap to add to the envelope if segmentation is wanted.
 - [ ] **A9. Favorites unwired** — `RIDDLE_FAVORITES` storage key defined but no favorite events/feature (plan docs §5.2); only worth doing if favorites ship as a feature.
-- [ ] **A10. Resume-prompt decisions untracked** — the quiz resume prompt (`useQuizResume`) and riddle resume dialog render with no events. `session_resumed` covers "accepted", but "prompt shown / declined → start fresh" is invisible, so we can't tell how often returning players discard saved progress. Cheap client-only events (`resume_prompt_shown`, `resume_declined`) if wanted.
+- [x] **A10. Resume-prompt decisions untracked** — DONE 2026-09-22: `resume_prompt_shown`
+      (quiz: `useQuizMcq` effect with per-mount ref guard; riddle: fetch-effect in
+      `useRiddlePlay`) and `resume_declined` (quiz `handleStartFresh`; riddle play page's
+      Start-New handler). Accept-path stays `session_resumed`.
 
 ### B — Aggregation / dashboard gaps
 
@@ -129,14 +139,27 @@ dashboard implies. **A = data collection, B = aggregation/BI, C = infrastructure
 
 ### C — Infrastructure / hygiene
 
-- [ ] **C1. Data-retention purge job** — retention is indefinite; plan docs §9 suggests ~13 months raw events (aggregates forever). The entity comment already calls raw rows "the retention-capped tier" but nothing enforces it. **Needs owner decision** (also a GDPR data-minimization point now that geo fields exist).
-- [ ] **C2. Zero test coverage on the module** — no spec touches ingest validation/sanitization, enrichment, dashboard SQL, or cohorts. Ingest+sanitization are unit-testable as-is; the SQL parts need the DB harness already flagged in §4 P2.
-- [ ] **C3. Dashboard cache invalidation** — 60s TTL only; acceptable today, but worth noting before building anything real-time on top.
+- [x] **C1. Data-retention purge job** — DONE 2026-09-22 (owner go via "implement group 1"):
+      `analytics-retention.service.ts` runs in-process (boot+45s, then every 24h), deletes raw
+      rows older than `ANALYTICS_RETENTION_MONTHS` (default 13, plan §9) in
+      `ANALYTICS_RETENTION_BATCH`-sized (5000) `DELETE … RETURNING` batches, invalidates
+      `analytics:*` caches when rows were removed, never throws. 6 unit tests.
+- [x] **C2. Zero test coverage on the module** — PARTIAL 2026-09-22: ingest idempotency
+      suite (TASK-02, 8 tests) + retention-purge suite (6 tests) cover the unit-testable
+      surface; dashboard SQL/cohorts still need the DB-backed harness (testcontainers) —
+      deferred with rationale in §4 P2.
+- [x] **C3. Dashboard cache invalidation** — reviewed 2026-09-22: 60s TTL is fine for
+      admin dashboards (public summary runs 300s); `resetAllAnalytics()` invalidates
+      `analytics:*`; the retention purge also invalidates after mass deletes. Documented —
+      nothing real-time will be built on top without revisiting.
 - [ ] **C4. Ingest retry can double-count events** — the client `flush()` re-queues the whole batch when the POST fails; if the server actually persisted the batch but the response was lost (client 15s timeout, network blip), the retry writes the rows again. Rare and bounded, but there is no client event UUID / server dedup. A per-event `eventId` (client UUID) with a unique index would close it; only worth it if exact counts start to matter.
 
 ### D — Docs
 
-- [ ] **D1. `docs/analytics/analytics-data-collection.md` stale sections** — §1 summary table (guest endpoint "broken", image-riddle/joke events "never emitted/idle" — all fixed), §2.1/§3 (demographics columns/removed feature 2026-08-30; `DropDemographicsColumns` migration `1788400000000`), §7 (demographic popup funnel), §11 (admin overview "demographics funnel" bullet). §11 status list is accurate; sections 1–7 predate it. Refresh when this feature is picked up.
+- [x] **D1. `docs/analytics/analytics-data-collection.md` stale sections** — refreshed
+      2026-09-22: §1 summary table reflects reality (guest counters, GA4 behind consent, demo
+      removal), §2.1/§2.3/§3 marked with the 2026-08-30 demographics removal, §7 popup line
+      struck, §11 ledger extended with the A5/A7/A10/C1 additions.
 
 ### Suggested pickup order (when the owner gives the go-ahead)
 

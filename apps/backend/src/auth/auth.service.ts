@@ -220,6 +220,8 @@ export class AuthService {
     user: { id: string; email: string; name: string; role: string };
     token: string;
     refreshToken: string;
+    /** Present for freshly-created Google accounts (A7 signup anchor). */
+    isNewUser?: boolean;
   }> {
     const key = `oauth:code:${crypto.createHash('sha256').update(code).digest('hex')}`;
     const cached = await this.cacheService.get<{
@@ -250,6 +252,8 @@ export class AuthService {
     user: { id: string; email: string; name: string; role: string };
     token: string;
     refreshToken: string;
+    /** A7 anchor: lets the exchanging client emit guest-attributed signup_completed. */
+    isNewUser?: boolean;
   }> {
     let user = await this.usersService.findByGoogleId(googleData.googleId);
     let isNewUser = false;
@@ -280,6 +284,7 @@ export class AuthService {
     return {
       user: { id: user.id, email: user.email, name: user.name, role: user.role },
       ...tokens,
+      isNewUser,
     };
   }
 

@@ -60,25 +60,32 @@ async function fetchSections(path: string): Promise<DynamicRoute[]> {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const [quizSubjects, riddleSubjects, imageCategories] = await Promise.all([
+  const [quizSubjects, riddleCategories, imageCategories] = await Promise.all([
     fetchSections('/quiz-mcq/subjects'),
-    fetchSections('/riddle-mcq/subjects'),
+    fetchSections('/riddle-mcq/categories'),
     fetchSections('/image-riddles/categories'),
   ]);
 
   const dynamicRoutes: MetadataRoute.Sitemap = [
+    // plan/15 P2: real path segments — /quiz-mcq/<subject> and /riddle-mcq/<category>
+    // are server-rendered landings with their own metadata/canonicals, so the
+    // sitemap can point at them directly. (The riddle section previously emitted
+    // /riddle-mcq?subject=<slug> — the riddle hub never read that param, so those
+    // entries all resolved to the plain hub.)
     ...quizSubjects.map((s) => ({
-      url: `${APP_URL}/quiz-mcq?subject=${s.url}`,
+      url: `${APP_URL}/quiz-mcq/${s.url}`,
       ...(s.lastModified ? { lastModified: s.lastModified } : {}),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     })),
-    ...riddleSubjects.map((s) => ({
-      url: `${APP_URL}/riddle-mcq?subject=${s.url}`,
+    ...riddleCategories.map((s) => ({
+      url: `${APP_URL}/riddle-mcq/${s.url}`,
       ...(s.lastModified ? { lastModified: s.lastModified } : {}),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
     })),
+    // Image-riddle categories keep their query-param URLs: the filters hook
+    // reads and URL-syncs ?category=, so those pages work and stay canonical.
     ...imageCategories.map((s) => ({
       url: `${APP_URL}/image-riddles?category=${s.url}`,
       ...(s.lastModified ? { lastModified: s.lastModified } : {}),

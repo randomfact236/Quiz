@@ -93,7 +93,10 @@ export async function generateMetadata({
     if (match) {
       const title = `Riddles · ${match.name} — brain teasers`;
       const image = `/og/riddle-category/${encodeURIComponent(category)}.png`;
-      const url = `${APP_URL}/riddle-mcq?category=${encodeURIComponent(category)}`;
+      // plan/15 P2: canonical points at the real per-category segment
+      // (/riddle-mcq/<category>) so the query-param view consolidates onto the
+      // URL the sitemap lists.
+      const url = `${APP_URL}/riddle-mcq/${encodeURIComponent(category)}`;
       return {
         ...MODULE_META['riddle-mcq'],
         title,

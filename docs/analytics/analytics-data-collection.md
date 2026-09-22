@@ -9,6 +9,9 @@
 > country/sex/ageGroup columns and §3 no longer exist — migration `1788400000000`),
 > and §1's "broken endpoint / never-emitted events / idle votes" rows are all fixed.
 > Current gaps are tracked in `plan/13-analytics.md` §4b.
+>
+> **Refresh (2026-09-22, plan/13 D1):** sections 1–7 above are now marked where they were
+> stale. §11 carries the 2026-09-22 additions (A5/A7/A10 events, C1 retention purge).
 
 ---
 
@@ -17,14 +20,14 @@
 | Area                                             | Status                                                    |
 | ------------------------------------------------ | --------------------------------------------------------- |
 | User accounts (`users` table)                    | ✅ Persisted server-side                                  |
-| Guest users (`guest_users` table)                | ⚠️ Exists but endpoint broken; counters never incremented |
-| Demographics (country / sex / ageGroup)          | ✅ Collected via popup                                    |
-| Quiz/riddle sessions & answers                   | ❌ localStorage only (`aiquiz:*` keys)                    |
-| Backend stats services                           | ⚠️ Content counts only — zero user-behavior analytics     |
-| Image-riddle action events                       | ❌ `analyticsEvent` fields defined, never emitted         |
-| Joke votes (like/dislike columns)                | ❌ Columns idle; votes device-local only                  |
+| Guest users (`guest_users` table)                | ✅ Wired — counters upsert on `session_completed` (§11)   |
+| Demographics (country / sex / ageGroup)          | ❌ Feature removed 2026-08-30; country now from geo-lite  |
+| Quiz/riddle sessions & answers                   | ⚠️ localStorage for resume + `analytics_events` for facts |
+| Backend stats services                           | ✅ analytics_events pipeline + cached dashboard           |
+| Image-riddle action events                       | ✅ `image_riddle_*` shim forwards supported actions       |
+| Joke votes (like/dislike columns)                | ✅ Server `joke_voted` + device-local dedupe              |
 | HTTP access logs (Winston + LoggingInterceptor)  | ✅ requestId, method, url, statusCode, durationMs         |
-| Third-party analytics SDK (GA4, Plausible, etc.) | ❌ None                                                   |
+| Third-party analytics SDK (GA4, Plausible, etc.) | ✅ GA4 (G-D4VPRXEYCX) behind the cookie-consent gate      |
 
 ---
 
@@ -34,16 +37,16 @@
 
 Already persisted — available for analytics directly:
 
-| Field                        | Type                | Analytical use                                            |
-| ---------------------------- | ------------------- | --------------------------------------------------------- |
-| `id`                         | uuid                | Join key for all user events                              |
-| `email`                      | string              | Funnel/contact analysis (PII — handle per GDPR)           |
-| `name`                       | string              | Display only                                              |
-| `role`                       | `'user' \| 'admin'` | Segment real users vs staff (exclude admins from metrics) |
-| `googleId`                   | string nullable     | Auth-method segmentation                                  |
-| `country`, `sex`, `ageGroup` | demographics        | Geo/demo segmentation                                     |
-| `lastActive`                 | Date nullable       | DAU/WAU/MAU, churn detection                              |
-| `createdAt`                  | Date                | Registration cohorting, growth curves                     |
+| Field                            | Type                | Analytical use                                            |
+| -------------------------------- | ------------------- | --------------------------------------------------------- |
+| `id`                             | uuid                | Join key for all user events                              |
+| `email`                          | string              | Funnel/contact analysis (PII — handle per GDPR)           |
+| `name`                           | string              | Display only                                              |
+| `role`                           | `'user' \| 'admin'` | Segment real users vs staff (exclude admins from metrics) |
+| `googleId`                       | string nullable     | Auth-method segmentation                                  |
+| ~~`country`, `sex`, `ageGroup`~~ | removed 2026-08-30  | Demo columns dropped; geo comes from server geo-lite      |
+| `lastActive`                     | Date nullable       | DAU/WAU/MAU, churn detection                              |
+| `createdAt`                      | Date                | Registration cohorting, growth curves                     |
 
 ### 2.2 Derived Auth Events (need event tracking)
 
@@ -55,23 +58,19 @@ Already persisted — available for analytics directly:
 
 ### 2.3 Guest Users (`guest_users` entity)
 
-Fields available but currently unwired: `guestId` (localStorage `aiquiz:guest-id`),
-`country`, `sex`, `ageGroup`, `quizAttempts`, `totalScore`, `lastActive`.
-Analytics value: guest→registered conversion rate, guest engagement depth,
-guest demographics coverage.
+Wired: `guestId` (localStorage `aiquiz:guest-id`), `quizAttempts`, `totalScore`,
+`lastActive` (upserted from `session_completed` events). The demo columns
+(`country`/`sex`/`ageGroup`) were removed with the demographics feature.
+Analytics value: guest→registered conversion rate (A7 anchor), guest engagement depth.
 
 ---
 
 ## 3. Demographics Data
 
-Collected once via `DemographicsPopup` (skippable):
-
-- **Country** (~195-country dropdown + "Other") → geo distribution maps
-- **Sex** (`male` \| `female`) → demographic split
-- **Age group** buckets: `10-15, 15-20, 20-25, 25-30, 30-35, 35-40, 40-45, 45-50, 50+`
-
-Analytics uses: content difficulty tuning per age group, market segmentation,
-popup skip rate itself is a metric worth tracking.
+> **Removed 2026-08-30.** The `DemographicsPopup` and the user/guest demo columns
+> (`country`/`sex`/`ageGroup`) were dropped (migration `1788400000000`). Country-level
+> geo now comes from server-side geo-lite enrichment on ingest (§1), which needs no
+> user input and never stores raw IPs.
 
 ---
 
@@ -138,7 +137,7 @@ Content status workflow: `draft / published / trash`.
 
 - `content_viewed` — page/card views per module, subject page views
 - `search_performed` — admin/content search terms, filters applied (subject/chapter/level filter usage)
-- `joke_voted` — like/dislike per joke (backend `likes`/`dislikes` columns exist but idle; frontend keeps `aiquiz:voted-jokes` locally)
+- `joke_voted` — like/dislike per joke (server-emitted from `dad-jokes.service.voteForJoke`; frontend keeps `aiquiz:voted-jokes` locally for dedupe)
 - `image_riddle_action` — event names already declared in `actionOptions`: `answer_submitted`, `hint_revealed`, `riddle_skipped`, `answer_revealed`, `timer_reset/paused/resumed`, `fullscreen_toggled`, `share_opened`, `issue_reported`
 - `favorites` — `RIDDLE_FAVORITES` storage key defined but unwired
 - Content performance: views-per-published-item, dead content (0 views), most popular subjects/categories/difficulties
@@ -179,7 +178,7 @@ statusCode, durationMs). Extend with:
 
 - Visitor → registration conversion
 - Guest → registered conversion
-- Demographic popup: shown → filled → skipped rates
+- ~~Demographic popup: shown → filled → skipped rates~~ (popup removed 2026-08-30)
 - Return visitor rate (localStorage guest-id persistence)
 - Feature adoption: which module do new users try first?
 - Retention cohorts (D1/D7/D30) by acquisition month, country, age group
@@ -284,10 +283,35 @@ Phases 1–4 are implemented; Phase 5 (third-party) intentionally not started.
 
 **Not yet covered (follow-ups)**
 
-- `session_abandoned` / `session_extended` events (no abandon handler exists in the
-  engines yet; ExtendSessionModal exists on riddles only).
-- Riddle `hint_used` events and joke-quiz module (surface doesn't exist — plan §4 notes).
+- ~~`session_abandoned` / `session_extended` events~~ — done (engines emit both).
+- ~~Riddle `hint_used`~~ — done (`RiddleCard` hint button reports via `onHintShown`).
+- ~~Event retention/purge job (plan §9 suggests 13 months raw)~~ — done 2026-09-22 (below).
+- Joke-quiz module (surface doesn't exist — plan §4 notes).
 - Timer pause/reset/resume + fullscreen + issue-report image-riddle actions
   (`UNSUPPORTED_ACTION_IDS` in `features/image-riddles/lib/game.ts` still inert).
-- Event retention/purge job (plan §9 suggests 13 months raw).
-- Consent banner before any third-party SDK (Phase 5).
+- Consent banner before any third-party SDK (Phase 5) — GA4 now sits behind the
+  `CookieConsent` gate (`pigzap-cookie-consent`), so this is satisfied for GA4.
+
+**Added 2026-09-22 (plan/13 §4b gaps A5/A7/A10/C1)**
+
+- `content_viewed` (A5) — dimension events with `{contentType, slug}` from the hub
+  surfaces: quiz subject view (`QuizHubView` ChapterSelection), riddle category view
+  (`RiddlesHubView`), image-riddle category selection, joke category selection.
+  Views-per-published-item and dead content are now computable.
+- `search_performed` (A5) — `{query}` on settled searches: dad-jokes server search and
+  image-riddles client-side catalog search (both debounce-guarded, repeat-suppressed).
+- `resume_prompt_shown` / `resume_declined` (A10) — quiz: `useQuizMcq` effect +
+  `handleStartFresh`; riddle: fetch-effect emission in `useRiddlePlay` + the play page's
+  Start-New handler. Accept-path remains `session_resumed`, so accept/discard rates are
+  computable.
+- Guest→registered anchor completed (A7): Google-only registrations used to bypass the
+  register page's `signup_completed`. `googleLogin` now returns `isNewUser`, survives the
+  one-time-code exchange, and the client emits `signup_completed` (method `google`)
+  BEFORE `mergeGuestIntoAccount()` rotates the guest id — the event carries the same
+  device guestId as the visitor's pre-signup events.
+- Retention purge (C1) — `analytics-retention.service.ts`: in-process job, first pass
+  ~45s after boot then every 24h, deletes raw rows older than
+  `ANALYTICS_RETENTION_MONTHS` (default 13) in batches of
+  `ANALYTICS_RETENTION_BATCH` (default 5000) via `DELETE … RETURNING`, invalidates
+  `analytics:*` caches when rows were removed, never throws. Covered by
+  `analytics-retention.service.spec.ts` (6 tests).

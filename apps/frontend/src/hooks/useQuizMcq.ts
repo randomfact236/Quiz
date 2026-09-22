@@ -172,6 +172,27 @@ export function useQuizMcq(
   });
   const { showResumePrompt, pendingResumeState } = resumeController;
 
+  // A10 (plan/13 §4b): the resume prompt itself was invisible to analytics —
+  // only the accepted path (session_resumed) reported. Track the show once
+  // per mount (ref guard against effect re-runs) and the declined path in
+  // handleStartFresh, so accept vs discard rates are computable.
+  const resumePromptTrackedRef = useRef(false);
+  useEffect(() => {
+    if (!showResumePrompt || resumePromptTrackedRef.current) return;
+    resumePromptTrackedRef.current = true;
+    track(
+      'resume_prompt_shown',
+      {
+        subject,
+        chapter,
+        level,
+        progressAtSave: pendingResumeState ? Object.keys(pendingResumeState.answers).length : 0,
+      },
+      { module: 'quiz-mcq' }
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showResumePrompt]);
+
   const [state, setState] = useState<QuizState>({
     questions: [],
     availableQuestions: [],
@@ -649,10 +670,22 @@ export function useQuizMcq(
   }, [pendingResumeState, timeLimit]);
 
   const handleStartFresh = useCallback(() => {
+    // A10: "Start Fresh" on the resume prompt = saved progress discarded.
+    track(
+      'resume_declined',
+      {
+        subject,
+        chapter,
+        level,
+        progressAtSave: pendingResumeState ? Object.keys(pendingResumeState.answers).length : 0,
+      },
+      { module: 'quiz-mcq' }
+    );
     clearQuizResume();
     resumeController.startFreshReset();
     setResetKey((k) => k + 1);
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [pendingResumeState]);
 
   const addMoreQuestions = useCallback((count: number) => {
     // Pure updater — sessionRef sync happens in the effect below.

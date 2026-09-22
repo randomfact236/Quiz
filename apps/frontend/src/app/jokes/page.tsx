@@ -480,6 +480,25 @@ export default function JokesPage(): JSX.Element {
     };
   }, [apiOnline, searchQuery, activeCategory]);
 
+  // A5 (plan/13 §4b): dimension events — category views and settled searches
+  // (searchQuery is the debounced value). activeCategory is the category id
+  // the server filters join on, so it doubles as the content dimension.
+  const lastTrackedSearchRef = useRef('');
+  useEffect(() => {
+    if (!activeCategory) return;
+    track(
+      'content_viewed',
+      { contentType: 'joke_category', slug: activeCategory },
+      { module: 'jokes' }
+    );
+  }, [activeCategory]);
+  useEffect(() => {
+    const q = searchQuery.trim();
+    if (!q || q === lastTrackedSearchRef.current) return;
+    lastTrackedSearchRef.current = q;
+    track('search_performed', { query: q }, { module: 'jokes' });
+  }, [searchQuery]);
+
   // 💬 comment counts for the card chips (comments-system plan §4) — batched
   // one request for the whole set; silently empty offline.
   useEffect(() => {

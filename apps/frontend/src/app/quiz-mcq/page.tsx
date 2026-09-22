@@ -98,7 +98,10 @@ export async function generateMetadata({
       const image = `/og/quiz-subject/${encodeURIComponent(subject)}${
         count !== undefined ? `-${count}` : ''
       }.png`;
-      const url = `${APP_URL}/quiz-mcq?subject=${encodeURIComponent(subject)}`;
+      // plan/15 P2: canonical points at the real per-subject segment now — the
+      // query-param view and /quiz-mcq/<subject> are the same content, and the
+      // segment page is what the sitemap lists (keeps one consolidated URL).
+      const url = `${APP_URL}/quiz-mcq/${encodeURIComponent(subject)}`;
       return {
         ...MODULE_META['quiz-mcq'],
         title,

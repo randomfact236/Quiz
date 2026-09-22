@@ -1,6 +1,7 @@
 import { api } from './api-client';
 import { getGuestId, rotateGuestId } from './guest-id';
 import { getItem, setItem, removeItem, STORAGE_KEYS } from './storage';
+import { track } from './analytics';
 
 export interface AuthUser {
   id: string;
@@ -13,6 +14,8 @@ interface AuthResponse {
   user: AuthUser;
   token: string;
   refreshToken: string;
+  /** Set for a brand-new Google account (A7 signup anchor, plan/13 §4b). */
+  isNewUser?: boolean;
 }
 
 /**
@@ -71,6 +74,13 @@ export const authService = {
     const { token, refreshToken } = response.data;
     setItem(STORAGE_KEYS.AUTH_TOKEN, token, remember);
     setItem(STORAGE_KEYS.REFRESH_TOKEN, refreshToken, remember);
+    // A7 signup anchor (plan/13 §4b): Google registrations bypass the register
+    // page, so the client completes the funnel join here — emitted BEFORE
+    // mergeGuestIntoAccount() rotates the guest id, so signup_completed carries
+    // the SAME device guestId as the visitor's pre-signup events.
+    if (response.data.isNewUser) {
+      track('signup_completed', { method: 'google' }, { module: 'site' });
+    }
     await mergeGuestIntoAccount();
     return response.data;
   },

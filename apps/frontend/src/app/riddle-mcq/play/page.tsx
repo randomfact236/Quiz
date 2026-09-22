@@ -28,6 +28,7 @@ import {
 } from 'lucide-react';
 
 import { useRiddlePlay } from '@/hooks/use-riddle-play/useRiddlePlay';
+import { track } from '@/lib/analytics';
 import { RiddleCard, type RiddleCardRef } from '../components/RiddleCard';
 import ShareMenu from '@/components/share/ShareMenu';
 import { SITE_URL } from '@/lib/site-url';
@@ -164,7 +165,22 @@ function RiddlePlayPageContent(): JSX.Element {
   // Resume dialog
   if (play.showResumeDialog) {
     return (
-      <ResumePromptModal onResume={play.resumeSession} onStartNew={() => play.beginSession(0)} />
+      <ResumePromptModal
+        onResume={play.resumeSession}
+        onStartNew={() => {
+          // A10 (plan/13 §4b): "Start New Session" = saved progress discarded.
+          track(
+            'resume_declined',
+            {
+              mode,
+              subject: subjectId,
+              level: level || 'all',
+            },
+            { module: 'riddle-mcq' }
+          );
+          play.beginSession(0);
+        }}
+      />
     );
   }
 

@@ -19,6 +19,7 @@ import {
 import { getSubjects, getSubjectBySlug, getQuestionCounts } from '@/lib/quiz-mcq-api';
 import type { QuizSubject } from '@/lib/quiz-mcq-api';
 import { getChapterProgress } from '@/lib/progress';
+import { track } from '@/lib/analytics';
 import {
   QUIZ_LEVELS as levels,
   QUIZ_LEVEL_EMOJIS as levelEmojis,
@@ -88,7 +89,7 @@ function SubjectCard({
 
   return (
     <Card
-      {...(isAvailable ? { href: `/quiz-mcq?subject=${slug}` } : { tabIndex: -1 })}
+      {...(isAvailable ? { href: `/quiz-mcq/${slug}` } : { tabIndex: -1 })}
       className={`flex flex-col items-center rounded-2xl p-6 text-center shadow-lg transition-all ${isAvailable ? 'bg-white/95 dark:bg-secondary-800/95 hover:scale-105 hover:bg-white dark:hover:bg-secondary-700 hover:shadow-xl cursor-pointer' : 'bg-gray-100 dark:bg-secondary-800/50 cursor-not-allowed opacity-75'}`}
       aria-label={isAvailable ? `Select ${name} subject` : `${name} - Coming Soon`}
     >
@@ -421,6 +422,13 @@ function ChapterSelection({ subject }: { subject: string }): JSX.Element {
     staleTime: QUIZ_QUERY_STALE_TIME,
   });
 
+  // A5 (plan/13 §4b): dimension event for content performance — until now a
+  // subject view was only an opaque page_viewed path, so views per published
+  // subject weren't computable.
+  useEffect(() => {
+    track('content_viewed', { contentType: 'quiz_subject', slug: subject }, { module: 'quiz-mcq' });
+  }, [subject]);
+
   const chapterList = useMemo(
     () =>
       (subjectQuery.data?.chapters ?? [])
@@ -675,7 +683,7 @@ function ModeSelection({ subject, chapter }: { subject: string; chapter: string 
   return (
     <div>
       <Link
-        href={`/quiz-mcq?subject=${subject}`}
+        href={`/quiz-mcq/${subject}`}
         className="mb-6 inline-block rounded-lg bg-white/20 dark:bg-secondary-800/20 px-4 py-2 text-white transition-colors hover:bg-white dark:hover:bg-secondary-700/30"
       >
         ← Back to Chapters
@@ -790,9 +798,12 @@ function LevelSelection({
   );
 }
 
-function QuizContent(): JSX.Element {
+function QuizContent({ initialSubject }: { initialSubject?: string | undefined }): JSX.Element {
   const searchParams = useSearchParams();
-  const subject = searchParams?.get('subject') || '';
+  // SEO per-content routes (plan/15 P2): /quiz-mcq/<subject> passes the slug as
+  // a prop since it is a path segment, not a query param. Query param still
+  // wins so the existing ?subject= share/play links behave exactly as before.
+  const subject = searchParams?.get('subject') || initialSubject || '';
   const chapter = searchParams?.get('chapter') || '';
   const mode = searchParams?.get('mode') || '';
 
@@ -815,9 +826,13 @@ function QuizContent(): JSX.Element {
   return <SubjectSelection />;
 }
 
-export default function QuizPage(): JSX.Element {
+export default function QuizHubView({
+  initialSubject,
+}: {
+  initialSubject?: string | undefined;
+}): JSX.Element {
   const searchParams = useSearchParams();
-  const key = searchParams?.toString() || '';
+  const key = searchParams?.toString() || (initialSubject ? `subject=${initialSubject}` : '');
 
   return (
     <main className="min-h-screen bg-gradient-to-b from-[#A5A3E4] to-[#BF7076] dark:from-indigo-950 dark:to-rose-950/70 px-4 py-8">
@@ -829,7 +844,7 @@ export default function QuizPage(): JSX.Element {
             </div>
           }
         >
-          <QuizContent key={key} />
+          <QuizContent key={key} initialSubject={initialSubject} />
         </Suspense>
       </div>
     </main>

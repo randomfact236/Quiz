@@ -76,6 +76,9 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
   const [error, setError] = useState<string | null>(null);
   const [settings, setSettings] = useState<PublicSettings | null>(null);
   const [isMounted, setIsMounted] = useState(false);
+  // A10 (plan/13 §4b): emit resume_prompt_shown once per mount — the fetch
+  // effect re-runs on param change and must not double-report the dialog.
+  const resumePromptTrackedRef = useRef(false);
 
   // Mount guard to prevent hydration mismatch
   useEffect(() => {
@@ -157,6 +160,21 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
           setPool(fetchedRiddles);
           setShowResumeDialog(true);
           setStatus('paused'); // Exit loading so dialog renders
+          // A10: report the prompt itself (accept = session_resumed, decline
+          // = resume_declined from the play page's Start New button).
+          if (!resumePromptTrackedRef.current) {
+            resumePromptTrackedRef.current = true;
+            track(
+              'resume_prompt_shown',
+              {
+                mode,
+                subject: subjectId,
+                level: level || 'all',
+                progressAtSave: Object.keys(resume.answers).length,
+              },
+              { module: 'riddle-mcq' }
+            );
+          }
         } else {
           // Hold at the pre-game summary; session starts on user action
           setPool(fetchedRiddles);

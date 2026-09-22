@@ -15,10 +15,11 @@
 
 import Link from 'next/link';
 import { Sparkles } from 'lucide-react';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { ImageRiddle } from '@/lib/image-riddles-api';
 import { getImageRiddle } from '@/lib/image-riddles-api';
+import { track } from '@/lib/analytics';
 
 import {
   CategorySidebar,
@@ -59,6 +60,25 @@ export default function ImageRiddlesPage(): JSX.Element {
     shuffleSeed: filters.shuffleSeed,
   });
   const score = useImageRiddleScore(catalog.totalPublished);
+
+  // A5 (plan/13 §4b): dimension events — category views and settled searches.
+  // The filters hook debounces input, so filters.search only changes when the
+  // query has settled; the ref guards re-tracking the same query on URL
+  // write-backs. Search here is client-side over the catalog (no endpoint).
+  const lastTrackedSearchRef = useRef('');
+  useEffect(() => {
+    if (!filters.activeCategory) return;
+    track(
+      'content_viewed',
+      { contentType: 'image_riddle_category', slug: filters.activeCategory },
+      { module: 'image-riddles' }
+    );
+  }, [filters.activeCategory]);
+  useEffect(() => {
+    if (!filters.search || filters.search === lastTrackedSearchRef.current) return;
+    lastTrackedSearchRef.current = filters.search;
+    track('search_performed', { query: filters.search }, { module: 'image-riddles' });
+  }, [filters.search]);
 
   // 🔖 Save — device-local bookmarks, chip on the card corner (stays in sync
   // with the share menu's Save via the saved-items event)
