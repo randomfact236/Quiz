@@ -72,10 +72,14 @@
     fallback) + `cf-docker-firewall.service` systemd unit re-applies at boot.
   - Post-fix probes: pigzap.com + api.pigzap.com via Cloudflare = 200; direct-origin
     https/http = **connection timeout (blocked)**; SSH intact throughout.
-- **⚠️ Flag for owner:** Dokploy's UI is published on **0.0.0.0:3000** (control plane!).
-  It was left open so you don't lose access. When ready, restrict it — your current IP on
-  2026-09-22 was `27.34.64.78`: `ufw delete allow 3000/tcp && ufw allow from 27.34.64.78
-to any port 3000 proto tcp` (or front it with a Cloudflare-proxied hostname).
+- **✅ Dokploy :3000 flag CLOSED 2026-09-23** (was: UI published on 0.0.0.0:3000):
+  `cf-docker-firewall.sh` now appends owner-IP ACCEPT rules from
+  `/etc/dokploy-allow-ips.list` (currently `27.34.64.78`) followed by a :3000 DROP for
+  everyone else — IPv6 :3000 dropped outright (owner connects over IPv4). Verified live:
+  Dokploy loads 200 via the owner path, site/API via Cloudflare unchanged, and the
+  rules re-apply at boot via the same systemd unit. If the owner's IP rotates: edit
+  `/etc/dokploy-allow-ips.list` + rerun the script (SSH-based reopen one-liner is
+  `iptables -D DOCKER-USER -i eth0 -p tcp --dport 3000 -j DROP`).
 
 ### NOW-02 - Rotate credentials + SSH/secrets hygiene (was TASK-18)
 
