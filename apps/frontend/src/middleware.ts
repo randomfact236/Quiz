@@ -74,8 +74,38 @@ async function knownSlugs(): Promise<SlugCache | null> {
   return slugCache;
 }
 
+/**
+ * The eight 2D games are static HTML under public/games/<slug>/ — they BYPASS
+ * the next.config headers() (which only decorates Next-rendered routes), so
+ * they were served with no CSP at all. They are dependency-free and
+ * local-first (AGENTS.md): same-origin assets only. The one cross-origin
+ * allowance is the backend API origin, which pig-feedback.js posts game
+ * feedback to (BUG-053).
+ */
+const API_ORIGIN = (() => {
+  try {
+    return new URL(process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api').origin;
+  } catch {
+    return 'http://localhost:3012';
+  }
+})();
+
+const GAMES_CSP =
+  "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; " +
+  "img-src 'self' data: blob:; font-src 'self' data:; media-src 'self'; " +
+  `connect-src 'self' ${API_ORIGIN}; object-src 'none'; base-uri 'self'; ` +
+  "form-action 'none'; frame-ancestors 'none'";
+
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
+
+  // Static games: decorate with CSP and pass through untouched.
+  if (pathname.startsWith('/games/')) {
+    const response = NextResponse.next();
+    response.headers.set('Content-Security-Policy', GAMES_CSP);
+    return response;
+  }
+
   const moduleBase = pathname.startsWith('/quiz-mcq') ? '/quiz-mcq' : '/riddle-mcq';
   const rest = pathname.slice(moduleBase.length).replace(/^\//, '').toLowerCase();
 
@@ -98,5 +128,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/quiz-mcq/:path*', '/riddle-mcq/:path*'],
+  matcher: ['/quiz-mcq/:path*', '/riddle-mcq/:path*', '/games/:path*'],
 };

@@ -193,16 +193,32 @@
 
 ## GROUP 2 · HARDENING / FOR LATER
 
-### HARD-01 - CSP nonces + HttpOnly token storage (was TASK-04)
+### HARD-01 - CSP nonces + HttpOnly token storage (was TASK-04) - PARTIALLY FIXED 2026-09-22
 
 - **Date found:** 2026-09-22 (source: audit)
 - **Area:** security / frontend — **code work**
 - **Priority:** P2
 - **Reported:** baseline CSP ships `'unsafe-inline'` (verified: `apps/frontend/next.config.mjs:89`);
   tokens sit in localStorage. Nonce the inline scripts; plan HttpOnly refresh cookies.
-- **Context:** hardening-grade, not an active hole. The HttpOnly half changes the
-  guest/auth flow the owner deliberately kept friction-free — split the CSP-nonce half
-  (doable) from the cookie half (design decision).
+- **What was actually fixed 2026-09-22 — the real CSP gap:**
+  - Prod probe showed app pages served CSP fine, but **the eight static games
+    (`/games/<slug>/index.html`) served NO CSP at all** — public/ static files bypass
+    `next.config` headers().
+  - `middleware.ts` now decorates every `/games/*` response with the strictest policy on
+    the site: `script-src 'self'`, no remote anything, `connect-src` allows only same
+    origin + the API origin (pig-feedback.js posts game feedback there, BUG-053).
+    Verified against the games' actual HTML (same-origin assets + data: favicons only).
+    Verified on prod build: game page 200 with the CSP; app routes unaffected.
+- **Why full nonces are NOT being done (assessment, not deferral):** nonces require
+  dynamic rendering, and three parts of this site are structurally incompatible —
+  (a) prerendered/ISR pages embed the generation-time nonce, which a later request's
+  CSP rejects (blocked hydration); (b) the games' static HTML `<script src>` tags can't
+  carry per-request nonces and `strict-dynamic` would block them; (c) Next's own
+  bootstrap scripts only auto-nonce on dynamic routes. `'unsafe-inline'` on app pages
+  stays as the documented residual risk — it weakens XSS defense-in-depth but is not an
+  active hole.
+- **HttpOnly refresh-cookie half:** remains a design decision (changes the guest/auth
+  flow the owner deliberately kept friction-free) — parked with the owner.
 
 ### HARD-02 - Server-side grading phase 2c (was TASK-15)
 
