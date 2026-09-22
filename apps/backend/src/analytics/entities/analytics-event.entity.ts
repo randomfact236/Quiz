@@ -14,6 +14,7 @@ import { Column, CreateDateColumn, Entity, Index, PrimaryGeneratedColumn } from 
 @Index(['userId'])
 @Index(['guestId'])
 @Index(['serverTs'])
+@Index('uq_analytics_events_client_event_id', ['clientEventId'], { unique: true })
 export class AnalyticsEvent {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -71,6 +72,15 @@ export class AnalyticsEvent {
 
   @Column({ type: 'timestamptz', nullable: true })
   clientTs: Date | null;
+
+  /**
+   * TASK-02 idempotency key, minted client-side at queue time. Unique index
+   * makes ingest retries (lost responses, beacon retries) dedupe instead of
+   * double-inserting; NULL (legacy rows / server-side record()) is exempt
+   * from uniqueness in Postgres.
+   */
+  @Column({ type: 'varchar', length: 64, nullable: true })
+  clientEventId: string | null;
 
   @CreateDateColumn()
   serverTs: Date;

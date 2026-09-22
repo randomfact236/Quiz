@@ -254,6 +254,17 @@ export async function getSubjectRandomQuestions(
   return response.data;
 }
 
+/**
+ * TASK-27 (shared-question deep link): one published question for play — the
+ * same payload the random play endpoints serve, so a question pinned into a
+ * shared session behaves identically (answer key graded client-side, options
+ * already served-shuffled).
+ */
+export async function getQuizQuestionById(id: string): Promise<QuizQuestion> {
+  const response = await api.get<QuizQuestion>(`/quiz-mcq/questions/${id}/play`);
+  return response.data;
+}
+
 export interface FilterCountsResponse {
   subjects: {
     id: string;

@@ -127,6 +127,26 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     };
   }
 
+  /**
+   * TASK-27 (shared-question deep link): one published question for play.
+   * Serves the same payload the play flow's random endpoints serve — the full
+   * entity including the answer key the client grades against, with options
+   * served-shuffled per BUG-041 — so a pinned question behaves identically
+   * in-session. Not found / draft / trash → 404.
+   */
+  async findPlayItemById(id: string): Promise<Question> {
+    const uuidRe = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    if (!uuidRe.test(id)) throw new NotFoundException('Question not found');
+
+    const question = await this.deps.itemRepo.findOne({
+      where: { id, status: ContentStatus.PUBLISHED },
+      relations: { chapter: { subject: true } },
+    });
+    if (!question) throw new NotFoundException('Question not found');
+
+    return this.shuffleServedOptions([question])[0];
+  }
+
   // ==================== SUBJECTS ====================
 
   async findAllSubjects(

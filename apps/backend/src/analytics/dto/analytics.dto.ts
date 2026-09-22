@@ -29,6 +29,12 @@ import {
 /** eventName convention: `<object>_<action>` lowercase snake (plan §8). */
 export const EVENT_NAME_PATTERN = /^[a-z][a-z0-9_]{2,63}$/;
 
+/**
+ * TASK-02 idempotency key: a client-minted uuid or an opaque
+ * [A-Za-z0-9_-]{8,64} token (a uuid v4 satisfies both shapes).
+ */
+export const CLIENT_EVENT_ID_PATTERN = /^[A-Za-z0-9_-]{8,64}$/;
+
 /** Modules allowed in the envelope (plan §8). */
 export const ANALYTICS_MODULES = [
   'quiz-mcq',
@@ -80,6 +86,17 @@ export class AnalyticsEventDto {
   @IsOptional()
   @IsDateString()
   clientTs?: string;
+
+  @ApiPropertyOptional({
+    description:
+      'Client-minted idempotency key (uuid or [A-Za-z0-9_-]{8,64}); repeats of the same key are stored once',
+  })
+  @IsOptional()
+  @IsString()
+  @Matches(CLIENT_EVENT_ID_PATTERN, {
+    message: 'clientEventId must be a uuid or 8-64 chars of [A-Za-z0-9_-]',
+  })
+  clientEventId?: string;
 }
 
 export class IngestEventsDto {

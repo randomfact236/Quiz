@@ -15,9 +15,9 @@
 
 | ID      | Title                                                                              | Area                     | Pri | Status           |
 | ------- | ---------------------------------------------------------------------------------- | ------------------------ | --- | ---------------- |
-| TASK-01 | Question-likes do not survive a refresh                                            | engagement               | P1  | Open             |
-| TASK-02 | Analytics ingest retry can double-count events (C4)                                | analytics                | P1  | Open             |
-| TASK-03 | BE-09 CSV leakage/ambiguity repairs + re-audit                                     | content data             | P1  | Open             |
+| TASK-01 | Question-likes do not survive a refresh                                            | engagement               | P1  | Fixed 2026-09-22 |
+| TASK-02 | Analytics ingest retry can double-count events (C4)                                | analytics                | P1  | Fixed 2026-09-22 |
+| TASK-03 | BE-09 CSV leakage/ambiguity repairs + re-audit                                     | content data             | P1  | Fixed 2026-09-22 |
 | TASK-04 | H8 remainder: CSP nonces + HttpOnly token storage                                  | security                 | P2  | Open             |
 | TASK-05 | Bulk import lacks status (image riddles, jokes) / hint (riddles)                   | import (3 modules)       | P2  | Open             |
 | TASK-06 | Analytics gaps: A5 events, A10 resume, A7 anchor, C1 purge, C2 tests, C3 cache     | analytics                | P2  | Open             |
@@ -41,32 +41,49 @@
 | TASK-24 | Memory Quiz: grid-answer questions (where/swap) unanswerable by tap                | games / memory-quiz      | P1  | Fixed 2026-09-22 |
 | TASK-25 | Memory Quiz: swap reveal announced the pre-swap layout                             | games / memory-quiz      | P2  | Fixed 2026-09-22 |
 | TASK-26 | Memory Quiz: level-clear crash (focus on undefined btnRetry2)                      | games / memory-quiz      | P2  | Fixed 2026-09-22 |
-| TASK-27 | Shared question link should land on that question (others skipped, opt-in to play) | share / play (deep link) | P2  | Open             |
+| TASK-27 | Shared question link should land on that question (others skipped, opt-in to play) | share / play (deep link) | P2  | Fixed 2026-09-22 |
 
 ---
 
 ## Open
 
-### TASK-01 - Question-likes do not survive a refresh
+### TASK-01 - Question-likes do not survive a refresh - FIXED 2026-09-22
 
-- **Date found:** 2026-09-22 (source: plan/17-question-engagement.md)
-- **Area:** question engagement
-- **Priority:** P1
-- **Reported:** likes live in component state only - a refresh loses them; needs persistence.
+- **Fixed 2026-09-22:** persistence was already shipped in `5ee5ab7`/`2c86cfc`
+  (question_likes table + per-guest unique constraint + `/question-likes/my` restore).
+  Verified end-to-end: API (POST -> persisted row -> GET /my true -> dedupe
+  alreadyLiked=true) AND Playwright UI (like Q1 -> refresh -> Resume -> same question
+  restored with the heart filled and the public count shown).
 
-### TASK-02 - Analytics ingest retry can double-count events
+### TASK-02 - Analytics ingest retry can double-count events - FIXED 2026-09-22
 
-- **Date found:** 2026-09-22 (source: plan/13-analytics.md, C4)
-- **Area:** analytics ingest
-- **Priority:** P1
-- **Reported:** client flush() re-queues the whole batch on POST failure; if the server persisted it, the retry double-counts. Needs an idempotency key.
+- **Fixed 2026-09-22:** client mints a `clientEventId` (uuid v4 + fallback chain) once per
+  queued event; flush/beacon/re-queue reuse it. Backend accepts optional `clientEventId`
+  (varchar(64), unique index `uq_analytics_events_client_event_id`), dedupes in-batch,
+  pre-filters stored ids, and degrades to row-by-row on a 23505 race. Reply is now
+  `{accepted, rejected, skipped}`; side effects fire only for accepted rows. Migration
+  `1793100000000-AddAnalyticsClientEventId` applied to the dev DB.
+- **Verified:** analytics.service.spec.ts 8/8; full backend suite 117 tests; live
+  double-POST `{accepted:2}` then `{accepted:0,skipped:2}`; DB count 2 (not 4).
+  Two inert `test_idem_recheck` probe rows remain in analytics_events (retention purge
+  C1 ages them out; deletion was blocked by the ops safety guard).
 
-### TASK-03 - BE-09 CSV leakage/ambiguity repairs + re-audit
+### TASK-03 - BE-09 CSV leakage/ambiguity repairs + re-audit - FIXED 2026-09-22
 
-- **Date found:** 2026-09-22 (source: audit)
-- **Area:** content data
-- **Priority:** P1
-- **Reported:** measured leakage/ambiguity rows in the quiz/riddle CSVs; no repair script exists. Repair, re-audit, then push.
+- **Fixed 2026-09-22:** `scripts/repair-be09-csv.py` (idempotent, line-splice) repaired the
+  9 pop-culture-celebrities rows (CJK mojibake + literal "none skip" fragments) and
+  reworded food-cooking ID 378 (the one true leak: "Gouda cheese is named after which
+  Dutch city?"). `scripts/repair-be09-db.sql` applied the same 10 fixes to the serving DB,
+  recomputing `content_hash` for the 2 retexted rows; both verified idempotent.
+- **Re-audit:** true quiz answer-in-question count 436 -> 435 (the audit prints a capped
+  400); CJK/none-skip defect rows in `questions` now 0.
+- **Documented false positives (unchanged):** quiz "X or Y?" choice rows (381),
+  true/false statements (1), brand-ask rows (~52), riddle logic/detective entity rows
+  (171), Code-Breaking truncated distractors (20), hidden-word rows (4), A/B letter skew
+  (expected; serve-time shuffle mitigates).
+- **Deferred (owner decision):** 60 DB-only riddle questions exceed 220 chars (CSVs have
+  30); list captured in the repair report - needs wording rewrites.
+- **Pending (owner):** live push via `scripts/push-content.mjs` (dry-run first).
 
 ### TASK-04 - H8 remainder: CSP nonces + HttpOnly token storage
 
@@ -161,13 +178,27 @@
 - **Fix:** guarded focus target (`clearTarget?.focus?.()`); the missing `#btn-retry2` mapping remains the underlying gap if that button is added later.
 - **Verified:** E2E "zero console/page errors across the session" passes.
 
-### TASK-27 - Shared question link should land on that question (others skipped, opt-in to play)
+### TASK-27 - Shared question link should land on that question (others skipped, opt-in to play) - FIXED 2026-09-22
 
-- **Date found:** 2026-09-22 (owner request)
-- **Area:** share / play (deep link)
-- **Priority:** P2
-- **Reported:** when a visitor opens a question link shared from game play, they should land **on that exact question**, with the other questions shown as **skipped**. If they want to play, they can opt in/continue by clicking the **skip question** control (i.e. the skipped question is the entry point, and the skip button is the way back into the flow).
-- **Notes:** applies to shared question links from the play/game-play surfaces (quiz question, riddle question, image riddle). Overlaps with the existing item deep-links (`BUG-064` completion) - this adds the in-flow behaviour, not just opening the item.
+- **Fixed:** quiz question shares now emit a play deep link:
+  `/quiz-mcq/play?subject=<slug>&chapter=<name>&level=<level>&mode=<mode>&shared=true&total=<N>&qid=<uuid>`.
+  The play flow resolves the shared question BY IDENTITY (uuid), not by the sharer's
+  index - the visitor's session is a fresh random set. If the question is in the fetched
+  set, the session starts at its position; otherwise it is fetched by id
+  (`GET /quiz-mcq/questions/:id/play`, public, same exposure as the random feed, options
+  served-shuffled per BUG-041) and pinned as the entry point with the other slots
+  unvisited before it. An unresolvable id degrades to a plain session from Q1.
+- **Opt-in/continue:** the existing GameHeader "Unvisited (N)" chip is the way back into
+  the flow - tapping it jumps to Q1 (dismissUnvisited). Verified: landing shows the shared
+  question + chip; tapping the chip advances into the session.
+- **No regression:** the hub `?q=<uuid>` OG question preview still renders
+  (og:image /og/quiz-question/<uuid>.png, og:description = question text).
+- **Verified:** tsc clean; Playwright (play URL -> h2 == shared question text -> chip ->
+  opt-in moves to Q1) all PASS; screenshots 23/24.
+- **Not done (reported):** riddle question shares still use the hub `?q=` form - the
+  riddle play flow has no equivalent shared-start contract (subjectId/level based, no
+  in-session question identity); implementing it means changing the riddle session
+  contract. Deferred with reason.
 
 ### BUG-XXX — <title>
 

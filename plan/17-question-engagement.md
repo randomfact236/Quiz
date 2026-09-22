@@ -25,8 +25,9 @@
 - [x] Like capture on quiz + riddle question cards (`LikeButton` in the question action row —
       BUG-040 / BUG-054)
 - [x] Bucket model finalized (internal-only, derived by count)
-- [ ] **Question-likes persistence** — likes currently don't survive a refresh (QA-FINDINGS
-      **BUG-045**, P1): likes table + API with per-guest unique constraint
+- [x] **Question-likes persistence** — likes table + API with per-guest unique constraint
+      (shipped `5ee5ab7`/`2c86cfc`; end-to-end verified 2026-09-22: like -> refresh ->
+      Resume -> heart restored; QA-FINDINGS TASK-01/BUG-045 closed)
 - [ ] Internal bucket report surface (admin)
 - [ ] Share-count events + public like/comment/share counters (QA-FINDINGS **BUG-048**)
 

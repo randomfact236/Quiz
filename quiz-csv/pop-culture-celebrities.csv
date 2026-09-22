@@ -26,7 +26,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 23,Who is Daniel Kaluuya?,A Kenyan-British actor,The Get Out Oscar-winning actor,A Ghanaian-British actor,A Nigerian-British actor,B,medium,Celebrity Facts
 24,Which star's real name is Montero Lamar Hill?,Lil Nas X,Lady Gaga,Freddie Mercury,Elton John,A,expert,Real Names
 25,Who is known as Prince of Wales?,Prince William title,Beyonce,Jennifer Lopez,Dwayne Johnson,A,medium,Nicknames & Pairings
-26,What is the Centre for Early Childhood?,Meghans Archewell different,Kates early years project,Camilla reading room different,Annes保存 none skip,B,medium,Royals
+26,What is the Centre for Early Childhood?,Meghans Archewell different,Kates early years project,Camilla reading room different,Annes royal foundation,B,medium,Royals
 27,Which Jay-Z album is 4:44?,The 2017 confessional album,The Blueprint classic 2001,Magnolia Carta joint with Beyonce,The Black Album 2003,A,medium,Celebrity Facts
 28,Who is the late Ray Stevenson in Ahsoka?,The Thrawn actor Lars Mikkelsen different,The Sabine actor different,The Baylan Skoll actor passed after filming,The Hera actress different,C,expert,Celebrity Facts
 29,Which show formed One Direction?,The X Factor UK,The Voice UK,American Idol US,Britains Got Talent variety,A,medium,Reality TV
@@ -151,7 +151,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 148,Who directed Thor Ragnarok?,Kenneth Branagh first Thor,Taika Waititi,Destin Daniel Cretton Shang-Chi,Alan Taylor Dark World,B,medium,Celebrity Facts
 149,Which Young Money founder is Lil Wayne?,Nicki signed artist from it,Lil Wayne founded Young Money,Birdman Cash Money parent label,Drake signed artist from it,B,medium,Celebrity Facts
 150,What is Usain Bolt famous for being?,sprint legend,rapper and designer,reality star and entrepreneur,media personality and cosmetics founder,A,medium,Celebrities
-151,Who is the Amazon CEO?,Andy Jassy since 2021,Werner Vogels CTO,Jeff Bezos executive chair now,Shirish sanskar none skip,A,medium,Celebrity Facts
+151,Who is the Amazon CEO?,Andy Jassy since 2021,Werner Vogels CTO,Jeff Bezos executive chair now,Shirish Sanskar analyst,A,medium,Celebrity Facts
 152,Who is known as Queen Bey?,Jennifer Lopez,Beyonce,Dwayne Johnson,Kylie Jenner,B,medium,Nicknames & Pairings
 153,What is Zendaya famous for being?,reality star and entrepreneur,actress and singer,media personality and cosmetics founder,rapper and designer,B,medium,Celebrities
 154,Who played Frigga Thor mother?,Rene Russo,Idris Elba Heimdall,Jaimie Alexander Sif,Anthony Hopkins Odin,A,hard,Celebrity Facts
@@ -341,7 +341,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 338,Who is Selena Gomez founder of Rare Beauty?,Selena Gomez founded Rare Beauty,Kylie Cosmetics rival brand claim,Fenty Rihanna separate,Haus Labs Lady Gaga brand,A,medium,Celebrity Facts
 339,Who played Mariah Dillard in Luke Cage?,Gabriel Dennis Diamondback villain one,Alfre Woodard,Mustafa Shakir Bushmaster villain season two,Simone Missick Misty hero,B,hard,Celebrity Facts
 340,Which film won Best Picture at the 2021 Oscars?,Mank,Nomadland,Promising Young Woman,The Trial of the Chicago 7,B,medium,Awards & Events
-341,Who played Mance Rayder?,Ciaran Hinds the king beyond the wall,Mackenzie Davis none skip,Anton Lesser Qyburn maester,James Cosmo Mormont bear island,A,medium,Celebrity Facts
+341,Who played Mance Rayder?,Ciaran Hinds the king beyond the wall,Mackenzie Davis guest star,Anton Lesser Qyburn maester,James Cosmo Mormont bear island,A,medium,Celebrity Facts
 342,Which sports comedy won the 2021 comedy Emmy?,Ted Lasso,Hacks,What We Do in the Shadows,The Kominsky Method,A,medium,Awards & Events
 343,What is Bruno Mars real name?,Stefani Germanotta,Peter Gene Hernandez,Farrokh Bulsara,Reginald Dwight,B,hard,Real Names
 344,Who is Osita Osadebe?,Sir Warrior Oriental Brothers,Rex Lawson historic highlife,Oliver De Coque highlife guitarist,The highlife crooner icon,D,expert,Celebrity Facts
@@ -389,7 +389,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 386,Which Paul brother boxed Tyron Woodley?,Logan Paul versus KSI twice,Logan versus Floyd exhibition Dubai,Jake Paul versus Woodley,Jake versus Ben Askren trunks,C,hard,Celebrity Facts
 387,Who played Ser Jorah Mormont?,Iain Glen,Jerome Flynn Bronn,Julian Glover Grand Maester Pycelle,Conleth Hill Varys,A,medium,Celebrity Facts
 388,What is the Mannequin Challenge?,Standing frozen while camera moves,A mannequin head challenge game,A modeling contest,A mannequin brand,A,medium,Internet & Memes
-389,Who played Darcy Lewis in Thor and WandaVision?,Idra none skip,Kat Dennings,Stellan Skarsgard Selvig scientist,Randall Park Jimmy Woo partner WandaVision,B,medium,Celebrity Facts
+389,Who played Darcy Lewis in Thor and WandaVision?,Idris Elba Heimdall,Kat Dennings,Stellan Skarsgard Selvig scientist,Randall Park Jimmy Woo partner WandaVision,B,medium,Celebrity Facts
 390,Who sang Sign of the Times asked again?,Harry Styles again,Zayn Pillowtalk different,Louis Just Hold On different,Niall Slow Hands different,A,easy,Celebrity Facts
 391,What is the Met Gala?,A movie awards show,The Costume Institute benefit gala,A modeling contest,A music chart event,B,medium,Awards & Events
 392,Who sang My Type?,Saint Motel,Walk the Moon,Bleachers,The 1975,A,hard,Celebrity Facts
@@ -575,7 +575,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 572,Who sang Pompeii?,Imagine Dragons,Bastille,Alt-J,Foster the People,B,medium,Celebrity Facts
 573,Which star's real name is Abel Tesfaye?,The Weeknd,Lady Gaga,Freddie Mercury,Elton John,A,expert,Real Names
 574,What is Hailey Bieber most iconic for?,The College Dropout,Rhode skincare,Kylie Cosmetics,Keeping Up with the Kardashians,B,medium,Celebrities
-575,Who played Gong Gong in Everything Everywhere?,James Hong veteran actor,Harry Shum Jr quick cameo,Odessa Young none skip,Ke Huy Quan husband role,A,hard,Celebrity Facts
+575,Who played Gong Gong in Everything Everywhere?,James Hong veteran actor,Harry Shum Jr quick cameo,Odessa Young cameo,Ke Huy Quan husband role,A,hard,Celebrity Facts
 576,What is Gal Gadot famous for being?,actress,rapper and designer,reality star and entrepreneur,media personality and cosmetics founder,A,medium,Celebrities
 577,Which star's real name is Amala Dlamini?,Freddie Mercury,Doja Cat,Lady Gaga,Elton John,B,expert,Real Names
 578,Which Kourtney son is oldest?,Reign youngest son,Mason the eldest,Rocky new baby with Travis,Penelope middle daughter,B,medium,Celebrity Couples
@@ -644,7 +644,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 641,Who is known as Prince Harry the Duke of Sussex?,Dwayne Johnson,Prince Harry title,Jennifer Lopez,Beyonce,B,medium,Nicknames & Pairings
 642,Who headlined the 2023 Super Bowl halftime show?,Rihanna,Dr. Dre and friends,Lady Gaga,The Weeknd,A,easy,Awards & Events
 643,Which US long-running survivor competition is Survivor?,Mt Everests alone show is Alone,Survivor with Jeff Probst,The Amazing Race with Phil,Big Brother with Julie Chen,B,medium,Reality TV
-644,Who played Norman Osborn 2002?,James Franco Harry son,Willem Dafoe,Michael Massee相关的 none skip,Chris Cooper Amazing reboot,B,easy,Celebrity Facts
+644,Who played Norman Osborn 2002?,James Franco Harry son,Willem Dafoe,Michael Massee curse rumor,Chris Cooper Amazing reboot,B,easy,Celebrity Facts
 645,What is Rihanna famous for being?,singer and beauty founder,media personality and cosmetics founder,reality star and entrepreneur,rapper and designer,A,medium,Celebrities
 646,What is ASIMO?,The Tesla humanoid Optimus,The retired Honda walking robot,The Boston Dynamics Atlas,The Sony Aibo dog,B,hard,Celebrity Facts
 647,What is a key fact about Casio?,"Germany, founded by Adi Dassler",Japan digital watches,"the United States, founded by Phil Knight and Bill Bowerman","Germany, founded by Rudolf Dassler",B,medium,Brands & Fashion
@@ -719,7 +719,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 716,Which Hills star moved to The City?,Heidi MontagSpeidi,Audrina Patridge stayed,Whitney Port in New York,Lauren Conrad LA remained,C,expert,Celebrity Facts
 717,What is Barry Keoghan most iconic for?,Saltburn,The College Dropout,Keeping Up with the Kardashians,Kylie Cosmetics,A,medium,Celebrities
 718,What is Pitbull real name?,Reginald Dwight,Armando Christian Perez,Farrokh Bulsara,Stefani Germanotta,B,hard,Real Names
-719,Who is known as Jelena曾经的 pair?,Justin Bieber and Selena Gomez pairing,Dwayne Johnson,Jennifer Lopez,Beyonce,A,medium,Nicknames & Pairings
+719,Who is known as Jelena?,Justin Bieber and Selena Gomez pairing,Dwayne Johnson,Jennifer Lopez,Beyonce,A,medium,Nicknames & Pairings
 720,What is the MTV VMAs statue called?,The Video Vanguard trophy only,The Moon Person astronaut,The Golden Popcorn,The VMA Globe,B,medium,Awards & Events
 721,What is Confused Travolta?,Sad Keanu,Bad luck Brian,The lost Travolta in a kitchen meme,Success kid,C,hard,Internet & Memes
 722,Which magazine is Anna Wintour editor?,Harper’s Bazaar,Vogue,W Magazine,Elle,B,easy,Fashion & Brands
@@ -744,7 +744,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 741,What is Naomi Campbell most iconic for?,90s supermodel era,Keeping Up with the Kardashians,The College Dropout,Kylie Cosmetics,A,medium,Celebrities
 742,Which star's real name is Robert Zimmerman?,Elton John,Bob Dylan,Lady Gaga,Freddie Mercury,B,expert,Real Names
 743,Who is known as JAY-Z Hova?,Beyonce,Jay-Z nickname God MC,Jennifer Lopez,Dwayne Johnson,B,medium,Nicknames & Pairings
-744,Who is the Amazon founder?,Jeff Bezos founded Amazon,Marc Onetto operations none skip,MacKenzie Scott ex-wife philanthropist,Andy Jassy CEO now AWS then Amazon,A,easy,Celebrity Facts
+744,Who is the Amazon founder?,Jeff Bezos founded Amazon,Marc Onetto operations lead,MacKenzie Scott ex-wife philanthropist,Andy Jassy CEO now AWS then Amazon,A,easy,Celebrity Facts
 745,What is Jessica Alba famous for being?,actress and founder,rapper and designer,reality star and entrepreneur,media personality and cosmetics founder,A,medium,Celebrities
 746,What is a spoiler?,A cast list,Story details shared prematurely,A review score,A movie trailer,B,easy,Internet & Memes
 747,Who dated Kim Kardashian in 2022 briefly?,Pete Davidson comedian,Odell Beckham Jr rumors later,Travis Barker drummer married Kourtney,Ray J tape ex past,A,medium,Celebrity Couples
@@ -821,7 +821,7 @@ ID,Question,Option A,Option B,Option C,Option D,Correct Answer,Level,Chapter
 818,What is Brad Pitt famous for being?,actor and producer,reality star and entrepreneur,media personality and cosmetics founder,rapper and designer,A,medium,Celebrities
 819,Which star's real name is Peter Hernandez?,Lady Gaga,Bruno Mars,Freddie Mercury,Elton John,B,expert,Real Names
 820,Who is Rosario Dawson in Star Wars?,The Ahsoka Tano live-action actress,The Cara Dune actress different,The Fennec actress different,The Bo-Katan actress different,A,medium,Celebrity Facts
-821,Who played J. Jonah Jameson?,J.K. Simmons returned in MCU too,J.K. Simmons,Willem Dafoe Goblin,Zen范畴 none skip,B,easy,Celebrity Facts
+821,Who played J. Jonah Jameson?,J.K. Simmons returned in MCU too,J.K. Simmons,Willem Dafoe Goblin,Zachary Levi cameo,B,easy,Celebrity Facts
 822,Who is Burna Boy?,A Kenyan star,The Nigerian afrofusion headliner,A South African star,A Ghanaian star,B,medium,Celebrity Facts
 823,What is Kanye West famous for being?,rapper and designer,reality star and entrepreneur,media personality and cosmetics founder,singer-songwriter,A,medium,Celebrities
 824,Who sang The Less I Know the Better?,Tame Impala,Parcels talkbox funk,Khruangbin instrumental lean,Pond,A,medium,Celebrity Facts

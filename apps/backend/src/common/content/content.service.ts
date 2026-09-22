@@ -318,7 +318,10 @@ export abstract class ContentServiceBase<
    * admin view of them) stay untouched. Open-ended items (no letter) pass
    * through untouched.
    */
-  private shuffleServedOptions(items: TItem[]): TItem[] {
+  // protected (not private) so module services can serve single-item play
+  // payloads through the same BUG-041 shuffle invariant (e.g. the quiz
+  // shared-question deep link).
+  protected shuffleServedOptions(items: TItem[]): TItem[] {
     const letters = 'ABCDEFGH';
     for (const item of items as any[]) {
       const opts = item.options;

@@ -40,6 +40,13 @@ interface AnalyticsPayload {
   page?: string | undefined;
   properties?: Record<string, unknown> | undefined;
   clientTs: string;
+  /**
+   * TASK-02 idempotency key: minted ONCE per event at queue time, so flush
+   * retries and exit-beacon re-queues reuse the same id and the backend can
+   * dedupe instead of double-inserting. Mirrors the backend pattern
+   * (uuid or [A-Za-z0-9_-]{8,64}) — a uuid v4 fits both.
+   */
+  clientEventId: string;
 }
 
 interface TrackOptions {
@@ -52,6 +59,29 @@ const FLUSH_INTERVAL_MS = 10_000;
 const FLUSH_THRESHOLD = 20;
 const MAX_BATCH = 50;
 const MAX_QUEUE = 200;
+
+/**
+ * uuid v4 via crypto.randomUUID, with a crypto.getRandomValues fallback and
+ * a last-resort Math.random builder so every environment mints a valid id
+ * (still matching the backend's [A-Za-z0-9_-]{8,64} pattern).
+ */
+function newClientEventId(): string {
+  if (typeof crypto !== 'undefined') {
+    if (typeof crypto.randomUUID === 'function') return crypto.randomUUID();
+    if (typeof crypto.getRandomValues === 'function') {
+      const bytes = crypto.getRandomValues(new Uint8Array(16));
+      bytes[6] = ((bytes[6] ?? 0) & 0x0f) | 0x40; // version 4
+      bytes[8] = ((bytes[8] ?? 0) & 0x3f) | 0x80; // variant 10
+      const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, '0')).join('');
+      return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+    }
+  }
+  return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === 'x' ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
 
 let queue: AnalyticsPayload[] = [];
 let flushTimer: ReturnType<typeof setTimeout> | null = null;
@@ -97,6 +127,8 @@ export function track(
     page: window.location.pathname,
     properties,
     clientTs: new Date().toISOString(),
+    // Minted once here — re-queues (failed flush, exit beacon) reuse it.
+    clientEventId: newClientEventId(),
   });
 
   // Bound the queue: drop the OLDEST events when saturated.

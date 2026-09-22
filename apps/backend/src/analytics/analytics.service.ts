@@ -13,7 +13,7 @@
 
 import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
 import { GuestUsersService } from '../guest-users/guest-users.service';
@@ -24,6 +24,16 @@ import { RequestContext } from './request-context';
 
 /** Free-form properties payload cap (plan §9 data minimization). */
 const MAX_PROPERTIES_JSON_BYTES = 8192;
+
+/** Postgres unique-violation code (TASK-02 ingest dedupe race). */
+const PG_UNIQUE_VIOLATION = '23505';
+
+/** True when the driver error is a Postgres unique-constraint violation. */
+function isUniqueViolation(err: unknown): boolean {
+  const code = (err as { code?: unknown } | null)?.code;
+  const driverCode = (err as { driverError?: { code?: unknown } } | null)?.driverError?.code;
+  return code === PG_UNIQUE_VIOLATION || driverCode === PG_UNIQUE_VIOLATION;
+}
 
 const OVERVIEW_CACHE_KEY = 'analytics:overview';
 const OVERVIEW_CACHE_TTL_S = 60;
@@ -195,14 +205,24 @@ export class AnalyticsService {
   /**
    * Persist a client batch. Invalid/oversized events are dropped (counted in
    * the reply) rather than failing the whole batch.
+   *
+   * TASK-02 idempotency: events carrying a clientEventId are stored at most
+   * once. In-batch repeats and events already in the DB (flush retry after a
+   * lost response, beacon retry) are counted in `skipped` instead of being
+   * re-inserted, and never re-trigger the guest side effects. A concurrent
+   * flush winning the race is handled by falling back to row-by-row saves and
+   * counting unique-violation losers as skipped. Events without a
+   * clientEventId (legacy clients, server-side record()) ingest as before.
    */
   async ingest(
     dtos: AnalyticsEventDto[],
     userId: string | null,
     context?: RequestContext
-  ): Promise<{ accepted: number; rejected: number }> {
+  ): Promise<{ accepted: number; rejected: number; skipped: number }> {
     const rows: AnalyticsEvent[] = [];
     let rejected = 0;
+    let skipped = 0;
+    const batchIds = new Set<string>();
 
     for (const dto of dtos) {
       if (!AnalyticsEventDtoSafe.isNameValid(dto.eventName)) {
@@ -214,6 +234,14 @@ export class AnalyticsService {
         rejected++;
         continue;
       }
+      if (dto.clientEventId) {
+        // Same key twice within one batch (e.g. hook + retry merge): keep first.
+        if (batchIds.has(dto.clientEventId)) {
+          skipped++;
+          continue;
+        }
+        batchIds.add(dto.clientEventId);
+      }
 
       const row = new AnalyticsEvent();
       row.eventName = dto.eventName;
@@ -224,21 +252,64 @@ export class AnalyticsService {
       row.page = dto.page ?? null;
       row.properties = properties ?? null;
       row.clientTs = dto.clientTs ? new Date(dto.clientTs) : null;
+      row.clientEventId = dto.clientEventId ?? null;
       this.applyContext(row, context);
       rows.push(row);
     }
 
-    if (rows.length > 0) {
+    // Drop rows whose clientEventId is already stored (retry of an
+    // acknowledged-or-persisted batch). Rows without an id are never dropped.
+    const pending = await this.dropAlreadyStored(rows);
+    skipped += rows.length - pending.length;
+
+    const accepted: AnalyticsEvent[] = [];
+    if (pending.length > 0) {
       try {
-        await this.eventRepo.save(rows);
+        await this.eventRepo.save(pending);
+        accepted.push(...pending);
       } catch (err) {
-        this.logger.warn(`analytics ingest failed: ${err instanceof Error ? err.message : err}`);
-        return { accepted: 0, rejected: dtos.length };
+        if (!isUniqueViolation(err)) {
+          this.logger.warn(`analytics ingest failed: ${err instanceof Error ? err.message : err}`);
+          return { accepted: 0, rejected: dtos.length, skipped };
+        }
+        // Race: a concurrent flush stored some ids between the check above
+        // and the save. Re-save row-by-row; unique-violation losers were
+        // already stored by the other request and count as skipped.
+        for (const row of pending) {
+          try {
+            await this.eventRepo.save(row);
+            accepted.push(row);
+          } catch (rowErr) {
+            if (isUniqueViolation(rowErr)) {
+              skipped++;
+            } else {
+              this.logger.warn(
+                `analytics ingest failed: ${rowErr instanceof Error ? rowErr.message : rowErr}`
+              );
+              rejected++;
+            }
+          }
+        }
       }
     }
 
-    await this.applyServerSideEffects(rows);
-    return { accepted: rows.length, rejected };
+    await this.applyServerSideEffects(accepted);
+    return { accepted: accepted.length, rejected, skipped };
+  }
+
+  /** Filter out rows whose clientEventId already exists in analytics_events. */
+  private async dropAlreadyStored(rows: AnalyticsEvent[]): Promise<AnalyticsEvent[]> {
+    const withIds = rows.filter((row) => row.clientEventId !== null);
+    if (withIds.length === 0) return rows;
+
+    const stored = await this.eventRepo.find({
+      select: { clientEventId: true },
+      where: {
+        clientEventId: In(withIds.map((row) => row.clientEventId as string)),
+      },
+    });
+    const storedIds = new Set(stored.map((row) => row.clientEventId));
+    return rows.filter((row) => row.clientEventId === null || !storedIds.has(row.clientEventId));
   }
 
   /**

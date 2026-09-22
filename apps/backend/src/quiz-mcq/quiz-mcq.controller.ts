@@ -188,6 +188,17 @@ export class QuizMcqController {
   }
 
   @_Public()
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @Get('questions/:id/play')
+  @ApiOperation({
+    summary:
+      'Public play payload for one published question (same shape/exposure as the random play feed — carries the answer key the play flow grades against, options served-shuffled)',
+  })
+  async getPublicQuestionPlay(@Param('id') id: string) {
+    return this.quizService.findPlayItemById(id);
+  }
+
+  @_Public()
   @Get('subjects/:slug')
   @ApiOperation({ summary: 'Get subject by slug with chapters' })
   @ApiParam({ name: 'slug', example: 'science' })

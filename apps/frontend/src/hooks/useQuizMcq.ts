@@ -27,6 +27,7 @@ import {
   getSubjectRandomQuestions,
   getMixedQuestions,
   getRandomQuestions,
+  getQuizQuestionById,
 } from '@/lib/quiz-mcq-api';
 import { calculateScore, calculateResult, isAnswerCorrect } from '@/lib/quiz-mcq-scoring';
 import { recordChallengeAnswer, resetChallengeStreak } from '@/lib/challenge-streak';
@@ -151,7 +152,8 @@ export function useQuizMcq(
   initialTotal?: number | null,
   mode?: string,
   type?: string,
-  isSharedLink?: boolean
+  isSharedLink?: boolean,
+  sharedQuestionId?: string | null
 ): UseQuizMcqReturn {
   const sessionRef = useRef<QuizSession | null>(null);
 
@@ -206,7 +208,36 @@ export function useQuizMcq(
       }
 
       const decision = resumeController.mountDecision;
-      const initialQuestions = all.slice(0, decision.sessionSize);
+
+      // TASK-27 (shared-question deep link): the visitor's session is a fresh
+      // random set, so the shared UUID must be resolved by identity — the
+      // sharer's index is meaningless here. If the question is in the fetched
+      // set, start at its position (extending the slice to reach it). If not,
+      // fetch it by id and pin it into the last slot so the session still
+      // ships the shared size with the shared question as the entry point and
+      // the rest sitting "unvisited" before it (GameHeader chip). An
+      // unresolvable id (deleted/unpublished) degrades to a plain session
+      // from Q1.
+      let sessionQuestions = all.slice(0, decision.sessionSize);
+      let startIndex = decision.startIndex;
+      if (sharedQuestionId) {
+        const inSetIndex = all.findIndex((q) => q.id === sharedQuestionId);
+        if (inSetIndex >= 0) {
+          sessionQuestions = all.slice(0, Math.max(decision.sessionSize, inSetIndex + 1));
+          startIndex = inSetIndex;
+        } else {
+          try {
+            const shared = convertQuizQuestion(await getQuizQuestionById(sharedQuestionId));
+            sessionQuestions = [...all.slice(0, Math.max(0, decision.sessionSize - 1)), shared];
+            startIndex = sessionQuestions.length - 1;
+          } catch {
+            sessionQuestions = all.slice(0, decision.sessionSize);
+            startIndex = 0;
+          }
+        }
+      }
+
+      const initialQuestions = sessionQuestions;
 
       sessionRef.current = {
         id: generateUUID(),
@@ -233,7 +264,7 @@ export function useQuizMcq(
         availableQuestions: all,
         questions: initialQuestions,
         sessionSize: decision.sessionSize,
-        currentQuestionIndex: decision.startIndex,
+        currentQuestionIndex: startIndex,
         answers: {},
         score: 0,
         timeRemaining: timeLimit || 0,
@@ -734,7 +765,10 @@ export function useQuizMcq(
     handleSkip,
     jumpToQuestion,
     dismissUnvisited,
-    startFromShare: startFromShareRef.current || null,
+    // TASK-27: expose the unvisited count for the shared-question entry chip
+    startFromShare: sharedQuestionId
+      ? state.currentQuestionIndex + 1
+      : startFromShareRef.current || null,
     showResumePrompt,
     pendingResumeState,
     handleResumeSession,
