@@ -138,8 +138,11 @@ export class ImageRiddlesController {
   @ApiOperation({ summary: 'Get image riddle by ID' })
   @ApiResponse({ status: 200, description: 'Returns image riddle' })
   @ApiResponse({ status: 404, description: 'Image riddle not found' })
-  findById(@Param('id', ParseUUIDPipe) id: string): Promise<ImageRiddle> {
-    return this.imageRiddlesService.findRiddleById(id);
+  async findById(@Param('id', ParseUUIDPipe) id: string): Promise<Record<string, unknown>> {
+    const riddle = await this.imageRiddlesService.findRiddleById(id);
+    // HARD-02/H1: the public read ships answerLength, never the answer itself.
+    const { answer, alternativeAnswers, ...safe } = riddle as unknown as Record<string, unknown>;
+    return { ...safe, answerLength: typeof answer === 'string' ? answer.length : 0 };
   }
   /** H1: grade one image-riddle guess server-side. */
   @_Public()

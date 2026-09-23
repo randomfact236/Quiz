@@ -28,22 +28,6 @@ export function normalizeAnswer(value: string): string {
 }
 
 /**
- * Check a guess against the canonical answer plus any alternative answers.
- * Returns true when the normalized guess equals any candidate.
- */
-export function isImageRiddleAnswerCorrect(params: {
-  answer: string;
-  alternativeAnswers?: string[] | null | undefined;
-  guess: string;
-}): boolean {
-  const guess = normalizeAnswer(params.guess);
-  if (guess.length === 0) return false;
-
-  const candidates = [params.answer, ...(params.alternativeAnswers ?? [])];
-  return candidates.some((candidate) => normalizeAnswer(candidate) === guess);
-}
-
-/**
  * Letter count for the "N letters" hint chip — counts alphanumeric
  * characters only so "ice cream" reads "8 letters" rather than "9".
  */

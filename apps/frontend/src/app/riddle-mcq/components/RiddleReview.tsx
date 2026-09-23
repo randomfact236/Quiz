@@ -8,11 +8,12 @@
 
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronDown, CheckCircle, XCircle } from 'lucide-react';
 import type { Riddle } from '@/types/riddles';
 import { isRiddleAnswerCorrect } from '@/lib/riddle-scoring';
+import { revealRiddleAnswer } from '@/lib/riddle-mcq-api';
 
 interface RiddleReviewProps {
   /** The riddle */
@@ -25,6 +26,25 @@ interface RiddleReviewProps {
 
 export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewProps): JSX.Element {
   const [isExpanded, setIsExpanded] = useState(false);
+
+  // HARD-02 (H1): the play payload no longer carries the key — post-session
+  // review fetches the reveal once (throttled endpoint) to mark the right one.
+  const [reveal, setReveal] = useState<{
+    answer: string | null;
+    correctLetter: string | null;
+  } | null>(null);
+  useEffect(() => {
+    if (riddle.correctOption || riddle.correctLetter) return; // legacy snapshot
+    let cancelled = false;
+    revealRiddleAnswer(riddle.id)
+      .then((r) => {
+        if (!cancelled) setReveal(r);
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [riddle.id, riddle.correctOption, riddle.correctLetter]);
 
   const isCorrect = isRiddleAnswerCorrect(riddle, userAnswer);
   const isExpert = riddle.level === 'expert' || riddle.difficulty === 'expert';
@@ -104,7 +124,8 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
                 <div className="space-y-2">
                   {options.map((opt) => {
                     const isUserChoice = opt.key === userAnswer;
-                    const isCorrectAnswer = opt.key === riddle.correctOption;
+                    const correctKey = riddle.correctOption ?? reveal?.correctLetter ?? null;
+                    const isCorrectAnswer = opt.key === correctKey;
 
                     let style = 'rounded-lg border-2 p-3 ';
                     if (isCorrectAnswer) {
@@ -167,7 +188,7 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
                         ✍️ Text answer
                       </span>
                       <span className="flex-1 text-right font-medium">
-                        {riddle.correctAnswer || riddle.correctOption}
+                        {riddle.correctAnswer || reveal?.answer || riddle.correctOption}
                       </span>
                       <span className="text-sm font-bold text-green-600 dark:text-green-300 uppercase tracking-widest">
                         Correct
