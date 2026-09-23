@@ -71,10 +71,14 @@ export class DailyChallengeService {
         const questions = await this.questionRepo.find({ where: { id: In(ids) } });
         const byId = new Map(questions.map((q) => [q.id, q]));
         const ordered = ids.map((id) => byId.get(id)).filter((q): q is Question => Boolean(q));
-        // Same strip contract as QuizMcqController.toPublicQuestion (H1).
+        // Same strip contract as QuizMcqController.toPublicQuestion (H1 +
+        // 2026-09-24 hardening): no key, no explanation, no internal columns.
         return {
           date: day,
-          questions: ordered.map(({ correctAnswer, correctLetter, ...safe }) => safe),
+          questions: ordered.map(
+            ({ correctAnswer, correctLetter, explanation, contentHash, random_weight, ...safe }) =>
+              safe
+          ),
         };
       },
       DAY_SET_TTL_S

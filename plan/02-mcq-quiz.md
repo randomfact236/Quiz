@@ -127,3 +127,9 @@ Frontend (`apps/frontend/src/`):
 - **Quiz share deep-link (TASK-27, fixed 2026-09-22, commit `c4faea6`)** — play URLs carry `qid=<uuid>`; shared links resolve by question identity with an opt-in "Unvisited" chip; Playwright PASS. Riddle-side deep-link → HARD-14 in QA-FINDINGS (deferred with reason).
 - **Daily Challenge (NOW-08, built 2026-09-23 — verified locally, goes live on next push)** — `GET /quiz-mcq/daily` (deterministic per-date 10-question set via `md5(id || ':daily:<date>')`, identical for everyone, redis-cached, key-free), `POST /quiz-mcq/daily/result` (one attempt per identity per client-local date; `daily_challenge_results` table, migration `1793200000000`, partial unique indexes), `GET /quiz-mcq/daily/status` (streaks with yesterday-grace). Frontend `/quiz-mcq/daily` (noindex) reuses QuestionCard + shared scorer + server grading; Play Hub banner + home strip. v1 scope notes: share is text-based (no OG type yet); achievements not wired.
 - **Answer explanations (NOW-09, quiz side 2026-09-23)** — `answers/check` + `answers/reveal` now carry `explanation`; in-play "💡 Why" panel + review fallback render it when present. DB fact: `questions.explanation` is populated for **0 / 11,541** published rows — the panel activates per-question as content is authored (content task, owner). Public list reads never shipped quiz explanations (nothing to leak), so no quiz-side strip was needed — the riddle side DID leak (see plan/03).
+- **2026-09-24 hardening (public reads):** `toPublicQuestion` additionally strips
+  `explanation` (future-proof against the riddle-class leak once content lands) and
+  the internal `contentHash` / `random_weight` columns (no frontend consumer); the
+  Daily Challenge set mirrors the identical strip. Live-site note: prod answer-strip
+  on quiz lists IS live (phase-1 era); the remaining live exposures are riddle +
+  image-riddle reads — resolved by the pending production push.

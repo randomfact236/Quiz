@@ -477,11 +477,18 @@ export class QuizMcqController {
    * H1 (audit SEC-03): public question reads must not expose `correctAnswer` /
    * `correctLetter`. Guesses are graded server-side; these list endpoints are
    * browse-only and now return the question payload without the key.
+   * 2026-09-24 hardening: `explanation` joins the strip (it explains the
+   * answer — same leak class as the riddle fix; null everywhere today, wired
+   * before content lands), and the internal-only `contentHash` /
+   * `random_weight` columns stop shipping (no frontend consumer).
    */
   private toPublicQuestion(question: Question): Record<string, unknown> {
     const safe: Record<string, unknown> = { ...question };
     delete safe['correctAnswer'];
     delete safe['correctLetter'];
+    delete safe['explanation'];
+    delete safe['contentHash'];
+    delete safe['random_weight'];
     return safe;
   }
 

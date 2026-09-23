@@ -140,3 +140,8 @@ Frontend (`apps/frontend/src/`):
   is populated 3,000/3,000, so this renders on every riddle answer.
 - Verified live local: public payload has no explanation/hint stays public; check returns
   `{correct, explanation}`; frontend/backend tsc + suites green.
+
+- **2026-09-24 hardening:** `toPublicRiddle` also strips the internal-only
+  `contentHash` / `random_weight` columns (no frontend consumer — grep-verified).
+  LIVE NOTE: prod runs pre-`2b17264` code, so the live riddle reads still ship the
+  full key until the next production push.

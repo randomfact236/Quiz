@@ -112,3 +112,13 @@ Admin (JWT + role admin) — canonical CRUD:
 - **Comments** — image riddles are a first-class comment target (`targetType: 'image-riddle'` in the comments module).
 - **Analytics** — preset action events forwarded via the committed shim; dashboard module breakdowns label `image-riddles`.
 - **MCQ / Riddle MCQ** — shares the shared UI kit (AnswerOptions heritage, BubbleEmojiEffect), BulkActionService, CacheService patterns, and ContentStatus workflow.
+
+## Security record (2026-09-24 hardening — NOW-09 sweep)
+
+- `/image-riddles/random` returned the RAW entity — `answer` + `alternativeAnswers`
+  included (verified on the LIVE API). The frontend never calls it (Mix intentionally
+  uses search — hook note #19), but it is a public endpoint. Fixed to the by-id
+  contract: `answerLength` only, answer + alternativeAnswers stripped. `search` and
+  by-id were already stripped (HARD-02 / `2b17264`).
+- All fixes live with the next production push (prod currently runs pre-`2b17264`
+  code — see the warning in QA-FINDINGS OPEN).

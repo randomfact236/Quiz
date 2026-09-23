@@ -125,6 +125,14 @@
 
 ## OPEN — normal conversation work happens only on these
 
+> **⚠️ 2026-09-24 live-exposure audit:** production runs code OLDER than `2b17264` — the
+> deploy has been pending since 2026-09-23. Verified live: `/riddle-mcq/*` public reads
+> ship the FULL answer key (`answer` + `correctLetter` + `explanation`), and
+> `/image-riddles/random` + by-id ship the raw answer. ALL fixes exist in local commits
+> (`2b17264` era + `9858323` + the 2026-09-24 hardening) — **they go live with the next
+> push to production.** Live checks that PASS: quiz list answer-strip, `answers/check`
+> grader (400), admin guard (401), CSP/HSTS/frame-deny headers.
+
 | ID      | Title                                                              | Was              | Area           | Pri | Work by       | Status                                           |
 | ------- | ------------------------------------------------------------------ | ---------------- | -------------- | --- | ------------- | ------------------------------------------------ |
 | NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)               | TASK-11          | seo            | P2  | code          | Open (RSC bodies remain)                         |

@@ -59,6 +59,9 @@ export class RiddleMcqController {
     // reads was an answer-key leak. It returns with the verdict (answers/check)
     // and from answers/reveal for post-session review instead.
     delete safe['explanation'];
+    // 2026-09-24 hardening: internal-only columns, no frontend consumer.
+    delete safe['contentHash'];
+    delete safe['random_weight'];
     return safe;
   }
 

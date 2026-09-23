@@ -53,8 +53,16 @@ export class ImageRiddlesController {
   @ApiOperation({ summary: 'Get a random image riddle' })
   @ApiResponse({ status: 200, description: 'Returns a random image riddle' })
   @ApiResponse({ status: 404, description: 'No image riddles found' })
-  findRandom(): Promise<ImageRiddle> {
-    return this.imageRiddlesService.findRandomRiddle();
+  async findRandom(): Promise<ImageRiddle> {
+    const riddle = await this.imageRiddlesService.findRandomRiddle();
+    // HARD-02/H1 (2026-09-24 hardening): random used to return the raw entity —
+    // answer + alternativeAnswers included. Same contract as the by-id read:
+    // the game grades server-side; callers get the length, never the answer.
+    const { answer, alternativeAnswers, ...safe } = riddle as unknown as Record<string, unknown>;
+    return {
+      ...safe,
+      answerLength: typeof answer === 'string' ? answer.length : 0,
+    } as unknown as ImageRiddle;
   }
 
   @_Public()
