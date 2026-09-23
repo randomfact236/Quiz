@@ -980,7 +980,10 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
    * shared frontend scorer: MCQ levels compare the selected letter exactly;
    * the `extreme` level compares normalized free text.
    */
-  async checkAnswer(questionId: string, answer: string): Promise<{ correct: boolean }> {
+  async checkAnswer(
+    questionId: string,
+    answer: string
+  ): Promise<{ correct: boolean; explanation: string | null }> {
     const question = await this.deps.itemRepo.findOne({
       where: { id: questionId, status: ContentStatus.PUBLISHED } as never,
     });
@@ -1004,9 +1007,11 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
           this.normalizeFreeText(given) === this.normalizeFreeText(storedText);
       }
     }
-    // Verdict ONLY — leaking the key here would let any client grade-or-harvest
-    // answers without ever answering (H1). Post-session review uses reveal().
-    return { correct };
+    // Verdict + (NOW-09) the explanation — safe post-answer (it can only
+    // explain a question just answered; quiz explanations are currently
+    // sparse, the field is wired for when content lands). Post-session
+    // review uses reveal().
+    return { correct, explanation: question.explanation ?? null };
   }
 
   private optionTextForLetter(question: Question, letter: string): string | null {
@@ -1023,9 +1028,11 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
    * this is the deliberate, documented compromise — the grader itself no
    * longer doubles as a key oracle.
    */
-  async revealAnswer(
-    questionId: string
-  ): Promise<{ correctAnswer: string | null; correctLetter: string | null }> {
+  async revealAnswer(questionId: string): Promise<{
+    correctAnswer: string | null;
+    correctLetter: string | null;
+    explanation: string | null;
+  }> {
     const question = await this.deps.itemRepo.findOne({
       where: { id: questionId, status: ContentStatus.PUBLISHED } as never,
     });
@@ -1035,6 +1042,7 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     return {
       correctAnswer: question.correctAnswer ?? null,
       correctLetter: question.correctLetter ?? null,
+      explanation: question.explanation ?? null,
     };
   }
 

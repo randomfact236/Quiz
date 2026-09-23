@@ -4,16 +4,20 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { BulkActionService } from '../common/services/bulk-action.service';
 
 import { Chapter } from './entities/chapter.entity';
+import { DailyChallengeResult } from './entities/daily-challenge-result.entity';
 import { Question } from './entities/question.entity';
 import { Subject } from './entities/subject.entity';
 import { QuizSession } from './entities/quiz-session.entity';
+import { DailyChallengeService } from './services/daily-challenge.service';
 import { QuizMcqController } from './quiz-mcq.controller';
 import { QuizMcqService } from './quiz-mcq.service';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Subject, Chapter, Question, QuizSession])],
+  imports: [
+    TypeOrmModule.forFeature([Subject, Chapter, Question, QuizSession, DailyChallengeResult]),
+  ],
   controllers: [QuizMcqController],
-  providers: [QuizMcqService, BulkActionService],
+  providers: [QuizMcqService, DailyChallengeService, BulkActionService],
   exports: [QuizMcqService],
 })
 export class QuizMcqModule {}

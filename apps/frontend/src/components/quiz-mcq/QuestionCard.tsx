@@ -451,6 +451,20 @@ export const QuestionCard = forwardRef<QuestionCardRef, QuestionCardProps>(funct
           />
         </div>
 
+        {/* NOW-09: explanation — rides the server verdict (post-answer, safe).
+            Quiz explanations are sparse today; the panel appears when content
+            exists (riddles ship one for every item). */}
+        {showFeedback && selectedAnswer && question.explanation && (
+          <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/70 px-4 py-3 dark:border-indigo-500/20 dark:bg-indigo-500/10">
+            <p className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-300">
+              💡 Why
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-700 dark:text-secondary-200">
+              {question.explanation}
+            </p>
+          </div>
+        )}
+
         {/* BUG-040: comments panel — opened from the action row above; while
             open, the play page blocks advancing; closing proceeds onward. */}
         {commentsOpen && (

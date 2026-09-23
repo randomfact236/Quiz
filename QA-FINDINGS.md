@@ -1,174 +1,246 @@
-# QA Findings — Bug Tracker (OPEN ITEMS ONLY)
+# QA Findings — Bug Tracker (DEFERRED + OPEN)
 
 > **Policy (owner, 2026-09-19/20):** this file lists **open work only**. Resolved findings and
 > logs are removed once fixed — resolved behaviours are documented in their respective feature
-> files under `plan/`; full history lives in **git history** (`git log --grep=BUG` / `--grep=TASK`).
+> files under `plan/`; full history lives in **git history** (`git log --grep=BUG` / `--grep=TASK` /
+> `--grep=NOW` / `--grep=HARD`).
 > Verification screenshots remain in `gui-test-screenshots/`.
 > Priority basis: **P0** = critical/broken · **P1** = major gap · **P2** = integration/quality ·
 > **P3** = polish.
 >
-> **Ordering rule UPDATE (owner, 2026-09-22):** the 2026-09-20 rule ("strictly chronological,
-> never regroup") is **superseded by owner request**. Final structure — **two groups**:
-> **GROUP 1 · REQUIRED NOW** (resolve right now) and **GROUP 2 · HARDENING / FOR LATER**
-> (security hardening, decision items, deferred). IDs are sequential per group
-> (NOW-xx / HARD-xx); every entry keeps its **"was TASK-xx"** cross-reference so git
-> history and earlier discussions stay resolvable. New findings: file into the matching
-> group with that group's next free number.
+> **Structure rule (owner, 2026-09-23):** this tracker has exactly TWO tables —
+> **DEFERRED on top** and **OPEN below**.
+>
+> - **DEFERRED:** never touch until the owner explicitly mentions the item.
+> - **OPEN:** all normal conversation and work happens on open-table issues only.
+> - Resolved findings are removed (documented in `plan/` files; history in git:
+>   `git log --grep=NOW / --grep=HARD / --grep=TASK / --grep=BUG`).
+>
+> **Resolution rule (owner, 2026-09-23):** for ALL resolved findings, ALWAYS recheck the
+> resolved issue against the real code (and the live site where relevant) to confirm it is
+> **completely resolved** — before it is removed/closed. A finding marked resolved but not
+> fully fixed in code goes back to OPEN.
 
 ## Index
 
-### GROUP 1 · REQUIRED NOW
+## DEFERRED — never touch until explicitly mentioned (owner 2026-09-23)
 
-| ID     | Title                                                            | Was            | Area      | Pri | Work by       | Status                     |
-| ------ | ---------------------------------------------------------------- | -------------- | --------- | --- | ------------- | -------------------------- |
-| NOW-01 | Restrict origin firewall to Cloudflare IPs                       | TASK-19        | ops       | P1  | owner/VPS     | Fixed 2026-09-22           |
-| NOW-02 | Rotate credentials + SSH/secrets hygiene                         | TASK-18        | ops       | P1  | owner/VPS     | Open (runbook ready)       |
-| NOW-03 | SEO big rock: RSC landing pages, per-content routes, JSON-LD, OG | TASK-11        | seo       | P2  | code          | Fixed 2026-09-22           |
-| NOW-04 | Off-box backup replication + restore drill                       | TASK-20        | ops       | P2  | owner/VPS     | Fixed 2026-09-22           |
-| NOW-05 | Uptime/error alerting wiring                                     | TASK-21        | ops       | P2  | owner/VPS     | Fixed 2026-09-22\*         |
-| NOW-06 | Analytics: retention purge (C1) + A5/A10 events, tests, cache    | TASK-06        | analytics | P2  | code          | Fixed 2026-09-22           |
-| NOW-07 | 60 over-long DB riddles rewrite + live content push              | TASK-03 resid. | content   | P2  | owner/content | Draft ready — owner review |
+### Queued / parked items
 
-### GROUP 2 · HARDENING / FOR LATER
-
-| ID      | Title                                                              | Was                     | Type      | Pri  | Work by    |
-| ------- | ------------------------------------------------------------------ | ----------------------- | --------- | ---- | ---------- |
-| HARD-01 | ✅ CSP: games gap closed + nonce assessment — PARTIAL 2026-09-22   | TASK-04                 | security  | P2   | code       |
-| HARD-02 | ✅ Server-side grading phase 2c — FIXED 2026-09-23                 | TASK-15                 | security  | P1\* | code       |
-| HARD-03 | ✅ Signed guest token for anonymous writes — FIXED 2026-09-22      | TASK-14                 | security  | P2   | code       |
-| HARD-04 | ✅ Bulk import status/hint gaps — FIXED 2026-09-22                 | TASK-05                 | quality   | P2   | code       |
-| HARD-05 | R2 media follow-ups                                                | TASK-22                 | media/ops | P2   | owner+code |
-| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                  | TASK-09 rem.            | a11y      | P3   | code+owner |
-| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01)        | decision  | P2   | decision   |
-| HARD-08 | Comments on quiz/riddle content                                    | TASK-12 (DEC-02)        | decision  | P3   | decision   |
-| HARD-09 | SEC-07 email-verification gate                                     | TASK-13 (DEC-03)        | decision  | P2   | decision   |
-| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity        | TASK-16 (DEC-04)        | decision  | P3   | decision   |
-| HARD-11 | Installability: full manifest / theme-color                        | TASK-17 (DEC-05)        | decision  | P3   | decision   |
-| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests) | TASK-07 (DEC-06)        | decision  | P3   | decision   |
-| HARD-13 | Owner-deferred bucket (no action unless re-opened)                 | TASK-23 (DEF-01)        | deferred  | P3   | deferred   |
-| HARD-14 | Riddle share deep-link (needs session-contract change)             | TASK-27 resid. (DEF-02) | deferred  | P3   | deferred   |
-
-\* HARD-02 was rated P1 by the audit; practical stakes are low (fun-quiz score integrity), so it sits in hardening.
+| ID      | Title                                                                  | Was                     | Area           | Pri | Work by       | Status                                   |
+| ------- | ---------------------------------------------------------------------- | ----------------------- | -------------- | --- | ------------- | ---------------------------------------- |
+| NOW-02  | Rotate credentials + SSH/secrets hygiene                               | TASK-18                 | ops            | P1  | owner/VPS     | Queued next (runbook ready)              |
+| NOW-10  | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23          | content        | P2  | owner+content | Queued next (rights decision needed 1st) |
+| HARD-13 | Owner-deferred bucket — items revisited in sequence                    | TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Queued next                              |
+| HARD-15 | Duel / PvP mode — web-first                                            | new 2026-09-23          | feature/growth | P2  | code          | Queued next (after session contract)     |
+| HARD-14 | Riddle share deep-link (needs session-contract change)                 | TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Deferred w/ reason                       |
 
 ---
 
-## GROUP 1 · REQUIRED NOW
+### Queued item details
 
-### NOW-01 - Restrict origin firewall to Cloudflare IPs (was TASK-19) - FIXED 2026-09-22
-
-- **Date found:** 2026-09-22 (source: audit)
-- **Area:** ops / VPS — **owner action**
-- **Priority:** P1
-- **Reported:** the origin serves 80/443 to the whole internet, so anyone who learns the
-  origin IP bypasses Cloudflare (WAF, rate limits, DDoS shield).
-- **Verified live 2026-09-22 (pre-fix):** direct probe of the origin IP with
-  `Host: pigzap.com` returned **HTTPS 200 / HTTP 308** — the bypass was open.
-- **Fixed 2026-09-22, applied + verified live:**
-  - `ufw` enabled (was inactive): default-deny incoming, allow 22/tcp (rate-limited),
-    80/443 tcp+udp from all Cloudflare ranges, 3000/tcp (Dokploy UI — see note), host-self.
-  - The 80/443 block actually lives in the iptables **DOCKER-USER** chain — Docker's DNAT
-    bypasses ufw's INPUT for published ports (proven: origin still answered with ufw
-    active). `/usr/local/sbin/cf-docker-firewall.sh` (idempotent, CF lists cached with
-    fallback) + `cf-docker-firewall.service` systemd unit re-applies at boot.
-  - Post-fix probes: pigzap.com + api.pigzap.com via Cloudflare = 200; direct-origin
-    https/http = **connection timeout (blocked)**; SSH intact throughout.
-- **✅ Dokploy :3000 flag CLOSED 2026-09-23** (was: UI published on 0.0.0.0:3000):
-  `cf-docker-firewall.sh` now appends owner-IP ACCEPT rules from
-  `/etc/dokploy-allow-ips.list` (currently `27.34.64.78`) followed by a :3000 DROP for
-  everyone else — IPv6 :3000 dropped outright (owner connects over IPv4). Verified live:
-  Dokploy loads 200 via the owner path, site/API via Cloudflare unchanged, and the
-  rules re-apply at boot via the same systemd unit. If the owner's IP rotates: edit
-  `/etc/dokploy-allow-ips.list` + rerun the script (SSH-based reopen one-liner is
-  `iptables -D DOCKER-USER -i eth0 -p tcp --dport 3000 -j DROP`).
-
-### NOW-02 - Rotate credentials + SSH/secrets hygiene (was TASK-18)
+### NOW-02 - Rotate credentials + SSH/secrets hygiene (was TASK-18) — QUEUED NEXT
 
 - **Date found:** 2026-09-22 (source: audit + plan/push-ownership-contract.md)
 - **Area:** ops / VPS — **owner action**
 - **Priority:** P1
-- **Reported:** rotate admin/DB/Redis/JWT/OAuth credentials, SSH hardening, secret-history
+- **Scope:** rotate admin/DB/Redis/JWT/OAuth credentials, SSH hardening, secret-history
   scan, audit logging.
-- **Context:** prod content was wiped once already (2026-09-17); credentials were not
-  rotated as part of that recovery — treat this as the follow-up it deserves.
-- **Status:** OPEN — needs the owner present (new secrets must be recorded by the owner).
-  Runbook prepared 2026-09-22, stored at `plan/runbooks/credential-rotation.md`.
+- **Risk note (kept from the 2026-09-23 analysis):** prod content was wiped once already
+  (2026-09-17) and credentials were NOT rotated as part of that recovery — anyone holding
+  valid credentials from then still has working access. The firewall lockdown (NOW-01,
+  done) removed the direct-origin bypass, which reduces exposure; rotation is the closure.
+  Cheap to run: runbook ready at `plan/runbooks/credential-rotation.md`, ~1 hour with the
+  owner present (new secrets must be recorded by the owner).
+- **Status:** QUEUED NEXT (owner 2026-09-23) — starts right after the ACTIVE queue
+  completes; do not let this slip past that point.
 
-### NOW-03 - SEO big rock (was TASK-11) - FIXED 2026-09-22 (landing core; full RSC body conversion remains)
+### NOW-10 - Image-riddle catalog replacement: wipe + extract from the benchmark sites (new 2026-09-23) — QUEUED NEXT
+
+- **Date found:** 2026-09-23 (owner request in the competitor-comparison discussion)
+- **Area:** content — **owner decision + content work**
+- **Priority:** P2
+- **Owner request as stated:** remove ALL existing image riddles, then extract image
+  riddles from the four benchmark websites (Trivia Crack / Britannica / TriviaPlaza /
+  FunTrivia) and ADD ONLY the extracted ones.
+- **Owner decisions required BEFORE execution — nothing has been done:**
+  1. **Rights:** scraped puzzles and their images are copyrighted by their publishers;
+     republishing verbatim is a legal risk. Options: (a) treat them as format/style
+     inspiration and re-create original riddles (safe), (b) use only public-domain/CC
+     sources, (c) accept the risk — owner's call, recorded here.
+  2. **Source reality (verified live 2026-09-23):** none of the four sites publishes true
+     "image riddles" in our format (image + word answer). Closest: FunTrivia Photo
+     Quizzes / Photo Match — MCQ-with-picture, needs format conversion. Trivia Crack =
+     JS app shell (nothing extractable), Britannica = bot-wall 403 on all fetchers,
+     TriviaPlaza = none seen. Expect low yield; re-creation likely beats scraping.
+  3. **Destructive:** wipes 1,906 live image riddles across 10 categories. Standing
+     rules apply: DB backup first, wipe + push, then FLUSH image-riddle redis keys
+     (BUG-038).
+- **Status:** QUEUED NEXT (owner 2026-09-23) — the rights decision above should be made
+  while the ACTIVE queue runs so execution can start immediately after it.
+
+### HARD-13 - Owner-deferred bucket — items revisited in sequence (was TASK-23, briefly DEF-01) — QUEUED NEXT
+
+- **Date found:** 2026-09-22
+- **Contents (original owner-deferred list):** riddle-mcq session persistence /
+  JSON import-export / cache tuning; image-riddle server-side progress;
+  admin-dashboard unification (dedupe with HARD-10 when reached); games R2-2/R2-3
+  extras; LinkedIn + Pinterest share previews.
+- **Status:** QUEUED NEXT (owner 2026-09-23) — revisit item-by-item in the order above
+  right after the ACTIVE queue completes; the riddle-mcq session persistence item is
+  ALSO the HARD-15 (duel) prerequisite, so it comes first when this bucket opens.
+
+### HARD-15 - Duel / PvP mode — web-first (new 2026-09-23) — QUEUED NEXT
+
+- **Date found:** 2026-09-23 (source: competitor pass — Trivia Crack's core hook; owner
+  asked "website, app, or both?")
+- **Area:** feature / growth — **code work (was decision; owner queued it 2026-09-23)**
+- **Priority:** P2
+- **Decision record:** owner initially did not want it; on 2026-09-23 queued it to be
+  BUILT right after the ACTIVE queue completes — on the WEBSITE first, web-first and
+  mobile-first. Rationale on record: there is no app yet (web = 100% of the audience;
+  withholding the feature from web withholds it from everyone), web is the SEO funnel
+  that feeds a future app, and the expensive part — the backend — already exists: the
+  `duels` module (public controller: join/leave/name) ships with ZERO frontend
+  references today; any future app shell (e.g. Capacitor wrap) talks to the same API.
+  Precedent: Trivia Crack itself is app-first yet added browser play (CrazyGames, 2023).
+  v1 tradeoff: weaker push notifications vs native — cover with async design +
+  email/PWA push.
+- **Prerequisite:** session-contract work — HARD-13's riddle-mcq session persistence
+  item (quiz side is closer: play URLs already carry `qid=` deep links, TASK-27).
+  Sequence: HARD-13 session contract → HARD-15 duel UI.
+
+---
+
+### HARD-14 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — DEFERRED w/ reason
+
+- **Date found:** 2026-09-22 — riddle question shares still use the hub `?q=` form; the
+  riddle play flow has no shared-start contract (subjectId/level based, no in-session
+  question identity). Implementing means changing the riddle session contract — deferred
+  with reason when TASK-27 shipped. Note: the same session-contract work is a HARD-15
+  (duel) prerequisite and HARD-13 is queued — sequence them together when the queue
+  reaches that point. P3.
+
+---
+
+## OPEN — normal conversation work happens only on these
+
+| ID      | Title                                                              | Was              | Area           | Pri | Work by       | Status                                           |
+| ------- | ------------------------------------------------------------------ | ---------------- | -------------- | --- | ------------- | ------------------------------------------------ |
+| NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)               | TASK-11          | seo            | P2  | code          | Open (RSC bodies remain)                         |
+| NOW-05  | Uptime/error alerting — one owner step left                        | TASK-21          | ops            | P2  | owner/VPS     | Open (owner step only)                           |
+| NOW-07  | 60 over-long DB riddles rewrite + live content push                | TASK-03 resid.   | content        | P2  | owner/content | Draft ready — owner review                       |
+| NOW-08  | Daily Challenge + streaks                                          | new 2026-09-23   | retention/code | P2  | code          | Fixed 2026-09-23 (local; goes live on next push) |
+| NOW-09  | Surface stored answer explanations post-answer                     | new 2026-09-23   | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content  |
+| HARD-01 | CSP residuals: 'unsafe-inline' + HttpOnly token storage            | TASK-04          | security       | P2  | decision      | Open — owner decision                            |
+| HARD-05 | R2 media follow-ups                                                | TASK-22          | media/ops      | P2  | owner+code    | Open                                             |
+| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                  | TASK-09 rem.     | a11y           | P3  | code+owner    | Fixed — owner phone QA                           |
+| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01) | decision       | P2  | decision      | Open — owner decision                            |
+| HARD-08 | Comments on quiz/riddle content                                    | TASK-12 (DEC-02) | decision       | P3  | decision      | Open — owner decision                            |
+| HARD-09 | SEC-07 email-verification gate                                     | TASK-13 (DEC-03) | decision       | P2  | decision      | Open — owner decision                            |
+| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity        | TASK-16 (DEC-04) | decision       | P3  | decision      | Open — owner decision                            |
+| HARD-11 | Installability: full manifest / theme-color                        | TASK-17 (DEC-05) | decision       | P3  | decision      | Open — owner decision                            |
+| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests) | TASK-07 (DEC-06) | decision       | P3  | decision      | Open — owner decision                            |
+
+### Open item details
+
+### NOW-03 - SEO residual: RSC hub bodies (was TASK-11) - chapter landings DONE 2026-09-23; RSC bodies remain
 
 - **Date found:** 2026-09-22 (source: plan/15, audit)
 - **Area:** seo — **code work**
 - **Priority:** P2
-- **Shipped 2026-09-22** (details in plan/15 §P2):
-  - Real per-content segments **`/quiz-mcq/[subject]`** and **`/riddle-mcq/[category]`**:
-    server pages (revalidate 3600) with per-content titles (live question/riddle counts),
-    descriptions, canonicals, per-page OG images (existing /api/og types) and
-    BreadcrumbList JSON-LD; hub views take `initialSubject`/`initialCategory` (query-param
-    links unchanged); cards/back-links now use the segment form; sitemap emits segment
-    URLs (fixed its riddle section, which emitted `?subject=` URLs the hub never read);
-    `?subject=`/`?category=` wrappers canonicalize onto the segments while `?q=`/`?score=`
-    share surfaces stay self-canonical (SHARE-01).
-  - `src/middleware.ts` (matcher-scoped): unknown slugs get a real **307 → module hub**
-    (slug lists cached 60s, fail-open). Reason: Next 15.5 streaming metadata flushes the
-    200 shell before data-fetched notFound()/redirect() can resolve in-page.
-- **Verified (prod build, `next start`):** science landing 200 with
-  `<title>Science Quiz — 499 Questions</title>` + segment canonical + og:image +
-  2×JSON-LD; brain-teasers landing 200 with segment canonical; unknown slugs 307 with
-  `location: /quiz-mcq|/riddle-mcq`; `/quiz-mcq/play` + hubs unaffected; sitemap.xml
-  lists segment URLs; frontend tsc + build clean.
-- **Remaining (owner go):** full RSC conversion of hub/section bodies (plan/15 P2 item),
-  GSC integration, organic segmentation (P3).
+- **Shipped 2026-09-22 (full record: plan/15 §P2):** real per-content segments
+  `/quiz-mcq/[subject]` + `/riddle-mcq/[category]` — server pages (revalidate 3600) with
+  per-content titles (live counts), descriptions, canonicals, per-page OG images,
+  BreadcrumbList JSON-LD; middleware 307 for unknown slugs (Next 15.5 streaming-metadata
+  workaround); sitemap emits segment URLs; `?subject=`/`?category=` wrappers canonicalize
+  onto the segments while `?q=`/`?score=` share surfaces stay self-canonical (SHARE-01).
+- **✅ Chapter landings DONE 2026-09-23 (verified live local + GUI screenshots):**
+  - `/quiz-mcq/[subject]/[chapter]` (the TriviaPlaza long-tail play): 92 chapters, ALL
+    with descriptive names (DB-verified — zero renames needed). Slugs derive from chapter
+    names via `lib/slug.ts` (single source shared by pages/sitemap/middleware).
+  - Each page: ISR 3600, live chapter count in the title, canonical, BreadcrumbList
+    JSON-LD, subject OG card, a "Sample questions" section (easy-level MCQs from the
+    answer-key-free public reads — the default listing order serves the open-ended
+    extreme tier first, so samples pin `level=easy`), sibling-chapter link grid, play
+    CTAs by chapter name (the play page's contract).
+  - Middleware validates two-segment paths with REAL 307s (unknown subject → hub,
+    unknown chapter → subject landing; per-subject chapter cache 60s, fail-open).
+  - Sitemap emits all 92 chapter URLs (priority 0.5; verified in /sitemap.xml).
+  - Subject landings render a server-side "Browse all <Subject> chapters" crawlable
+    grid with live counts (the interactive hub hydrates client-side — this grid is the
+    crawler-visible entry surface).
+- **Remaining (owner go):** full RSC conversion of hub/section bodies (plan/15 P2 item);
+  organic segmentation (P3); curated niche packs ("90s Music Quiz") once GSC shows which
+  long-tails earn them.
 
-### NOW-04 - Off-box backup replication + restore drill (was TASK-20) - FIXED 2026-09-22
+### NOW-08 - Daily Challenge + streaks (new 2026-09-23) — FIXED 2026-09-23 (local; goes live on next push)
 
-- **Date found:** 2026-09-22 (source: OPS-19)
-- **Area:** ops / VPS — **owner action**
+- **Date found:** 2026-09-23 (source: competitor pass — all three trivia benchmarks
+  (Trivia Crack, TriviaPlaza, FunTrivia) run daily/hourly ritual games; we have nothing
+  that resets daily)
+- **Area:** retention / quiz — **code work**
 - **Priority:** P2
-- **Reported:** backups live on the same VPS they protect — single point of failure.
-- **Verified 2026-09-22:**
-  - Off-box replication was already wired by the parallel session (rclone remote `r2` in
-    backup.sh, 2026-09-21) — confirmed working: 2 objects in `r2:quiz-backups/db`, last
-    night's 2.1MB dump copied at 03:30.
-  - **Restore drill PASS:** `quiz_db_20260922_033002.sql.gz` restored into a throwaway
-    postgres:18 container — counts matched the prod snapshot exactly (questions 11,541 /
-    riddle_mcqs 3,000 / users 1 / comments 3 / question_likes 6); analytics_events grew
-    on prod since the snapshot, as expected.
-  - Drill finding fixed: dump emitted 38 `OWNER TO` errors in a fresh container →
-    backup.sh now uses `--no-owner --no-privileges` (drill logged in
-    `/opt/quiz-backups/README.md`).
+- **Built 2026-09-23, verified end-to-end locally (API probes + full GUI play-through
+  with screenshots in gui-test-screenshots/now08-\*.png):**
+  - Backend: `GET /quiz-mcq/daily` (deterministic per-date 10-question set —
+    `md5(id || ':daily:<date>')` order, identical for every visitor, redis-cached,
+    key-free payloads per H1); `POST /quiz-mcq/daily/result` (one attempt per identity
+    per CLIENT-LOCAL date — two partial unique indexes, migration
+    `1793200000000-CreateDailyChallengeResults`, applied to dev DB manually per the
+    dev-schema gotcha); `GET /quiz-mcq/daily/status` (played flag + current/best
+    streak with a yesterday-grace rule).
+  - Frontend: `/quiz-mcq/daily` page (noindex like other gameplay routes) reusing the
+    shared QuestionCard + shared scorer + the server-side grader (HARD-02); streak
+    header, played-today state, result screen with share (Web Share → clipboard).
+  - Placement: Play Hub banner card + home strip above the fixed-order topic cards.
+  - Middleware: `daily` added to the known quiz subpaths so the slug validator
+    never touches it.
+- **Not wired (v1 scope):** achievements/OG share-image type for daily results — the
+  share is text-based for now; achievements integration can ride the existing evaluator
+  later. Recheck against the live site after deploy, then remove per policy.
 
-### NOW-05 - Uptime/error alerting wiring (was TASK-21) - FIXED 2026-09-22 (one owner step left)
+### NOW-09 - Surface stored answer explanations post-answer (new 2026-09-23) — PARTIAL: riddle side fixed; quiz side needs content (owner)
+
+- **Date found:** 2026-09-23 (source: competitor pass — Britannica lesson: every answer
+  carries explanatory, learnable content)
+- **Area:** quiz/riddle UX + SEO — **code + content**
+- **Priority:** P2
+- **⚠️ Premise corrected during implementation (DB-verified 2026-09-23):** the claim
+  "explanations already sit on our MCQ rows" was WRONG for quiz — `questions.explanation`
+  is **0 of 11,541 published** populated. Riddles are the opposite: **3,000 of 3,000**
+  riddles carry explanation AND hint.
+- **✅ Fixed 2026-09-23 (riddle side — real content, verified via API):**
+  - **LEAK FIX (security):** riddle `toPublicRiddle` shipped `explanation` on all
+    pre-answer public reads — and every explanation explains the answer ("it's a
+    coffin because…"), so this was a live answer-key leak (the same class HARD-02
+    closed for answer fields). Explanation is now stripped from public reads and
+    returns ONLY with the verdict (`answers/check`) and from `answers/reveal`
+    (both graders + both reveal endpoints now carry it; quiz graders wired identically,
+    dormant until content exists).
+  - UI: in-play "💡 Why" panel under the options after the verdict (quiz + riddle
+    cards); review screens fall back to the reveal's explanation (RiddleReview +
+    QuestionReview). Component-level test coverage kept green (548/548).
+- **Remaining (owner decision):** QUIZ explanations must be AUTHORED — 11,541 rows
+  with an empty explanation column is a content-ops task (like NOW-07), not code; the
+  surface renders automatically per-question as content lands. Options: author
+  explanations per subject (content pass), crowd none (leave as-is), or fold into the
+  NOW-07 rewrite pass. SEO surfacing of explanations on landing pages deliberately NOT
+  built while the quiz column is empty.
+
+### NOW-05 - Uptime/error alerting wiring (was TASK-21) - WIRED 2026-09-22; one owner step left
 
 - **Date found:** 2026-09-22 (source: OPS-21)
 - **Area:** ops / VPS — **owner action**
 - **Priority:** P2
-- **Wired 2026-09-22, live:** `/usr/local/bin/quiz-uptime.sh` on a 1-minute cron checks
-  https://pigzap.com/ + the API summary endpoint, counts consecutive failures (state in
-  `/opt/quiz-alerts/`), fires `{text:...}` JSON webhooks on failure AND recovery, and
-  dead-man-pings a heartbeat URL on every clean run.
+- **Wired + live 2026-09-22 (full record: audit file §6.3 OPS-21):** `/usr/local/bin/quiz-uptime.sh`
+  on a 1-minute cron checks https://pigzap.com/ + the API summary endpoint, counts consecutive
+  failures (state in `/opt/quiz-alerts/`), fires `{text:...}` JSON webhooks on failure AND
+  recovery, and dead-man-pings a heartbeat URL on every clean run.
 - **Owner step (only thing missing — no channel existed on the VPS):** create a free
   healthchecks.io check (or Discord/Slack/Telegram webhook) and put it in
   `/opt/quiz-alerts/alert.env` as `HEARTBEAT_URL=` and/or `ALERT_WEBHOOK=` — no restart
   needed; the script reads it per run.
-
-### NOW-06 - Analytics: retention purge + coverage gaps (was TASK-06) - FIXED 2026-09-22
-
-- **Date found:** 2026-09-22 (source: plan/13: A5, A7 partial, A10, C1, C2, C3, D1)
-- **Area:** analytics — **code work**
-- **Priority:** P2
-- **Fixed 2026-09-22** (checkboxes in plan/13 §4b updated):
-  - **C1** `analytics-retention.service.ts`: in-process job (boot+45s, then every 24h),
-    deletes raw rows older than `ANALYTICS_RETENTION_MONTHS` (default 13) in 5k-row
-    `DELETE … RETURNING` batches, invalidates `analytics:*` caches on deletion; 6 unit
-    tests.
-  - **A5** `content_viewed` (quiz subject view, riddle category, image-riddle category,
-    joke category) + `search_performed` (jokes server search, image-riddles client search).
-  - **A10** `resume_prompt_shown` / `resume_declined` for quiz + riddle resume prompts.
-  - **A7** Google-only signups now emit `signup_completed` (method google) via the
-    OAuth-code exchange with `isNewUser`, fired BEFORE guest-id rotation so the funnel
-    join key survives.
-  - **C2** partial (ingest idempotency 8 + retention 6 tests; DB-harness SQL tests still
-    deferred per plan), **C3** reviewed/documented, **D1** analytics doc refreshed.
-- **Verified:** backend tsc clean; analytics suites 14/14 pass; frontend tsc clean.
 
 ### NOW-07 - 60 over-long DB riddles + live content push (was TASK-03 residue)
 
@@ -189,108 +261,21 @@
   refutes). Both need an owner decision + an explanation-rewrite pass in the same
   content push.
 
----
-
-## GROUP 2 · HARDENING / FOR LATER
-
-### HARD-01 - CSP nonces + HttpOnly token storage (was TASK-04) - PARTIALLY FIXED 2026-09-22
+### HARD-01 - CSP residuals: 'unsafe-inline' + HttpOnly token storage (was TASK-04) - games gap FIXED 2026-09-22; residuals parked
 
 - **Date found:** 2026-09-22 (source: audit)
-- **Area:** security / frontend — **code work**
+- **Area:** security / frontend — **decision**
 - **Priority:** P2
-- **Reported:** baseline CSP ships `'unsafe-inline'` (verified: `apps/frontend/next.config.mjs:89`);
-  tokens sit in localStorage. Nonce the inline scripts; plan HttpOnly refresh cookies.
-- **What was actually fixed 2026-09-22 — the real CSP gap:**
-  - Prod probe showed app pages served CSP fine, but **the eight static games
-    (`/games/<slug>/index.html`) served NO CSP at all** — public/ static files bypass
-    `next.config` headers().
-  - `middleware.ts` now decorates every `/games/*` response with the strictest policy on
-    the site: `script-src 'self'`, no remote anything, `connect-src` allows only same
-    origin + the API origin (pig-feedback.js posts game feedback there, BUG-053).
-    Verified against the games' actual HTML (same-origin assets + data: favicons only).
-    Verified on prod build: game page 200 with the CSP; app routes unaffected.
-- **Why full nonces are NOT being done (assessment, not deferral):** nonces require
-  dynamic rendering, and three parts of this site are structurally incompatible —
-  (a) prerendered/ISR pages embed the generation-time nonce, which a later request's
-  CSP rejects (blocked hydration); (b) the games' static HTML `<script src>` tags can't
-  carry per-request nonces and `strict-dynamic` would block them; (c) Next's own
-  bootstrap scripts only auto-nonce on dynamic routes. `'unsafe-inline'` on app pages
-  stays as the documented residual risk — it weakens XSS defense-in-depth but is not an
-  active hole.
-- **HttpOnly refresh-cookie half:** remains a design decision (changes the guest/auth
-  flow the owner deliberately kept friction-free) — parked with the owner.
-
-### HARD-02 - Server-side grading phase 2c (was TASK-15) - FIXED 2026-09-23
-
-- **Date found:** 2026-09-22 (source: audit, H1 phase 2c)
-- **Area:** security — **code work**
-- **Priority:** P1 by audit; practical stakes low (devtools can manipulate a fun-quiz score)
-- **Fixed 2026-09-23 (H1 phase 2c complete — see plan/02 H1 todo):**
-  - All three graders (quiz / riddle / image-riddle answers-check) now return the
-    VERDICT ONLY — they previously echoed the answer key on every call.
-  - Graders grade by OPTION TEXT (shuffle-proof): the BUG-041 serve-shuffle remaps the
-    served letter per response, so the old letter-vs-stored-letter grading was wrong
-    whenever the correct value moved slots — latent bug fixed en route.
-  - New throttled reveal endpoints (quiz/riddle answers/reveal, image-riddles
-    answers/reveal) serve the key ONLY for post-session review / give-up reveal.
-  - Play reads stripped of the key: quiz random/mixed/by-level/by-id play; riddle
-    subject riddles/mixed/random/by-id; image-riddle search ships `answerLength`
-    instead of the answer.
-  - Frontend: quiz + riddle engines grade via the server (verdict attached to the
-    question objects — scoring/streaks/review/analytics switch automatically);
-    verdicts persist in resume snapshots (old snapshots keep their embedded keys as
-    fallback); image-riddle game grades via the server and reveals on correct guess
-    or explicit give-up.
-- **Verified:** backend 129/129 + tsc; frontend 561/561 + tsc; Playwright play-throughs
-  quiz 7/7 and riddle 4/4 (grader called per answer, verdict-only responses, feedback
-  rendered, zero page errors); image-riddle API probes (catalog stripped, wrong guess
-  verdict-only, reveal serves the answer).
-
-### HARD-03 - Signed guest token for anonymous writes (was TASK-14) - FIXED 2026-09-22
-
-- **Date found:** 2026-09-22 (source: audit, SEC-10/12)
-- **Area:** security — **code work**
-- **Priority:** P2
-- **Reported:** guest ids for likes/comments are unsigned → forgeable (like/comment spam
-  vector). Sign the guest token server-side.
-- **Fixed 2026-09-22** (SEC-12 binding; locally committed, goes live on next push):
-  - `guest-token.service.ts`: `token = HMAC-SHA256(GUEST_TOKEN_SECRET‖JWT_SECRET, guestId)`;
-    `POST /guest-users/token` (throttled 10/min) issues `{guestId, token}`, signing either
-    a server-minted `srv_…` id or an EXISTING legacy `guest_…` id as-is — the migration
-    path that keeps every existing visitor's likes/comments matching.
-  - `GuestTokenGuard` enforces the pair on the identity-authorizing writes: like
-    (`POST /question-likes`), comment create + delete-own, guest activity heartbeat,
-    and login merge. Verified constant-time.
-  - Frontend: `ensureGuestToken()` caches the pair, attaches it on all four write
-    helpers (like, post comment, delete-own, login merge); a 403 auto-re-issues once
-    and retries (heals stale cached tabs); `rotateGuestId()` drops the pair so the
-    next guest can't reuse it.
-- **Scope notes:** comment `flag` has no identity to bind (idempotent by comment id);
-  analytics ingest keeps unsigned guestId (read-only attribution, not a write);
-  duels' own guestId endpoints (join/leave/name) are game-scoped and get the token
-  binding in a follow-up pass.
-- **Verified:** backend tsc clean; guest-token spec 6/6; full frontend suite 561/561;
-  full backend suite green.
-
-### HARD-04 - Bulk import status/hint gaps (was TASK-05) - FIXED 2026-09-22
-
-- **Date found:** 2026-09-22 (source: plan/03, 04, 05)
-- **Area:** import (3 modules) — **code work**
-- **Priority:** P2
-- **Reported:** imported image riddles/jokes land DRAFT with no publish step; riddle bulk
-  import drops hint (no hint button / hint_used analytics). Only bites the admin
-  bulk-import path — the content pipeline (push-content.mjs) is unaffected.
-- **Fixed 2026-09-22 (audit found the finding partly stale):**
-  - Riddles: bulk import already carried hint AND status end-to-end (import service
-    honours `dto.hint`/`dto.status`; admin ImportModal maps both columns).
-  - Image riddles: `CreateImageRiddleDto` gained optional validated `status`;
-    createRiddle (single + bulk) applies `dto.status ?? DRAFT`; the admin import hook
-    maps an optional `status` column (previously: toggle each riddle after import).
-  - Jokes: `CreateDadJokeDto` gained optional `status`; single + bulk creation honour
-    it. The jokes import modal ADVERTISED a `status` column but the mapping dropped it —
-    now passed through.
-  - Default remains DRAFT everywhere when no status is supplied (safe-by-default).
-- **Verified:** backend tsc clean; frontend tsc clean.
+- **Fixed 2026-09-22 (full record: audit file §6.1 H8):** the eight static games served NO
+  CSP at all — `middleware.ts` now decorates every `/games/*` response with the strictest
+  policy on the site (`script-src 'self'`, no remote anything, `connect-src` same-origin +
+  API origin; two inline theme-loader hashes). Verified on prod build.
+- **Full nonces: NOT being done (assessment, not deferral):** nonces require dynamic
+  rendering — incompatible with prerendered/ISR pages, the games' static HTML `<script>`
+  tags, and Next's own bootstrap scripts. `'unsafe-inline'` on app pages stays as the
+  documented residual risk (weakens XSS defense-in-depth, not an active hole).
+- **HttpOnly refresh-cookie half:** design decision (changes the guest/auth flow the owner
+  deliberately kept friction-free) — parked with the owner.
 
 ### HARD-05 - R2 media follow-ups (was TASK-22)
 
@@ -304,16 +289,15 @@
 ### HARD-06 - Games a11y polish + phone QA (was TASK-09 remainder) - FIXED 2026-09-23 (owner phone QA remains)
 
 - **Date found:** 2026-09-22 (source: plan/games/\*)
-- **Area:** games — **code + owner 10-min phone QA**
+- **Area:** games — **owner 10-min phone QA**
 - **Priority:** P3
-- **Fixed 2026-09-23:**
-  - AA contrast (computed WCAG audit, 7 games): muted text #64748b failed on the page
-    gradient (2.93-3.81:1) → #475569 (worst case 4.67:1); dark-theme primary buttons
-    #3b82f6 failed with white text (3.68:1) → #2563eb (5.17:1).
-  - Sliding-puzzle: segmented radio groups (picture-mode, size-cards) got roving
-    tabindex + arrow-key selection; round start focuses the board (board focusable).
-  - All 8 games verified zero JS errors and zero CSP violations (games CSP completed
-    with the two inline theme-loader script hashes).
+- **Fixed 2026-09-23 (commit `81080c2`; memory-quiz QA record in plan/games/08 §22):**
+  AA contrast (computed WCAG audit, 7 games): muted text #64748b failed on the page
+  gradient (2.93-3.81:1) → #475569 (worst case 4.67:1); dark-theme primary buttons
+  #3b82f6 failed with white text (3.68:1) → #2563eb (5.17:1). Sliding-puzzle: segmented
+  radio groups got roving tabindex + arrow-key selection; round start focuses the board.
+  All 8 games verified zero JS errors and zero CSP violations (games CSP completed with
+  the two inline theme-loader script hashes).
 - **Remaining (owner):** the 10-minute phone QA pass.
 
 ### HARD-07 - Dad jokes surfaces (was TASK-10, briefly DEC-01) — DECISION
@@ -332,7 +316,8 @@
 ### HARD-10 - Admin user-mgmt UI + dashboard unification + guest activity (was TASK-16, briefly DEC-04) — DECISION
 
 - **Date found:** 2026-09-22 (source: plan/09) — note: "dashboard unification" overlaps
-  HARD-13's deferred "admin-dashboard unification"; dedupe when deciding. P3.
+  HARD-13's "admin-dashboard unification"; dedupe when deciding (HARD-13 is now QUEUED
+  next, so coordinate the two when picked up). P3.
 
 ### HARD-11 - Installability: full manifest / theme-color (was TASK-17, briefly DEC-05) — DECISION
 
@@ -344,28 +329,74 @@
 - **Date found:** 2026-09-22 (source: plan/13: funnels, accuracy join, retention tests, B6/B7) —
   additive once picked up; collection already in place. P3.
 
-### HARD-13 - Owner-deferred bucket (was TASK-23, briefly DEF-01) — DEFERRED
+## Resolved — removed from this tracker (policy: open items only)
 
-- **Date found:** 2026-09-22 — riddle-mcq session persistence / JSON import-export / cache
-  tuning; image-riddle server-side progress; admin-dashboard unification (see HARD-10);
-  games R2-2/R2-3 extras; LinkedIn + Pinterest share previews. P3.
+Fully-fixed findings live in their respective `plan/` files and in git history
+(`git log --grep=NOW` / `--grep=HARD` / `--grep=TASK` / `--grep=BUG`). Cleanup 2026-09-23:
 
-### HARD-14 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — DEFERRED
-
-- **Date found:** 2026-09-22 — riddle question shares still use the hub `?q=` form; the
-  riddle play flow has no shared-start contract (subjectId/level based, no in-session
-  question identity). Implementing means changing the riddle session contract — deferred
-  with reason when TASK-27 shipped. P3.
+- NOW-01 → audit file §6.1 **H6** (firewall + Dokploy :3000 closure)
+- NOW-04 → audit file §6.3 **OPS-19** (off-box replication + restore drill PASS)
+- NOW-06 → plan/13 §4b (A5/A7/A10/C1 DONE entries, were already recorded there)
+- HARD-02 → audit file §6.1 **H1** (phase 2c complete 2026-09-23)
+- HARD-03 → audit file §6.2 **SEC-10/12** (signed guest token)
+- HARD-04 → plan/03 §P3 (hint import — closed stale), plan/04 §P3 (status import), plan/05 §P3 (jokes status import)
+- Resolved sweep 2026-09-22 (TASK-01/02/03/08/24/25/26/27) → plan/17, plan/13, plan/02 §6
+  (TASK-03 + TASK-27), plan/games/08 §22 (TASK-24/25/26); TASK-08 was a non-issue
 
 ---
 
-## Resolved — 2026-09-22 sweep (original IDs kept for git traceability; ages out per policy)
+## Competitor comparison
 
-- **TASK-01** likes survive refresh — already shipped (`5ee5ab7`/`2c86cfc`); verified API + Playwright E2E.
-- **TASK-02** analytics double-count — `clientEventId` + unique index + dedupe; migration `1793100000000`; 117 backend tests pass; live double-POST verified.
-- **TASK-03** CSV leakage/ambiguity — `scripts/repair-be09-csv.py` + `repair-be09-db.sql`, 10 rows fixed both sides, re-audit clean; residue -> NOW-07.
-- **TASK-08** TODO/FIXME markers — **non-issue**: all 10 hits were comments referencing the TODO.md _file_, not markers.
-- **TASK-24/25/26** Memory Quiz — grid answers tappable (`bf55e38`+), swap reveal order, level-clear focus crash; E2E 39/39.
-- **TASK-27** quiz share deep-link — play URLs with `qid=<uuid>`, resolve by identity, "Unvisited" chip opt-in; Playwright PASS; riddle side -> HARD-14.
+Benchmark vs four reference quiz/trivia sites (owner request 2026-09-23). Our site = PigZap (quiz-mcq, riddle-mcq, image riddles, dad jokes, games).
 
-Commits: `c4faea6` (TASK-01/02/03/27), `6b0b7bc` (TASK-09 partial), `bf55e38`+ (TASK-24/25/26).
+| Dimension            | **Us (PigZap)**                                                           | [Trivia Crack](https://triviacrack.com/)  | [Britannica](https://www.britannica.com/)              | [TriviaPlaza](https://www.triviaplaza.com/)    | [FunTrivia](https://www.funtrivia.com/)                       |
+| -------------------- | ------------------------------------------------------------------------- | ----------------------------------------- | ------------------------------------------------------ | ---------------------------------------------- | ------------------------------------------------------------- |
+| Core model           | Play-yourself quiz/hub (MCQ + riddles + image riddles)                    | PvP / mobile-style trivia duel game       | Encyclopedia + quizzes as a learning sidecar           | Casual play-in-place trivia quizzes            | Large community-written quiz archive                          |
+| Content depth        | 11.5k+ questions, 3k riddles, growing DB                                  | Fixed game categories, live opponents     | Authoritative reference articles first, quizzes second | Modest hand-picked quiz set                    | Very large (100k+ quizzes, UGC)                               |
+| Formats              | MCQ, riddle MCQ, visual/image riddles, rebus-style, jokes, 8 arcade games | Category duels, streaks                   | Articles + knowledge quizzes                           | MCQ + fill-in/missing-word decade packs        | MCQ, match, photo, fill-in, classification, label, crosswords |
+| Accounts             | Optional — friction-free guest play + Google                              | Account/platform required for progression | Account optional for reading                           | Anonymous play                                 | Account for scores/history                                    |
+| Social / retention   | Likes, comments, achievements, newsletter, share deep-links               | Duels, ranks, cross-play                  | None (reference brand pull)                            | Minimal                                        | Profiles, high scores, forums                                 |
+| SEO surface          | SSR landing pages, per-subject routes, JSON-LD, sitemap                   | App-store / brand-driven                  | Massive organic encyclopedia traffic                   | Long-tail quiz keywords                        | Deep archive of long-tail quiz pages                          |
+| Monetization posture | Content platform (owner-defined)                                          | Ads + IAP (mobile F2P)                    | Subscription (Britannica) + ads                        | Ads                                            | Ads + premium membership                                      |
+| **Gap to close**     | —                                                                         | No live multiplayer / duel mode           | No encyclopedia-grade explanatory copy under answers   | Quiz set is narrower than their homepage packs | No UGC quiz creation pipeline                                 |
+
+### Verified live 2026-09-23 (fetch pass)
+
+- **Trivia Crack** — triviacrack.com is a JS-only app shell (nothing crawlable); features
+  verified via Wikipedia. 600M+ downloads, ~150M annual actives, #1 trivia app in
+  125+ countries; 7 mascot categories; the hook is async PvP duels + progression; browser play
+  arrived via CrazyGames (2023). Web presence = brand funnel, zero SEO content surface.
+- **Britannica** — 403s all automated fetchers (bot wall), so this column stays positioning-based:
+  authoritative encyclopedia = E-E-A-T moat + massive organic traffic; quizzes are a learning
+  sidecar; ads + Premium subscription; no social layer.
+- **TriviaPlaza** — 13 top categories + General Knowledge; the real shape is LONG-TAIL: per-decade
+  packs (1950s–2020s), Eurovision, Lyrics, Song Titles ("1964 Hits & Missing Word 1/2"), fill-in
+  format, "get graded", dated "recent quizzes" (freshness cadence), keyword-rich URLs
+  (`/1956-hits-missing-words-quiz/`), no accounts. No ads seen on fetched pages (footer carries a
+  book product). Smaller catalog than ours, but the decade/niche long tail is their SEO engine.
+- **FunTrivia** — 2.5M questions / ~168k quizzes / 14k topics / 20 categories / 9,656 crosswords /
+  K-12 organized sets, since 1995. Formats: MCQ, match, collection, photo, photo-match, fill-in,
+  classification, label. Retention machine: DAILY games (Duel, Mind Melt, Knockout, Monster Quiz,
+  Global Challenge tournament, Team Heroes) + HOURLY games + teams + badges/ranks. UGC via Author
+  Central + "Adventures in Authoring"; Ask FunTrivia Q&A. Monetization: Gold membership (ad-free +
+  perks), pub-trivia packs, content licensing.
+
+### Opportunity ranking (from the verified pass)
+
+1. **Daily ritual hook** → filed as **NOW-08**.
+2. **Surface stored explanations** (Britannica lesson) → filed as **NOW-09** (pairs with NOW-07's rewrite pass).
+3. **Duel UI on the existing backend** → filed as **HARD-15** — owner queued it 2026-09-23: built right after the ACTIVE queue, web-first.
+4. **Long-tail landing pages** (TriviaPlaza lesson) → folded into **NOW-03 residual** (chapter-level pages).
+5. **Fill-in format** (TriviaPlaza + FunTrivia): missing-word/fill-in packs are proven casual
+   formats we don't have; our word-puzzle game + open-ended riddle tiers are adjacent cover — not filed, pick up with NOW-03 niche packs if wanted.
+6. **UGC creation** (FunTrivia): stays deferred — a content-ops race, not a code gap.
+7. **Monetization:** all four monetize (IAP / subscription / membership); we deliberately don't — owner posture, listed for completeness.
+8. **Image-riddle catalog replacement** (owner request during this pass) → filed as **NOW-10**, queued next; rights decision needed before execution.
+
+Our live edge over all four: zero-account friction-free play, zero-ad clean UX, share system with
+dynamic OG images + quiz deep-links (none of the four has this), the 8-game arcade bundle, and
+hybrid formats (image riddles, dad jokes) none of them carry. Minor live observation: the home
+counters section rendered a "Loading…" placeholder at fetch time — client-side counts, worth a look
+if it persists.
+
+Open action: opportunities filed as above — no further IDs auto-created.

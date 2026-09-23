@@ -54,6 +54,11 @@ export class RiddleMcqController {
     delete safe['correctAnswer'];
     delete safe['correctLetter'];
     delete safe['answer'];
+    // NOW-03/09 leak fix: the explanation EXPLAINS the answer ("it's a coffin
+    // because…") and every published riddle has one — shipping it on pre-answer
+    // reads was an answer-key leak. It returns with the verdict (answers/check)
+    // and from answers/reveal for post-session review instead.
+    delete safe['explanation'];
     return safe;
   }
 

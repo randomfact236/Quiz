@@ -574,3 +574,11 @@ by `games-memory-quiz.test.ts` (all 8 games suites green, 343 tests); live pass 
 Mystery Mix menu entry and prefs persistence across reloads. The campaign level-picker tiles
 could not be click-through in the automation session (recurring in-app-browser guest instability)
 — the suites remain the verification of record for the picker/shuffle flow.
+
+## 22. QA fix record (was TASK-24/25/26 — resolved 2026-09-22, commit `bf55e38`+)
+
+- **Grid answers tappable** — answer interaction fixed on all grid tiers (was QA TASK-24).
+- **Swap reveal order** — the reveal shows the exchange correctly (was QA TASK-25).
+- **Level-clear focus crash** — the end-of-level focus handoff no longer throws (was QA TASK-26).
+- Verification: E2E 39/39. Residual owner step (every game): the 10-minute phone session at
+  360 px — tracked in QA-FINDINGS as HARD-06.

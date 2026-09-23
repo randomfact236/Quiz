@@ -18,9 +18,11 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 
+import { chapterSlug } from '@/lib/slug';
+
 /** Static subroutes that must never be treated as slugs. */
 const KNOWN_SUBPATHS: Record<string, Set<string>> = {
-  '/quiz-mcq': new Set(['play', 'results', 'practice-mode', 'timer-challenge']),
+  '/quiz-mcq': new Set(['play', 'results', 'practice-mode', 'timer-challenge', 'daily']),
   '/riddle-mcq': new Set(['play', 'practice', 'challenge', 'results']),
 };
 
@@ -30,8 +32,15 @@ interface SlugCache {
   riddle: Set<string>;
 }
 
+/** Per-subject chapter-slug sets (NOW-03 two-segment validation). */
+interface ChapterCacheEntry {
+  at: number;
+  slugs: Set<string>;
+}
+
 let slugCache: SlugCache | null = null;
 const SLUG_TTL_MS = 60_000;
+const chapterCache = new Map<string, ChapterCacheEntry>();
 
 const API_BASE = (process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api')
   .replace(/\/v1\/?$/, '')
@@ -72,6 +81,38 @@ async function knownSlugs(): Promise<SlugCache | null> {
   if (quiz.size === 0 && riddle.size === 0) return slugCache;
   slugCache = { at: Date.now(), quiz, riddle };
   return slugCache;
+}
+
+/**
+ * Chapter slugs for ONE subject (NOW-03): the public subject payload carries
+ * the chapter names; URL slugs derive via lib/slug.ts. Cached per subject
+ * with the same 60s TTL, fail-open on any error (an empty set passes through
+ * to the page-level fallback redirect).
+ */
+async function knownChapterSlugs(subjectSlug: string): Promise<Set<string>> {
+  const key = subjectSlug.toLowerCase();
+  const cached = chapterCache.get(key);
+  if (cached && Date.now() - cached.at < SLUG_TTL_MS) return cached.slugs;
+  try {
+    const response = await fetch(`${API_BASE}/v1/quiz-mcq/subjects/${encodeURIComponent(key)}`, {
+      signal: AbortSignal.timeout(4000),
+      cache: 'no-store',
+    });
+    if (!response.ok) return cached?.slugs ?? new Set();
+    const payload: unknown = await response.json();
+    const chapters = (payload as { chapters?: unknown })?.chapters;
+    const slugs = new Set<string>();
+    if (Array.isArray(chapters)) {
+      for (const chapter of chapters) {
+        const name = (chapter as { name?: unknown })?.name;
+        if (typeof name === 'string' && name) slugs.add(chapterSlug(name));
+      }
+    }
+    if (slugs.size > 0) chapterCache.set(key, { at: Date.now(), slugs });
+    return slugs.size > 0 ? slugs : (cached?.slugs ?? new Set());
+  } catch {
+    return cached?.slugs ?? new Set(); // fail open
+  }
 }
 
 /**
@@ -116,6 +157,28 @@ export async function middleware(request: NextRequest) {
 
   // Exactly the hub, a static subroute, or deeper paths (asset/other) → pass.
   if (!rest || KNOWN_SUBPATHS[moduleBase]?.has(rest) || rest.includes('/')) {
+    // Two-segment quiz paths (/quiz-mcq/<subject>/<chapter>) get the NOW-03
+    // chapter validation below; riddle and deeper paths pass through.
+    if (moduleBase === '/quiz-mcq' && rest.includes('/')) {
+      const [subjectPart, chapterPart] = rest.split('/');
+      if (!subjectPart || !chapterPart || KNOWN_SUBPATHS['/quiz-mcq']?.has(subjectPart)) {
+        return NextResponse.next();
+      }
+      const subjects = await knownSlugs();
+      if (subjects && subjects.quiz.size > 0 && !subjects.quiz.has(subjectPart)) {
+        const url = request.nextUrl.clone();
+        url.pathname = '/quiz-mcq';
+        url.search = '';
+        return NextResponse.redirect(url, 307); // unknown subject → hub
+      }
+      const chapters = await knownChapterSlugs(subjectPart);
+      if (chapters.size > 0 && !chapters.has(decodeURIComponent(chapterPart))) {
+        const url = request.nextUrl.clone();
+        url.pathname = `/quiz-mcq/${subjectPart}`;
+        url.search = '';
+        return NextResponse.redirect(url, 307); // unknown chapter → subject landing
+      }
+    }
     return NextResponse.next();
   }
 

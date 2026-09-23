@@ -88,7 +88,7 @@ tests). `adaptJoke` mapper + category cascade remain uncovered (mapper is a thin
 ### P3 — polish / tech debt
 
 - [x] **`defaultJokeCategories` fallback**
-- [ ] Jokes bulk import accepts no `status` field (same gap as image riddles) — cross-module consistency candidate.
+- [x] Jokes bulk import accepts no `status` field — FIXED 2026-09-22 (was QA HARD-04): `CreateDadJokeDto` gained optional `status`; single + bulk creation honour it; the import modal advertised a `status` column but the mapping dropped it — now passed through. Default remains DRAFT when unsupplied.
 - [ ] `page.tsx` is 1253 lines — extraction into `features/jokes/` hooks mirrors the image-riddles refactor but is cosmetic: the page is stable, tested through the API client, and no second consumer exists. **Deferred as tech debt (revisit if the page grows or a bug forces a rewrite).**
 - [ ] Trending sort and share buttons — **needs owner decision:** both are new product surfaces (a trending metric definition; share targets/placement), not gaps in shipped behavior.
 - [x] Server-side search + true server pagination — **built (2026-09-14)**: the public page's search box and category view go through `GET /jokes/classic/search` / `/classic/category/:id` (debounced, server-filtered, newest-first with client-side sorts on top); client-side filtering remains the offline fallback.

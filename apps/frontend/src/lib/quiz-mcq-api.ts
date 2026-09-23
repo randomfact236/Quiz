@@ -453,6 +453,8 @@ export async function getQuizSessionHistory(guestId?: string): Promise<QuizSessi
  */
 export interface AnswerCheckResult {
   correct: boolean;
+  /** NOW-09: safe post-answer — explains the question just answered. */
+  explanation: string | null;
 }
 
 export async function checkQuizAnswer(
@@ -470,12 +472,72 @@ export async function checkQuizAnswer(
  * HARD-02 (H1): post-session review reveal - the key for ONE question.
  * Throttled server-side; the grader itself no longer doubles as a key oracle.
  */
-export async function revealQuizAnswer(
-  questionId: string
-): Promise<{ correctAnswer: string | null; correctLetter: string | null }> {
-  const response = await api.post<{ correctAnswer: string | null; correctLetter: string | null }>(
-    '/quiz-mcq/answers/reveal',
-    { questionId }
+export async function revealQuizAnswer(questionId: string): Promise<{
+  correctAnswer: string | null;
+  correctLetter: string | null;
+  explanation: string | null;
+}> {
+  const response = await api.post<{
+    correctAnswer: string | null;
+    correctLetter: string | null;
+    explanation: string | null;
+  }>('/quiz-mcq/answers/reveal', { questionId });
+  return response.data;
+}
+
+// ============================================================================
+// Daily Challenge (NOW-08)
+// ============================================================================
+
+export interface DailyChallengeSet {
+  date: string;
+  questions: QuizQuestion[];
+}
+
+export interface DailyChallengeStatus {
+  date: string;
+  played: boolean;
+  streak: number;
+  bestStreak: number;
+  result: { score: number; correctCount: number; total: number } | null;
+}
+
+export interface DailyChallengeSubmitResult {
+  recorded: boolean;
+  alreadyPlayed: boolean;
+  streak: number;
+  bestStreak: number;
+}
+
+/** Today's set — deterministic per client-local date, identical for everyone. */
+export async function getDailyChallenge(date?: string): Promise<DailyChallengeSet> {
+  const query = date ? `?date=${encodeURIComponent(date)}` : '';
+  const response = await api.get<DailyChallengeSet>(`/quiz-mcq/daily${query}`);
+  return response.data;
+}
+
+/** Played-today flag + streaks for the caller (guestId mirrors sessions/history). */
+export async function getDailyStatus(
+  guestId: string | null,
+  date?: string
+): Promise<DailyChallengeStatus> {
+  const params = new URLSearchParams();
+  if (guestId) params.set('guestId', guestId);
+  if (date) params.set('date', date);
+  const response = await api.get<DailyChallengeStatus>(
+    `/quiz-mcq/daily/status${params.size ? `?${params.toString()}` : ''}`
   );
+  return response.data;
+}
+
+/** Records the attempt (one per identity per day, enforced server-side). */
+export async function submitDailyResult(input: {
+  date: string;
+  score: number;
+  correctCount: number;
+  total: number;
+  guestId: string | null;
+}): Promise<DailyChallengeSubmitResult> {
+  const response = await api.post<DailyChallengeSubmitResult>('/quiz-mcq/daily/result', input);
   return response.data;
 }

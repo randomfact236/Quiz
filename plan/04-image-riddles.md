@@ -103,7 +103,7 @@ Admin (JWT + role admin) — canonical CRUD:
 - [x] **Next-gen images**
 - [x] **`initial-data.ts` fallback**
 - [x] **MobileFooter difficulty drawer**
-- [ ] Bulk import accepts no `status` field — imported riddles land DRAFT and need a bulk-action publish; accept `status` for one-shot published imports.
+- [x] Bulk import accepts no `status` field — FIXED 2026-09-22 (was QA HARD-04): `CreateImageRiddleDto` gained optional validated `status`; createRiddle (single + bulk) applies `dto.status ?? DRAFT` (safe-by-default); the admin import hook maps an optional `status` column (previously: toggle each riddle after import).
 
 ## 5. Cross-feature touchpoints
 

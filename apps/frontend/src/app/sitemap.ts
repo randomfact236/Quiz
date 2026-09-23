@@ -1,6 +1,7 @@
 import type { MetadataRoute } from 'next';
 
 import { APP_URL, INDEXABLE_ROUTES } from '@/lib/seo';
+import { chapterSlug } from '@/lib/slug';
 
 // NEXT_PUBLIC_API_URL may or may not carry the /v1 suffix depending on the
 // deployment (prod: …/api/v1, local default: …/api) — normalize so appending
@@ -59,12 +60,47 @@ async function fetchSections(path: string): Promise<DynamicRoute[]> {
   }
 }
 
+/**
+ * Chapters of one quiz subject (NOW-03 per-chapter landings). Chapter URL
+ * slugs derive from the name (lib/slug.ts — same derivation as the pages
+ * and the middleware validation). Fails empty like fetchSections.
+ */
+async function fetchQuizChapters(subjectSlug: string): Promise<DynamicRoute[]> {
+  try {
+    const response = await fetch(
+      `${API_BASE}/v1/quiz-mcq/subjects/${encodeURIComponent(subjectSlug)}`,
+      { next: { revalidate: 3600 } }
+    );
+    if (!response.ok) return [];
+    const payload: unknown = await response.json();
+    const chapters = (payload as { chapters?: unknown })?.chapters;
+    if (!Array.isArray(chapters)) return [];
+    return chapters
+      .map((chapter): DynamicRoute | null => {
+        const name = (chapter as { name?: unknown })?.name;
+        // Carry "<subject>/<chapter-slug>" so the caller can build the URL.
+        return typeof name === 'string' && name
+          ? { url: `${subjectSlug}/${chapterSlug(name)}` }
+          : null;
+      })
+      .filter((entry): entry is DynamicRoute => entry !== null);
+  } catch {
+    return [];
+  }
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const [quizSubjects, riddleCategories, imageCategories] = await Promise.all([
     fetchSections('/quiz-mcq/subjects'),
     fetchSections('/riddle-mcq/categories'),
     fetchSections('/image-riddles/categories'),
   ]);
+
+  // NOW-03: /quiz-mcq/<subject>/<chapter> landings — 79 chapters, all with
+  // descriptive names; each resolves server-side with its own canonical.
+  const quizChapterRoutes = (
+    await Promise.all(quizSubjects.map((s) => fetchQuizChapters(s.url)))
+  ).flat();
 
   const dynamicRoutes: MetadataRoute.Sitemap = [
     // plan/15 P2: real path segments — /quiz-mcq/<subject> and /riddle-mcq/<category>
@@ -77,6 +113,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       ...(s.lastModified ? { lastModified: s.lastModified } : {}),
       changeFrequency: 'weekly' as const,
       priority: 0.6,
+    })),
+    ...quizChapterRoutes.map((s) => ({
+      url: `${APP_URL}/quiz-mcq/${s.url}`,
+      changeFrequency: 'weekly' as const,
+      priority: 0.5,
     })),
     ...riddleCategories.map((s) => ({
       url: `${APP_URL}/riddle-mcq/${s.url}`,

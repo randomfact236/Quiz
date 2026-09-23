@@ -384,7 +384,10 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
    * reads can stop shipping `correctLetter` / `answer`. Mirrors the shared
    * frontend riddle scorer (expert/extreme = normalized text, else letter).
    */
-  async checkAnswer(riddleId: string, answer: string): Promise<{ correct: boolean }> {
+  async checkAnswer(
+    riddleId: string,
+    answer: string
+  ): Promise<{ correct: boolean; explanation: string | null }> {
     const riddle = await this.deps.itemRepo.findOne({
       where: { id: riddleId, status: RiddleStatus.PUBLISHED } as never,
     });
@@ -411,17 +414,21 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
           storedText !== '' && this.normalizeFreeText(given) === this.normalizeFreeText(storedText);
       }
     }
-    // Verdict ONLY (H1) - review uses the reveal endpoint.
-    return { correct };
+    // Verdict + (NOW-09) the explanation — safe here because the answer is
+    // already committed; it can only ever explain a question the user just
+    // answered, never help harvest keys. Review uses the reveal endpoint.
+    return { correct, explanation: riddle.explanation ?? null };
   }
 
   /**
    * Post-session review reveal (H1): key for ONE published riddle. Public but
    * throttled; the grader itself no longer doubles as a key oracle.
    */
-  async revealAnswer(
-    riddleId: string
-  ): Promise<{ answer: string | null; correctLetter: string | null }> {
+  async revealAnswer(riddleId: string): Promise<{
+    answer: string | null;
+    correctLetter: string | null;
+    explanation: string | null;
+  }> {
     const riddle = await this.deps.itemRepo.findOne({
       where: { id: riddleId, status: RiddleStatus.PUBLISHED } as never,
     });
@@ -431,6 +438,7 @@ export class RiddleMcqQuestionService extends ContentServiceBase<
     return {
       answer: riddle.answer ?? null,
       correctLetter: riddle.correctLetter ?? null,
+      explanation: riddle.explanation ?? null,
     };
   }
 

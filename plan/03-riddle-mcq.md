@@ -99,7 +99,7 @@ Frontend (`apps/frontend/src/`):
 - [x] Hint/skip tracking
 - [x] **`riddle-mcq-question.service.ts` split evaluation**
 - [x] **Legacy `chapterId` fallback**
-- [ ] Bulk import carries no `hint` field — imported riddles can't fire the hint button or `hint_used` analytics; add it to `BulkCreateRiddleDto` if wanted.
+- [x] Bulk import carries no `hint` field — CLOSED 2026-09-22 (was QA HARD-04): audit found the finding stale — the riddle import path already carries hint AND status end-to-end (import service honours `dto.hint`/`dto.status`; admin ImportModal maps both columns), so imported riddles fire the hint button and `hint_used` analytics.
 
 ## 5. Cross-feature touchpoints
 
@@ -125,3 +125,18 @@ Frontend (`apps/frontend/src/`):
   longest option exceeds ~18 chars (won't fit half a phone width) stacks single-column on mobile.
   Side gap: the answer grid stretches edge-to-edge inside the question card (-mx cancels the card
   padding), so there is no horizontal gap between the question container's sides and the options.
+
+## 7 · Explanations: leak fix + surfacing (NOW-09, 2026-09-23)
+
+- **Leak fix (security):** `toPublicRiddle` stripped `correctAnswer`/`correctLetter`/`answer`
+  but NOT `explanation` — and all 3,000 published riddles carry one, each explaining the
+  answer ("it's a coffin because…"). Every pre-answer public read (subject riddles, mixed,
+  random, by-id) was therefore shipping an answer key. Fixed: explanation deleted from
+  public payloads; it now returns ONLY with the verdict (`answers/check` — post-answer,
+  safe) and from `answers/reveal` (post-session review; the reveal response gained the
+  field, and RiddleReview falls back to it since snapshots no longer carry it).
+- **Surfacing:** in-play "💡 Why" panel under the options after the verdict (RiddleCard);
+  review keeps hint + explanation (explanation from snapshot-or-reveal). `Riddle.explanation`
+  is populated 3,000/3,000, so this renders on every riddle answer.
+- Verified live local: public payload has no explanation/hint stays public; check returns
+  `{correct, explanation}`; frontend/backend tsc + suites green.

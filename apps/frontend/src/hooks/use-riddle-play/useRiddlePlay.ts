@@ -457,21 +457,33 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
         // HARD-02 (H1): the server grades; the verdict drives scoring,
         // feedback and the results page (isRiddleAnswerCorrect reads it).
         let verdict: boolean;
+        let explanation: string | null = null;
         try {
           const answerText = riddleOptionText(currentRiddle, optionLetter) ?? optionLetter;
           const result = await checkRiddleAnswer(currentRiddle.id, answerText);
           verdict = !!result.correct;
+          // NOW-09: the explanation rides the verdict (post-answer — safe;
+          // every published riddle carries one).
+          explanation = result.explanation ?? null;
         } catch {
           verdict = isRiddleAnswerCorrect(currentRiddle, optionLetter);
         }
         verdictsRef.current[currentRiddle.id] = verdict;
-        setRiddles((prev) => prev.map((r) => (r.id === currentRiddle.id ? { ...r, verdict } : r)));
+        // NOW-09: merge the explanation only when present — Riddle.explanation
+        // is optional (exactOptionalPropertyTypes forbids explicit undefined).
+        const mergeExplanation = (r: Riddle): Riddle =>
+          explanation !== null && r.explanation === undefined
+            ? { ...r, verdict, explanation }
+            : { ...r, verdict };
+        setRiddles((prev) =>
+          prev.map((r) => (r.id === currentRiddle.id ? mergeExplanation(r) : r))
+        );
         setSession((prev) =>
           prev
             ? {
                 ...prev,
                 riddles: prev.riddles.map((r) =>
-                  r.id === currentRiddle.id ? { ...r, verdict } : r
+                  r.id === currentRiddle.id ? mergeExplanation(r) : r
                 ),
               }
             : prev

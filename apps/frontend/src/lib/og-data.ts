@@ -115,8 +115,38 @@ export const ogData = {
       `/quiz-mcq/subjects/${encodeURIComponent(slug)}/meta`
     ),
 
+  /**
+   * Chapters of one quiz subject (public subject payload) — the per-chapter
+   * landing pages + the subject landing's chapter grid resolve chapters from
+   * this (NOW-03). Chapter URL slugs derive from the name (lib/slug.ts).
+   */
+  quizSubjectChapters: (slug: string) =>
+    fetchJson<{ chapters?: Array<{ id: string; name: string; chapterNumber: number }> }>(
+      `/quiz-mcq/subjects/${encodeURIComponent(slug)}`
+    ),
+
+  /**
+   * A few easy-level published questions of one chapter for the chapter
+   * landing's "sample questions" section — public read, answer key never
+   * included (H1). `chapter` filters by the chapter NAME (service contract);
+   * level is pinned to `easy` because the default ordering serves the
+   * open-ended (options: null) extreme tier first.
+   */
+  quizChapterSamples: (slug: string, chapterName: string, limit = 4) =>
+    fetchJson<{
+      data?: Array<{ id: string; question: string; options: string[] | null; level: string }>;
+    }>(
+      `/quiz-mcq/subjects/${encodeURIComponent(
+        slug
+      )}/questions?chapter=${encodeURIComponent(chapterName)}&level=easy&limit=${limit}`
+    ),
+
   /** Published published-question counts per subject slug. */
-  quizCounts: () => fetchJson<{ bySubject: Record<string, number> }>('/quiz-mcq/question-counts'),
+  quizCounts: () =>
+    fetchJson<{
+      bySubject: Record<string, number>;
+      byChapter?: Record<string, { count: number; levels: Record<string, number> }>;
+    }>('/quiz-mcq/question-counts'),
 
   /** { id, question, options, subjectName, subjectEmoji } — never the answer. */
   quizQuestionShare: async (id: string): Promise<OgQuestionShare | null> => {

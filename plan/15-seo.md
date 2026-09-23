@@ -58,6 +58,12 @@
       server-fetch subject/category meta, emit metadata + BreadcrumbList JSON-LD, and 404
       unknown slugs; the hub bodies themselves still hydrate client-side. Full RSC
       conversion of the hub grid/section bodies remains future work.
+      UPDATE 2026-09-23 (NOW-03): chapter-level landings `/quiz-mcq/[subject]/[chapter]`
+      SHIPPED — 92 chapters (all descriptive names, DB-verified), slugs derived from
+      chapter names via `lib/slug.ts` (shared by pages/sitemap/middleware), live chapter
+      counts in titles, BreadcrumbList JSON-LD, easy-level sample questions (answer-key
+      stripped), sibling-chapter grids on subject landings (crawlable), middleware
+      two-segment 307 validation, all 92 sitemap entries. Verified live + GUI.
 - [x] **Per-content route segments + metadata** — DONE 2026-09-22: `/quiz-mcq/[subject]`
       and `/riddle-mcq/[category]` (server pages, `revalidate = 3600`, `notFound()` on
       unknown slugs) with `generateMetadata` (title/description/canonical/per-page OG via

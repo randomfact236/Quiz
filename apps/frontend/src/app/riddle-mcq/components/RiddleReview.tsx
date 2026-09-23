@@ -29,9 +29,12 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
 
   // HARD-02 (H1): the play payload no longer carries the key — post-session
   // review fetches the reveal once (throttled endpoint) to mark the right one.
+  // NOW-03/09: public reads also dropped `explanation` (it explains the
+  // answer = a key), so the reveal now carries it for review.
   const [reveal, setReveal] = useState<{
     answer: string | null;
     correctLetter: string | null;
+    explanation: string | null;
   } | null>(null);
   useEffect(() => {
     if (riddle.correctOption || riddle.correctLetter) return; // legacy snapshot
@@ -199,21 +202,21 @@ export function RiddleReview({ riddle, userAnswer, riddleNumber }: RiddleReviewP
               )}
 
               {/* Explanation / Hint */}
-              {(riddle.explanation || riddle.hint) && (
+              {(riddle.explanation || reveal?.explanation || riddle.hint) && (
                 <div className="mt-5 rounded-xl bg-indigo-50 dark:bg-indigo-500/10 p-4 border border-indigo-100 dark:border-indigo-500/30">
-                  {riddle.explanation && (
+                  {(riddle.explanation || reveal?.explanation) && (
                     <div className="mb-3">
                       <p className="font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2 mb-1">
                         💡 Explanation
                       </p>
                       <p className="text-sm text-indigo-900 dark:text-indigo-200">
-                        {riddle.explanation}
+                        {riddle.explanation ?? reveal?.explanation}
                       </p>
                     </div>
                   )}
                   {riddle.hint && (
                     <div
-                      className={`${riddle.explanation ? 'border-t border-indigo-200 dark:border-indigo-500/30 pt-3' : ''}`}
+                      className={`${riddle.explanation || reveal?.explanation ? 'border-t border-indigo-200 dark:border-indigo-500/30 pt-3' : ''}`}
                     >
                       <p className="font-bold text-indigo-800 dark:text-indigo-300 flex items-center gap-2 mb-1">
                         🔑 Hint

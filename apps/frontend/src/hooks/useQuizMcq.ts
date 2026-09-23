@@ -431,12 +431,15 @@ export function useQuizMcq(
       if (!currentQuestion) return;
 
       let verdict: boolean;
+      let explanation: string | null = null;
       try {
         // Grade by option TEXT (BUG-041 shuffles served slots - letters are
         // per-serve). Extreme/free-text answers send the text as-is.
         const answerText = quizOptionText(currentQuestion, option) ?? option;
         const result = await checkQuizAnswer(currentQuestion.id, answerText);
         verdict = !!result.correct;
+        // NOW-09: the explanation rides the verdict (post-answer — safe).
+        explanation = result.explanation ?? null;
       } catch {
         verdict = isAnswerCorrect(currentQuestion, option);
       }
@@ -444,7 +447,9 @@ export function useQuizMcq(
 
       setState((prev) => {
         const questions = prev.questions.map((q) =>
-          q.id === currentQuestion.id ? { ...q, verdict } : q
+          q.id === currentQuestion.id
+            ? { ...q, verdict, explanation: q.explanation ?? explanation }
+            : q
         );
         const newAnswers = { ...prev.answers, [currentQuestion.id]: option };
         const newScore = calculateScore(questions, newAnswers);

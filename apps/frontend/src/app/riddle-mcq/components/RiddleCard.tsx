@@ -457,6 +457,19 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
           />
         </div>
 
+        {/* NOW-09: explanation — rides the server verdict (post-answer, safe);
+            every published riddle carries one. */}
+        {showFeedback && selectedAnswer && riddle.explanation && (
+          <div className="mt-4 rounded-xl border border-indigo-100 bg-indigo-50/70 px-4 py-3 dark:border-indigo-500/20 dark:bg-indigo-500/10">
+            <p className="text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-300">
+              💡 Why
+            </p>
+            <p className="mt-1 text-sm leading-relaxed text-slate-700 dark:text-secondary-200">
+              {riddle.explanation}
+            </p>
+          </div>
+        )}
+
         {/* BUG-040: comments after answering — while open, the play page blocks
             advancing; closing it proceeds to the next riddle. */}
         {/* BUG-054: comments panel — opened from the action row above; while

@@ -12,11 +12,13 @@
  */
 
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { formatCount, ogData } from '@/lib/og-data';
 import { APP_URL, MODULE_META, breadcrumbJsonLd } from '@/lib/seo';
 import { JsonLd } from '@/components/JsonLd';
+import { chapterSlug } from '@/lib/slug';
 
 import QuizHubView from '../QuizHubView';
 
@@ -27,12 +29,26 @@ interface PageProps {
   params: Promise<{ subject: string }>;
 }
 
-/** Subject meta + live published-question count (both null-tolerant). */
+/** Subject meta + live published-question count + chapter grid (null-tolerant). */
 async function fetchSubject(slug: string) {
-  const [meta, counts] = await Promise.all([ogData.quizSubjectMeta(slug), ogData.quizCounts()]);
+  const [meta, counts, subject] = await Promise.all([
+    ogData.quizSubjectMeta(slug),
+    ogData.quizCounts(),
+    ogData.quizSubjectChapters(slug),
+  ]);
   if (!meta) return null;
   const count = counts?.bySubject[slug];
-  return { ...meta, count: typeof count === 'number' ? count : null };
+  // NOW-03: server-rendered chapter links — the crawlable long-tail graph
+  // (the interactive hub hydrates client-side, so its chapter pickers are
+  // invisible to crawlers; this grid is the indexable entry surface).
+  const chapters = (subject?.chapters ?? [])
+    .map((chapter) => ({
+      name: chapter.name,
+      slug: chapterSlug(chapter.name),
+      count: counts?.byChapter?.[chapter.id]?.count ?? null,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
+  return { ...meta, count: typeof count === 'number' ? count : null, chapters };
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -84,6 +100,32 @@ export default async function QuizSubjectLanding({ params }: PageProps) {
         ])}
       />
       <QuizHubView initialSubject={decoded} />
+      {data.chapters.length > 0 && (
+        <section
+          aria-label={`${data.name} chapters`}
+          className="mx-auto w-full max-w-5xl px-4 pb-12 sm:px-6"
+        >
+          <h2 className="text-xl font-black tracking-tight text-secondary-900 dark:text-white">
+            Browse all {data.name} chapters
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {data.chapters.map((chapter) => (
+              <Link
+                key={chapter.slug}
+                href={`/quiz-mcq/${encodeURIComponent(decoded)}/${encodeURIComponent(chapter.slug)}`}
+                className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-secondary-800 shadow-sm transition-colors hover:border-indigo-300 hover:text-indigo-600 dark:border-secondary-700 dark:bg-secondary-800 dark:text-secondary-100 dark:hover:border-indigo-500/40 dark:hover:text-indigo-300"
+              >
+                <span>{chapter.name}</span>
+                {chapter.count !== null && (
+                  <span className="shrink-0 text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-300">
+                    {formatCount(chapter.count)} Q
+                  </span>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
     </>
   );
 }

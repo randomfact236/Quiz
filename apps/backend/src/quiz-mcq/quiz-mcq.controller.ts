@@ -49,6 +49,8 @@ import { Throttle } from '@nestjs/throttler';
 import { Chapter } from './entities/chapter.entity';
 import { Question } from './entities/question.entity';
 import { Subject } from './entities/subject.entity';
+import { SubmitDailyResultDto } from './dto/daily-challenge.dto';
+import { DailyChallengeService } from './services/daily-challenge.service';
 import { QuizMcqService } from './quiz-mcq.service';
 
 export class QuizMcqQueryDto extends PaginationDto {
@@ -81,7 +83,10 @@ export class QuizMcqQueryDto extends PaginationDto {
 @ApiTags('Quiz MCQ')
 @Controller('quiz-mcq')
 export class QuizMcqController {
-  constructor(private readonly quizService: QuizMcqService) {}
+  constructor(
+    private readonly quizService: QuizMcqService,
+    private readonly dailyService: DailyChallengeService
+  ) {}
 
   // ==================== SESSIONS (server-side persistence) ====================
 
@@ -126,6 +131,50 @@ export class QuizMcqController {
         guestId: guestId ?? null,
       }),
     };
+  }
+
+  // ==================== DAILY CHALLENGE (NOW-08) ====================
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Get('daily')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiOperation({
+    summary:
+      "Today's Daily Challenge set — deterministic per client-local date, identical for every visitor, key-free (H1)",
+  })
+  async getDailyChallenge(@Query('date') date?: string) {
+    return this.dailyService.getDailySet(date ?? '');
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Get('daily/status')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiOperation({ summary: 'Played-today flag + current/best streak for the caller' })
+  async getDailyStatus(
+    @Req() req: any,
+    @Query('date') date?: string,
+    @Query('guestId') guestId?: string
+  ) {
+    return this.dailyService.getStatus(date ?? '', {
+      userId: req.user?.id ?? null,
+      guestId: guestId ?? null,
+    });
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Post('daily/result')
+  @HttpCode(HttpStatus.OK)
+  @Throttle({ default: { limit: 10, ttl: 60000 } })
+  @ApiOperation({ summary: 'Record the Daily Challenge attempt (one per identity per day)' })
+  async submitDailyResult(@Body() dto: SubmitDailyResultDto, @Req() req: any) {
+    return this.dailyService.submitResult(
+      dto.date,
+      { score: dto.score, correctCount: dto.correctCount, total: dto.total },
+      { userId: req.user?.id ?? null, guestId: dto.guestId ?? null }
+    );
   }
 
   // ==================== SUBJECTS ====================

@@ -478,6 +478,8 @@ export async function getRiddleStats(): Promise<RiddleStats> {
 /** H1 (audit SEC-03): grade one riddle answer server-side. */
 export interface RiddleAnswerCheckResult {
   correct: boolean;
+  /** NOW-09: safe post-answer — every published riddle carries one. */
+  explanation: string | null;
 }
 
 export async function checkRiddleAnswer(
@@ -494,12 +496,15 @@ export async function checkRiddleAnswer(
 /**
  * HARD-02 (H1): post-session review reveal - key for ONE riddle. Throttled.
  */
-export async function revealRiddleAnswer(
-  riddleId: string
-): Promise<{ answer: string | null; correctLetter: string | null }> {
-  const response = await api.post<{ answer: string | null; correctLetter: string | null }>(
-    '/riddle-mcq/answers/reveal',
-    { riddleId }
-  );
+export async function revealRiddleAnswer(riddleId: string): Promise<{
+  answer: string | null;
+  correctLetter: string | null;
+  explanation: string | null;
+}> {
+  const response = await api.post<{
+    answer: string | null;
+    correctLetter: string | null;
+    explanation: string | null;
+  }>('/riddle-mcq/answers/reveal', { riddleId });
   return response.data;
 }

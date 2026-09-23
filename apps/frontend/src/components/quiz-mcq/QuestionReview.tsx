@@ -34,9 +34,12 @@ export function QuestionReview({
 
   // HARD-02 (H1): play payloads no longer ship the key, so post-session review
   // fetches the reveal once per question (throttled endpoint).
+  // NOW-09: the reveal also carries the explanation (public reads never ship
+  // it pre-answer once content exists).
   const [reveal, setReveal] = useState<{
     correctAnswer: string | null;
     correctLetter: string | null;
+    explanation: string | null;
   } | null>(null);
   const [revealFailed, setRevealFailed] = useState(false);
   useEffect(() => {
@@ -178,11 +181,12 @@ export function QuestionReview({
                 </div>
               )}
 
-              {/* Explanation (if available) */}
-              {question.explanation && (
+              {/* Explanation (NOW-09: snapshot OR reveal — public reads never
+                  ship it pre-answer once content exists). */}
+              {(question.explanation || reveal?.explanation) && (
                 <div className="mt-4 rounded-lg bg-blue-50 dark:bg-blue-500/10 p-4 text-blue-800 dark:text-blue-300">
                   <p className="font-semibold">Explanation:</p>
-                  <p className="text-sm">{question.explanation}</p>
+                  <p className="text-sm">{question.explanation ?? reveal?.explanation}</p>
                 </div>
               )}
 
