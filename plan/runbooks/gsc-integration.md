@@ -28,13 +28,23 @@
 ### 3. Give the backend the key
 
 1. Copy the ENTIRE JSON key file content onto ONE line (or base64-encode it).
-2. Dokploy → **quiz-api** service → Environment → add:
+2. Dokploy → **quiz-api** service → Environment → add ONE of:
 
    ```
    GOOGLE_SERVICE_ACCOUNT_JSON={"type":"service_account","project_id":"…", … }
    ```
 
-   (one line; raw JSON or base64 both accepted — base64 avoids quoting issues)
+   (the full key flattened to one line) — or the quoting-proof base64 form:
+
+   ```
+   GOOGLE_SERVICE_ACCOUNT_JSON_BASE64=<base64 of the key file>
+   ```
+
+   PowerShell one-liner to produce the base64 on the clipboard:
+
+   ```powershell
+   [Convert]::ToBase64String([IO.File]::ReadAllBytes("$env:USERPROFILE\Downloads\<key-file>.json")) | clip
+   ```
 
 3. Redeploy/restart **quiz-api**.
 
