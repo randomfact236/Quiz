@@ -20,6 +20,22 @@
 > resolved issue against the real code (and the live site where relevant) to confirm it is
 > **completely resolved** — before it is removed/closed. A finding marked resolved but not
 > fully fixed in code goes back to OPEN.
+>
+> **Record-before-remove rule (owner, 2026-09-24 — WORKING PROCESS):** removing a resolved
+> task from this tracker REQUIRES a durable record, created BEFORE the removal:
+>
+> 1. **Record it** in the respective existing feature file under `plan/`
+>    (e.g. `plan/02-mcq-quiz.md`) — dated, with what was done + how it was verified;
+> 2. **If the resolved item was a NEW FEATURE with no plan file**, CREATE one first
+>    (`plan/NN-<name>.md`, next free number per `plan/TODO.md`, conventions per
+>    `plan/STANDARDS.md`) and keep the record there;
+> 3. **Only then remove** the entry from the table.
+>
+> **Cross-check (mandatory):** before deleting an entry, grep the target plan file to
+> confirm the record actually exists; after the removal, re-verify it survived (and that
+> the entry count/headings are intact — scripted rebuilds have dropped entries before).
+> **No entry leaves this tracker without its record** — an accidental removal without a
+> record is treated as data loss: restore the entry from git and re-do the record first.
 
 ## Index
 
