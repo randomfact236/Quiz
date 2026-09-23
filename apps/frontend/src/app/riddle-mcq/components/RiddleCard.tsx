@@ -443,11 +443,14 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
         )}
 
         {/* Answer Options — shared component with the riddle option-count spec
-            (easy 2 · medium 3 · hard 4 — BUG-016) */}
+            (easy 2 · medium 3 · hard 4 — BUG-016). NOW-09/2026-09-24: the
+            server verdict drives the ✕/✔ marking (correctKey is stripped from
+            play payloads, so the legacy compare would mark EVERY answer ✕). */}
         <div className="-mx-5 sm:-mx-8">
           <AnswerOptions
             options={options}
             selectedKey={selectedAnswer}
+            answerVerdict={selectedAnswer ? isCorrect : undefined}
             correctKey={showFeedback ? riddle.correctOption : ''}
             onSelect={handleSelectAnswer}
             disabled={disabled || timeUp}

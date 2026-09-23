@@ -147,6 +147,16 @@ export class QuizMcqService extends ContentServiceBase<Subject, Chapter, Questio
     return this.shuffleServedOptions([question])[0];
   }
 
+  /**
+   * NOW-08: public shuffle seam for the Daily Challenge service — it builds
+   * its own set but must obey the same BUG-041 serve-shuffle invariant (the
+   * stored option order is learnable: correct answers sit on A/B ~79% of the
+   * catalog). Single shuffle implementation, no duplication.
+   */
+  serveShuffledQuestions(items: Question[]): Question[] {
+    return this.shuffleServedOptions(items);
+  }
+
   // ==================== SUBJECTS ====================
 
   async findAllSubjects(

@@ -49,6 +49,8 @@ export default function DailyChallengePage(): JSX.Element {
   const [dailyDate, setDailyDate] = useState('');
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+  /** Questions whose server verdict has landed — gates feedback + the Next button. */
+  const [resolvedIds, setResolvedIds] = useState<Set<string>>(new Set());
   const [status, setStatus] = useState<{ streak: number; bestStreak: number }>({
     streak: 0,
     bestStreak: 0,
@@ -74,7 +76,9 @@ export default function DailyChallengePage(): JSX.Element {
         if (cancelled) return;
         setDailyDate(set.date);
         setStatus({ streak: status.streak, bestStreak: status.bestStreak });
-        if (status.played && status.result) {
+        // Played gate on the FLAG alone (result may be missing on a rare
+        // backend edge) — an already-played day must never offer a replay.
+        if (status.played) {
           setPlayedResult(status.result);
           setPhase('played');
           return;
@@ -96,6 +100,10 @@ export default function DailyChallengePage(): JSX.Element {
     async (option: string) => {
       const question = questions[index];
       if (!question || answers[question.id] !== undefined) return;
+      // Optimistic selection: highlight + lock the INSTANT the user clicks —
+      // the verdict (and explanation) arrive from the grader a beat later.
+      // Waiting for the server before showing anything felt like dead clicks.
+      setAnswers((prev) => ({ ...prev, [question.id]: option }));
       // Grade by option TEXT (BUG-041 shuffle-safe), exactly like the engine.
       const answerText = quizOptionText(question, option) ?? option;
       let verdict = false;
@@ -109,12 +117,12 @@ export default function DailyChallengePage(): JSX.Element {
         // and let the submit total reflect the answered count.
         verdict = false;
       }
-      const nextAnswers = { ...answers, [question.id]: option };
-      const nextQuestions = questions.map((q) =>
-        q.id === question.id ? { ...q, verdict, explanation: q.explanation ?? explanation } : q
+      setQuestions((prev) =>
+        prev.map((q) =>
+          q.id === question.id ? { ...q, verdict, explanation: q.explanation ?? explanation } : q
+        )
       );
-      setAnswers(nextAnswers);
-      setQuestions(nextQuestions);
+      setResolvedIds((prev) => new Set(prev).add(question.id));
     },
     [answers, index, questions]
   );
@@ -200,16 +208,18 @@ export default function DailyChallengePage(): JSX.Element {
           </div>
         )}
 
-        {phase === 'played' && playedResult && (
+        {phase === 'played' && (
           <div className="rounded-2xl bg-white p-8 text-center shadow-lg dark:bg-secondary-800">
             <p className="text-4xl">✅</p>
             <h2 className="mt-3 text-xl font-black text-gray-800 dark:text-secondary-100">
               Today is done — nice!
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-secondary-300">
-              You scored {playedResult.score} points ({playedResult.correctCount}/
-              {playedResult.total} correct).
-            </p>
+            {playedResult && (
+              <p className="mt-2 text-gray-600 dark:text-secondary-300">
+                You scored {playedResult.score} points ({playedResult.correctCount}/
+                {playedResult.total} correct).
+              </p>
+            )}
             <div className="mt-5 flex items-center justify-center gap-6">
               <span className="flex items-center gap-1 text-lg font-black text-orange-600 dark:text-orange-300">
                 <Flame className="h-5 w-5" /> {status.streak}-day streak
@@ -226,19 +236,22 @@ export default function DailyChallengePage(): JSX.Element {
 
         {phase === 'playing' && current && (
           <div>
+            {/* key: remount per question so the card's internal feedback/bubble
+                state resets with each question */}
             <QuestionCard
+              key={current.id}
               question={current}
               questionNumber={index + 1}
               totalQuestions={questions.length}
               selectedAnswer={answers[current.id] ?? null}
               onSelectAnswer={(option) => void handleSelect(option)}
-              showFeedback={answers[current.id] !== undefined}
+              showFeedback={resolvedIds.has(current.id)}
               disabled={answers[current.id] !== undefined}
               subjectEmoji="📅"
               score={calculateScore(questions, answers)}
               maxScore={questions.length}
             />
-            {answers[current.id] !== undefined && (
+            {resolvedIds.has(current.id) && (
               <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}

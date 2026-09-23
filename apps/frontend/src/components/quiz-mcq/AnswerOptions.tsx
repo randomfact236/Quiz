@@ -222,6 +222,8 @@ export function AnswerOptions({
   // Announce the graded outcome for screen readers (plan/02-mcq-quiz.md P2 a11y).
   const feedbackAnnouncement = (() => {
     if (!showFeedback || !hasSelection) return null;
+    // Server verdict first (key-stripped payloads have no correctKey to compare).
+    if (answerVerdict !== undefined) return answerVerdict ? 'Correct!' : 'Incorrect.';
     if (correctKey && selectedKey === correctKey) return 'Correct!';
     if (correctKey) {
       const correctText = displayOptions.find((o) => o.key === correctKey)?.text;
@@ -241,8 +243,19 @@ export function AnswerOptions({
           const isSelected = selectedKey === option.key;
           // Gate on hasSelection too: showFeedback alone is true during play,
           // which would leak the correct answer in pre-answer aria-labels.
-          const isCorrect = showFeedback && hasSelection && correctKey === option.key;
-          const isWrong = showFeedback && hasSelection && isSelected && correctKey !== option.key;
+          // 2026-09-24 fix: on key-stripped payloads (HARD-02) correctKey is
+          // always '' — the server verdict must drive the ✕/✔ marking, or a
+          // CORRECT answer renders as wrong (✕ + "incorrect" aria-label).
+          const verdictKnown = answerVerdict !== undefined;
+          const isCorrect =
+            showFeedback &&
+            hasSelection &&
+            (verdictKnown ? isSelected && answerVerdict === true : correctKey === option.key);
+          const isWrong =
+            showFeedback &&
+            hasSelection &&
+            isSelected &&
+            (verdictKnown ? answerVerdict === false : correctKey !== option.key);
 
           return (
             <motion.button

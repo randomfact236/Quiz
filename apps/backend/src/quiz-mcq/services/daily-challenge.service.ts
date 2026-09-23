@@ -6,6 +6,7 @@ import { CacheService } from '../../common/cache/cache.service';
 import { ContentStatus } from '../../common/enums/content-status.enum';
 import { DailyChallengeResult } from '../entities/daily-challenge-result.entity';
 import { Question } from '../entities/question.entity';
+import { QuizMcqService } from '../quiz-mcq.service';
 
 /** NOW-08 Daily Challenge — deterministic per-date set + one-attempt results. */
 
@@ -35,7 +36,8 @@ export class DailyChallengeService {
     private readonly questionRepo: Repository<Question>,
     @InjectRepository(DailyChallengeResult)
     private readonly resultRepo: Repository<DailyChallengeResult>,
-    private readonly cacheService: CacheService
+    private readonly cacheService: CacheService,
+    private readonly quizService: QuizMcqService
   ) {}
 
   /** Validates a client-supplied date; falls back to the server's UTC day. */
@@ -62,6 +64,9 @@ export class DailyChallengeService {
           .select('q.id', 'id')
           .addSelect('md5(q.id || :salt)', 'h')
           .where('q.status = :status', { status: ContentStatus.PUBLISHED })
+          // Daily = quick MCQs only: open-ended (extreme) questions have no
+          // options to shuffle and typing breaks the streak flow.
+          .andWhere('q.options IS NOT NULL')
           .setParameter('salt', `daily:${day}`)
           .orderBy('h', 'ASC')
           .limit(DAILY_SIZE)
@@ -71,11 +76,15 @@ export class DailyChallengeService {
         const questions = await this.questionRepo.find({ where: { id: In(ids) } });
         const byId = new Map(questions.map((q) => [q.id, q]));
         const ordered = ids.map((id) => byId.get(id)).filter((q): q is Question => Boolean(q));
+        // BUG-041 serve-shuffle (shared implementation via QuizMcqService): the
+        // stored option order is learnable — without it the correct answer sits
+        // on A/B ~79% of the time in the daily set.
+        const served = this.quizService.serveShuffledQuestions(ordered);
         // Same strip contract as QuizMcqController.toPublicQuestion (H1 +
         // 2026-09-24 hardening): no key, no explanation, no internal columns.
         return {
           date: day,
-          questions: ordered.map(
+          questions: served.map(
             ({ correctAnswer, correctLetter, explanation, contentHash, random_weight, ...safe }) =>
               safe
           ),

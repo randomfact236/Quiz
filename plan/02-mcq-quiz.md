@@ -133,3 +133,24 @@ Frontend (`apps/frontend/src/`):
   Daily Challenge set mirrors the identical strip. Live-site note: prod answer-strip
   on quiz lists IS live (phase-1 era); the remaining live exposures are riddle +
   image-riddle reads — resolved by the pending production push.
+- **Daily Challenge play-fixes (2026-09-24, owner-reported "issue when playing"):**
+  (a) **Correct answers rendered as ✕ in play** — AnswerOptions marked options via
+  `correctKey`, which is ALWAYS empty on key-stripped payloads (HARD-02), so every
+  selected answer showed ✕ + "your incorrect answer" even when correct (affected the
+  main quiz + riddle play flows too, since the strip shipped). Fixed: the server
+  verdict (`answerVerdict`) now drives the ✕/✔ icon, aria-label, and SR announcement;
+  the correctKey compare remains as the legacy fallback. RiddleCard now passes its
+  verdict through as well.
+  (b) **Option-position bias in the daily set** — the daily built its set from stored
+  rows without the BUG-041 serve-shuffle; stored distribution is A 3,986 / B 3,857 /
+  C 1,320 / D 536, so correct answers sat on A/B ~79% of the time. Fixed: the daily
+  now shuffles through a public `QuizMcqService.serveShuffledQuestions` seam (one
+  shuffle implementation, no duplication).
+  (c) **Open-ended questions removed from the daily pool** (`options IS NOT NULL`) —
+  typing broke the quick-streak flow (and extremes have no options to shuffle).
+  (d) **Play feel:** selection now locks instantly (optimistic) with the verdict
+  landing a beat later (Next button is verdict-gated so nothing is skipped);
+  QuestionCard remounts per question (key) so internal feedback/bubble state resets;
+  played-today gate no longer offers a replay in the rare played-without-result edge.
+  Verified with a full manual browser playthrough (marking ✓/✕ per verdict, 2-day
+  streak carried, played-today lockout on reload).
