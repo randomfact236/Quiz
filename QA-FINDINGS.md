@@ -11,11 +11,15 @@
 > **Structure rule (owner, 2026-09-23):** this tracker has exactly TWO tables —
 > **DEFERRED on top** and **OPEN below**.
 >
-> - **DEFERRED:** never touch until the owner explicitly mentions the item.
+> - **DEFERRED:** never touch until the owner explicitly mentions the item — and even
+>   then, first MOVE the item to OPEN before working on it.
 > - **OPEN:** all normal conversation and work happens on open-table issues only.
 > - Resolved findings are removed (documented in `plan/` files; history in git:
 >   `git log --grep=NOW / --grep=HARD / --grep=TASK / --grep=BUG`).
 >
+> **Work-authorization rule (owner, 2026-09-23):** before working on ANY issue, ALWAYS move it
+> from DEFERRED to OPEN first — then work on it. NEVER work on an issue while it sits in the
+> DEFERRED table.
 > **Resolution rule (owner, 2026-09-23):** for ALL resolved findings, ALWAYS recheck the
 > resolved issue against the real code (and the live site where relevant) to confirm it is
 > **completely resolved** — before it is removed/closed. A finding marked resolved but not
