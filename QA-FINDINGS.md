@@ -57,31 +57,6 @@
 | ------ | ---------------------------------------- | ------- | ---- | --- | --------- | ----------------------------------- |
 | NOW-02 | Rotate credentials + SSH/secrets hygiene | TASK-18 | ops  | P1  | owner/VPS | Deferred for now (owner 2026-09-24) |
 
----
-
-### Queued item details
-
-### NOW-02 - Rotate credentials + SSH/secrets hygiene (was TASK-18) — QUEUED NEXT
-
-- **Date found:** 2026-09-22 (source: audit + plan/push-ownership-contract.md)
-- **Area:** ops / VPS — **owner action**
-- **Priority:** P1
-- **Scope:** rotate admin/DB/Redis/JWT/OAuth credentials, SSH hardening, secret-history
-  scan, audit logging.
-- **Risk note (kept from the 2026-09-23 analysis):** prod content was wiped once already
-  (2026-09-17) and credentials were NOT rotated as part of that recovery — anyone holding
-  valid credentials from then still has working access. The firewall lockdown (NOW-01,
-  done) removed the direct-origin bypass, which reduces exposure; rotation is the closure.
-  Cheap to run: runbook ready at `plan/runbooks/credential-rotation.md`, ~1 hour with the
-  owner present (new secrets must be recorded by the owner).
-- **Status:** DEFERRED FOR NOW (owner 2026-09-24 — supersedes the earlier
-  queued-next sequencing; runbook + the 2026-09-24 runbook additions are ready,
-  ~1 hour with the owner present, resume the moment the owner says go).
-
----
-
----
-
 ## OPEN — normal conversation work happens only on these
 
 > **⚠️ 2026-09-24 live-exposure audit:** production runs code OLDER than `2b17264` — the
@@ -113,6 +88,25 @@
 | HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests)     | TASK-07 (DEC-06)        | decision       | P3  | decision      | Open — owner decision                           |
 
 ### Open item details
+
+### NOW-02 - Rotate credentials + SSH/secrets hygiene (was TASK-18) — DEFERRED FOR NOW
+
+- **Date found:** 2026-09-22 (source: audit + plan/push-ownership-contract.md)
+- **Area:** ops / VPS — **owner action**
+- **Priority:** P1
+- **Scope:** rotate admin/DB/Redis/JWT/OAuth credentials, SSH hardening, secret-history
+  scan, audit logging.
+- **Risk note (kept from the 2026-09-23 analysis):** prod content was wiped once already
+  (2026-09-17) and credentials were NOT rotated as part of that recovery — anyone holding
+  valid credentials from then still has working access. The firewall lockdown (NOW-01,
+  done) removed the direct-origin bypass, which reduces exposure; rotation is the closure.
+  Cheap to run: runbook ready at `plan/runbooks/credential-rotation.md`, ~1 hour with the
+  owner present (new secrets must be recorded by the owner).
+- **Status:** DEFERRED FOR NOW (owner 2026-09-24 — supersedes the earlier
+  queued-next sequencing; runbook + the 2026-09-24 runbook additions are ready,
+  ~1 hour with the owner present, resume the moment the owner says go).
+
+---
 
 ### NOW-03 - SEO residual: RSC hub bodies (was TASK-11) - chapter landings DONE 2026-09-23; RSC bodies remain
 
