@@ -49,7 +49,7 @@
 
 | ID      | Title                                                                  | Was                     | Area           | Pri | Work by       | Status                                   |
 | ------- | ---------------------------------------------------------------------- | ----------------------- | -------------- | --- | ------------- | ---------------------------------------- |
-| NOW-02  | Rotate credentials + SSH/secrets hygiene                               | TASK-18                 | ops            | P1  | owner/VPS     | Queued next (runbook ready)              |
+| NOW-02  | Rotate credentials + SSH/secrets hygiene                               | TASK-18                 | ops            | P1  | owner/VPS     | Deferred for now (owner 2026-09-24)      |
 | NOW-10  | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23          | content        | P2  | owner+content | Queued next (rights decision needed 1st) |
 | HARD-13 | Owner-deferred bucket — items revisited in sequence                    | TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Queued next                              |
 | HARD-15 | Duel / PvP mode — web-first                                            | new 2026-09-23          | feature/growth | P2  | code          | Queued next (after session contract)     |
@@ -72,8 +72,9 @@
   done) removed the direct-origin bypass, which reduces exposure; rotation is the closure.
   Cheap to run: runbook ready at `plan/runbooks/credential-rotation.md`, ~1 hour with the
   owner present (new secrets must be recorded by the owner).
-- **Status:** QUEUED NEXT (owner 2026-09-23) — starts right after the ACTIVE queue
-  completes; do not let this slip past that point.
+- **Status:** DEFERRED FOR NOW (owner 2026-09-24 — supersedes the earlier
+  queued-next sequencing; runbook + the 2026-09-24 runbook additions are ready,
+  ~1 hour with the owner present, resume the moment the owner says go).
 
 ### NOW-10 - Image-riddle catalog replacement: wipe + extract from the benchmark sites (new 2026-09-23) — QUEUED NEXT
 
