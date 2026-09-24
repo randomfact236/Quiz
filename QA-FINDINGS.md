@@ -40,6 +40,12 @@
 > the entry count/headings are intact — scripted rebuilds have dropped entries before).
 > **No entry leaves this tracker without its record** — an accidental removal without a
 > record is treated as data loss: restore the entry from git and re-do the record first.
+>
+> **Reopen-after-change rule (owner, 2026-09-24 — WORKING PROCESS):** after EVERY change
+> to this file, REOPEN/RE-READ it and show the updated content (the tables and any
+> affected entries) in the same conversation — never end an edit relying on a remembered
+> or cached view. This is both a courtesy to the owner and a built-in guard: the reopen
+> step is what catches stale views, failed writes, and parallel-session collisions.
 
 ## Index
 
