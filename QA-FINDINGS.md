@@ -153,22 +153,21 @@
 > push to production.** Live checks that PASS: quiz list answer-strip, `answers/check`
 > grader (400), admin guard (401), CSP/HSTS/frame-deny headers.
 
-| ID      | Title                                                              | Was              | Area           | Pri | Work by       | Status                                           |
-| ------- | ------------------------------------------------------------------ | ---------------- | -------------- | --- | ------------- | ------------------------------------------------ |
-| NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)               | TASK-11          | seo            | P2  | code          | Open (RSC bodies remain)                         |
-| NOW-05  | Uptime/error alerting — one owner step left                        | TASK-21          | ops            | P2  | owner/VPS     | Open (owner step only)                           |
-| NOW-07  | 60 over-long DB riddles rewrite + live content push                | TASK-03 resid.   | content        | P2  | owner/content | Draft ready — owner review                       |
-| NOW-08  | Daily Challenge + streaks                                          | new 2026-09-23   | retention/code | P2  | code          | Fixed 2026-09-23 (local; goes live on next push) |
-| NOW-09  | Surface stored answer explanations post-answer                     | new 2026-09-23   | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content  |
-| HARD-01 | CSP residuals: 'unsafe-inline' + HttpOnly token storage            | TASK-04          | security       | P2  | decision      | Open — owner decision                            |
-| HARD-05 | R2 media follow-ups                                                | TASK-22          | media/ops      | P2  | owner+code    | Open                                             |
-| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                  | TASK-09 rem.     | a11y           | P3  | code+owner    | Fixed — owner phone QA                           |
-| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01) | decision       | P2  | decision      | Open — owner decision                            |
-| HARD-08 | Comments on quiz/riddle content                                    | TASK-12 (DEC-02) | decision       | P3  | decision      | Open — owner decision                            |
-| HARD-09 | SEC-07 email-verification gate                                     | TASK-13 (DEC-03) | decision       | P2  | decision      | Open — owner decision                            |
-| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity        | TASK-16 (DEC-04) | decision       | P3  | decision      | Open — owner decision                            |
-| HARD-11 | Installability: full manifest / theme-color                        | TASK-17 (DEC-05) | decision       | P3  | decision      | Open — owner decision                            |
-| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests) | TASK-07 (DEC-06) | decision       | P3  | decision      | Open — owner decision                            |
+| ID      | Title                                                              | Was              | Area      | Pri | Work by       | Status                                          |
+| ------- | ------------------------------------------------------------------ | ---------------- | --------- | --- | ------------- | ----------------------------------------------- |
+| NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)               | TASK-11          | seo       | P2  | code          | Open (RSC bodies remain)                        |
+| NOW-05  | Uptime/error alerting — one owner step left                        | TASK-21          | ops       | P2  | owner/VPS     | Open (owner step only)                          |
+| NOW-07  | 60 over-long DB riddles rewrite + live content push                | TASK-03 resid.   | content   | P2  | owner/content | Draft ready — owner review                      |
+| NOW-09  | Surface stored answer explanations post-answer                     | new 2026-09-23   | ux/seo    | P2  | code+content  | Partial — riddle side fixed; quiz needs content |
+| HARD-01 | CSP residuals: 'unsafe-inline' + HttpOnly token storage            | TASK-04          | security  | P2  | decision      | Open — owner decision                           |
+| HARD-05 | R2 media follow-ups                                                | TASK-22          | media/ops | P2  | owner+code    | Open                                            |
+| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                  | TASK-09 rem.     | a11y      | P3  | code+owner    | Fixed — owner phone QA                          |
+| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01) | decision  | P2  | decision      | Open — owner decision                           |
+| HARD-08 | Comments on quiz/riddle content                                    | TASK-12 (DEC-02) | decision  | P3  | decision      | Open — owner decision                           |
+| HARD-09 | SEC-07 email-verification gate                                     | TASK-13 (DEC-03) | decision  | P2  | decision      | Open — owner decision                           |
+| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity        | TASK-16 (DEC-04) | decision  | P3  | decision      | Open — owner decision                           |
+| HARD-11 | Installability: full manifest / theme-color                        | TASK-17 (DEC-05) | decision  | P3  | decision      | Open — owner decision                           |
+| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests) | TASK-07 (DEC-06) | decision  | P3  | decision      | Open — owner decision                           |
 
 ### Open item details
 
@@ -201,32 +200,6 @@
 - **Remaining (owner go):** full RSC conversion of hub/section bodies (plan/15 P2 item);
   organic segmentation (P3); curated niche packs ("90s Music Quiz") once GSC shows which
   long-tails earn them.
-
-### NOW-08 - Daily Challenge + streaks (new 2026-09-23) — FIXED 2026-09-23 (local; goes live on next push)
-
-- **Date found:** 2026-09-23 (source: competitor pass — all three trivia benchmarks
-  (Trivia Crack, TriviaPlaza, FunTrivia) run daily/hourly ritual games; we have nothing
-  that resets daily)
-- **Area:** retention / quiz — **code work**
-- **Priority:** P2
-- **Built 2026-09-23, verified end-to-end locally (API probes + full GUI play-through
-  with screenshots in gui-test-screenshots/now08-\*.png):**
-  - Backend: `GET /quiz-mcq/daily` (deterministic per-date 10-question set —
-    `md5(id || ':daily:<date>')` order, identical for every visitor, redis-cached,
-    key-free payloads per H1); `POST /quiz-mcq/daily/result` (one attempt per identity
-    per CLIENT-LOCAL date — two partial unique indexes, migration
-    `1793200000000-CreateDailyChallengeResults`, applied to dev DB manually per the
-    dev-schema gotcha); `GET /quiz-mcq/daily/status` (played flag + current/best
-    streak with a yesterday-grace rule).
-  - Frontend: `/quiz-mcq/daily` page (noindex like other gameplay routes) reusing the
-    shared QuestionCard + shared scorer + the server-side grader (HARD-02); streak
-    header, played-today state, result screen with share (Web Share → clipboard).
-  - Placement: Play Hub banner card + home strip above the fixed-order topic cards.
-  - Middleware: `daily` added to the known quiz subpaths so the slug validator
-    never touches it.
-- **Not wired (v1 scope):** achievements/OG share-image type for daily results — the
-  share is text-based for now; achievements integration can ride the existing evaluator
-  later. Recheck against the live site after deploy, then remove per policy.
 
 ### NOW-09 - Surface stored answer explanations post-answer (new 2026-09-23) — PARTIAL: riddle side fixed; quiz side needs content (owner)
 
@@ -370,6 +343,9 @@ Fully-fixed findings live in their respective `plan/` files and in git history
 - HARD-04 → plan/03 §P3 (hint import — closed stale), plan/04 §P3 (status import), plan/05 §P3 (jokes status import)
 - Resolved sweep 2026-09-22 (TASK-01/02/03/08/24/25/26/27) → plan/17, plan/13, plan/02 §6
   (TASK-03 + TASK-27), plan/games/08 §22 (TASK-24/25/26); TASK-08 was a non-issue
+- NOW-08 → plan/02 (Daily Challenge built + play-fixes; **live-verified on
+  production 2026-09-24**: API + web + 92-chapter sitemap + riddle/image-riddle
+  strips; record-before-remove cross-checked before removal)
 
 ---
 
