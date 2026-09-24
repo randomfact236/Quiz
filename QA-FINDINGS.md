@@ -304,8 +304,21 @@
   JSON import-export / cache tuning; image-riddle server-side progress;
   admin-dashboard unification (dedupe with HARD-10 when reached); games R2-2/R2-3
   extras; LinkedIn + Pinterest share previews.
-- **Status:** OPEN (owner 2026-09-24) — start with the riddle-mcq session persistence
-  item; it is the HARD-15 (duel) prerequisite.
+- **Status:** OPEN (owner 2026-09-24) — session persistence IN PROGRESS (design set
+  2026-09-24, implementation started).
+- **Session-persistence implementation plan (2026-09-24):** riddle sessions are currently
+  CLIENT-ONLY (localStorage, 24h expiry — `lib/riddle-persistence.ts`); the quiz side
+  already has the server pattern to mirror (`quiz_sessions` entity + POST
+  `/quiz-mcq/sessions` + history/high-scores endpoints, soft userId/guestId identity,
+  denormalized subject fields). Work items: (1) backend `RiddleSession` entity +
+  `riddle_sessions` table (mirror `quiz_sessions`; riddle fields: subject slug/name,
+  difficulty, mode, totals/score) + migration `1793300000000-CreateRiddleSessions` +
+  dev-DB manual apply; (2) endpoints `POST /riddle-mcq/sessions`, `GET
+/riddle-mcq/sessions/history`, `GET /riddle-mcq/sessions/high-scores` (OptionalJwt,
+  throttled, same conventions); (3) frontend `lib/riddle-mcq-api.ts` submit/history
+  functions wired into the riddle results flow (localStorage stays as the offline
+  layer — server persistence makes results/resume survive device loss and gives
+  HARD-15 duels their server-side session identity).
 
 ### HARD-14 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — OPEN (after the session contract lands)
 
