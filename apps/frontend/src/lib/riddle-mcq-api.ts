@@ -475,6 +475,27 @@ export async function getRiddleStats(): Promise<RiddleStats> {
   return response.data;
 }
 
+/** NOW-07: persist a completed riddle session server-side (soft identity). */
+export async function submitRiddleSession(payload: {
+  guestId: string | null;
+  subjectSlug: string | null;
+  subjectName: string | null;
+  difficulty: string | null;
+  mode: string | null;
+  totalRiddles: number;
+  correctCount: number;
+  score: number;
+  maxScore: number;
+  timeTaken: number | null;
+  startedAt: string | null;
+}): Promise<{ recorded: boolean; sessionId?: string }> {
+  const response = await api.post<{ recorded: boolean; sessionId?: string }>(
+    '/riddle-mcq/sessions',
+    payload
+  );
+  return response.data;
+}
+
 /** H1 (audit SEC-03): grade one riddle answer server-side. */
 export interface RiddleAnswerCheckResult {
   correct: boolean;

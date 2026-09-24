@@ -29,7 +29,7 @@ import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/ri
 import { saveRiddleResult } from '@/lib/riddle-progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 import { isRiddleAnswerCorrect, riddleOptionText } from '@/lib/riddle-scoring';
-import { checkRiddleAnswer } from '@/lib/riddle-mcq-api';
+import { submitRiddleSession, checkRiddleAnswer } from '@/lib/riddle-mcq-api';
 import { registerExitHook, track } from '@/lib/analytics';
 import { toast } from '@/lib/toast';
 import { shuffle } from '@/lib/utils';
@@ -38,6 +38,7 @@ import { SettingsService } from '@/services/settings.service';
 import type { PublicSettings } from '@/services/settings.service';
 
 import { useRiddleTimers, type RiddlePlayStatus } from './useRiddleTimers';
+import { getGuestId } from '@/lib/guest-id';
 
 // Auto-save interval in milliseconds
 const AUTO_SAVE_INTERVAL = 10000;
@@ -591,6 +592,28 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
     setStatus('completed');
     saveRiddleSession(completedSession); // full payload, one-time, for results
+
+    // NOW-07: server-side persistence — results survive device loss and give
+    // HARD-15 (duel) its session identity. Fire-and-forget; offline-safe.
+    void (async () => {
+      try {
+        await submitRiddleSession({
+          guestId: getGuestId(),
+          subjectSlug: session.subjectId === 'all' ? null : session.subjectId,
+          subjectName: session.subjectName ?? null,
+          difficulty: session.difficulty === 'all' ? null : session.difficulty,
+          mode,
+          totalRiddles: riddles.length,
+          correctCount,
+          score: completedSession.score,
+          maxScore: riddles.length,
+          timeTaken: completedSession.timeTaken,
+          startedAt: session.startedAt,
+        });
+      } catch {
+        // offline-safe: the local snapshot already holds the result
+      }
+    })();
 
     // Achievements/progress integration (plan/03-riddle-mcq.md P1 #1): riddles
     // previously fed nothing. Record the completion, then evaluate unlocks.
