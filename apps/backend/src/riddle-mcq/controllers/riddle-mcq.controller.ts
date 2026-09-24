@@ -22,6 +22,9 @@ import { RolesGuard } from '../../common/guards/roles.guard';
 
 import { RiddleMcq, RiddleStatus } from '../entities/riddle-mcq.entity';
 import { RiddleMcqQuestionService } from '../services/riddle-mcq-question.service';
+import { RiddleSessionService } from '../services/riddle-session.service';
+import { Req } from '@nestjs/common';
+import { OptionalJwtAuthGuard } from '../../auth/optional-jwt-auth.guard';
 import { _Public } from '../../common/decorators/public.decorator';
 import { Throttle } from '@nestjs/throttler';
 import { RiddleMcqImportService } from '../services/riddle-mcq-import.service';
@@ -42,7 +45,8 @@ export class RiddleMcqController {
     private readonly questionService: RiddleMcqQuestionService,
     private readonly importService: RiddleMcqImportService,
     private readonly bulkActionsService: RiddleMcqBulkActionsService,
-    private readonly statsService: RiddleMcqStatsService
+    private readonly statsService: RiddleMcqStatsService,
+    private readonly sessionService: RiddleSessionService
   ) {}
 
   /**
@@ -63,6 +67,67 @@ export class RiddleMcqController {
     delete safe['contentHash'];
     delete safe['random_weight'];
     return safe;
+  }
+
+  // ==================== SESSIONS (NOW-07: server-side riddle persistence) ====================
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Post('sessions')
+  @HttpCode(HttpStatus.CREATED)
+  @Throttle({ default: { limit: 20, ttl: 60000 } })
+  @ApiOperation({ summary: 'Persist a completed riddle session (user or guest attributed)' })
+  async createRiddleSession(@Body() body: Record<string, any>, @Req() req: any) {
+    const userId = req.user?.id ?? null;
+    if (!userId && !body?.guestId) {
+      return { recorded: false };
+    }
+    const session = await this.sessionService.createSession(
+      {
+        guestId: body?.guestId ?? null,
+        subjectSlug: body?.subjectSlug ?? null,
+        subjectName: body?.subjectName ?? null,
+        difficulty: body?.difficulty ?? null,
+        mode: body?.mode ?? null,
+        totalRiddles: Number(body?.totalRiddles) || 1,
+        correctCount: Number(body?.correctCount) || 0,
+        score: Number(body?.score) || 0,
+        maxScore: Number(body?.maxScore) || 0,
+        timeTaken: body?.timeTaken != null ? Number(body.timeTaken) : null,
+        startedAt: body?.startedAt ?? null,
+      },
+      userId
+    );
+    return { recorded: true, sessionId: session.id };
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Get('sessions/history')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiOperation({
+    summary: 'Latest 50 completed riddle sessions for the caller (token or guestId)',
+  })
+  async getRiddleSessionHistory(@Req() req: any, @Query('guestId') guestId?: string) {
+    const data = await this.sessionService.history({
+      userId: req.user?.id ?? null,
+      guestId: guestId ?? null,
+    });
+    return { data, total: data.length };
+  }
+
+  @UseGuards(OptionalJwtAuthGuard)
+  @_Public()
+  @Get('sessions/high-scores')
+  @Throttle({ default: { limit: 60, ttl: 60000 } })
+  @ApiOperation({ summary: 'Best riddle score per subject for the caller (token or guestId)' })
+  async getRiddleSessionHighScores(@Req() req: any, @Query('guestId') guestId?: string) {
+    return {
+      data: await this.sessionService.highScores({
+        userId: req.user?.id ?? null,
+        guestId: guestId ?? null,
+      }),
+    };
   }
 
   @Get('all')

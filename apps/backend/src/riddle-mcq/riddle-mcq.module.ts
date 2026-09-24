@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CacheModule } from '../common/cache/cache.module';
 
 import { RiddleMcqCategory } from './entities/riddle-category.entity';
+import { RiddleSession } from './entities/riddle-session.entity';
+import { RiddleSessionService } from './services/riddle-session.service';
 import { RiddleMcq } from './entities/riddle-mcq.entity';
 import { RiddleMcqSubject } from './entities/riddle-subject.entity';
 import {
@@ -22,7 +24,7 @@ import {
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([RiddleMcqCategory, RiddleMcqSubject, RiddleMcq]),
+    TypeOrmModule.forFeature([RiddleMcqCategory, RiddleMcqSubject, RiddleMcq, RiddleSession]),
     CacheModule,
   ],
   controllers: [RiddleMcqCategoryController, RiddleMcqSubjectController, RiddleMcqController],
@@ -33,6 +35,7 @@ import {
     RiddleMcqBulkActionsService,
     RiddleMcqImportService,
     RiddleMcqStatsService,
+    RiddleSessionService,
   ],
 })
 export class RiddleMcqModule {}
