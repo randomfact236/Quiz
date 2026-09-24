@@ -379,6 +379,13 @@ Benchmark vs four reference quiz/trivia sites (owner request 2026-09-23). Our si
 | Monetization posture | Content platform (owner-defined)                                          | Ads + IAP (mobile F2P)                    | Subscription (Britannica) + ads                        | Ads                                            | Ads + premium membership                                      |
 | **Gap to close**     | —                                                                         | No live multiplayer / duel mode           | No encyclopedia-grade explanatory copy under answers   | Quiz set is narrower than their homepage packs | No UGC quiz creation pipeline                                 |
 
+- **LIVE 2026-09-21 (owner-approved generated format; commit fa772dc):** 30 original
+  emoji/rebus SVG riddles (960×600) + 3 categories (Emoji Puzzles / Rebus Puzzles /
+  Wordplay) deployed and pushed via the content lane; prod API verifies
+  30 riddles / 3 categories; sample set (Set B = the approved direction) at
+  `designs/image-riddle-samples-10.html`. Public-domain photo riddles (old Set A)
+  REJECTED by owner — generated visuals only going forward. Remaining: scale the
+  catalog (more riddles in the same generator pattern).
 - **WIPED 2026-09-22 (owner: "wipe all the image riddle data first"):** prod + local
   image_riddles (1,906 rows) and image_riddle_categories (10 rows) deleted AFTER backups
   (prod: `/opt/quiz-backups/image-riddles-wipe/pre-wipe_20260922.sql`; local:
