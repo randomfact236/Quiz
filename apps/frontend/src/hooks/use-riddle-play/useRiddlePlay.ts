@@ -25,7 +25,12 @@ import {
   saveRiddleResumeQuestions,
   clearRiddleResume,
 } from '@/lib/riddle-persistence';
-import { getRiddlesBySubject, getMixedRiddles, getRandomRiddles } from '@/lib/riddle-mcq-api';
+import {
+  getRiddlePlayById,
+  getRiddlesBySubject,
+  getMixedRiddles,
+  getRandomRiddles,
+} from '@/lib/riddle-mcq-api';
 import { saveRiddleResult } from '@/lib/riddle-progress';
 import { checkAchievements, toastAchievementUnlocks } from '@/lib/achievements';
 import { isRiddleAnswerCorrect, riddleOptionText } from '@/lib/riddle-scoring';
@@ -54,9 +59,17 @@ export interface UseRiddlePlayParams {
   level: string;
   mode: 'timer' | 'practice';
   chapterNameParam: string;
+  /** NOW-08: shared single-riddle play (riddle id from a share link). */
+  sharedId?: string | null;
 }
 
-export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseRiddlePlayParams) {
+export function useRiddlePlay({
+  subjectId,
+  level,
+  mode,
+  chapterNameParam,
+  sharedId,
+}: UseRiddlePlayParams) {
   const router = useRouter();
 
   // State — mirrors quiz page structure
@@ -93,6 +106,20 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
     async function fetchRiddles() {
       try {
+        // NOW-08: shared single-riddle play — fetch exactly the shared riddle
+        if (sharedId) {
+          const raw = await getRiddlePlayById(sharedId);
+          if (!raw) {
+            setError('Shared riddle not found.');
+            setStatus('playing');
+            return;
+          }
+          const single = [adaptRiddleMcq(raw as any)];
+          setPool(single);
+          setChapterName('Shared Riddle');
+          setStatus('ready');
+          return;
+        }
         setStatus('loading');
         setError(null);
 
@@ -190,7 +217,7 @@ export function useRiddlePlay({ subjectId, level, mode, chapterNameParam }: UseR
 
     fetchRiddles();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [subjectId, level, isMounted]);
+  }, [subjectId, level, isMounted, sharedId]);
 
   // Start new session
   const startNewSession = useCallback(

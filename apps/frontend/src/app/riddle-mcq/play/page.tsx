@@ -80,7 +80,10 @@ function RiddlePlayPageContent(): JSX.Element {
   const chapterNameParam = searchParams.get('chapterName') || '';
 
   // Guard: no subject scope in the URL at all -> back to the hub
-  const hasScopeParam = searchParams.has('subjectId') || searchParams.has('chapterId');
+  // NOW-08: ?shared=<riddleId> is a valid entry too (shared single-riddle play)
+  const sharedId = searchParams.get('shared');
+  const hasScopeParam =
+    searchParams.has('subjectId') || searchParams.has('chapterId') || searchParams.has('shared');
   useEffect(() => {
     if (!hasScopeParam) router.replace('/riddle-mcq');
   }, [hasScopeParam, router]);
@@ -92,7 +95,13 @@ function RiddlePlayPageContent(): JSX.Element {
   // header share (same upgrade BUG-047 gave the quiz play card).
   const [shareMenu, setShareMenu] = useState<null | 'mix' | 'question'>(null);
 
-  const play = useRiddlePlay({ subjectId, level, mode, chapterNameParam });
+  const play = useRiddlePlay({
+    subjectId,
+    level,
+    mode,
+    chapterNameParam,
+    sharedId: sharedId || null,
+  });
 
   // Refs for RiddleCard animations — UI concern, stays in the page
   const riddleCardRef = useRef<RiddleCardRef>(null);

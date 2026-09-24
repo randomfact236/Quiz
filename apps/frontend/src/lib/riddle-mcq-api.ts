@@ -475,6 +475,16 @@ export async function getRiddleStats(): Promise<RiddleStats> {
   return response.data;
 }
 
+/** NOW-08: one shared riddle for the play flow (public, answer-stripped). */
+export async function getRiddlePlayById(id: string): Promise<RiddleMcq | null> {
+  try {
+    const response = await api.get<RiddleMcq>(`/riddle-mcq/riddles/${id}`);
+    return withNormalizedOptions(response.data);
+  } catch {
+    return null;
+  }
+}
+
 /** NOW-07: persist a completed riddle session server-side (soft identity). */
 export async function submitRiddleSession(payload: {
   guestId: string | null;

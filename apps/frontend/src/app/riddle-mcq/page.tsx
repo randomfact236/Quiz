@@ -118,12 +118,34 @@ export async function generateMetadata({
 
 // NOW-03 (RSC residual): category grid renders SERVER-SIDE for crawlers;
 // the interactive hub hydrates below.
-export default async function RiddleMcqPage() {
+export default async function RiddleMcqPage({
+  searchParams,
+}: {
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
+}) {
+  const params = await searchParams;
+  const q = Array.isArray(params['q']) ? params['q'][0] : params['q'];
+
   const categories = await ogData.riddleCategories();
   const catalog = (categories ?? []).filter((c) => c.isActive !== false);
 
   return (
     <>
+      {q && (
+        <section aria-label="Shared riddle" className="mx-auto w-full max-w-3xl px-4 pt-6 sm:px-6">
+          <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-indigo-200 bg-indigo-50 px-5 py-4 dark:border-indigo-500/30 dark:bg-indigo-500/10">
+            <p className="text-sm font-bold text-secondary-800 dark:text-secondary-100">
+              Someone shared a riddle with you — play it now.
+            </p>
+            <Link
+              href={`/riddle-mcq/play?shared=${encodeURIComponent(q)}`}
+              className="rounded-lg bg-indigo-600 px-4 py-2 text-xs font-black uppercase tracking-widest text-white transition-colors hover:bg-indigo-500"
+            >
+              ▶ Play this riddle
+            </Link>
+          </div>
+        </section>
+      )}
       <RiddlesHubView />
       {catalog.length > 0 && (
         <section
