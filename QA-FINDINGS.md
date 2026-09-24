@@ -67,25 +67,25 @@
 > push to production.** Live checks that PASS: quiz list answer-strip, `answers/check`
 > grader (400), admin guard (401), CSP/HSTS/frame-deny headers.
 
-| ID      | Title                                                                  | Was                     | Area           | Pri | Work by       | Status                                          |
-| ------- | ---------------------------------------------------------------------- | ----------------------- | -------------- | --- | ------------- | ----------------------------------------------- |
-| NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)                   | TASK-11                 | seo            | P2  | code          | Open (RSC bodies remain)                        |
-| NOW-05  | Uptime/error alerting — one owner step left                            | TASK-21                 | ops            | P2  | owner/VPS     | Open (owner step only)                          |
-| NOW-07  | 60 over-long DB riddles rewrite + live content push                    | TASK-03 resid.          | content        | P2  | owner/content | Draft ready — owner review                      |
-| NOW-09  | Surface stored answer explanations post-answer                         | new 2026-09-23          | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content |
-| NOW-10  | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23          | content        | P2  | owner+content | Open — rights decision gates execution          |
-| HARD-13 | Owner-deferred bucket — session persistence first                      | TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Open — session persistence first                |
-| HARD-14 | Riddle share deep-link (needs session-contract change)                 | TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Open — after session contract                   |
-| HARD-15 | Duel / PvP mode — web-first                                            | new 2026-09-23          | feature/growth | P2  | code          | Open — after session contract                   |
-| HARD-01 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | TASK-04                 | security       | P2  | decision      | Open — owner decision                           |
-| HARD-05 | R2 media follow-ups                                                    | TASK-22                 | media/ops      | P2  | owner+code    | Open                                            |
-| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | TASK-09 rem.            | a11y           | P3  | code+owner    | Fixed — owner phone QA                          |
-| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | TASK-10 (DEC-01)        | decision       | P2  | decision      | Open — owner decision                           |
-| HARD-08 | Comments on quiz/riddle content                                        | TASK-12 (DEC-02)        | decision       | P3  | decision      | Open — owner decision                           |
-| HARD-09 | SEC-07 email-verification gate                                         | TASK-13 (DEC-03)        | decision       | P2  | decision      | Open — owner decision                           |
-| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity            | TASK-16 (DEC-04)        | decision       | P3  | decision      | Open — owner decision                           |
-| HARD-11 | Installability: full manifest / theme-color                            | TASK-17 (DEC-05)        | decision       | P3  | decision      | Open — owner decision                           |
-| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests)     | TASK-07 (DEC-06)        | decision       | P3  | decision      | Open — owner decision                           |
+| ID     | Title                                                                  | Was                                   | Area           | Pri | Work by       | Status                                          |
+| ------ | ---------------------------------------------------------------------- | ------------------------------------- | -------------- | --- | ------------- | ----------------------------------------------- |
+| NOW-03 | SEO residual: RSC hub bodies (chapter landings DONE)                   | TASK-11                               | seo            | P2  | code          | Open (RSC bodies remain)                        |
+| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                               | ops            | P2  | owner/VPS     | Open (owner step only)                          |
+| NOW-05 | 60 over-long DB riddles rewrite + live content push                    | TASK-03 resid.                        | content        | P2  | owner/content | Draft ready — owner review                      |
+| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                        | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content |
+| NOW-07 | Owner-deferred bucket — session persistence first                      | was HARD-13 · TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Open — session persistence first                |
+| NOW-08 | Riddle share deep-link (needs session-contract change)                 | was HARD-14 · TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Open — after session contract                   |
+| NOW-09 | Duel / PvP mode — web-first                                            | was HARD-15                           | feature/growth | P2  | code          | Open — after session contract                   |
+| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04                 | security       | P2  | decision      | Open — owner decision                           |
+| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22                 | media/ops      | P2  | owner+code    | Open                                            |
+| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.            | a11y           | P3  | code+owner    | Fixed — owner phone QA                          |
+| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01)        | decision       | P2  | decision      | Open — owner decision                           |
+| NOW-14 | Comments on quiz/riddle content                                        | was HARD-08 · TASK-12 (DEC-02)        | decision       | P3  | decision      | Open — owner decision                           |
+| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03)        | decision       | P2  | decision      | Open — owner decision                           |
+| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04)        | decision       | P3  | decision      | Open — owner decision                           |
+| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05)        | decision       | P3  | decision      | Open — owner decision                           |
+| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06)        | decision       | P3  | decision      | Open — owner decision                           |
+| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                        | content        | P2  | owner+content | Open — rights decision gates execution          |
 
 ### Open item details
 
@@ -138,7 +138,40 @@
   organic segmentation (P3); curated niche packs ("90s Music Quiz") once GSC shows which
   long-tails earn them.
 
-### NOW-09 - Surface stored answer explanations post-answer (new 2026-09-23) — PARTIAL: riddle side fixed; quiz side needs content (owner)
+### NOW-04 - Uptime/error alerting wiring (was TASK-21) - WIRED 2026-09-22; one owner step left
+
+- **Date found:** 2026-09-22 (source: OPS-21)
+- **Area:** ops / VPS — **owner action**
+- **Priority:** P2
+- **Wired + live 2026-09-22 (full record: audit file §6.3 OPS-21):** `/usr/local/bin/quiz-uptime.sh`
+  on a 1-minute cron checks https://pigzap.com/ + the API summary endpoint, counts consecutive
+  failures (state in `/opt/quiz-alerts/`), fires `{text:...}` JSON webhooks on failure AND
+  recovery, and dead-man-pings a heartbeat URL on every clean run.
+- **Owner step (only thing missing — no channel existed on the VPS):** create a free
+  healthchecks.io check (or Discord/Slack/Telegram webhook) and put it in
+  `/opt/quiz-alerts/alert.env` as `HEARTBEAT_URL=` and/or `ALERT_WEBHOOK=` — no restart
+  needed; the script reads it per run.
+
+### NOW-05 - 60 over-long DB riddles + live content push (was TASK-03 residue)
+
+- **Date found:** 2026-09-22 (source: TASK-03 repair report)
+- **Area:** content — **owner/content judgment + push**
+- **Priority:** P2
+- **Status:** DRAFT READY 2026-09-22 — all 60 rows exported from prod (with options +
+  answer letters) and proposed ≤220-char rewrites written to
+  `scripts/overlong-riddle-rewrites-DRAFT.tsv` for owner review. **Nothing has been
+  pushed** — apply only after the owner approves wording, then the standing post-push
+  rule: flush `quiz:*`/`riddle-mcq:*` redis keys (BUG-038).
+- **⚠️ New finding from the drafting pass (owner must judge):** the 30 open-answer rows
+  are **self-contradictory as stored in prod** — the question says the bakery receipt
+  _clears_ the culprit, yet the stored answer IS that culprit (explanations blame a
+  jogger instead). Confirmed 30/30. The draft rewrites them as "stale/fake alibi" so the
+  stored answer becomes deducible, flagged CAUTION per row. Additionally, the 30 MCQ
+  rows' stored **explanations are inverted** (they praise the answer's alibi the puzzle
+  refutes). Both need an owner decision + an explanation-rewrite pass in the same
+  content push.
+
+### NOW-06 - Surface stored answer explanations post-answer (new 2026-09-23) — PARTIAL: riddle side fixed; quiz side needs content (owner)
 
 - **Date found:** 2026-09-23 (source: competitor pass — Britannica lesson: every answer
   carries explanatory, learnable content)
@@ -160,46 +193,135 @@
     cards); review screens fall back to the reveal's explanation (RiddleReview +
     QuestionReview). Component-level test coverage kept green (548/548).
 - **Remaining (owner decision):** QUIZ explanations must be AUTHORED — 11,541 rows
-  with an empty explanation column is a content-ops task (like NOW-07), not code; the
+  with an empty explanation column is a content-ops task (like NOW-05), not code; the
   surface renders automatically per-question as content lands. Options: author
   explanations per subject (content pass), crowd none (leave as-is), or fold into the
-  NOW-07 rewrite pass. SEO surfacing of explanations on landing pages deliberately NOT
+  NOW-05 rewrite pass. SEO surfacing of explanations on landing pages deliberately NOT
   built while the quiz column is empty.
 
-### NOW-05 - Uptime/error alerting wiring (was TASK-21) - WIRED 2026-09-22; one owner step left
+### NOW-07 - Owner-deferred bucket — items revisited in sequence (was TASK-23, briefly DEF-01) — OPEN (session persistence first)
 
-- **Date found:** 2026-09-22 (source: OPS-21)
-- **Area:** ops / VPS — **owner action**
+- **Date found:** 2026-09-22
+- **Contents (original owner-deferred list):** riddle-mcq session persistence /
+  JSON import-export / cache tuning; image-riddle server-side progress;
+  admin-dashboard unification (dedupe with NOW-16 when reached); games R2-2/R2-3
+  extras; LinkedIn + Pinterest share previews.
+- **Status:** OPEN (owner 2026-09-24) — session persistence IN PROGRESS (design set
+  2026-09-24, implementation started).
+- **Session-persistence implementation plan (2026-09-24):** riddle sessions are currently
+  CLIENT-ONLY (localStorage, 24h expiry — `lib/riddle-persistence.ts`); the quiz side
+  already has the server pattern to mirror (`quiz_sessions` entity + POST
+  `/quiz-mcq/sessions` + history/high-scores endpoints, soft userId/guestId identity,
+  denormalized subject fields). Work items: (1) backend `RiddleSession` entity +
+  `riddle_sessions` table (mirror `quiz_sessions`; riddle fields: subject slug/name,
+  difficulty, mode, totals/score) + migration `1793300000000-CreateRiddleSessions` +
+  dev-DB manual apply; (2) endpoints `POST /riddle-mcq/sessions`, `GET
+/riddle-mcq/sessions/history`, `GET /riddle-mcq/sessions/high-scores` (OptionalJwt,
+  throttled, same conventions); (3) frontend `lib/riddle-mcq-api.ts` submit/history
+  functions wired into the riddle results flow (localStorage stays as the offline
+  layer — server persistence makes results/resume survive device loss and gives
+  NOW-09 duels their server-side session identity).
+
+### NOW-08 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — OPEN (after the session contract lands)
+
+- **Date found:** 2026-09-22 — riddle question shares still use the hub `?q=` form; the
+  riddle play flow has no shared-start contract (subjectId/level based, no in-session
+  question identity). Implementing means changing the riddle session contract — opened 2026-09-24 with the rest of the
+  contract-chain items; implement after the session contract lands. Note: the same session-contract work is a NOW-09
+  (duel) prerequisite and NOW-07 is queued — sequence them together when the queue
+  reaches that point. P3.
+
+### NOW-09 - Duel / PvP mode — web-first (new 2026-09-23) — OPEN (build after the session contract)
+
+- **Date found:** 2026-09-23 (source: competitor pass — Trivia Crack's core hook; owner
+  asked "website, app, or both?")
+- **Area:** feature / growth — **code work (was decision; owner queued it 2026-09-23)**
 - **Priority:** P2
-- **Wired + live 2026-09-22 (full record: audit file §6.3 OPS-21):** `/usr/local/bin/quiz-uptime.sh`
-  on a 1-minute cron checks https://pigzap.com/ + the API summary endpoint, counts consecutive
-  failures (state in `/opt/quiz-alerts/`), fires `{text:...}` JSON webhooks on failure AND
-  recovery, and dead-man-pings a heartbeat URL on every clean run.
-- **Owner step (only thing missing — no channel existed on the VPS):** create a free
-  healthchecks.io check (or Discord/Slack/Telegram webhook) and put it in
-  `/opt/quiz-alerts/alert.env` as `HEARTBEAT_URL=` and/or `ALERT_WEBHOOK=` — no restart
-  needed; the script reads it per run.
+- **Decision record:** owner initially did not want it; on 2026-09-23 queued it, and on
+  2026-09-24 moved it to OPEN — on the WEBSITE first, web-first and
+  mobile-first. Rationale on record: there is no app yet (web = 100% of the audience;
+  withholding the feature from web withholds it from everyone), web is the SEO funnel
+  that feeds a future app, and the expensive part — the backend — already exists: the
+  `duels` module (public controller: join/leave/name) ships with ZERO frontend
+  references today; any future app shell (e.g. Capacitor wrap) talks to the same API.
+  Precedent: Trivia Crack itself is app-first yet added browser play (CrazyGames, 2023).
+  v1 tradeoff: weaker push notifications vs native — cover with async design +
+  email/PWA push.
+- **Prerequisite:** session-contract work — NOW-07's riddle-mcq session persistence
+  item (quiz side is closer: play URLs already carry `qid=` deep links, TASK-27).
+  Sequence: NOW-07 session contract → NOW-09 duel UI.
 
-### NOW-07 - 60 over-long DB riddles + live content push (was TASK-03 residue)
+---
 
-- **Date found:** 2026-09-22 (source: TASK-03 repair report)
-- **Area:** content — **owner/content judgment + push**
+### NOW-10 - CSP residuals: 'unsafe-inline' + HttpOnly token storage (was TASK-04) - games gap FIXED 2026-09-22; residuals parked
+
+- **Date found:** 2026-09-22 (source: audit)
+- **Area:** security / frontend — **decision**
 - **Priority:** P2
-- **Status:** DRAFT READY 2026-09-22 — all 60 rows exported from prod (with options +
-  answer letters) and proposed ≤220-char rewrites written to
-  `scripts/overlong-riddle-rewrites-DRAFT.tsv` for owner review. **Nothing has been
-  pushed** — apply only after the owner approves wording, then the standing post-push
-  rule: flush `quiz:*`/`riddle-mcq:*` redis keys (BUG-038).
-- **⚠️ New finding from the drafting pass (owner must judge):** the 30 open-answer rows
-  are **self-contradictory as stored in prod** — the question says the bakery receipt
-  _clears_ the culprit, yet the stored answer IS that culprit (explanations blame a
-  jogger instead). Confirmed 30/30. The draft rewrites them as "stale/fake alibi" so the
-  stored answer becomes deducible, flagged CAUTION per row. Additionally, the 30 MCQ
-  rows' stored **explanations are inverted** (they praise the answer's alibi the puzzle
-  refutes). Both need an owner decision + an explanation-rewrite pass in the same
-  content push.
+- **Fixed 2026-09-22 (full record: audit file §6.1 H8):** the eight static games served NO
+  CSP at all — `middleware.ts` now decorates every `/games/*` response with the strictest
+  policy on the site (`script-src 'self'`, no remote anything, `connect-src` same-origin +
+  API origin; two inline theme-loader hashes). Verified on prod build.
+- **Full nonces: NOT being done (assessment, not deferral):** nonces require dynamic
+  rendering — incompatible with prerendered/ISR pages, the games' static HTML `<script>`
+  tags, and Next's own bootstrap scripts. `'unsafe-inline'` on app pages stays as the
+  documented residual risk (weakens XSS defense-in-depth, not an active hole).
+- **HttpOnly refresh-cookie half:** design decision (changes the guest/auth flow the owner
+  deliberately kept friction-free) — parked with the owner.
 
-### NOW-10 - Image-riddle catalog replacement: wipe + extract from the benchmark sites (new 2026-09-23) — OPEN (rights decision gates execution)
+### NOW-11 - R2 media follow-ups (was TASK-22)
+
+- **Date found:** 2026-09-22 (source: plan/17-r2-storage-setup.md)
+- **Area:** media — **owner + code**
+- **Priority:** P2
+- **Reported:** confirm one admin Media upload end-to-end (untested path); move off
+  `r2.dev` (rate-limited, not meant for prod) to a custom domain; rclone-migrate existing
+  media; token hygiene.
+
+### NOW-12 - Games a11y polish + phone QA (was TASK-09 remainder) - FIXED 2026-09-23 (owner phone QA remains)
+
+- **Date found:** 2026-09-22 (source: plan/games/\*)
+- **Area:** games — **owner 10-min phone QA**
+- **Priority:** P3
+- **Fixed 2026-09-23 (commit `81080c2`; memory-quiz QA record in plan/games/08 §22):**
+  AA contrast (computed WCAG audit, 7 games): muted text #64748b failed on the page
+  gradient (2.93-3.81:1) → #475569 (worst case 4.67:1); dark-theme primary buttons
+  #3b82f6 failed with white text (3.68:1) → #2563eb (5.17:1). Sliding-puzzle: segmented
+  radio groups got roving tabindex + arrow-key selection; round start focuses the board.
+  All 8 games verified zero JS errors and zero CSP violations (games CSP completed with
+  the two inline theme-loader script hashes).
+- **Remaining (owner):** the 10-minute phone QA pass.
+
+### NOW-13 - Dad jokes surfaces (was TASK-10, briefly DEC-01) — DECISION
+
+- **Date found:** 2026-09-22 (source: plan/05) — saved jokes, JotD SSR, trending + share buttons. P2.
+
+### NOW-14 - Comments on quiz/riddle content (was TASK-12, briefly DEC-02) — DECISION
+
+- **Date found:** 2026-09-22 (source: plan/07) — P3.
+
+### NOW-15 - SEC-07 email-verification gate (was TASK-13, briefly DEC-03) — DECISION
+
+- **Date found:** 2026-09-22 (source: audit) — real consideration, low actual risk; adds
+  signup friction the owner has resisted before. P2.
+
+### NOW-16 - Admin user-mgmt UI + dashboard unification + guest activity (was TASK-16, briefly DEC-04) — DECISION
+
+- **Date found:** 2026-09-22 (source: plan/09) — note: "dashboard unification" overlaps
+  NOW-07's "admin-dashboard unification"; dedupe when deciding (NOW-07 is now QUEUED
+  next, so coordinate the two when picked up). P3.
+
+### NOW-17 - Installability: full manifest / theme-color (was TASK-17, briefly DEC-05) — DECISION
+
+- **Date found:** 2026-09-22 (source: audit) — related: manifest still carries the
+  hardcoded "AI Quiz" branding (see rebrand state). P3.
+
+### NOW-18 - Analytics deferred items (was TASK-07, briefly DEC-06) — DECISION
+
+- **Date found:** 2026-09-22 (source: plan/13: funnels, accuracy join, retention tests, B6/B7) —
+  additive once picked up; collection already in place. P3.
+
+### NOW-19 - Image-riddle catalog replacement: wipe + extract from the benchmark sites (new 2026-09-23) — OPEN (rights decision gates execution)
 
 - **Date found:** 2026-09-23 (owner request in the competitor-comparison discussion)
 - **Area:** content — **owner decision + content work**
@@ -222,128 +344,6 @@
      (BUG-038).
 - **Status:** OPEN (owner 2026-09-24). Execution gated on the owner rights decision
   (re-create originals recommended).
-
-### HARD-01 - CSP residuals: 'unsafe-inline' + HttpOnly token storage (was TASK-04) - games gap FIXED 2026-09-22; residuals parked
-
-- **Date found:** 2026-09-22 (source: audit)
-- **Area:** security / frontend — **decision**
-- **Priority:** P2
-- **Fixed 2026-09-22 (full record: audit file §6.1 H8):** the eight static games served NO
-  CSP at all — `middleware.ts` now decorates every `/games/*` response with the strictest
-  policy on the site (`script-src 'self'`, no remote anything, `connect-src` same-origin +
-  API origin; two inline theme-loader hashes). Verified on prod build.
-- **Full nonces: NOT being done (assessment, not deferral):** nonces require dynamic
-  rendering — incompatible with prerendered/ISR pages, the games' static HTML `<script>`
-  tags, and Next's own bootstrap scripts. `'unsafe-inline'` on app pages stays as the
-  documented residual risk (weakens XSS defense-in-depth, not an active hole).
-- **HttpOnly refresh-cookie half:** design decision (changes the guest/auth flow the owner
-  deliberately kept friction-free) — parked with the owner.
-
-### HARD-05 - R2 media follow-ups (was TASK-22)
-
-- **Date found:** 2026-09-22 (source: plan/17-r2-storage-setup.md)
-- **Area:** media — **owner + code**
-- **Priority:** P2
-- **Reported:** confirm one admin Media upload end-to-end (untested path); move off
-  `r2.dev` (rate-limited, not meant for prod) to a custom domain; rclone-migrate existing
-  media; token hygiene.
-
-### HARD-06 - Games a11y polish + phone QA (was TASK-09 remainder) - FIXED 2026-09-23 (owner phone QA remains)
-
-- **Date found:** 2026-09-22 (source: plan/games/\*)
-- **Area:** games — **owner 10-min phone QA**
-- **Priority:** P3
-- **Fixed 2026-09-23 (commit `81080c2`; memory-quiz QA record in plan/games/08 §22):**
-  AA contrast (computed WCAG audit, 7 games): muted text #64748b failed on the page
-  gradient (2.93-3.81:1) → #475569 (worst case 4.67:1); dark-theme primary buttons
-  #3b82f6 failed with white text (3.68:1) → #2563eb (5.17:1). Sliding-puzzle: segmented
-  radio groups got roving tabindex + arrow-key selection; round start focuses the board.
-  All 8 games verified zero JS errors and zero CSP violations (games CSP completed with
-  the two inline theme-loader script hashes).
-- **Remaining (owner):** the 10-minute phone QA pass.
-
-### HARD-07 - Dad jokes surfaces (was TASK-10, briefly DEC-01) — DECISION
-
-- **Date found:** 2026-09-22 (source: plan/05) — saved jokes, JotD SSR, trending + share buttons. P2.
-
-### HARD-08 - Comments on quiz/riddle content (was TASK-12, briefly DEC-02) — DECISION
-
-- **Date found:** 2026-09-22 (source: plan/07) — P3.
-
-### HARD-09 - SEC-07 email-verification gate (was TASK-13, briefly DEC-03) — DECISION
-
-- **Date found:** 2026-09-22 (source: audit) — real consideration, low actual risk; adds
-  signup friction the owner has resisted before. P2.
-
-### HARD-10 - Admin user-mgmt UI + dashboard unification + guest activity (was TASK-16, briefly DEC-04) — DECISION
-
-- **Date found:** 2026-09-22 (source: plan/09) — note: "dashboard unification" overlaps
-  HARD-13's "admin-dashboard unification"; dedupe when deciding (HARD-13 is now QUEUED
-  next, so coordinate the two when picked up). P3.
-
-### HARD-11 - Installability: full manifest / theme-color (was TASK-17, briefly DEC-05) — DECISION
-
-- **Date found:** 2026-09-22 (source: audit) — related: manifest still carries the
-  hardcoded "AI Quiz" branding (see rebrand state). P3.
-
-### HARD-12 - Analytics deferred items (was TASK-07, briefly DEC-06) — DECISION
-
-- **Date found:** 2026-09-22 (source: plan/13: funnels, accuracy join, retention tests, B6/B7) —
-  additive once picked up; collection already in place. P3.
-
-### HARD-13 - Owner-deferred bucket — items revisited in sequence (was TASK-23, briefly DEF-01) — OPEN (session persistence first)
-
-- **Date found:** 2026-09-22
-- **Contents (original owner-deferred list):** riddle-mcq session persistence /
-  JSON import-export / cache tuning; image-riddle server-side progress;
-  admin-dashboard unification (dedupe with HARD-10 when reached); games R2-2/R2-3
-  extras; LinkedIn + Pinterest share previews.
-- **Status:** OPEN (owner 2026-09-24) — session persistence IN PROGRESS (design set
-  2026-09-24, implementation started).
-- **Session-persistence implementation plan (2026-09-24):** riddle sessions are currently
-  CLIENT-ONLY (localStorage, 24h expiry — `lib/riddle-persistence.ts`); the quiz side
-  already has the server pattern to mirror (`quiz_sessions` entity + POST
-  `/quiz-mcq/sessions` + history/high-scores endpoints, soft userId/guestId identity,
-  denormalized subject fields). Work items: (1) backend `RiddleSession` entity +
-  `riddle_sessions` table (mirror `quiz_sessions`; riddle fields: subject slug/name,
-  difficulty, mode, totals/score) + migration `1793300000000-CreateRiddleSessions` +
-  dev-DB manual apply; (2) endpoints `POST /riddle-mcq/sessions`, `GET
-/riddle-mcq/sessions/history`, `GET /riddle-mcq/sessions/high-scores` (OptionalJwt,
-  throttled, same conventions); (3) frontend `lib/riddle-mcq-api.ts` submit/history
-  functions wired into the riddle results flow (localStorage stays as the offline
-  layer — server persistence makes results/resume survive device loss and gives
-  HARD-15 duels their server-side session identity).
-
-### HARD-14 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — OPEN (after the session contract lands)
-
-- **Date found:** 2026-09-22 — riddle question shares still use the hub `?q=` form; the
-  riddle play flow has no shared-start contract (subjectId/level based, no in-session
-  question identity). Implementing means changing the riddle session contract — opened 2026-09-24 with the rest of the
-  contract-chain items; implement after the session contract lands. Note: the same session-contract work is a HARD-15
-  (duel) prerequisite and HARD-13 is queued — sequence them together when the queue
-  reaches that point. P3.
-
-### HARD-15 - Duel / PvP mode — web-first (new 2026-09-23) — OPEN (build after the session contract)
-
-- **Date found:** 2026-09-23 (source: competitor pass — Trivia Crack's core hook; owner
-  asked "website, app, or both?")
-- **Area:** feature / growth — **code work (was decision; owner queued it 2026-09-23)**
-- **Priority:** P2
-- **Decision record:** owner initially did not want it; on 2026-09-23 queued it, and on
-  2026-09-24 moved it to OPEN — on the WEBSITE first, web-first and
-  mobile-first. Rationale on record: there is no app yet (web = 100% of the audience;
-  withholding the feature from web withholds it from everyone), web is the SEO funnel
-  that feeds a future app, and the expensive part — the backend — already exists: the
-  `duels` module (public controller: join/leave/name) ships with ZERO frontend
-  references today; any future app shell (e.g. Capacitor wrap) talks to the same API.
-  Precedent: Trivia Crack itself is app-first yet added browser play (CrazyGames, 2023).
-  v1 tradeoff: weaker push notifications vs native — cover with async design +
-  email/PWA push.
-- **Prerequisite:** session-contract work — HARD-13's riddle-mcq session persistence
-  item (quiz side is closer: play URLs already carry `qid=` deep links, TASK-27).
-  Sequence: HARD-13 session contract → HARD-15 duel UI.
-
----
 
 ## Resolved — removed from this tracker (policy: open items only)
 
@@ -402,15 +402,15 @@ Benchmark vs four reference quiz/trivia sites (owner request 2026-09-23). Our si
 
 ### Opportunity ranking (from the verified pass)
 
-1. **Daily ritual hook** → filed as **NOW-08**.
-2. **Surface stored explanations** (Britannica lesson) → filed as **NOW-09** (pairs with NOW-07's rewrite pass).
-3. **Duel UI on the existing backend** → filed as **HARD-15** — owner queued it 2026-09-23: built right after the ACTIVE queue, web-first.
+1. **Daily ritual hook** → filed as NOW-08 (shipped, live, removed — see plan/02).
+2. **Surface stored explanations** (Britannica lesson) → filed as **NOW-06** (pairs with NOW-05's rewrite pass).
+3. **Duel UI on the existing backend** → filed as **NOW-09** — owner queued it 2026-09-23: built right after the ACTIVE queue, web-first.
 4. **Long-tail landing pages** (TriviaPlaza lesson) → folded into **NOW-03 residual** (chapter-level pages).
 5. **Fill-in format** (TriviaPlaza + FunTrivia): missing-word/fill-in packs are proven casual
    formats we don't have; our word-puzzle game + open-ended riddle tiers are adjacent cover — not filed, pick up with NOW-03 niche packs if wanted.
 6. **UGC creation** (FunTrivia): stays deferred — a content-ops race, not a code gap.
 7. **Monetization:** all four monetize (IAP / subscription / membership); we deliberately don't — owner posture, listed for completeness.
-8. **Image-riddle catalog replacement** (owner request during this pass) → filed as **NOW-10**, queued next; rights decision needed before execution.
+8. **Image-riddle catalog replacement** (owner request during this pass) → filed as **NOW-19**, queued next; rights decision needed before execution.
 
 Our live edge over all four: zero-account friction-free play, zero-ad clean UX, share system with
 dynamic OG images + quiz deep-links (none of the four has this), the 8-game arcade bundle, and
