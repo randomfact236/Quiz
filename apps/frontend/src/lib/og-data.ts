@@ -125,6 +125,10 @@ export const ogData = {
       `/quiz-mcq/subjects/${encodeURIComponent(slug)}`
     ),
 
+  /** Active quiz subjects (public list) — the hub's crawlable subject grid. */
+  quizSubjectsList: () =>
+    fetchJson<Array<{ name: string; emoji: string; slug: string }>>(`/quiz-mcq/subjects`),
+
   /**
    * A few easy-level published questions of one chapter for the chapter
    * landing's "sample questions" section — public read, answer key never

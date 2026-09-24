@@ -11,6 +11,7 @@
  * ============================================================================ */
 
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
 import { formatCount, ogData } from '@/lib/og-data';
 import { APP_URL, MODULE_META } from '@/lib/seo';
@@ -120,6 +121,51 @@ export async function generateMetadata({
   return MODULE_META['quiz-mcq'];
 }
 
-export default function QuizMcqPage() {
-  return <QuizHubView />;
+// NOW-03 (RSC residual): the subject grid renders SERVER-SIDE so crawlers see
+// the full quiz catalog as crawlable links — the interactive hub hydrates
+// below it and stays untouched for players.
+export default async function QuizMcqPage() {
+  const [subjects, counts] = await Promise.all([ogData.quizSubjectsList(), ogData.quizCounts()]);
+  const catalog = (subjects ?? [])
+    .map((subject) => ({
+      name: subject.name,
+      emoji: subject.emoji,
+      slug: subject.slug,
+      count: counts?.bySubject[subject.slug] ?? null,
+    }))
+    .sort((a, b) => (b.count ?? 0) - (a.count ?? 0));
+
+  return (
+    <>
+      <QuizHubView />
+      {catalog.length > 0 && (
+        <section
+          aria-label="All quiz subjects"
+          className="mx-auto w-full max-w-5xl px-4 pb-12 sm:px-6"
+        >
+          <h2 className="text-xl font-black tracking-tight text-secondary-900 dark:text-white">
+            Browse all quiz subjects
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {catalog.map((subject) => (
+              <Link
+                key={subject.slug}
+                href={`/quiz-mcq/${encodeURIComponent(subject.slug)}`}
+                className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-secondary-800 shadow-sm transition-colors hover:border-indigo-300 hover:text-indigo-600 dark:border-secondary-700 dark:bg-secondary-800 dark:text-secondary-100 dark:hover:border-indigo-500/40 dark:hover:text-indigo-300"
+              >
+                <span>
+                  {subject.emoji} {subject.name}
+                </span>
+                {subject.count !== null && (
+                  <span className="shrink-0 text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-300">
+                    {formatCount(subject.count)} Q
+                  </span>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  );
 }

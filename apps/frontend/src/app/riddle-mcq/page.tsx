@@ -11,8 +11,9 @@
  * ============================================================================ */
 
 import type { Metadata } from 'next';
+import Link from 'next/link';
 
-import { ogData } from '@/lib/og-data';
+import { formatCount, ogData } from '@/lib/og-data';
 import { APP_URL, MODULE_META } from '@/lib/seo';
 
 import RiddlesHubView from './RiddlesHubView';
@@ -115,6 +116,43 @@ export async function generateMetadata({
   return MODULE_META['riddle-mcq'];
 }
 
-export default function RiddleMcqPage() {
-  return <RiddlesHubView />;
+// NOW-03 (RSC residual): category grid renders SERVER-SIDE for crawlers;
+// the interactive hub hydrates below.
+export default async function RiddleMcqPage() {
+  const categories = await ogData.riddleCategories();
+  const catalog = (categories ?? []).filter((c) => c.isActive !== false);
+
+  return (
+    <>
+      <RiddlesHubView />
+      {catalog.length > 0 && (
+        <section
+          aria-label="All riddle categories"
+          className="mx-auto w-full max-w-5xl px-4 pb-12 sm:px-6"
+        >
+          <h2 className="text-xl font-black tracking-tight text-secondary-900 dark:text-white">
+            Browse all riddle categories
+          </h2>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {catalog.map((category) => (
+              <Link
+                key={category.slug}
+                href={`/riddle-mcq/${encodeURIComponent(category.slug)}`}
+                className="flex items-center justify-between gap-3 rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-bold text-secondary-800 shadow-sm transition-colors hover:border-indigo-300 hover:text-indigo-600 dark:border-secondary-700 dark:bg-secondary-800 dark:text-secondary-100 dark:hover:border-indigo-500/40 dark:hover:text-indigo-300"
+              >
+                <span>
+                  {category.emoji} {category.name}
+                </span>
+                {typeof category.riddleTotal === 'number' && (
+                  <span className="shrink-0 text-xs font-black uppercase tracking-widest text-indigo-500 dark:text-indigo-300">
+                    {formatCount(category.riddleTotal)} R
+                  </span>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+    </>
+  );
 }
