@@ -1,0 +1,322 @@
+[
+  {
+    "slug": "raining-cats-and-dogs",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🌧️", "🐱", "🐶"],
+    "title": "Decode the weather phrase",
+    "answer": "Raining cats and dogs",
+    "hint": "Look up — the animals are falling",
+    "difficulty": "easy",
+    "alt": "Rain cloud with a cat and a dog falling from the sky"
+  },
+  {
+    "slug": "elephant-in-the-room",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐘", "🛋️"],
+    "title": "Spot the big problem nobody mentions",
+    "answer": "The elephant in the room",
+    "hint": "It is huge, grey, and standing on the furniture",
+    "difficulty": "medium",
+    "alt": "An elephant standing next to a sofa"
+  },
+  {
+    "slug": "bird-in-the-hand",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐦", "✋"],
+    "title": "A classic about holding on",
+    "answer": "A bird in the hand",
+    "hint": "Two in the bush are not worth as much",
+    "difficulty": "medium",
+    "alt": "A small bird resting on an open hand"
+  },
+  {
+    "slug": "smells-fishy",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐠", "👃"],
+    "title": "Something about this situation stinks",
+    "answer": "Something smells fishy",
+    "hint": "Suspicions should point you to the sea",
+    "difficulty": "easy",
+    "alt": "A fish next to a nose"
+  },
+  {
+    "slug": "bull-china-shop",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐂", "💥", "🍽️"],
+    "title": "Clumsy and destructive — where?",
+    "answer": "A bull in a china shop",
+    "hint": "Fragile plates and cups everywhere",
+    "difficulty": "medium",
+    "alt": "A bull among delicate china dishes"
+  },
+  {
+    "slug": "sleeping-dogs",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐶", "💤"],
+    "title": "Best leave this alone",
+    "answer": "Let sleeping dogs lie",
+    "hint": "Starting something will only cause trouble",
+    "difficulty": "medium",
+    "alt": "A sleeping dog with dreaming bubbles"
+  },
+  {
+    "slug": "two-birds-one-stone",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🪨", "2️⃣", "🐦"],
+    "title": "Efficient problem solving",
+    "answer": "Kill two birds with one stone",
+    "hint": "One action, two results",
+    "difficulty": "hard",
+    "alt": "A stone flying toward two birds"
+  },
+  {
+    "slug": "leopard-spots",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐆", "🎨"],
+    "title": "Nature said this can never change",
+    "answer": "A leopard can't change its spots",
+    "hint": "The pattern is permanent",
+    "difficulty": "hard",
+    "alt": "A leopard with its spotted coat"
+  },
+  {
+    "slug": "can-of-worms",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🥫", "🪱"],
+    "title": "Opening this creates a whole mess",
+    "answer": "Open a can of worms",
+    "hint": "A tangle of slimy trouble inside",
+    "difficulty": "medium",
+    "alt": "A can tipped over with worms spilling out"
+  },
+  {
+    "slug": "straw-camel-back",
+    "cat": "emoji-puzzles",
+    "glyphs": ["🐫", "🥤", "🔙"],
+    "title": "The final tiny burden",
+    "answer": "The straw that broke the camel back",
+    "hint": "One small thing too many",
+    "difficulty": "hard",
+    "alt": "A camel carrying a single straw on its back"
+  },
+  {
+    "slug": "seasons",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "A word hidden in the seasons",
+    "answer": "Seasons",
+    "hint": "What spring, summer, autumn and winter have in common",
+    "difficulty": "easy",
+    "alt": "The word SEAS stacked above ON",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">SEAS</text>\n  <text x=\"480\" y=\"318.6\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">ON</text>\n  <text x=\"480\" y=\"432.20000000000005\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "garbage",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "One man’s trash",
+    "answer": "Garbage",
+    "hint": "GARB plus AGE",
+    "difficulty": "easy",
+    "alt": "The word GARB stacked above AGE",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">GARB</text>\n  <text x=\"480\" y=\"318.6\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">AGE</text>\n  <text x=\"480\" y=\"432.20000000000005\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "water-htoo",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "Read it chemically",
+    "answer": "Water",
+    "hint": "It goes from H to O",
+    "difficulty": "hard",
+    "alt": "The letters H through O in a row",
+    "svg_body": "  <text x=\"480\" y=\"300\" font-size=\"46\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">H I J K L M N O</text>\n  <text x=\"480\" y=\"392.9\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "million-ion",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "A very large number",
+    "answer": "Million",
+    "hint": "Find ION hiding inside",
+    "difficulty": "medium",
+    "alt": "The word MILL with ION below",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"60\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">MILL</text>\n  <text x=\"480\" y=\"314.0\" font-size=\"44\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">I O N</text>\n  <text x=\"480\" y=\"404.6\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "broken-promise",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "It was made, then broken",
+    "answer": "A broken promise",
+    "hint": "Split right down the middle",
+    "difficulty": "hard",
+    "alt": "The word PROMISE split in two",
+    "svg_body": "  <text x=\"480\" y=\"300\" font-size=\"56\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">PROM ISE</text>\n  <text x=\"480\" y=\"404.4\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "banana-split",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "A dessert you can also slip on",
+    "answer": "Banana split",
+    "hint": "The fruit cut in two",
+    "difficulty": "medium",
+    "alt": "The word BANANA split apart",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">BAN</text>\n  <text x=\"480\" y=\"318.6\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">ANA</text>\n  <text x=\"480\" y=\"432.20000000000005\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "good-afternoon",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "A time of day turned greeting",
+    "answer": "Good afternoon",
+    "hint": "NOON comes after GOOD",
+    "difficulty": "medium",
+    "alt": "The word GOOD stacked above NOON",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"56\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">GOOD</text>\n  <text x=\"480\" y=\"309.4\" font-size=\"56\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">NOON</text>\n  <text x=\"480\" y=\"413.79999999999995\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "black-coffee",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "A strong dark drink",
+    "answer": "Black coffee",
+    "hint": "No milk, no sugar",
+    "difficulty": "easy",
+    "alt": "The word BLACK stacked above COFFEE",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"56\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">BLACK</text>\n  <text x=\"480\" y=\"309.4\" font-size=\"56\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">COFFEE</text>\n  <text x=\"480\" y=\"413.79999999999995\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "custom",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "Made to your measure",
+    "answer": "Custom",
+    "hint": "Half a customer",
+    "difficulty": "medium",
+    "alt": "The word CUS stacked above TOM",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">CUS</text>\n  <text x=\"480\" y=\"318.6\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">TOM</text>\n  <text x=\"480\" y=\"432.20000000000005\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "big-deal",
+    "cat": "rebus-puzzles",
+    "glyphs": "",
+    "title": "It matters more than it looks",
+    "answer": "A big deal",
+    "hint": "Large, and important",
+    "difficulty": "easy",
+    "alt": "The word BIG stacked above DEAL",
+    "svg_body": "  <text x=\"480\" y=\"245\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">BIG</text>\n  <text x=\"480\" y=\"318.6\" font-size=\"64\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"8\">DEAL</text>\n  <text x=\"480\" y=\"432.20000000000005\" font-size=\"26\" fill=\"rgba(255,255,255,.75)\" text-anchor=\"middle\">➜ pigzap.com</text>"
+  },
+  {
+    "slug": "begin-bee-gin",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "This is how every story starts",
+    "answer": "Begin",
+    "hint": "A buzzing way to spell it",
+    "difficulty": "easy",
+    "alt": "A bee with the word GIN",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🐝</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">GIN</text>"
+  },
+  {
+    "slug": "moonlight",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "The night’s own lamp",
+    "answer": "Moonlight",
+    "hint": "The moon doing the lighting",
+    "difficulty": "easy",
+    "alt": "A moon above the word LIGHT",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🌙</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">LIGHT</text>"
+  },
+  {
+    "slug": "sunglasses",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "Bright days demand these",
+    "answer": "Sunglasses",
+    "hint": "Glasses for the sun",
+    "difficulty": "easy",
+    "alt": "A sun above the word GLASSES",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">☀️</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">GLASSES</text>"
+  },
+  {
+    "slug": "firefly",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "A summer night’s tiny lantern",
+    "answer": "Firefly",
+    "hint": "A fly on fire",
+    "difficulty": "medium",
+    "alt": "A flame next to a fly",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🔥</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">FLY</text>"
+  },
+  {
+    "slug": "bee-fore",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "Earlier than earlier",
+    "answer": "Before",
+    "hint": "Be-four",
+    "difficulty": "hard",
+    "alt": "A bee above the number 4",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🐝</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">4</text>"
+  },
+  {
+    "slug": "boneless",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "Some cuts come without it",
+    "answer": "Boneless",
+    "hint": "Minus the bone",
+    "difficulty": "medium",
+    "alt": "A bone above the word LESS",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🦴</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">LESS</text>"
+  },
+  {
+    "slug": "between-bee-tween",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "Hiding in the middle",
+    "answer": "Between",
+    "hint": "A bee in the middle",
+    "difficulty": "hard",
+    "alt": "A bee above the word TWEEN",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🐝</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">TWEEN</text>"
+  },
+  {
+    "slug": "starfish",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "It lives in the sea but wears a star",
+    "answer": "Starfish",
+    "hint": "Not a fish at all",
+    "difficulty": "easy",
+    "alt": "A star above the word FISH",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">⭐</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">FISH</text>"
+  },
+  {
+    "slug": "beer-bee-r",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "A buzzing pub order",
+    "answer": "Beer",
+    "hint": "B plus the buzzing insect",
+    "difficulty": "medium",
+    "alt": "A bee above the letter R",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🐝</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">R</text>"
+  },
+  {
+    "slug": "sunrise",
+    "cat": "wordplay",
+    "glyphs": "",
+    "title": "It happens every single morning",
+    "answer": "Sunrise",
+    "hint": "The sun on the way up",
+    "difficulty": "easy",
+    "alt": "A sunrise above the word RISE",
+    "svg_body": "  <text x=\"480\" y=\"330\" font-size=\"110\" text-anchor=\"middle\">🌅</text>\n  <text x=\"480\" y=\"430\" font-size=\"58\" font-weight=\"900\" fill=\"#ffffff\" text-anchor=\"middle\" letter-spacing=\"6\">RISE</text>"
+  }
+]

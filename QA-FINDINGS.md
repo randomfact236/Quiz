@@ -379,6 +379,13 @@ Benchmark vs four reference quiz/trivia sites (owner request 2026-09-23). Our si
 | Monetization posture | Content platform (owner-defined)                                          | Ads + IAP (mobile F2P)                    | Subscription (Britannica) + ads                        | Ads                                            | Ads + premium membership                                      |
 | **Gap to close**     | —                                                                         | No live multiplayer / duel mode           | No encyclopedia-grade explanatory copy under answers   | Quiz set is narrower than their homepage packs | No UGC quiz creation pipeline                                 |
 
+- **WIPED 2026-09-22 (owner: "wipe all the image riddle data first"):** prod + local
+  image_riddles (1,906 rows) and image_riddle_categories (10 rows) deleted AFTER backups
+  (prod: `/opt/quiz-backups/image-riddles-wipe/pre-wipe_20260922.sql`; local:
+  `backups/local-image-riddles-pre-wipe_20260922.sql`); image-riddle redis keys flushed
+  both sides; live API verifies totalRiddles=0 / totalCategories=0. NEXT: the rights
+  decision + extraction of replacement content (the reason this item exists).
+
 ### Verified live 2026-09-23 (fetch pass)
 
 - **Trivia Crack** — triviacrack.com is a JS-only app shell (nothing crawlable); features
