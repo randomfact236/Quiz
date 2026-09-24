@@ -45,6 +45,9 @@
 - Rotate in quiz-api env (`JWT_SECRET`, refresh secret), redeploy.
 - **Blast radius:** every logged-in session is invalidated once (users just log in again).
   Guest ids are unaffected. Verify login + a guest like after deploy.
+- **`GUEST_TOKEN_SECRET`** (added by the SEC-10/12 signed-guest-token work): rotate it in
+  the same pass — blast radius is only that cached guest token pairs re-issue on the next
+  write (the frontend self-heals with one retry).
 
 ### 5. Admin panel accounts
 
@@ -61,6 +64,9 @@
 - Rotate the R2 API token used by rclone (`rclone config` on the VPS) — verify with
   `rclone ls r2:quiz-backups/db`.
 - Review Cloudflare API tokens; roll the origin rules if any token predates 2026-09.
+- **GSC service-account key** (`pigzap-gsc@…` JSON used by the SEO panel): if it ever
+  left your machine, revoke it in Google Cloud Console and issue a new one — otherwise
+  note its creation date and move on (it is read-only Search Console access).
 
 ### 8. Secret-history scan
 
