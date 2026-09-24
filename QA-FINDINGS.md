@@ -67,25 +67,25 @@
 > push to production.** Live checks that PASS: quiz list answer-strip, `answers/check`
 > grader (400), admin guard (401), CSP/HSTS/frame-deny headers.
 
-| ID     | Title                                                                  | Was                                   | Area           | Pri | Work by       | Status                                          |
-| ------ | ---------------------------------------------------------------------- | ------------------------------------- | -------------- | --- | ------------- | ----------------------------------------------- |
-| NOW-03 | SEO residual: RSC hub bodies (chapter landings DONE)                   | TASK-11                               | seo            | P2  | code          | Open (RSC bodies remain)                        |
-| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                               | ops            | P2  | owner/VPS     | Open (owner step only)                          |
-| NOW-05 | 60 over-long DB riddles rewrite + live content push                    | TASK-03 resid.                        | content        | P2  | owner/content | Draft ready — owner review                      |
-| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                        | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content |
-| NOW-07 | Owner-deferred bucket — session persistence first                      | was HARD-13 · TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Open — session persistence first                |
-| NOW-08 | Riddle share deep-link (needs session-contract change)                 | was HARD-14 · TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Open — after session contract                   |
-| NOW-09 | Duel / PvP mode — web-first                                            | was HARD-15                           | feature/growth | P2  | code          | Open — after session contract                   |
-| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04                 | security       | P2  | decision      | Open — owner decision                           |
-| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22                 | media/ops      | P2  | owner+code    | Open                                            |
-| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.            | a11y           | P3  | code+owner    | Fixed — owner phone QA                          |
-| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01)        | decision       | P2  | decision      | Open — owner decision                           |
-| NOW-14 | Comments on quiz/riddle content                                        | was HARD-08 · TASK-12 (DEC-02)        | decision       | P3  | decision      | Open — owner decision                           |
-| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03)        | decision       | P2  | decision      | Open — owner decision                           |
-| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04)        | decision       | P3  | decision      | Open — owner decision                           |
-| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05)        | decision       | P3  | decision      | Open — owner decision                           |
-| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06)        | decision       | P3  | decision      | Open — owner decision                           |
-| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                        | content        | P2  | owner+content | Open — rights decision gates execution          |
+| ID     | Title                                                                  | Was                                   | Area           | Pri | Work by       | Status                                            |
+| ------ | ---------------------------------------------------------------------- | ------------------------------------- | -------------- | --- | ------------- | ------------------------------------------------- |
+| NOW-03 | SEO residual: RSC hub bodies (chapter landings DONE)                   | TASK-11                               | seo            | P2  | code          | Open (RSC bodies remain)                          |
+| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                               | ops            | P2  | owner/VPS     | Open — owner adds webhook URL when ready          |
+| NOW-05 | 60 over-long DB riddles rewrite + live content push                    | TASK-03 resid.                        | content        | P2  | owner/content | Draft ready — owner review                        |
+| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                        | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content   |
+| NOW-07 | Owner-deferred bucket — session persistence first                      | was HARD-13 · TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Open — session persistence first                  |
+| NOW-08 | Riddle share deep-link (needs session-contract change)                 | was HARD-14 · TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Open — after session contract                     |
+| NOW-09 | Duel / PvP mode — web-first                                            | was HARD-15                           | feature/growth | P2  | code          | Open — after session contract                     |
+| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04                 | security       | P2  | decision      | Open — owner decision                             |
+| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22                 | media/ops      | P2  | owner+code    | Open                                              |
+| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.            | a11y           | P3  | code+owner    | Fixed — owner phone QA                            |
+| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01)        | decision       | P2  | decision      | Decision 2026-09-24: defer (needs spec)           |
+| NOW-14 | Comments on quiz/riddle content                                        | was HARD-08 · TASK-12 (DEC-02)        | decision       | P3  | decision      | Done already (BUG-040/054) — closing              |
+| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03)        | decision       | P2  | decision      | Decision 2026-09-24: keep friction-free (no gate) |
+| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04)        | decision       | P3  | decision      | Decision 2026-09-24: defer (needs spec)           |
+| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05)        | decision       | P3  | decision      | Approved 2026-09-24 — build scheduled             |
+| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06)        | decision       | P3  | decision      | Decision 2026-09-24: leave deferred (additive)    |
+| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                        | content        | P2  | owner+content | Open — rights decision gates execution            |
 
 ### Open item details
 
