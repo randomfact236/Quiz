@@ -53,13 +53,9 @@
 
 ### Queued / parked items
 
-| ID      | Title                                                                  | Was                     | Area           | Pri | Work by       | Status                                   |
-| ------- | ---------------------------------------------------------------------- | ----------------------- | -------------- | --- | ------------- | ---------------------------------------- |
-| NOW-02  | Rotate credentials + SSH/secrets hygiene                               | TASK-18                 | ops            | P1  | owner/VPS     | Deferred for now (owner 2026-09-24)      |
-| NOW-10  | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23          | content        | P2  | owner+content | Queued next (rights decision needed 1st) |
-| HARD-13 | Owner-deferred bucket — items revisited in sequence                    | TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Queued next                              |
-| HARD-15 | Duel / PvP mode — web-first                                            | new 2026-09-23          | feature/growth | P2  | code          | Queued next (after session contract)     |
-| HARD-14 | Riddle share deep-link (needs session-contract change)                 | TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Deferred w/ reason                       |
+| ID     | Title                                    | Was     | Area | Pri | Work by   | Status                              |
+| ------ | ---------------------------------------- | ------- | ---- | --- | --------- | ----------------------------------- |
+| NOW-02 | Rotate credentials + SSH/secrets hygiene | TASK-18 | ops  | P1  | owner/VPS | Deferred for now (owner 2026-09-24) |
 
 ---
 
@@ -82,71 +78,7 @@
   queued-next sequencing; runbook + the 2026-09-24 runbook additions are ready,
   ~1 hour with the owner present, resume the moment the owner says go).
 
-### NOW-10 - Image-riddle catalog replacement: wipe + extract from the benchmark sites (new 2026-09-23) — QUEUED NEXT
-
-- **Date found:** 2026-09-23 (owner request in the competitor-comparison discussion)
-- **Area:** content — **owner decision + content work**
-- **Priority:** P2
-- **Owner request as stated:** remove ALL existing image riddles, then extract image
-  riddles from the four benchmark websites (Trivia Crack / Britannica / TriviaPlaza /
-  FunTrivia) and ADD ONLY the extracted ones.
-- **Owner decisions required BEFORE execution — nothing has been done:**
-  1. **Rights:** scraped puzzles and their images are copyrighted by their publishers;
-     republishing verbatim is a legal risk. Options: (a) treat them as format/style
-     inspiration and re-create original riddles (safe), (b) use only public-domain/CC
-     sources, (c) accept the risk — owner's call, recorded here.
-  2. **Source reality (verified live 2026-09-23):** none of the four sites publishes true
-     "image riddles" in our format (image + word answer). Closest: FunTrivia Photo
-     Quizzes / Photo Match — MCQ-with-picture, needs format conversion. Trivia Crack =
-     JS app shell (nothing extractable), Britannica = bot-wall 403 on all fetchers,
-     TriviaPlaza = none seen. Expect low yield; re-creation likely beats scraping.
-  3. **Destructive:** wipes 1,906 live image riddles across 10 categories. Standing
-     rules apply: DB backup first, wipe + push, then FLUSH image-riddle redis keys
-     (BUG-038).
-- **Status:** QUEUED NEXT (owner 2026-09-23) — the rights decision above should be made
-  while the ACTIVE queue runs so execution can start immediately after it.
-
-### HARD-13 - Owner-deferred bucket — items revisited in sequence (was TASK-23, briefly DEF-01) — QUEUED NEXT
-
-- **Date found:** 2026-09-22
-- **Contents (original owner-deferred list):** riddle-mcq session persistence /
-  JSON import-export / cache tuning; image-riddle server-side progress;
-  admin-dashboard unification (dedupe with HARD-10 when reached); games R2-2/R2-3
-  extras; LinkedIn + Pinterest share previews.
-- **Status:** QUEUED NEXT (owner 2026-09-23) — revisit item-by-item in the order above
-  right after the ACTIVE queue completes; the riddle-mcq session persistence item is
-  ALSO the HARD-15 (duel) prerequisite, so it comes first when this bucket opens.
-
-### HARD-15 - Duel / PvP mode — web-first (new 2026-09-23) — QUEUED NEXT
-
-- **Date found:** 2026-09-23 (source: competitor pass — Trivia Crack's core hook; owner
-  asked "website, app, or both?")
-- **Area:** feature / growth — **code work (was decision; owner queued it 2026-09-23)**
-- **Priority:** P2
-- **Decision record:** owner initially did not want it; on 2026-09-23 queued it to be
-  BUILT right after the ACTIVE queue completes — on the WEBSITE first, web-first and
-  mobile-first. Rationale on record: there is no app yet (web = 100% of the audience;
-  withholding the feature from web withholds it from everyone), web is the SEO funnel
-  that feeds a future app, and the expensive part — the backend — already exists: the
-  `duels` module (public controller: join/leave/name) ships with ZERO frontend
-  references today; any future app shell (e.g. Capacitor wrap) talks to the same API.
-  Precedent: Trivia Crack itself is app-first yet added browser play (CrazyGames, 2023).
-  v1 tradeoff: weaker push notifications vs native — cover with async design +
-  email/PWA push.
-- **Prerequisite:** session-contract work — HARD-13's riddle-mcq session persistence
-  item (quiz side is closer: play URLs already carry `qid=` deep links, TASK-27).
-  Sequence: HARD-13 session contract → HARD-15 duel UI.
-
 ---
-
-### HARD-14 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — DEFERRED w/ reason
-
-- **Date found:** 2026-09-22 — riddle question shares still use the hub `?q=` form; the
-  riddle play flow has no shared-start contract (subjectId/level based, no in-session
-  question identity). Implementing means changing the riddle session contract — deferred
-  with reason when TASK-27 shipped. Note: the same session-contract work is a HARD-15
-  (duel) prerequisite and HARD-13 is queued — sequence them together when the queue
-  reaches that point. P3.
 
 ---
 
@@ -160,21 +92,25 @@
 > push to production.** Live checks that PASS: quiz list answer-strip, `answers/check`
 > grader (400), admin guard (401), CSP/HSTS/frame-deny headers.
 
-| ID      | Title                                                              | Was              | Area      | Pri | Work by       | Status                                          |
-| ------- | ------------------------------------------------------------------ | ---------------- | --------- | --- | ------------- | ----------------------------------------------- |
-| NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)               | TASK-11          | seo       | P2  | code          | Open (RSC bodies remain)                        |
-| NOW-05  | Uptime/error alerting — one owner step left                        | TASK-21          | ops       | P2  | owner/VPS     | Open (owner step only)                          |
-| NOW-07  | 60 over-long DB riddles rewrite + live content push                | TASK-03 resid.   | content   | P2  | owner/content | Draft ready — owner review                      |
-| NOW-09  | Surface stored answer explanations post-answer                     | new 2026-09-23   | ux/seo    | P2  | code+content  | Partial — riddle side fixed; quiz needs content |
-| HARD-01 | CSP residuals: 'unsafe-inline' + HttpOnly token storage            | TASK-04          | security  | P2  | decision      | Open — owner decision                           |
-| HARD-05 | R2 media follow-ups                                                | TASK-22          | media/ops | P2  | owner+code    | Open                                            |
-| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                  | TASK-09 rem.     | a11y      | P3  | code+owner    | Fixed — owner phone QA                          |
-| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share              | TASK-10 (DEC-01) | decision  | P2  | decision      | Open — owner decision                           |
-| HARD-08 | Comments on quiz/riddle content                                    | TASK-12 (DEC-02) | decision  | P3  | decision      | Open — owner decision                           |
-| HARD-09 | SEC-07 email-verification gate                                     | TASK-13 (DEC-03) | decision  | P2  | decision      | Open — owner decision                           |
-| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity        | TASK-16 (DEC-04) | decision  | P3  | decision      | Open — owner decision                           |
-| HARD-11 | Installability: full manifest / theme-color                        | TASK-17 (DEC-05) | decision  | P3  | decision      | Open — owner decision                           |
-| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests) | TASK-07 (DEC-06) | decision  | P3  | decision      | Open — owner decision                           |
+| ID      | Title                                                                  | Was                     | Area           | Pri | Work by       | Status                                          |
+| ------- | ---------------------------------------------------------------------- | ----------------------- | -------------- | --- | ------------- | ----------------------------------------------- |
+| NOW-03  | SEO residual: RSC hub bodies (chapter landings DONE)                   | TASK-11                 | seo            | P2  | code          | Open (RSC bodies remain)                        |
+| NOW-05  | Uptime/error alerting — one owner step left                            | TASK-21                 | ops            | P2  | owner/VPS     | Open (owner step only)                          |
+| NOW-07  | 60 over-long DB riddles rewrite + live content push                    | TASK-03 resid.          | content        | P2  | owner/content | Draft ready — owner review                      |
+| NOW-09  | Surface stored answer explanations post-answer                         | new 2026-09-23          | ux/seo         | P2  | code+content  | Partial — riddle side fixed; quiz needs content |
+| NOW-10  | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23          | content        | P2  | owner+content | Open — rights decision gates execution          |
+| HARD-13 | Owner-deferred bucket — session persistence first                      | TASK-23 (DEF-01)        | deferred       | P3  | owner+code    | Open — session persistence first                |
+| HARD-14 | Riddle share deep-link (needs session-contract change)                 | TASK-27 resid. (DEF-02) | deferred       | P3  | deferred      | Open — after session contract                   |
+| HARD-15 | Duel / PvP mode — web-first                                            | new 2026-09-23          | feature/growth | P2  | code          | Open — after session contract                   |
+| HARD-01 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | TASK-04                 | security       | P2  | decision      | Open — owner decision                           |
+| HARD-05 | R2 media follow-ups                                                    | TASK-22                 | media/ops      | P2  | owner+code    | Open                                            |
+| HARD-06 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | TASK-09 rem.            | a11y           | P3  | code+owner    | Fixed — owner phone QA                          |
+| HARD-07 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | TASK-10 (DEC-01)        | decision       | P2  | decision      | Open — owner decision                           |
+| HARD-08 | Comments on quiz/riddle content                                        | TASK-12 (DEC-02)        | decision       | P3  | decision      | Open — owner decision                           |
+| HARD-09 | SEC-07 email-verification gate                                         | TASK-13 (DEC-03)        | decision       | P2  | decision      | Open — owner decision                           |
+| HARD-10 | Admin user-mgmt UI + dashboard unification + guest activity            | TASK-16 (DEC-04)        | decision       | P3  | decision      | Open — owner decision                           |
+| HARD-11 | Installability: full manifest / theme-color                            | TASK-17 (DEC-05)        | decision       | P3  | decision      | Open — owner decision                           |
+| HARD-12 | Analytics deferred items (funnels, accuracy join, retention tests)     | TASK-07 (DEC-06)        | decision       | P3  | decision      | Open — owner decision                           |
 
 ### Open item details
 
@@ -269,6 +205,30 @@
   refutes). Both need an owner decision + an explanation-rewrite pass in the same
   content push.
 
+### NOW-10 - Image-riddle catalog replacement: wipe + extract from the benchmark sites (new 2026-09-23) — OPEN (rights decision gates execution)
+
+- **Date found:** 2026-09-23 (owner request in the competitor-comparison discussion)
+- **Area:** content — **owner decision + content work**
+- **Priority:** P2
+- **Owner request as stated:** remove ALL existing image riddles, then extract image
+  riddles from the four benchmark websites (Trivia Crack / Britannica / TriviaPlaza /
+  FunTrivia) and ADD ONLY the extracted ones.
+- **Owner decisions required BEFORE execution — nothing has been done:**
+  1. **Rights:** scraped puzzles and their images are copyrighted by their publishers;
+     republishing verbatim is a legal risk. Options: (a) treat them as format/style
+     inspiration and re-create original riddles (safe), (b) use only public-domain/CC
+     sources, (c) accept the risk — owner's call, recorded here.
+  2. **Source reality (verified live 2026-09-23):** none of the four sites publishes true
+     "image riddles" in our format (image + word answer). Closest: FunTrivia Photo
+     Quizzes / Photo Match — MCQ-with-picture, needs format conversion. Trivia Crack =
+     JS app shell (nothing extractable), Britannica = bot-wall 403 on all fetchers,
+     TriviaPlaza = none seen. Expect low yield; re-creation likely beats scraping.
+  3. **Destructive:** wipes 1,906 live image riddles across 10 categories. Standing
+     rules apply: DB backup first, wipe + push, then FLUSH image-riddle redis keys
+     (BUG-038).
+- **Status:** OPEN (owner 2026-09-24). Execution gated on the owner rights decision
+  (re-create originals recommended).
+
 ### HARD-01 - CSP residuals: 'unsafe-inline' + HttpOnly token storage (was TASK-04) - games gap FIXED 2026-09-22; residuals parked
 
 - **Date found:** 2026-09-22 (source: audit)
@@ -336,6 +296,47 @@
 
 - **Date found:** 2026-09-22 (source: plan/13: funnels, accuracy join, retention tests, B6/B7) —
   additive once picked up; collection already in place. P3.
+
+### HARD-13 - Owner-deferred bucket — items revisited in sequence (was TASK-23, briefly DEF-01) — OPEN (session persistence first)
+
+- **Date found:** 2026-09-22
+- **Contents (original owner-deferred list):** riddle-mcq session persistence /
+  JSON import-export / cache tuning; image-riddle server-side progress;
+  admin-dashboard unification (dedupe with HARD-10 when reached); games R2-2/R2-3
+  extras; LinkedIn + Pinterest share previews.
+- **Status:** OPEN (owner 2026-09-24) — start with the riddle-mcq session persistence
+  item; it is the HARD-15 (duel) prerequisite.
+
+### HARD-14 - Riddle share deep-link (was TASK-27 residue, briefly DEF-02) — OPEN (after the session contract lands)
+
+- **Date found:** 2026-09-22 — riddle question shares still use the hub `?q=` form; the
+  riddle play flow has no shared-start contract (subjectId/level based, no in-session
+  question identity). Implementing means changing the riddle session contract — opened 2026-09-24 with the rest of the
+  contract-chain items; implement after the session contract lands. Note: the same session-contract work is a HARD-15
+  (duel) prerequisite and HARD-13 is queued — sequence them together when the queue
+  reaches that point. P3.
+
+### HARD-15 - Duel / PvP mode — web-first (new 2026-09-23) — OPEN (build after the session contract)
+
+- **Date found:** 2026-09-23 (source: competitor pass — Trivia Crack's core hook; owner
+  asked "website, app, or both?")
+- **Area:** feature / growth — **code work (was decision; owner queued it 2026-09-23)**
+- **Priority:** P2
+- **Decision record:** owner initially did not want it; on 2026-09-23 queued it, and on
+  2026-09-24 moved it to OPEN — on the WEBSITE first, web-first and
+  mobile-first. Rationale on record: there is no app yet (web = 100% of the audience;
+  withholding the feature from web withholds it from everyone), web is the SEO funnel
+  that feeds a future app, and the expensive part — the backend — already exists: the
+  `duels` module (public controller: join/leave/name) ships with ZERO frontend
+  references today; any future app shell (e.g. Capacitor wrap) talks to the same API.
+  Precedent: Trivia Crack itself is app-first yet added browser play (CrazyGames, 2023).
+  v1 tradeoff: weaker push notifications vs native — cover with async design +
+  email/PWA push.
+- **Prerequisite:** session-contract work — HARD-13's riddle-mcq session persistence
+  item (quiz side is closer: play URLs already carry `qid=` deep links, TASK-27).
+  Sequence: HARD-13 session contract → HARD-15 duel UI.
+
+---
 
 ## Resolved — removed from this tracker (policy: open items only)
 
