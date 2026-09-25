@@ -271,6 +271,12 @@
 
 ### NOW-11 - R2 media follow-ups (was TASK-22)
 
+- **2026-09-24: local Media upload E2E PASS** (the untested path is now tested):
+  admin login → `POST /media/upload` (JWT-guarded multipart) → sharp PNG→WebP
+  conversion (`isConverted: true`) → stored under `/uploads/` → serves back 200
+  `image/webp`. Remaining parts are owner-side: move off `r2.dev` to a custom
+  domain, rclone-migrate existing media, token hygiene (needs Cloudflare access).
+
 - **Date found:** 2026-09-22 (source: plan/17-r2-storage-setup.md)
 - **Area:** media — **owner + code**
 - **Priority:** P2
