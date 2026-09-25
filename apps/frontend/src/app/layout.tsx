@@ -86,6 +86,12 @@ export async function generateMetadata(): Promise<Metadata> {
     authors: [{ name: `${siteName} Team` }],
     creator: `${siteName} Team`,
     publisher: `${siteName} Platform`,
+    // NOW-17: iOS install support (home-screen standalone + status bar).
+    appleWebApp: {
+      capable: true,
+      title: 'PigZap',
+      statusBarStyle: 'default',
+    },
     robots: {
       index: true,
       follow: true,
