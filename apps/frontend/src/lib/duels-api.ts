@@ -76,7 +76,3 @@ export async function finishDuel(code: string, guestId: string): Promise<DuelPol
   const response = await api.post<DuelPoll>(`/duels/${code}/finish`, { guestId });
   return response.data;
 }
-
-export async function leaveDuel(code: string, guestId: string): Promise<void> {
-  await api.post(`/duels/${code}/leave`, { guestId });
-}
