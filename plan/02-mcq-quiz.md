@@ -154,3 +154,11 @@ Frontend (`apps/frontend/src/`):
   played-today gate no longer offers a replay in the rare played-without-result edge.
   Verified with a full manual browser playthrough (marking ✓/✕ per verdict, 2-day
   streak carried, played-today lockout on reload).
+- **Duel (NOW-09, shipped 2026-09-25):** the dormant duels backend
+  (race mode: frozen question set per match, 6-char join codes, server-side
+  grading via `POST /duels/:code/answer`, silence rule, reveal-on-finish) got
+  its frontend: `/duel` page (noindex) — create (level + 10 questions → share
+  code + `pigzap.com/duel?code=<code>` link), join by code, race play with
+  instant verdict marking, revealed result comparison. Verified live:
+  create → join → grade → finish on production. Duels API client:
+  `lib/duels-api.ts`.

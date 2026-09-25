@@ -103,3 +103,16 @@
   inside it.
 - **Features 02–05 (content)** — sitemap + future per-content metadata read the public content
   APIs; RSC conversion touches their pages.
+
+## 5. RSC residual — CLOSED 2026-09-25 (NOW-03 complete)
+
+- The hub bodies are now server-rendered: `/quiz-mcq` renders a crawlable
+  "Browse all quiz subjects" grid (live counts, sorted), `/riddle-mcq` renders
+  "Browse all riddle categories" — both in the initial HTML, with the
+  interactive hubs hydrating below. Payload unwrapping is defensive (`{data,
+total}` vs array) so prerendering with a reachable backend cannot crash the
+  build (that crash shipped twice to Dokploy before the fix, `2c7f58b`).
+- Verified live on production: both catalogs present in fetched HTML, 200 on
+  hub/chapter/daily/duel pages, 92 chapter sitemap entries.
+- NOW-03 residual is COMPLETE; organic segmentation (P3) remains under NOW-18-adjacent
+  analytics items.

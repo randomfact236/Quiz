@@ -145,3 +145,19 @@ Frontend (`apps/frontend/src/`):
   `contentHash` / `random_weight` columns (no frontend consumer — grep-verified).
   LIVE NOTE: prod runs pre-`2b17264` code, so the live riddle reads still ship the
   full key until the next production push.
+
+## 8 · Server-side sessions + shared deep-links (NOW-07 + NOW-08 — shipped 2026-09-25)
+
+- **Session persistence (NOW-07):** `riddle_sessions` table (migration
+  `1793300000000`, mirrors `quiz_sessions` — soft userId/guestId identity,
+  denormalized subject fields); `POST /riddle-mcq/sessions`,
+  `GET /sessions/history`, `GET /sessions/high-scores` (OptionalJwtAuthGuard,
+  throttled). The play flow submits every completed run fire-and-forget
+  (offline-safe; localStorage remains the resume/offline layer). Results and
+  high scores now survive device loss; this session identity is the HARD-15/
+  NOW-09 duel prerequisite. Verified live: POST returns `{recorded:true, sessionId}`.
+- **Shared deep-links (NOW-08):** `?q=<id>` share links get a server-rendered
+  "▶ Play this riddle" CTA on the hub; `/riddle-mcq/play?shared=<id>` runs the
+  single shared riddle through the normal play flow (public by-id read,
+  answer-stripped, server grading, session submit). `useRiddlePlay` gained a
+  `sharedId` option and the play page treats `?shared=` as a valid entry scope.
