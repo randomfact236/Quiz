@@ -161,3 +161,15 @@ Frontend (`apps/frontend/src/`):
   single shared riddle through the normal play flow (public by-id read,
   answer-stripped, server grading, session submit). `useRiddlePlay` gained a
   `sharedId` option and the play page treats `?shared=` as a valid entry scope.
+
+## 9 · Over-long question rewrites — APPLIED TO PROD (NOW-05, 2026-09-25)
+
+- All 60 proposed ≤220-char question rewrites from
+  `scripts/overlong-riddle-rewrites-DRAFT.tsv` were applied directly to the
+  production DB (authorized: owner delegated the 03–18 run) — verified:
+  **0 published rows exceed 220 chars** (was 60), redis `riddle-mcq:*` flushed,
+  live API serves the fixed questions (sample max length 120).
+- **Still open (owner decision):** the 30 open-answer rows' baked-alibi
+  contradiction and the 30 inverted MCQ explanations flagged CAUTION in the
+  drafting pass need an owner wording decision; local DB does not carry these
+  prod-only rows (UUIDs differ) — local stays source-of-truth for everything else.

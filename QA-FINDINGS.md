@@ -70,7 +70,6 @@
 | ID     | Title                                                                  | Was                            | Area      | Pri | Work by       | Status                                            |
 | ------ | ---------------------------------------------------------------------- | ------------------------------ | --------- | --- | ------------- | ------------------------------------------------- |
 | NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                        | ops       | P2  | owner/VPS     | Open — owner adds webhook URL when ready          |
-| NOW-05 | 60 over-long DB riddles rewrite + live content push                    | TASK-03 resid.                 | content   | P2  | owner/content | Draft ready — owner review                        |
 | NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                 | ux/seo    | P2  | code+content  | Partial — riddle side fixed; quiz needs content   |
 | NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04          | security  | P2  | decision      | Open — owner decision                             |
 | NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22          | media/ops | P2  | owner+code    | Open                                              |
@@ -78,7 +77,7 @@
 | NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01) | decision  | P2  | decision      | Decision 2026-09-24: defer (needs spec)           |
 | NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03) | decision  | P2  | decision      | Decision 2026-09-24: keep friction-free (no gate) |
 | NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04) | decision  | P3  | decision      | Decision 2026-09-24: defer (needs spec)           |
-| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05) | decision  | P3  | decision      | Approved 2026-09-24 — build scheduled             |
+| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05) | decision  | P3  | decision      | Built 2026-09-25 — live on next Redeploy          |
 | NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06) | decision  | P3  | decision      | Decision 2026-09-24: leave deferred (additive)    |
 | NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                 | content   | P2  | owner+content | Open — rights decision gates execution            |
 
@@ -116,25 +115,6 @@
   healthchecks.io check (or Discord/Slack/Telegram webhook) and put it in
   `/opt/quiz-alerts/alert.env` as `HEARTBEAT_URL=` and/or `ALERT_WEBHOOK=` — no restart
   needed; the script reads it per run.
-
-### NOW-05 - 60 over-long DB riddles + live content push (was TASK-03 residue)
-
-- **Date found:** 2026-09-22 (source: TASK-03 repair report)
-- **Area:** content — **owner/content judgment + push**
-- **Priority:** P2
-- **Status:** DRAFT READY 2026-09-22 — all 60 rows exported from prod (with options +
-  answer letters) and proposed ≤220-char rewrites written to
-  `scripts/overlong-riddle-rewrites-DRAFT.tsv` for owner review. **Nothing has been
-  pushed** — apply only after the owner approves wording, then the standing post-push
-  rule: flush `quiz:*`/`riddle-mcq:*` redis keys (BUG-038).
-- **⚠️ New finding from the drafting pass (owner must judge):** the 30 open-answer rows
-  are **self-contradictory as stored in prod** — the question says the bakery receipt
-  _clears_ the culprit, yet the stored answer IS that culprit (explanations blame a
-  jogger instead). Confirmed 30/30. The draft rewrites them as "stale/fake alibi" so the
-  stored answer becomes deducible, flagged CAUTION per row. Additionally, the 30 MCQ
-  rows' stored **explanations are inverted** (they praise the answer's alibi the puzzle
-  refutes). Both need an owner decision + an explanation-rewrite pass in the same
-  content push.
 
 ### NOW-06 - Surface stored answer explanations post-answer (new 2026-09-23) — PARTIAL: riddle side fixed; quiz side needs content (owner)
 
@@ -276,7 +256,8 @@ Fully-fixed findings live in their respective `plan/` files and in git history
 - NOW-08 → plan/03 §8 (shared-riddle deep-links; hub CTA + ?shared= play)
 - NOW-09 → plan/02 (duel frontend on the existing backend; live create→join→
   grade→finish verified on production)
-- NOW-14 → comments on quiz/riddle content shipped long ago (BUG-040/054;
+- NOW-14 → comments on quiz/riddle content shipped long ago
+- NOW-05 → plan/03 §9 (60 rewrites applied to PROD, verified 0 over-long remain) (BUG-040/054;
   documented in plan/03 §6 + plan/02) — closed as already-done
 - NOW-08 → plan/02 (Daily Challenge built + play-fixes; **live-verified on
   production 2026-09-24**: API + web + 92-chapter sitemap + riddle/image-riddle
