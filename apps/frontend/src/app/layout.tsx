@@ -124,6 +124,12 @@ export const viewport: Viewport = {
     { media: '(prefers-color-scheme: light)', color: '#ffffff' },
     { media: '(prefers-color-scheme: dark)', color: '#0f172a' },
   ],
+  // NOW-17: iOS install support (home-screen standalone + status bar).
+  appleWebApp: {
+    capable: true,
+    title: 'PigZap',
+    statusBarStyle: 'default',
+  },
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
