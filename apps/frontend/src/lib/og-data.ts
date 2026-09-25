@@ -126,8 +126,14 @@ export const ogData = {
     ),
 
   /** Active quiz subjects (public list) — the hub's crawlable subject grid. */
-  quizSubjectsList: () =>
-    fetchJson<Array<{ name: string; emoji: string; slug: string }>>(`/quiz-mcq/subjects`),
+  quizSubjectsList: async () => {
+    const payload = await fetchJson<
+      | { data?: Array<{ name: string; emoji: string; slug: string }> }
+      | Array<{ name: string; emoji: string; slug: string }>
+    >(`/quiz-mcq/subjects`);
+    if (Array.isArray(payload)) return payload;
+    return payload?.data ?? [];
+  },
 
   /**
    * A few easy-level published questions of one chapter for the chapter
@@ -171,17 +177,30 @@ export const ogData = {
   },
 
   /** Riddle categories (public hub payload) — { id, name, slug, emoji, isActive, riddleTotal? }. */
-  riddleCategories: () =>
-    fetchJson<
-      Array<{
-        id: string;
-        name: string;
-        slug: string;
-        emoji: string;
-        isActive: boolean;
-        riddleTotal?: number;
-      }>
-    >('/riddle-mcq/categories'),
+  riddleCategories: async () => {
+    const payload = await fetchJson<
+      | {
+          data?: Array<{
+            id: string;
+            name: string;
+            slug: string;
+            emoji: string;
+            isActive: boolean;
+            riddleTotal?: number;
+          }>;
+        }
+      | Array<{
+          id: string;
+          name: string;
+          slug: string;
+          emoji: string;
+          isActive: boolean;
+          riddleTotal?: number;
+        }>
+    >('/riddle-mcq/categories');
+    if (Array.isArray(payload)) return payload;
+    return payload?.data ?? [];
+  },
 
   /**
    * A single image riddle for the per-riddle share card (SHARE-01 #8). Only
