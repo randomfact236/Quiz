@@ -192,27 +192,45 @@ Confirmed 2026-09-26: installation `158498141` on `randomfact236`,
 `contents: read`, `metadata: read`, `pull_requests: write` — read is enough to clone.
 **Authorisation is not the problem.**
 
-**4. Is the webhook reachable from the internet?** This is the prime suspect, and it is
-invisible from the VPS (which can always reach its own hostnames). Test from _outside_:
+**4. Is the webhook reachable from the internet?** **This was the actual cause**, found
+2026-09-27. Test from _outside_ the VPS — from the VPS every hostname resolves locally and
+always looks reachable:
 
 ```bash
-curl -o /dev/null -w "%{http_code}\n" https://vmi3549789.contaboserver.net   # -> 000
-curl -o /dev/null -w "%{http_code}\n" https://dokploy.profitbenefit.com      # -> 200
+curl -o /dev/null -w "%{http_code}\n" http://207.180.199.86:3000/api/deploy/github  # -> 000
+curl -o /dev/null -w "%{http_code}\n" https://dokploy.profitbenefit.com            # -> 200
 ```
 
-The panel is served on two hostnames. `DOCKER-USER` drops inbound 80/443 from anything
-outside the Cloudflare ranges (the NOW-01 lockdown), so `vmi3549789.contaboserver.net` is
-unreachable from the public internet. **The App's webhook URL was set once at install time
-(2026-09-02) and does not follow you when you change which hostname you browse on.** If it
-still points at the Contabo hostname, GitHub's deliveries are silently dropped.
+The App's webhook URL was `http://207.180.199.86:3000/api/deploy/github`: port 3000 is
+dropped by `DOCKER-USER` (the NOW-01 lockdown), on a bare IP, over plain HTTP. GitHub was
+delivering push events into a black hole. Fix — set the App's **Webhook URL** to:
+
+```
+https://dokploy.profitbenefit.com/api/deploy/github
+```
+
+**Do not open port 3000 to fix this.** That would expose the raw panel over HTTP to the
+open internet and undo NOW-01 entirely. **Do not touch the App's `Secret` field** — Dokploy
+verifies it from the `X-Hub-Signature-256` header on every delivery, and it is already
+correct.
 
 **5. Is the App subscribed to `push`?** GitHub → your App → Advanced → Webhook events.
-`push` must be selected. If it is not, nothing is ever delivered regardless of hostname.
+`push` must be selected. (On 2026-09-27 it already was, so it was not the cause here — but
+check it on any new App.)
 
-**6. Confirm the endpoint path.** `https://<reachable-host>/api/deploy/github/<secret>`
-returns `401` to an unsigned request, which is correct; `/api/deploy/<id>` returns
-`404 Application Not Found`. If the App's URL uses the firewalled hostname, repoint it at
-`dokploy.profitbenefit.com` with the same path and secret.
+**6. The endpoint takes NO secret in the path.** Verified by reading the handler at
+`/app/.next/server/pages/api/deploy/github.js` inside the Dokploy container:
+
+- the route is `/api/deploy/github`; appending a secret segment returns `401`
+- it requires the `X-Hub-Signature-256` header and rejects unsigned requests with `401`
+- it looks your GitHub row up by `installation.id` **taken from the payload**, so the body
+  must carry it (real GitHub deliveries do)
+- a signed `X-GitHub-Event: ping` returns `200 {"message":"Ping received, webhook is active"}`
+  and — usefully — **triggers no deploy**, so it is a safe way to prove a URL works
+
+**Do not use traefik access logs as evidence.** They do not record `/api/deploy` requests:
+a request that verifiably returned `200` through traefik still showed zero log hits. Proof of
+delivery has to come from a real push, never from a log grep.
 
 **Also worth knowing:** Dokploy runs on Docker **Swarm** — container names look like
 `quiz-api-wqmjxb.1.<taskid>`. Do not hand-build over SSH to "fix" a deploy: that bypasses
