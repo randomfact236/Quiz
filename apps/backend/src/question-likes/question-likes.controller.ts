@@ -52,7 +52,7 @@ export class QuestionLikesController {
 
   @Get('my')
   @_Public()
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @ApiOperation({ summary: 'Whether the caller already liked a question (guest or account)' })
   likedByMe(
     @Query() query: MyQuestionLikeQueryDto,

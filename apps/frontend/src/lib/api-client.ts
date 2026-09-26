@@ -11,6 +11,12 @@ const BASE = process.env['NEXT_PUBLIC_API_URL'] || 'http://localhost:3012/api';
 export const API_BASE_URL = BASE.endsWith('/v1') ? BASE : `${BASE}/v1`;
 
 import { getItem, setItem, STORAGE_KEYS, removeItem } from './storage';
+import {
+  clearGuestToken,
+  guestTokenFor,
+  writeGuestToken,
+  type GuestTokenPair,
+} from './guest-token-store';
 
 /**
  * Why two token stores: the admin token pair (ADMIN_TOKEN / ADMIN_REFRESH_TOKEN)
@@ -101,6 +107,65 @@ function clearTokens(isAdmin?: boolean): void {
 }
 
 /**
+ * Guest-scoped routes (session history, achievements, "did I like this", duel
+ * polling) identify the caller with a `guestId`, and the backend requires the
+ * server-signed pair alongside it. Attaching `X-Guest-Token` centrally keeps
+ * the secret out of the URL — a token in a query string is captured by access
+ * logs and Referer headers — and keeps every call site from having to await
+ * the token first. A cache miss simply omits the header and the server 403s,
+ * which the write paths already recover from by re-issuing the pair.
+ */
+function guestTokenHeader(
+  endpoint: string,
+  body: unknown
+): Record<string, string> | Record<string, never> {
+  const guestId = guestIdOf(endpoint, body);
+  const guestToken = guestTokenFor(guestId);
+  return guestToken ? { 'X-Guest-Token': guestToken } : {};
+}
+
+/** Pull the guestId out of a request, from the query string or a JSON body. */
+function guestIdOf(endpoint: string, body: unknown): string | undefined {
+  const queryMatch = /[?&]guestId=([^&]+)/.exec(endpoint);
+  const fromQuery = queryMatch?.[1];
+  if (fromQuery) {
+    try {
+      return decodeURIComponent(fromQuery);
+    } catch {
+      return fromQuery;
+    }
+  }
+  if (body && typeof body === 'object' && !isFormData(body)) {
+    const value = (body as { guestId?: unknown }).guestId;
+    if (typeof value === 'string' && value) return value;
+  }
+  return undefined;
+}
+
+/**
+ * Ask the backend for a fresh signed pair for `guestId` and cache it. Raw
+ * `fetch` rather than `api.post` so this stays a leaf helper — guest-id.ts
+ * imports the api client, so calling back into it would be a cycle.
+ */
+async function reissueGuestToken(guestId: string | undefined): Promise<string | null> {
+  if (!guestId || typeof window === 'undefined') return null;
+  try {
+    const res = await fetch(`${API_BASE_URL}/guest-users/token`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ legacyId: guestId }),
+    });
+    if (!res.ok) return null;
+    const pair = (await res.json()) as GuestTokenPair;
+    if (!pair?.token) return null;
+    writeGuestToken(pair);
+    return pair.token;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * Make an API request to the backend
  */
 export async function apiRequest<T>(
@@ -119,6 +184,7 @@ export async function apiRequest<T>(
       // boundary itself; a manual header would break the request.
       ...(formData ? {} : { 'Content-Type': 'application/json' }),
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...guestTokenHeader(endpoint, options.body),
       ...options.headers,
     },
   };
@@ -187,6 +253,32 @@ export async function apiRequest<T>(
           if (!pathname.startsWith('/admin/login')) {
             window.location.assign('/admin/login?expired=1');
           }
+        }
+      }
+    }
+
+    if (response.status === 403 && guestIdOf(endpoint, options.body)) {
+      // The backend rejected the signed guest pair. That means the cached
+      // token is stale or missing (rotated id, cleared storage, backend
+      // re-key) — re-issue once and replay the request with a fresh header.
+      // Single retry, matching the write paths' one-recovery-pass pattern.
+      clearGuestToken();
+      const fresh = await reissueGuestToken(guestIdOf(endpoint, options.body));
+      if (fresh) {
+        const retryHeaders = new Headers(config.headers);
+        retryHeaders.set('X-Guest-Token', fresh);
+        const retryRes = await fetch(url, {
+          ...config,
+          headers: retryHeaders,
+          signal: controller.signal,
+        });
+        clearTimeout(timeout);
+        if (retryRes.ok) {
+          return {
+            data: (await retryRes.json()) as T,
+            status: retryRes.status,
+            ok: retryRes.ok,
+          };
         }
       }
     }

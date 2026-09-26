@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { authService, AuthUser } from '@/lib/auth';
 import { getItem, STORAGE_KEYS } from '@/lib/storage';
+import { ensureGuestToken } from '@/lib/guest-id';
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -34,6 +35,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       setIsLoading(false);
     };
     checkAuth();
+  }, []);
+
+  useEffect(() => {
+    // Warm the signed guest pair. Guest-scoped READS (session history,
+    // achievement re-hydration, "did I already like this", duel polling) are
+    // now guarded server-side, and the api client attaches the cached token
+    // synchronously — so a first-time visitor with an empty cache would get a
+    // 403 on the very first read. Fetching the pair once on mount means it is
+    // cached before any of those fire. Fire-and-forget: anonymous visitors
+    // never block on it, and a failure just leaves the reads unsigned.
+    void ensureGuestToken();
   }, []);
 
   return (

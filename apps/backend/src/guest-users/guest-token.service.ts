@@ -30,10 +30,24 @@ export class GuestTokenService {
   private readonly secret: string;
 
   constructor() {
-    this.secret =
-      process.env['GUEST_TOKEN_SECRET'] ||
-      process.env['JWT_SECRET'] ||
-      'dev-only-guest-token-secret';
+    const configured = process.env['GUEST_TOKEN_SECRET'] || process.env['JWT_SECRET'];
+    if (configured) {
+      this.secret = configured;
+      return;
+    }
+    // Previously this fell through to a hardcoded literal in EVERY
+    // environment, so a deploy that set neither variable signed guest
+    // identities with a publicly-known string from the source tree. The
+    // production env validator catches a missing JWT_SECRET, but this service
+    // is constructed in contexts that do not go through it, and neither
+    // .env nor apps/backend/.env sets GUEST_TOKEN_SECRET — so the common local
+    // setup was signing with a guessable dev value. Refuse outside dev instead.
+    if (process.env['NODE_ENV'] === 'production') {
+      throw new Error(
+        'GUEST_TOKEN_SECRET (or JWT_SECRET) must be set in production — refusing to sign guest identities with a fallback secret.'
+      );
+    }
+    this.secret = 'dev-only-guest-token-secret';
   }
 
   sign(guestId: string): string {

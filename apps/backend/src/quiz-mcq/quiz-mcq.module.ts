@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { BulkActionService } from '../common/services/bulk-action.service';
+import { GuestUsersModule } from '../guest-users/guest-users.module';
 
 import { Chapter } from './entities/chapter.entity';
 import { DailyChallengeResult } from './entities/daily-challenge-result.entity';
@@ -15,6 +16,9 @@ import { QuizMcqService } from './quiz-mcq.service';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Subject, Chapter, Question, QuizSession, DailyChallengeResult]),
+    // GuestUsersModule supplies the GuestTokenGuard enforced on the
+    // guest-attributed session write and history read.
+    GuestUsersModule,
   ],
   controllers: [QuizMcqController],
   providers: [QuizMcqService, DailyChallengeService, BulkActionService],

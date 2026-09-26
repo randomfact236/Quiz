@@ -50,7 +50,7 @@ export class CommentsController {
   @Get('my')
   @_Public()
   @ApiOperation({ summary: "List the caller's own comments on one content item" })
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   findMine(@Query() query: MyCommentsQueryDto, @Req() req: any): Promise<PublicComment[]> {
     return this.commentsService.findMyComments(
       query.contentType,
