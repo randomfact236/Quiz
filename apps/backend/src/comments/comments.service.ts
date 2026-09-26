@@ -486,10 +486,16 @@ export class CommentsService {
     const counts: Record<string, number> = {};
     if (contentIds.length === 0) return counts;
 
+    // The cache key MUST cover the requested ID set. It used to end in a
+    // literal `:all`, so `?ids=a,b,c` and `?ids=x,y,z` collided for the whole
+    // TTL window and whichever request landed second was served the first
+    // request's numbers — wrong 💬 badge counts on any page whose chip request
+    // overlapped another's. Family invalidation clears
+    // `comments:{type}:counts:*`, so anything after `counts:` stays matchable.
+    const idDigest = digestIdSet(contentIds);
+
     return this.cacheService.getOrSet(
-      // NOTE: the `:all` suffix matters — family invalidation clears
-      // `comments:{type}:counts:*`, which must match this key.
-      `${FEED_CACHE_FAMILY}:${contentType}:counts:all`,
+      `${FEED_CACHE_FAMILY}:${contentType}:counts:${idDigest}`,
       async () => {
         const rows = await this.commentRepo
           .createQueryBuilder('comment')
@@ -529,4 +535,25 @@ export class CommentsService {
   private async invalidateAllFeedCaches(): Promise<void> {
     await invalidateCacheFamilies(this.cacheService, [FEED_CACHE_FAMILY]);
   }
+}
+
+/**
+ * Order-independent 64-bit digest of an ID set, for use in a cache key.
+ * Two 32-bit FNV-1a passes with different offset bases are concatenated so
+ * the key stays short (a raw join of up to 500 UUIDs would be an 18 KB Redis
+ * key) while the collision probability across a TTL window stays negligible.
+ * The set is de-duplicated and sorted first, so `a,b` and `b,a` agree.
+ */
+function digestIdSet(ids: string[]): string {
+  const canonical = [...new Set(ids)].sort().join(',');
+  let h1 = 0x811c9dc5;
+  let h2 = 0x01000193;
+  for (let i = 0; i < canonical.length; i++) {
+    const c = canonical.charCodeAt(i);
+    h1 = Math.imul(h1 ^ c, 0x01000193);
+    h2 = Math.imul(h2 ^ c, 0x85ebca6b);
+  }
+  return `${(h1 >>> 0).toString(16).padStart(8, '0')}${(h2 >>> 0)
+    .toString(16)
+    .padStart(8, '0')}-${ids.length}`;
 }

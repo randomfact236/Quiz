@@ -209,18 +209,21 @@ export class MediaService {
     ]);
 
     // Storage saved = original sizes minus stored webp variant sizes.
+    // Both sums are done in SQL. This previously issued a second
+    // `find({ select: ['variants'] })` that loaded EVERY media row into
+    // memory just to add up a JSONB number in JavaScript — an O(table) read
+    // on an admin dashboard endpoint.
     const rows = await this.mediaRepo
       .createQueryBuilder('media')
       .select('COALESCE(SUM(media.fileSize), 0)', 'original')
-      .getRawOne<{ original: string }>();
-    const variantRows = await this.mediaRepo.find({ select: ['variants'] });
-    let convertedBytes = 0;
-    for (const row of variantRows) {
-      if (row.variants?.webp) {
-        convertedBytes += row.variants.webp.fileSize;
-      }
-    }
+      .addSelect(
+        "COALESCE(SUM(CASE WHEN media.variants->'webp' IS NOT NULL THEN (media.variants->'webp'->>'fileSize')::bigint END), 0)",
+        'converted'
+      )
+      .getRawOne<{ original: string; converted: string }>();
+
     const originalBytes = parseInt(rows?.original ?? '0', 10);
+    const convertedBytes = parseInt(rows?.converted ?? '0', 10);
 
     return {
       total,
