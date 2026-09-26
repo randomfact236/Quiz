@@ -1,6 +1,11 @@
 # =============================================================================
 # AI Quiz Platform - Production Deployment Script (PowerShell)
 # =============================================================================
+# DEPRECATED — kept for reference only. The live deploy path is push-to-git:
+#   git push origin main           # CI gates (lint, type-check, test, build)
+#   git push origin main:production # syncs the production branch; Dokploy rebuilds
+# See docs/production-runbook.md.
+#
 # Usage: .\deploy.ps1 [command]
 # Commands:
 #   deploy      - Full deployment (build + start)

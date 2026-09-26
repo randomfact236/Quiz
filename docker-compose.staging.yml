@@ -1,13 +1,24 @@
 # Staging deployment — production-like but isolated from dev stack:
 # different container names, ports (backend 3013 / frontend 3011), fresh volume.
 # Validates the full migration path: DB_SYNCHRONIZE=false + migrationsRun on boot.
+#
+# NOT currently deployed — nothing in CI or any runbook targets it. It is kept
+# as a rehearsal of the production migration path, so treat it as a live-shaped
+# config rather than a scratch file.
+#
+# Secrets live in a gitignored `.env.staging` beside this file (see
+# `.env.staging.example`). Every value below is required and fails closed, so
+# a missing var stops the stack instead of booting with a guessable secret —
+# the previous version of this file hardcoded a 38-character JWT secret and
+# published the backend on 0.0.0.0, which meant anyone who could reach the host
+# could mint a valid admin token.
 services:
   postgres:
     image: postgres:15-alpine
     container_name: quiz-staging-postgres
     environment:
       POSTGRES_USER: aiquiz
-      POSTGRES_PASSWORD: aiquiz_staging_password
+      POSTGRES_PASSWORD: ${STAGING_POSTGRES_PASSWORD:?set STAGING_POSTGRES_PASSWORD in .env.staging}
       POSTGRES_DB: aiquiz
     volumes:
       - quiz_staging_pgdata:/var/lib/postgresql/data
@@ -22,9 +33,10 @@ services:
   redis:
     image: redis:7-alpine
     container_name: quiz-staging-redis
-    command: ["redis-server", "--requirepass", "aiquiz_staging_redis_password"]
+    command:
+      ["redis-server", "--requirepass", "${STAGING_REDIS_PASSWORD:?set STAGING_REDIS_PASSWORD in .env.staging}"]
     healthcheck:
-      test: ["CMD-SHELL", "redis-cli -a aiquiz_staging_redis_password ping | grep PONG"]
+      test: ["CMD-SHELL", "redis-cli -a ${STAGING_REDIS_PASSWORD} ping | grep PONG"]
       interval: 5s
       timeout: 5s
       retries: 10
@@ -42,20 +54,27 @@ services:
       DB_HOST: postgres
       DB_PORT: '5432'
       DB_USERNAME: aiquiz
-      DB_PASSWORD: aiquiz_staging_password
+      DB_PASSWORD: ${STAGING_POSTGRES_PASSWORD:?set STAGING_POSTGRES_PASSWORD in .env.staging}
       DB_DATABASE: aiquiz
       DB_SYNCHRONIZE: 'false'
       REDIS_HOST: redis
       REDIS_PORT: '6379'
-      REDIS_PASSWORD: aiquiz_staging_redis_password
-      JWT_SECRET: staging-only-secret-do-not-use-in-prod
+      REDIS_PASSWORD: ${STAGING_REDIS_PASSWORD:?set STAGING_REDIS_PASSWORD in .env.staging}
+      JWT_SECRET: ${STAGING_JWT_SECRET:?set STAGING_JWT_SECRET in .env.staging}
+      # Distinct from JWT_SECRET: rotating one must not invalidate the other,
+      # and a leaked guest secret must not be a JWT signing key.
+      GUEST_TOKEN_SECRET: ${STAGING_GUEST_TOKEN_SECRET:?set STAGING_GUEST_TOKEN_SECRET in .env.staging}
       JWT_EXPIRES_IN: 24h
-      GOOGLE_CLIENT_ID: staging-placeholder.apps.googleusercontent.com
-      GOOGLE_CLIENT_SECRET: staging-placeholder-secret
+      FRONTEND_URL: http://localhost:3011
+      TRUST_PROXY: 'true'
+      GOOGLE_CLIENT_ID: ${STAGING_GOOGLE_CLIENT_ID:?set STAGING_GOOGLE_CLIENT_ID in .env.staging}
+      GOOGLE_CLIENT_SECRET: ${STAGING_GOOGLE_CLIENT_SECRET:?set STAGING_GOOGLE_CLIENT_SECRET in .env.staging}
       GOOGLE_CALLBACK_URL: http://localhost:3013/api/v1/auth/google/callback
       CORS_ORIGIN: http://localhost:3011
+    # Loopback only — the host reverse proxy is the sole ingress. Publishing on
+    # 0.0.0.0 would expose the API to the LAN/the internet directly.
     ports:
-      - '3013:3012'
+      - '127.0.0.1:3013:3012'
     depends_on:
       postgres:
         condition: service_healthy
@@ -75,7 +94,7 @@ services:
       NODE_ENV: production
       NEXT_PUBLIC_API_URL: http://localhost:3013/api/v1
     ports:
-      - '3011:3010'
+      - '127.0.0.1:3011:3010'
     depends_on:
       - backend
     networks:

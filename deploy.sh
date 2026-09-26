@@ -2,6 +2,13 @@
 # =============================================================================
 # AI Quiz Platform - Production Deployment Script
 # =============================================================================
+# DEPRECATED — kept for reference only. The live deploy path is push-to-git:
+#   git push origin main           # CI gates (lint, type-check, test, build)
+#   git push origin main:production # syncs the production branch; Dokploy rebuilds
+# See docs/production-runbook.md. This script drives the RETIRED compose stack
+# and `cmd_update` pulls `main` while production tracks `production`, so it
+# will deploy the wrong revision. Prefer the runbook.
+#
 # Usage: ./deploy.sh [command]
 # Commands:
 #   deploy      - Full deployment (build + start)
@@ -97,9 +104,15 @@ cmd_build() {
 # Start all services
 cmd_start() {
     log_info "Cleaning up old containers..."
-    # Remove all conflicting containers if they exist
-    docker rm -f quiz-frontend quiz-backend quiz-postgres quiz-redis 2>/dev/null || true
-    
+    # Only the stateless app containers are force-removed. quiz-postgres is
+    # DELIBERATELY NOT in this list: its volume holds the only copy of the
+    # production data, and `docker rm -f` on the container does not remove the
+    # volume but does destroy any chance of a clean graceful stop. DEPLOYMENT.md
+    # §"Database" says never to force-remove it. `compose up` recreates the
+    # data container from its volume when the image changes, so removing it by
+    # hand bought nothing.
+    docker rm -f quiz-frontend quiz-backend quiz-redis 2>/dev/null || true
+
     log_info "Starting services..."
     # Use --remove-orphans to clean up any orphaned containers
     $(get_compose_cmd) up -d --remove-orphans
