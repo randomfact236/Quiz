@@ -27,6 +27,49 @@ Preconditions: CI green on the exact `main` commit; Dokploy apps show a successf
 afterwards. Verify live: `https://pigzap.com` (200), `https://api.pigzap.com/api/v1/health`
 (200), `https://api.pigzap.com/api/v1/quiz-mcq/subjects` (200).
 
+### 2.1 ⚠️ Use **Deploy**, never **Rebuild**
+
+**Rebuild reuses the cached build context. It does not re-clone the repository.** The
+result is a brand-new image, with a fresh timestamp and a green health check, built from
+**whatever source Dokploy last fetched**. It reports success. Nothing warns you.
+
+This is not theoretical. On 2026-09-26 a security fix was pushed to `production`, CI went
+green, and two **Rebuild** clicks produced images whose build timestamps were minutes old
+and whose contents were three days stale. The site was healthy, the deploy log said `done`,
+and the running code was missing every change from the push. Three independent probes
+confirmed it (see 2.2). The fixes only reached production after a real **Deploy**.
+
+- **Deploy** = fetch the branch fresh, then build. Use this for every code change.
+- **Rebuild** = build the existing context again. Only useful for "the build was flaky,
+  try again with the same source".
+
+### 2.2 Verify a deploy actually landed
+
+Never infer it from a green Dokploy card. Ask the running code directly:
+
+```bash
+# 400 = the new validation is live.  201 = still running the old build.
+curl -s -o /dev/null -w "%{http_code}\n" -X POST \
+  https://api.pigzap.com/api/v1/riddle-mcq/sessions \
+  -H "Content-Type: application/json" \
+  -d '{"totalRiddles":1,"correctCount":0,"score":0,"maxScore":1,"bogus":1}'
+```
+
+To inspect the running container directly (SSH as root to the VPS):
+
+```bash
+C=$(docker ps --filter name=quiz-api -q | head -1)
+docker exec $C grep -rq "CreateRiddleSessionDto" /app/apps/backend/dist \
+  && echo "new code is live" || echo "STALE BUILD"
+```
+
+Also useful, because Dokploy logs a clone step for a real deploy but not for a rebuild:
+
+```bash
+grep -iE "clone|checkout|fetch|Checking out" \
+  /etc/dokploy/logs/quiz-api-wqmjxb/<latest>.log
+```
+
 ## 3. Rollback
 
 1. Find the last known-good commit: `git log --oneline origin/production`.
@@ -117,3 +160,60 @@ completion and confirm the state file gains the missing families.
 2. Keep 30 days there; keep the existing 7 locally.
 3. Run a documented restore drill (quarterly): restore the newest off-box dump into a scratch
    database, compare row counts, drop it.
+
+## 12. Auto-deploy not triggering — diagnosis (2026-09-26)
+
+Pushes to `production` produced **no deployment at all**. Every deployment in Dokploy's
+entire history is titled `Rebuild deployment`; not one was push-triggered. Work through
+these in order — each step rules something out.
+
+**1. Is the app configured to auto-deploy?** Application → General tab:
+`Autodeploy` on, `Trigger Type` = **On Push**, repository/branch/build path correct.
+All confirmed correct on `quiz-api`.
+
+**2. Is the Git provider connection live?** Settings → Git. The pill switch on the provider
+row is **"Share with entire organization"** — _not_ an auto-deploy switch. Do not toggle it
+looking for an auto-deploy fix; it only controls provider sharing.
+
+**3. Is the GitHub App installed and authorised?** Authenticate as the App using the
+credentials in Dokploy's `github` table and ask GitHub directly (run on the VPS, delete the
+temp key afterwards):
+
+```
+GET /app                                    -> app identity
+GET /app/installations                      -> every installation
+POST /app/installations/<id>/access_tokens  -> short-lived installation token
+GET /installation/repositories              -> the repos actually in scope
+```
+
+Confirmed 2026-09-26: installation `158498141` on `randomfact236`,
+`repository_selection=selected`, covering `randomfact236/Quiz` and
+`randomfact236/product-ecommerce-affiliate-website`. Permissions are
+`contents: read`, `metadata: read`, `pull_requests: write` — read is enough to clone.
+**Authorisation is not the problem.**
+
+**4. Is the webhook reachable from the internet?** This is the prime suspect, and it is
+invisible from the VPS (which can always reach its own hostnames). Test from _outside_:
+
+```bash
+curl -o /dev/null -w "%{http_code}\n" https://vmi3549789.contaboserver.net   # -> 000
+curl -o /dev/null -w "%{http_code}\n" https://dokploy.profitbenefit.com      # -> 200
+```
+
+The panel is served on two hostnames. `DOCKER-USER` drops inbound 80/443 from anything
+outside the Cloudflare ranges (the NOW-01 lockdown), so `vmi3549789.contaboserver.net` is
+unreachable from the public internet. **The App's webhook URL was set once at install time
+(2026-09-02) and does not follow you when you change which hostname you browse on.** If it
+still points at the Contabo hostname, GitHub's deliveries are silently dropped.
+
+**5. Is the App subscribed to `push`?** GitHub → your App → Advanced → Webhook events.
+`push` must be selected. If it is not, nothing is ever delivered regardless of hostname.
+
+**6. Confirm the endpoint path.** `https://<reachable-host>/api/deploy/github/<secret>`
+returns `401` to an unsigned request, which is correct; `/api/deploy/<id>` returns
+`404 Application Not Found`. If the App's URL uses the firewalled hostname, repoint it at
+`dokploy.profitbenefit.com` with the same path and secret.
+
+**Also worth knowing:** Dokploy runs on Docker **Swarm** — container names look like
+`quiz-api-wqmjxb.1.<taskid>`. Do not hand-build over SSH to "fix" a deploy: that bypasses
+Swarm, Traefik, and the CI gate, and creates a second unmanaged deploy path.
