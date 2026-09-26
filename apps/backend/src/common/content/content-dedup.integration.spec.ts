@@ -22,22 +22,42 @@ import { RiddleMcqCategory } from '../../riddle-mcq/entities/riddle-category.ent
  */
 jest.setTimeout(60000);
 
-// These are integration tests: they require the gitignored backend .env and a
-// running local Postgres. When that config is absent - e.g. in CI, which has no
-// database - the suite skips itself instead of failing the whole run. Run it
-// locally with the dev database up: docker-compose -f docker-compose.local.yml up -d
+// These are integration tests: they require a reachable Postgres. Config is
+// read from the process environment FIRST and only then from the gitignored
+// backend `.env`. Reading process.env first is what lets this suite actually
+// run in CI, where a `services: postgres` container supplies the credentials
+// and there is no `.env` file to read — it used to key off the file alone, so
+// the most valuable test in the repo silently skipped on every PR. When
+// neither source has the config, the suite skips instead of failing the run.
+// Locally: docker-compose -f docker-compose.local.yml up -d
 const REQUIRED_DB_ENV = ['DB_HOST', 'DB_PORT', 'DB_USERNAME', 'DB_PASSWORD', 'DB_DATABASE'];
 
-const hasLocalDatabaseConfig = (): boolean => {
+/** Parse the gitignored backend `.env`; empty string when it is absent. */
+const readDotEnv = (): string => {
   try {
-    const env = readFileSync('.env', 'utf8');
-    return REQUIRED_DB_ENV.every((k) => env.split(/\r?\n/).some((l) => l.startsWith(`${k}=`)));
+    return readFileSync('.env', 'utf8');
   } catch {
-    return false;
+    return '';
   }
 };
 
-const describeIntegration = hasLocalDatabaseConfig() ? describe : describe.skip;
+const dbConfig = (key: string): string => {
+  const fromEnv = process.env[key];
+  if (fromEnv) return fromEnv;
+  const line = readDotEnv()
+    .split(/\r?\n/)
+    .find((l) => l.startsWith(`${key}=`));
+  if (!line) throw new Error(`Missing ${key} in the environment or backend .env`);
+  return line.slice(key.length + 1).trim();
+};
+
+const hasDatabaseConfig = (): boolean => {
+  if (REQUIRED_DB_ENV.every((k) => process.env[k])) return true;
+  const contents = readDotEnv();
+  return REQUIRED_DB_ENV.every((k) => contents.split(/\r?\n/).some((l) => l.startsWith(`${k}=`)));
+};
+
+const describeIntegration = hasDatabaseConfig() ? describe : describe.skip;
 
 describeIntegration('duplicate detection (integration)', () => {
   let dataSource: DataSource;
@@ -53,13 +73,7 @@ describeIntegration('duplicate detection (integration)', () => {
 
   const fakeCache = { delPattern: jest.fn().mockResolvedValue(undefined) } as any;
 
-  const envValue = (key: string): string => {
-    const line = readFileSync('.env', 'utf8')
-      .split(/\r?\n/)
-      .find((l) => l.startsWith(`${key}=`));
-    if (!line) throw new Error(`Missing ${key} in backend .env`);
-    return line.slice(key.length + 1).trim();
-  };
+  const envValue = (key: string): string => dbConfig(key);
 
   beforeAll(async () => {
     dataSource = new DataSource({

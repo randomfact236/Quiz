@@ -10,9 +10,37 @@ concurrency:
   group: ci-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+
 jobs:
   lint-type-test:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+    services:
+      # The dedup integration spec exercises the real repositories against a
+      # real Postgres. It used to key off a gitignored `.env`, which CI never
+      # has, so it skipped itself on every PR. It now reads process.env first,
+      # so this service is what makes the most valuable test in the repo run.
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: aiquiz
+          POSTGRES_PASSWORD: aiquiz_ci_password
+          POSTGRES_DB: aiquiz_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_HOST: localhost
+      DB_PORT: '5432'
+      DB_USERNAME: aiquiz
+      DB_PASSWORD: aiquiz_ci_password
+      DB_DATABASE: aiquiz_ci
     steps:
       - uses: actions/checkout@v4
 
@@ -33,6 +61,11 @@ jobs:
       - name: Type-check
         run: npm run type-check
 
+      # The integration spec needs the real schema, and a fresh CI database has
+      # none. Migrations only — never `synchronize` (production forbids it too).
+      - name: Apply database migrations
+        run: npm run migration:run --workspace=apps/backend
+
       - name: Unit tests
         run: npm test
 
@@ -46,8 +79,57 @@ jobs:
           # Smoke value for CI only — production deploys set the real origin
           NEXT_PUBLIC_API_URL: http://localhost:3012/api
 
+  # Both workspaces define `coverageThreshold`, but jest only evaluates it when
+  # coverage is collected — so `npm test` never actually checked the floors.
+  # They are not enforced as a PR gate because the backend is currently BELOW
+  # them (branches 14.75% vs 15%, functions 13.6% vs 20% as of 2026-09-26);
+  # gating on that would block every PR, and lowering the floors to match is
+  # explicitly forbidden by apps/frontend/jest.config.ts. This job keeps the
+  # number visible and stops it drifting further. Raise the thresholds (or the
+  # tests) until the backend clears its own floor, then make this job blocking.
+  coverage:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    continue-on-error: true
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_USER: aiquiz
+          POSTGRES_PASSWORD: aiquiz_ci_password
+          POSTGRES_DB: aiquiz_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    env:
+      DB_HOST: localhost
+      DB_PORT: '5432'
+      DB_USERNAME: aiquiz
+      DB_PASSWORD: aiquiz_ci_password
+      DB_DATABASE: aiquiz_ci
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - run: npm ci
+
+      - name: Apply database migrations
+        run: npm run migration:run --workspace=apps/backend
+
+      - name: Coverage report
+        run: npm run test:coverage
+
   secret-scan:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     permissions:
       contents: read
       pull-requests: write

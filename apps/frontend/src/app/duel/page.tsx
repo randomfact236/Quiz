@@ -207,7 +207,7 @@ export default function DuelPage(): JSX.Element {
                   className={`flex-1 rounded-xl px-3 py-3 text-sm font-black uppercase tracking-widest transition-colors ${
                     level === lv
                       ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300'
+                      : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600'
                   }`}
                 >
                   {lv}
@@ -224,7 +224,7 @@ export default function DuelPage(): JSX.Element {
               Create duel &amp; get invite code
             </button>
 
-            <div className="my-6 flex items-center gap-3 text-gray-400">
+            <div className="my-6 flex items-center gap-3 text-gray-400 dark:text-secondary-400">
               <span className="h-px flex-1 bg-gray-200 dark:bg-secondary-700" />
               or join with a code
               <span className="h-px flex-1 bg-gray-200 dark:bg-secondary-700" />
@@ -300,7 +300,7 @@ export default function DuelPage(): JSX.Element {
                           : lastCorrect === false
                             ? 'border-red-500 bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-300'
                             : 'border-indigo-400 bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-200'
-                        : 'border-slate-200 bg-white text-gray-700 hover:border-indigo-300 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-200'
+                        : 'border-slate-200 bg-white text-gray-700 hover:border-indigo-300 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-200 dark:hover:border-secondary-500'
                     }`}
                   >
                     <span className="mr-2 font-black">{letter}.</span>

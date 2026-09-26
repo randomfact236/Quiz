@@ -800,7 +800,7 @@ export default function JokesPage(): JSX.Element {
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery('')}
-                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-secondary-400 hover:text-gray-700 dark:text-secondary-200 text-xs font-bold"
+                      className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-secondary-400 hover:text-gray-700 dark:hover:text-secondary-200 text-xs font-bold"
                       aria-label="Clear search"
                     >
                       &times;
@@ -818,7 +818,7 @@ export default function JokesPage(): JSX.Element {
                   >
                     <div className="relative">
                       <Search
-                        className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+                        className="absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400 dark:text-secondary-400"
                         aria-hidden="true"
                       />
                       <input
@@ -844,7 +844,7 @@ export default function JokesPage(): JSX.Element {
                       type="button"
                       onClick={() => setSearchExpanded(false)}
                       aria-label="Close search"
-                      className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gray-100 py-2 text-xs font-bold text-gray-500 transition-colors hover:bg-orange-100 hover:text-orange-600 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-orange-500/20"
+                      className="mt-2 flex w-full items-center justify-center gap-1.5 rounded-xl bg-gray-100 py-2 text-xs font-bold text-gray-500 transition-colors hover:bg-orange-100 hover:text-orange-600 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-orange-500/20 dark:hover:text-orange-300"
                     >
                       <X className="h-4 w-4" aria-hidden="true" /> Close search
                     </button>
