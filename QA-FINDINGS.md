@@ -59,13 +59,16 @@
 
 ## OPEN — normal conversation work happens only on these
 
-> **⚠️ 2026-09-24 live-exposure audit:** production runs code OLDER than `2b17264` — the
-> deploy has been pending since 2026-09-23. Verified live: `/riddle-mcq/*` public reads
-> ship the FULL answer key (`answer` + `correctLetter` + `explanation`), and
-> `/image-riddles/random` + by-id ship the raw answer. ALL fixes exist in local commits
-> (`2b17264` era + `9858323` + the 2026-09-24 hardening) — **they go live with the next
-> push to production.** Live checks that PASS: quiz list answer-strip, `answers/check`
-> grader (400), admin guard (401), CSP/HSTS/frame-deny headers.
+> **RESOLVED 2026-09-26 — the 2026-09-24 live-exposure banner below was STALE
+> and has been removed.** It claimed production ran code older than `2b17264` and
+> that `/riddle-mcq/*` + `/image-riddles/*` public reads shipped the answer key.
+> Re-verified: `2b17264` IS an ancestor of `origin/production`, the production
+> `riddle-mcq.controller.ts` strips `answer`/`correctLetter`/`explanation` on every
+> public read, and `origin/production` head (`e550a56`, 2026-09-25) is only two
+> commits behind `main` — both a docs commit and a removed client wrapper. The
+> banner was true on 2026-09-23 and outlived the 2026-09-25 deploy that fixed it.
+> Full record: **`plan/03-riddle-mcq.md` §10**. If you are reading this because you
+> believed production was leaking answers: it was not, as of 2026-09-26.
 
 | ID     | Title                                                                  | Was                            | Area      | Pri | Work by       | Status                                            |
 | ------ | ---------------------------------------------------------------------- | ------------------------------ | --------- | --- | ------------- | ------------------------------------------------- |

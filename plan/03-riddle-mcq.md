@@ -173,3 +173,23 @@ Frontend (`apps/frontend/src/`):
   contradiction and the 30 inverted MCQ explanations flagged CAUTION in the
   drafting pass need an owner wording decision; local DB does not carry these
   prod-only rows (UUIDs differ) — local stays source-of-truth for everything else.
+
+## 10 · Answer-key leak banner — RESOLVED, banner was stale (2026-09-26)
+
+The ⚠️ banner above the OPEN table in `QA-FINDINGS.md` (dated 2026-09-24) claimed
+production ran code older than `2b17264` and that `/riddle-mcq/*` public reads
+shipped `answer` + `correctLetter` + `explanation`. **Re-verified against the live
+branch on 2026-09-26: the claim no longer holds.**
+
+- `git merge-base --is-ancestor 2b17264 origin/production` → true. The fix IS on
+  the production branch.
+- `origin/production:apps/backend/src/riddle-mcq/controllers/riddle-mcq.controller.ts`
+  carries `toPublicRiddle` (line 56) deleting `correctLetter`, `answer`, and
+  `explanation`, applied on every public read (lines 198/208/223/232).
+- The production deploy has since caught up: `origin/production` head is
+  `e550a56` (2026-09-25); `main` is only 2 commits ahead, and both are a
+  `docs(tracker)` commit and a removed client-side `leaveDuel` wrapper — neither
+  touches the answer key.
+
+The banner was accurate when written (2026-09-23) and was simply never removed
+after the 2026-09-25 deploy resolved it. Corrected in place rather than acted on.

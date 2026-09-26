@@ -134,22 +134,30 @@ docker-compose -f docker-compose.local.yml down
 
 ### Production
 
+Production is **push-to-git**, not a local compose run. `docs/production-runbook.md`
+is the authoritative procedure; the summary is:
+
 ```bash
-git push origin main
-# Dokploy auto-deploys
+git push origin main            # CI gates this: lint, theme guard, type-check, test, build
+git push origin main:production # fast-forwards the production branch; Dokploy rebuilds from it
 ```
+
+> ⚠️ The older `git push origin main` → "Dokploy auto-deploys" pair that used to sit
+> here described the **retired** flow. Under the current flow Dokploy watches the
+> `production` branch, not `main`, so pushing to `main` alone deploys nothing. The
+> compose stack this file documents is reference-only.
 
 ---
 
 ## Key Points
 
-| Aspect           | Decision                                    |
-| ---------------- | ------------------------------------------- |
-| Staging          | **Not needed** - local test sufficient      |
-| Browser location | **Your choice** - same result               |
-| Local databases  | **Docker** (PostgreSQL + Redis)             |
-| Apps             | **npm** (backend: start:dev, frontend: dev) |
-| Production       | **VPS only** - already configured           |
+| Aspect           | Decision                                                                           |
+| ---------------- | ---------------------------------------------------------------------------------- |
+| Staging          | **Not deployed.** `docker-compose.staging.yml` rehearses the migration path only   |
+| Browser location | **Your choice** - same result                                                      |
+| Local databases  | **Docker** (PostgreSQL + Redis)                                                    |
+| Apps             | **npm** (backend: start:dev, frontend: dev)                                        |
+| Production       | **VPS only** — push to `main`, then `main:production`; Dokploy rebuilds from there |
 
 ---
 
@@ -335,13 +343,21 @@ docker exec quiz-backend sh -c "cd /app/apps/backend && npm run create-admin -- 
 
 ## Database Credentials (VPS)
 
+The values below are **placeholders**. Production secrets are NOT stored in this
+repository — they live in a gitignored `.env` beside `docker-compose.prod.yml`,
+and that file fails closed on any missing value
+(`${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}`). `.env.production.example`
+is the tracked template.
+
 ```
 DB_HOST: postgres
 DB_PORT: 5432
 DB_USERNAME: aiquiz
-DB_PASSWORD: aiquiz_password
+DB_PASSWORD: <set in .env — never committed>
 DB_DATABASE: aiquiz
 ```
+
+Rotation procedure: `plan/runbooks/credential-rotation.md`.
 
 ---
 
@@ -494,15 +510,32 @@ gunzip -c backup_YYYYMMDD.sql.gz | docker exec -i quiz-postgres psql -U aiquiz -
 
 ## Direct VPS Push
 
-| Edit Type            | Safe to Push Direct? |
-| -------------------- | -------------------- |
-| Text/spelling fix    | ✅ Yes               |
-| Color change         | ✅ Yes               |
-| Minor CSS adjustment | ✅ Yes               |
-| Console.log addition | ✅ Yes               |
-| Comment added        | ✅ Yes               |
-| Single line fix      | ✅ Yes               |
-| Typo fix             | ✅ Yes               |
+> ⚠️ **This table is obsolete and the advice in it is now actively unsafe.**
+> Under the current push-to-git flow, copying files straight to the VPS bypasses
+> CI entirely — CI only runs on `main` pushes and PRs targeting `main`, never on
+> the `production` branch — so a direct push can ship code that never passed
+> lint, type-check, tests, or the theme guard. It also leaves git history out of
+> sync with what is actually running, which is what made the 2026-09-23
+> "production is behind" situation hard to diagnose.
+>
+> Push to `main`, let CI go green, then push `main:production`. The first table
+> below is kept only as a record of the old guidance; the second still applies as
+> a local-testing requirement.
+
+<details>
+<summary>Obsolete guidance (kept for reference — do not follow)</summary>
+
+| Edit Type            | Was considered "Safe to Push Direct?" |
+| -------------------- | ------------------------------------- |
+| Text/spelling fix    | ✅ Yes                                |
+| Color change         | ✅ Yes                                |
+| Minor CSS adjustment | ✅ Yes                                |
+| Console.log addition | ✅ Yes                                |
+| Comment added        | ✅ Yes                                |
+| Single line fix      | ✅ Yes                                |
+| Typo fix             | ✅ Yes                                |
+
+</details>
 
 | Edit Type              | Test First (Local Docker) |
 | ---------------------- | ------------------------- |

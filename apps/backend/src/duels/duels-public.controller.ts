@@ -14,6 +14,7 @@ import {
 
 import { _Public } from '../common/decorators/public.decorator';
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
+import { GuestTokenGuard } from '../guest-users/guest-token.guard';
 import { DuelsService } from './duels.service';
 
 class CreateDuelDto {
@@ -95,7 +96,7 @@ class ShowInListDto extends GuestDto {
 
 @ApiTags('Duels')
 @Controller('duels')
-@UseGuards(OptionalJwtAuthGuard)
+@UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
 export class DuelsPublicController {
   constructor(private readonly duels: DuelsService) {}
 
@@ -189,7 +190,7 @@ export class PresenceController {
 
 @ApiTags('Guest Users')
 @Controller('guest-users')
-@UseGuards(OptionalJwtAuthGuard)
+@UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
 export class GuestPresenceController {
   constructor(private readonly duels: DuelsService) {}
 
