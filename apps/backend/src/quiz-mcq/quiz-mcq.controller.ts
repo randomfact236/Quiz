@@ -35,6 +35,7 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../common/constants/app.constants';
 import { ContentStatus } from '../common/enums/content-status.enum';
 import { ContentImportDuplicate } from '../common/content/content.service';
+import { toPublicContent } from '../common/content/answer-key.util';
 import { Roles } from '../common/decorators/roles.decorator';
 import { CreateQuestionDto, CreateSubjectDto, PaginationDto } from '../common/dto/base.dto';
 import { BulkActionDto, BulkActionResponseDto } from '../common/dto/bulk-action.dto';
@@ -44,6 +45,7 @@ import { CreateQuizSessionDto } from './dto/create-quiz-session.dto';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { _Public } from '../common/decorators/public.decorator';
 import { OptionalJwtAuthGuard } from '../auth/optional-jwt-auth.guard';
+import { GuestTokenGuard } from '../guest-users/guest-token.guard';
 import { Throttle } from '@nestjs/throttler';
 
 import { Chapter } from './entities/chapter.entity';
@@ -90,7 +92,7 @@ export class QuizMcqController {
 
   // ==================== SESSIONS (server-side persistence) ====================
 
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @_Public()
   @Post('sessions')
   @HttpCode(HttpStatus.CREATED)
@@ -106,7 +108,7 @@ export class QuizMcqController {
     return { recorded: true, session: { id: session.id, completedAt: session.completedAt } };
   }
 
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @_Public()
   @Get('sessions/history')
   @Throttle({ default: { limit: 60, ttl: 60000 } })
@@ -481,15 +483,11 @@ export class QuizMcqController {
    * answer — same leak class as the riddle fix; null everywhere today, wired
    * before content lands), and the internal-only `contentHash` /
    * `random_weight` columns stop shipping (no frontend consumer).
+   * The stripped field list now lives in `common/content/answer-key.util.ts`
+   * so quiz-mcq, riddle-mcq and image-riddles cannot drift apart again.
    */
   private toPublicQuestion(question: Question): Record<string, unknown> {
-    const safe: Record<string, unknown> = { ...question };
-    delete safe['correctAnswer'];
-    delete safe['correctLetter'];
-    delete safe['explanation'];
-    delete safe['contentHash'];
-    delete safe['random_weight'];
-    return safe;
+    return toPublicContent(question);
   }
 
   private validateCount(count: string | undefined, defaultValue: number, max: number = 50): number {

@@ -16,6 +16,7 @@ import { ApiTags, ApiOperation, ApiBearerAuth, ApiParam, ApiQuery } from '@nestj
 import { JwtAuthGuard } from '../../auth/jwt-auth.guard';
 import { DEFAULT_PAGE_SIZE } from '../../common/constants/app.constants';
 import { ContentImportDuplicate } from '../../common/content/content.service';
+import { toPublicContent } from '../../common/content/answer-key.util';
 import { Roles } from '../../common/decorators/roles.decorator';
 import { BulkActionDto, BulkActionResponseDto } from '../../common/dto/bulk-action.dto';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -25,6 +26,7 @@ import { RiddleMcqQuestionService } from '../services/riddle-mcq-question.servic
 import { RiddleSessionService } from '../services/riddle-session.service';
 import { Req } from '@nestjs/common';
 import { OptionalJwtAuthGuard } from '../../auth/optional-jwt-auth.guard';
+import { GuestTokenGuard } from '../../guest-users/guest-token.guard';
 import { _Public } from '../../common/decorators/public.decorator';
 import { Throttle } from '@nestjs/throttler';
 import { RiddleMcqImportService } from '../services/riddle-mcq-import.service';
@@ -34,6 +36,7 @@ import { PaginationValidator } from '../validators/pagination.validator';
 import { DifficultyValidator } from '../validators/difficulty.validator';
 import { CreateRiddleMcqDto, UpdateRiddleMcqDto, BulkCreateRiddleDto } from '../dto/riddle-mcq.dto';
 import { RiddleAnswerCheckDto, RevealAnswerDto } from '../dto/riddle-answer-check.dto';
+import { CreateRiddleSessionDto } from '../dto/create-riddle-session.dto';
 
 @ApiTags('Riddle MCQ')
 @Controller('riddle-mcq')
@@ -52,21 +55,11 @@ export class RiddleMcqController {
   /**
    * H1 (audit SEC-03) / HARD-02: public play reads stop shipping the key —
    * grading goes through answers/check, review through answers/reveal.
+   * The stripped field list now lives in `common/content/answer-key.util.ts`,
+   * shared with quiz-mcq and image-riddles so the three cannot drift apart.
    */
   private toPublicRiddle(riddle: RiddleMcq): Record<string, unknown> {
-    const safe: Record<string, unknown> = { ...riddle };
-    delete safe['correctAnswer'];
-    delete safe['correctLetter'];
-    delete safe['answer'];
-    // NOW-03/09 leak fix: the explanation EXPLAINS the answer ("it's a coffin
-    // because…") and every published riddle has one — shipping it on pre-answer
-    // reads was an answer-key leak. It returns with the verdict (answers/check)
-    // and from answers/reveal for post-session review instead.
-    delete safe['explanation'];
-    // 2026-09-24 hardening: internal-only columns, no frontend consumer.
-    delete safe['contentHash'];
-    delete safe['random_weight'];
-    return safe;
+    return toPublicContent(riddle);
   }
 
   // ==================== SESSIONS (NOW-07: server-side riddle persistence) ====================
@@ -75,9 +68,10 @@ export class RiddleMcqController {
   @_Public()
   @Post('sessions')
   @HttpCode(HttpStatus.CREATED)
+  @UseGuards(GuestTokenGuard)
   @Throttle({ default: { limit: 20, ttl: 60000 } })
   @ApiOperation({ summary: 'Persist a completed riddle session (user or guest attributed)' })
-  async createRiddleSession(@Body() body: Record<string, any>, @Req() req: any) {
+  async createRiddleSession(@Body() body: CreateRiddleSessionDto, @Req() req: any) {
     const userId = req.user?.id ?? null;
     if (!userId && !body?.guestId) {
       return { recorded: false };
@@ -89,11 +83,11 @@ export class RiddleMcqController {
         subjectName: body?.subjectName ?? null,
         difficulty: body?.difficulty ?? null,
         mode: body?.mode ?? null,
-        totalRiddles: Number(body?.totalRiddles) || 1,
-        correctCount: Number(body?.correctCount) || 0,
-        score: Number(body?.score) || 0,
-        maxScore: Number(body?.maxScore) || 0,
-        timeTaken: body?.timeTaken != null ? Number(body.timeTaken) : null,
+        totalRiddles: body?.totalRiddles ?? 1,
+        correctCount: body?.correctCount ?? 0,
+        score: body?.score ?? 0,
+        maxScore: body?.maxScore ?? 0,
+        timeTaken: body?.timeTaken ?? null,
         startedAt: body?.startedAt ?? null,
       },
       userId
@@ -101,7 +95,7 @@ export class RiddleMcqController {
     return { recorded: true, sessionId: session.id };
   }
 
-  @UseGuards(OptionalJwtAuthGuard)
+  @UseGuards(OptionalJwtAuthGuard, GuestTokenGuard)
   @_Public()
   @Get('sessions/history')
   @Throttle({ default: { limit: 60, ttl: 60000 } })
@@ -192,7 +186,12 @@ export class RiddleMcqController {
   ): Promise<{ data: Record<string, unknown>[]; total: number }> {
     const pagination = {
       page: page ? parseInt(page, 10) : 1,
-      limit: limit ? parseInt(limit, 10) : DEFAULT_PAGE_SIZE,
+      // Clamped: this public route takes loose @Query() strings and bypasses
+      // PaginationDto, so an unclamped parseInt let `?limit=999999` through
+      // into skip/take.
+      limit: limit
+        ? Math.min(100, Math.max(1, parseInt(limit, 10) || DEFAULT_PAGE_SIZE))
+        : DEFAULT_PAGE_SIZE,
     };
     const result = await this.questionService.findRiddlesBySubject(subjectId, pagination, level);
     return { data: result.data.map((r) => this.toPublicRiddle(r)), total: result.total };

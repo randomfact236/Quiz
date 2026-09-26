@@ -13,6 +13,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 
 import { CacheService } from '../common/cache/cache.service';
+import { toPublicContentList } from '../common/content/answer-key.util';
 import { SearchImageRiddlesDto } from '../common/dto/base.dto';
 import { BulkActionType } from '../common/enums/bulk-action.enum';
 import { ContentStatus } from '../common/enums/content-status.enum';
@@ -138,9 +139,13 @@ export class ImageRiddlesService {
 
     // HARD-02/H1: the catalog must not ship the answer key — the game grades
     // server-side and reveals only on a correct guess or explicit reveal.
-    const safe = data.map((riddle) => {
-      const { answer, alternativeAnswers, ...rest } = riddle as unknown as Record<string, unknown>;
-      return { ...rest, answerLength: typeof answer === 'string' ? answer.length : 0 };
+    // `answerLength` is derived from the ORIGINAL row before the strip, so the
+    // UI can render a mask without ever receiving the answer. The stripped
+    // field list is shared with quiz-mcq and riddle-mcq via
+    // `common/content/answer-key.util.ts`.
+    const safe = toPublicContentList(data, (riddle) => {
+      const answer = (riddle as unknown as Record<string, unknown>)['answer'];
+      return { answerLength: typeof answer === 'string' ? answer.length : 0 };
     });
     return { data: safe as unknown as ImageRiddle[], total };
   }
