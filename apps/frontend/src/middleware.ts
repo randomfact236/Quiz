@@ -116,7 +116,7 @@ async function knownChapterSlugs(subjectSlug: string): Promise<Set<string>> {
 }
 
 /**
- * The eight 2D games are static HTML under public/games/<slug>/ — they BYPASS
+ * The 2D games are static HTML under public/games/<slug>/ — they BYPASS
  * the next.config headers() (which only decorates Next-rendered routes), so
  * they were served with no CSP at all. They are dependency-free and
  * local-first (AGENTS.md): same-origin assets only. The one cross-origin

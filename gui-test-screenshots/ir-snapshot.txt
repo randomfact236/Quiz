@@ -1,0 +1,81 @@
+- link "Skip to main content":
+  - /url: "#main-content"
+- banner:
+  - navigation "Main navigation":
+    - link "PigZap Home":
+      - /url: /
+    - list:
+      - link "Home":
+        - /url: /
+      - link "Play Hub":
+        - /url: /play
+      - link "Quiz":
+        - /url: /quiz-mcq
+      - link "Games":
+        - /url: /games
+      - link "Dad Jokes":
+        - /url: /jokes
+      - link "Riddles":
+        - /url: /riddle-mcq
+      - link "Image Riddles":
+        - /url: /image-riddles
+    - link "Login":
+      - /url: /login
+    - 'button "Current theme: light. Switch to dark mode"':
+- main:
+  - paragraph: Loading...
+- contentinfo "Site footer":
+  - link "PigZap - Home":
+    - /url: /
+  - paragraph: Enterprise-grade interactive quiz platform. Test your knowledge and have fun!
+  - heading "Get new quizzes in your inbox" [level=3]
+  - textbox "Email address":
+    - /placeholder: you@example.com
+  - button "Subscribe" [disabled]:
+    - text: Subscribe
+  - paragraph:
+    - text: By subscribing you agree to our
+    - link "privacy policy":
+      - /url: /privacy
+    - text: . Unsubscribe anytime.
+  - navigation "Product links":
+    - heading "Product" [level=3]
+    - list:
+      - link "Go to Home":
+        - /url: /
+        - text: Home
+      - link "Go to Quiz":
+        - /url: /quiz-mcq
+        - text: Quiz
+      - link "Go to Riddles":
+        - /url: /riddle-mcq
+        - text: Riddles
+      - link "Go to Image Riddles":
+        - /url: /image-riddles
+        - text: Image Riddles
+      - link "Go to Dad Jokes":
+        - /url: /jokes
+        - text: Dad Jokes
+      - link "Go to Games":
+        - /url: /games
+        - text: Games
+  - navigation "Company links":
+    - heading "Company" [level=3]
+    - list:
+      - link "Go to Achievements":
+        - /url: /achievements
+        - text: Achievements
+      - link "Go to About":
+        - /url: /about
+        - text: About
+  - navigation "Legal links":
+    - link "FAQ":
+      - /url: /faq
+    - link "Privacy Policy":
+      - /url: /privacy
+    - link "Terms of Service":
+      - /url: /terms
+    - link "Contact":
+      - /url: /contact
+    - button "Cookie Settings"
+  - paragraph: © 2026 PigZap. All rights reserved.

@@ -40,13 +40,12 @@ These are NOT used: 80, 443, 3000-3004, 4000-4001, 5433-5434, 6380-6381, 5672-56
 - Validate ports: `.\port-validator.ps1`
 - Check status: `.\check-status.ps1`
 
-## 2D Games — integrated (owner decision 2026-09-15)
+## 2D Games — empty-board family (owner decision 2026-09-28)
 
-The eight 2D games (`apps/frontend/public/games/<slug>/`) and the `/games` hub
-(`apps/frontend/src/app/games/`) are part of the product: linked from nav/footer/
-Play Hub/sitemap and included in the analytics module lists. The former
-isolation rule (2026-09-09) is lifted. Games follow the same production rules as
-every other feature and stay dependency-free/local-first by design (the only permitted
-outbound calls are the per-game share-count POST and the shared in-game feedback POST —
-2026-09-25). Full rule:
-**`AGENTS.md`**.
+The games family pivoted to empty-board games (the tic-tac-toe model): nothing
+pre-filled, every move made by a player. The standard template — solo vs computer
+(easy/medium/hard AI), hot-seat, live online duels on the server-authoritative poll
+backend — lives in **`plan/games/README.md`**; the full rule (archived pre-filled
+games, permitted network calls, seams) is in **`AGENTS.md`**. The hub
+(`apps/frontend/src/app/games/`) and the registry
+(`apps/frontend/src/lib/games-registry.ts`) are one source of truth for what is live.

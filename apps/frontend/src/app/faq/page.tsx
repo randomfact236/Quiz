@@ -33,7 +33,7 @@ const FAQS: ReadonlyArray<{ q: string; a: string }> = [
   },
   {
     q: 'Are the mini games really free?',
-    a: 'Yes — all eight games (Tic Tac Toe, Sliding Puzzle, Word Puzzle, Memory Quiz and more) are free, work offline once loaded, and never ask for an account.',
+    a: 'Yes — all games (Tic Tac Toe and the rest of the games family) are free, work offline once loaded, and never ask for an account.',
   },
   {
     q: 'What data do you collect?',
