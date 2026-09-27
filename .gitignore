@@ -63,3 +63,4 @@ backups/
 # Content push secrets/state
 scripts/content-push.env
 scripts/.content-push-state.json
+gui-test-screenshots/
