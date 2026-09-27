@@ -32,6 +32,8 @@ import { ArrowLeft, AlertCircle } from 'lucide-react';
 
 import { useQuizMcq } from '@/hooks/useQuizMcq';
 
+import { useQuestionPacing } from '@/hooks/useQuestionPacing';
+
 import { QuestionCard, type QuestionCardRef } from '@/components/quiz-mcq/QuestionCard';
 
 import ShareMenu from '@/components/share/ShareMenu';
@@ -244,59 +246,16 @@ function QuizContent(): JSX.Element {
     }
   }, [quiz.status, quiz.sessionId, router]);
 
-  // BUG-001: after answering, keep the correct-answer reveal up for a few
-
-  // seconds, then advance automatically. Practice/normal modes only — timer
-
-  // mode already advances on per-question expiry. Driven by the answer events
-
-  // themselves (not an answered-state effect), so resumed/shared sessions and
-
-  // Back-navigation to answered questions never auto-advance.
-
-  const AUTO_ADVANCE_MS = 3000;
-
-  const autoAdvanceTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-  const clearAutoAdvance = useCallback(() => {
-    if (autoAdvanceTimer.current !== null) {
-      clearTimeout(autoAdvanceTimer.current);
-
-      autoAdvanceTimer.current = null;
-    }
-  }, []);
+  // BUG-001 / BUG-040 pacing lives in the shared hook (plan/18 §10 step 1):
+  // after answering, hold the reveal ~3 s then advance — unless the comments
+  // panel opens (open cancels the pending advance and blocks Next; close
+  // proceeds). Solo timer mode keeps the hook disabled — it advances on
+  // per-question expiry. Driven by answer events (not an answered-state
+  // effect), so resumed/shared sessions and Back-navigation never advance.
 
   const currentQuestionId = quiz.currentQuestion?.id ?? null;
 
-  // Question changed (advanced / went Back) or unmounted — no longer pending.
-
-  useEffect(() => clearAutoAdvance, [currentQuestionId, clearAutoAdvance]);
-
-  // BUG-040: comments after answering. Open cancels the pending auto-advance
-
-  // and BLOCKS advancing (Next + keyboard); close proceeds to the next
-
-  // question (or the submit confirm on the last one).
-
-  const [commentsOpen, setCommentsOpen] = useState(false);
-
-  useEffect(() => {
-    setCommentsOpen(false);
-  }, [currentQuestionId]);
-
-  const toggleComments = useCallback(() => {
-    setCommentsOpen((prev) => {
-      if (!prev) clearAutoAdvance();
-
-      return !prev;
-    });
-  }, [clearAutoAdvance]);
-
-  const proceedAfterComments = useCallback(() => {
-    setCommentsOpen(false);
-
-    if (!quiz.hasAnsweredCurrent) return; // unanswered: just close the panel
-
+  const advance = useCallback(() => {
     questionCardRef.current?.clearBubbles();
 
     if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
@@ -304,37 +263,27 @@ function QuizContent(): JSX.Element {
     } else {
       quiz.goToNext();
     }
-  }, [quiz.hasAnsweredCurrent, quiz.currentQuestionIndex, quiz.totalQuestions, quiz.goToNext]);
+  }, [quiz.currentQuestionIndex, quiz.totalQuestions, quiz.goToNext]);
 
-  const scheduleAutoAdvance = useCallback(() => {
-    if (isTimerMode || quiz.status !== 'playing') return;
+  const {
+    scheduleAdvance: scheduleAutoAdvance,
+    commentsOpen,
+    toggleComments,
+    closeComments,
+  } = useQuestionPacing({
+    questionId: currentQuestionId,
+    advanceMs: 3000,
+    enabled: !isTimerMode && quiz.status === 'playing',
+    onAdvance: advance,
+  });
 
-    clearAutoAdvance();
+  const proceedAfterComments = useCallback(() => {
+    closeComments();
 
-    autoAdvanceTimer.current = setTimeout(() => {
-      autoAdvanceTimer.current = null;
+    if (!quiz.hasAnsweredCurrent) return; // unanswered: just close the panel
 
-      if (quiz.currentQuestionIndex >= quiz.totalQuestions - 1) {
-        setShowConfirmSubmit(true);
-      } else {
-        questionCardRef.current?.clearBubbles();
-
-        quiz.goToNext();
-      }
-    }, AUTO_ADVANCE_MS);
-  }, [
-    isTimerMode,
-
-    quiz.status,
-
-    quiz.currentQuestionIndex,
-
-    quiz.totalQuestions,
-
-    quiz.goToNext,
-
-    clearAutoAdvance,
-  ]);
+    advance();
+  }, [closeComments, quiz.hasAnsweredCurrent, advance]);
 
   // Keyboard shortcuts: 1-4 / A-D select an option, Enter = Next/Submit.
 

@@ -21,6 +21,14 @@ export class DuelMatch {
   @Column({ type: 'varchar', length: 16 })
   level: string;
 
+  /** plan/18 §4: content family — 'quiz' today; 'riddle' lands in phase 2. */
+  @Column({ type: 'varchar', length: 16, default: 'quiz' })
+  contentType: string;
+
+  /** Optional quiz subject filter (uuid of quiz_subjects; null = all). */
+  @Column({ type: 'uuid', nullable: true })
+  subjectId: string | null;
+
   /** Frozen question ids for both participants (server keeps the answers). */
   @Column({ type: 'jsonb' })
   questionIds: string[];

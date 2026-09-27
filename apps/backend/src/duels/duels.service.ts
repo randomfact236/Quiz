@@ -36,6 +36,8 @@ export class DuelsService {
     questionCount: number;
     playerName: string;
     guestId: string;
+    /** Optional quiz subject filter (plan/18 §10 step 5); null = all subjects. */
+    subjectId?: string | null;
     /** Public (non-secret) handle of the targeted player — resolved to the
      * target's guestId here so raw guestIds never cross the API
      * (security-audit-2026-09-09.md A3). */
@@ -49,13 +51,16 @@ export class DuelsService {
       challengeGuestId = target?.guestId ?? null;
     }
     const count = Math.min(Math.max(input.questionCount || 10, 3), 20);
-    const picked = await this.questions
+    const qb = this.questions
       .createQueryBuilder('q')
       .where('q.level = :level', { level: input.level })
-      .andWhere('q.status = :status', { status: 'published' })
-      .orderBy('random()')
-      .limit(count)
-      .getMany();
+      .andWhere('q.status = :status', { status: 'published' });
+    if (input.subjectId) {
+      qb.innerJoin('q.chapter', 'ch').andWhere('ch.subjectId = :subjectId', {
+        subjectId: input.subjectId,
+      });
+    }
+    const picked = await qb.orderBy('random()').limit(count).getMany();
     if (picked.length === 0) {
       throw new NotFoundException(`No published questions for level "${input.level}"`);
     }
@@ -64,6 +69,7 @@ export class DuelsService {
       this.matches.create({
         code: await this.generateCode(),
         level: input.level,
+        subjectId: input.subjectId ?? null,
         questionIds: picked.map((q) => q.id),
         status: 'waiting',
         expiresAt: new Date(Date.now() + MATCH_TTL_MS),
@@ -167,6 +173,9 @@ export class DuelsService {
               : {}),
           }
         : null,
+      // plan/18 §10 step 4: the per-question review only exists once the match
+      // resolves — nothing (key, explanation) ships while it is still playable.
+      ...(revealed ? { reveal: await this.buildReveal(fresh) } : {}),
     };
   }
 
@@ -181,12 +190,19 @@ export class DuelsService {
     );
   }
 
-  /** Server-side grading (owner decision): answers never leave the server. */
+  /** Server-side grading (owner decision): answers never leave the server —
+   *  but once a pick is graded, its reveal is safe to hand back (plan/18 §10
+   *  step 3): the verdict drives the card feedback and the explanation panel. */
   async gradeAnswer(
     code: string,
     guestId: string,
     input: { questionId: string; selected: string }
-  ): Promise<{ correct: boolean; completed: number }> {
+  ): Promise<{
+    correct: boolean;
+    completed: number;
+    correctAnswer: string | null;
+    explanation: string | null;
+  }> {
     const match = await this.requireLiveMatch(code);
     const me = await this.requireParticipant(match.id, guestId);
     if (!match.questionIds.includes(input.questionId)) {
@@ -213,7 +229,12 @@ export class DuelsService {
       `UPDATE duel_participants SET "lastPolledAt" = now() WHERE id = $1`,
       [me.id]
     );
-    return { correct, completed: completedCount };
+    return {
+      correct,
+      completed: completedCount,
+      correctAnswer: question.correctAnswer?.trim() ? question.correctAnswer : null,
+      explanation: question.explanation ?? null,
+    };
   }
 
   /** Finishing just signals completion — the server computes the results. */
@@ -413,6 +434,35 @@ export class DuelsService {
     const ordered = match.questionIds.map((id) => byId.get(id)).filter((q) => q !== undefined);
     void guestId;
     return { status: match.status, level: match.level, questions: ordered, total: ordered.length };
+  }
+
+  /** Post-resolution review rows (frozen order; plan/18 §10 step 4). */
+  private async buildReveal(match: DuelMatch) {
+    const questions = await this.questions.find({
+      where: { id: In(match.questionIds) },
+      select: [
+        'id',
+        'question',
+        'options',
+        'level',
+        'correctAnswer',
+        'correctLetter',
+        'explanation',
+      ],
+    });
+    const byId = new Map(questions.map((q) => [q.id, q]));
+    return match.questionIds
+      .map((id) => byId.get(id))
+      .filter((q) => q !== undefined)
+      .map((q) => ({
+        id: q.id,
+        question: q.question,
+        options: q.options ?? [],
+        level: q.level,
+        correctAnswer: q.correctAnswer ?? null,
+        correctLetter: q.correctLetter ?? null,
+        explanation: q.explanation ?? null,
+      }));
   }
 
   private async requireJoinableMatch(code: string): Promise<DuelMatch> {

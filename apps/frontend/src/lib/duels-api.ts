@@ -12,6 +12,19 @@ export interface DuelQuestion {
   id: string;
   question: string;
   options: string[];
+  level: string;
+}
+
+/** Post-resolution review row (plan/18 §10 step 4) — only in the poll/finish
+ *  view once the match is no longer running. */
+export interface DuelRevealItem {
+  id: string;
+  question: string;
+  options: string[];
+  level: string;
+  correctAnswer: string | null;
+  correctLetter: string | null;
+  explanation: string | null;
 }
 
 export interface DuelParticipantView {
@@ -29,6 +42,8 @@ export interface DuelPoll {
   level: string;
   me: DuelParticipantView;
   opponent: DuelParticipantView | null;
+  /** Present once the match resolves (finished/abandoned). */
+  reveal?: DuelRevealItem[];
 }
 
 export interface DuelJoinView {
@@ -43,6 +58,7 @@ export async function createDuel(input: {
   questionCount: number;
   playerName: string;
   guestId: string;
+  subjectId?: string | null;
 }): Promise<{ code: string }> {
   const response = await api.post<{ match: unknown; code: string }>('/duels', input);
   return response.data;
@@ -64,11 +80,18 @@ export async function pollDuel(code: string, guestId: string): Promise<DuelPoll>
 export async function sendDuelAnswer(
   code: string,
   input: { guestId: string; questionId: string; selected: string }
-): Promise<{ correct: boolean; completed: number }> {
-  const response = await api.post<{ correct: boolean; completed: number }>(
-    `/duels/${code}/answer`,
-    input
-  );
+): Promise<{
+  correct: boolean;
+  completed: number;
+  correctAnswer: string | null;
+  explanation: string | null;
+}> {
+  const response = await api.post<{
+    correct: boolean;
+    completed: number;
+    correctAnswer: string | null;
+    explanation: string | null;
+  }>(`/duels/${code}/answer`, input);
   return response.data;
 }
 

@@ -6,6 +6,7 @@ import {
   IsNotEmpty,
   IsOptional,
   IsString,
+  IsUUID,
   Max,
   MaxLength,
   Min,
@@ -28,7 +29,7 @@ class CreateDuelDto {
   questionCount: number;
 
   @IsString()
-  @MinLength(1)
+  @IsNotEmpty()
   @MaxLength(32)
   playerName: string;
 
@@ -36,6 +37,11 @@ class CreateDuelDto {
   @IsNotEmpty()
   @MaxLength(64)
   guestId: string;
+
+  /** Optional quiz subject filter (plan/18 §10 step 5); absent = all subjects. */
+  @IsOptional()
+  @IsUUID()
+  subjectId?: string | null;
 
   /** Targeted challenge — the target's PUBLIC handle from /presence/players
    * (never a guestId; those authorize guest writes and stay secret, A3).
