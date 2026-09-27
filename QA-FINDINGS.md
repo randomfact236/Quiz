@@ -397,7 +397,10 @@
   newsletter. GETs were unaffected (no custom header), which is why it hid behind
   GET-only spot checks.
 - **Fix (2026-09-27):** `X-Guest-Token` added to the CORS allow-list in `apps/backend/src/main.ts`
-  (comment added explaining why). Verified by preflight probe after deploy.
+  (comment added explaining why). **Verified live (2026-09-27):** the prod preflight for
+  `/duels` now returns `access-control-allow-headers: Content-Type,Authorization,X-Request-ID,
+X-Guest-Token`; browser writes (duel create, likes, comments, share counts) unblocked.
+  Owner re-test of the duel flow on pigzap.com/duel is the final confirmation.
 
 ## Resolved — removed from this tracker (policy: open items only)
 
