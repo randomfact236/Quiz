@@ -241,3 +241,20 @@ delivery has to come from a real push, never from a log grep.
 **Also worth knowing:** Dokploy runs on Docker **Swarm** — container names look like
 `quiz-api-wqmjxb.1.<taskid>`. Do not hand-build over SSH to "fix" a deploy: that bypasses
 Swarm, Traefik, and the CI gate, and creates a second unmanaged deploy path.
+
+### 12.1 Follow-up — removing the VPS SSH key from GitHub (2026-09-27)
+
+The GitHub account SSH key `164349268` ("VPS - Contabo") is the public half of
+`/root/.ssh/github_deploy` on the VPS (comment `dokploy-deploy`), fingerprint
+`SHA256:z4hX0ye4qInXWtSvMZ53s8JHMDVsmNN32Y1vTdmbxBw`. It authenticates successfully as
+`randomfact236`.
+
+It is an **account-level** key, not a read-only deploy key, so its private half on the VPS
+grants write access to every repo the account can push to. Nothing in the deploy path uses
+it: the push is HTTPS via `gh` credentials, Dokploy clones over HTTPS with a rotating GitHub
+App token, no repo on the VPS has a `git@` remote, and Dokploy stores zero SSH keys.
+
+Removal plan: confirm push-triggered auto-deploy works, delete the key from GitHub, then
+remove the now-inert `/root/.ssh/github_deploy*` files and the `Host github.com` block from
+`/root/.ssh/config` on the VPS so no dangling private key is left behind. Re-verify
+auto-deploy still fires afterwards.
