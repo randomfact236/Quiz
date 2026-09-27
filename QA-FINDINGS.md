@@ -384,6 +384,12 @@
   needs no realtime layer (the repo has no WebSocket/SSE anywhere and the games are
   network-free by contract). Live duels for the games would require a move/state transport +
   a realtime layer built from scratch.
+- **PLAN WRITTEN 2026-09-27 — `plan/18-duel-multiplayer.md`** (owner: "duel needs proper
+  planning, for quiz, riddle and games too"). Supersedes this piecemeal entry. Families:
+  quiz (polish in Phase 1), riddles + image riddles (Phase 2), games as async challenge
+  links (Phase 4), live games gated (Phase 5). Phase 0 (invite links, 5 levels, discovery)
+  is shipped; Phase 1 = rebuild the duel question screen on the shared quiz components
+  (timer, auto-advance, progress, explanations, per-question like/comment/share, review).
 
 ### NOW-28 - PRODUCTION REGRESSION: every browser write fails CORS ("Failed to fetch")
 
