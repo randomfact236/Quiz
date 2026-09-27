@@ -43,7 +43,7 @@ DUP=$(curl -s -o /dev/null -w '%{http_code}' -X POST "$API/duels/$CODE/answer" -
 
 echo "--- view leaks ---"
 GC=$(curl -s -X POST "$API/game-challenges" -H "$AH" -H 'Content-Type: application/json' \
-  -d "{\"gameSlug\":\"word-puzzle\",\"payload\":{\"seed\":111111},\"run\":{\"score\":3},\"playerName\":\"TesterA\",\"guestId\":\"$AG\"}")
+  -d "{\"gameSlug\":\"tic-tac-toe\",\"payload\":{\"seed\":111111},\"run\":{\"score\":3},\"playerName\":\"TesterA\",\"guestId\":\"$AG\"}")
 GT=$(echo "$GC" | jqget "['token']")
 GV=$(curl -s "$API/game-challenges/$GT")
 lacks "challenge view hides guest ids" "$GV" '"guestId"'

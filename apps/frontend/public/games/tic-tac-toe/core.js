@@ -3,7 +3,7 @@
  * core.js — Tic Tac Toe (pure model, no DOM — the test surface)
  * ============================================================================
  * Extracted from game.js (Rev 2 architecture, plan/games/02-tic-tac-toe.md
- * §12, reference 03-sliding-puzzle.md Rev 2). game.test.html and the jest
+ * §12). game.test.html and the jest
  * suite (src/__tests__/games-tic-tac-toe.test.ts) import this module
  * directly; game.js is the UI shell.
  *

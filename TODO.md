@@ -20,22 +20,9 @@ Logged decisions/flags from the capacity build so they don't get lost. Completed
   P2/P3 items (admin sidebar grouping, analytics accuracy drill-down) moved to
   `plan/future-features.md` §4; its analytics style-reference note moved to
   `plan/13-analytics.md` §9 (Design provenance).
-- **Games docs consolidated:** `plan/suggestion/01/02/03/08` (enhancement specs, all implemented
-  2026-09-13 and verified 2026-09-15) folded into the matching `plan/games/` plans as
-  "Enhancements pass" sections; the extension-less, number-colliding folder retired (full task
-  text in git history). Historical brainstorm `2d games plan.md` moved from the repo root to
-  `plan/games/00-historical-brainstorm.md`; `plan/games/README.md` §9 records the pass.
-- **Directory + scope fixes:** `plans/00-CLOUDFLARE-CONFIG.md` →
-  `docs/cloudflare-config-runbook.md` (kills the `plan/` vs `plans/` split; DEPLOYMENT.md
-  reference updated); `plan/STANDARDS.md` scope line now covers `plan/01–16` + `plan/games/`;
-  stray temp file `.openclaw-tmp-check.ts` deleted.
-- **Generated game docs regenerated:** `plan/games/html/*` via `build-html.mjs` (adds
-  `00-historical-brainstorm.html`) and `plan/games/pdf/*.print.html` via `build-pdf.mjs`;
-  the single tracked PDF (`01-tap-or-dont-tap.pdf`, 7 pages) re-rendered through the pdf
-  skill's html2pdf-next.js using the repo-local playwright — QA green (metadata/fonts/
-  overflow pass; fill-ratio and full-bleed warnings are poster heuristics, not applicable
-  to the A4 print doc). The other games' PDFs were never generated (print.html only) —
-  unchanged policy.
+- **Games docs consolidated:** per-game plans and generated renders archived to
+  `_archive/games/plans/` (owner decision 2026-09-28 — the pre-filled pattern games
+  were retired; the empty-board family is speced in `plan/games/README.md`).
 - **Left in place deliberately:** this run log (decision record) and `gui-test-screenshots/`
   (QA evidence cited by the games plans' verification notes).
 

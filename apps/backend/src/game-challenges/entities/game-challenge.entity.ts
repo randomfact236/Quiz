@@ -16,7 +16,7 @@ export class GameChallenge {
   @Column({ type: 'varchar', length: 24, unique: true })
   token: string;
 
-  /** Slug under /games/<slug>/ (e.g. 'word-puzzle'). */
+  /** Slug under /games/<slug>/ (e.g. 'connect-four'). */
   @Column({ type: 'varchar', length: 48 })
   gameSlug: string;
 

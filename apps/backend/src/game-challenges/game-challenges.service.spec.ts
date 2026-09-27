@@ -14,7 +14,7 @@ describe('GameChallengesService', () => {
   const live = () => ({
     id: 'c1',
     token: 'ABC234FGH567JKL89012',
-    gameSlug: 'word-puzzle',
+    gameSlug: 'connect-four',
     payload: { seed: 1234, level: 2 },
     challengerName: 'Ann',
     challengerGuestId: 'guest-A',
@@ -35,7 +35,7 @@ describe('GameChallengesService', () => {
 
   it('creates a challenge with a token and sanitized payload/run', async () => {
     const { token } = await service.create({
-      gameSlug: 'word-puzzle',
+      gameSlug: 'connect-four',
       payload: { seed: 42, level: 1, evil: { nested: 'object' }, long: 'x'.repeat(200) },
       run: { score: 12.7, durationMs: -5, moves: 30 },
       playerName: 'Ann',
@@ -54,7 +54,7 @@ describe('GameChallengesService', () => {
     for (let i = 0; i < 50; i += 1) payload['k' + i] = i;
 
     await service.create({
-      gameSlug: 'word-puzzle',
+      gameSlug: 'connect-four',
       payload,
       run: { score: 1 },
       playerName: 'Ann',
@@ -69,7 +69,7 @@ describe('GameChallengesService', () => {
     repo.findOne.mockResolvedValueOnce({ id: 'clash' }).mockResolvedValueOnce(null);
 
     await service.create({
-      gameSlug: 'word-puzzle',
+      gameSlug: 'connect-four',
       payload: {},
       run: { score: 1 },
       playerName: 'Ann',

@@ -9,22 +9,13 @@
  * This test extracts each game's `shareUrls()` source and runs it in a `vm`
  * sandbox with stubbed dependencies, then asserts the three share anchors
  * received real URLs and the copy button received real text. Any future
- * undefined-reference regression in any of the eight games fails here.
+ * undefined-reference regression in any game fails here.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { runInNewContext } from 'node:vm';
 
-const GAMES: Array<{ name: string; file: string }> = [
-  { name: 'tap-or-dont-tap', file: 'game.js' },
-  { name: 'tic-tac-toe', file: 'game.js' },
-  { name: 'sliding-puzzle', file: 'game.js' },
-  { name: 'word-puzzle', file: 'game.js' },
-  { name: 'hurdle-runner', file: 'main.js' },
-  { name: 'flying-snake', file: 'main.js' },
-  { name: 'spirit-runner', file: 'main.js' },
-  { name: 'memory-quiz', file: 'game.js' },
-];
+const GAMES: Array<{ name: string; file: string }> = [{ name: 'tic-tac-toe', file: 'game.js' }];
 
 const ROOT = join(process.cwd(), 'public', 'games');
 

@@ -3,7 +3,7 @@
  * config.js — Tic Tac Toe (flags + strings, host-overridable)
  * ============================================================================
  * Rev 2 pattern (plan/games/02-tic-tac-toe.md §12, reference
- * 03-sliding-puzzle.md Rev 2): environment flags and per-locale UI strings in
+ * the games convention): environment flags and per-locale UI strings in
  * one host-overridable place:
  *
  *   defaults  ←  window.__TIC_TAC_TOE_CONFIG__ (host page / WebView)

@@ -12,8 +12,8 @@
  *
  * Games wire it with: the <script> tag + one PigChallenge.reportRun call at
  * game over. Seeded games pass their seed in the run; the share link then
- * carries ?seed=… so the friend replays the exact board (word-puzzle's QA
- * hook reads it natively; sliding/memory ride their daily boards).
+ * carries ?seed=… so the friend replays the exact board (any game with a
+ * deterministic-seed hook reads it natively).
  * Bump ?v=N in each index.html when editing.
  * ========================================================================== */
 (function () {

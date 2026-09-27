@@ -19,12 +19,12 @@
 
 ## 2. Content families in scope
 
-| Family                      | Live-duel fit                          | Grading                          | Phase                             |
-| --------------------------- | -------------------------------------- | -------------------------------- | --------------------------------- |
-| **Quiz MCQ** (5 levels)     | ✅ today                               | letter (server)                  | 0/1                               |
-| **Text riddles** (4 levels) | ✅ same engine + content type          | open answer, tolerant match      | 2                                 |
-| **Image riddles**           | ✅ rides the riddle path (image shown) | open answer                      | 2                                 |
-| **Arcade games (8)**        | ⚠️ **not** the question-list engine    | client-run, server-stored result | 3 (async links) / 4 (live, gated) |
+| Family                      | Live-duel fit                          | Grading                     | Phase                             |
+| --------------------------- | -------------------------------------- | --------------------------- | --------------------------------- |
+| **Quiz MCQ** (5 levels)     | ✅ today                               | letter (server)             | 0/1                               |
+| **Text riddles** (4 levels) | ✅ same engine + content type          | open answer, tolerant match | 2                                 |
+| **Image riddles**           | ✅ rides the riddle path (image shown) | open answer                 | 2                                 |
+| **Board/duel games**        | ✅ turn-based, the tic-tac-toe shape   | server-authoritative (live) | 4 (shipped) / 5 (shipped for ttt) |
 
 ## 3. Shared duel experience (the "complete feel")
 
@@ -82,17 +82,13 @@ duel_matches:  + content_type varchar(16)   'quiz' | 'riddle'   (default 'quiz')
 **Riddles** — category picker; hint cost tracked and shared in results; open-answer grading with
 aliases; share text “I cracked N riddles — beat me”.
 **Image riddles** — show the image, typed answer, alias matching; identical flow to riddles.
-**Games (async, v1)** — deterministic seeds everywhere they exist (sliding daily, word seeded
-generator, memory daily): the link carries `?seed=…&level=…`; the server stores your run
-(`score`, `durationMs`, `seed`, `moves` for puzzle games) and the friend lands on the same board
-and sees your run afterwards. No realtime needed. Endless games (runners, snake, tap-or-dont-tap)
-have no board to reproduce → "beat my score" challenges (run record only). Network note: run
-recording requires ONE new allow-listed games endpoint (e.g. `/api/v1/game-challenges`) added to
-the games CSP + rate limits — the 2026-09-25 rule currently permits only `/share-counts` and
-`/comments`.
-**Games (live, gated)** — only 2P-capable/turn-based shapes (tic-tac-toe ships 2P; word/sliding
-could ship "same board, alternating" with a server-held state). Requires the realtime decision
-(3-s poll vs WebSocket) and per-game adapters — deliberately the LAST phase, not a promise.
+**Games (2026-09-28 owner decision — the family pivoted to empty-board games):** the
+pre-filled pattern games were archived (`_archive/games/`); every family game now follows the
+tic-tac-toe template — solo vs easy/medium/hard AI, hot-seat, and LIVE online duels on the
+server-authoritative poll backend (phase 5 shipped it: `/tictactoe`). Future games (Connect
+Four, Gomoku, …) clone that backend per game. Async challenge links (`/api/v1/game-challenges`,
+allow-listed in the games CSP + rate limits alongside `/share-counts` and `/comments`) remain
+available for any score-style game; turn-based boards use live duels instead.
 
 ## 7. Phases, effort, and what ships when
 
@@ -102,7 +98,7 @@ could ship "same board, alternating" with a server-held state). Requires the rea
 | **1 — duel feel**                        | extract the timer-mode flow into a shared component used by `/quiz-mcq/play` **and** `/duel` (cards, countdown, auto-advance, progress, explanations, action row, results review) + live opponent bar — concrete steps in §10 | ~2 d   | next            |
 | **2 — riddle + image-riddle duels**      | contentType, category picker, `RiddleCard` timer mode in the duel flow, alias grading, riddle share text                                                                                                                      | ~1 d   | after 1         |
 | **3 — subject picker (quiz)**            | subjectId filter end-to-end                                                                                                                                                                                                   | ~2 h   | with 1          |
-| **4 — game challenge links (async)**     | payload/invite_token, per-game run records, 8 game adapters, hub “challenge a friend” on results                                                                                                                              | ~2 d   | after 2         |
+| **4 — game challenge links (async)**     | payload/invite_token, per-game run records, game adapters, hub “challenge a friend” on results (shipped; family pivoted to empty-board duels 2026-09-28)                                                                      | ~2 d   | after 2         |
 | **5 — live games** (gated)               | realtime layer + per-game state adapters                                                                                                                                                                                      | 3–5 d+ | only after a go |
 | **+ hygiene**                            | backend specs for the duels module (currently none — audit BE-11 PARTIAL), E2E for the full two-device flow                                                                                                                   | ~0.5 d | with 1          |
 

@@ -2,7 +2,7 @@
  * ============================================================================
  * Tic Tac Toe — game.js (Game 02, plan/games/02-tic-tac-toe.md) — UI shell
  * ============================================================================
- * Plain ESM, no build step (same convention as tap-or-dont-tap). Rev 2
+ * Plain ESM, no build step (the games convention). Rev 2
  * structure (§12): the pure model lives in core.js, persistence in storage.js
  * (versioned + migrated), flags/strings in config.js. This file is only the
  * screens + DOM wiring; it auto-inits when its board exists in the DOM, so

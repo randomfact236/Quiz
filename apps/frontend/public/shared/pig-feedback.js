@@ -29,9 +29,8 @@
   ];
   var OVER_CARDS = [
     '#overlay-over .card',
-    // memory-quiz: the in-question feedback card, plus its game-over and
-    // level-clear overlays (missing until 2026-09-25 — the widget never
-    // mounted on the most feedback-worthy states of that game).
+    // plus the in-question/game-over/level-clear overlay cards used across
+    // the games family.
     '#overlay-feedback .feedback-card',
     '#overlay-gameover .overlay-card',
     '#overlay-levelclear .overlay-card',
