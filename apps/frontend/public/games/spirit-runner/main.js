@@ -345,6 +345,8 @@ function die() {
   const m = distanceM();
   const earned = shardsFor(state.run, m);
   const score = scoreFor(state.run, m);
+  // plan/18 phase 4: async challenge hook
+  if (window.PigChallenge) PigChallenge.reportRun({ score: score, detail: m + ' m' });
 
   // meta: shards + unlocks persist forever; best distance separate (plan §2)
   const prevBest = save.bestDistanceM;

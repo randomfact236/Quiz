@@ -362,6 +362,15 @@ function win() {
   const seconds = Math.floor(timeMs / 1000);
   const score = scoreFor(state.size, state.moves, seconds);
   const variant = state.hardActive ? 'hard' : null;
+  // plan/18 phase 4: async challenge hook (daily boards replay the same day)
+  if (window.PigChallenge) {
+    PigChallenge.reportRun({
+      score: score,
+      moves: state.moves,
+      durationMs: timeMs,
+      detail: state.daily ? 'daily 4x4' : state.size + 'x' + state.size,
+    });
+  }
 
   // A daily run updates today's record (badges compare against it) and,
   // since it is a real assisted 4×4 solve, the normal 4×4 best as well.

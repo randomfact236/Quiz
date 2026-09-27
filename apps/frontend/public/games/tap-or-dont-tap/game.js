@@ -284,6 +284,8 @@ function gameOver() {
   if (state === 'gameover') return; // re-entry guard — one card per run
   setState('gameover');
   const { best, isRecord } = recordRun({ score, bestMs: bestMsThisRun });
+  // plan/18 phase 4: async challenge hook
+  if (window.PigChallenge) PigChallenge.reportRun({ score: score });
 
   els.goScore.textContent = score.toLocaleString(LOCALE);
   els.goBestMs.textContent = bestMsThisRun !== null ? `${bestMsThisRun}ms 🔥` : '—';

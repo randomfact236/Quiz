@@ -223,6 +223,8 @@ function gameOver() {
   // Distance to the NEXT tier (suggestion 03 item 3) — the bronze line below
   // already covers sub-bronze scores; nothing extra once platinum is reached.
   const next = nextMedalFor(state.score);
+  // plan/18 phase 4: async challenge hook
+  if (window.PigChallenge) PigChallenge.reportRun({ score: state.score });
   els.overScore.textContent = String(state.score);
   els.badgeNew.classList.toggle('hidden', !newBest);
   els.overBest.textContent = 'Best ' + (best ? best.score : state.score);

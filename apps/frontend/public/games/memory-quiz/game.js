@@ -741,6 +741,13 @@ function showGameover() {
     { mode: state.mode, level: state.levelId || '' }
   );
   if (isDaily()) saveDailyRecord(new Date(), state.score);
+  // plan/18 phase 4: async challenge hook (daily boards replay the same day)
+  if (window.PigChallenge) {
+    PigChallenge.reportRun({
+      score: state.score,
+      detail: (isDaily() ? 'daily' : state.levelId || '') || undefined,
+    });
+  }
 
   els.goStats.textContent =
     state.score +

@@ -199,6 +199,10 @@ function showScreen(mode) {
 
 function renderMenuBest() {
   const best = loadBest();
+  // plan/18 phase 4: async challenge hook
+  if (window.PigChallenge) {
+    PigChallenge.reportRun({ score: m + state.cleared * CLEAR_BONUS, detail: m + ' m' });
+  }
   els.menuBest.textContent = best ? t('best', { m: best.distanceM }) : t('noBest');
 }
 

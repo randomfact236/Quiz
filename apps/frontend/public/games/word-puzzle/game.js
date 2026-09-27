@@ -535,6 +535,17 @@ function winLevel() {
   const stars = starsFor(state.level.parSec, timeSec, state.hintsUsed, state.wrongPicks);
   const levelNo = state.levelIndex + 1;
   const { record, newBest } = saveResult(state.theme.id, levelNo, stars, timeMs);
+  // plan/18 phase 4: async challenge hook (same-board when a seed is set)
+  if (window.PigChallenge) {
+    PigChallenge.reportRun({
+      score: stars,
+      durationMs: timeMs,
+      detail: stars + '/3 stars - ' + state.theme.name + ' #' + levelNo,
+      seed: state.seedOverride === null ? undefined : state.seedOverride,
+      level: levelNo,
+      theme: state.theme.id,
+    });
+  }
 
   // result overlay (plan §4): time, stars, words found; theme-complete variant
   const themeComplete = state.levelIndex === state.theme.levels.length - 1;

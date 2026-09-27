@@ -15,6 +15,8 @@ and local-first: no auth, and no coupling beyond each game's
 documented `?debug`/`?locale`/`?seed`/`?theme`/`?v` seams — keep it that way unless the
 owner asks otherwise. (Network: since 2026-09-25 each game may POST only to the
 `/api/v1/share-counts` endpoint and, via `/shared/pig-feedback.js`, to `/comments`; both are
-gated by the games CSP and rate-limited. No other outbound calls.)
+gated by the games CSP and rate-limited. No other outbound calls. Since 2026-09-27
+(plan/18 phase 4, owner-approved) games may additionally reach `/api/v1/game-challenges`
+via `/shared/game-challenge.js` for async friend challenges; same CSP + rate limits.)
 
 See `assistant-rules.md` for port configuration and development commands.
