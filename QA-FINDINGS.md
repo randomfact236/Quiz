@@ -70,27 +70,28 @@
 > Full record: **`plan/03-riddle-mcq.md` §10**. If you are reading this because you
 > believed production was leaking answers: it was not, as of 2026-09-26.
 
-| ID     | Title                                                                  | Was                            | Area      | Pri   | Work by       | Status                                            |
-| ------ | ---------------------------------------------------------------------- | ------------------------------ | --------- | ----- | ------------- | ------------------------------------------------- |
-| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                        | ops       | P2    | owner/VPS     | Open — owner adds webhook URL when ready          |
-| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                 | ux/seo    | P2    | code+content  | Partial — riddle side fixed; quiz needs content   |
-| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04          | security  | P2    | decision      | Open — owner decision                             |
-| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22          | media/ops | P2    | owner+code    | Open                                              |
-| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.     | a11y      | P3    | code+owner    | Fixed — owner phone QA                            |
-| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01) | decision  | P2    | decision      | Decision 2026-09-24: defer (needs spec)           |
-| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03) | decision  | P2    | decision      | Decision 2026-09-24: keep friction-free (no gate) |
-| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04) | decision  | P3    | decision      | Decision 2026-09-24: defer (needs spec)           |
-| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05) | decision  | P3    | decision      | Built 2026-09-25 — live on next Redeploy          |
-| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06) | decision  | P3    | decision      | Decision 2026-09-24: leave deferred (additive)    |
-| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                 | content   | P2    | owner+content | Open — rights decision gates execution            |
-| NOW-20 | Spirit-runner: in-game share is completely broken (ReferenceError)     | games (spirit-runner)          | P1        | Fixed |
-| NOW-21 | Games CSP: theme bootstrap hash fails on CRLF checkouts (6 of 8)       | games (CSP)                    | P1        | Fixed |
-| NOW-22 | Tab-hide soft-lock: Run/Retry does nothing (hurdle + spirit)           | games (loops)                  | P1        | Fixed |
-| NOW-23 | Tap-or-Don't-Tap: ?locale crash, broken favicon, no theme              | games (tap)                    | P1        | Fixed |
-| NOW-24 | Memory-quiz: no feedback widget on game over / level clear             | games (feedback)               | P2        | Fixed |
-| NOW-25 | Storage growth + timer/daily races (sliding, word, memory)             | games (core)                   | P2        | Fixed |
-| NOW-26 | Games docs false: "no backend calls" + stale test counts               | docs (plan/games)              | P3        | Fixed |
-| NOW-27 | Invite-link multiplayer: real cross-device duels (design + build)      | multiplayer                    | P1        | Open  |
+| ID     | Title                                                                  | Was                            | Area      | Pri               | Work by       | Status                                            |
+| ------ | ---------------------------------------------------------------------- | ------------------------------ | --------- | ----------------- | ------------- | ------------------------------------------------- |
+| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                        | ops       | P2                | owner/VPS     | Open — owner adds webhook URL when ready          |
+| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                 | ux/seo    | P2                | code+content  | Partial — riddle side fixed; quiz needs content   |
+| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04          | security  | P2                | decision      | Open — owner decision                             |
+| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22          | media/ops | P2                | owner+code    | Open                                              |
+| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.     | a11y      | P3                | code+owner    | Fixed — owner phone QA                            |
+| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01) | decision  | P2                | decision      | Decision 2026-09-24: defer (needs spec)           |
+| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03) | decision  | P2                | decision      | Decision 2026-09-24: keep friction-free (no gate) |
+| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04) | decision  | P3                | decision      | Decision 2026-09-24: defer (needs spec)           |
+| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05) | decision  | P3                | decision      | Built 2026-09-25 — live on next Redeploy          |
+| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06) | decision  | P3                | decision      | Decision 2026-09-24: leave deferred (additive)    |
+| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                 | content   | P2                | owner+content | Open — rights decision gates execution            |
+| NOW-20 | Spirit-runner: in-game share is completely broken (ReferenceError)     | games (spirit-runner)          | P1        | Fixed             |
+| NOW-21 | Games CSP: theme bootstrap hash fails on CRLF checkouts (6 of 8)       | games (CSP)                    | P1        | Fixed             |
+| NOW-22 | Tab-hide soft-lock: Run/Retry does nothing (hurdle + spirit)           | games (loops)                  | P1        | Fixed             |
+| NOW-23 | Tap-or-Don't-Tap: ?locale crash, broken favicon, no theme              | games (tap)                    | P1        | Fixed             |
+| NOW-24 | Memory-quiz: no feedback widget on game over / level clear             | games (feedback)               | P2        | Fixed             |
+| NOW-25 | Storage growth + timer/daily races (sliding, word, memory)             | games (core)                   | P2        | Fixed             |
+| NOW-26 | Games docs false: "no backend calls" + stale test counts               | docs (plan/games)              | P3        | Fixed             |
+| NOW-27 | Invite-link multiplayer: real cross-device duels (design + build)      | multiplayer                    | P1        | Open              |
+| NOW-28 | P0 REGRESSION: every browser write fails CORS (guest token)            | security (CORS)                | P0        | Fixed (deploying) |
 
 ### Open item details
 
@@ -383,6 +384,20 @@
   needs no realtime layer (the repo has no WebSocket/SSE anywhere and the games are
   network-free by contract). Live duels for the games would require a move/state transport +
   a realtime layer built from scratch.
+
+### NOW-28 - PRODUCTION REGRESSION: every browser write fails CORS ("Failed to fetch")
+
+- **Date found:** 2026-09-27 (owner hit it live: duel create failed in a real browser)
+- **Area:** security/CORS - backend CORS allow-list vs the guest token (SEC-10/12)
+- **Priority:** P0
+- **Found:** since the server-signed guest token shipped (2026-09-25), the api client
+  attaches `X-Guest-Token` to every write, but `main.ts` allowed only
+  `Content-Type, Authorization, X-Request-ID` — so every cross-origin write fails its
+  preflight in production: duel create, question likes, comments, share-count pings,
+  newsletter. GETs were unaffected (no custom header), which is why it hid behind
+  GET-only spot checks.
+- **Fix (2026-09-27):** `X-Guest-Token` added to the CORS allow-list in `apps/backend/src/main.ts`
+  (comment added explaining why). Verified by preflight probe after deploy.
 
 ## Resolved — removed from this tracker (policy: open items only)
 

@@ -52,7 +52,10 @@ function setupMiddleware(app: NestExpressApplication): void {
   app.enableCors({
     origin: corsOriginList,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID'],
+    // X-Guest-Token: the api client attaches the server-signed guest token
+    // on every write (SEC-10/12) — without it in the allow-list every
+    // cross-origin write fails its preflight with 'Failed to fetch'.
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Request-ID', 'X-Guest-Token'],
     credentials: true,
     maxAge: CORS_MAX_AGE,
   });
