@@ -254,7 +254,8 @@ grants write access to every repo the account can push to. Nothing in the deploy
 it: the push is HTTPS via `gh` credentials, Dokploy clones over HTTPS with a rotating GitHub
 App token, no repo on the VPS has a `git@` remote, and Dokploy stores zero SSH keys.
 
-Removal plan: confirm push-triggered auto-deploy works, delete the key from GitHub, then
-remove the now-inert `/root/.ssh/github_deploy*` files and the `Host github.com` block from
-`/root/.ssh/config` on the VPS so no dangling private key is left behind. Re-verify
-auto-deploy still fires afterwards.
+**Removed 2026-09-27.** Push-triggered auto-deploy was confirmed working first (commit
+`8167888` deployed without any manual click), then the key was deleted from GitHub —
+verified both sides: the account lists zero SSH keys and the VPS now gets
+`Permission denied (publickey)` from `git@github.com`. The orphaned
+`/root/.ssh/github_deploy*` files still need deleting from the VPS.
