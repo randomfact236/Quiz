@@ -163,6 +163,12 @@ completion and confirm the state file gains the missing families.
 
 ## 12. Auto-deploy not triggering — diagnosis (2026-09-26)
 
+**RESOLVED 2026-09-27.** The App's Webhook URL was `http://207.180.199.86:3000/api/deploy/github`
+— port 3000 is dropped by `DOCKER-USER`, so GitHub could never reach it. Repointed to
+`https://dokploy.profitbenefit.com/api/deploy/github` and the Redirect URI / Homepage URL to the
+same host. Verified with a signed `ping` (200, no deploy) and then a real push to `production`.
+Diagnosis steps below are kept for the next time a push produces nothing.
+
 Pushes to `production` produced **no deployment at all**. Every deployment in Dokploy's
 entire history is titled `Rebuild deployment`; not one was push-triggered. Work through
 these in order — each step rules something out.
