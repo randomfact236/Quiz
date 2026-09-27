@@ -371,7 +371,11 @@
   opponent progress) and the result polls until the opponent finishes (durations shown);
   10 s heartbeat keeps a backgrounded phone alive (silence rule); active code persisted for
   refresh-resume; /duel added to primary nav + Play Hub card. tsc clean. Remaining in
-  slice 1: end-to-end two-device race verification — blocked on local Docker (DB/Redis down).
+  slice 1 verification: prod bundle confirmed to carry all six features (name gate, Copy
+  link, Share, resume key, New duel, duel?code=). Interactive two-device race could NOT be
+  driven from the in-app browser pane (its webview blocks cross-origin API calls — "Failed to
+  fetch" on prod too) and local Docker is down; the flow needs one real browser/phone:
+  open pigzap.com/duel → create → share link → friend opens on their phone.
 - **Games (the 8 static bundles): structurally incompatible with the question-shaped duel.**
   Per their own plans: live online rooms "gated — not planned" (ttt), `multiplayerEnabled`
   flag never added (sliding), reflex games "no meaningful multiplayer" (tap). The cheap 80%
