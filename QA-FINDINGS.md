@@ -366,6 +366,12 @@
      question) and no `?mode` filter (easy/medium/hard only).
   9. **No backend tests** on the duels module (audit BE-11 PARTIAL) — required before changing it.
   10. Logged-in users duel anonymously (open decision in plan/future-features).
+- **SLICE 1 SHIPPED 2026-09-27 (commit 63b0e18):** invite link built from SITE_URL with
+  Copy link + Share buttons; ?code= joiners get a name gate; poll runs during play (live
+  opponent progress) and the result polls until the opponent finishes (durations shown);
+  10 s heartbeat keeps a backgrounded phone alive (silence rule); active code persisted for
+  refresh-resume; /duel added to primary nav + Play Hub card. tsc clean. Remaining in
+  slice 1: end-to-end two-device race verification — blocked on local Docker (DB/Redis down).
 - **Games (the 8 static bundles): structurally incompatible with the question-shaped duel.**
   Per their own plans: live online rooms "gated — not planned" (ttt), `multiplayerEnabled`
   flag never added (sliding), reflex games "no meaningful multiplayer" (tap). The cheap 80%
