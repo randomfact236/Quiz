@@ -146,6 +146,6 @@ jobs:
       # OPS-14: fail the build if a committed secret slips in (the audit found
       # literal DB passwords in docker-compose.yml). Scans full history.
       - name: gitleaks
-        uses: gitleaks/gitleaks-action@v2
+        uses: gitleaks/gitleaks-action@v3
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
