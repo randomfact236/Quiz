@@ -1,15 +1,15 @@
 /**
  * ============================================================================
- * /duel — head-to-head quiz duels (plan/18: NOW-27 slice 1 + phase 1 "duel
- * feel"). Create → share code → join → race → server-graded result.
+ * /duel — head-to-head duels (plan/18: NOW-27 slice 1 + phases 1–2). Create →
+ * share code → join → race → server-graded result.
  * Shared link format: /duel?code=<6-char code>.
  *
- * The question screen is the SOLO flow (plan/18 §3): QuestionCard +
- * AnswerOptions with the per-question countdown, the shared reveal→advance
- * pacing (useQuestionPacing) and the like·comment·share action row. Duel
- * differences only: the live opponent progress bar and the race pacing
- * (auto-advance stays on even though the duel is timed — solo timer mode
- * disables it because expiry advances instead).
+ * The question screen is the SOLO flow (plan/18 §3): quiz duels render
+ * QuestionCard/AnswerOptions, riddle + picture-riddle duels render RiddleCard
+ * (image support included) — both with the per-question countdown, the shared
+ * reveal→advance pacing (useQuestionPacing) and the like·comment·share action
+ * row. Duel differences only: the live opponent progress bar and race pacing
+ * (auto-advance stays on even though the duel is timed).
  * ============================================================================
  */
 
@@ -28,22 +28,38 @@ import {
   pollDuel,
   sendDuelAnswer,
   sendDuelProgress,
-  type DuelPoll,
   type DuelQuestion,
+  type DuelPoll,
 } from '@/lib/duels-api';
 import { SITE_URL } from '@/lib/site-url';
 import { toast } from '@/lib/toast';
 import { getSubjects } from '@/lib/quiz-mcq-api';
+import { getSubjects as getRiddleSubjects } from '@/lib/riddle-mcq-api';
+import { getImageRiddleCategories } from '@/lib/image-riddles-api';
 import { normalizeExtremeAnswer } from '@/lib/quiz-mcq-scoring';
 import { SettingsService } from '@/services/settings.service';
 import { QuestionCard } from '@/components/quiz-mcq/QuestionCard';
+import { RiddleCard } from '@/app/riddle-mcq/components/RiddleCard';
 import ShareMenu from '@/components/share/ShareMenu';
 import { useQuestionPacing } from '@/hooks/useQuestionPacing';
 import type { Question } from '@/types/quiz-mcq';
+import type { Riddle } from '@/types/riddles';
 
 type Phase = 'lobby' | 'joining' | 'waiting' | 'playing' | 'finished';
+type Family = 'quiz' | 'riddle' | 'image-riddle';
 
-const LEVELS = ['easy', 'medium', 'hard', 'expert', 'extreme'] as const;
+const FAMILIES: { key: Family; label: string; emoji: string }[] = [
+  { key: 'quiz', label: 'Quiz', emoji: '📝' },
+  { key: 'riddle', label: 'Riddles', emoji: '🧩' },
+  { key: 'image-riddle', label: 'Picture Riddles', emoji: '🖼️' },
+];
+
+/** Level chips per family (plan/18 §2: quiz 5 tiers; riddles 4). */
+const FAMILY_LEVELS: Record<Family, string[]> = {
+  quiz: ['easy', 'medium', 'hard', 'expert', 'extreme'],
+  riddle: ['easy', 'medium', 'hard', 'expert'],
+  'image-riddle': ['easy', 'medium', 'hard', 'expert'],
+};
 
 /** Same fallback table as solo timer mode (quiz-mcq/play) — settings win. */
 const DEFAULT_TIME_LIMITS: Record<string, number> = {
@@ -54,9 +70,9 @@ const DEFAULT_TIME_LIMITS: Record<string, number> = {
   extreme: 120,
 };
 
-/** DuelQuestion (plain options array) → the quiz Question shape the shared
- *  card renders. The key stays empty: verdicts arrive per answer. */
-function adaptQuestion(q: DuelQuestion): Question {
+/** DuelQuestion (plain API row) → the quiz Question shape the shared card
+ *  renders. Keys stay empty: verdicts arrive per answer from the server. */
+function adaptQuizQuestion(q: DuelQuestion): Question {
   return {
     id: q.id,
     question: q.question,
@@ -66,9 +82,36 @@ function adaptQuestion(q: DuelQuestion): Question {
     optionD: q.options[3] ?? '',
     correctAnswer: '',
     correctLetter: null,
-    level: (LEVELS as readonly string[]).includes(q.level)
+    level: (FAMILY_LEVELS.quiz as string[]).includes(q.level)
       ? (q.level as Question['level'])
       : 'medium',
+  };
+}
+
+/** DuelQuestion → the frontend Riddle shape RiddleCard renders. expert/open
+ *  rows map to level 'extreme' so AnswerOptions shows the text input (same
+ *  mapping as the solo adapter). */
+function adaptRiddle(
+  q: DuelQuestion,
+  verdict?: { correct: boolean; explanation: string | null }
+): Riddle {
+  const options = q.options ?? [];
+  const isOpenEnded = q.level === 'expert' || q.level === 'extreme' || options.length === 0;
+  const difficulty = (['easy', 'medium', 'hard', 'expert'] as string[]).includes(q.level)
+    ? (q.level as Riddle['difficulty'])
+    : 'medium';
+  return {
+    id: q.id,
+    question: q.question,
+    options,
+    correctOption: '',
+    correctLetter: null,
+    difficulty,
+    level: isOpenEnded ? 'extreme' : (q.level as 'easy' | 'medium' | 'hard' | 'expert'),
+    hint: q.hint ?? '',
+    explanation: verdict?.explanation ?? '',
+    // exactOptionalPropertyTypes: verdict only when the row has been graded.
+    ...(verdict ? { verdict: verdict.correct } : {}),
   };
 }
 
@@ -79,7 +122,7 @@ function optionText(item: { options: string[] }, letter: string | null | undefin
   return item.options[idx] ?? null;
 }
 
-interface SubjectChip {
+interface PickerItem {
   id: string;
   name: string;
   emoji?: string | null;
@@ -91,11 +134,16 @@ export default function DuelPage(): JSX.Element {
 
   const [phase, setPhase] = useState<Phase>('lobby');
   const [playerName, setPlayerName] = useState('');
+  const [family, setFamily] = useState<Family>('quiz');
+  const [matchFamily, setMatchFamily] = useState<Family>('quiz');
   const [level, setLevel] = useState<string>('medium');
   const [joinCode, setJoinCode] = useState(urlCode);
   const [activeCode, setActiveCode] = useState('');
   const [duelLevel, setDuelLevel] = useState<string>('');
-  const [questions, setQuestions] = useState<Question[]>([]);
+  const [questions, setQuestions] = useState<DuelQuestion[]>([]);
+  const [verdicts, setVerdicts] = useState<
+    Record<string, { correct: boolean; explanation: string | null }>
+  >({});
   const [index, setIndex] = useState(0);
   const [picks, setPicks] = useState<Record<string, string>>({});
   const [score, setScore] = useState(0);
@@ -106,9 +154,9 @@ export default function DuelPage(): JSX.Element {
   const [joinGate, setJoinGate] = useState(''); // code awaiting a name
   const [copied, setCopied] = useState(false);
   const [shareQuestionId, setShareQuestionId] = useState<string | null>(null);
-  // Subject filter (plan/18 §10 step 5): '' = all subjects.
-  const [subjectId, setSubjectId] = useState('');
-  const [subjects, setSubjects] = useState<SubjectChip[]>([]);
+  // Optional family filter: quiz subject / riddle subject / image category.
+  const [filterId, setFilterId] = useState('');
+  const [pickerItems, setPickerItems] = useState<PickerItem[]>([]);
   const [levelTimers, setLevelTimers] = useState<Record<string, number> | null>(null);
   const [timeRemaining, setTimeRemaining] = useState<number | null>(null);
   const guestRef = useRef<string>('');
@@ -120,14 +168,32 @@ export default function DuelPage(): JSX.Element {
     return guestRef.current;
   };
 
-  // Lobby chips: the same subject feed the homepage topics use.
+  // Filter chips feed on the family: quiz subjects, riddle subjects, image
+  // categories (the same public lists the hubs use).
   useEffect(() => {
-    getSubjects(false)
-      .then((rows) =>
-        setSubjects(rows.map((s) => ({ id: s.id, name: s.name, emoji: s.emoji ?? null })))
-      )
-      .catch(() => undefined);
-    // Timer settings — same source solo timer mode uses.
+    let cancelled = false;
+    const toItems = (rows: { id: string; name: string; emoji?: string | null }[]) =>
+      rows.map((r) => ({ id: r.id, name: r.name, emoji: r.emoji ?? null }));
+    if (family === 'quiz') {
+      getSubjects(false)
+        .then((rows) => !cancelled && setPickerItems(toItems(rows)))
+        .catch(() => undefined);
+    } else if (family === 'riddle') {
+      getRiddleSubjects(true)
+        .then((rows) => !cancelled && setPickerItems(toItems(rows)))
+        .catch(() => undefined);
+    } else {
+      getImageRiddleCategories()
+        .then((cats) => !cancelled && setPickerItems(toItems(cats)))
+        .catch(() => undefined);
+    }
+    return () => {
+      cancelled = true;
+    };
+  }, [family]);
+
+  // Timer settings — same source solo timer mode uses.
+  useEffect(() => {
     SettingsService.getSettings()
       .then((settings) => {
         const timers = settings.quiz?.defaults?.levelTimers;
@@ -136,15 +202,20 @@ export default function DuelPage(): JSX.Element {
       .catch(() => setLevelTimers(null));
   }, []);
 
-  const subjectLabel =
-    subjectId === ''
-      ? 'all subjects'
-      : (subjects.find((s) => s.id === subjectId)?.name ?? 'a subject');
-  const subjectEmoji =
-    subjectId === '' ? '⚔️' : (subjects.find((s) => s.id === subjectId)?.emoji ?? '⚔️');
+  const filterLabel = family === 'quiz' ? 'Subject (optional)' : 'Category (optional)';
+  const filterName =
+    filterId === '' ? null : (pickerItems.find((i) => i.id === filterId)?.name ?? null);
+  const filterEmoji =
+    filterId === '' ? null : (pickerItems.find((i) => i.id === filterId)?.emoji ?? null);
   const timeLimit = duelLevel
     ? (levelTimers?.[duelLevel] ?? DEFAULT_TIME_LIMITS[duelLevel] ?? 45)
     : null;
+
+  const switchFamily = (next: Family) => {
+    setFamily(next);
+    setFilterId('');
+    if (!FAMILY_LEVELS[next].includes(level)) setLevel('medium');
+  };
 
   // Join (or re-join) a shared match and enter the race.
   const doJoin = useCallback(
@@ -157,13 +228,15 @@ export default function DuelPage(): JSX.Element {
           guestId: guest(),
         });
         setActiveCode(code);
+        setMatchFamily(view.contentType ?? 'quiz');
         setDuelLevel(view.level);
         try {
           window.localStorage.setItem('pigzap:duel-code', code);
         } catch (e) {
           /* private mode — resume is best-effort */
         }
-        setQuestions(view.questions.map(adaptQuestion));
+        setQuestions(view.questions);
+        setVerdicts({});
         setIndex(0);
         setPicks({});
         picksCountRef.current = 0;
@@ -189,9 +262,11 @@ export default function DuelPage(): JSX.Element {
         questionCount: 10,
         playerName: playerName.trim() || 'Guest',
         guestId: guest(),
-        subjectId: subjectId || null,
+        contentType: family,
+        subjectId: filterId || null,
       });
       setActiveCode(code);
+      setMatchFamily(family);
       setDuelLevel(level);
       try {
         window.localStorage.setItem('pigzap:duel-code', code);
@@ -203,7 +278,7 @@ export default function DuelPage(): JSX.Element {
       setError(e instanceof Error ? e.message : 'Could not create the duel.');
       setPhase('lobby');
     }
-  }, [level, playerName, subjectId]);
+  }, [family, filterId, level, playerName]);
 
   // Waiting: poll until the opponent joins (status flips to running), then
   // claim our own question view by "joining" our own match (idempotent).
@@ -308,8 +383,8 @@ export default function DuelPage(): JSX.Element {
     void advance();
   }, [phase, currentId, timeRemaining, picks, advance]);
 
-  // Submit a pick (letter, or typed text on extreme) — the server grades; the
-  // verdict + explanation attach to the question exactly like solo play.
+  // Submit a pick (letter, or typed text on open tiers) — the server grades;
+  // the verdict + explanation attach exactly like solo play (verdict-driven).
   const submitAnswer = useCallback(
     async (answer: string) => {
       if (phase !== 'playing' || !current || picks[current.id] !== undefined) return;
@@ -323,23 +398,13 @@ export default function DuelPage(): JSX.Element {
           selected: answer,
         });
         if (result.correct) setScore((s) => s + 1);
-        setQuestions((qs) =>
-          qs.map((q) =>
-            q.id === questionId
-              ? {
-                  ...q,
-                  verdict: result.correct,
-                  explanation: q.explanation ?? result.explanation,
-                  ...(q.level === 'extreme' && result.correctAnswer
-                    ? { correctAnswer: result.correctAnswer }
-                    : {}),
-                }
-              : q
-          )
-        );
+        setVerdicts((prev) => ({
+          ...prev,
+          [questionId]: { correct: result.correct, explanation: result.explanation },
+        }));
       } catch {
         // Grading unavailable — count it as answered-not-correct and move on.
-        setQuestions((qs) => qs.map((q) => (q.id === questionId ? { ...q, verdict: false } : q)));
+        setVerdicts((prev) => ({ ...prev, [questionId]: { correct: false, explanation: null } }));
       } finally {
         pacing.scheduleAdvance();
       }
@@ -405,13 +470,23 @@ export default function DuelPage(): JSX.Element {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [urlCode, phase]);
 
-  const shareQuestion = shareQuestionId
-    ? (questions.find((q) => q.id === shareQuestionId) ?? null)
-    : null;
   const total = questions.length;
   const meDone = poll?.me?.completed ?? picksCountRef.current;
   const opponentDone = poll?.opponent?.completed ?? 0;
   const opponentName = poll?.opponent?.playerName || 'Opponent';
+
+  const familyLabel = (f: Family): string =>
+    f === 'quiz' ? 'quiz' : f === 'riddle' ? 'riddles' : 'picture riddles';
+  const challengeText =
+    matchFamily === 'quiz'
+      ? `Can you beat my${filterName ? ` ${filterName}` : ''} quiz? Code ${activeCode}`
+      : matchFamily === 'riddle'
+        ? `Riddle duel — think you can beat me? Code ${activeCode}`
+        : `Picture-riddle duel — think you can beat me? Code ${activeCode}`;
+
+  const shareQuestion = shareQuestionId
+    ? (questions.find((q) => q.id === shareQuestionId) ?? null)
+    : null;
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8 dark:from-indigo-950 dark:to-rose-950/70">
@@ -449,7 +524,22 @@ export default function DuelPage(): JSX.Element {
               Create a duel
             </h2>
             <div className="mb-2 flex flex-wrap gap-2">
-              {LEVELS.map((lv) => (
+              {FAMILIES.map((f) => (
+                <button
+                  key={f.key}
+                  onClick={() => switchFamily(f.key)}
+                  className={`flex-1 rounded-xl px-3 py-3 text-sm font-black uppercase tracking-widest transition-colors ${
+                    family === f.key
+                      ? 'bg-indigo-600 text-white'
+                      : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600'
+                  }`}
+                >
+                  {f.emoji} {f.label}
+                </button>
+              ))}
+            </div>
+            <div className="mb-2 flex flex-wrap gap-2">
+              {FAMILY_LEVELS[family].map((lv) => (
                 <button
                   key={lv}
                   onClick={() => setLevel(lv)}
@@ -463,35 +553,39 @@ export default function DuelPage(): JSX.Element {
                 </button>
               ))}
             </div>
-            <p className="mt-3 mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
-              Subject (optional)
-            </p>
-            <div className="mb-2 flex flex-wrap gap-2">
-              <button
-                onClick={() => setSubjectId('')}
-                className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
-                  subjectId === ''
-                    ? 'bg-indigo-600 text-white'
-                    : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600'
-                }`}
-              >
-                All subjects
-              </button>
-              {subjects.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setSubjectId(s.id)}
-                  className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
-                    subjectId === s.id
-                      ? 'bg-indigo-600 text-white'
-                      : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600'
-                  }`}
-                >
-                  {s.emoji ? `${s.emoji} ` : ''}
-                  {s.name}
-                </button>
-              ))}
-            </div>
+            {pickerItems.length > 0 && (
+              <>
+                <p className="mt-3 mb-1 text-xs font-bold uppercase tracking-wider text-gray-500 dark:text-secondary-400">
+                  {filterLabel}
+                </p>
+                <div className="mb-2 flex flex-wrap gap-2">
+                  <button
+                    onClick={() => setFilterId('')}
+                    className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
+                      filterId === ''
+                        ? 'bg-indigo-600 text-white'
+                        : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600'
+                    }`}
+                  >
+                    All
+                  </button>
+                  {pickerItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setFilterId(item.id)}
+                      className={`rounded-full px-3 py-1.5 text-xs font-bold transition-colors ${
+                        filterId === item.id
+                          ? 'bg-indigo-600 text-white'
+                          : 'bg-slate-100 text-slate-600 hover:bg-indigo-50 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600'
+                      }`}
+                    >
+                      {item.emoji ? `${item.emoji} ` : ''}
+                      {item.name}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
             <p className="mb-4 text-xs text-gray-500 dark:text-secondary-400">
               10 questions · same set for both players · fastest correct run wins
             </p>
@@ -588,7 +682,8 @@ export default function DuelPage(): JSX.Element {
             </h2>
             <p className="mt-2 text-gray-600 dark:text-secondary-300">
               {duelLevel ? `${duelLevel.charAt(0).toUpperCase()}${duelLevel.slice(1)} · ` : ''}
-              {subjectLabel} — send them this link:
+              {familyLabel(matchFamily)}
+              {filterName ? ` · ${filterName}` : ''} — send them this link:
             </p>
             <p className="my-3 break-all font-mono text-lg font-black text-indigo-600 dark:text-indigo-300">
               {SITE_URL}/duel?code={activeCode}
@@ -616,7 +711,7 @@ export default function DuelPage(): JSX.Element {
                     try {
                       await navigator.share({
                         title: 'Duel me on PigZap',
-                        text: `Can you beat my ${subjectLabel} quiz? Code ${activeCode}`,
+                        text: challengeText,
                         url,
                       });
                       return;
@@ -673,34 +768,82 @@ export default function DuelPage(): JSX.Element {
               </div>
             </div>
 
-            <QuestionCard
-              key={current.id}
-              question={current}
-              questionNumber={index + 1}
-              totalQuestions={total}
-              selectedAnswer={picks[current.id] ?? null}
-              onSelectAnswer={(answer) => void submitAnswer(answer)}
-              showFeedback={true}
-              disabled={phase !== 'playing'}
-              subjectEmoji={subjectEmoji}
-              score={score}
-              maxScore={total}
-              timeUp={timeRemaining === 0}
-              onShare={() => setShareQuestionId(current.id)}
-              commentsOpen={pacing.commentsOpen}
-              onToggleComments={pacing.toggleComments}
-              onCloseComments={proceedAfterComments}
-              {...(timeRemaining !== null && timeLimit
-                ? { questionTimeRemaining: timeRemaining, questionTimeLimit: timeLimit }
-                : {})}
-            />
+            {matchFamily === 'quiz' ? (
+              <QuestionCard
+                key={current.id}
+                question={{
+                  ...adaptQuizQuestion(current),
+                  // exactOptionalPropertyTypes: verdict only when graded.
+                  ...(verdicts[current.id]
+                    ? {
+                        verdict: verdicts[current.id]!.correct,
+                        explanation: verdicts[current.id]!.explanation ?? null,
+                      }
+                    : {}),
+                }}
+                questionNumber={index + 1}
+                totalQuestions={total}
+                selectedAnswer={picks[current.id] ?? null}
+                onSelectAnswer={(answer) => void submitAnswer(answer)}
+                showFeedback={true}
+                disabled={phase !== 'playing'}
+                subjectEmoji={filterEmoji ?? '⚔️'}
+                score={score}
+                maxScore={total}
+                timeUp={timeRemaining === 0}
+                onShare={() => setShareQuestionId(current.id)}
+                commentsOpen={pacing.commentsOpen}
+                onToggleComments={pacing.toggleComments}
+                onCloseComments={proceedAfterComments}
+                {...(timeRemaining !== null && timeLimit
+                  ? { questionTimeRemaining: timeRemaining, questionTimeLimit: timeLimit }
+                  : {})}
+              />
+            ) : (
+              <RiddleCard
+                key={current.id}
+                riddle={adaptRiddle(current, verdicts[current.id])}
+                riddleNumber={index + 1}
+                totalRiddles={total}
+                selectedAnswer={picks[current.id] ?? null}
+                onSelectAnswer={(answer) => void submitAnswer(answer)}
+                showFeedback={true}
+                disabled={phase !== 'playing'}
+                score={score}
+                maxScore={total}
+                timeUp={timeRemaining === 0}
+                onShare={() => setShareQuestionId(current.id)}
+                commentsOpen={pacing.commentsOpen}
+                onToggleComments={pacing.toggleComments}
+                onCloseComments={proceedAfterComments}
+                imageUrl={current.imageUrl ?? null}
+                altText={current.altText ?? null}
+                {...(timeRemaining !== null && timeLimit
+                  ? { questionTimeRemaining: timeRemaining, questionTimeLimit: timeLimit }
+                  : {})}
+              />
+            )}
 
             {shareQuestion && (
               <ShareMenu
-                title={`Quiz question ${index + 1}`}
+                title={shareQuestion.question.slice(0, 60)}
                 text={shareQuestion.question}
-                url={`${SITE_URL}/quiz-mcq/play?subject=all&chapter=all&level=${duelLevel || 'medium'}&mode=normal&shared=true&total=${total}&qid=${shareQuestion.id}`}
-                countKey={{ contentType: 'quiz-question', contentId: shareQuestion.id }}
+                url={
+                  matchFamily === 'riddle'
+                    ? `${SITE_URL}/riddle-mcq?q=${shareQuestion.id}`
+                    : matchFamily === 'image-riddle'
+                      ? `${SITE_URL}/image-riddles`
+                      : `${SITE_URL}/quiz-mcq/play?subject=all&chapter=all&level=${duelLevel || 'medium'}&mode=normal&shared=true&total=${total}&qid=${shareQuestion.id}`
+                }
+                countKey={{
+                  contentType:
+                    matchFamily === 'quiz'
+                      ? 'quiz-question'
+                      : matchFamily === 'riddle'
+                        ? 'riddle-question'
+                        : 'image-riddle',
+                  contentId: shareQuestion.id,
+                }}
                 onClose={() => setShareQuestionId(null)}
               />
             )}
@@ -742,6 +885,32 @@ export default function DuelPage(): JSX.Element {
                       ? 'Close one — rematch?'
                       : 'Dead heat — a draw.'}
               </p>
+              <button
+                onClick={async () => {
+                  const url = `${SITE_URL}/duel`;
+                  const text =
+                    matchFamily === 'quiz'
+                      ? `I scored ${score}/${total} on a PigZap quiz duel — think you can beat me?`
+                      : `I solved ${score}/${total} ${familyLabel(matchFamily)} in a PigZap duel — beat me!`;
+                  if (navigator.share) {
+                    try {
+                      await navigator.share({ title: 'PigZap Duel', text, url });
+                      return;
+                    } catch (e) {
+                      /* dismissed — fall through to copy */
+                    }
+                  }
+                  try {
+                    await navigator.clipboard.writeText(`${text} ${url}`);
+                    toast.success('Result copied — paste it anywhere');
+                  } catch (err) {
+                    toast.error('Could not copy the result');
+                  }
+                }}
+                className="mt-4 rounded-xl bg-indigo-600 px-5 py-2.5 text-xs font-black uppercase tracking-widest text-white transition-colors hover:bg-indigo-500"
+              >
+                📤 Share my score
+              </button>
             </div>
 
             {/* Per-question review (plan/18 §10 step 4): your pick vs the
@@ -773,6 +942,15 @@ export default function DuelPage(): JSX.Element {
                           {i + 1}. {item.question}
                         </summary>
                         <div className="mt-2 space-y-1 text-xs text-gray-600 dark:text-secondary-300">
+                          {item.imageUrl && (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={item.imageUrl}
+                              alt={item.altText ?? item.question}
+                              className="mb-2 max-h-40 w-auto rounded-lg"
+                              loading="lazy"
+                            />
+                          )}
                           {myText !== null && (
                             <p>
                               <span className="font-bold">Your answer:</span>{' '}
@@ -811,6 +989,7 @@ export default function DuelPage(): JSX.Element {
                   setActiveCode('');
                   setPoll(null);
                   setQuestions([]);
+                  setVerdicts({});
                   setIndex(0);
                   setScore(0);
                   setPicks({});

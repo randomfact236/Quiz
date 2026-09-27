@@ -8,6 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { In, LessThan, Repository } from 'typeorm';
 
 import { Question } from '../quiz-mcq/entities/question.entity';
+import { RiddleMcq } from '../riddle-mcq/entities/riddle-mcq.entity';
+import { ImageRiddle } from '../image-riddles/entities/image-riddle.entity';
 import { GuestUser } from '../guest-users/entities/guest-user.entity';
 import { DuelMatch } from './entities/duel-match.entity';
 import { DuelParticipant } from './entities/duel-participant.entity';
@@ -15,6 +17,12 @@ import { DuelParticipant } from './entities/duel-participant.entity';
 const MATCH_TTL_MS = 10 * 60 * 1000; // match expires 10 min after creation
 const POLL_HEARTBEAT_MS = 30 * 1000; // silence while running voids the match
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I/1/O/0 confusion
+
+/** plan/18 §2 content families a duel can draw from. */
+export type DuelContentType = 'quiz' | 'riddle' | 'image-riddle';
+
+/** Trim + case-fold — the tolerant match for open-answer grading. */
+const norm = (text: string | null | undefined): string => (text ?? '').trim().toLowerCase();
 
 @Injectable()
 export class DuelsService {
@@ -26,7 +34,11 @@ export class DuelsService {
     @InjectRepository(Question)
     private readonly questions: Repository<Question>,
     @InjectRepository(GuestUser)
-    private readonly guests: Repository<GuestUser>
+    private readonly guests: Repository<GuestUser>,
+    @InjectRepository(RiddleMcq)
+    private readonly riddles: Repository<RiddleMcq>,
+    @InjectRepository(ImageRiddle)
+    private readonly imageRiddles: Repository<ImageRiddle>
   ) {}
 
   // ---- creation / joining -------------------------------------------------
@@ -36,7 +48,10 @@ export class DuelsService {
     questionCount: number;
     playerName: string;
     guestId: string;
-    /** Optional quiz subject filter (plan/18 §10 step 5); null = all subjects. */
+    /** Content family (plan/18 §2); defaults to quiz. */
+    contentType?: DuelContentType;
+    /** Optional filter: quiz subject / riddle subject / image-riddle category.
+     *  Null = all. */
     subjectId?: string | null;
     /** Public (non-secret) handle of the targeted player — resolved to the
      * target's guestId here so raw guestIds never cross the API
@@ -51,26 +66,21 @@ export class DuelsService {
       challengeGuestId = target?.guestId ?? null;
     }
     const count = Math.min(Math.max(input.questionCount || 10, 3), 20);
-    const qb = this.questions
-      .createQueryBuilder('q')
-      .where('q.level = :level', { level: input.level })
-      .andWhere('q.status = :status', { status: 'published' });
-    if (input.subjectId) {
-      qb.innerJoin('q.chapter', 'ch').andWhere('ch.subjectId = :subjectId', {
-        subjectId: input.subjectId,
-      });
-    }
-    const picked = await qb.orderBy('random()').limit(count).getMany();
-    if (picked.length === 0) {
-      throw new NotFoundException(`No published questions for level "${input.level}"`);
+    const contentType = input.contentType ?? 'quiz';
+    const pickedIds = await this.pickQuestionIds(contentType, input.level, input.subjectId, count);
+    if (pickedIds.length === 0) {
+      throw new NotFoundException(
+        `No published ${contentType} questions for level "${input.level}"`
+      );
     }
 
     const match = await this.matches.save(
       this.matches.create({
         code: await this.generateCode(),
         level: input.level,
+        contentType,
         subjectId: input.subjectId ?? null,
-        questionIds: picked.map((q) => q.id),
+        questionIds: pickedIds,
         status: 'waiting',
         expiresAt: new Date(Date.now() + MATCH_TTL_MS),
       })
@@ -155,6 +165,7 @@ export class DuelsService {
       status: fresh.status,
       total: fresh.questionIds.length,
       level: fresh.level,
+      contentType: fresh.contentType ?? 'quiz',
       me: this.participantView(meRow, revealed),
       opponent: opponent
         ? {
@@ -209,15 +220,17 @@ export class DuelsService {
       throw new BadRequestException('That question is not part of this match.');
     }
 
-    const question = await this.questions.findOne({ where: { id: input.questionId } });
-    if (!question) throw new NotFoundException('Question not found.');
-
+    const graded = await this.questionForGrading(
+      (match.contentType ?? 'quiz') as DuelContentType,
+      input.questionId
+    );
     const selected = input.selected.trim().toUpperCase();
-    const letter = (question.correctLetter ?? '').trim().toUpperCase();
     const correct =
-      letter !== ''
-        ? selected === letter
-        : selected !== '' && question.correctAnswer.trim().toUpperCase() === selected;
+      graded.accepted.length > 0 &&
+      selected !== '' &&
+      (graded.correctLetter
+        ? selected === graded.correctLetter
+        : graded.accepted.includes(norm(input.selected)));
 
     const completedCount = Math.min(me.completedCount + 1, match.questionIds.length);
     await this.participants.update(me.id, {
@@ -232,8 +245,8 @@ export class DuelsService {
     return {
       correct,
       completed: completedCount,
-      correctAnswer: question.correctAnswer?.trim() ? question.correctAnswer : null,
-      explanation: question.explanation ?? null,
+      correctAnswer: graded.correctAnswer?.trim() ? graded.correctAnswer : null,
+      explanation: graded.explanation,
     };
   }
 
@@ -368,6 +381,94 @@ export class DuelsService {
     throw new Error('Could not allocate a match code.');
   }
 
+  /** Random frozen set from the match's content family (plan/18 §2). */
+  private async pickQuestionIds(
+    contentType: DuelContentType,
+    level: string,
+    subjectId: string | null | undefined,
+    count: number
+  ): Promise<string[]> {
+    if (contentType === 'riddle') {
+      const qb = this.riddles
+        .createQueryBuilder('r')
+        .where('r.level = :level', { level })
+        .andWhere('r.status = :status', { status: 'published' });
+      if (subjectId) qb.andWhere('r.subjectId = :subjectId', { subjectId });
+      const rows = await qb.orderBy('random()').limit(count).getMany();
+      return rows.map((r) => r.id);
+    }
+    if (contentType === 'image-riddle') {
+      const qb = this.imageRiddles
+        .createQueryBuilder('i')
+        .where('i.difficulty = :level', { level })
+        .andWhere('i.status = :status', { status: 'published' })
+        .andWhere('i.isActive = :isActive', { isActive: true });
+      if (subjectId) qb.andWhere('i.categoryId = :categoryId', { categoryId: subjectId });
+      const rows = await qb.orderBy('random()').limit(count).getMany();
+      return rows.map((r) => r.id);
+    }
+    const qb = this.questions
+      .createQueryBuilder('q')
+      .where('q.level = :level', { level })
+      .andWhere('q.status = :status', { status: 'published' });
+    if (subjectId) {
+      qb.innerJoin('q.chapter', 'ch').andWhere('ch.subjectId = :subjectId', { subjectId });
+    }
+    const rows = await qb.orderBy('random()').limit(count).getMany();
+    return rows.map((q) => q.id);
+  }
+
+  /** The grading row for one question, by family (plan/18 §2/§4). Grading
+   *  stays entirely server-side: MCQs grade by letter; open answers grade by
+   *  trimmed/case-folded text; image riddles also accept their alternative
+   *  answers (alias list). */
+  private async questionForGrading(
+    contentType: DuelContentType,
+    questionId: string
+  ): Promise<{
+    correctLetter: string | null;
+    accepted: string[];
+    correctAnswer: string | null;
+    explanation: string | null;
+  }> {
+    if (contentType === 'riddle') {
+      const riddle = await this.riddles.findOne({ where: { id: questionId } });
+      if (!riddle) throw new NotFoundException('Riddle not found.');
+      const letter = (riddle.correctLetter ?? '').trim().toUpperCase() || null;
+      const letterIdx = letter ? 'ABCDEFGH'.indexOf(letter) : -1;
+      const textAnswer =
+        letterIdx >= 0 ? ((riddle.options ?? [])[letterIdx] ?? null) : riddle.answer;
+      return {
+        correctLetter: letter,
+        accepted: letter ? [letter] : [norm(textAnswer)].filter((a) => a !== ''),
+        correctAnswer: textAnswer,
+        explanation: riddle.explanation ?? null,
+      };
+    }
+    if (contentType === 'image-riddle') {
+      const riddle = await this.imageRiddles.findOne({ where: { id: questionId } });
+      if (!riddle) throw new NotFoundException('Riddle not found.');
+      const accepted = [riddle.answer, ...(riddle.alternativeAnswers ?? [])]
+        .map(norm)
+        .filter((candidate) => candidate !== '');
+      return {
+        correctLetter: null,
+        accepted: Array.from(new Set(accepted)),
+        correctAnswer: riddle.answer,
+        explanation: null,
+      };
+    }
+    const question = await this.questions.findOne({ where: { id: questionId } });
+    if (!question) throw new NotFoundException('Question not found.');
+    const letter = (question.correctLetter ?? '').trim().toUpperCase() || null;
+    return {
+      correctLetter: letter,
+      accepted: letter ? [letter] : [norm(question.correctAnswer)].filter((a) => a !== ''),
+      correctAnswer: question.correctAnswer ?? null,
+      explanation: question.explanation ?? null,
+    };
+  }
+
   private async startMatch(matchId: string): Promise<void> {
     const match = await this.matches.findOne({ where: { id: matchId } });
     if (!match || match.status !== 'waiting') return;
@@ -425,6 +526,51 @@ export class DuelsService {
   }
 
   private async buildJoinedView(match: DuelMatch, guestId: string) {
+    void guestId;
+    const base = {
+      status: match.status,
+      level: match.level,
+      contentType: match.contentType ?? 'quiz',
+    };
+    if (match.contentType === 'riddle') {
+      const rows = await this.riddles.find({
+        where: { id: In(match.questionIds) },
+        select: ['id', 'question', 'options', 'level', 'hint'],
+      });
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      // Preserve the frozen order; the answer/letter/explanation never ship.
+      const questions = match.questionIds
+        .map((id) => byId.get(id))
+        .filter((r) => r !== undefined)
+        .map((r) => ({
+          id: r.id,
+          question: r.question,
+          options: r.options ?? [],
+          level: r.level,
+          hint: r.hint,
+        }));
+      return { ...base, questions, total: questions.length };
+    }
+    if (match.contentType === 'image-riddle') {
+      const rows = await this.imageRiddles.find({
+        where: { id: In(match.questionIds) },
+        select: ['id', 'title', 'imageUrl', 'altText', 'difficulty', 'hint'],
+      });
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      const questions = match.questionIds
+        .map((id) => byId.get(id))
+        .filter((r) => r !== undefined)
+        .map((r) => ({
+          id: r.id,
+          question: r.title,
+          imageUrl: r.imageUrl,
+          altText: r.altText,
+          options: [] as string[],
+          level: r.difficulty,
+          hint: r.hint,
+        }));
+      return { ...base, questions, total: questions.length };
+    }
     const questions = await this.questions.find({
       where: { id: In(match.questionIds) },
       select: ['id', 'question', 'options', 'level'],
@@ -432,12 +578,56 @@ export class DuelsService {
     // Preserve the frozen order.
     const byId = new Map(questions.map((q) => [q.id, q]));
     const ordered = match.questionIds.map((id) => byId.get(id)).filter((q) => q !== undefined);
-    void guestId;
-    return { status: match.status, level: match.level, questions: ordered, total: ordered.length };
+    return { ...base, questions: ordered, total: ordered.length };
   }
 
   /** Post-resolution review rows (frozen order; plan/18 §10 step 4). */
   private async buildReveal(match: DuelMatch) {
+    const contentType = match.contentType ?? 'quiz';
+    if (contentType === 'riddle') {
+      const rows = await this.riddles.find({
+        where: { id: In(match.questionIds) },
+        select: ['id', 'question', 'options', 'level', 'answer', 'correctLetter', 'explanation'],
+      });
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      return match.questionIds
+        .map((id) => byId.get(id))
+        .filter((r) => r !== undefined)
+        .map((r) => {
+          const letterIdx = 'ABCDEFGH'.indexOf((r.correctLetter ?? '').toUpperCase());
+          return {
+            id: r.id,
+            question: r.question,
+            options: r.options ?? [],
+            level: r.level,
+            correctAnswer:
+              letterIdx >= 0 ? ((r.options ?? [])[letterIdx] ?? null) : (r.answer ?? null),
+            correctLetter: r.correctLetter ?? null,
+            explanation: r.explanation ?? null,
+          };
+        });
+    }
+    if (contentType === 'image-riddle') {
+      const rows = await this.imageRiddles.find({
+        where: { id: In(match.questionIds) },
+        select: ['id', 'title', 'imageUrl', 'altText', 'difficulty', 'answer'],
+      });
+      const byId = new Map(rows.map((r) => [r.id, r]));
+      return match.questionIds
+        .map((id) => byId.get(id))
+        .filter((r) => r !== undefined)
+        .map((r) => ({
+          id: r.id,
+          question: r.title,
+          imageUrl: r.imageUrl,
+          altText: r.altText,
+          options: [] as string[],
+          level: r.difficulty,
+          correctAnswer: r.answer,
+          correctLetter: null,
+          explanation: null,
+        }));
+    }
     const questions = await this.questions.find({
       where: { id: In(match.questionIds) },
       select: [

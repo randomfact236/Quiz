@@ -2,6 +2,7 @@ import { Body, Controller, Get, Param, Post, Query, UseGuards } from '@nestjs/co
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import {
   IsBoolean,
+  IsIn,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -38,7 +39,13 @@ class CreateDuelDto {
   @MaxLength(64)
   guestId: string;
 
-  /** Optional quiz subject filter (plan/18 §10 step 5); absent = all subjects. */
+  /** Content family (plan/18 §2); absent = quiz. */
+  @IsOptional()
+  @IsIn(['quiz', 'riddle', 'image-riddle'])
+  contentType?: 'quiz' | 'riddle' | 'image-riddle';
+
+  /** Optional filter: quiz subject / riddle subject / image-riddle category
+   *  (plan/18 §10 step 5); absent = all. */
   @IsOptional()
   @IsUUID()
   subjectId?: string | null;

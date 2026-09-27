@@ -63,6 +63,10 @@ interface RiddleCardProps {
   onCloseComments?: () => void;
   /** BUG-054: opens the per-riddle ShareMenu on the play page. */
   onShare?: () => void;
+  /** plan/18 phase 2: image-riddle duels ride this card — the picture renders
+   *  under the question. Solo callers pass nothing. */
+  imageUrl?: string | null;
+  altText?: string | null;
 }
 
 export interface RiddleCardRef {
@@ -166,6 +170,8 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
     onToggleComments,
     onCloseComments,
     onShare,
+    imageUrl,
+    altText,
   },
   ref
 ): JSX.Element {
@@ -317,6 +323,19 @@ export const RiddleCard = forwardRef<RiddleCardRef, RiddleCardProps>(function Ri
             {riddle.question}
           </h2>
         </div>
+
+        {/* plan/18 phase 2: image-riddle duel picture */}
+        {imageUrl && (
+          <div className="mb-4 flex justify-center">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageUrl}
+              alt={altText ?? riddle.question}
+              className="max-h-72 w-auto rounded-2xl shadow-md"
+              loading="lazy"
+            />
+          </div>
+        )}
 
         {/* Floating Emojis — Below Question */}
         <div className="mb-4 flex items-center justify-center gap-4">

@@ -14,12 +14,15 @@ describe('DuelsService', () => {
   let participants: Record<string, jest.Mock>;
   let questions: Record<string, jest.Mock>;
   let guests: Record<string, jest.Mock>;
+  let riddles: Record<string, jest.Mock>;
+  let imageRiddles: Record<string, jest.Mock>;
   let service: DuelsService;
 
   const runningMatch = {
     id: 'm1',
     code: 'ABC234',
     level: 'medium',
+    contentType: 'quiz',
     questionIds: ['q1', 'q2'],
     status: 'running',
     expiresAt: new Date(Date.now() + 60_000),
@@ -73,11 +76,23 @@ describe('DuelsService', () => {
       update: jest.fn().mockResolvedValue(undefined),
       query: jest.fn().mockResolvedValue([{ count: 0 }]),
     };
+    riddles = {
+      findOne: jest.fn().mockResolvedValue(null),
+      find: jest.fn().mockResolvedValue([]),
+      createQueryBuilder: jest.fn(),
+    };
+    imageRiddles = {
+      findOne: jest.fn().mockResolvedValue(null),
+      find: jest.fn().mockResolvedValue([]),
+      createQueryBuilder: jest.fn(),
+    };
     service = new DuelsService(
       matches as any,
       participants as any,
       questions as any,
-      guests as any
+      guests as any,
+      riddles as any,
+      imageRiddles as any
     );
   });
 
@@ -211,6 +226,93 @@ describe('DuelsService', () => {
 
     expect(matches.findOne).toHaveBeenCalledTimes(2);
     expect(matches.save).toHaveBeenCalled();
+  });
+
+  // ---- riddle + image-riddle families (plan/18 phase 2) --------------------
+
+  it('grades a riddle MCQ by letter and reveals the option text', async () => {
+    matches.findOne.mockResolvedValue({ ...runningMatch, contentType: 'riddle' });
+    riddles.findOne.mockResolvedValue({
+      id: 'r1',
+      correctLetter: 'C',
+      options: ['a', 'b', 'c-option', 'd'],
+      answer: null,
+      explanation: 'Because c.',
+    });
+
+    const result = await service.gradeAnswer('ABC234', 'guest-1', {
+      questionId: 'q1',
+      selected: 'C',
+    });
+
+    expect(result.correct).toBe(true);
+    expect(result.correctAnswer).toBe('c-option');
+    expect(result.explanation).toBe('Because c.');
+  });
+
+  it('grades an open riddle by its text answer, trimmed and case-folded', async () => {
+    matches.findOne.mockResolvedValue({ ...runningMatch, contentType: 'riddle' });
+    riddles.findOne.mockResolvedValue({
+      id: 'r2',
+      correctLetter: null,
+      options: null,
+      answer: '  Towel  ',
+      explanation: 'Classic.',
+    });
+
+    const result = await service.gradeAnswer('ABC234', 'guest-1', {
+      questionId: 'q1',
+      selected: 'towel',
+    });
+
+    expect(result.correct).toBe(true);
+    expect(result.correctAnswer).toBe('  Towel  ');
+  });
+
+  it('grades an image riddle accepting its alias answers', async () => {
+    matches.findOne.mockResolvedValue({ ...runningMatch, contentType: 'image-riddle' });
+    imageRiddles.findOne.mockResolvedValue({
+      id: 'i1',
+      answer: 'Elephant',
+      alternativeAnswers: ['an elephant', 'grey giant'],
+    });
+
+    const alias = await service.gradeAnswer('ABC234', 'guest-1', {
+      questionId: 'q1',
+      selected: '  An Elephant ',
+    });
+    const wrong = await service.gradeAnswer('ABC234', 'guest-1', {
+      questionId: 'q1',
+      selected: 'rhino',
+    });
+
+    expect(alias.correct).toBe(true);
+    expect(alias.correctAnswer).toBe('Elephant');
+    expect(wrong.correct).toBe(false);
+  });
+
+  it('draws riddle matches from the riddle table with the subject filter', async () => {
+    const qb: Record<string, jest.Mock> = {};
+    ['where', 'andWhere', 'orderBy', 'limit'].forEach((k) => {
+      qb[k] = jest.fn().mockReturnThis();
+    });
+    qb.getMany = jest.fn().mockResolvedValue([{ id: 'r1' }]);
+    riddles.createQueryBuilder.mockReturnValue(qb);
+    matches.findOne.mockResolvedValue(null);
+    matches.save.mockImplementation(async (x) => ({ ...x, id: 'm-new' }));
+
+    await service.createMatch({
+      level: 'expert',
+      questionCount: 5,
+      playerName: 'Me',
+      guestId: 'guest-1',
+      contentType: 'riddle',
+      subjectId: 'subj-9',
+    });
+
+    expect(riddles.createQueryBuilder).toHaveBeenCalled();
+    expect(qb.andWhere).toHaveBeenCalledWith('r.subjectId = :subjectId', { subjectId: 'subj-9' });
+    expect(matches.create).toHaveBeenCalledWith(expect.objectContaining({ contentType: 'riddle' }));
   });
 
   // ---- resolution ----------------------------------------------------------

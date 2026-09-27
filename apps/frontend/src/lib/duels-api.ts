@@ -13,6 +13,11 @@ export interface DuelQuestion {
   question: string;
   options: string[];
   level: string;
+  /** image-riddle family only */
+  imageUrl?: string;
+  altText?: string | null;
+  /** Solo-parity hint (text/image riddles); never the answer. */
+  hint?: string | null;
 }
 
 /** Post-resolution review row (plan/18 §10 step 4) — only in the poll/finish
@@ -22,6 +27,8 @@ export interface DuelRevealItem {
   question: string;
   options: string[];
   level: string;
+  imageUrl?: string;
+  altText?: string | null;
   correctAnswer: string | null;
   correctLetter: string | null;
   explanation: string | null;
@@ -40,6 +47,7 @@ export interface DuelPoll {
   status: 'waiting' | 'running' | 'finished' | 'abandoned';
   total: number;
   level: string;
+  contentType?: 'quiz' | 'riddle' | 'image-riddle';
   me: DuelParticipantView;
   opponent: DuelParticipantView | null;
   /** Present once the match resolves (finished/abandoned). */
@@ -49,6 +57,7 @@ export interface DuelPoll {
 export interface DuelJoinView {
   status: string;
   level: string;
+  contentType?: 'quiz' | 'riddle' | 'image-riddle';
   questions: DuelQuestion[];
   total: number;
 }
@@ -58,6 +67,7 @@ export async function createDuel(input: {
   questionCount: number;
   playerName: string;
   guestId: string;
+  contentType?: 'quiz' | 'riddle' | 'image-riddle';
   subjectId?: string | null;
 }): Promise<{ code: string }> {
   const response = await api.post<{ match: unknown; code: string }>('/duels', input);
