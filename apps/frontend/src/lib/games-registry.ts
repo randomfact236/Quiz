@@ -29,6 +29,14 @@ export interface GameEntry {
 
 export const GAMES: GameEntry[] = [
   {
+    slug: 'connect-four',
+    emoji: '🔴',
+    title: 'Connect Four',
+    blurb: 'Drop discs, line up four — solo vs the computer or a live duel with a friend.',
+    gradient: 'from-amber-500 to-red-600',
+    cssGradient: 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)',
+  },
+  {
     slug: 'tic-tac-toe',
     emoji: '⭕',
     title: 'Tic Tac Toe',

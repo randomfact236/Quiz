@@ -25,9 +25,10 @@ rematch. Solo and social feed each other.
 
 ## 2. Live today
 
-| Game                    | Slug          | Solo                                  | Hot-seat | Online duel                                  |
-| ----------------------- | ------------- | ------------------------------------- | -------- | -------------------------------------------- |
-| Tic Tac Toe (prototype) | `tic-tac-toe` | easy/medium/hard AI (+ misère toggle) | ✅       | ✅ (`/tictactoe` backend, `?ttt=CODE` links) |
+| Game                    | Slug           | Solo                                  | Hot-seat | Online duel                                   |
+| ----------------------- | -------------- | ------------------------------------- | -------- | --------------------------------------------- |
+| Tic Tac Toe (prototype) | `tic-tac-toe`  | easy/medium/hard AI (+ misère toggle) | ✅       | ✅ (`/tictactoe` backend, `?ttt=CODE` links)  |
+| Connect Four            | `connect-four` | easy/medium/hard AI                   | ✅       | ✅ (`/connectfour` backend, `?c4=CODE` links) |
 
 ## 3. Roadmap — planned games (owner-requested plans, 2026-09-28)
 
