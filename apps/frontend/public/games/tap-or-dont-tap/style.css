@@ -4,7 +4,30 @@
    layout live above it, so a flash can never shift layout.
    ========================================================================== */
 
-:root {
+/* Theming (2026-09-25 audit fix): the game used to be hardcoded dark-only and
+   never followed the site theme. The original palette is now the DARK theme and
+   a matching light palette backs the light one; data-theme is set before first
+   paint by /shared/theme.js. */
+:root,
+[data-theme='light'] {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --card-border: #e3e7f0;
+  --text: #1f2430;
+  --muted: #5c6474;
+  --green: #16a34a;
+  --red: #dc2626;
+  --yellow: #ca8a04;
+  --blue: #2563eb;
+  --primary: #4f46e5;
+  --primary-dark: #4338ca;
+  --focus: #2563eb;
+  --scrim: #eef0f6;
+  --ghost: #eceff7;
+  --amber-ink: #451a03;
+}
+
+[data-theme='dark'] {
   --bg: #0b0e14;
   --card: #151a24;
   --card-border: #232b3a;
@@ -16,6 +39,10 @@
   --blue: #3b82f6;
   --primary: #6366f1;
   --primary-dark: #4f46e5;
+  --focus: #93c5fd;
+  --scrim: #05070b;
+  --ghost: #2a3245;
+  --amber-ink: #1c1917;
 }
 
 * {
@@ -103,7 +130,7 @@ body {
   left: 50%;
   transform: translateX(-50%);
   background: #f59e0b;
-  color: #1c1917;
+  color: var(--amber-ink);
   font-weight: 800;
   font-size: 0.85rem;
   padding: 6px 14px;
@@ -192,7 +219,7 @@ button {
 }
 
 button:focus-visible {
-  outline: 3px solid #93c5fd;
+  outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
 
@@ -217,7 +244,7 @@ button:focus-visible {
 .btn-secondary {
   display: block;
   width: 100%;
-  background: #2a3245;
+  background: var(--ghost);
   color: var(--text);
   font-size: 1.05rem;
   font-weight: 700;
@@ -263,11 +290,11 @@ button:focus-visible {
 /* ---------- waiting ---------- */
 
 #state-waiting {
-  background: #05070b;
+  background: var(--scrim);
 }
 
 .wait-text {
-  color: #2a3245;
+  color: var(--muted);
   font-size: 1rem;
   letter-spacing: 0.08em;
 }
@@ -284,7 +311,7 @@ button:focus-visible {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #05070b;
+  background: var(--scrim);
 }
 
 #signal-surface.flash-green {
@@ -314,7 +341,7 @@ button:focus-visible {
 /* White fails contrast on the bright flashes — the Stroop word switches to
    dark ink on green (the only flash that ever shows a word besides red). */
 #signal-surface.flash-green #signal-word {
-  color: #052e16;
+  color: #052e16; /* dark ink on green stays in both themes */
   text-shadow: none;
 }
 

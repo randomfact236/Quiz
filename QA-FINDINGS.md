@@ -90,6 +90,7 @@
 | NOW-24 | Memory-quiz: no feedback widget on game over / level clear             | games (feedback)               | P2        | Fixed |
 | NOW-25 | Storage growth + timer/daily races (sliding, word, memory)             | games (core)                   | P2        | Fixed |
 | NOW-26 | Games docs false: "no backend calls" + stale test counts               | docs (plan/games)              | P3        | Fixed |
+| NOW-27 | Invite-link multiplayer: real cross-device duels (design + build)      | multiplayer                    | P1        | Open  |
 
 ### Open item details
 
@@ -298,7 +299,7 @@
   site suffix; (d) no in-memory storage fallback (private mode = no persistence at all).
 - **Fix:** validate the locale (try/catch or `Intl.supportedValuesOf`), percent-encode the
   data-URI, port the theme block, add the storage shim.
-- **Fixed 2026-09-25:** `safeLocale()` guards all four `toLocaleString` sites; favicon data-URI percent-encoded; title + light/dark `theme-color` + shared theme script aligned; in-memory storage fallback added; copy gained a `prompt()` fallback. Dark-palette CSS for tap is still a design task (noted in the plan).
+- **Fixed 2026-09-25:** `safeLocale()` guards all four `toLocaleString` sites; favicon data-URI percent-encoded; title + light/dark `theme-color` + shared theme script aligned; in-memory storage fallback added; copy gained a `prompt()` fallback. **Also 2026-09-25:** the game's hardcoded dark-only palette is now a real theme pair — `:root`/`[data-theme="light"]` (light) + `[data-theme="dark"]` (the original), hardcoded surfaces routed through variables; verified light + dark in the browser (tap `style.css?v=6`).
 
 ### NOW-24 - Memory-quiz: no feedback widget on game over / level clear
 
@@ -334,6 +335,44 @@
   tests" vs ~310 declared); "folder is git-ignored" and "no cache-busting needed" are false;
   E2E verify scripts unwired; 6 test harnesses ship to prod; `check:theme` never scans games.
 - **Fixed 2026-09-25:** `plan/games/README.md` (network reality, tracked-not-ignored, themes.js, cache-busting, test counts 36/28/42, share format), `AGENTS.md` + `assistant-rules.md` ("no backend calls" → the two permitted POSTs).
+
+### NOW-27 - Invite-link multiplayer: real cross-device duels (owner design 2026-09-27)
+
+- **Date found:** 2026-09-27 (owner request)
+- **Area:** multiplayer — /duel + games
+- **Priority:** P1
+- **Owner ask:** analyze each game by playing it, recommend scale-ups, and make multiplayer
+  playable from individual devices via an invite link (not one device).
+- **What exists (verified 2026-09-27):** a complete server-graded duels backend
+  (`POST /duels` create, `POST /duels/:code/join`, `GET /duels/:code` poll,
+  `POST /duels/:code/answer` — SERVER grades, answer key never sent, membership enforced,
+  DB-clock duration, 10-min TTL, 30s silence rule) plus a working `/duel` frontend
+  (lobby → code → join → race → result; quiz MCQ only; noindex; commit 232f803).
+  Quiz deep-links carry `qid=`; riddles addressed by subject+level (no frozen set — HARD-14/15).
+- **Blockers to "owner makes a link, friend plays on their phone" (ranked):**
+  1. **No share affordance** — the invite is a hardcoded text literal (`pigzap.com/duel?code=`
+     in a `<p>`): add `navigator.share` + clipboard (reuse `components/share/ShareMenu.tsx`) + APP_URL.
+  2. **Orphaned page** — `/duel` has zero nav/Play-Hub/sitemap entry.
+  3. **Auto-joiner never asked for a name** (`?code=` joins as "Guest").
+  4. **Polling stops when playing** — the 3s poll runs only in `waiting`; no opponent progress
+     mid-race; `progress` heartbeat never called.
+  5. **One-shot finish** — result poll runs once, so a slow opponent leaves the comparison
+     permanently "check back here"; must poll until status != running + show durationMs.
+  6. **No reconnect** — 30s silence voids the match; a backgrounded phone kills it.
+  7. **Riddles need a backend shape** — `contentType` on the match + union source + open-answer
+     grading (letter-only MaxLength(4) today); daily-challenge deterministic-set pattern is the
+     reusable precedent.
+  8. **createMatch doesn't filter `options IS NOT NULL`** (a duel can draw an unrenderable
+     question) and no `?mode` filter (easy/medium/hard only).
+  9. **No backend tests** on the duels module (audit BE-11 PARTIAL) — required before changing it.
+  10. Logged-in users duel anonymously (open decision in plan/future-features).
+- **Games (the 8 static bundles): structurally incompatible with the question-shaped duel.**
+  Per their own plans: live online rooms "gated — not planned" (ttt), `multiplayerEnabled`
+  flag never added (sliding), reflex games "no meaningful multiplayer" (tap). The cheap 80%
+  is **async challenge links** (board state in the URL — the daily/challenge precedent), which
+  needs no realtime layer (the repo has no WebSocket/SSE anywhere and the games are
+  network-free by contract). Live duels for the games would require a move/state transport +
+  a realtime layer built from scratch.
 
 ## Resolved — removed from this tracker (policy: open items only)
 
