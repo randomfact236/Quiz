@@ -317,9 +317,5 @@
         mountButton(card, '⚔️ Challenge a friend', createChallenge);
       }
     },
-    /** For seeded games: the challenge's board parameters, when present. */
-    context: function () {
-      return accepted ? { payload: accepted.payload, view: accepted } : null;
-    },
   };
 })();

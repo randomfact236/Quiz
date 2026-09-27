@@ -27,8 +27,8 @@
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9D%8C%3C/text%3E%3C/svg%3E"
     />
     <script src="/shared/theme.js?v=1"></script>
-    <link rel="stylesheet" href="style.css?v=5" />
-    <script type="module" src="game.js?v=5"></script>
+    <link rel="stylesheet" href="style.css?v=6" />
+    <script type="module" src="game.js?v=6"></script>
   </head>
   <body>
     <main class="app">
@@ -48,6 +48,20 @@
             <button type="button" role="radio" aria-checked="false" data-mode="2p">
               👥 2 Players
             </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">
+              ⚔️ Online
+            </button>
+          </div>
+
+          <!-- plan/18 phase 5: live online duel (server-authoritative, 3 s poll) -->
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you play ✕)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
           </div>
 
           <div class="row" id="difficulty-row">

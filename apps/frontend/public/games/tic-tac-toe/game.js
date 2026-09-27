@@ -42,7 +42,7 @@ const MARK_SVG = {
 
 const state = {
   screen: 'menu',
-  mode: '1p', // '1p' | '2p'
+  mode: '1p', // '1p' | '2p' | 'online'
   difficulty: 'medium', // 'easy' | 'medium' | 'hard'
   misere: false,
   board: emptyBoard(),
@@ -51,6 +51,8 @@ const state = {
   locked: false, // true during AI thinking and after the round ends
   series: emptyTally(),
   aiTimer: null,
+  // plan/18 phase 5: live online duel — server-authoritative board, 3-s poll.
+  online: null, // { code, mark, pollTimer, busy }
 };
 
 const els = {};
@@ -71,7 +73,12 @@ function showScreen(name) {
 /* ---- menu screen ---------------------------------------------------------- */
 
 function renderSeriesCard() {
-  let scope = state.mode === '1p' ? 'vs computer · ' + state.difficulty : '2 players';
+  let scope =
+    state.mode === '1p'
+      ? 'vs computer · ' + state.difficulty
+      : state.mode === 'online'
+        ? 'online duel'
+        : '2 players';
   if (state.misere) scope += ' · misère';
   els.seriesScope.textContent = scope;
   els.seriesX.textContent = String(state.series.x);
@@ -130,6 +137,11 @@ function renderTurn() {
   const mark = state.turn;
   if (state.mode === '1p') {
     label = isAiTurnNow() ? "Computer's turn…" : "Your turn — you're " + mark;
+  } else if (state.mode === 'online' && state.online) {
+    const you = state.online.mark;
+    const oppName = you === 'X' ? state.online.oName : state.online.xName;
+    label =
+      mark === you ? "Your turn — you're " + mark : 'Waiting for ' + (oppName || 'opponent') + '…';
   } else {
     label = mark + "'s turn";
   }
@@ -173,6 +185,10 @@ function placeMark(index) {
   if (state.screen !== 'playing' || state.locked) return; // round over / AI thinking
   if (state.board[index]) return; // occupied — no-op
   if (isAiTurnNow()) return; // human cannot move for the computer
+  if (state.mode === 'online') {
+    playOnlineMove(index);
+    return;
+  }
   play(index);
 }
 
@@ -216,6 +232,218 @@ function scheduleAiMove() {
     lockBoard(false);
     play(move);
   }, GAME_CONFIG.aiThinkDelayMs);
+}
+
+/* ---- online duel (plan/18 phase 5) ------------------------------------------- */
+/* Server-authoritative matches (backend /tictactoe): the board only changes
+ * via POST move, and both players sync the authoritative state with the same
+ * 3-second poll the duels use. One round per match; rematch = new match. */
+
+const ONLINE_API =
+  location.hostname === 'localhost' || location.hostname === '127.0.0.1'
+    ? 'http://localhost:3012/api/v1'
+    : 'https://api.pigzap.com/api/v1';
+
+function onlineGuestId() {
+  try {
+    const key = 'aiquiz:guest-id';
+    let id = localStorage.getItem(key);
+    if (!id) {
+      id = 'guest_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+      localStorage.setItem(key, id);
+    }
+    return id;
+  } catch {
+    return 'guest_anon';
+  }
+}
+
+function onlinePlayerName() {
+  const name = els.onlineName.value.trim().slice(0, 24) || 'Guest';
+  try {
+    localStorage.setItem('pigzap:challenge-name', name);
+  } catch {
+    /* private mode */
+  }
+  return name;
+}
+
+function onlineApi(path, body) {
+  return fetch(ONLINE_API + path, {
+    method: body ? 'POST' : 'GET',
+    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    body: body ? JSON.stringify(body) : undefined,
+  }).then((r) => {
+    if (!r.ok)
+      return r.json().then((e) => Promise.reject(new Error(e.message || String(r.status))));
+    return r.json();
+  });
+}
+
+function onlineStatus(text) {
+  els.onlineStatus.textContent = text;
+}
+
+function stopOnlinePoll() {
+  if (state.online && state.online.pollTimer) {
+    clearInterval(state.online.pollTimer);
+    state.online.pollTimer = null;
+  }
+}
+
+function onlineLeaveQuietly() {
+  if (state.online && state.online.code && state.online.mark) {
+    onlineApi('/tictactoe/' + state.online.code + '/leave', {
+      playerName: onlinePlayerName(),
+      guestId: onlineGuestId(),
+    }).catch(() => undefined);
+  }
+  stopOnlinePoll();
+  state.online = null;
+}
+
+function onlineCreate() {
+  onlineStatus('Creating the match…');
+  onlineApi('/tictactoe', {
+    playerName: onlinePlayerName(),
+    guestId: onlineGuestId(),
+    misere: state.misere,
+  })
+    .then(({ code }) => {
+      state.online = { code, mark: 'X', pollTimer: null, oName: null, busy: false };
+      const link = 'https://pigzap.com/games/tic-tac-toe/?ttt=' + code;
+      onlineStatus('Match ' + code + ' — waiting for a challenger. Send: ' + link);
+      if (navigator.share) {
+        navigator
+          .share({ title: 'Tic Tac Toe duel', text: 'Duel me — match ' + code, url: link })
+          .catch(() => undefined);
+      }
+      state.online.pollTimer = setInterval(pollOnline, 3000);
+    })
+    .catch(() => onlineStatus('Could not create the match — check your connection.'));
+}
+
+function onlineJoin(code) {
+  if (!code) return;
+  onlineStatus('Joining ' + code + '…');
+  onlineApi('/tictactoe/' + encodeURIComponent(code) + '/join', {
+    playerName: onlinePlayerName(),
+    guestId: onlineGuestId(),
+  })
+    .then((view) => {
+      state.online = {
+        code: view.code,
+        mark: view.yourMark,
+        pollTimer: null,
+        xName: view.xName,
+        oName: view.oName,
+        busy: false,
+      };
+      if (view.status === 'waiting') {
+        onlineStatus('Joined as ⭕ — waiting for X to be claimed…');
+        state.online.pollTimer = setInterval(pollOnline, 3000);
+        return;
+      }
+      enterOnlinePlay(view);
+    })
+    .catch((e) => onlineStatus('Join failed: ' + (e.message || 'try again')));
+}
+
+function pollOnline() {
+  if (!state.online || state.online.busy) return;
+  onlineApi(
+    '/tictactoe/' +
+      encodeURIComponent(state.online.code) +
+      '?guestId=' +
+      encodeURIComponent(onlineGuestId())
+  )
+    .then((view) => {
+      if (!state.online) return;
+      state.online.xName = view.xName;
+      state.online.oName = view.oName;
+      if (view.status === 'waiting') return; // still waiting for the opponent
+      if (state.screen !== 'playing') enterOnlinePlay(view);
+      else applyOnlineView(view);
+    })
+    .catch(() => undefined); // transient — the poll rides again
+}
+
+function enterOnlinePlay(view) {
+  refreshSeriesFromStorage();
+  showScreen('playing');
+  startOnlineRound(view);
+}
+
+function startOnlineRound(view) {
+  els.overlay.classList.add('hidden');
+  els.overlay.classList.remove('overlay--in');
+  els.board.classList.remove('board--deal');
+  void els.board.offsetWidth;
+  els.board.classList.add('board--deal');
+  state.locked = false;
+  applyOnlineView(view);
+}
+
+function applyOnlineView(view) {
+  state.board = view.board.slice();
+  state.turn = view.turn;
+  renderBoard();
+  renderTurn();
+  renderMiniSeries();
+  if (view.status === 'finished' && !state.locked) finishOnlineRound(view);
+}
+
+function playOnlineMove(index) {
+  if (!state.online || state.online.busy) return;
+  if (state.turn !== state.online.mark) return; // opponent's turn — poll will catch up
+  state.online.busy = true;
+  onlineApi('/tictactoe/' + encodeURIComponent(state.online.code) + '/move', {
+    guestId: onlineGuestId(),
+    cell: index,
+  })
+    .then((view) => {
+      if (state.online) state.online.busy = false;
+      applyOnlineView(view);
+    })
+    .catch(() => {
+      if (state.online) state.online.busy = false;
+      toast('Move rejected — try again');
+    });
+}
+
+function finishOnlineRound(view) {
+  state.locked = true;
+  stopOnlinePoll();
+  const isDraw = !!view.draw;
+  const winner = view.winner;
+  const youWon = !isDraw && winner === state.online.mark;
+
+  if (isDraw) state.series.draw++;
+  else if (winner === 'X') state.series.x++;
+  else state.series.o++;
+  saveSeries(currentSetupKey(), state.series);
+
+  if (view.winningLine) highlightWin(view.winningLine);
+  renderMiniSeries();
+  if (youWon) vibrate([40, 60, 40]);
+
+  const oppName = state.online.mark === 'X' ? view.oName : view.xName;
+  setTimeout(() => {
+    els.overlayEmoji.textContent = isDraw ? '🤝' : youWon ? '🎉' : '😬';
+    els.overlayTitle.textContent = isDraw
+      ? 'Draw 🤝'
+      : youWon
+        ? 'You win! 🎉'
+        : (oppName || 'Opponent') + ' wins';
+    els.overlayTitle.dataset.mark = isDraw ? '' : winner || '';
+    const seriesLine =
+      'Series — ✕ ' + state.series.x + ' · ◯ ' + state.series.o + ' · 🤝 ' + state.series.draw;
+    els.overlaySub.textContent = seriesLine;
+    els.overlay.classList.remove('hidden');
+    els.overlay.classList.add('overlay--in');
+    document.getElementById('btn-next').textContent = 'New online match';
+    document.getElementById('btn-next').focus();
+  }, 650);
 }
 
 /* ---- round end --------------------------------------------------------------- */
@@ -420,13 +648,24 @@ function init() {
   els.seriesDraw = document.getElementById('series-draw');
   els.resetSeriesBtn = document.getElementById('reset-series');
   els.difficultyRow = document.getElementById('difficulty-row');
+  els.onlineRow = document.getElementById('online-row');
+  els.onlineName = document.getElementById('online-name');
+  els.onlineCode = document.getElementById('online-code');
+  els.onlineStatus = document.getElementById('online-status');
+  els.btnPlay = document.getElementById('btn-play');
   els.toast = document.getElementById('toast');
 
   buildBoard();
 
+  const applyModeUi = (mode) => {
+    els.difficultyRow.classList.toggle('hidden', mode !== '1p');
+    els.onlineRow.classList.toggle('hidden', mode !== 'online');
+    els.btnPlay.classList.toggle('hidden', mode === 'online');
+  };
+
   bindSegmented(document.getElementById('mode-segmented'), 'data-mode', (mode) => {
     state.mode = mode;
-    els.difficultyRow.classList.toggle('hidden', mode !== '1p');
+    applyModeUi(mode);
     refreshSeriesFromStorage();
     renderSeriesCard();
     saveMenuPrefs();
@@ -453,17 +692,36 @@ function init() {
     showScreen('playing');
     startRound();
   });
+  els.btnOnlineCreate = document.getElementById('btn-online-create');
+  els.btnOnlineCreate.addEventListener('click', onlineCreate);
+  document.getElementById('btn-online-join').addEventListener('click', () => {
+    onlineJoin(els.onlineCode.value.trim().toUpperCase().slice(0, 6));
+  });
+  const leaveOnlineToMenu = () => {
+    onlineLeaveQuietly();
+    document.getElementById('btn-next').textContent = 'Next round';
+  };
   document.getElementById('btn-menu').addEventListener('click', () => {
+    if (state.mode === 'online') leaveOnlineToMenu();
     if (state.aiTimer) {
       clearTimeout(state.aiTimer);
       state.aiTimer = null;
     }
     showScreen('menu');
   });
-  document.getElementById('btn-next').addEventListener('click', startRound);
+  document.getElementById('btn-next').addEventListener('click', () => {
+    if (state.mode === 'online') {
+      // One round per online match — the rematch is a fresh match.
+      onlineLeaveQuietly();
+      onlineCreate();
+      return;
+    }
+    startRound();
+  });
   // BUG (2026-09-25 audit): btn-menu clears state.aiTimer on the way out of
   // play; this round-overlay path did not — same treatment here.
   document.getElementById('btn-menu2').addEventListener('click', () => {
+    if (state.mode === 'online') leaveOnlineToMenu();
     if (state.aiTimer) {
       clearTimeout(state.aiTimer);
       state.aiTimer = null;
@@ -526,7 +784,7 @@ function init() {
     state.mode = prefs.mode;
     state.difficulty = prefs.level;
     state.misere = prefs.misere;
-    els.difficultyRow.classList.toggle('hidden', state.mode !== '1p');
+    applyModeUi(state.mode);
     syncSegmented(document.getElementById('mode-segmented'), 'data-mode', state.mode);
     syncSegmented(
       document.getElementById('difficulty-segmented'),
@@ -539,6 +797,23 @@ function init() {
   refreshSeriesFromStorage();
   renderSeriesCard();
   showScreen('menu');
+
+  // plan/18 phase 5: ?ttt=CODE deep link — flip to online mode with the code
+  // prefilled (name remembered from a previous duel when available).
+  const tttCode = new URLSearchParams(window.location.search).get('ttt');
+  if (tttCode) {
+    state.mode = 'online';
+    applyModeUi('online');
+    syncSegmented(document.getElementById('mode-segmented'), 'data-mode', 'online');
+    renderSeriesCard();
+    els.onlineCode.value = tttCode.toUpperCase().slice(0, 6);
+    try {
+      els.onlineName.value = localStorage.getItem('pigzap:challenge-name') || '';
+    } catch {
+      /* private mode */
+    }
+    onlineStatus('Match ' + els.onlineCode.value + ' ready — press Join.');
+  }
 }
 
 if (typeof document !== 'undefined' && document.getElementById('board')) {

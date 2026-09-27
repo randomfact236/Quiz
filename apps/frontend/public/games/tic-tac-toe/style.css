@@ -737,3 +737,46 @@ a:focus-visible,
   max-height: 96px;
   opacity: 1;
 }
+
+/* ---------------------------------------------------------------------------
+ * Online duel (plan/18 phase 5) — name + code inputs, status line.
+ * ------------------------------------------------------------------------ */
+
+.online-row {
+  margin-top: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.online-row h2 {
+  margin: 0;
+  font-size: 15px;
+}
+
+.online-row input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 12px;
+  font: inherit;
+  font-size: 14px;
+  color: var(--text);
+  background: var(--cell);
+  border: 1.5px solid var(--card-border);
+  border-radius: 10px;
+}
+
+.online-row input:focus {
+  outline: none;
+  border-color: var(--primary-a);
+}
+
+.online-status {
+  margin: 0;
+  min-height: 1.2em;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+  text-align: center;
+  overflow-wrap: anywhere;
+}
