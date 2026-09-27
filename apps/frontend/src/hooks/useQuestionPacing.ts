@@ -28,7 +28,6 @@ export function useQuestionPacing({
   onAdvance: () => void;
 }): {
   scheduleAdvance: () => void;
-  clearAdvance: () => void;
   commentsOpen: boolean;
   toggleComments: () => void;
   closeComments: () => void;
@@ -80,7 +79,6 @@ export function useQuestionPacing({
 
   return {
     scheduleAdvance,
-    clearAdvance,
     commentsOpen,
     toggleComments,
     closeComments,

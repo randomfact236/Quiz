@@ -28,7 +28,7 @@ describe('DuelsService', () => {
     expiresAt: new Date(Date.now() + 60_000),
   };
 
-  const meRow = {
+  const meRow = () => ({
     id: 'p1',
     matchId: 'm1',
     guestId: 'guest-1',
@@ -36,7 +36,10 @@ describe('DuelsService', () => {
     completedCount: 0,
     correctCount: 0,
     score: 0,
-  };
+    answered: [] as string[],
+  });
+
+  let me: ReturnType<typeof meRow>;
 
   const mcqQuestion = {
     id: 'q1',
@@ -47,6 +50,7 @@ describe('DuelsService', () => {
   };
 
   beforeEach(() => {
+    me = meRow();
     matches = {
       findOne: jest.fn().mockResolvedValue(runningMatch),
       find: jest.fn().mockResolvedValue([]),
@@ -55,11 +59,16 @@ describe('DuelsService', () => {
       update: jest.fn().mockResolvedValue(undefined),
     };
     participants = {
-      findOne: jest.fn().mockResolvedValue(meRow),
-      find: jest.fn().mockResolvedValue([meRow]),
+      findOne: jest.fn().mockResolvedValue(me),
+      find: jest.fn().mockResolvedValue([me]),
       save: jest.fn().mockImplementation(async (x) => x),
       create: jest.fn().mockImplementation((x) => x),
-      update: jest.fn().mockResolvedValue(undefined),
+      // Persist into the live row so a re-read (e.g. grading twice) sees the
+      // written answered set — the DB does.
+      update: jest.fn().mockImplementation(async (id, patch) => {
+        if (id === me?.id) Object.assign(me, patch);
+        return undefined;
+      }),
       count: jest.fn().mockResolvedValue(1),
       query: jest.fn().mockResolvedValue([]),
       createQueryBuilder: jest.fn(),
@@ -228,6 +237,23 @@ describe('DuelsService', () => {
     expect(matches.save).toHaveBeenCalled();
   });
 
+  it('rejects a replay of an already-answered question (farming guard)', async () => {
+    await service.gradeAnswer('ABC234', 'guest-1', { questionId: 'q1', selected: 'A' });
+
+    await expect(
+      service.gradeAnswer('ABC234', 'guest-1', { questionId: 'q1', selected: 'B' })
+    ).rejects.toThrow(BadRequestException);
+    expect(participants.update).toHaveBeenCalledTimes(1);
+  });
+
+  it('ignores client-claimed progress beyond the answered set (heartbeat)', async () => {
+    participants.findOne.mockResolvedValue({ ...me, answered: ['q1'] });
+
+    await service.recordProgress('ABC234', 'guest-1', 10);
+
+    expect(participants.update).toHaveBeenCalledWith('p1', { completedCount: 1 });
+  });
+
   // ---- riddle + image-riddle families (plan/18 phase 2) --------------------
 
   it('grades a riddle MCQ by letter and reveals the option text', async () => {
@@ -282,7 +308,7 @@ describe('DuelsService', () => {
       selected: '  An Elephant ',
     });
     const wrong = await service.gradeAnswer('ABC234', 'guest-1', {
-      questionId: 'q1',
+      questionId: 'q2', // the once-guard forbids re-answering q1
       selected: 'rhino',
     });
 

@@ -15,7 +15,6 @@ import { DuelMatch } from './entities/duel-match.entity';
 import { DuelParticipant } from './entities/duel-participant.entity';
 
 const MATCH_TTL_MS = 10 * 60 * 1000; // match expires 10 min after creation
-const POLL_HEARTBEAT_MS = 30 * 1000; // silence while running voids the match
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I/1/O/0 confusion
 
 /** plan/18 §2 content families a duel can draw from. */
@@ -140,7 +139,7 @@ export class DuelsService {
     }
 
     await this.startMatch(match.id);
-    return this.buildJoinedView(match, input.guestId);
+    return this.buildJoinedView(match);
   }
 
   // ---- playing -------------------------------------------------------------
@@ -193,7 +192,9 @@ export class DuelsService {
   async recordProgress(code: string, guestId: string, completed: number): Promise<void> {
     const match = await this.requireLiveMatch(code);
     const me = await this.requireParticipant(match.id, guestId);
-    const capped = Math.max(0, Math.min(completed, match.questionIds.length));
+    // The client only reports its local count (heartbeat); the server's own
+    // answered set stays the source of truth for the progress display.
+    const capped = Math.max(0, Math.min(completed, (me.answered ?? []).length));
     await this.participants.update(me.id, { completedCount: capped });
     await this.participants.query(
       `UPDATE duel_participants SET "lastPolledAt" = now() WHERE id = $1`,
@@ -232,11 +233,22 @@ export class DuelsService {
         ? selected === graded.correctLetter
         : graded.accepted.includes(norm(input.selected)));
 
-    const completedCount = Math.min(me.completedCount + 1, match.questionIds.length);
+    // Score integrity: one answer per question, ever — replaying a known
+    // correct answer must not farm the score.
+    const answered = [...(me.answered ?? [])];
+    if (answered.includes(input.questionId)) {
+      throw new BadRequestException('You already answered that question.');
+    }
+    answered.push(input.questionId);
+
+    const completedCount = Math.min(answered.length, match.questionIds.length);
+    // Belt-and-braces: the counts can never disagree even if legacy rows do.
+    const correctCount = Math.min(me.correctCount + (correct ? 1 : 0), completedCount);
     await this.participants.update(me.id, {
+      answered,
       completedCount,
-      correctCount: me.correctCount + (correct ? 1 : 0),
-      score: me.score + (correct ? 1 : 0),
+      correctCount,
+      score: correctCount,
     });
     await this.participants.query(
       `UPDATE duel_participants SET "lastPolledAt" = now() WHERE id = $1`,
@@ -525,8 +537,7 @@ export class DuelsService {
     };
   }
 
-  private async buildJoinedView(match: DuelMatch, guestId: string) {
-    void guestId;
+  private async buildJoinedView(match: DuelMatch) {
     const base = {
       status: match.status,
       level: match.level,

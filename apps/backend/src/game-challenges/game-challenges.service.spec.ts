@@ -49,6 +49,22 @@ describe('GameChallengesService', () => {
     expect(saved.challengerGuestId).toBe('guest-A');
   });
 
+  it('caps the payload at 12 keys so a hostile client cannot bloat the row', async () => {
+    const payload: Record<string, number> = {};
+    for (let i = 0; i < 50; i += 1) payload['k' + i] = i;
+
+    await service.create({
+      gameSlug: 'word-puzzle',
+      payload,
+      run: { score: 1 },
+      playerName: 'Ann',
+      guestId: 'guest-A',
+    });
+
+    const saved = repo.create.mock.calls[0][0];
+    expect(Object.keys(saved.payload)).toHaveLength(12);
+  });
+
   it('retries token generation on a clash', async () => {
     repo.findOne.mockResolvedValueOnce({ id: 'clash' }).mockResolvedValueOnce(null);
 

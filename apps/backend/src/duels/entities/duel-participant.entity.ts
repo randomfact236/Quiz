@@ -57,6 +57,11 @@ export class DuelParticipant {
   @Column({ type: 'integer', default: 0 })
   score: number;
 
+  /** Distinct answered question ids — once-guard for grading (score
+   *  integrity: replays of one known answer must not farm the score). */
+  @Column({ type: 'jsonb', default: '[]' })
+  answered: string[];
+
   @Column({ type: 'integer', nullable: true })
   durationMs: number | null;
 

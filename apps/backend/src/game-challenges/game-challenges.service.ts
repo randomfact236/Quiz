@@ -111,10 +111,11 @@ export class GameChallengesService {
     throw new Error('Could not allocate a challenge token.');
   }
 
-  /** Numbers/strings only, bounded — the payload rides public links. */
+  /** Numbers/strings only, bounded — the payload rides public links. The key
+   *  cap keeps a hostile client from bloating the jsonb row. */
   private sanitizePayload(payload: Record<string, unknown>): Record<string, unknown> {
     const out: Record<string, unknown> = {};
-    for (const [key, value] of Object.entries(payload ?? {})) {
+    for (const [key, value] of Object.entries(payload ?? {}).slice(0, 12)) {
       if (typeof value === 'number' && Number.isFinite(value)) out[key] = value;
       else if (typeof value === 'boolean') out[key] = value;
       else if (typeof value === 'string' && value.length <= 64) out[key] = value;
