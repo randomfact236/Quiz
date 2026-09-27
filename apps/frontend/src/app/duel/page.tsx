@@ -20,9 +20,12 @@ import {
   joinDuel,
   pollDuel,
   sendDuelAnswer,
+  sendDuelProgress,
   type DuelPoll,
   type DuelQuestion,
 } from '@/lib/duels-api';
+import { SITE_URL } from '@/lib/site-url';
+import { toast } from '@/lib/toast';
 
 type Phase = 'lobby' | 'joining' | 'waiting' | 'playing' | 'finished' | 'error';
 
@@ -44,6 +47,10 @@ export default function DuelPage(): JSX.Element {
   const [score, setScore] = useState(0);
   const [poll, setPoll] = useState<DuelPoll | null>(null);
   const [error, setError] = useState('');
+  // BUG (2026-09-25): the auto-joiner was never asked for a name (joined as
+  // "Guest") and the invite was a plain text literal (typed by hand on a phone).
+  const [joinGate, setJoinGate] = useState(''); // code awaiting a name
+  const [copied, setCopied] = useState(false);
   const guestRef = useRef<string>('');
 
   const guest = () => {
@@ -53,15 +60,20 @@ export default function DuelPage(): JSX.Element {
 
   // Join (or re-join) a shared match and enter the race.
   const doJoin = useCallback(
-    async (code: string) => {
+    async (code: string, nameOverride?: string) => {
       setPhase('joining');
       setError('');
       try {
         const view = await joinDuel(code, {
-          playerName: playerName.trim() || 'Guest',
+          playerName: (nameOverride ?? playerName).trim() || 'Guest',
           guestId: guest(),
         });
         setActiveCode(code);
+        try {
+          window.localStorage.setItem('pigzap:duel-code', code);
+        } catch (e) {
+          /* private mode — resume is best-effort */
+        }
         setQuestions(view.questions);
         setIndex(0);
         setPicked(null);
@@ -87,6 +99,11 @@ export default function DuelPage(): JSX.Element {
         guestId: guest(),
       });
       setActiveCode(code);
+      try {
+        window.localStorage.setItem('pigzap:duel-code', code);
+      } catch (e) {
+        /* private mode — resume is best-effort */
+      }
       setPhase('waiting');
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Could not create the duel.');
@@ -115,6 +132,37 @@ export default function DuelPage(): JSX.Element {
       clearInterval(timer);
     };
   }, [phase, activeCode, doJoin]);
+
+  // Playing/finished: keep the poll alive so the opponent's progress shows and
+  // the result can resolve. 10-second heartbeat refreshes `lastPolledAt` so a
+  // backgrounded phone doesn't trip the 30-second silence rule mid-race.
+  useEffect(() => {
+    if ((phase !== 'playing' && phase !== 'finished') || !activeCode) return;
+    let stopped = false;
+    let ticks = 0;
+    const tick = async () => {
+      if (stopped) return;
+      try {
+        const view = await pollDuel(activeCode, guest());
+        if (!stopped) setPoll(view);
+        // heartbeat every 3rd tick (~9s): survives tab backgrounding
+        ticks += 1;
+        if (phase === 'playing' && ticks % 3 === 0) {
+          void sendDuelProgress(activeCode, guest(), index).catch(() => undefined);
+        }
+      } catch {
+        /* transient — keep polling */
+      }
+    };
+    void tick();
+    const timer = setInterval(tick, 3000);
+    return () => {
+      stopped = true;
+      clearInterval(timer);
+    };
+    // index intentionally omitted: the heartbeat sends the latest count via a ref
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [phase, activeCode, index]);
 
   const current = questions[index];
 
@@ -155,14 +203,55 @@ export default function DuelPage(): JSX.Element {
     }
   }, [activeCode, index, questions]);
 
-  // Shared link (?code=) → straight into the join flow once a name exists.
+  // Shared link (?code=) → ask for a name, then join (a phone joiner must not
+  // land as a nameless "Guest").
   useEffect(() => {
-    if (urlCode) {
+    if (urlCode && !joinGate && phase === 'lobby') {
       setJoinCode(urlCode);
-      void doJoin(urlCode);
+      setJoinGate(urlCode);
+      setPhase('joining');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [urlCode]);
+  }, [urlCode, phase, joinGate]);
+
+  // Refresh resilience: re-link to a match this device was in. A `waiting`
+  // match resumes cleanly; a `finished` one shows the result; a `running` one
+  // cannot (the backend only serves the frozen question set to the join call)
+  // — we say so instead of silently failing.
+  useEffect(() => {
+    if (urlCode || phase !== 'lobby') return;
+    let stored = '';
+    try {
+      stored = window.localStorage.getItem('pigzap:duel-code') || '';
+    } catch (e) {
+      return;
+    }
+    if (!stored) return;
+    let cancelled = false;
+    void pollDuel(stored, guest())
+      .then((view) => {
+        if (cancelled) return;
+        if (view.status === 'waiting') {
+          setActiveCode(stored);
+          setPhase('waiting');
+        } else if (view.status === 'finished' || view.status === 'abandoned') {
+          setActiveCode(stored);
+          setPoll(view);
+          setPhase('finished');
+        } else {
+          try {
+            window.localStorage.removeItem('pigzap:duel-code');
+          } catch (e) {
+            /* ignore */
+          }
+        }
+      })
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [urlCode, phase]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-[#E8E4F3] to-[#D4C5E8] px-4 py-8 dark:from-indigo-950 dark:to-rose-950/70">
@@ -252,9 +341,53 @@ export default function DuelPage(): JSX.Element {
           </div>
         )}
 
-        {phase === 'joining' && (
+        {phase === 'joining' && !joinGate && (
           <div className="rounded-2xl bg-white p-8 text-center shadow-lg dark:bg-secondary-800">
             <p className="text-gray-500 dark:text-secondary-300">Connecting…</p>
+          </div>
+        )}
+
+        {phase === 'joining' && joinGate && (
+          <div className="rounded-2xl bg-white p-6 shadow-lg dark:bg-secondary-800">
+            <h2 className="mb-1 text-xl font-black text-gray-800 dark:text-secondary-100">
+              You&apos;ve been invited to a duel
+            </h2>
+            <p className="mb-4 text-sm text-gray-600 dark:text-secondary-300">
+              Code{' '}
+              <span className="font-mono font-black text-indigo-600 dark:text-indigo-300">
+                {joinGate}
+              </span>{' '}
+              · same questions for both players, fastest correct run wins.
+            </p>
+            <label className="mb-1 block text-sm font-bold text-gray-700 dark:text-secondary-200">
+              Your name
+            </label>
+            <input
+              autoFocus
+              value={playerName}
+              onChange={(e) => setPlayerName(e.target.value)}
+              maxLength={24}
+              placeholder="Guest"
+              className="mb-5 w-full rounded-xl border border-slate-200 px-4 py-3 text-gray-800 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-100"
+            />
+            <div className="flex gap-2">
+              <button
+                onClick={() => {
+                  const code = joinGate;
+                  setJoinGate('');
+                  void doJoin(code, playerName);
+                }}
+                className="flex-1 rounded-xl bg-rose-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-rose-500"
+              >
+                Accept the duel
+              </button>
+              <Link
+                href="/play"
+                className="rounded-xl bg-slate-100 px-6 py-3 text-sm font-black uppercase tracking-widest text-slate-600 transition-colors hover:bg-slate-200 dark:bg-secondary-700 dark:text-secondary-300"
+              >
+                Not now
+              </Link>
+            </div>
           </div>
         )}
 
@@ -264,12 +397,56 @@ export default function DuelPage(): JSX.Element {
             <h2 className="mt-3 text-xl font-black text-gray-800 dark:text-secondary-100">
               Waiting for a challenger
             </h2>
-            <p className="mt-2 text-gray-600 dark:text-secondary-300">Share this code:</p>
-            <p className="my-3 font-mono text-4xl font-black tracking-[0.3em] text-indigo-600 dark:text-indigo-300">
-              {activeCode}
+            <p className="mt-2 text-gray-600 dark:text-secondary-300">Send them this link:</p>
+            <p className="my-3 break-all font-mono text-lg font-black text-indigo-600 dark:text-indigo-300">
+              {SITE_URL}/duel?code={activeCode}
             </p>
-            <p className="text-sm text-gray-500 dark:text-secondary-400">
-              Or send them: pigzap.com/duel?code={activeCode}
+            <div className="flex justify-center gap-2">
+              <button
+                onClick={async () => {
+                  const url = `${SITE_URL}/duel?code=${activeCode}`;
+                  try {
+                    await navigator.clipboard.writeText(url);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch (e) {
+                    toast.error('Copy failed — long-press the link above');
+                  }
+                }}
+                className="rounded-xl bg-indigo-600 px-5 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-indigo-500"
+              >
+                {copied ? '✓ Link copied' : '🔗 Copy link'}
+              </button>
+              <button
+                onClick={async () => {
+                  const url = `${SITE_URL}/duel?code=${activeCode}`;
+                  if (navigator.share) {
+                    try {
+                      await navigator.share({
+                        title: 'Duel me on PigZap',
+                        text: `Can you beat my quiz? Code ${activeCode}`,
+                        url,
+                      });
+                      return;
+                    } catch (e) {
+                      /* dismissed — fall through to copy */
+                    }
+                  }
+                  try {
+                    await navigator.clipboard.writeText(url);
+                    setCopied(true);
+                    setTimeout(() => setCopied(false), 2000);
+                  } catch (err) {
+                    toast.error('Copy failed — long-press the link above');
+                  }
+                }}
+                className="rounded-xl bg-rose-600 px-5 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-rose-500"
+              >
+                📤 Share
+              </button>
+            </div>
+            <p className="mt-4 text-xs text-gray-500 dark:text-secondary-400">
+              Waiting code: <span className="font-mono font-bold">{activeCode}</span>
             </p>
           </div>
         )}
@@ -282,6 +459,12 @@ export default function DuelPage(): JSX.Element {
               </span>
               <span>Score: {score}</span>
             </div>
+            {poll?.opponent && (
+              <p className="mb-3 rounded-lg bg-slate-100 px-3 py-2 text-xs font-semibold text-slate-600 dark:bg-secondary-700 dark:text-secondary-300">
+                {poll.opponent.playerName || 'Opponent'}: {poll.opponent.completed}/
+                {questions.length} answered
+              </p>
+            )}
             <p className="mb-5 text-lg font-semibold text-gray-800 dark:text-secondary-100">
               {current.question}
             </p>
@@ -326,25 +509,62 @@ export default function DuelPage(): JSX.Element {
             <h2 className="mt-3 text-2xl font-black text-gray-800 dark:text-secondary-100">
               Duel complete — {score}/{questions.length}
             </h2>
-            {poll?.opponent && (
-              <p className="mt-2 text-gray-600 dark:text-secondary-300">
-                {poll.opponent.playerName || 'Opponent'}: {poll.opponent.correct ?? '—'}/
-                {questions.length}
+            {poll?.opponent ? (
+              <div className="mt-3 space-y-1 text-sm text-gray-600 dark:text-secondary-300">
+                <p className="font-bold">
+                  {poll.opponent.playerName || 'Opponent'}: {poll.opponent.correct ?? '—'}/
+                  {poll.status === 'running'
+                    ? `done · ${poll.opponent.completed}`
+                    : questions.length}
+                </p>
+                {poll.status !== 'running' && (poll.me.durationMs || poll.opponent.durationMs) && (
+                  <p className="text-xs text-gray-500 dark:text-secondary-400">
+                    {Math.round((poll.me.durationMs ?? 0) / 1000)}s vs{' '}
+                    {Math.round((poll.opponent.durationMs ?? 0) / 1000)}s
+                  </p>
+                )}
+              </div>
+            ) : (
+              <p className="mt-2 text-sm text-gray-500 dark:text-secondary-400">
+                Solo finish — no opponent joined.
               </p>
             )}
-            <p className="mt-4 text-sm text-gray-500 dark:text-secondary-400">
-              {poll?.me && poll?.opponent && (poll.me.correct ?? 0) > (poll.opponent.correct ?? 0)
-                ? '🏆 You win!'
-                : poll?.opponent && (poll.opponent.correct ?? 0) > (poll.me.correct ?? 0)
-                  ? 'Close — rematch?'
-                  : 'Awaiting the opponent or a tie — check back here.'}
+            <p className="mt-4 text-sm font-bold text-gray-700 dark:text-secondary-200">
+              {poll?.status === 'running' || !poll?.opponent
+                ? 'Waiting for the opponent to finish…'
+                : (poll.me.correct ?? 0) > (poll.opponent.correct ?? 0)
+                  ? '🏆 You win!'
+                  : (poll.opponent.correct ?? 0) > (poll.me.correct ?? 0)
+                    ? 'Close one — rematch?'
+                    : 'Dead heat — a draw.'}
             </p>
-            <Link
-              href="/play"
-              className="mt-6 inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-indigo-500"
-            >
-              Back to Play Hub
-            </Link>
+            <div className="mt-6 flex flex-wrap justify-center gap-2">
+              <button
+                onClick={() => {
+                  try {
+                    window.localStorage.removeItem('pigzap:duel-code');
+                  } catch (e) {
+                    /* ignore */
+                  }
+                  setPhase('lobby');
+                  setActiveCode('');
+                  setPoll(null);
+                  setQuestions([]);
+                  setIndex(0);
+                  setScore(0);
+                  setPicked(null);
+                }}
+                className="rounded-xl bg-rose-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-rose-500"
+              >
+                New duel
+              </button>
+              <Link
+                href="/play"
+                className="inline-block rounded-xl bg-indigo-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-indigo-500"
+              >
+                Back to Play Hub
+              </Link>
+            </div>
           </div>
         )}
       </div>

@@ -17,6 +17,8 @@ export const NAV_ITEMS: NavItem[] = [
   { href: '/jokes', label: 'Dad Jokes' },
   { href: '/riddle-mcq', label: 'Riddles' },
   { href: '/image-riddles', label: 'Image Riddles' },
+  // NOW-27: the duel flow existed but was unreachable — no nav entry at all.
+  { href: '/duel', label: 'Duel' },
 ];
 
 /**

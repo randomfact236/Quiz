@@ -76,3 +76,16 @@ export async function finishDuel(code: string, guestId: string): Promise<DuelPol
   const response = await api.post<DuelPoll>(`/duels/${code}/finish`, { guestId });
   return response.data;
 }
+
+/**
+ * Heartbeat: refreshes the caller's `lastPolledAt` so the 30-second silence
+ * rule (which voids an unattended match) does not fire while a phone is
+ * simply locked or backgrounded mid-race (NOW-27).
+ */
+export async function sendDuelProgress(
+  code: string,
+  guestId: string,
+  completed: number
+): Promise<void> {
+  await api.post(`/duels/${code}/progress`, { guestId, completed });
+}

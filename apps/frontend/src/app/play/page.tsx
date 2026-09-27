@@ -12,7 +12,15 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { ArrowLeft, Brain, CalendarDays, Gamepad2, GraduationCap, Timer } from 'lucide-react';
+import {
+  ArrowLeft,
+  Brain,
+  CalendarDays,
+  Gamepad2,
+  GraduationCap,
+  Swords,
+  Timer,
+} from 'lucide-react';
 
 interface ContentOption {
   label: string;
@@ -185,6 +193,28 @@ export default function UnifiedGamePickerPage(): JSX.Element {
               </span>
             </span>
             <span className="text-sm font-bold uppercase tracking-wider">Play →</span>
+          </Link>
+        </motion.div>
+
+        {/* NOW-27: duel card — invite a friend from their own device */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35 }}
+          className="mb-10"
+        >
+          <Link
+            href="/duel"
+            className="flex items-center gap-4 rounded-2xl bg-gradient-to-r from-rose-500 to-red-600 p-5 text-white shadow-lg transition-all hover:scale-[1.01] hover:shadow-xl"
+          >
+            <Swords className="h-8 w-8 shrink-0" />
+            <span className="flex-1">
+              <span className="block text-lg font-bold">Duel a friend</span>
+              <span className="block text-sm text-white/90">
+                Same 10 questions, same clock — send them the link and race head-to-head.
+              </span>
+            </span>
+            <span className="text-sm font-bold uppercase tracking-wider">Challenge →</span>
           </Link>
         </motion.div>
 
