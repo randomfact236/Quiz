@@ -29,7 +29,12 @@
   ];
   var OVER_CARDS = [
     '#overlay-over .card',
-    '#overlay-feedback .card',
+    // memory-quiz: the in-question feedback card, plus its game-over and
+    // level-clear overlays (missing until 2026-09-25 — the widget never
+    // mounted on the most feedback-worthy states of that game).
+    '#overlay-feedback .feedback-card',
+    '#overlay-gameover .overlay-card',
+    '#overlay-levelclear .overlay-card',
     '#overlay-win .overlay-card',
     '#overlay-result .overlay-card',
     '#overlay .overlay-card',
@@ -126,7 +131,7 @@
 
     btn.addEventListener('click', function () {
       form.hidden = !form.hidden;
-      btn.hidden = form.hidden ? false : false;
+      btn.hidden = false;
       if (!form.hidden) input.focus();
     });
 

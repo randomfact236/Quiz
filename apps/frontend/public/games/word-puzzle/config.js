@@ -25,6 +25,7 @@ const DEFAULT_CONFIG = {
       alreadyFound: 'Already found ✓',
       // First hint of a level attempt warns about the perfect-run star.
       hintStarToast: 'Using a hint means no perfect-run star this level.',
+      levelError: "Couldn't build this level — try again.",
       themeCompleteTitle: '{theme} complete!',
       themeCompleteSub: 'Theme stars: {stars}/9',
       themeCompletePerfect: ' — perfect! 🌟',

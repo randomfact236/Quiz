@@ -34,7 +34,11 @@ import {
   localPercentile,
   sparklinePoints,
 } from './core.js';
-import { GAME_CONFIG, t } from './config.js?v=3';
+import { GAME_CONFIG, t } from './config.js?v=5';
+import { safeLocale } from './config.js?v=5';
+
+// Validated once — an invalid ?locale= can no longer throw (2026-09-25).
+const LOCALE = safeLocale(GAME_CONFIG.locale);
 import {
   getBest,
   getHistory,
@@ -116,7 +120,7 @@ function isSwapActive() {
 function renderHud() {
   els.hearts.textContent = '❤️'.repeat(hearts) + '🖤'.repeat(TOTAL_HEARTS - hearts);
   els.hearts.setAttribute('aria-label', `${hearts} of ${TOTAL_HEARTS} hearts remaining`);
-  els.score.textContent = score.toLocaleString(GAME_CONFIG.locale);
+  els.score.textContent = score.toLocaleString(LOCALE);
   els.roundEl.textContent = `R${round}`;
 }
 
@@ -281,7 +285,7 @@ function gameOver() {
   setState('gameover');
   const { best, isRecord } = recordRun({ score, bestMs: bestMsThisRun });
 
-  els.goScore.textContent = score.toLocaleString(GAME_CONFIG.locale);
+  els.goScore.textContent = score.toLocaleString(LOCALE);
   els.goBestMs.textContent = bestMsThisRun !== null ? `${bestMsThisRun}ms 🔥` : '—';
   // No green tapped this run ⇒ no reaction to report; drop the segment entirely.
   els.goBestLabel.hidden = bestMsThisRun === null;
@@ -298,7 +302,7 @@ function shareUrls() {
   const bestMs = bestMsThisRun ?? getBest().bestMs;
   const text = t('share', {
     bestMs: bestMs !== null ? `${bestMs}ms` : '??',
-    score: score.toLocaleString(GAME_CONFIG.locale),
+    score: score.toLocaleString(LOCALE),
     url,
   });
   const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
@@ -321,10 +325,10 @@ function copyResult() {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text).then(
       () => done(true),
-      () => done(false)
+      () => window.prompt('Copy your result:', text) // fallback so the result is never lost
     );
   } else {
-    done(false);
+    window.prompt('Copy your result:', text);
   }
 }
 
@@ -362,7 +366,7 @@ function resumeRun() {
 function renderMenu() {
   const best = getBest();
   els.menuBest.hidden = !(best.score > 0 || best.bestMs !== null);
-  els.menuBestScore.textContent = (best.score || 0).toLocaleString(GAME_CONFIG.locale);
+  els.menuBestScore.textContent = (best.score || 0).toLocaleString(LOCALE);
   els.menuBestMs.textContent = best.bestMs !== null ? `${best.bestMs}ms` : '—';
   const scores = getHistory().map((h) => h.score);
   // svg elements: the hidden ATTRIBUTE must be toggled (no `hidden` property)

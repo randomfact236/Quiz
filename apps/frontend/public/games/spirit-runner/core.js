@@ -138,8 +138,6 @@ export function createPlayer() {
  * (landed flag, slide buffer, coyote refresh). Mutates and returns player.
  */
 export function stepPlayer(player, dt, input) {
-  const slideH = PLAYER_H * SLIDE_H_FACTOR;
-
   if (input.slidePressed) {
     if (player.onGround) {
       player.sliding = true;

@@ -36,7 +36,34 @@ const LEGACY_KEYS = {
 
 let remoteAdapter = null;
 
+/**
+ * BUG (2026-09-25 audit): this game had no in-memory fallback, so private
+ * browsing / quota errors silently disabled persistence entirely. Match the
+ * other seven games: fall back to a per-session memory store so the run still
+ * remembers best score and history for the session.
+ */
+let memoryStore = null;
+let storageAvailable = null;
+
+function probeStorage() {
+  if (storageAvailable !== null) return storageAvailable;
+  try {
+    const probe = '__todt_probe__';
+    localStorage.setItem(probe, '1');
+    localStorage.removeItem(probe);
+    storageAvailable = true;
+  } catch (e) {
+    storageAvailable = false;
+    memoryStore = {};
+  }
+  return storageAvailable;
+}
+
 function readJson(key, fallback) {
+  if (!probeStorage()) {
+    const raw = memoryStore[key];
+    return raw ? JSON.parse(raw) : fallback;
+  }
   try {
     const raw = localStorage.getItem(key);
     return raw ? JSON.parse(raw) : fallback;
@@ -46,15 +73,26 @@ function readJson(key, fallback) {
 }
 
 function writeJson(key, value) {
+  if (!probeStorage()) {
+    memoryStore[key] = JSON.stringify(value);
+    return true;
+  }
   try {
     localStorage.setItem(key, JSON.stringify(value));
     return true;
   } catch {
-    return false; // private mode / quota — persistence is best-effort
+    // storage died mid-session (quota) — keep playing with the memory store
+    if (!memoryStore) memoryStore = {};
+    memoryStore[key] = JSON.stringify(value);
+    return true;
   }
 }
 
 function removeKey(key) {
+  if (!probeStorage()) {
+    delete memoryStore[key];
+    return;
+  }
   try {
     localStorage.removeItem(key);
   } catch {
@@ -63,10 +101,11 @@ function removeKey(key) {
 }
 
 function readRaw(key) {
+  if (!probeStorage()) return memoryStore[key] || null;
   try {
     return localStorage.getItem(key);
   } catch {
-    return null;
+    return memoryStore && memoryStore[key] ? memoryStore[key] : null;
   }
 }
 

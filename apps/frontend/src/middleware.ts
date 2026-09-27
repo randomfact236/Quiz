@@ -132,11 +132,10 @@ const API_ORIGIN = (() => {
 })();
 
 const GAMES_CSP =
-  // The two sha256 hashes are the games' inline theme-loader scripts (fixed
-  // content per game — collected by probing all eight games).
-  "default-src 'self'; script-src 'self' " +
-  "'sha256-x8n9zHOItWYXzKEW7pxTk40Fp+ISErZbT3GSH2HCyuI=' " +
-  "'sha256-1BmS27UYSimo8gSUTIkRpmW36+iWT0/uKfSVjj8R5EI='; " +
+  // No sha256 allow-list needed: the inline theme-loader was extracted to
+  // /shared/theme.js (same-origin, 2026-09-25) so the previous hashes — which
+  // broke silently on CRLF checkouts — are gone.
+  "default-src 'self'; script-src 'self'; " +
   "style-src 'self' 'unsafe-inline'; " +
   "img-src 'self' data: blob:; font-src 'self' data:; media-src 'self'; " +
   `connect-src 'self' ${API_ORIGIN}; object-src 'none'; base-uri 'self'; ` +

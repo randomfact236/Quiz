@@ -11,8 +11,10 @@ remain the spec of record for each game's behavior.
 
 Games code follows the same production rules as every other feature (no dead,
 stale, or duplicated code). The static game folders are deliberately dependency-free
-and local-first: no backend calls, no auth, and no coupling beyond each game's
-documented `?debug`/`?locale`/`?seed`/`?theme` seams — keep it that way unless the
-owner asks otherwise.
+and local-first: no auth, and no coupling beyond each game's
+documented `?debug`/`?locale`/`?seed`/`?theme`/`?v` seams — keep it that way unless the
+owner asks otherwise. (Network: since 2026-09-25 each game may POST only to the
+`/api/v1/share-counts` endpoint and, via `/shared/pig-feedback.js`, to `/comments`; both are
+gated by the games CSP and rate-limited. No other outbound calls.)
 
 See `assistant-rules.md` for port configuration and development commands.

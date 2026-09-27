@@ -177,6 +177,9 @@ function ensureHudTicker() {
 }
 
 function showScreen(name) {
+  // BUG (2026-09-25 audit): the menu never held the clock, so playedMs()
+  // kept ticking behind the menu and could leak into a share text.
+  if (name === 'menu') holdClock();
   state.screen = name;
   els.screenMenu.classList.toggle('screen--active', name === 'menu');
   els.screenLevel.classList.toggle('screen--active', name === 'level');
@@ -360,7 +363,20 @@ function startLevel(themeIndex, levelIndex) {
 
   const seed =
     state.seedOverride !== null ? state.seedOverride : Math.floor(Math.random() * 0x7fffffff);
-  const gen = generateLevel(level, seed);
+  // BUG (2026-09-25 audit): generateLevel throws after 20 placement restarts
+  // by design; uncaught it took the whole screen down. Fall back to a fresh
+  // seed once, then surface a friendly message instead of a blank game.
+  let gen = null;
+  try {
+    gen = generateLevel(level, seed);
+  } catch (err) {
+    try {
+      gen = generateLevel(level, Math.floor(Math.random() * 0x7fffffff));
+    } catch (err2) {
+      toast(t('levelError'));
+      return;
+    }
+  }
   state.grid = gen.grid;
   state.placements = gen.placements;
 

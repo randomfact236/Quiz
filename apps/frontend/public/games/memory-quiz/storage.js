@@ -311,12 +311,30 @@ export function loadDailyRecord(date) {
   return score === null || score === undefined ? null : { score };
 }
 
+/** BUG (2026-09-25 audit): one `daily:<yyyymmdd>` key per day, never pruned. */
+const DAILY_KEEP = 30;
+function pruneDailyKeys() {
+  try {
+    const prefix = 'game:memory-quiz:daily:';
+    const keys = [];
+    for (let i = 0; i < localStorage.length; i += 1) {
+      const k = localStorage.key(i);
+      if (k && k.indexOf(prefix) === 0) keys.push(k);
+    }
+    keys.sort();
+    while (keys.length > DAILY_KEEP) localStorage.removeItem(keys.shift());
+  } catch (e) {
+    /* best-effort */
+  }
+}
+
 /** Fold a finished daily run into the day's record (score maximum). */
 export function saveDailyRecord(date, score) {
   const key = dailyKey(date);
   const prev = loadDailyRecord(date);
   const next = { score: Math.max(prev ? prev.score : 0, count(score) ?? 0) };
   writeJson(key, next);
+  pruneDailyKeys();
   return next;
 }
 

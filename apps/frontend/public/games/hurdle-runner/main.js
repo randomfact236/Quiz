@@ -210,6 +210,10 @@ function toMenu() {
 
 /** Straight into the run — restart is one tap and instant (plan §10). */
 function toPlay() {
+  // BUG (2026-09-25 audit): engine.paused is set on tab-hide and only ever
+  // cleared by an explicit setPaused(false) — which toPlay never did, so
+  // "hide the tab on the menu, come back, press Run" produced a frozen sim.
+  if (loop) loop.setPaused(false);
   buildRun();
   state.mode = 'playing';
   showScreen('playing');
@@ -394,7 +398,6 @@ function fitCanvas() {
      logical world widens to the viewport aspect (uniform scale anchored to the
      height, ground line included), so gameplay is unchanged at any size. */
   const padY = 0;
-  const scale = Math.max(0.1, (box.height - padY) / VIEW_H);
   const cssW = Math.max(1, Math.floor(box.width));
   const cssH = Math.max(1, Math.floor(box.height - padY));
   if (canvas.style.width !== cssW + 'px') canvas.style.width = cssW + 'px';
@@ -512,7 +515,6 @@ function shareUrls() {
 }
 
 function copyResult() {
-  const text = els.shareCopy.dataset.copy || '';
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(els.shareCopy.dataset.copy || '').then(
       () => toast(t('copied')),

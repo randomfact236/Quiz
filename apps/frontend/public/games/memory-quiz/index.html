@@ -26,24 +26,9 @@
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%A7%A0%3C/text%3E%3C/svg%3E"
     />
-    <script>
-      // Resolve the site's theme (ai-quiz-theme: light|dark|system) before first
-      // paint so the board never flashes the wrong scheme.
-      (function () {
-        try {
-          var stored = localStorage.getItem('ai-quiz-theme');
-          var dark =
-            stored === 'dark' ||
-            ((!stored || stored === 'system') &&
-              window.matchMedia('(prefers-color-scheme: dark)').matches);
-          document.documentElement.dataset.theme = dark ? 'dark' : 'light';
-        } catch (e) {
-          document.documentElement.dataset.theme = 'light';
-        }
-      })();
-    </script>
-    <link rel="stylesheet" href="style.css?v=4" />
-    <script type="module" src="game.js?v=4"></script>
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=5" />
+    <script type="module" src="game.js?v=5"></script>
   </head>
   <body>
     <main class="app">
@@ -234,6 +219,6 @@
     </main>
 
     <div class="toast" id="toast" role="status"></div>
-    <script src="/shared/pig-feedback.js?v=1"></script>
+    <script src="/shared/pig-feedback.js?v=2"></script>
   </body>
 </html>

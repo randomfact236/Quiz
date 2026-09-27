@@ -70,19 +70,26 @@
 > Full record: **`plan/03-riddle-mcq.md` §10**. If you are reading this because you
 > believed production was leaking answers: it was not, as of 2026-09-26.
 
-| ID     | Title                                                                  | Was                            | Area      | Pri | Work by       | Status                                            |
-| ------ | ---------------------------------------------------------------------- | ------------------------------ | --------- | --- | ------------- | ------------------------------------------------- |
-| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                        | ops       | P2  | owner/VPS     | Open — owner adds webhook URL when ready          |
-| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                 | ux/seo    | P2  | code+content  | Partial — riddle side fixed; quiz needs content   |
-| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04          | security  | P2  | decision      | Open — owner decision                             |
-| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22          | media/ops | P2  | owner+code    | Open                                              |
-| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.     | a11y      | P3  | code+owner    | Fixed — owner phone QA                            |
-| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01) | decision  | P2  | decision      | Decision 2026-09-24: defer (needs spec)           |
-| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03) | decision  | P2  | decision      | Decision 2026-09-24: keep friction-free (no gate) |
-| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04) | decision  | P3  | decision      | Decision 2026-09-24: defer (needs spec)           |
-| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05) | decision  | P3  | decision      | Built 2026-09-25 — live on next Redeploy          |
-| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06) | decision  | P3  | decision      | Decision 2026-09-24: leave deferred (additive)    |
-| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                 | content   | P2  | owner+content | Open — rights decision gates execution            |
+| ID     | Title                                                                  | Was                            | Area      | Pri   | Work by       | Status                                            |
+| ------ | ---------------------------------------------------------------------- | ------------------------------ | --------- | ----- | ------------- | ------------------------------------------------- |
+| NOW-04 | Uptime/error alerting — one owner step left                            | TASK-21                        | ops       | P2    | owner/VPS     | Open — owner adds webhook URL when ready          |
+| NOW-06 | Surface stored answer explanations post-answer                         | new 2026-09-23                 | ux/seo    | P2    | code+content  | Partial — riddle side fixed; quiz needs content   |
+| NOW-10 | CSP residuals: 'unsafe-inline' + HttpOnly token storage                | was HARD-01 · TASK-04          | security  | P2    | decision      | Open — owner decision                             |
+| NOW-11 | R2 media follow-ups                                                    | was HARD-05 · TASK-22          | media/ops | P2    | owner+code    | Open                                              |
+| NOW-12 | ✅ Games a11y + CSP-clean — FIXED (phone QA owed)                      | was HARD-06 · TASK-09 rem.     | a11y      | P3    | code+owner    | Fixed — owner phone QA                            |
+| NOW-13 | Dad jokes surfaces: saved, JotD SSR, trending + share                  | was HARD-07 · TASK-10 (DEC-01) | decision  | P2    | decision      | Decision 2026-09-24: defer (needs spec)           |
+| NOW-15 | SEC-07 email-verification gate                                         | was HARD-09 · TASK-13 (DEC-03) | decision  | P2    | decision      | Decision 2026-09-24: keep friction-free (no gate) |
+| NOW-16 | Admin user-mgmt UI + dashboard unification + guest activity            | was HARD-10 · TASK-16 (DEC-04) | decision  | P3    | decision      | Decision 2026-09-24: defer (needs spec)           |
+| NOW-17 | Installability: full manifest / theme-color                            | was HARD-11 · TASK-17 (DEC-05) | decision  | P3    | decision      | Built 2026-09-25 — live on next Redeploy          |
+| NOW-18 | Analytics deferred items (funnels, accuracy join, retention tests)     | was HARD-12 · TASK-07 (DEC-06) | decision  | P3    | decision      | Decision 2026-09-24: leave deferred (additive)    |
+| NOW-19 | Image-riddle catalog replacement (wipe + extract from benchmark sites) | new 2026-09-23                 | content   | P2    | owner+content | Open — rights decision gates execution            |
+| NOW-20 | Spirit-runner: in-game share is completely broken (ReferenceError)     | games (spirit-runner)          | P1        | Fixed |
+| NOW-21 | Games CSP: theme bootstrap hash fails on CRLF checkouts (6 of 8)       | games (CSP)                    | P1        | Fixed |
+| NOW-22 | Tab-hide soft-lock: Run/Retry does nothing (hurdle + spirit)           | games (loops)                  | P1        | Fixed |
+| NOW-23 | Tap-or-Don't-Tap: ?locale crash, broken favicon, no theme              | games (tap)                    | P1        | Fixed |
+| NOW-24 | Memory-quiz: no feedback widget on game over / level clear             | games (feedback)               | P2        | Fixed |
+| NOW-25 | Storage growth + timer/daily races (sliding, word, memory)             | games (core)                   | P2        | Fixed |
+| NOW-26 | Games docs false: "no backend calls" + stale test counts               | docs (plan/games)              | P3        | Fixed |
 
 ### Open item details
 
@@ -240,6 +247,93 @@
      (BUG-038).
 - **Status:** OPEN (owner 2026-09-24). Execution gated on the owner rights decision
   (re-create originals recommended).
+
+### NOW-20 - Spirit-runner: in-game share is completely broken (ReferenceError)
+
+- **Date found:** 2026-09-25 (full 8-game audit)
+- **Area:** games (spirit-runner) — `public/games/spirit-runner/main.js`
+- **Priority:** P1
+- **Found:** `shareUrls()` at `main.js:883` references a bare `m` (defined only as a local at
+  `main.js:341,510,789`); eslint confirms `no-undef` x2. Clicking the share button throws
+  `ReferenceError` before any href/copy is set, so FB/X/WhatsApp anchors are empty and copy
+  copies nothing. Not caught by tests (suite only exercises the pure `shareText`).
+- **Fix:** `const m = distanceM();` inside `shareUrls()`; add a DOM test asserting non-empty
+  hrefs + `dataset.copy`.
+- **Fixed 2026-09-25:** `const m = distanceM()` restored in `shareUrls()`; new `src/__tests__/games-share-wiring.test.ts` runs every game's `shareUrls()` headless in a vm sandbox and asserts the FB/X/WhatsApp hrefs + copy text are real — 8/8 green (this guard would have caught the original bug).
+
+### NOW-21 - Games CSP: theme bootstrap hash fails on CRLF checkouts (6 of 8)
+
+- **Date found:** 2026-09-25 (audit)
+- **Area:** games (CSP) — `src/middleware.ts:138-139` vs each `index.html:29-43`
+- **Priority:** P1
+- **Found:** the CSP allow-list holds the sha256 of the LF form of the inline theme script;
+  this checkout (`core.autocrlf=true`, no `.gitattributes`) serves 6 of 7 hash-bearing games
+  with CRLF, so their theme bootstrap is CSP-blocked (theme flash / wrong initial theme). It
+  also makes the QA record "zero CSP violations in all 8 games" true only for LF checkouts.
+- **Fix:** add `.gitattributes` (`*.html text eol=lf`) and/or extract the bootstrap to
+  `/shared/theme.js` — the same fix removes the hash allow-list AND the 7× duplication.
+- **Fixed 2026-09-25:** inline theme script extracted to `public/shared/theme.js`; the two sha256 hashes removed from `GAMES_CSP` (live header now `script-src 'self'`); `.gitattributes` (`*.html text eol=lf`) added; assets bumped to `?v=5`, shared widget `?v=2`. Verified live: CSP serves hash-free, theme.js loads, `data-theme` set.
+
+### NOW-22 - Tab-hide soft-lock: Run/Retry does nothing (hurdle + spirit)
+
+- **Date found:** 2026-09-25 (audit)
+- **Area:** games (loops) — `hurdle-runner/engine.js:50-57`, `spirit-runner/engine.js:50-57`
+- **Priority:** P1
+- **Found:** on `visibilitychange` the loop sets internal `paused = true` and only calls
+  `onAutoPause` (no-op outside playing); `toPlay()` never clears it. Open a game, hide the tab
+  on the menu or game-over card, return, press Run/Retry → the scene renders but never
+  simulates; only a reload recovers. Copy-pasted identically in both engines.
+- **Fix:** clear the internal pause on `toPlay()`/`toMenu()` (or `onAutoPause` always pauses and
+  resume always clears).
+- **Fixed 2026-09-25:** `toPlay()` now calls `loop.setPaused(false)` in both engines (resumeGame already did).
+
+### NOW-23 - Tap-or-Don't-Tap: ?locale crash, broken favicon, no theme support
+
+- **Date found:** 2026-09-25 (audit)
+- **Area:** games (tap-or-dont-tap)
+- **Priority:** P1
+- **Found:** (a) an invalid `?locale=` makes `toLocaleString` throw and permanently wedges the run
+  loop (`game.js:119,284,301,365`); (b) the favicon data-URI is unencoded → broken icon; (c) the
+  only game with no `data-theme` bootstrap, a hard-coded theme-color, and a title without the
+  site suffix; (d) no in-memory storage fallback (private mode = no persistence at all).
+- **Fix:** validate the locale (try/catch or `Intl.supportedValuesOf`), percent-encode the
+  data-URI, port the theme block, add the storage shim.
+- **Fixed 2026-09-25:** `safeLocale()` guards all four `toLocaleString` sites; favicon data-URI percent-encoded; title + light/dark `theme-color` + shared theme script aligned; in-memory storage fallback added; copy gained a `prompt()` fallback. Dark-palette CSS for tap is still a design task (noted in the plan).
+
+### NOW-24 - Memory-quiz: no feedback widget on game over / level clear
+
+- **Date found:** 2026-09-25 (audit)
+- **Area:** games (feedback) — `public/shared/pig-feedback.js:25-36` vs `memory-quiz/index.html:200,167`
+- **Priority:** P2
+- **Found:** the widget's selector lists omit `#overlay-gameover .overlay-card` and
+  `#overlay-levelclear .overlay-card`, so memory-quiz — the most feedback-worthy game — shows the
+  widget only on the pause card. All other games mount it on pause + game over.
+- **Fix:** add both ids to the widget's overlay list (or switch to a `data-pig-feedback` hook).
+- **Fixed 2026-09-25:** widget overlay list now includes `#overlay-gameover .overlay-card` + `#overlay-levelclear .overlay-card` + `#overlay-feedback .feedback-card`; dead no-op ternary removed.
+
+### NOW-25 - Storage growth + timer/daily races (sliding, word, memory)
+
+- **Date found:** 2026-09-25 (audit)
+- **Area:** games (core) — sliding-puzzle, word-puzzle, memory-quiz
+- **Priority:** P2
+- **Found:** (a) sliding-puzzle's daily map and memory-quiz's `daily:*` keys are never pruned
+  (unbounded localStorage growth); (b) sliding-puzzle derives the daily seed three independent
+  times (midnight rollover = record under a different day than the board that was built);
+  (c) sliding + word leave the clock running on the menu and share text reads shared state;
+  (d) memory-quiz has no `dt` clamp; (e) word-puzzle's `generateLevel` throw is uncaught in the
+  UI path.
+- **Fixed 2026-09-25:** daily storage pruned to the newest 30 entries in both games; sliding-puzzle derives the daily seed once per round (`state.dailySeed`) and records the round's day; both games hold the clock on menu transitions; memory-quiz dt clamped to 100 ms; word-puzzle handles a `generateLevel` throw (retry once, then a friendly toast).
+
+### NOW-26 - Games docs false: "no backend calls" + stale test counts
+
+- **Date found:** 2026-09-25 (audit)
+- **Area:** docs (plan/games, AGENTS.md, assistant-rules.md)
+- **Priority:** P3
+- **Found:** every plan/README/AGENTS "zero network calls / isolation" claim is false since the
+  share-count + feedback posts landed; test counts understated (31/23/38 vs 36/28/42; "343
+  tests" vs ~310 declared); "folder is git-ignored" and "no cache-busting needed" are false;
+  E2E verify scripts unwired; 6 test harnesses ship to prod; `check:theme` never scans games.
+- **Fixed 2026-09-25:** `plan/games/README.md` (network reality, tracked-not-ignored, themes.js, cache-busting, test counts 36/28/42, share format), `AGENTS.md` + `assistant-rules.md` ("no backend calls" → the two permitted POSTs).
 
 ## Resolved — removed from this tracker (policy: open items only)
 

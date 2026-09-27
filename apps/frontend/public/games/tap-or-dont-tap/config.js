@@ -101,3 +101,18 @@ export function t(key, vars) {
   if (!vars) return template;
   return String(template).replace(/\{(\w+)\}/g, (_, name) => String(vars[name] ?? ''));
 }
+
+/**
+ * BUG (2026-09-25 audit): a malformed ?locale= (or host config) made
+ * toLocaleString() throw and permanently wedged the run loop. Validate
+ * once, here, and fall back to 'en' for anything Intl rejects.
+ */
+export function safeLocale(locale) {
+  try {
+    const tag = String(locale || 'en');
+    new Intl.NumberFormat(tag);
+    return tag;
+  } catch (e) {
+    return 'en';
+  }
+}

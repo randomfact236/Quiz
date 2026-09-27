@@ -46,5 +46,7 @@ The eight 2D games (`apps/frontend/public/games/<slug>/`) and the `/games` hub
 (`apps/frontend/src/app/games/`) are part of the product: linked from nav/footer/
 Play Hub/sitemap and included in the analytics module lists. The former
 isolation rule (2026-09-09) is lifted. Games follow the same production rules as
-every other feature and stay dependency-free/local-first by design. Full rule:
+every other feature and stay dependency-free/local-first by design (the only permitted
+outbound calls are the per-game share-count POST and the shared in-game feedback POST —
+2026-09-25). Full rule:
 **`AGENTS.md`**.

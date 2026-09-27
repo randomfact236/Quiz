@@ -104,6 +104,9 @@ function ensureHudTicker() {
 }
 
 function showScreen(name) {
+  // BUG (2026-09-25 audit): leaving to the menu never stopped the clock —
+  // playedMs() kept accumulating (HUD freezes, but the share text reads it).
+  if (name === 'menu') holdClock();
   state.screen = name;
   els.screenMenu.classList.toggle('screen--active', name === 'menu');
   els.screenPlaying.classList.toggle('screen--active', name !== 'menu');
@@ -213,12 +216,17 @@ function startRound(daily = false) {
   closePreview(false);
   if (daily) state.size = 4;
   state.daily = daily;
+  // BUG (2026-09-25 audit): the daily seed used to be derived from
+  // new Date() at three independent call sites — a midnight rollover between
+  // them built the board from one day and wrote the record under another.
+  // Derive it once, here, and use state.dailySeed everywhere.
+  state.dailySeed = daily ? dailySeed(new Date()) : 0;
   state.hardActive = state.hard && !daily;
   const wantPicture = state.hardActive || state.mode === 'picture';
   state.board = shuffle(
     state.size,
     SHUFFLE_MOVES[state.size],
-    daily ? mulberry32(dailySeed(new Date())) : Math.random
+    daily ? mulberry32(state.dailySeed) : Math.random
   );
   state.moves = 0;
   state.started = false;
@@ -233,7 +241,7 @@ function startRound(daily = false) {
   state.picture = wantPicture
     ? makePicture(
         daily
-          ? mulberry32(dailySeed(new Date()))() % SCENES.length
+          ? mulberry32(state.dailySeed)() % SCENES.length
           : Math.floor(Math.random() * SCENES.length)
       )
     : null;
@@ -361,7 +369,15 @@ function win() {
   let newTime;
   let newMoves;
   if (state.daily) {
-    ({ best, newTime, newMoves } = saveDailyRecord(new Date(), timeMs, state.moves));
+    // the round's day (state.dailySeed = YYYYMMDD), never "now" — a win that
+    // crosses midnight must still land on the board the player actually solved
+    const ds = String(state.dailySeed);
+    const roundDay = new Date(
+      Number(ds.slice(0, 4)),
+      Number(ds.slice(4, 6)) - 1,
+      Number(ds.slice(6, 8))
+    );
+    ({ best, newTime, newMoves } = saveDailyRecord(roundDay, timeMs, state.moves));
     saveBest(state.size, timeMs, state.moves);
   } else {
     ({ best, newTime, newMoves } = saveBest(state.size, timeMs, state.moves, variant));

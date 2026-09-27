@@ -197,7 +197,18 @@ export function setRemoteAdapter(adapter) {
   remoteAdapter = adapter && typeof adapter.save === 'function' ? adapter : null;
 }
 
+/** BUG (2026-09-25 audit): the daily map grew forever (~1 entry/day). */
+const DAILY_KEEP = 30;
+function pruneDaily(daily) {
+  const keys = Object.keys(daily).sort(); // YYYYMMDD sorts chronologically
+  while (keys.length > DAILY_KEEP) {
+    delete daily[keys.shift()];
+  }
+  return daily;
+}
+
 function persist(save) {
+  if (save && save.daily) save.daily = pruneDaily(save.daily);
   const written = writeJson(SAVE_KEY, save);
   if (remoteAdapter) {
     try {

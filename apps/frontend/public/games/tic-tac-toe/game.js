@@ -461,7 +461,15 @@ function init() {
     showScreen('menu');
   });
   document.getElementById('btn-next').addEventListener('click', startRound);
-  document.getElementById('btn-menu2').addEventListener('click', () => showScreen('menu'));
+  // BUG (2026-09-25 audit): btn-menu clears state.aiTimer on the way out of
+  // play; this round-overlay path did not — same treatment here.
+  document.getElementById('btn-menu2').addEventListener('click', () => {
+    if (state.aiTimer) {
+      clearTimeout(state.aiTimer);
+      state.aiTimer = null;
+    }
+    showScreen('menu');
+  });
   const shareRowEl = document.getElementById('share-row');
   let shareRowTimer = null;
   document.getElementById('btn-share').addEventListener('click', () => {

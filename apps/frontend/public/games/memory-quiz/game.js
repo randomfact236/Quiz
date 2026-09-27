@@ -134,7 +134,10 @@ function stopTicker() {
 
 function onTick(now) {
   if (!ticking) return;
-  const dt = now - lastTick;
+  // BUG (2026-09-25 audit): no clamp — a backgrounded tab before the
+  // visibilitychange handler fired could hand a huge dt to a timed phase and
+  // expire it instantly. Clamp like the other games' loops do.
+  const dt = Math.min(now - lastTick, 100);
   lastTick = now;
   if (!state.paused && isTimedPhase()) {
     state.phaseLeft -= dt;
