@@ -29,7 +29,7 @@ import { toast } from '@/lib/toast';
 
 type Phase = 'lobby' | 'joining' | 'waiting' | 'playing' | 'finished' | 'error';
 
-const LEVELS = ['easy', 'medium', 'hard'] as const;
+const LEVELS = ['easy', 'medium', 'hard', 'expert', 'extreme'] as const;
 
 export default function DuelPage(): JSX.Element {
   const searchParams = useSearchParams();
@@ -51,6 +51,7 @@ export default function DuelPage(): JSX.Element {
   // "Guest") and the invite was a plain text literal (typed by hand on a phone).
   const [joinGate, setJoinGate] = useState(''); // code awaiting a name
   const [copied, setCopied] = useState(false);
+  const [openAnswer, setOpenAnswer] = useState('');
   const guestRef = useRef<string>('');
 
   const guest = () => {
@@ -77,6 +78,7 @@ export default function DuelPage(): JSX.Element {
         setQuestions(view.questions);
         setIndex(0);
         setPicked(null);
+        setOpenAnswer('');
         setScore(0);
         setPhase('playing');
       } catch (e) {
@@ -191,6 +193,7 @@ export default function DuelPage(): JSX.Element {
       setIndex((i) => i + 1);
       setPicked(null);
       setLastCorrect(null);
+      setOpenAnswer('');
       return;
     }
     // Done — finish and show the revealed comparison.
@@ -288,7 +291,7 @@ export default function DuelPage(): JSX.Element {
             <h2 className="mb-3 text-lg font-black text-gray-800 dark:text-secondary-100">
               Create a duel
             </h2>
-            <div className="mb-2 flex gap-2">
+            <div className="mb-2 flex flex-wrap gap-2">
               {LEVELS.map((lv) => (
                 <button
                   key={lv}
@@ -468,30 +471,57 @@ export default function DuelPage(): JSX.Element {
             <p className="mb-5 text-lg font-semibold text-gray-800 dark:text-secondary-100">
               {current.question}
             </p>
-            <div className="space-y-3">
-              {current.options.map((option, i) => {
-                const letter = 'ABCDEFGH'[i] ?? String(i);
-                return (
-                  <button
-                    key={option}
-                    disabled={picked !== null}
-                    onClick={() => void answer(letter)}
-                    className={`w-full rounded-xl border-2 px-4 py-3 text-left text-base font-medium transition-colors ${
-                      picked === letter
-                        ? lastCorrect === true
-                          ? 'border-green-500 bg-green-50 text-green-800 dark:bg-green-500/10 dark:text-green-300'
-                          : lastCorrect === false
-                            ? 'border-red-500 bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-300'
-                            : 'border-indigo-400 bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-200'
-                        : 'border-slate-200 bg-white text-gray-700 hover:border-indigo-300 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-200 dark:hover:border-secondary-500'
-                    }`}
-                  >
-                    <span className="mr-2 font-black">{letter}.</span>
-                    {option}
-                  </button>
-                );
-              })}
-            </div>
+            {(current.options || []).length === 0 ? (
+              /* extreme — open-ended: the typed answer is graded server-side */
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (openAnswer.trim()) void answer(openAnswer.trim());
+                }}
+              >
+                <input
+                  value={openAnswer}
+                  onChange={(e) => setOpenAnswer(e.target.value)}
+                  disabled={picked !== null}
+                  maxLength={120}
+                  placeholder="Type your answer"
+                  aria-label="Your answer"
+                  className="mb-3 w-full rounded-xl border-2 border-slate-200 bg-white px-4 py-3 text-gray-800 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-100"
+                />
+                <button
+                  type="submit"
+                  disabled={picked !== null || openAnswer.trim() === ''}
+                  className="w-full rounded-xl bg-indigo-600 px-6 py-3 text-sm font-black uppercase tracking-widest text-white transition-colors hover:bg-indigo-500 disabled:opacity-50"
+                >
+                  Submit answer
+                </button>
+              </form>
+            ) : (
+              <div className="space-y-3">
+                {current.options.map((option, i) => {
+                  const letter = 'ABCDEFGH'[i] ?? String(i);
+                  return (
+                    <button
+                      key={option}
+                      disabled={picked !== null}
+                      onClick={() => void answer(letter)}
+                      className={`w-full rounded-xl border-2 px-4 py-3 text-left text-base font-medium transition-colors ${
+                        picked === letter
+                          ? lastCorrect === true
+                            ? 'border-green-500 bg-green-50 text-green-800 dark:bg-green-500/10 dark:text-green-300'
+                            : lastCorrect === false
+                              ? 'border-red-500 bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-300'
+                              : 'border-indigo-400 bg-indigo-50 text-indigo-700 dark:bg-indigo-500/10 dark:text-indigo-200'
+                          : 'border-slate-200 bg-white text-gray-700 hover:border-indigo-300 dark:border-secondary-600 dark:bg-secondary-900 dark:text-secondary-200 dark:hover:border-secondary-500'
+                      }`}
+                    >
+                      <span className="mr-2 font-black">{letter}.</span>
+                      {option}
+                    </button>
+                  );
+                })}
+              </div>
+            )}
             {picked !== null && lastCorrect !== null && (
               <button
                 onClick={() => (index + 1 < questions.length ? setIndex(index + 1) : void next())}

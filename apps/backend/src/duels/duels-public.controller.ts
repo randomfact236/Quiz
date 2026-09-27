@@ -78,7 +78,9 @@ class AnswerDto extends GuestDto {
 
   @IsString()
   @IsNotEmpty()
-  @MaxLength(4)
+  // 4 for MCQ letters, up to 120 for extreme's open-ended text answers
+  // (gradeAnswer falls back to comparing correctAnswer when there is no letter).
+  @MaxLength(120)
   selected: string;
 }
 

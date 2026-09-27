@@ -209,9 +209,9 @@ export default function UnifiedGamePickerPage(): JSX.Element {
           >
             <Swords className="h-8 w-8 shrink-0" />
             <span className="flex-1">
-              <span className="block text-lg font-bold">Duel a friend</span>
+              <span className="block text-lg font-bold">Duel a friend — Quiz</span>
               <span className="block text-sm text-white/90">
-                Same 10 questions, same clock — send them the link and race head-to-head.
+                Same 10 quiz questions, same clock — send them the link and race head-to-head.
               </span>
             </span>
             <span className="text-sm font-bold uppercase tracking-wider">Challenge →</span>
