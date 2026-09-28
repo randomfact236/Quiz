@@ -101,6 +101,7 @@ function renderMiniSeries() {
 /* ---- table rendering --------------------------------------------------------- */
 
 function renderTable() {
+  const finished = isMatchWon(state.match.scores, state.match.target);
   els.die.textContent = state.lastRoll ? DIE_FACES[state.lastRoll] : '🎲';
   els.pot.textContent = String(state.match.pot);
   els.score1.textContent = String(state.match.scores[0]);
@@ -119,14 +120,14 @@ function renderTable() {
       ? 'Your turn — you are ' + (turn === 1 ? '🔴' : '🔵')
       : (oppName || 'Your opponent') + ' is deciding…';
   }
-  els.turn.textContent = turnText;
+  els.turn.textContent = finished ? 'Match over' : turnText;
   els.turn.dataset.mark = String(turn);
 
   els.notice.textContent = state.notice ? state.notice.text : '';
   els.notice.className =
     'notice' + (state.notice && state.notice.cls ? ' ' + state.notice.cls : '');
 
-  const canAct = state.match.turn === myMark() || (state.mode === '2p' && true);
+  const canAct = !finished && (state.match.turn === myMark() || state.mode === '2p');
   els.btnRoll.disabled = !canAct;
   els.btnHold.disabled = !canAct;
 }

@@ -35,63 +35,56 @@ rematch. Solo and social feed each other.
 | Rock Paper Scissors     | `rock-paper-scissors` | easy/medium/hard AI (best of 5)           | ✅       | ✅ (`/rock-paper-scissors` backend, `?rps=CODE` links) |
 | Pig Dice                | `pig-dice`            | easy/medium/hard AI (the server rolls)    | ✅       | ✅ (`/pig-dice` backend, `?pd=CODE` links)             |
 
-## 3. Roadmap — planned games (owner-requested plans, 2026-09-28)
+## 3. Roadmap — build order (owner reorder 2026-09-28: famous/common games first)
 
-Build in this order. Every plan carries the 9-line spec, rules, pure model, AI tiers,
-backend reuse of the tictactoe pattern, and its own verification list.
+**Built games are untouched:** Tic Tac Toe, Connect Four, Gomoku, Dots & Boxes,
+Battleship and Pig Dice keep their current hub order in `games-registry.ts`.
+The queue below reorders the UNBUILT confirmed games so the famous/common names
+get built first (owner ask 2026-09-28). Flagged: Rock Paper Scissors has a hub
+registry entry but no `public/games/rock-paper-scissors/` folder yet — verify
+before promoting it anywhere.
 
-| #   | Game                | Plan                                                     | Why it earns its place                                                        |
-| --- | ------------------- | -------------------------------------------------------- | ----------------------------------------------------------------------------- |
-| 1   | Connect Four        | [01-connect-four.md](01-connect-four.md)                 | Strongest friend-duel fit                                                     |
-| 2   | Gomoku              | [02-gomoku.md](02-gomoku.md)                             | Cheapest build — ttt engine, bigger board, never draws                        |
-| 3   | Dots & Boxes        | [03-dots-and-boxes.md](03-dots-and-boxes.md)             | ✅ **BUILT** — the server resolves the extra turn                             |
-| 4   | Battleship Lite     | [04-battleship.md](04-battleship.md)                     | ✅ **BUILT** — hidden info; the server redacts the enemy fleet                |
-| 5   | Pig Dice            | [05-pig-dice.md](05-pig-dice.md)                         | ✅ **BUILT** — the server owns the dice (crypto RNG)                          |
-| 6   | Checkers            | [06-checkers.md](06-checkers.md)                         | The "step up" game — biggest build, scheduled last                            |
-| 7   | Rock Paper Scissors | [07-rock-paper-scissors.md](07-rock-paper-scissors.md)   | ✅ **BUILT** — simultaneous picks; the server reveals (no second-mover cheat) |
-| 8   | Ultimate TTT        | [08-ultimate-tic-tac-toe.md](08-ultimate-tic-tac-toe.md) | Your move picks your opponent's board                                         |
-| 9   | Nim                 | [09-nim.md](09-nim.md)                                   | Solved math = free perfect AI                                                 |
-| 10  | Chomp               | [10-chomp.md](10-chomp.md)                               | Poisoned-cookie grid; eat the poison and you lose                             |
-| 11  | Hex                 | [11-hex.md](11-hex.md)                                   | Connect your two sides; never draws                                           |
-| 12  | Othello             | [12-othello.md](12-othello.md)                           | Friendly first 20 moves, brutal last 5                                        |
-| 13  | Nine Men's Morris   | [13-nine-mens-morris.md](13-nine-mens-morris.md)         | Form mills, capture pieces; 2,000 years old                                   |
-| 14  | Mancala (Kalah)     | [14-mancala-kalah.md](14-mancala-kalah.md)               | Extra-turn chains snowball                                                    |
-| 15  | Quarto              | [15-quarto.md](15-quarto.md)                             | Shared pieces; you hand your opponent their next piece                        |
-| 16  | Quoridor            | [16-quoridor.md](16-quoridor.md)                         | Race your pawn, throw walls                                                   |
-| 17  | Hive                | [17-hive.md](17-hive.md)                                 | Pocket bug-chess, no board at all                                             |
-| 19  | Santorini           | [19-santorini.md](19-santorini.md)                       | Players place their own builders                                              |
-| 20  | Blokus Duo          | [20-blokus-duo.md](20-blokus-duo.md)                     | Fit your polyominoes; no moves left = you lose                                |
-| 21  | Abalone             | [21-abalone.md](21-abalone.md)                           | Push marbles off the hex ring                                                 |
-| 22  | Pentago             | [22-pentago.md](22-pentago.md)                           | Connect four + spin a quadrant every move                                     |
-| 23  | Pente               | [23-pente.md](23-pente.md)                               | Gomoku plus jump-captures; draws almost impossible                            |
-| 24  | Connect6            | [24-connect6.md](24-connect6.md)                         | Six in a row, two stones per turn                                             |
-| 25  | Breakthrough        | [25-breakthrough.md](25-breakthrough.md)                 | Pawn race to the far row; 5-minute teach                                      |
-| 26  | Lines of Action     | [26-lines-of-action.md](26-lines-of-action.md)           | Get all your checkers connected                                               |
-| 27  | Ataxx               | [27-ataxx.md](27-ataxx.md)                               | Clone/jump to infect the whole board                                          |
-| 28  | Domineering         | [28-domineering.md](28-domineering.md)                   | Vertical vs horizontal dominoes                                               |
-| 29  | SOS                 | [29-sos.md](29-sos.md)                                   | Your line or theirs counts - and scores                                       |
-| 30  | Sim                 | [30-sim.md](30-sim.md)                                   | Your triangle = your loss                                                     |
-| 31  | Sprouts             | [31-sprouts.md](31-sprouts.md)                           | Two rules, surprisingly deep                                                  |
-| 32  | Paper Soccer        | [32-paper-soccer.md](32-paper-soccer.md)                 | Bounce the ball into the goal                                                 |
-| 33  | Three Men's Morris  | [33-three-mens-morris.md](33-three-mens-morris.md)       | The 2,000-year-old ttt ancestor                                               |
-| 34  | Mastermind          | [34-mastermind.md](34-mastermind.md)                     | Duel: friend sets the code; solo: runtime random                              |
-| 36  | Bulls & Cows        | [36-bulls-and-cows.md](36-bulls-and-cows.md)             | Numeric mastermind with random digits                                         |
-| 37  | Notakto             | [37-notakto.md](37-notakto.md)                           | Three boards, all X, three in a row LOSES                                     |
-| 39  | Go 9x9              | [39-go-9x9.md](39-go-9x9.md)                             | The deepest game, duel-sized (batch L)                                        |
-| 40  | Chess               | [40-chess.md](40-chess.md)                               | The final boss - build last (batch L)                                         |
+| Order | Game               | Plan                                                     | Batch | Why it is here now                           |
+| ----- | ------------------ | -------------------------------------------------------- | ----- | -------------------------------------------- |
+| 1     | Checkers           | [06-checkers.md](06-checkers.md)                         | S     | the most famous buildable board classic      |
+| 2     | Othello            | [12-othello.md](12-othello.md)                           | M     | world-known flip classic                     |
+| 3     | Mastermind         | [34-mastermind.md](34-mastermind.md)                     | S     | household code-breaker; friend sets the code |
+| 4     | Ultimate TTT       | [08-ultimate-tic-tac-toe.md](08-ultimate-tic-tac-toe.md) | S     | modern classic on the ttt shape              |
+| 5     | Mancala (Kalah)    | [14-mancala-kalah.md](14-mancala-kalah.md)               | S     | sowing classic known worldwide               |
+| 6     | Bulls & Cows       | [36-bulls-and-cows.md](36-bulls-and-cows.md)             | XS    | the digit form is a household game           |
+| 7     | Quoridor           | [16-quoridor.md](16-quoridor.md)                         | M     | strong brand in modern abstracts             |
+| 8     | Hive               | [17-hive.md](17-hive.md)                                 | M     | acclaimed modern abstract                    |
+| 9     | Santorini          | [19-santorini.md](19-santorini.md)                       | M     | acclaimed modern abstract                    |
+| 10    | Quarto             | [15-quarto.md](15-quarto.md)                             | M     | award-winning classic                        |
+| 11    | Connect6           | [24-connect6.md](24-connect6.md)                         | S     | familiar six-in-row shape                    |
+| 12    | Pente              | [23-pente.md](23-pente.md)                               | S     | gomoku's famous cousin                       |
+| 13    | Pentago            | [22-pentago.md](22-pentago.md)                           | S     | connect-four with a twist                    |
+| 14    | Notakto            | [37-notakto.md](37-notakto.md)                           | XS    | misère ttt, near-zero rules                  |
+| 15    | Nim                | [09-nim.md](09-nim.md)                                   | XS    | ancient stick classic                        |
+| 16    | Chomp              | [10-chomp.md](10-chomp.md)                               | XS    | paper classic                                |
+| 17    | SOS                | [29-sos.md](29-sos.md)                                   | XS    | school-paper famous                          |
+| 18    | Three Men's Morris | [33-three-mens-morris.md](33-three-mens-morris.md)       | XS    | ancient familiar shape                       |
+| 19    | Domineering        | [28-domineering.md](28-domineering.md)                   | XS    | one-rule duel                                |
+| 20    | Sim                | [30-sim.md](30-sim.md)                                   | XS    | paper triangle duel                          |
+| 21    | Breakthrough       | [25-breakthrough.md](25-breakthrough.md)                 | S     | clean pawn race                              |
+| 22    | Ataxx              | [27-ataxx.md](27-ataxx.md)                               | S     | infection race                               |
+| 23    | Blokus Duo         | [20-blokus-duo.md](20-blokus-duo.md)                     | M     | famous brand, 2P edition                     |
+| 24    | Abalone            | [21-abalone.md](21-abalone.md)                           | M     | known modern abstract                        |
+| 25    | Lines of Action    | [26-lines-of-action.md](26-lines-of-action.md)           | M     | connoisseur abstract                         |
+| 26    | Sprouts            | [31-sprouts.md](31-sprouts.md)                           | S     | pencil-game curiosity                        |
+| 27    | Paper Soccer       | [32-paper-soccer.md](32-paper-soccer.md)                 | S     | regional paper classic                       |
+| 28    | Go 9x9             | [39-go-9x9.md](39-go-9x9.md)                             | L     | deep boss — after the M waves                |
+| 29    | Chess              | [40-chess.md](40-chess.md)                               | L     | the final boss — always last                 |
 
-**Batches** (from the 2026-09-28 50-ideas review): XS = 4-6 h, S = 8-12 h,
-M = 13-18 h, L = 30 h+. Games 1-7 keep their original estimates in their plans.
+**The 9-line spec** the owner fills for any new game: Name — One-liner — How to win —
+The board + what a move is — Turn-based? — Solo AI expectations — Duel mode — Rules
+toggles — Never-has (e.g. "no levels, no pre-filled data").
 
-**Decision-required - deliberately NO plans yet** (owner call pending, see
+**Decision-required — deliberately NO plans yet** (owner call pending, see
 `50-game-ideas.md` review): #18 Onitama (random opening deal of fixed move-cards),
 #35 Hangman Duel (solo needs a word list), #38 Word Duel (needs a dictionary),
 #41-50 luck tier (dice/deck RNG approval pending; Pig Dice's server-roll already
 sets the precedent). Each gets a plan the day the owner decides.
-
-**The 9-line spec** the owner fills for any new game: Name · One-liner · How to win ·
-The board + what a move is · Turn-based? · Solo AI expectations · Duel mode · Rules
-toggles · Never-has (e.g. "no levels, no pre-filled data").
 
 ## 3b. Multiplayer party (3P/4P) — owner decision 2026-09-28
 
@@ -118,14 +111,27 @@ TP games ride the same registry.
 
 The base sets (T1–T10 native 3P, F1–F10 party 4P) stay the build-now scope. Expansion
 lists take both to 50 rows each on the same engines (adapters only, no new plumbing):
-[three-player-50.md](three-player-50.md) (T1–T50: 40 RNG-free + 10 RNG-gated) and
-[four-player-50.md](four-player-50.md) (F1–F50: 34 RNG-free + 16 RNG-gated). Tags mark
-each row [native] / [variant] / [original] / [RNG]; the RNG rows activate only with the
-luck-tier decision. Team rows (F40/F41) need a 2v2 seat layer flagged in MP1 first.
-Expansion plans: [three-player-50-plan.md](three-player-50-plan.md) (TP2, waves A–D on
-the TP1 engine) and [four-player-50-plan.md](four-player-50-plan.md) (MP2, waves A–D on
-the MP1 engine, with the team-seat layer for F40/F41 and the server-held deck view as
-flagged prerequisites).
+[three-player-50.md](three-player-50.md) (T1–T50) and [four-player-50.md](four-player-50.md)
+(F1–F50). **Owner reorder 2026-09-28:** the **Build** column in each list is the
+fame-first build sequence — common games before less common; IDs (T#/F#) are stable and
+never renumber. Tags: [native] / [variant] / [original] / [RNG] / [RNG·pre] (Pig-precedent
+RNG builds now). RNG rows build only after the luck-tier decision. Team rows (F40/F41)
+need the 2v2 seat layer in MP1 first. Expansion plans:
+[three-player-50-plan.md](three-player-50-plan.md) (TP2, waves A–D on the TP1 engine) and
+[four-player-50-plan.md](four-player-50-plan.md) (MP2, waves A–D on the MP1 engine, with
+the team-seat layer and the server-held deck view as flagged prerequisites).
+
+## 3b. Play-path smoke (run after game changes)
+
+```bash
+cd apps/frontend && node scripts/games-smoke.mjs
+```
+
+Loads every live game in a real browser, enters play, makes real moves, and fails
+on any JS error or a game that will not accept input. The unit specs and API tests
+cover the RULES; this covers the PLAY path — four real bugs shipped past both
+(battleship hot-seat loop + attribution, dots-and-boxes null read, pig-dice AI
+hang, rps hot-seat gate). Run it before calling a game done.
 
 ## 4. Architecture rules (unchanged from the family's earlier standard)
 
@@ -139,3 +145,19 @@ flagged prerequisites).
   and rate-limited. No other outbound calls.
 - Registry: `apps/frontend/src/lib/games-registry.ts` feeds the hub, sitemap and OG
   images — one source of truth.
+
+## 5. Hub play-preview rule (owner ask 2026-09-28 — applies to every AI writing game code)
+
+Every game card on the `/games` hub MUST show a **play-preview**: a small static
+snapshot of how the game looks mid-play, rendered as an inline SVG by
+`apps/frontend/src/components/games/GamePlayPreview.tsx`, with the **game name
+written directly below the preview**, then the blurb. The hub card layout is
+vertical: preview tile → title → blurb (share button floats top-right).
+
+- Adding a game to `games-registry.ts` is INCOMPLETE without a matching preview
+  case (`switch (slug)`) in `GamePlayPreview.tsx` — treat it as part of the
+  game's definition of done, alongside the registry entry.
+- Previews are server-safe inline SVG (no client JS, no new deps, no images),
+  aria-hidden decoration; unknown slugs fall back to a neutral placeholder.
+- This rule is mirrored in the repo-root `AGENTS.md` §2D Games. Do not remove
+  or bypass it without an explicit owner instruction.

@@ -45,6 +45,9 @@ const state = {
   match: createState(), // { wins: [you, them], history, lastRound, target }
   roundNo: 1,
   locked: false,
+  // fat-finger guard: a stray double-tap right after a throw must not slip a
+  // second throw into the next round while the computer is still thinking
+  armed: true,
   pending: null, // hot-seat: the throw locked in, waiting for the second player
   rName: 'Red',
   bName: 'Computer',
@@ -132,7 +135,8 @@ function renderTable() {
   els.turn.textContent = turnText;
 
   // hot-seat: one device plays both sides — the turn gate is 1p/online only
-  const canThrow = !state.locked && (state.mode === '2p' || whoseThrow() === myMark());
+  const canThrow =
+    !state.locked && state.armed && (state.mode === '2p' || whoseThrow() === myMark());
   for (const btn of els.throws) btn.disabled = !canThrow;
 
   const notice = state.notice || '';
@@ -143,7 +147,15 @@ function renderTable() {
 /* ---- local match flow --------------------------------------------------------- */
 
 function myThrow(throw_) {
-  if (state.locked) return;
+  if (state.locked || !state.armed) return;
+  // disarm while this round resolves, re-arm when the next round opens
+  state.armed = false;
+  window.setTimeout(() => {
+    if (!state.locked) {
+      state.armed = true;
+      renderTable();
+    }
+  }, GAME_CONFIG.aiThinkDelayMs + 120);
   if (state.mode === 'online') {
     if (whoseThrow() !== myMark()) return;
     onlinePick(throw_);
@@ -510,6 +522,7 @@ function startRound() {
   state.match = createState();
   state.roundNo = 1;
   state.locked = false;
+  state.armed = true;
   state.pending = null;
   state.notice = '';
   if (state.mode !== 'online') {
