@@ -381,6 +381,12 @@ function startOnlineRound(view) {
   els.overlay.classList.remove('overlay--in');
   state.locked = false;
   applyOnlineView(view);
+  // The JOINER has no poll yet (only the creator's create-branch starts one) —
+  // without this their page freezes on the join view: no opponent moves, no
+  // turn updates, moves silently ignored. Found by the manual browser check.
+  if (state.online && !state.online.pollTimer) {
+    state.online.pollTimer = setInterval(pollOnline, 3000);
+  }
 }
 
 function applyOnlineView(view) {
