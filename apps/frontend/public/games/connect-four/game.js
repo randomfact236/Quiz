@@ -342,7 +342,13 @@ function onlineJoin(code) {
         busy: false,
       };
       if (view.status === 'waiting') {
-        onlineStatus('Joined as 🟡 — waiting for 🔴 to be claimed…');
+        // Re-opening your own match link on this device: the server sees the
+        // same guest id and returns the creator's view — don't claim 🟡.
+        onlineStatus(
+          view.yourMark === 'R'
+            ? 'This is your own match — waiting for a challenger to join.'
+            : 'Joined as 🟡 — waiting for 🔴 to be claimed…'
+        );
         state.online.pollTimer = setInterval(pollOnline, 3000);
         return;
       }
