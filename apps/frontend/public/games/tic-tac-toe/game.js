@@ -13,7 +13,7 @@
  * ============================================================================
  */
 
-import { emptyBoard, other, roundOutcome, aiMove, hardAiToastDue } from './core.js';
+import { emptyBoard, other, roundOutcome, aiMove, hardAiToastDue } from './core.js?v=9';
 import {
   emptyTally,
   seriesSetupKey,

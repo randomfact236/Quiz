@@ -14,7 +14,7 @@
  * ============================================================================
  */
 
-import { SIZES, createEmptyBoard, other, placeInPlace, roundOutcome, aiMove } from './core.js';
+import { SIZES, createEmptyBoard, other, placeInPlace, roundOutcome, aiMove } from './core.js?v=2';
 import {
   emptyTally,
   seriesSetupKey,

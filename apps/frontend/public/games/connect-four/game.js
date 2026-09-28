@@ -13,7 +13,16 @@
  * ============================================================================
  */
 
-import { COLS, ROWS, CELLS, emptyBoard, other, dropInPlace, roundOutcome, aiMove } from './core.js';
+import {
+  COLS,
+  ROWS,
+  CELLS,
+  emptyBoard,
+  other,
+  dropInPlace,
+  roundOutcome,
+  aiMove,
+} from './core.js?v=4';
 import {
   emptyTally,
   seriesSetupKey,
