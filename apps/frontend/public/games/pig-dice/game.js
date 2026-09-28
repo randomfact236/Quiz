@@ -21,6 +21,7 @@ import {
   other,
   applyRoll,
   applyHold,
+  isWin,
   aiAction,
 } from './core.js?v=1';
 import {
@@ -101,7 +102,13 @@ function renderMiniSeries() {
 /* ---- table rendering --------------------------------------------------------- */
 
 function renderTable() {
-  const finished = isMatchWon(state.match.scores, state.match.target);
+  // A match is over once EITHER side reaches the target (or the server said so
+  // in an online duel) — the buttons must lock even after finishLocal()'s
+  // render, or a fast double-tap rolls into a match that is already decided.
+  const finished =
+    state.locked ||
+    isWin(state.match.scores, 1, state.match.target) ||
+    isWin(state.match.scores, 2, state.match.target);
   els.die.textContent = state.lastRoll ? DIE_FACES[state.lastRoll] : '🎲';
   els.pot.textContent = String(state.match.pot);
   els.score1.textContent = String(state.match.scores[0]);
