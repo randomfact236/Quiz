@@ -99,6 +99,30 @@ clones): [multiplayer-party-plan.md](multiplayer-party-plan.md). Now-scope: Dots
 Boxes, Ultimate TTT, SOS, Notakto, Pig Dice (P1–P5); dice/card tables join after the
 RNG decision; Ludo stays its own L build.
 
+## 3c. Native three-player games — owner decision 2026-09-28
+
+A dedicated 3-player set (T1–T10), separate numbering — not ports of the 2-player
+queue. Seat rule: 3 seats, humans join by code, **empty seats default to bots**
+(one lobby-wide tier), abandoned humans convert to bots, placement 1st/2nd/3rd
+recorded. All ten designs are RNG-free (no dice/decks) — nothing waits on the
+luck-tier decision. Roster + sketches: [three-player-games.md](three-player-games.md).
+Engine + Wave 1 plan (TP1: shared `tp_matches` table, adapters for T1/T2/T8/T9/T3/T4):
+[three-player-plan.md](three-player-plan.md). If the MP1 party engine lands first,
+TP games ride the same registry.
+
+## 3d. Expansion lists — 50 in 3P and 4P (owner decision 2026-09-28)
+
+The base sets (T1–T10 native 3P, F1–F10 party 4P) stay the build-now scope. Expansion
+lists take both to 50 rows each on the same engines (adapters only, no new plumbing):
+[three-player-50.md](three-player-50.md) (T1–T50: 40 RNG-free + 10 RNG-gated) and
+[four-player-50.md](four-player-50.md) (F1–F50: 34 RNG-free + 16 RNG-gated). Tags mark
+each row [native] / [variant] / [original] / [RNG]; the RNG rows activate only with the
+luck-tier decision. Team rows (F40/F41) need a 2v2 seat layer flagged in MP1 first.
+Expansion plans: [three-player-50-plan.md](three-player-50-plan.md) (TP2, waves A–D on
+the TP1 engine) and [four-player-50-plan.md](four-player-50-plan.md) (MP2, waves A–D on
+the MP1 engine, with the team-seat layer for F40/F41 and the server-held deck view as
+flagged prerequisites).
+
 ## 4. Architecture rules (unchanged from the family's earlier standard)
 
 - Dependency-free static folders under `apps/frontend/public/games/<slug>/`:

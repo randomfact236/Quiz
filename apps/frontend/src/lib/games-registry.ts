@@ -29,6 +29,14 @@ export interface GameEntry {
 
 export const GAMES: GameEntry[] = [
   {
+    slug: 'battleship',
+    emoji: '🚢',
+    title: 'Battleship',
+    blurb: 'Place your own fleet, then hunt your opponent — solo vs computer or a live duel.',
+    gradient: 'from-slate-600 to-slate-900',
+    cssGradient: 'linear-gradient(135deg, #475569 0%, #0f172a 100%)',
+  },
+  {
     slug: 'dots-and-boxes',
     emoji: '🔵',
     title: 'Dots and Boxes',

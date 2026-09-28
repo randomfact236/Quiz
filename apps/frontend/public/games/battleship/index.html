@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Battleship — PigZap Games" />
+    <meta property="og:description" content="Place your own fleet, then hunt your opponent — solo against the computer (easy, medium or hard) or duel a friend live from your own phone." />
+    <meta property="og:url" content="https://pigzap.com/games/battleship" />
+    <meta property="og:image" content="https://pigzap.com/og/game/battleship.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Battleship — PigZap Games" />
+    <meta name="twitter:description" content="Place your own fleet, then hunt your opponent — solo or a live duel." />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/battleship.png" />
+    <title>Battleship — PigZap Games</title>
+    <meta
+      name="description"
+      content="Place your own fleet, then hunt your opponent — solo against the computer (easy, medium or hard) or duel a friend live from your own phone."
+    />
+    <meta name="theme-color" content="#dbe3ee" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%231e3a5f'/%3E%3Cpath d='M25 60h50l-8 14H33z' fill='%23e2e8f0'/%3E%3Crect x='52' y='38' width='8' height='22' fill='%23e2e8f0'/%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Battleship menu">
+        <h1 class="menu-title">Battleship 🚢</h1>
+        <p class="tagline">Place your own fleet, then hunt your opponent — solo or a live duel.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">
+              🤖 vs Computer
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">
+              👥 2 Players
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">
+              ⚔️ Online
+            </button>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div
+              class="segmented"
+              role="radiogroup"
+              aria-labelledby="difficulty-label"
+              id="difficulty-segmented"
+            >
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">
+                Easy
+              </button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">
+                Medium
+              </button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">
+                Hard
+              </button>
+            </div>
+          </div>
+
+          <!-- plan/games/04: live online duel (server-authoritative, 3 s poll) -->
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you place 🔴)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--r">
+              <span class="num" id="series-r">0</span>
+              <span class="label">🔴 wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--b">
+              <span class="num" id="series-b">0</span>
+              <span class="label">🔵 wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Battleship board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">🔴 0 · 🤝 0 · 🔵 0</div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">Place your fleet</div>
+
+        <!-- placement phase -->
+        <div id="placement-bar" class="placement-bar hidden">
+          <span class="label" id="placement-label">Ship 1 of 3 — length 4</span>
+          <span class="ghost-row">
+            <button type="button" class="ghost" id="btn-rotate">⟳ Rotate</button>
+            <button type="button" class="ghost" id="btn-random">🎲 Random</button>
+          </span>
+        </div>
+
+        <div class="board-wrap">
+          <div class="seas" id="seas">
+            <div class="sea">
+              <span class="sea-title" id="sea-mine-title">Your waters</span>
+              <div class="sea-grid" id="sea-mine"></div>
+            </div>
+            <div class="sea">
+              <span class="sea-title" id="sea-theirs-title">Enemy waters</span>
+              <div class="sea-grid" id="sea-theirs"></div>
+            </div>
+          </div>
+
+          <div id="overlay" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="overlay-title">
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="overlay-title">You win!</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next match</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge hidden" id="thinking-badge">Computer is aiming…</div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>
