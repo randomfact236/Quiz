@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Checkers — PigZap Games" />
+    <meta
+      property="og:description"
+      content="Jump your opponent's pieces and crown kings on the far row — play the computer on easy, medium or hard, pass-and-play, or duel a friend live."
+    />
+    <meta property="og:url" content="https://pigzap.com/games/checkers" />
+    <meta property="og:image" content="https://pigzap.com/og/game/checkers.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Checkers — PigZap Games" />
+    <meta
+      name="twitter:description"
+      content="Jump your opponent's pieces and crown kings on the far row — play the computer on easy, medium or hard, pass-and-play, or duel a friend live."
+    />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/checkers.png" />
+    <title>Checkers — PigZap Games</title>
+    <meta
+      name="description"
+      content="Jump your opponent's pieces and crown kings on the far row — play the computer on easy, medium or hard, pass-and-play, or duel a friend live."
+    />
+    <meta name="theme-color" content="#f7e8d0" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#2a1c12" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%EF%B8%8F%3C/text%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Checkers menu">
+        <h1 class="menu-title">Checkers ⛓️</h1>
+        <p class="tagline">Jump, capture, crown. Captures are forced — multi-jumps included.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">
+              🤖 vs Computer
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">
+              👥 2 Players
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">
+              ⚔️ Online
+            </button>
+          </div>
+
+          <!-- live online duel (server-authoritative, 3 s poll) -->
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">
+              ⚔️ Create match (you play 🔴)
+            </button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div
+              class="segmented"
+              role="radiogroup"
+              aria-labelledby="difficulty-label"
+              id="difficulty-segmented"
+            >
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">
+                Easy
+              </button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">
+                Medium
+              </button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">
+                Hard
+              </button>
+            </div>
+          </div>
+
+          <p class="rules-note">
+            Men move and capture one square diagonally forward. Reach the far row to crown a king —
+            kings move and capture both ways. If a capture is available you <b>must</b> take it, and a
+            multi-jump has to be finished.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--r">
+              <span class="num" id="series-r">0</span>
+              <span class="label">🔴 Red wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--b">
+              <span class="num" id="series-b">0</span>
+              <span class="label">⚫ Black wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Checkers board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">🔴 0 · 🤝 0 · ⚫ 0</div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">🔴 Red's turn</div>
+        <div class="hint-line" id="hint-line" role="status" aria-live="polite"></div>
+
+        <div class="board-wrap">
+          <div id="board" class="board board--dark" role="group" aria-label="Checkers board"></div>
+
+          <div
+            id="overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overlay-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="overlay-title">Red wins!</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next game</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+                <div class="share-row" id="share-row" hidden>
+                  <a class="share-target" id="share-fb" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a>
+                  <a class="share-target" id="share-x" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+                  <a class="share-target" id="share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a>
+                  <button type="button" class="share-target" id="share-copy" aria-label="Copy result">🔗 Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="legend">
+          <span class="legend-chip legend-chip--you">your pieces</span>
+          <span class="legend-chip legend-chip--them">their pieces</span>
+          <span class="legend-chip legend-chip--jump">jump</span>
+        </p>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>

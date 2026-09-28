@@ -19,6 +19,7 @@ import { DotsAndBoxesModule } from './dotsandboxes/dotsandboxes.module';
 import { BattleshipModule } from './battleship/battleship.module';
 import { PigDiceModule } from './pigdice/pigdice.module';
 import { RpsModule } from './rockpaperscissors/rockpaperscissors.module';
+import { CheckersModule } from './checkers/checkers.module';
 import { ShareCountsModule } from './share-counts/share-counts.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
 import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
@@ -144,6 +145,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     BattleshipModule,
     PigDiceModule,
     RpsModule,
+    CheckersModule,
     HealthModule,
     SettingsModule,
   ],

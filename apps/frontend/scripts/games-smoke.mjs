@@ -24,6 +24,12 @@ const GAMES = [
   { slug: 'battleship', moves: ['#sea-mine .cell', '.cell[data-cell]'], board: '#sea-mine .cell' },
   { slug: 'pig-dice', moves: ['#btn-roll'], board: null, extra: playPigDiceToWin },
   {
+    slug: 'checkers',
+    // two taps per move: pick the piece up, then drop it on a destination
+    moves: ['.sq[data-sq] .piece, .sq[data-sq]'],
+    board: '.sq[data-sq]',
+  },
+  {
     slug: 'rock-paper-scissors',
     moves: ['.throws button', '[data-throw]'],
     board: null,
