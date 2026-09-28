@@ -1,5 +1,5 @@
 // Live Checkers duel E2E over HTTP (plan/games/06 phase 3).
-const API = 'http://localhost:3012/api/v1';
+const API = process.env.E2E_API || 'http://localhost:3012/api/v1';
 const core = await import('../public/games/checkers/core.js');
 const sq = core.squareAt;
 
