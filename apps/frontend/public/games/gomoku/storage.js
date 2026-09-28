@@ -1,0 +1,154 @@
+/**
+ * ============================================================================
+ * storage.js — Gomoku (guarded persistence facade)
+ * ============================================================================
+ * The games convention: one versioned save document, guarded reads and
+ * writes, in-memory fallback for private mode, never any network.
+ *
+ *   game:gomoku:save → { version: 1, series, prefs }
+ *     series: { [setupKey]: { b, w, draw } }
+ *            setupKey like '1p:hard:15' / '2p:11' / 'online:15'
+ *     prefs:  { mode, difficulty, size }
+ * ============================================================================
+ */
+
+export const SAVE_KEY = 'game:gomoku:save';
+export const SAVE_VERSION = 1;
+
+const MODES = ['1p', '2p', 'online'];
+const LEVELS = ['easy', 'medium', 'hard'];
+const SIZES = [11, 15];
+
+export const DEFAULT_PREFS = Object.freeze({ mode: '1p', difficulty: 'medium', size: 15 });
+
+/** One series per exact setup — the board size is part of the setup. */
+export function seriesSetupKey(mode, difficulty, size) {
+  return `${mode === '1p' ? mode + ':' + difficulty : mode}:${size}`;
+}
+
+export function emptyTally() {
+  return { b: 0, w: 0, draw: 0 };
+}
+
+/** Storage that degrades to an in-memory object when localStorage is unavailable. */
+const storage = (() => {
+  const fallback = {};
+  function backend() {
+    try {
+      if (typeof window !== 'undefined' && window.localStorage) {
+        const probe = '__g5_probe__';
+        window.localStorage.setItem(probe, '1');
+        window.localStorage.removeItem(probe);
+        return window.localStorage;
+      }
+    } catch {
+      /* private mode / disabled — fall through */
+    }
+    return null;
+  }
+  return {
+    getItem(key) {
+      const store = backend();
+      return store ? store.getItem(key) : fallback[key] || null;
+    },
+    setItem(key, value) {
+      const store = backend();
+      if (store) store.setItem(key, value);
+      else fallback[key] = value;
+    },
+    removeItem(key) {
+      const store = backend();
+      if (store) store.removeItem(key);
+      else delete fallback[key];
+    },
+  };
+})();
+
+function readJson(key, fallback) {
+  try {
+    const raw = storage.getItem(key);
+    return raw ? JSON.parse(raw) : fallback;
+  } catch {
+    return fallback;
+  }
+}
+
+function writeJson(key, value) {
+  try {
+    storage.setItem(key, JSON.stringify(value));
+    return true;
+  } catch {
+    return false; // quota / private mode — persistence is best-effort
+  }
+}
+
+function normalizeTally(tally) {
+  return tally && typeof tally === 'object' ? Object.assign(emptyTally(), tally) : emptyTally();
+}
+
+function normalizePrefs(parsed) {
+  if (!parsed || typeof parsed !== 'object') return null;
+  return {
+    mode: MODES.indexOf(parsed.mode) !== -1 ? parsed.mode : '1p',
+    difficulty: LEVELS.indexOf(parsed.difficulty) !== -1 ? parsed.difficulty : 'medium',
+    size: SIZES.indexOf(parsed.size) !== -1 ? parsed.size : 15,
+  };
+}
+
+function normalizeSave(parsed) {
+  if (
+    !parsed ||
+    typeof parsed !== 'object' ||
+    parsed.version !== SAVE_VERSION ||
+    !parsed.series ||
+    typeof parsed.series !== 'object'
+  ) {
+    return null;
+  }
+  const series = {};
+  for (const [setup, tally] of Object.entries(parsed.series)) {
+    series[setup] = normalizeTally(tally);
+  }
+  return {
+    version: SAVE_VERSION,
+    series,
+    prefs: normalizePrefs(parsed.prefs) || { ...DEFAULT_PREFS },
+  };
+}
+
+let save = null;
+
+function loadSave() {
+  if (save) return save;
+  save = normalizeSave(readJson(SAVE_KEY, null)) || {
+    version: SAVE_VERSION,
+    series: {},
+    prefs: { ...DEFAULT_PREFS },
+  };
+  return save;
+}
+
+function persist() {
+  writeJson(SAVE_KEY, save);
+}
+
+export function loadSeries(setup) {
+  return normalizeTally(loadSave().series[setup]);
+}
+
+export function saveSeries(setup, tally) {
+  const doc = loadSave();
+  doc.series[setup] = normalizeTally(tally);
+  persist();
+}
+
+export function loadPrefs() {
+  return { ...(normalizePrefs(loadSave().prefs) || { ...DEFAULT_PREFS }) };
+}
+
+export function savePrefs(prefs) {
+  const doc = loadSave();
+  const normalized = normalizePrefs(prefs);
+  if (normalized) doc.prefs = normalized;
+  persist();
+}

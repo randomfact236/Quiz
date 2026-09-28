@@ -29,6 +29,7 @@ rematch. Solo and social feed each other.
 | ----------------------- | -------------- | ------------------------------------- | -------- | --------------------------------------------- |
 | Tic Tac Toe (prototype) | `tic-tac-toe`  | easy/medium/hard AI (+ misère toggle) | ✅       | ✅ (`/tictactoe` backend, `?ttt=CODE` links)  |
 | Connect Four            | `connect-four` | easy/medium/hard AI                   | ✅       | ✅ (`/connectfour` backend, `?c4=CODE` links) |
+| Gomoku                  | `gomoku`       | easy/medium/hard AI (15×15 or 11×11)  | ✅       | ✅ (`/gomoku` backend, `?g5=CODE` links)      |
 
 ## 3. Roadmap — planned games (owner-requested plans, 2026-09-28)
 

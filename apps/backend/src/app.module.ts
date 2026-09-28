@@ -14,6 +14,7 @@ import { QuestionLikesModule } from './question-likes/question-likes.module';
 import { GameChallengesModule } from './game-challenges/game-challenges.module';
 import { TictactoeModule } from './tictactoe/tictactoe.module';
 import { ConnectFourModule } from './connectfour/connectfour.module';
+import { GomokuModule } from './gomoku/gomoku.module';
 import { ShareCountsModule } from './share-counts/share-counts.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
 import { DB_PORT, DB_POOL_SIZE } from './common/constants/app.constants';
@@ -134,6 +135,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     GameChallengesModule,
     TictactoeModule,
     ConnectFourModule,
+    GomokuModule,
     HealthModule,
     SettingsModule,
   ],

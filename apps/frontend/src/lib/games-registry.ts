@@ -37,6 +37,14 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #f59e0b 0%, #dc2626 100%)',
   },
   {
+    slug: 'gomoku',
+    emoji: '⚫',
+    title: 'Gomoku',
+    blurb: 'Five in a row on a 15×15 board — solo vs the computer or duel a friend live.',
+    gradient: 'from-amber-600 to-yellow-700',
+    cssGradient: 'linear-gradient(135deg, #d97706 0%, #a16207 100%)',
+  },
+  {
     slug: 'tic-tac-toe',
     emoji: '⭕',
     title: 'Tic Tac Toe',
