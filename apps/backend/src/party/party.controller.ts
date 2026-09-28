@@ -27,6 +27,7 @@ class CreatePartyDto {
     'connect-four-mp',
     'othello-3',
     'quadflip',
+    'ultimate-ttt-mp',
   ])
   gameSlug: string;
 

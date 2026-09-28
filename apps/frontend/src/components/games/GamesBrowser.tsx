@@ -1,13 +1,15 @@
 /**
  * ============================================================================
- * GamesBrowser — the /games tab bar (owner ask 2026-09-28)
+ * GamesBrowser — the /games tab bar + card grid (owner asks 2026-09-28)
  * ============================================================================
- * Owner rule: CLEAR SEPARATION by player count — visible tabs "2 Players /
- * 3 Players / 4 Players" at the top of the games page, numbers visible
- * OUTSIDE (no dropdown, nothing hidden): one tap selects the group. A game
- * appears in every tab it supports (2P duels → "2 Players"; party tables →
- * "3 Players" AND "4 Players" with a badge). The rule is binding for any AI
- * adding games — mirrored in AGENTS.md §2D Games and plan/games/README.md §5.
+ * Owner rules (binding, mirrored in AGENTS.md §2D + plan/games/README §5):
+ *  - VISIBLE tabs "2 Players / 3 Players / 4 Players" at the top, numbers
+ *    outside, NO dropdown; one tap selects the group.
+ *  - Play-preview snapshot with the game name directly BELOW it.
+ *  - Always-visible created-games counter.
+ *  - Layout Restructure (2026-09-28, owner feedback): 3-column responsive
+ *    grid with a refined card anatomy — preview tile, name, blurb, footer
+ *    with share + badge. Same data, same rules, better rhythm.
  * ============================================================================
  */
 
@@ -40,9 +42,9 @@ export function GamesBrowser({ games }: { games: GameCard[] }): JSX.Element {
 
   return (
     <div>
-      {/* Visible tab bar — player counts outside, no dropdown (owner rule). */}
+      {/* Player-count tabs — visible outside, no dropdown (owner rule). */}
       <div
-        className="mb-8 flex justify-center gap-2"
+        className="mx-auto mb-5 flex w-fit gap-1.5 rounded-2xl bg-white/60 p-1.5 shadow-sm ring-1 ring-black/5 backdrop-blur dark:bg-white/10 dark:ring-white/10"
         role="tablist"
         aria-label="Filter games by player count"
       >
@@ -55,57 +57,71 @@ export function GamesBrowser({ games }: { games: GameCard[] }): JSX.Element {
               role="tab"
               aria-selected={active}
               onClick={() => setTab(key)}
-              className={`rounded-full px-4 py-2.5 text-sm font-extrabold transition-all sm:px-5 ${
+              className={`rounded-xl px-4 py-2 text-sm font-bold transition-all sm:px-5 ${
                 active
-                  ? 'bg-indigo-600 text-white shadow-lg'
-                  : 'bg-white/70 text-gray-700 hover:bg-white dark:bg-white/10 dark:text-secondary-200 dark:hover:bg-white/20'
+                  ? 'bg-indigo-600 text-white shadow-md'
+                  : 'text-gray-600 hover:bg-white/70 hover:text-gray-900 dark:text-secondary-300 dark:hover:bg-white/10 dark:hover:text-white'
               }`}
             >
-              {label} <span className={active ? 'text-white/80' : 'opacity-50'}>({count})</span>
+              {label}
+              <span className={`ml-1.5 text-xs ${active ? 'text-white/75' : 'opacity-45'}`}>
+                {count}
+              </span>
             </button>
           );
         })}
       </div>
 
-      {/* Owner ask 2026-09-28: always show how many games are created. */}
-      <p className="mb-6 text-center text-sm font-semibold text-gray-600 dark:text-secondary-300">
-        ðŸŽ® {games.length} game{games.length === 1 ? '' : 's'} created Â· {visible.length} in this
-        tab
+      {/* Always-visible created-games counter (owner rule). */}
+      <p className="mb-8 text-center text-sm font-medium text-gray-500 dark:text-secondary-400">
+        🎮 {games.length} game{games.length === 1 ? '' : 's'} created · {visible.length} in this tab
       </p>
 
       {visible.length === 0 ? (
-        <p className="text-center text-gray-500 dark:text-secondary-400">
+        <p className="py-16 text-center text-gray-500 dark:text-secondary-400">
           No games here yet — new tables are on the way.
         </p>
       ) : (
-        <div className="grid gap-6 sm:grid-cols-2">
+        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {visible.map((game) => (
-            <div
+            <article
               key={game.slug}
-              className={`relative flex flex-col rounded-2xl bg-gradient-to-r ${game.gradient} p-4 text-white shadow-lg transition-all hover:scale-[1.02] hover:shadow-xl`}
+              className={`group relative flex flex-col overflow-hidden rounded-2xl bg-gradient-to-br ${game.gradient} text-white shadow-md ring-1 ring-black/5 transition-all duration-200 hover:-translate-y-1 hover:shadow-xl dark:ring-white/10`}
             >
+              {/* Sheen: subtle diagonal light sweep on hover. */}
+              <span
+                aria-hidden="true"
+                className="pointer-events-none absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+              />
               <a
                 href={`/games/${game.slug}/index.html`}
-                className="flex min-w-0 flex-1 flex-col items-center gap-2 text-center"
+                className="flex min-w-0 flex-1 flex-col p-4"
+                aria-label={`Play ${game.title}`}
               >
                 {/* Play-preview tile: how the game looks mid-play. */}
-                <span className="relative w-full">
+                <span className="relative block overflow-hidden rounded-xl bg-white/15 ring-1 ring-white/25 backdrop-blur-[2px] transition-transform duration-300 group-hover:scale-[1.02]">
                   <GamePlayPreview slug={game.slug} />
                   {/* Player-count badge — visible on every card. */}
-                  <span className="absolute right-2 top-2 rounded-full bg-black/35 px-2 py-0.5 text-xs font-bold text-white">
+                  <span className="absolute right-2 top-2 rounded-full bg-black/40 px-2 py-0.5 text-[11px] font-bold tracking-wide text-white">
                     {game.players.join(' · ')}P
                   </span>
                 </span>
-                {/* Name sits directly below the preview (owner layout). */}
-                <span className="block pt-1 text-lg font-bold">{game.title}</span>
-                <span className="block text-sm text-white/90">{game.blurb}</span>
+                {/* Name directly below the preview (owner rule). */}
+                <span className="mt-3 block truncate text-base font-extrabold tracking-tight">
+                  {game.title}
+                </span>
+                <span className="mt-1 line-clamp-2 block text-xs leading-relaxed text-white/85">
+                  {game.blurb}
+                </span>
               </a>
-              {/* BUG-035: hub-level share — result shares live in each game's
-                  own result screen; this spreads the game itself. */}
-              <div className="absolute left-3 top-3">
+              {/* Card footer: share isolated from the card link. */}
+              <div className="flex items-center justify-between border-t border-white/15 px-4 py-2.5">
+                <span className="text-[11px] font-semibold uppercase tracking-widest text-white/60">
+                  Play now
+                </span>
                 <GameShareButton slug={game.slug} title={game.title} blurb={game.blurb} />
               </div>
-            </div>
+            </article>
           ))}
         </div>
       )}

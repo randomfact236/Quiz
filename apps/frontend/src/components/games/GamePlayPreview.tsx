@@ -47,6 +47,8 @@ function previewSvg(slug: string): JSX.Element {
       return <Flip3Preview />;
     case 'quadflip':
       return <Flip4Preview />;
+    case 'ultimate-ttt-mp':
+      return <UtttPreview />;
     case 'tri-nim':
       return <TriNimPreview />;
     case 'connect-four-mp':
@@ -562,6 +564,44 @@ function Flip4Preview(): JSX.Element {
       </g>
       {stones.map(([cx, cy, fill], i) => (
         <circle key={i} cx={cx} cy={cy} r="6" fill={fill} />
+      ))}
+    </BoardFrame>
+  );
+}
+/** 3×3 of mini tic-tac-toe boards, one won, one forced. */
+function UtttPreview(): JSX.Element {
+  const marks: Array<[number, number, string, string]> = [
+    [28, 28, '●', '#e11d48'],
+    [44, 28, '▲', '#2563eb'],
+    [60, 28, '●', '#e11d48'],
+    [28, 48, '■', '#059669'],
+    [60, 48, '★', '#d97706'],
+    [44, 68, '●', '#e11d48'],
+    [60, 68, '▲', '#2563eb'],
+  ];
+  const grid = [36, 56, 76];
+  return (
+    <BoardFrame>
+      <g stroke="currentColor" strokeWidth="1" opacity="0.35">
+        {grid.map((v) => (
+          <path key={'v' + v} d={'M' + v + ' 12v66'} />
+        ))}
+        {grid.map((v) => (
+          <path key={'h' + v} d={'M16 ' + v + 'h72'} />
+        ))}
+      </g>
+      {marks.map(([cx, cy, sym, fill], i) => (
+        <text
+          key={i}
+          x={cx}
+          y={cy + 5}
+          fontSize="13"
+          fontWeight="800"
+          fill={fill}
+          textAnchor="middle"
+        >
+          {sym}
+        </text>
       ))}
     </BoardFrame>
   );

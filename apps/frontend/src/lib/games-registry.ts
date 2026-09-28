@@ -138,6 +138,15 @@ export const GAMES: GameEntry[] = [
     players: [4],
   },
   {
+    slug: 'ultimate-ttt-mp',
+    emoji: ' hashtag#️⃣',
+    title: 'Ultimate TTT MP',
+    blurb: 'Nine boards at once — where you play decides where they must play. 3 or 4 players.',
+    gradient: 'from-cyan-600 to-blue-800',
+    cssGradient: 'linear-gradient(135deg, #0891b2 0%, #1e40af 100%)',
+    players: [3, 4],
+  },
+  {
     slug: 'tri-nim',
     emoji: 'ðŸ¥¢',
     title: 'Tri-Nim',

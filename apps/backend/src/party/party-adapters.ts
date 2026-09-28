@@ -62,6 +62,16 @@ import {
   flipPlacement,
   flipValidateMove,
 } from './games/flip-mp.core';
+import {
+  UtttState,
+  utttAiMove,
+  utttApplyMove,
+  utttInitialState,
+  utttIsOver,
+  utttPlacement,
+  utttValidateMove,
+  utttWinner,
+} from './games/uttt-mp.core';
 
 /**
  * MP1 party engine — ONE server-authoritative engine for ALL party games
@@ -505,6 +515,55 @@ class FlipAdapter implements PartyAdapter {
   }
 }
 
+/** Ultimate TTT MP: 9 mini-boards, send-rule turn forcing, macro-line win. */
+class UtttAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return utttInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): UtttState {
+    return state as unknown as UtttState;
+  }
+
+  validate(state: Record<string, unknown>, _seat: number, move: unknown): string | null {
+    return utttValidateMove(this.as(state), move as number);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return utttApplyMove(this.as(state), seat, move as number) as unknown as Record<
+      string,
+      unknown
+    >;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return utttIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return utttWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return utttAiMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  placement(
+    state: Record<string, unknown>,
+    winnerSeat: number | null
+  ): { seat: number; rank: number }[] {
+    return utttPlacement(this.as(state).seatCount, winnerSeat);
+  }
+}
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -514,6 +573,7 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'connect-four-mp': new C4Adapter(),
   'othello-3': new FlipAdapter(3),
   quadflip: new FlipAdapter(4),
+  'ultimate-ttt-mp': new UtttAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {
