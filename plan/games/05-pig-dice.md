@@ -63,3 +63,11 @@ banner ("rolled a 1 — pot lost!"). Rematch = new match. Rounds run 3–6 minut
 
 jest: pot-loss on 1, banking, win detection, AI threshold sanity; backend specs:
 turn enforcement, RNG bounds, server-resolved winner; two-phone manual duel.
+
+## 9. Party variants (3P/4P) — see [multiplayer-party.md](multiplayer-party.md) §P5
+
+3P/4P classic race: turn order fixed, one shared die, no teams. House rule: three
+1s in a row wipes your WHOLE bank (anti-snowball). Hot-seat natural; online lobby
+fills humans first, bots take empty seats (owner decision 2026-09-28). Solo AI
+unchanged — each bot runs the same tiers independently. Effort: +4–6 h on the
+duel backend (N-player seats, bot-turn ticker).

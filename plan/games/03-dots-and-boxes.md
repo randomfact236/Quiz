@@ -65,3 +65,11 @@ the opener.
 
 jest: box completion, extra-turn cascade, chain counting, parity of total boxes; backend
 specs: edge double-claim rejection, authoritative turn resolution; two-phone manual duel.
+
+## 9. Party variants (3P/4P) — see [multiplayer-party.md](multiplayer-party.md) §P1
+
+3P/4P on the 8×8 (4P also 10×10): every claimed box scores its owner, no player
+elimination — running out of turns never removes you from scoring. The classic
+four-way endgame chain giveaway is the whole show. Bots fill empty lobby seats
+(owner decision 2026-09-28); each runs its tier independently. Effort: +4–6 h
+(N-player seats, box-owner map, bot ticker).
