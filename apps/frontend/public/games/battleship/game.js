@@ -53,12 +53,14 @@ const state = {
   phase: 'placing', // 'placing' | 'battle' | 'finished'
   placing: 0, // index of the ship being placed
   orientation: 'h',
+  iAm: 1, // which side this device plays in a local match (2p: the last placer)
   myFleet: [null, null, null],
   theirFleet: [null, null, null], // local modes only; online keeps this null
   myShots: new Uint8Array(CELLS), // shots I fired at their waters (1 = hit)
   theirShots: new Uint8Array(CELLS), // shots they fired at me (1 miss | 2 hit)
   myTurn: true,
   winner: 0, // 0 none | 1 me | 2 them
+  placingFor: 1, // hot-seat: which player is placing (1 Red, 2 Blue)
   series: emptyTally(),
   aiTimer: null,
   // plan/games/04: live online duel — server-authoritative, 3-s poll.
@@ -73,7 +75,7 @@ function currentSetupKey() {
 
 const markLabel = (m) => (m === 1 ? '🔴' : '🔵');
 const markName = (m) => (m === 1 ? 'Red' : 'Blue');
-const myMark = () => (state.mode === 'online' && state.online ? state.online.mark : 1);
+const myMark = () => (state.mode === 'online' && state.online ? state.online.mark : state.iAm);
 const themMark = () => (myMark() === 1 ? 2 : 1);
 
 /* ---- screens -------------------------------------------------------------- */
@@ -258,19 +260,26 @@ function onFleetComplete() {
     submitOnlineFleet();
     return;
   }
-  // local modes: the opponent's fleet (computer places its own; 2p the other
-  // player places on the same device right after)
   if (state.mode === '1p') {
+    // the computer places its own fleet
     state.theirFleet = randomFleet();
     startBattle();
-  } else {
+    return;
+  }
+  // 2p hot-seat: the FIRST completion hands the device to the other player
+  // (their fleet becomes the enemy fleet); the second one starts the battle.
+  if (state.placingFor === 1) {
+    state.theirFleet = state.myFleet;
+    state.myFleet = [null, null, null];
+    state.placingFor = 2;
     state.phase = 'placing';
     state.placing = 0;
-    state.myFleet = [null, null, null];
     renderPlacement();
     els.turn.textContent = 'Blue places their fleet';
     els.turn.dataset.mark = '2';
+    return;
   }
+  startBattle();
 }
 
 function startBattle() {
@@ -325,8 +334,10 @@ function theirFire(cell) {
   renderBattle();
 }
 
-function finishLocal(winner) {
+/** `iWon` = the player on this device won → the winner is a SIDE (2p plays 🔵). */
+function finishLocal(iWon) {
   state.phase = 'finished';
+  const winner = iWon ? myMark() : themMark();
   state.winner = winner;
   if (winner === 1) state.series.r++;
   else if (winner === 2) state.series.b++;
@@ -334,7 +345,7 @@ function finishLocal(winner) {
   saveSeries(currentSetupKey(), state.series);
   renderBattle();
   renderMiniSeries();
-  showOverlay(winner === 1, winner);
+  showOverlay(winner === myMark(), winner);
 }
 
 /* ---- round overlay ------------------------------------------------------------- */
@@ -593,29 +604,8 @@ function applyOnlineView(view) {
   state.theirShots = Uint8Array.from(view.yourIncoming || new Uint8Array(CELLS));
   state.myTurn = view.turn === view.yourMark && view.status === 'running';
   renderBattle();
-  if (view.status === 'finished' && state.winner === 0) {
-    const youWon = view.winner === view.yourMark;
-    state.winner = view.winner;
-    if (youWon) state.series.r++;
-    else if (view.winner === 0) state.series.draw++;
-    else state.series.b++;
-    saveSeries(currentSetupKey(), state.series);
-    renderMiniSeries();
-    showOverlay(youWon, view.winner);
-    stopOnlinePoll();
-  }
-  if (state.phase === 'finished' && els.overlay.classList.contains('hidden')) {
-    // the match resolved while we were away
-    const youWon = view.winner === view.yourMark;
-    state.winner = view.winner;
-    if (youWon) state.series.r++;
-    else if (view.winner === 0) state.series.draw++;
-    else state.series.b++;
-    saveSeries(currentSetupKey(), state.series);
-    renderMiniSeries();
-    showOverlay(youWon, view.winner);
-    stopOnlinePoll();
-  }
+  // the !locked guard keeps a repeated poll/response from tallying twice
+  if (view.status === 'finished' && !state.locked) finishOnlineRound(view);
 }
 
 function onlineFire(cell) {
@@ -713,6 +703,8 @@ function resetMatch() {
   state.theirShots = new Uint8Array(CELLS);
   state.myTurn = myMark() === 1;
   state.winner = 0;
+  state.placingFor = 1;
+  state.iAm = 1;
   if (state.aiTimer) {
     clearTimeout(state.aiTimer);
     state.aiTimer = null;
