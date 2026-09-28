@@ -17,7 +17,7 @@
   --cell-hover: #e0e7ff;
   --black: #1e293b;
   --white: #f8fafc;
-  --line: #cbd5e1;
+  --line: #92400e;
   --board: #f0c27b;
   --board-edge: #d9a15a;
   --win: #10b981;
@@ -37,7 +37,7 @@
   --cell-hover: #312e81;
   --black: #0f172a;
   --white: #f1f5f9;
-  --line: #a16207;
+  --line: #451a03;
   --board: #b45309;
   --board-edge: #78350f;
   --win: #34d399;
@@ -354,7 +354,7 @@ button.ghost:hover {
     linear-gradient(to bottom, var(--line) 1px, transparent 1px);
   background-size: var(--cell, 24px) var(--cell, 24px);
   background-position: calc(var(--cell, 24px) / 2) calc(var(--cell, 24px) / 2);
-  opacity: 0.8;
+  opacity: 0.55;
 }
 
 .cell {

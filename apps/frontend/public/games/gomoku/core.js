@@ -176,13 +176,27 @@ export function easyMove(board, size, toMove) {
   return cells[Math.floor(Math.random() * cells.length)];
 }
 
-/** Medium AI — take the win, block the loss, else best shape score. */
+/** Medium AI — take the win, block the loss, block the opponent's open
+ *  three (manual play showed it chasing its own shape instead of defending),
+ *  else best shape score. */
 export function mediumMove(board, size, toMove) {
   const cells = candidateCells(board, size);
   if (cells.length === 0) return -1;
   const opp = other(toMove);
   for (const i of cells) if (isWinningCell(board, size, i, toMove)) return i;
   for (const i of cells) if (isWinningCell(board, size, i, opp)) return i;
+  // defend: the cell where the opponent would complete an open three/four
+  let block = -1;
+  let blockScore = 0;
+  for (const i of cells) {
+    const { row, col } = rowColOf(size, i);
+    const s = pointScore(board, size, row, col, opp);
+    if (s >= SCORES.openThree && s > blockScore) {
+      blockScore = s;
+      block = i;
+    }
+  }
+  if (block >= 0) return block;
   let best = -Infinity;
   let bestCells = [];
   for (const i of cells) {

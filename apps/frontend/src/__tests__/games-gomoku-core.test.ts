@@ -271,6 +271,22 @@ describe('gomoku core', () => {
     }
   });
 
+  it('medium AI blocks an opponent open three instead of chasing its own shape', () => {
+    // manual play found this: with an open three against it, medium built its
+    // own line instead of defending. The blocking cells are the two open ends.
+    const size = 15;
+    const board = line(
+      size,
+      [
+        [7, 5],
+        [7, 6],
+      ],
+      B
+    );
+    const move = mediumMove(board, size, W);
+    expect([idx(size, 7, 4), idx(size, 7, 7)]).toContain(move);
+  });
+
   it('medium and hard take an immediate win and block an immediate loss', () => {
     const size = 15;
     // W can win at (7,3) → both tiers must take it
