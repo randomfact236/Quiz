@@ -52,6 +52,23 @@ const count = (board, piece) => board.filter((p) => p === piece).length;
 try {
   await page.goto(`${BASE}/games/checkers/index.html`, { waitUntil: 'networkidle' });
 
+  // ---- the menu renders its state (caught a prefs-key mismatch here: the
+  // series scope read "vs computer · undefined" and NO difficulty was marked
+  // selected on load, yet every spec and the play path still passed) --------
+  const scope = (await page.textContent('#series-scope')) || '';
+  check('the series scope names the difficulty', /vs computer · (easy|medium|hard)$/.test(scope.trim()), scope);
+  const checkedDifficulty = await page.locator('#difficulty-segmented button[aria-checked="true"]').count();
+  check('exactly one difficulty is pre-selected', checkedDifficulty === 1, `${checkedDifficulty} checked`);
+  const checkedMode = await page.locator('#mode-segmented button[aria-checked="true"]').count();
+  check('exactly one mode is pre-selected', checkedMode === 1, `${checkedMode} checked`);
+
+  // a chosen difficulty must survive a reload (it is persisted per device)
+  await page.click('#difficulty-segmented button[data-difficulty="hard"]');
+  await page.reload({ waitUntil: 'networkidle' });
+  const afterReload = await page.locator('#difficulty-segmented button[data-difficulty="hard"]').getAttribute('aria-checked');
+  check('the chosen difficulty persists across a reload', afterReload === 'true', `aria-checked=${afterReload}`);
+  await page.click('#difficulty-segmented button[data-difficulty="medium"]');
+
   // ---- enter play --------------------------------------------------------
   await page.click('#btn-play');
   await page.waitForSelector('#screen-playing.screen--active');

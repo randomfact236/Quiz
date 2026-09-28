@@ -805,7 +805,7 @@ function syncSegmented(container, attr, value) {
 }
 
 function saveMenuPrefs() {
-  savePrefs({ mode: state.mode, level: state.difficulty });
+  savePrefs({ mode: state.mode, difficulty: state.difficulty });
 }
 
 function init() {
@@ -940,7 +940,11 @@ function init() {
   const prefs = loadPrefs();
   if (prefs) {
     state.mode = prefs.mode;
-    state.difficulty = prefs.level;
+    // storage.js keys the level as `difficulty` (tic-tac-toe uses `level`).
+    // Reading the wrong one left the series scope reading "vs computer ·
+    // undefined" and NO difficulty button marked selected on load — found by
+    // the manual browser check, invisible to the specs and the play path.
+    state.difficulty = prefs.difficulty;
     applyModeUi(state.mode);
     syncSegmented(document.getElementById('mode-segmented'), 'data-mode', state.mode);
     syncSegmented(
