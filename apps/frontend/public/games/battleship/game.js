@@ -272,6 +272,8 @@ function onFleetComplete() {
     state.theirFleet = state.myFleet;
     state.myFleet = [null, null, null];
     state.placingFor = 2;
+    // the last placer becomes "this device" in the battle (🔵 Blue)
+    state.iAm = 2;
     state.phase = 'placing';
     state.placing = 0;
     renderPlacement();
