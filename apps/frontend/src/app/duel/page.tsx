@@ -666,7 +666,7 @@ export default function DuelPage(): JSX.Element {
               </button>
               <Link
                 href="/play"
-                className="rounded-xl bg-slate-100 px-6 py-3 text-sm font-black uppercase tracking-widest text-slate-600 transition-colors hover:bg-slate-200 dark:bg-secondary-700 dark:text-secondary-300"
+                className="rounded-xl bg-slate-100 px-6 py-3 text-sm font-black uppercase tracking-widest text-slate-600 transition-colors hover:bg-slate-200 dark:bg-secondary-700 dark:text-secondary-300 dark:hover:bg-secondary-600"
               >
                 Not now
               </Link>

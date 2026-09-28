@@ -66,6 +66,9 @@
     ],
     "*.{json,md,css}": [
       "prettier --write"
+    ],
+    "apps/frontend/src/app/**/*.{ts,tsx}": [
+      "npm run check:theme"
     ]
   },
   "engines": {
