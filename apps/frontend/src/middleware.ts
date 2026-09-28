@@ -148,6 +148,14 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith('/games/')) {
     const response = NextResponse.next();
     response.headers.set('Content-Security-Policy', GAMES_CSP);
+    // The page document carries the ?v= bumps for js/css — a cached
+    // index.html keeps serving the PREVIOUS game.js?v=N after a fix ships
+    // (2026-09-28: the running-score fix looked "not deployed" because of
+    // exactly this). Always revalidate the HTML; the versioned assets keep
+    // their 4-hour cache.
+    if (pathname.endsWith('/') || pathname.endsWith('/index.html')) {
+      response.headers.set('Cache-Control', 'no-cache');
+    }
     return response;
   }
 
