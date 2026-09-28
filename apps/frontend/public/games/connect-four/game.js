@@ -231,16 +231,56 @@ function onlinePlayerName() {
   return name;
 }
 
-function onlineApi(path, body) {
-  return fetch(ONLINE_API + path, {
-    method: body ? 'POST' : 'GET',
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
-    body: body ? JSON.stringify(body) : undefined,
-  }).then((r) => {
-    if (!r.ok)
-      return r.json().then((e) => Promise.reject(new Error(e.message || String(r.status))));
-    return r.json();
+/** The server-signed guest pair (HARD-03) cached by the app under this key —
+ *  every guest WRITE the duels backend accepts requires it as X-Guest-Token. */
+function onlineGuestPair() {
+  try {
+    const raw = localStorage.getItem('aiquiz:guest-token');
+    if (!raw) return null;
+    const pair = JSON.parse(raw);
+    return pair && pair.guestId && pair.token ? pair : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Reuse the app's signed pair, or issue one for this device's guest id. */
+async function ensureOnlineGuestPair() {
+  const guestId = onlineGuestId();
+  const cached = onlineGuestPair();
+  if (cached && cached.guestId === guestId) return cached;
+  const res = await fetch(ONLINE_API + '/guest-users/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ legacyId: guestId }),
   });
+  if (!res.ok) return null;
+  const pair = await res.json();
+  try {
+    localStorage.setItem('aiquiz:guest-token', JSON.stringify(pair));
+  } catch {
+    /* private mode — the in-memory pair still works this page */
+  }
+  return pair;
+}
+
+function onlineApi(path, body) {
+  return ensureOnlineGuestPair()
+    .then((pair) =>
+      fetch(ONLINE_API + path, {
+        method: body ? 'POST' : 'GET',
+        headers: {
+          ...(body ? { 'Content-Type': 'application/json' } : {}),
+          ...(pair ? { 'X-Guest-Token': pair.token } : {}),
+        },
+        body: body ? JSON.stringify(body) : undefined,
+      })
+    )
+    .then((r) => {
+      if (!r.ok)
+        return r.json().then((e) => Promise.reject(new Error(e.message || String(r.status))));
+      return r.json();
+    });
 }
 
 function onlineStatus(text) {
