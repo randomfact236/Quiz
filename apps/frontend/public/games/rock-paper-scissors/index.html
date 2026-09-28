@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Rock Paper Scissors — PigZap Games" />
+    <meta property="og:description" content="Best of five in under a minute — throw against the computer or duel a friend with simultaneous reveals." />
+    <meta property="og:url" content="https://pigzap.com/games/rock-paper-scissors" />
+    <meta property="og:image" content="https://pigzap.com/og/game/rock-paper-scissors.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Rock Paper Scissors — PigZap Games" />
+    <meta name="twitter:description" content="Best of five in under a minute — throw against the computer or duel a friend." />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/rock-paper-scissors.png" />
+    <title>Rock Paper Scissors — PigZap Games</title>
+    <meta
+      name="description"
+      content="Best of five in under a minute — throw against the computer (easy, medium or hard) or duel a friend live."
+    />
+    <meta name="theme-color" content="#d9f2e4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#052e1a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='16' fill='%239333ea'/%3E%3Ctext x='50' y='68' font-size='48' text-anchor='middle'%3E%E2%9C%8A%3C/text%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Rock Paper Scissors menu">
+        <h1 class="menu-title">Rock Paper Scissors ✊</h1>
+        <p class="tagline">Best of five in under a minute — throws are simultaneous, so nobody cheats.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">
+              🤖 vs Computer
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">
+              👥 2 Players
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">
+              ⚔️ Online
+            </button>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div
+              class="segmented"
+              role="radiogroup"
+              aria-labelledby="difficulty-label"
+              id="difficulty-segmented"
+            >
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">
+                Easy
+              </button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">
+                Medium
+              </button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">
+                Hard
+              </button>
+            </div>
+          </div>
+
+          <!-- plan/games/07: live online duel (server resolves + reveals together) -->
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you play 🔴)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--r">
+              <span class="num" id="series-r">0</span>
+              <span class="label">🔴 wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--b">
+              <span class="num" id="series-b">0</span>
+              <span class="label">🔵 wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Rock Paper Scissors table">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">🔴 0 · 🤝 0 · 🔵 0</div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">Round 1 — throw!</div>
+
+        <div class="table">
+          <div class="reveal" id="reveal">
+            <div class="hand" id="hand-you"><span class="who">🔴 You</span><span class="glyph" id="glyph-you">✊</span></div>
+            <div class="vs" id="reveal-vs">VS</div>
+            <div class="hand" id="hand-them"><span class="who" id="them-who">💻 Computer</span><span class="glyph" id="glyph-them">✊</span></div>
+          </div>
+          <div class="banks">
+            <div class="bank" data-mark="1" id="bank-1">
+              <div class="num" id="score-1">0</div>
+              <div class="label">🔴 Red</div>
+            </div>
+            <div class="bank" data-mark="2" id="bank-2">
+              <div class="num" id="score-2">0</div>
+              <div class="label">🔵 Blue</div>
+            </div>
+          </div>
+          <p class="notice" id="notice" role="status" aria-live="polite"></p>
+        </div>
+
+        <div class="throws">
+          <button type="button" data-throw="R"><span class="glyph">✊</span>Rock</button>
+          <button type="button" data-throw="P"><span class="glyph">✋</span>Paper</button>
+          <button type="button" data-throw="S"><span class="glyph">✌️</span>Scissors</button>
+        </div>
+
+        <div
+          id="overlay"
+          class="overlay hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="overlay-title"
+        >
+          <div class="overlay-card">
+            <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+            <h2 class="overlay-title" id="overlay-title">You win!</h2>
+            <p class="overlay-sub" id="overlay-sub"></p>
+            <div class="overlay-actions">
+              <button type="button" class="primary" id="btn-next">Next match</button>
+              <div class="ghost-row">
+                <button type="button" class="ghost" id="btn-menu2">Menu</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="badge hidden" id="thinking-badge">Computer is choosing…</div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>

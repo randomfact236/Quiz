@@ -29,6 +29,14 @@ export interface GameEntry {
 
 export const GAMES: GameEntry[] = [
   {
+    slug: 'rock-paper-scissors',
+    emoji: '✊',
+    title: 'Rock Paper Scissors',
+    blurb: 'Best of five in under a minute — quickfire throws, simultaneous reveal, no cheating.',
+    gradient: 'from-purple-600 to-fuchsia-700',
+    cssGradient: 'linear-gradient(135deg, #9333ea 0%, #a21caf 100%)',
+  },
+  {
     slug: 'pig-dice',
     emoji: '🎲',
     title: 'Pig Dice',
