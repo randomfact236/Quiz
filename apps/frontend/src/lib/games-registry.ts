@@ -25,6 +25,12 @@ export interface GameEntry {
   gradient: string;
   /** Raw CSS gradient for the satori share image. */
   cssGradient: string;
+  /**
+   * Supported seat counts (owner rule 2026-09-28: the /games hub tabs by
+   * player count â€” 2 Players / 3 Players / 4 Players). Default [2] when
+   * omitted. Party games list every seat count they support.
+   */
+  players?: number[];
 }
 
 export const GAMES: GameEntry[] = [
@@ -84,6 +90,44 @@ export const GAMES: GameEntry[] = [
     blurb: 'Pass-and-play, take on the computer, or duel a friend online — hard is unbeatable.',
     gradient: 'from-cyan-500 to-blue-600',
     cssGradient: 'linear-gradient(135deg, #06b6d4 0%, #2563eb 100%)',
+  },
+  {
+    slug: 'checkers',
+    emoji: '⛓️',
+    title: 'Checkers',
+    blurb:
+      'Jump, capture, crown — forced captures and multi-jump chains, solo vs the computer or a live duel.',
+    gradient: 'from-amber-600 to-rose-700',
+    cssGradient: 'linear-gradient(135deg, #d97706 0%, #be123c 100%)',
+  },
+
+  {
+    slug: 'dots-boxes-4p',
+    players: [3, 4],
+    emoji: 'â¬œ',
+    title: 'Dots & Boxes 4P',
+    blurb: 'Four players draw edges and claim boxes â€” the chain giveaway decides everything.',
+    gradient: 'from-sky-500 to-indigo-700',
+    cssGradient: 'linear-gradient(135deg, #0ea5e9 0%, #4338ca 100%)',
+  },
+  {
+    slug: 'sos-4p',
+    players: [3, 4],
+    emoji: 'âœï¸',
+    title: 'SOS 4P',
+    blurb: 'Complete SOS lines to score and go again â€” four players, one paper grid.',
+    gradient: 'from-rose-500 to-orange-600',
+    cssGradient: 'linear-gradient(135deg, #f43f5e 0%, #ea580c 100%)',
+  },
+  {
+    slug: 'quad-oxo',
+    players: [3, 4],
+    emoji: 'ðŸŽ®',
+    title: 'Quad-OXO',
+    blurb:
+      'Four players, one 5x5 grid - first four in a row wins. Empty seats are bots, so start anytime.',
+    gradient: 'from-indigo-500 to-purple-700',
+    cssGradient: 'linear-gradient(135deg, #6366f1 0%, #7e22ce 100%)',
   },
 ];
 
