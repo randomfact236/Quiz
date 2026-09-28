@@ -185,7 +185,7 @@ body {
 }
 
 .score--b .num {
-  color: var(--black);
+  color: var(--text);
 }
 
 .score--w .num {
