@@ -46,7 +46,7 @@ const state = {
   mode: '1p', // '1p' | '2p' | 'online'
   difficulty: 'medium',
   size: DEFAULT_SIZE,
-  match: null, // core.js state { n, edges, owners, turn, scores }
+  match: createState(DEFAULT_SIZE), // core.js state { n, edges, owners, turn, scores }
   starter: 1,
   locked: false,
   series: emptyTally(),
