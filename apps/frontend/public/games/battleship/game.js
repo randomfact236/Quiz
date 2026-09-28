@@ -210,7 +210,7 @@ function renderBattle(view) {
       ? 'Battle over'
       : state.myTurn
         ? 'Your shot — pick a cell in ' +
-          (state.mode === '1p' ? 'enemy waters' : theirMark() === 1 ? 'Blue waters' : 'Red waters')
+          (state.mode === '1p' ? 'enemy waters' : themMark() === 1 ? 'Blue waters' : 'Red waters')
         : state.mode === '1p'
           ? 'Computer is aiming…'
           : markLabel(themMark()) + ' ' + markName(themMark()) + ' is aiming…';
