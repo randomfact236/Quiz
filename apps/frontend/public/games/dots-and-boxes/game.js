@@ -197,9 +197,14 @@ function renderTurn() {
   els.turn.dataset.mark = String(mark);
 }
 
+/** Top bar: the LIVE match score (box claims), not the series tally —
+ *  chains are decided by who is ahead right now (manual play caught the
+ *  mismatch: the bar showed series games-won and stayed 0–0 all match). */
 function renderMiniSeries() {
-  els.miniSeries.textContent =
-    '🔴 ' + state.series.r + ' · 🤝 ' + state.series.draw + ' · 🔵 ' + state.series.b;
+  if (state.match) {
+    els.miniSeries.textContent =
+      '🔴 ' + state.match.scores[0] + ' – ' + state.match.scores[1] + ' 🔵';
+  }
 }
 
 /* ---- match flow ------------------------------------------------------------- */
@@ -246,9 +251,7 @@ function playLocal(edge) {
   }
   renderBoard();
   renderTurn();
-  // the running score must track box claims as they happen (manual play
-  // caught the top bar frozen at 0–0 until the match ended)
-  renderMiniSeries();
+  renderMiniSeries(); // the live box score must move on every claim
   if (state.mode === '1p' && match.turn !== 1) scheduleAiMove();
 }
 
