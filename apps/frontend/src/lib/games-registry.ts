@@ -29,6 +29,15 @@ export interface GameEntry {
 
 export const GAMES: GameEntry[] = [
   {
+    slug: 'dots-and-boxes',
+    emoji: '🔵',
+    title: 'Dots and Boxes',
+    blurb:
+      'Draw lines, close boxes, keep the initiative — solo vs the computer or duel a friend live.',
+    gradient: 'from-sky-500 to-blue-700',
+    cssGradient: 'linear-gradient(135deg, #0ea5e9 0%, #1d4ed8 100%)',
+  },
+  {
     slug: 'connect-four',
     emoji: '🔴',
     title: 'Connect Four',
