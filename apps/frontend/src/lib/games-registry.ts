@@ -29,6 +29,14 @@ export interface GameEntry {
 
 export const GAMES: GameEntry[] = [
   {
+    slug: 'pig-dice',
+    emoji: '🎲',
+    title: 'Pig Dice',
+    blurb: 'Roll to build a turn score — bank it or push your luck. First to the target wins.',
+    gradient: 'from-emerald-500 to-lime-600',
+    cssGradient: 'linear-gradient(135deg, #10b981 0%, #65a30d 100%)',
+  },
+  {
     slug: 'battleship',
     emoji: '🚢',
     title: 'Battleship',
