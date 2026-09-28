@@ -184,6 +184,10 @@ function scheduleAi() {
         : { text: `💻 Computer rolled ${r.pips}`, cls: '' };
     }
     renderTable();
+    // a non-1 roll KEEPS the turn — the computer must decide again (hold once
+    // the pot builds). Without this the match freezes on the computer's turn
+    // (found by the browser play-through).
+    if (state.match.turn === 2) scheduleAi();
   }, GAME_CONFIG.aiThinkDelayMs);
 }
 
