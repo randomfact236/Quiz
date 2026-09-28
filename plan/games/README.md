@@ -25,11 +25,13 @@ rematch. Solo and social feed each other.
 
 ## 2. Live today
 
-| Game                    | Slug           | Solo                                  | Hot-seat | Online duel                                   |
-| ----------------------- | -------------- | ------------------------------------- | -------- | --------------------------------------------- |
-| Tic Tac Toe (prototype) | `tic-tac-toe`  | easy/medium/hard AI (+ misère toggle) | ✅       | ✅ (`/tictactoe` backend, `?ttt=CODE` links)  |
-| Connect Four            | `connect-four` | easy/medium/hard AI                   | ✅       | ✅ (`/connectfour` backend, `?c4=CODE` links) |
-| Gomoku                  | `gomoku`       | easy/medium/hard AI (15×15 or 11×11)  | ✅       | ✅ (`/gomoku` backend, `?g5=CODE` links)      |
+| Game                    | Slug             | Solo                                      | Hot-seat | Online duel                                       |
+| ----------------------- | ---------------- | ----------------------------------------- | -------- | ------------------------------------------------- |
+| Tic Tac Toe (prototype) | `tic-tac-toe`    | easy/medium/hard AI (+ misère toggle)     | ✅       | ✅ (`/tictactoe` backend, `?ttt=CODE` links)      |
+| Connect Four            | `connect-four`   | easy/medium/hard AI                       | ✅       | ✅ (`/connectfour` backend, `?c4=CODE` links)     |
+| Gomoku                  | `gomoku`         | easy/medium/hard AI (15×15 or 11×11)      | ✅       | ✅ (`/gomoku` backend, `?g5=CODE` links)          |
+| Dots and Boxes          | `dots-and-boxes` | easy/medium/hard AI (3×3 / 4×4 / 5×5)     | ✅       | ✅ (`/dots-and-boxes` backend, `?dbb=CODE` links) |
+| Battleship              | `battleship`     | easy/medium/hard AI (you place the fleet) | ✅       | ✅ (`/battleship` backend, `?bs=CODE` links)      |
 
 ## 3. Roadmap — planned games (owner-requested plans, 2026-09-28)
 
@@ -40,8 +42,8 @@ backend reuse of the tictactoe pattern, and its own verification list.
 | --- | ------------------- | -------------------------------------------------------- | -------------------------------------------------------------- |
 | 1   | Connect Four        | [01-connect-four.md](01-connect-four.md)                 | Strongest friend-duel fit                                      |
 | 2   | Gomoku              | [02-gomoku.md](02-gomoku.md)                             | Cheapest build — ttt engine, bigger board, never draws         |
-| 3   | Dots & Boxes        | [03-dots-and-boxes.md](03-dots-and-boxes.md)             | Chain-strategy depth on a tiny board                           |
-| 4   | Battleship Lite     | [04-battleship.md](04-battleship.md)                     | Hidden info + players place their OWN ships (pure player data) |
+| 3   | Dots & Boxes        | [03-dots-and-boxes.md](03-dots-and-boxes.md)             | ✅ **BUILT** — the server resolves the extra turn              |
+| 4   | Battleship Lite     | [04-battleship.md](04-battleship.md)                     | ✅ **BUILT** — hidden info; the server redacts the enemy fleet |
 | 5   | Pig Dice            | [05-pig-dice.md](05-pig-dice.md)                         | Luck keeps beginners competitive in duels                      |
 | 6   | Checkers            | [06-checkers.md](06-checkers.md)                         | The "step up" game — biggest build, scheduled last             |
 | 7   | Rock Paper Scissors | [07-rock-paper-scissors.md](07-rock-paper-scissors.md)   | 60-second quickfire duel, near-zero rules                      |
