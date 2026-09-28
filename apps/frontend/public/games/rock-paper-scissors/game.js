@@ -131,7 +131,8 @@ function renderTable() {
   }
   els.turn.textContent = turnText;
 
-  const canThrow = !state.locked && whoseThrow() === myMark();
+  // hot-seat: one device plays both sides — the turn gate is 1p/online only
+  const canThrow = !state.locked && (state.mode === '2p' || whoseThrow() === myMark());
   for (const btn of els.throws) btn.disabled = !canThrow;
 
   const notice = state.notice || '';
@@ -142,8 +143,9 @@ function renderTable() {
 /* ---- local match flow --------------------------------------------------------- */
 
 function myThrow(throw_) {
-  if (state.locked || whoseThrow() !== myMark()) return;
+  if (state.locked) return;
   if (state.mode === 'online') {
+    if (whoseThrow() !== myMark()) return;
     onlinePick(throw_);
     return;
   }
