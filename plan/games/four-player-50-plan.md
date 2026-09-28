@@ -14,13 +14,14 @@ serve every row unchanged.
 
 ## 2. Waves
 
-| Wave                              | Rows         | Composition                                                                   | Envelope (XS 4–6 h · S 8–12 h · M 13–18 h · L 30 h+) |
-| --------------------------------- | ------------ | ----------------------------------------------------------------------------- | ---------------------------------------------------- |
-| Base F1–F10                       | 10           | planned in MP1 phases 1–5 (incl. the simultaneous-round engine for P7–P8/P10) | ~27 h (phases 1–4) + ~10 h (phase 5)                 |
-| A — family variants + official 4P | F11–F26 (16) | XS×3, S×6, M×6, L×1 (Halma)                                                   | ≈ 170–230 h                                          |
-| B — secret races + circle games   | F27–F32 (6)  | XS×2, S×2, M×2; F29 (4-fleet sea) reuses the Battleship redaction pattern     | ≈ 45–65 h                                            |
-| C — RNG tier                      | F33–F42 (10) | **GATED** on the luck-tier decision; card games need the server-held deck     | ≈ 115–155 h + team-seat layer                        |
-| D — the deep end                  | F43–F50 (8)  | L×3 (Four-Handed Chess, Blokus 4P, Chinese Checkers 4P), M×2, S×3             | ≈ 145–195 h                                          |
+| Wave                        | Build positions | Notes                                                                              |
+| --------------------------- | --------------- | ---------------------------------------------------------------------------------- |
+| Base                        | 1-3             | F11 Quad-OXO + F1 Dots & Boxes 4P + F3 SOS 4P BUILT on MP1                         |
+| A - famous + gated-holdouts | 4-10            | F47/F15/F46/F44 build now; F9 Ludo, F35 Snakes & Ladders, F33 Memory Flip GATED    |
+| B - official 4P canon       | 11-12           | F45 Chinese Checkers 4P, F26 Halma (L band)                                        |
+| C - known + secret races    | 13-20           | F29/F27 reuse hidden-info redaction; F5 Pig Dice 4P rides the approved server-roll |
+| D - connoisseur bulk        | 21-38           | XS-to-M; F43 Four-Handed Chess needs its geometry note                             |
+| E - RNG tail                | 39-50           | GATED; F40/F41 also need the 2v2 seat layer                                        |
 
 ## 3. Two MP2-only prerequisites
 

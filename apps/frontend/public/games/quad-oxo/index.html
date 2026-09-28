@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Quad-OXO — 4-player four in a row | PigZap</title>
+    <meta name="description" content="Four players, one 5x5 grid, first four in a row wins. Play vs bots, pass-and-play, or a live table with friends — no signup." />
+    <meta name="robots" content="noindex" />
+    <meta property="og:title" content="Quad-OXO — four-player four in a row" />
+    <meta property="og:description" content="Empty seats are bots — grab friends or play 1v3. First four in a row wins." />
+    
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script src="/shared/theme.js?v=1"></script>
+  </head>
+  <body data-game="quad-oxo">
+    <main class="game-shell">
+      <header class="game-header">
+        <a class="back-link" href="/games/index.html">&larr; Games</a>
+        <h1>Quad-OXO</h1>
+        <p class="tagline">Four in a row on a 5×5 — take on three bots or bring friends.</p>
+      </header>
+
+      <!-- MENU -->
+      <section id="screen-menu" class="screen">
+        <button id="btn-hotseat" class="btn btn-primary">Pass &amp; play (4 players, one phone)</button>
+        <button id="btn-party" class="btn btn-primary">Online table — invite friends</button>
+        <p class="hint">Empty seats in an online table are played by bots — you can start anytime.</p>
+      </section>
+
+      <!-- HOT-SEAT -->
+      <section id="screen-hotseat" class="screen" hidden>
+        <p id="hot-turn" class="turn-label"></p>
+        <div id="hot-board" class="board"></div>
+        <p id="hot-msg" class="msg"></p>
+        <button id="btn-hot-again" class="btn btn-primary" hidden>Rematch</button>
+        <button class="btn btn-ghost" data-back>Menu</button>
+      </section>
+
+      <!-- PARTY LOBBY -->
+      <section id="screen-party-lobby" class="screen" hidden>
+        <label class="field">
+          <span>Your name</span>
+          <input id="party-name" maxlength="32" />
+        </label>
+        <div id="party-create-box">
+          <label class="field">
+            <span>Seats</span>
+            <select id="party-seats">
+              <option value="4" selected>4 (you + 3 seats)</option>
+              <option value="3">3 (you + 2 seats)</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Bot level</span>
+            <select id="party-tier">
+              <option value="easy">Easy</option>
+              <option value="medium" selected>Medium</option>
+              <option value="hard">Hard</option>
+            </select>
+          </label>
+          <button id="party-create" class="btn btn-primary">Create table</button>
+        </div>
+        <div id="party-join-box" hidden>
+          <label class="field">
+            <span>Table code</span>
+            <input id="party-code" maxlength="6" autocapitalize="characters" />
+          </label>
+          <button id="party-join" class="btn btn-primary">Join table</button>
+        </div>
+        <p id="party-msg" class="msg"></p>
+        <button id="party-lobby-back" class="btn btn-ghost">Menu</button>
+      </section>
+
+      <!-- PARTY GAME -->
+      <section id="screen-party-game" class="screen" hidden>
+        <div class="table-bar">
+          <span id="party-code-label" class="code-label"></span>
+          <button id="party-copy" class="btn btn-ghost" hidden>Copy invite</button>
+        </div>
+        <div id="party-seats-row" class="seats-row"></div>
+        <div id="party-board" class="board"></div>
+        <p id="party-status" class="turn-label"></p>
+        <div id="party-configure" class="configure-row" hidden></div>
+        <button id="party-start" class="btn btn-primary" hidden>Start the table</button>
+        <button id="party-leave" class="btn btn-ghost">Leave table</button>
+      </section>
+    </main>
+
+    <script src="/shared/pig-feedback.js?v=2" defer></script>
+    <script src="config.js?v=2"></script>
+    <script src="storage.js?v=2"></script>
+    <script src="core.js?v=2"></script>
+    <script src="game.js?v=2"></script>
+  </body>
+</html>

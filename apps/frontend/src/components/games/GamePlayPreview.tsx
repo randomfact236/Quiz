@@ -43,6 +43,14 @@ function previewSvg(slug: string): JSX.Element {
       return <PigDicePreview />;
     case 'rock-paper-scissors':
       return <RockPaperScissorsPreview />;
+    case 'othello-3':
+      return <Flip3Preview />;
+    case 'quadflip':
+      return <Flip4Preview />;
+    case 'tri-nim':
+      return <TriNimPreview />;
+    case 'connect-four-mp':
+      return <C4MpPreview />;
     case 'quad-oxo':
       return <QuadOxoPreview />;
     case 'dots-boxes-4p':
@@ -447,6 +455,117 @@ function CheckersPreview(): JSX.Element {
   );
 }
 
+/** Stick rows (3-4-5), some sticks missing. */
+function TriNimPreview(): JSX.Element {
+  const rows = [2, 4, 3];
+  return (
+    <BoardFrame>
+      {rows.map((n, rowIdx) =>
+        Array.from({ length: n }, (_, i) => (
+          <rect
+            key={rowIdx + '-' + i}
+            x={22 + i * 14 + rowIdx * 8}
+            y={16 + rowIdx * 22}
+            width="8"
+            height="16"
+            rx="4"
+            fill="#d97706"
+          />
+        ))
+      )}
+    </BoardFrame>
+  );
+}
+
+/** Drop board with stacked multi-colour discs. */
+function C4MpPreview(): JSX.Element {
+  const discs: Array<[number, number, string]> = [
+    [30, 64, '#e11d48'],
+    [50, 64, '#2563eb'],
+    [70, 64, '#059669'],
+    [90, 64, '#d97706'],
+    [30, 44, '#2563eb'],
+    [50, 44, '#e11d48'],
+    [30, 24, '#059669'],
+  ];
+  return (
+    <BoardFrame>
+      <rect
+        x="10"
+        y="10"
+        width="100"
+        height="64"
+        rx="8"
+        stroke="currentColor"
+        strokeWidth="2"
+        opacity="0.5"
+      />
+      {discs.map(([cx, cy, fill], i) => (
+        <circle key={i} cx={cx} cy={cy} r="7" fill={fill} />
+      ))}
+    </BoardFrame>
+  );
+}
+
+/** Flip board: green grid with three colour clusters. */
+function Flip3Preview(): JSX.Element {
+  const stones: Array<[number, number, string]> = [
+    [30, 42, '#e11d48'],
+    [44, 42, '#2563eb'],
+    [58, 42, '#059669'],
+    [30, 56, '#e11d48'],
+    [44, 56, '#e11d48'],
+    [58, 56, '#2563eb'],
+  ];
+  const hLines = [22, 36, 50, 64];
+  const vLines = [28, 42, 56, 70];
+  return (
+    <BoardFrame>
+      <g stroke="#15803d" strokeWidth="1" opacity="0.4">
+        {hLines.map((y) => (
+          <path key={'h' + y} d={'M14 ' + y + 'h92'} />
+        ))}
+        {vLines.map((x) => (
+          <path key={'v' + x} d={'M' + x + ' 14v56'} />
+        ))}
+      </g>
+      {stones.map(([cx, cy, fill], i) => (
+        <circle key={i} cx={cx} cy={cy} r="6" fill={fill} />
+      ))}
+    </BoardFrame>
+  );
+}
+
+/** Four-colour flip board with corner clusters. */
+function Flip4Preview(): JSX.Element {
+  const stones: Array<[number, number, string]> = [
+    [24, 24, '#e11d48'],
+    [38, 24, '#2563eb'],
+    [24, 38, '#2563eb'],
+    [38, 38, '#e11d48'],
+    [82, 24, '#059669'],
+    [96, 24, '#d97706'],
+    [82, 38, '#d97706'],
+    [96, 38, '#059669'],
+    [24, 62, '#059669'],
+    [38, 62, '#d97706'],
+    [82, 62, '#e11d48'],
+    [96, 62, '#2563eb'],
+  ];
+  const lines = [17, 31, 45, 59, 73];
+  return (
+    <BoardFrame>
+      <g stroke="#7c3aed" strokeWidth="1" opacity="0.35">
+        {lines.map((y) => (
+          <path key={y} d={'M14 ' + y + 'h92'} />
+        ))}
+      </g>
+      {stones.map(([cx, cy, fill], i) => (
+        <circle key={i} cx={cx} cy={cy} r="6" fill={fill} />
+      ))}
+    </BoardFrame>
+  );
+}
 /** Neutral fallback so an unknown slug never breaks the hub. */
 function PlaceholderPreview(): JSX.Element {
   return (

@@ -25,3 +25,16 @@ owner-approved CSP, `/api/v1/game-challenges` via `/shared/game-challenge.js` an
 `/api/v1/tictactoe` for live duels. All are rate-limited. No other outbound calls.)
 
 See `assistant-rules.md` for port configuration and development commands.
+
+**Hub rules (owner asks 2026-09-28, BINDING for any AI writing game code):**
+
+1. PLAY-PREVIEW: every hub card shows a static mid-game SVG snapshot via
+   `apps/frontend/src/components/games/GamePlayPreview.tsx`, game name directly
+   BELOW the preview, then the blurb. A registry entry is incomplete without its
+   preview case in that component.
+2. TABS BY PLAYER COUNT: the hub opens with VISIBLE tabs `2 Players / 3 Players /
+4 Players (`GamesBrowser.tsx`) — numbers outside, NO dropdown, one tap selects.
+Every registry entry MUST declare `players: number[]`(e.g.`[2]`or`[3, 4]`); the
+   game appears in every matching tab and carries a count badge on its card.
+3. BUILD ORDER: famous/common games first (`plan/games/README.md` §3); already-
+   built games keep their hub order untouched. Details: plan/games/README.md §5.

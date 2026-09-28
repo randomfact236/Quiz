@@ -146,7 +146,16 @@ hang, rps hot-seat gate). Run it before calling a game done.
 - Registry: `apps/frontend/src/lib/games-registry.ts` feeds the hub, sitemap and OG
   images — one source of truth.
 
-## 5. Hub play-preview rule (owner ask 2026-09-28 — applies to every AI writing game code)
+## 5. Hub rules: play-preview + player-count tabs (owner asks 2026-09-28 — every AI writing game code)
+
+**Player-count tabs (owner rule 2026-09-28):** the hub opens with three VISIBLE tabs —
+**2 Players / 3 Players / 4 Players** — rendered by
+`apps/apps/frontend/src/components/games/GamesBrowser.tsx. Numbers sit outside the tabs
+(no dropdown, nothing hidden): one tap selects the group. Every game in
+`games-registry.ts`MUST declare`players: number[]`(its supported seat counts); it
+appears in every matching tab, and each card carries a player-count badge. Games that
+support both 3 and 4 seats appear in BOTH tabs. Adding a game without its`players`
+annotation and preview case is an incomplete build.
 
 Every game card on the `/games` hub MUST show a **play-preview**: a small static
 snapshot of how the game looks mid-play, rendered as an inline SVG by
