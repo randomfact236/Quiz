@@ -246,6 +246,9 @@ function playLocal(edge) {
   }
   renderBoard();
   renderTurn();
+  // the running score must track box claims as they happen (manual play
+  // caught the top bar frozen at 0–0 until the match ended)
+  renderMiniSeries();
   if (state.mode === '1p' && match.turn !== 1) scheduleAiMove();
 }
 
