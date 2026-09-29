@@ -37,7 +37,11 @@
       $('screen-' + s).hidden = s !== screen;
     });
   }
-  function ensureGuest() {
+  async function ensureGuest() {
+    // Mint/refresh the signed guest pair once per browser (shared bootstrap).
+    try {
+      await window.PIG_GUEST_READY;
+    } catch (_) {}
     let pair = null;
     try {
       const raw = localStorage.getItem('aiquiz:guest-token');
@@ -54,7 +58,7 @@
     return pair;
   }
   async function api(path, body, method) {
-    const pair = ensureGuest();
+    const pair = await ensureGuest();
     const headers = {};
     if (body) headers['Content-Type'] = 'application/json';
     if (pair.token) headers['X-Guest-Token'] = pair.token;
@@ -78,9 +82,9 @@
     }
     return res.json();
   }
-  function initMenu() {
+  async function initMenu() {
     $('btn-create').addEventListener('click', async function () {
-      ensureGuest();
+      await ensureGuest();
       const name = $('player-name').value.trim() || S.party.name;
       storage.set('name', name);
       try {
@@ -98,7 +102,7 @@
       }
     });
     $('btn-join').addEventListener('click', async function () {
-      ensureGuest();
+      await ensureGuest();
       const code = $('join-code').value.trim().toUpperCase();
       const name = $('player-name').value.trim() || S.party.name;
       storage.set('name', name);
@@ -122,7 +126,7 @@
       $('join-code').value = cfg.partyCode;
     }
   }
-  function enterGame() {
+  async function enterGame() {
     show('game');
     $('code-label').textContent = S.party.code;
     poll();
