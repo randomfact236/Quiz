@@ -44,8 +44,8 @@ import {
   saveSeries,
   loadPrefs,
   savePrefs,
-} from './storage.js';
-import { GAME_CONFIG, t } from './config.js';
+} from './storage.js?v=1';
+import { GAME_CONFIG, t } from './config.js?v=1';
 
 const SIDE_LABEL = { 1: '⚫ Black', 2: '⚪ White' };
 const KOMIS = [0, 5.5];

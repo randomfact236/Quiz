@@ -119,6 +119,15 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #3f6212 0%, #14532d 100%)',
   },
   {
+    slug: 'chess',
+    emoji: '♞',
+    title: 'Chess',
+    blurb:
+      'The most famous game in existence, full ruleset — castling, en passant, promotion.',
+    gradient: 'from-neutral-600 to-neutral-900',
+    cssGradient: 'linear-gradient(135deg, #52525b 0%, #18181b 100%)',
+  },
+  {
     slug: 'othello',
     emoji: '⚫',
     title: 'Othello',

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Chess — PigZap Games" />
+    <meta
+      property="og:description"
+      content="The most famous game in existence, with the full ruleset — castling, en passant, promotion. Play the computer or duel a friend live."
+    />
+    <meta property="og:url" content="https://pigzap.com/games/chess" />
+    <meta property="og:image" content="https://pigzap.com/og/game/chess.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Chess — PigZap Games" />
+    <meta
+      name="twitter:description"
+      content="The most famous game in existence, with the full ruleset — play the computer or duel a friend live."
+    />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/chess.png" />
+    <title>Chess — PigZap Games</title>
+    <meta
+      name="description"
+      content="The most famous game in existence, with the full ruleset — castling, en passant, promotion. Play the computer or duel a friend live."
+    />
+    <meta name="theme-color" content="#e9e6df" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#15161a" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%E2%99%9E%3C/text%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Chess menu">
+        <h1 class="menu-title">Chess ♞</h1>
+        <p class="tagline">The full ruleset — castling, en passant, promotion and all.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">🤖 vs Computer</button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">👥 2 Players</button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">⚔️ Online</button>
+          </div>
+
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you play ⚪)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="difficulty-label" id="difficulty-segmented">
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">Easy</button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">Medium</button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">Hard</button>
+            </div>
+            <p class="rules-note">
+              The computer plays a capped alpha-beta search — a solid club-amateur
+              at the depths a phone can afford. It is not an engine.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--w">
+              <span class="num" id="series-w">0</span>
+              <span class="label">⚪ White wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--b">
+              <span class="num" id="series-b">0</span>
+              <span class="label">⚫ Black wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Chess board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">⚪ 0 · 🤝 0 · ⚫ 0</div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">⚪ White to move</div>
+        <div class="hint-line" id="hint-line" role="status" aria-live="polite"></div>
+
+        <div class="captured">
+          <div class="capture-side">
+            <span class="capture-label">⚫ taken</span>
+            <span class="capture-count" id="cap-black">0</span>
+          </div>
+          <div class="capture-side">
+            <span class="capture-label">move</span>
+            <span class="capture-count" id="move-no">1</span>
+          </div>
+          <div class="capture-side">
+            <span class="capture-label">⚪ taken</span>
+            <span class="capture-count" id="cap-white">0</span>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="group" aria-label="Chess board"></div>
+
+          <div
+            id="overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overlay-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">♚</div>
+              <h2 class="overlay-title" id="overlay-title">White wins</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next game</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+                <div class="share-row" id="share-row" hidden>
+                  <a class="share-target" id="share-fb" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a>
+                  <a class="share-target" id="share-x" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+                  <a class="share-target" id="share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a>
+                  <button type="button" class="share-target" id="share-copy" aria-label="Copy result">🔗 Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="legend">
+          <span class="legend-chip legend-chip--w">white</span>
+          <span class="legend-chip legend-chip--b">black</span>
+          <span class="legend-chip legend-chip--legal">legal move</span>
+        </p>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <div class="promo-bar hidden" id="promo-bar" role="group" aria-label="Choose a promotion piece">
+      <span>Promote to</span>
+      <button type="button" data-promo="5">♛</button>
+      <button type="button" data-promo="4">♜</button>
+      <button type="button" data-promo="3">♝</button>
+      <button type="button" data-promo="2">♞</button>
+    </div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>

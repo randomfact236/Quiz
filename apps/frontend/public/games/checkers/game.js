@@ -39,8 +39,8 @@ import {
   saveSeries,
   loadPrefs,
   savePrefs,
-} from './storage.js';
-import { GAME_CONFIG, t } from './config.js';
+} from './storage.js?v=1';
+import { GAME_CONFIG, t } from './config.js?v=1';
 
 /* ==========================================================================
  * UI — auto-inits only when the board exists (never under jest/node)

@@ -1,39 +1,48 @@
 /**
  * ============================================================================
- * game.js — Othello (plan/games/12-othello.md) — UI shell
+ * game.js — Chess (plan/games/40-chess.md) — UI shell
  * ============================================================================
- * Plain ESM, no build step (the games convention). The pure model lives in
- * core.js (jest-tested), persistence in storage.js, flags/strings in
- * config.js. This file is screens + DOM wiring; it auto-inits only when its
- * board exists in the DOM.
+ * Plain ESM, no build step. The rules live in core.js (jest-tested); this is
+ * screens + DOM wiring, and it auto-inits when its board exists.
  *
- * Modes (the family template): solo vs computer (easy/medium/hard), 2-player
- * hot-seat, and ⚔️ online duels on the server-authoritative backend — the
- * SERVER recomputes every flip, so a client cannot claim discs it did not
- * outflank. Deep link: ?oth=CODE. Sides: 1 = ⚫ Dark (creator, opens), 2 = ⚪ Light.
+ * Modes: solo vs computer (easy/medium/hard), 2-player hot-seat, and ⚔️ online
+ * duels on the server-authoritative backend. Deep link: ?ch=CODE.
+ * Sides: 1 = ⚪ White (creator, opens), 2 = ⚫ Black.
  *
- * A PASS is a real state in this game: the side with no legal placement does
- * nothing and the turn goes back. The banner says so rather than looking hung.
+ * Two pieces of UI the rules force: a legal move is a dot, a CAPTURE is a full
+ * square, and castling shows as a dashed box (you tap the KING, never the
+ * rook) — all three are easy to get wrong and the play-path check pins them.
  * ============================================================================
  */
 
 import {
-  BOARD_SIZES,
-  DEFAULT_SIZE,
+  WHITE,
+  BLACK,
   EMPTY,
-  DARK,
-  LIGHT,
-  other,
-  sizeOf,
-  initialBoard,
-  fromArray,
+  PAWN,
+  KNIGHT,
+  BISHOP,
+  ROOK,
+  QUEEN,
+  KING,
+  FILES,
+  createGame,
+  rowOf,
+  fileOf,
+  squareName,
+  parseSquare,
+  typeOf,
+  isWhite,
+  colourOf,
+  make,
+  findKing,
+  isInCheck,
   legalMoves,
   applyMove,
-  pass,
-  discCount,
-  isOver,
   outcome,
+  isInsufficientMaterial,
   aiMove,
+  fromArray,
 } from './core.js?v=1';
 import {
   emptyTally,
@@ -45,30 +54,56 @@ import {
 } from './storage.js?v=1';
 import { GAME_CONFIG, t } from './config.js?v=1';
 
-const SIDE_LABEL = { 1: '⚫ Dark', 2: '⚪ Light' };
+const PIECE_GLYPH = {
+  [PAWN]: { 1: '♟', 2: '♙' },
+  [KNIGHT]: { 1: '♞', 2: '♘' },
+  [BISHOP]: { 1: '♝', 2: '♗' },
+  [ROOK]: { 1: '♜', 2: '♖' },
+  [QUEEN]: { 1: '♛', 2: '♕' },
+  [KING]: { 1: '♚', 2: '♔' },
+};
+
+// the core's side is a BOOLEAN (WHITE === true), so these keys are booleans —
+// keying them 1/2 made every side name read "undefined"
+const SIDE_LABEL = { true: '⚪ White', false: '⚫ Black' };
+const DRAW_REASON = {
+  stalemate: 'Stalemate — nobody could move.',
+  fifty: 'The fifty-move rule — no capture and no pawn move in 50 moves each.',
+  repetition: 'Threefold repetition.',
+  material: 'Neither side has enough material to mate.',
+};
 
 const state = {
   screen: 'menu',
-  mode: '1p', // '1p' | '2p' | 'online'
-  difficulty: 'medium', // 'easy' | 'medium' | 'hard'
-  size: DEFAULT_SIZE,
-  cells: initialBoard(DEFAULT_SIZE),
-  turn: DARK,
-  starter: DARK,
-  locked: false, // true during AI thinking and after the game ends
-  lastMove: null, // { idx, flipped } for the place/flip animations
+  mode: '1p',
+  difficulty: 'medium',
+  game: createGame(),
+  selected: -1,
+  pendingPromotion: null, // a move awaiting the player's choice
+  locked: false,
+  lastMove: null,
   series: emptyTally(),
   aiTimer: null,
-  online: null, // { code, mark, pollTimer, busy }
+  online: null,
 };
 
 const els = {};
 
 function currentSetupKey() {
-  return seriesSetupKey(state.mode, state.difficulty, state.size);
+  return seriesSetupKey(state.mode, state.difficulty);
 }
 
-/* ---- screens -------------------------------------------------------------- */
+function mySide() {
+  if (state.mode === 'online') return state.online ? state.online.mark : WHITE;
+  if (state.mode === '2p') return state.game.turn;
+  return WHITE; // 1p: you play white
+}
+
+function isAiTurnNow() {
+  return state.mode === '1p' && state.game.turn === BLACK;
+}
+
+/* ---- screens ------------------------------------------------------------------ */
 
 function showScreen(name) {
   state.screen = name;
@@ -84,11 +119,11 @@ function renderSeriesCard() {
       : state.mode === 'online'
         ? 'online duel'
         : '2 players';
-  els.seriesScope.textContent = scope + ' · ' + state.size + '×' + state.size;
-  els.seriesD.textContent = String(state.series.d);
-  els.seriesL.textContent = String(state.series.l);
+  els.seriesScope.textContent = scope;
+  els.seriesW.textContent = String(state.series.w);
+  els.seriesB.textContent = String(state.series.b);
   els.seriesDraw.textContent = String(state.series.draw);
-  const total = state.series.d + state.series.l + state.series.draw;
+  const total = state.series.w + state.series.b + state.series.draw;
   els.resetSeriesBtn.disabled = total === 0;
 }
 
@@ -96,137 +131,134 @@ function refreshSeriesFromStorage() {
   state.series = loadSeries(currentSetupKey());
 }
 
-/* ---- board ---------------------------------------------------------------- */
+/* ---- board -------------------------------------------------------------------- */
 
-/** Build the grid for the current size. Only playable squares exist at all. */
+const FILES_ORDER = ['h', 'g', 'f', 'e', 'd', 'c', 'b', 'a']; // black's view on top
+
 function buildBoard() {
-  const size = state.size;
-  els.board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
   els.board.innerHTML = '';
-  for (let idx = 0; idx < size * size; idx++) {
-    const cell = document.createElement('button');
-    cell.type = 'button';
-    cell.className = 'cell';
-    cell.dataset.idx = String(idx);
-    cell.setAttribute('aria-label', squareName(idx) + ', empty');
-    els.board.appendChild(cell);
+  // rendered from black's side, so the ranks read 8→1 and the files h→a
+  for (let row = 7; row >= 0; row--) {
+    for (let col = 7; col >= 0; col--) {
+      const sq = row * 8 + col;
+      const cell = document.createElement('button');
+      cell.type = 'button';
+      cell.className = 'square' + ((row + col) % 2 === 1 ? ' square--dark' : '');
+      cell.dataset.sq = String(sq);
+      cell.setAttribute('aria-label', squareName(sq) + ', empty');
+      els.board.appendChild(cell);
+    }
   }
 }
 
-function squareName(idx) {
-  const size = sizeOf(state.cells);
-  const row = Math.floor(idx / size);
-  const file = idx % size;
-  return String.fromCharCode(97 + file) + (row + 1);
-}
-
-function discHtml(cell) {
-  return '<span class="disc disc--' + (cell === DARK ? 'dark' : 'light') + '"></span>';
-}
-
-/** The side the human controls right now. */
-function mySide() {
-  if (state.mode === 'online') return state.online ? state.online.mark : DARK;
-  if (state.mode === '2p') return state.turn;
-  return DARK; // 1p: you always play dark
-}
-
-function isAiTurnNow() {
-  return state.mode === '1p' && state.turn === LIGHT;
-}
-
-function opponentName() {
-  if (state.mode === 'online' && state.online) {
-    return state.online.mark === DARK ? state.online.lName : state.online.dName;
-  }
-  return state.mode === '1p' ? 'the computer' : null;
+function pieceHtml(piece) {
+  const type = typeOf(piece);
+  const white = isWhite(piece);
+  return '<span class="piece piece--' + (white ? 'w' : 'b') + '">' + PIECE_GLYPH[type][white ? 2 : 1] + '</span>';
 }
 
 function renderBoard() {
-  const moves = state.locked ? [] : legalMoves(state.cells, state.turn);
+  const moves = state.locked ? [] : legalMoves(state.game);
+  const fromSelected = state.selected;
+  const dests = new Set(moves.filter((m) => m.from === fromSelected).map((m) => m.to));
+  const castleDests = new Set(
+    moves.filter((m) => m.from === fromSelected && m.castle).map((m) => m.to)
+  );
+  const captures = new Set(moves.filter((m) => m.captured !== EMPTY || m.enPassant).map((m) => m.to));
+  const checked = isInCheck(state.game.board, state.game.turn)
+    ? findKing(state.game.board, state.game.turn)
+    : -1;
+
   for (const cell of els.board.children) {
-    const idx = Number(cell.dataset.idx);
-    const value = state.cells[idx];
-    cell.innerHTML = value === EMPTY ? '' : discHtml(value);
-    cell.classList.remove('cell--legal', 'cell--flip', 'cell--placed', 'cell--thinking');
-    if (value === EMPTY && moves.indexOf(idx) !== -1) cell.classList.add('cell--legal');
-    const last = state.lastMove;
-    if (last) {
-      if (last.idx === idx) cell.classList.add('cell--placed');
-      if (last.flipped.indexOf(idx) !== -1) cell.classList.add('cell--flip');
+    const sq = Number(cell.dataset.sq);
+    const piece = state.game.board[sq];
+    cell.innerHTML = piece === EMPTY ? '' : pieceHtml(piece);
+    cell.className = cell.className.replace(/ square--(legal|capture|castle|check|moved|thinking)/g, '');
+    if (dests.has(sq)) cell.classList.add('square--legal');
+    if (dests.has(sq) && captures.has(sq)) cell.classList.add('square--capture');
+    if (castleDests.has(sq)) cell.classList.add('square--castle');
+    if (checked === sq) cell.classList.add('square--check');
+    if (state.lastMove && (state.lastMove.from === sq || state.lastMove.to === sq)) {
+      cell.classList.add('square--moved');
     }
+    if (state.thinkingSquare === sq) cell.classList.add('square--thinking');
     cell.setAttribute(
       'aria-label',
-      squareName(idx) +
-        ', ' +
-        (value === EMPTY ? 'empty' : SIDE_LABEL[value].split(' ')[1].toLowerCase())
+      squareName(sq) + ', ' + (piece === EMPTY ? 'empty' : SIDE_LABEL[colourOf(piece)])
     );
   }
 }
 
-function renderScoreBar() {
-  const { dark, light, empty } = discCount(state.cells);
-  const played = dark + light;
-  els.barDark.style.width = played === 0 ? '50%' : (dark / played) * 100 + '%';
-  els.barCount.textContent = dark + ' : ' + light + (empty ? '  ·  ' + empty + ' empty' : '');
-}
-
 function renderTurn() {
-  let label;
+  let text;
   if (state.mode === '1p') {
-    label = state.turn === DARK ? "Your turn — you're ⚫" : "Computer's turn…";
+    text = state.game.turn === WHITE ? "Your turn — you're ⚪" : "Computer's turn…";
   } else if (state.mode === 'online' && state.online) {
-    const you = state.online.mark;
-    const opp = opponentName();
-    label =
-      state.turn === you
-        ? "Your turn — you're " + SIDE_LABEL[you]
+    const opp = state.online.mark === WHITE ? state.online.bName : state.online.lName;
+    text =
+      state.game.turn === state.online.mark
+        ? "Your turn — you're " + SIDE_LABEL[state.online.mark]
         : (opp || 'Opponent') + ' is thinking…';
   } else {
-    label = SIDE_LABEL[state.turn] + "'s turn";
+    text = SIDE_LABEL[state.game.turn] + ' to move';
   }
-  els.turn.textContent = label;
-  els.turn.dataset.turn = String(state.turn);
+  els.turn.textContent = text;
+  els.turn.dataset.turn = state.game.turn ? '1' : '2';
 }
 
-/** The banner: legal-move count, or the pass the player needs to know about. */
 function renderHint() {
   let hint = '';
   if (!state.locked) {
-    if (isOver(state.cells)) hint = '';
-    else if (legalMoves(state.cells, state.turn).length === 0) {
-      hint = SIDE_LABEL[state.turn] + ' has no move — passing';
-    } else if (state.mode === '1p' && state.turn === DARK) {
-      hint = 'Tap a highlighted square to outflank';
+    if (state.mode === '1p' && state.game.turn === WHITE) {
+      hint = state.selected >= 0 ? 'Tap where the piece lands' : 'Tap one of your pieces';
     }
   }
   els.hintLine.textContent = hint;
 }
 
+function renderCaptures() {
+  const board = state.game.board;
+  let whiteTaken = 0;
+  let blackTaken = 0;
+  for (let sq = 0; sq < 64; sq++) {
+    const piece = board[sq];
+    if (piece === EMPTY) continue;
+    const t = typeOf(piece);
+    if (t === KING) continue;
+    if (isWhite(piece)) whiteTaken++;
+    else blackTaken++;
+  }
+  // a side has "taken" whatever the opponent is missing
+  els.capWhite.textContent = String(blackTaken);
+  els.capBlack.textContent = String(whiteTaken);
+  els.moveNo.textContent = String(state.game.fullmove);
+}
+
 function renderMiniSeries() {
-  els.miniSeries.textContent =
-    '⚫ ' + state.series.d + ' · 🤝 ' + state.series.draw + ' · ⚪ ' + state.series.l;
+  els.miniSeries.textContent = '⚪ ' + state.series.w + ' · 🤝 ' + state.series.draw + ' · ⚫ ' + state.series.b;
 }
 
-/* ---- a game ---------------------------------------------------------------- */
-
-/** Re-derive the turn after any board change, handling the pass rule. */
-function settleTurn(result) {
-  state.cells = result.cells;
-  state.lastMove = { idx: result.idx ?? null, flipped: result.flipped || [] };
-  state.turn = result.turn;
-  return result;
+function renderAll() {
+  renderBoard();
+  renderTurn();
+  renderHint();
+  renderCaptures();
+  renderMiniSeries();
 }
+
+/* ---- a game ---------------------------------------------------------------------- */
 
 function startGame() {
-  state.cells = initialBoard(state.size);
-  state.turn = state.starter;
+  state.game = createGame();
+  state.selected = -1;
+  state.pendingPromotion = null;
   state.locked = false;
   state.lastMove = null;
   if (state.aiTimer) {
     clearTimeout(state.aiTimer);
     state.aiTimer = null;
   }
+  els.promoBar.classList.add('hidden');
   els.overlay.classList.add('hidden');
   els.overlay.classList.remove('overlay--in');
   buildBoard();
@@ -234,157 +266,157 @@ function startGame() {
   if (isAiTurnNow()) scheduleAi();
 }
 
-function renderAll() {
-  renderBoard();
-  renderScoreBar();
-  renderTurn();
-  renderHint();
-  renderMiniSeries();
-}
-
-/** Tap handler — one tap places one disc. */
-function onCellTap(idx) {
+function onSquareTap(sq) {
   if (state.screen !== 'playing' || state.locked) return;
   if (isAiTurnNow()) return;
   if (state.mode === 'online') {
-    if (state.turn !== state.online.mark) return;
-    sendOnlineMove(idx);
+    if (state.game.turn !== state.online.mark) return;
+    onlineTap(sq);
     return;
   }
-  play(idx);
+
+  const side = state.game.turn;
+  // tapping one of our own pieces selects it
+  if (state.game.board[sq] !== EMPTY && colourOf(state.game.board[sq]) === side) {
+    state.selected = state.selected === sq ? -1 : sq;
+    renderBoard();
+    renderHint();
+    return;
+  }
+  // tapping a destination plays
+  const options = legalMoves(state.game).filter((m) => m.from === state.selected && m.to === sq);
+  if (options.length === 0) {
+    state.selected = -1;
+    renderBoard();
+    renderHint();
+    return;
+  }
+  // a promotion has four versions of the same move — ask which
+  if (options.some((m) => m.promotion)) {
+    state.pendingPromotion = { from: state.selected, to: sq, side };
+    els.promoBar.classList.remove('hidden');
+    for (const b of els.promoBar.querySelectorAll('button')) b.setAttribute('aria-pressed', 'false');
+    return;
+  }
+  playMove(options[0]);
 }
 
-function play(idx) {
-  const side = state.turn;
-  let result;
-  try {
-    result = applyMove(state.cells, side, idx);
-  } catch {
-    toast('That square flips nothing');
+function choosePromotion(type) {
+  const pending = state.pendingPromotion;
+  if (!pending) return;
+  const move = legalMoves(state.game).find(
+    (m) => m.from === pending.from && m.to === pending.to && m.promotion === make(type, pending.side)
+  );
+  els.promoBar.classList.add('hidden');
+  state.pendingPromotion = null;
+  if (!move) {
+    toast('That promotion is not available');
     return;
   }
-  settleTurn(result);
+  playMove(move);
+}
+
+function playMove(move) {
+  const side = state.game.turn;
+  const result = applyMove(state.game, move);
+  state.game = result.state;
+  state.lastMove = move;
+  state.selected = -1;
   renderAll();
-  finishIfOver();
-  if (!state.locked && isAiTurnNow()) scheduleAi();
+  if (result.captured !== EMPTY) toast(`${SIDE_LABEL[side]} takes ${SIDE_LABEL[colourOf(result.captured) === WHITE ? BLACK : WHITE].split(' ')[1].toLowerCase()}`);
+  const ending = outcome(state.game);
+  if (ending) {
+    endGame(ending, side);
+    return;
+  }
+  if (isAiTurnNow()) scheduleAi();
 }
 
-function finishIfOver() {
-  if (isOver(state.cells)) {
-    endGame(outcome(state.cells));
-    return true;
+/* ---- promotion picker -------------------------------------------------------------- */
+
+function wirePromoBar() {
+  els.promoBar = document.getElementById('promo-bar');
+  for (const btn of els.promoBar.querySelectorAll('button')) {
+    btn.addEventListener('click', () => {
+      btn.setAttribute('aria-pressed', 'true');
+      choosePromotion(Number(btn.dataset.promo));
+    });
   }
-  // a pass is not the end — the banner already says who is stuck
-  if (legalMoves(state.cells, state.turn).length === 0) {
-    const advanced = pass(state.cells, state.turn);
-    if (advanced.over) {
-      endGame(outcome(state.cells));
-      return true;
-    }
-    state.turn = advanced.turn;
-    renderAll();
-  }
-  return false;
 }
 
-/* ---- AI ---------------------------------------------------------------------- */
+/* ---- AI -------------------------------------------------------------------------------- */
 
 function scheduleAi() {
   state.locked = true;
   renderHint();
-  // Medium/hard are deterministic, so the decision can be shown honestly; easy
-  // is random and has no strategy to visualise.
   const planned =
     state.difficulty !== 'easy'
-      ? aiMove(state.cells, LIGHT, state.difficulty, { maxNodes: GAME_CONFIG.hardSearchNodes })
+      ? aiMove(state.game, state.difficulty, { maxNodes: GAME_CONFIG.hardSearchNodes })
       : null;
-  if (planned !== null && planned !== undefined) {
-    const cell = els.board.children[planned];
-    if (cell) cell.classList.add('cell--thinking');
-  }
+  state.thinkingSquare = planned ? planned.from : null;
+  renderBoard();
   state.aiTimer = setTimeout(() => {
     state.aiTimer = null;
-    for (const cell of els.board.children) cell.classList.remove('cell--thinking');
+    state.thinkingSquare = null;
     if (state.screen !== 'playing' || !isAiTurnNow()) return;
     const move =
-      planned !== null && planned !== undefined
+      planned && planned !== undefined
         ? planned
-        : aiMove(state.cells, LIGHT, state.difficulty, { maxNodes: GAME_CONFIG.hardSearchNodes });
-    if (move === null || move === undefined) {
-      // the computer is stuck too — the game is over, not hung
-      state.locked = false;
-      if (finishIfOver()) return;
+        : aiMove(state.game, state.difficulty, { maxNodes: GAME_CONFIG.hardSearchNodes });
+    state.locked = false;
+    renderBoard();
+    if (!move) {
+      endGame(outcome(state.game) || 'stalemate', state.game.turn);
       return;
     }
-    state.locked = false;
-    play(move);
+    playMove(move);
   }, GAME_CONFIG.aiThinkDelayMs);
 }
 
-/* ---- game end -------------------------------------------------------------------- */
+/* ---- ending ------------------------------------------------------------------------------- */
 
-function endGame(result) {
+function endGame(result, mover) {
   state.locked = true;
-  const isDraw = result.draw;
-  const winner = result.winner; // null on a draw
+  const isDraw = result !== 'checkmate';
+  const winner = isDraw ? null : mover;
 
   if (isDraw) state.series.draw++;
-  else if (winner === DARK) state.series.d++;
-  else state.series.l++;
+  else if (winner === WHITE) state.series.w++;
+  else state.series.b++;
   saveSeries(currentSetupKey(), state.series);
-
-  // Rematch flips the opener — the same rule as the rest of the family.
-  state.starter = other(state.starter);
-
-  renderBoard();
-  renderScoreBar();
-  renderTurn();
-  renderHint();
   renderMiniSeries();
+  renderBoard();
+  renderHint();
+
   const youWon =
     state.mode === '1p'
-      ? winner === DARK
+      ? winner === WHITE
       : state.mode === 'online' && state.online
         ? winner === state.online.mark
         : false;
-  if (!isDraw && youWon) vibrate([40, 60, 40]);
+  if (youWon) vibrate([40, 60, 40]);
   setTimeout(() => showOverlay(isDraw, winner, result), 450);
 }
 
 function showOverlay(isDraw, winner, result) {
-  let title;
-  let emoji;
-  let sub;
   if (isDraw) {
-    title = 'Draw 🤝';
-    emoji = '🤝';
-    sub = 'An even split of the board.';
+    els.overlayEmoji.textContent = '🤝';
+    els.overlayTitle.textContent = 'Draw';
   } else {
-    title = SIDE_LABEL[winner] + ' wins! 🎉';
-    emoji = winner === DARK ? '⚫' : '⚪';
-    if (state.mode === '1p') {
-      sub = winner === DARK ? 'You outflanked the computer!' : 'The computer takes it. Rematch?';
-    } else if (state.mode === '2p') {
-      sub = '';
-    } else {
-      const youWon = winner === state.online.mark;
-      sub = youWon ? 'You take the duel!' : (opponentName() || 'Your opponent') + ' takes it.';
-    }
+    els.overlayEmoji.textContent = winner === WHITE ? '♔' : '♚';
+    els.overlayTitle.textContent = SIDE_LABEL[winner] + ' wins!';
   }
-  els.overlayEmoji.textContent = emoji;
-  els.overlayTitle.textContent = title;
   const seriesLine =
-    'Series — ⚫ ' + state.series.d + ' · ⚪ ' + state.series.l + ' · 🤝 ' + state.series.draw;
-  els.overlaySub.textContent =
-    (sub ? sub + ' ' : '') + result.dark + '–' + result.light + '. ' + seriesLine;
+    'Series — ⚪ ' + state.series.w + ' · ⚫ ' + state.series.b + ' · 🤝 ' + state.series.draw;
+  els.overlaySub.textContent = ((DRAW_REASON[result] || '') + ' ' + seriesLine).trim();
   els.overlay.classList.remove('hidden');
   els.overlay.classList.add('overlay--in');
   document.getElementById('btn-next').textContent =
-    state.mode === 'online' ? 'New online match' : 'Next game';
+    state.mode === 'online' ? 'New online match' : 'New game';
   document.getElementById('btn-next').focus();
 }
 
-/* ---- online duel (server-authoritative, 3 s poll) ---------------------------------- */
+/* ---- online duel ----------------------------------------------------------------------------- */
 
 const ONLINE_API =
   location.hostname === 'localhost' || location.hostname === '127.0.0.1'
@@ -415,7 +447,6 @@ function onlinePlayerName() {
   return name;
 }
 
-/** The server-signed guest pair — every guest WRITE requires it as X-Guest-Token. */
 function onlineGuestPair() {
   try {
     const raw = localStorage.getItem('aiquiz:guest-token');
@@ -441,7 +472,7 @@ async function ensureOnlineGuestPair() {
   try {
     localStorage.setItem('aiquiz:guest-token', JSON.stringify(pair));
   } catch {
-    /* private mode — the in-memory pair still works this page */
+    /* private mode */
   }
   return pair;
 }
@@ -478,7 +509,7 @@ function stopOnlinePoll() {
 
 function onlineLeaveQuietly() {
   if (state.online && state.online.code && state.online.mark) {
-    onlineApi('/othello/' + state.online.code + '/leave', {
+    onlineApi('/chess/' + state.online.code + '/leave', {
       playerName: onlinePlayerName(),
       guestId: onlineGuestId(),
     }).catch(() => undefined);
@@ -489,19 +520,13 @@ function onlineLeaveQuietly() {
 
 function onlineCreate() {
   onlineStatus('Creating the match…');
-  onlineApi('/othello', {
-    playerName: onlinePlayerName(),
-    guestId: onlineGuestId(),
-    size: state.size,
-  })
+  onlineApi('/chess', { playerName: onlinePlayerName(), guestId: onlineGuestId() })
     .then(({ code }) => {
-      state.online = { code, mark: DARK, pollTimer: null, lName: null, busy: false };
-      const link = 'https://pigzap.com/games/othello/?oth=' + code;
+      state.online = { code, mark: WHITE, pollTimer: null, bName: null, busy: false };
+      const link = 'https://pigzap.com/games/chess/?ch=' + code;
       onlineStatus('Match ' + code + ' — waiting for a challenger. Send: ' + link);
       if (navigator.share) {
-        navigator
-          .share({ title: 'Othello duel', text: 'Duel me — match ' + code, url: link })
-          .catch(() => undefined);
+        navigator.share({ title: 'Chess duel', text: 'Duel me — match ' + code, url: link }).catch(() => undefined);
       }
       state.online.pollTimer = setInterval(pollOnline, 3000);
     })
@@ -511,7 +536,7 @@ function onlineCreate() {
 function onlineJoin(code) {
   if (!code) return;
   onlineStatus('Joining ' + code + '…');
-  onlineApi('/othello/' + encodeURIComponent(code) + '/join', {
+  onlineApi('/chess/' + encodeURIComponent(code) + '/join', {
     playerName: onlinePlayerName(),
     guestId: onlineGuestId(),
   })
@@ -520,12 +545,12 @@ function onlineJoin(code) {
         code: view.code,
         mark: view.yourMark,
         pollTimer: null,
-        dName: view.dName,
-        lName: view.lName,
+        wName: view.wName,
+        bName: view.bName,
         busy: false,
       };
       if (view.status === 'waiting') {
-        onlineStatus('Joined as ⚪ Light — waiting for Dark to be claimed…');
+        onlineStatus('Joined as ⚫ Black — waiting for White…');
         state.online.pollTimer = setInterval(pollOnline, 3000);
         return;
       }
@@ -536,21 +561,16 @@ function onlineJoin(code) {
 
 function pollOnline() {
   if (!state.online || state.online.busy) return;
-  onlineApi(
-    '/othello/' +
-      encodeURIComponent(state.online.code) +
-      '?guestId=' +
-      encodeURIComponent(onlineGuestId())
-  )
+  onlineApi('/chess/' + encodeURIComponent(state.online.code) + '?guestId=' + encodeURIComponent(onlineGuestId()))
     .then((view) => {
       if (!state.online) return;
-      state.online.dName = view.dName;
-      state.online.lName = view.lName;
-      if (view.status === 'waiting') return; // still waiting for the opponent
+      state.online.wName = view.wName;
+      state.online.bName = view.bName;
+      if (view.status === 'waiting') return;
       if (state.screen !== 'playing') enterOnlinePlay(view);
       else applyOnlineView(view);
     })
-    .catch(() => undefined); // transient — the poll rides again
+    .catch(() => undefined);
 }
 
 function enterOnlinePlay(view) {
@@ -560,30 +580,65 @@ function enterOnlinePlay(view) {
   els.overlay.classList.remove('overlay--in');
   state.locked = false;
   applyOnlineView(view);
-  // The JOINER has no poll yet (only the creator's create-branch starts one).
   if (state.online && !state.online.pollTimer) {
     state.online.pollTimer = setInterval(pollOnline, 3000);
   }
 }
 
 function applyOnlineView(view) {
-  state.size = view.size;
-  if (els.board.children.length !== view.size * view.size) buildBoard();
-  state.cells = fromArray(view.cells, view.size);
-  state.turn = view.turn;
+  state.game = {
+    board: fromArray(view.board),
+    turn: view.turn === 1 ? WHITE : BLACK,
+    castling: view.castling,
+    enPassant: view.enPassant ?? -1,
+    halfmoves: view.halfmoves || 0,
+    fullmove: view.fullmove || 1,
+    history: [],
+  };
   state.lastMove = view.lastMove || null;
+  state.selected = -1;
   renderAll();
   if (view.status === 'finished' && !state.locked) {
-    const counts = discCount(state.cells);
-    finishOnlineGame(view, counts);
+    state.locked = true;
+    stopOnlinePoll();
+    const isDraw = !view.winner;
+    if (isDraw) state.series.draw++;
+    else if (view.winner === 1) state.series.w++;
+    else state.series.b++;
+    saveSeries(currentSetupKey(), state.series);
+    renderMiniSeries();
+    setTimeout(() => showOverlay(isDraw, view.winner, view.result), 450);
   }
 }
 
-function sendOnlineMove(idx) {
+function onlineTap(sq) {
+  const side = state.game.turn;
+  const options = legalMoves(state.game).filter((m) => m.from === state.selected && m.to === sq);
+  if (options.length === 0) {
+    if (state.game.board[sq] !== EMPTY && colourOf(state.game.board[sq]) === side) {
+      state.selected = state.selected === sq ? -1 : sq;
+      renderBoard();
+      renderHint();
+    }
+    return;
+  }
+  if (options.some((m) => m.promotion)) {
+    state.pendingPromotion = { from: state.selected, to: sq, side, online: true };
+    els.promoBar.classList.remove('hidden');
+    for (const b of els.promoBar.querySelectorAll('button')) b.setAttribute('aria-pressed', 'false');
+    return;
+  }
+  sendOnlineMove(options[0]);
+}
+
+function sendOnlineMove(move) {
   state.online.busy = true;
-  onlineApi('/othello/' + encodeURIComponent(state.online.code) + '/move', {
+  state.selected = -1;
+  onlineApi('/chess/' + encodeURIComponent(state.online.code) + '/move', {
     guestId: onlineGuestId(),
-    idx,
+    from: move.from,
+    to: move.to,
+    promotion: move.promotion || null,
   })
     .then((view) => {
       if (state.online) state.online.busy = false;
@@ -591,57 +646,27 @@ function sendOnlineMove(idx) {
     })
     .catch((e) => {
       if (state.online) state.online.busy = false;
-      toast(
-        e.message === 'Illegal move'
-          ? 'The server rejected that square'
-          : 'Move rejected — try again'
-      );
-      pollOnline(); // resync rather than sit on a rejected local state
+      toast(e.message === 'Illegal move' ? 'The server rejected that move' : 'Move rejected — try again');
+      pollOnline();
     });
 }
 
-function finishOnlineGame(view, counts) {
-  state.locked = true;
-  stopOnlinePoll();
-  const isDraw = !!view.draw;
-  const winner = view.winner;
-  const youWon = !isDraw && winner === state.online.mark;
-
-  if (isDraw) state.series.draw++;
-  else if (winner === DARK) state.series.d++;
-  else state.series.l++;
-  saveSeries(currentSetupKey(), state.series);
-  renderMiniSeries();
-  if (youWon) vibrate([40, 60, 40]);
-  setTimeout(() => showOverlay(isDraw, winner, { dark: counts.dark, light: counts.light }), 450);
-}
-
-/* ---- share (plan §6) ---------------------------------------------------------------- */
+/* ---- share ------------------------------------------------------------------------------- */
 
 function shareText() {
-  const url = 'https://pigzap.com/games/othello/';
-  const score =
-    '⚫ ' + state.series.d + ' · ⚪ ' + state.series.l + ' · draws ' + state.series.draw;
+  const url = 'https://pigzap.com/games/chess/';
+  const score = '⚪ ' + state.series.w + ' · ⚫ ' + state.series.b + ' · draws ' + state.series.draw;
   if (state.mode === '2p') return t('share2p', { score, url });
-  return t('share1p', {
-    setup:
-      'Othello vs the computer (' + state.difficulty + ', ' + state.size + '×' + state.size + ')',
-    score,
-    url,
-  });
+  return t('share1p', { setup: 'Chess vs the computer (' + state.difficulty + ')', score, url });
 }
 
 function shareUrls() {
-  const url = 'https://pigzap.com/games/othello/';
+  const url = 'https://pigzap.com/games/chess/';
   const text = shareText();
   const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
   document.getElementById('share-fb').href =
-    'https://www.facebook.com/sharer/sharer.php?u=' +
-    encodeURIComponent(url) +
-    '&quote=' +
-    encodeURIComponent(textNoUrl);
-  document.getElementById('share-x').href =
-    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+    'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(textNoUrl);
+  document.getElementById('share-x').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
   document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
   document.getElementById('share-copy').dataset.copy = text;
 }
@@ -670,11 +695,11 @@ function vibrate(pattern) {
   try {
     if (navigator.vibrate) navigator.vibrate(pattern);
   } catch {
-    /* unsupported — fine */
+    /* unsupported */
   }
 }
 
-/* ---- wiring --------------------------------------------------------------------------- */
+/* ---- wiring ---------------------------------------------------------------------------------- */
 
 function bindSegmented(container, attr, onPick) {
   container.addEventListener('click', (e) => {
@@ -691,15 +716,12 @@ function bindSegmented(container, attr, onPick) {
 function syncSegmented(container, attr, value) {
   const buttons = container.querySelectorAll('button[' + attr + ']');
   for (let i = 0; i < buttons.length; i++) {
-    buttons[i].setAttribute(
-      'aria-checked',
-      buttons[i].getAttribute(attr) === value ? 'true' : 'false'
-    );
+    buttons[i].setAttribute('aria-checked', buttons[i].getAttribute(attr) === value ? 'true' : 'false');
   }
 }
 
 function saveMenuPrefs() {
-  savePrefs({ mode: state.mode, difficulty: state.difficulty, size: state.size });
+  savePrefs({ mode: state.mode, difficulty: state.difficulty });
 }
 
 function init() {
@@ -708,16 +730,17 @@ function init() {
   els.board = document.getElementById('board');
   els.turn = document.getElementById('turn');
   els.hintLine = document.getElementById('hint-line');
-  els.barDark = document.getElementById('bar-dark');
-  els.barCount = document.getElementById('bar-count');
+  els.capWhite = document.getElementById('cap-white');
+  els.capBlack = document.getElementById('cap-black');
+  els.moveNo = document.getElementById('move-no');
   els.overlay = document.getElementById('overlay');
   els.overlayEmoji = document.getElementById('overlay-emoji');
   els.overlayTitle = document.getElementById('overlay-title');
   els.overlaySub = document.getElementById('overlay-sub');
   els.miniSeries = document.getElementById('mini-series');
   els.seriesScope = document.getElementById('series-scope');
-  els.seriesD = document.getElementById('series-d');
-  els.seriesL = document.getElementById('series-l');
+  els.seriesW = document.getElementById('series-w');
+  els.seriesB = document.getElementById('series-b');
   els.seriesDraw = document.getElementById('series-draw');
   els.resetSeriesBtn = document.getElementById('reset-series');
   els.difficultyRow = document.getElementById('difficulty-row');
@@ -728,6 +751,7 @@ function init() {
   els.toast = document.getElementById('toast');
 
   buildBoard();
+  wirePromoBar();
 
   const applyModeUi = (mode) => {
     els.difficultyRow.classList.toggle('hidden', mode !== '1p');
@@ -742,21 +766,8 @@ function init() {
     renderSeriesCard();
     saveMenuPrefs();
   });
-  bindSegmented(
-    document.getElementById('difficulty-segmented'),
-    'data-difficulty',
-    (difficulty) => {
-      state.difficulty = difficulty;
-      refreshSeriesFromStorage();
-      renderSeriesCard();
-      saveMenuPrefs();
-    }
-  );
-  bindSegmented(document.getElementById('size-segmented'), 'data-size', (raw) => {
-    const size = Number(raw);
-    if (BOARD_SIZES.indexOf(size) === -1 || size === state.size) return;
-    state.size = size;
-    buildBoard();
+  bindSegmented(document.getElementById('difficulty-segmented'), 'data-difficulty', (difficulty) => {
+    state.difficulty = difficulty;
     refreshSeriesFromStorage();
     renderSeriesCard();
     saveMenuPrefs();
@@ -817,12 +828,11 @@ function init() {
   });
 
   els.board.addEventListener('click', (e) => {
-    const cell = e.target.closest('.cell');
+    const cell = e.target.closest('.square');
     if (!cell) return;
-    onCellTap(Number(cell.dataset.idx));
+    onSquareTap(Number(cell.dataset.sq));
   });
 
-  // Pausing mid-AI-turn drops the pending move; reschedule on return.
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'hidden') {
       if (state.aiTimer) {
@@ -840,35 +850,26 @@ function init() {
     }
   });
 
-  // Restore the menu exactly as the player left it. storage.js keys the level
-  // as `difficulty` and the board as `size`.
   const prefs = loadPrefs();
   if (prefs) {
     state.mode = prefs.mode;
     state.difficulty = prefs.difficulty;
-    state.size = prefs.size;
     applyModeUi(state.mode);
     syncSegmented(document.getElementById('mode-segmented'), 'data-mode', state.mode);
-    syncSegmented(
-      document.getElementById('difficulty-segmented'),
-      'data-difficulty',
-      state.difficulty
-    );
-    syncSegmented(document.getElementById('size-segmented'), 'data-size', String(state.size));
+    syncSegmented(document.getElementById('difficulty-segmented'), 'data-difficulty', state.difficulty);
   }
 
   refreshSeriesFromStorage();
   renderSeriesCard();
   showScreen('menu');
 
-  // ?oth=CODE deep link — flip to online mode with the code prefilled.
-  const othCode = new URLSearchParams(window.location.search).get('oth');
-  if (othCode) {
+  const chCode = new URLSearchParams(window.location.search).get('ch');
+  if (chCode) {
     state.mode = 'online';
     applyModeUi('online');
     syncSegmented(document.getElementById('mode-segmented'), 'data-mode', 'online');
     renderSeriesCard();
-    els.onlineCode.value = othCode.toUpperCase().slice(0, 6);
+    els.onlineCode.value = chCode.toUpperCase().slice(0, 6);
     try {
       els.onlineName.value = localStorage.getItem('pigzap:challenge-name') || '';
     } catch {
@@ -880,12 +881,15 @@ function init() {
 
 if (typeof document !== 'undefined' && document.getElementById('board')) {
   init();
+  if (new URLSearchParams(window.location.search).has('debug')) {
+    window.__CHESS = state;
+  }
 }
 
 /* share-count pings (prod API; fire-and-forget, best-effort). */
 (function () {
   var API = 'https://api.pigzap.com/api/v1/share-counts';
-  var SLUG = 'othello';
+  var SLUG = 'chess';
   var wired = new WeakSet();
   var ping = function (platform) {
     try {
@@ -908,25 +912,13 @@ if (typeof document !== 'undefined' && document.getElementById('board')) {
       var a = document.getElementById(pair[0]);
       if (a && !wired.has(a)) {
         wired.add(a);
-        a.addEventListener(
-          'click',
-          function () {
-            ping(pair[1]);
-          },
-          { once: true, capture: true }
-        );
+        a.addEventListener('click', function () { ping(pair[1]); }, { once: true, capture: true });
       }
     });
     var copy = document.getElementById('share-copy');
     if (copy && !wired.has(copy)) {
       wired.add(copy);
-      copy.addEventListener(
-        'click',
-        function () {
-          ping('copy');
-        },
-        { once: true, capture: true }
-      );
+      copy.addEventListener('click', function () { ping('copy'); }, { once: true, capture: true });
     }
   };
   var btn = document.getElementById('btn-share');

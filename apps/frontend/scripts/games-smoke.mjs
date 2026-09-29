@@ -27,6 +27,7 @@ const GAMES = [
   { slug: 'othello', moves: ['.cell--legal'], board: '.cell' },
   { slug: 'pente', moves: ['.cell--free'], board: '.cell' },
   { slug: 'go', moves: ['.intersection--legal'], board: '.intersection' },
+  { slug: 'chess', moves: ['.square'], board: '.square' },
   {
     slug: 'checkers',
     // two taps per move: pick the piece up, then drop it on a destination

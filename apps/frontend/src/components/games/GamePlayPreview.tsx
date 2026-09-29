@@ -83,6 +83,8 @@ function previewSvg(slug: string): JSX.Element {
       return <PentePreview />;
     case 'go':
       return <GoPreview />;
+    case 'chess':
+      return <ChessPreview />;
     default:
       return <PlaceholderPreview />;
   }
@@ -1104,6 +1106,48 @@ function GoPreview(): JSX.Element {
       </g>
       {stones.map(([x, y, fill], i) => (
         <circle key={'s' + i} cx={x} cy={y} r="5" fill={fill} stroke={fill === '#fbfaf4' ? 'rgba(0,0,0,0.2)' : 'none'} strokeWidth="0.6" />
+      ))}
+    </BoardFrame>
+  );
+}
+
+/** A chess position mid-game: kings, a queen, and a pinned-looking pawn line. */
+function ChessPreview(): JSX.Element {
+  const squares: Array<[number, number, boolean]> = [];
+  for (let row = 0; row < 4; row++) {
+    for (let file = 0; file < 8; file++) squares.push([row, file, (row + file) % 2 === 1]);
+  }
+  const pieces: Array<[number, number, string]> = [
+    [0, 4, "♚"], [3, 3, "♔"],
+    [1, 1, "♝"], [2, 2, "♗"],
+    [1, 3, "♟"], [2, 4, "♙"],
+    [2, 6, "♙"], [3, 5, "♟"],
+  ];
+  return (
+    <BoardFrame>
+      {squares.map(([row, file, dark], i) => (
+        <rect
+          key={'sq' + i}
+          x={16 + file * 11}
+          y={12 + row * 15}
+          width={11}
+          height={15}
+          fill={dark ? "#7b9a68" : "#eeeed2"}
+        />
+      ))}
+      {pieces.map(([row, file, glyph], i) => (
+        <text
+          key={'p' + i}
+          x={16 + file * 11 + 5.5}
+          y={12 + row * 15 + 11}
+          fontSize="11"
+          textAnchor="middle"
+          fill={glyph === "♚" || glyph === "♙" ? "#23231f" : "#fbfbf7"}
+          stroke={glyph === "♚" || glyph === "♙" ? "none" : "#23231f"}
+          strokeWidth="0.4"
+        >
+          {glyph}
+        </text>
       ))}
     </BoardFrame>
   );
