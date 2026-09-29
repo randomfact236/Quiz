@@ -779,7 +779,11 @@ class SnlAdapter implements PartyAdapter {
     return state as unknown as SnlState;
   }
 
-  validate(state: Record<string, unknown>, seat: number, _move: unknown): string | null {
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    // The server rolls the die; the client must send an EMPTY move.
+    if (move !== null && typeof move === 'object' && Object.keys(move as object).length > 0) {
+      return 'Unexpected move payload — just send {}.';
+    }
     return snlValidateMove(this.as(state), seat, {});
   }
 
@@ -899,9 +903,11 @@ class LudoAdapter implements PartyAdapter {
     return state as unknown as LudoState;
   }
 
-  validate(_state: Record<string, unknown>, _seat: number, _move: unknown): string | null {
-    // Ludo moves are dice+token pairs generated server-side in apply(); the
-    // no-legal-token case passes the turn there.
+  validate(_state: Record<string, unknown>, _seat: number, move: unknown): string | null {
+    // The server rolls and moves; the client must send an EMPTY move.
+    if (move !== null && typeof move === 'object' && Object.keys(move as object).length > 0) {
+      return 'Unexpected move payload — just send {}.';
+    }
     return null;
   }
 
