@@ -34,47 +34,66 @@ rematch. Solo and social feed each other.
 | Battleship              | `battleship`          | easy/medium/hard AI (you place the fleet) | ✅       | ✅ (`/battleship` backend, `?bs=CODE` links)           |
 | Rock Paper Scissors     | `rock-paper-scissors` | easy/medium/hard AI (best of 5)           | ✅       | ✅ (`/rock-paper-scissors` backend, `?rps=CODE` links) |
 | Pig Dice                | `pig-dice`            | easy/medium/hard AI (the server rolls)    | ✅       | ✅ (`/pig-dice` backend, `?pd=CODE` links)             |
+| Checkers                | `checkers`            | easy/medium/hard AI (forced captures)     | ✅       | ✅ (`/checkers` backend, `?ck=CODE` links)             |
 
-## 3. Roadmap — build order (owner reorder 2026-09-28: famous/common games first)
+## 3. Roadmap — build order (owner reorder 2026-09-29: famous/common first, least common last)
 
-**Built games are untouched:** Tic Tac Toe, Connect Four, Gomoku, Dots & Boxes,
-Battleship and Pig Dice keep their current hub order in `games-registry.ts`.
-The queue below reorders the UNBUILT confirmed games so the famous/common names
-get built first (owner ask 2026-09-28). Flagged: Rock Paper Scissors has a hub
-registry entry but no `public/games/rock-paper-scissors/` folder yet — verify
-before promoting it anywhere.
+**Built games are untouched:** every shipped game keeps its current hub order in
+`games-registry.ts`. The queue below ranks the UNBUILT 2-player games purely by
+**how widely the name is known**, best first, so the front of the catalogue is
+recognisable and the connoisseur tail fills in last. Within a tier the cheaper
+builds come first, so the quick wins ship while the deep ones are still queued.
 
-| Order | Game               | Plan                                                     | Batch | Why it is here now                           |
-| ----- | ------------------ | -------------------------------------------------------- | ----- | -------------------------------------------- |
-| 1     | Checkers           | [06-checkers.md](06-checkers.md)                         | S     | the most famous buildable board classic      |
-| 2     | Othello            | [12-othello.md](12-othello.md)                           | M     | world-known flip classic                     |
-| 3     | Mastermind         | [34-mastermind.md](34-mastermind.md)                     | S     | household code-breaker; friend sets the code |
-| 4     | Ultimate TTT       | [08-ultimate-tic-tac-toe.md](08-ultimate-tic-tac-toe.md) | S     | modern classic on the ttt shape              |
-| 5     | Mancala (Kalah)    | [14-mancala-kalah.md](14-mancala-kalah.md)               | S     | sowing classic known worldwide               |
-| 6     | Bulls & Cows       | [36-bulls-and-cows.md](36-bulls-and-cows.md)             | XS    | the digit form is a household game           |
-| 7     | Quoridor           | [16-quoridor.md](16-quoridor.md)                         | M     | strong brand in modern abstracts             |
-| 8     | Hive               | [17-hive.md](17-hive.md)                                 | M     | acclaimed modern abstract                    |
-| 9     | Santorini          | [19-santorini.md](19-santorini.md)                       | M     | acclaimed modern abstract                    |
-| 10    | Quarto             | [15-quarto.md](15-quarto.md)                             | M     | award-winning classic                        |
-| 11    | Connect6           | [24-connect6.md](24-connect6.md)                         | S     | familiar six-in-row shape                    |
-| 12    | Pente              | [23-pente.md](23-pente.md)                               | S     | gomoku's famous cousin                       |
-| 13    | Pentago            | [22-pentago.md](22-pentago.md)                           | S     | connect-four with a twist                    |
-| 14    | Notakto            | [37-notakto.md](37-notakto.md)                           | XS    | misère ttt, near-zero rules                  |
-| 15    | Nim                | [09-nim.md](09-nim.md)                                   | XS    | ancient stick classic                        |
-| 16    | Chomp              | [10-chomp.md](10-chomp.md)                               | XS    | paper classic                                |
-| 17    | SOS                | [29-sos.md](29-sos.md)                                   | XS    | school-paper famous                          |
-| 18    | Three Men's Morris | [33-three-mens-morris.md](33-three-mens-morris.md)       | XS    | ancient familiar shape                       |
-| 19    | Domineering        | [28-domineering.md](28-domineering.md)                   | XS    | one-rule duel                                |
-| 20    | Sim                | [30-sim.md](30-sim.md)                                   | XS    | paper triangle duel                          |
-| 21    | Breakthrough       | [25-breakthrough.md](25-breakthrough.md)                 | S     | clean pawn race                              |
-| 22    | Ataxx              | [27-ataxx.md](27-ataxx.md)                               | S     | infection race                               |
-| 23    | Blokus Duo         | [20-blokus-duo.md](20-blokus-duo.md)                     | M     | famous brand, 2P edition                     |
-| 24    | Abalone            | [21-abalone.md](21-abalone.md)                           | M     | known modern abstract                        |
-| 25    | Lines of Action    | [26-lines-of-action.md](26-lines-of-action.md)           | M     | connoisseur abstract                         |
-| 26    | Sprouts            | [31-sprouts.md](31-sprouts.md)                           | S     | pencil-game curiosity                        |
-| 27    | Paper Soccer       | [32-paper-soccer.md](32-paper-soccer.md)                 | S     | regional paper classic                       |
-| 28    | Go 9x9             | [39-go-9x9.md](39-go-9x9.md)                             | L     | deep boss — after the M waves                |
-| 29    | Chess              | [40-chess.md](40-chess.md)                               | L     | the final boss — always last                 |
+Fame is judged by general public recognition (household names and long-lived
+retail classics) over niche or puzzle-community renown — that is why Hive and
+Lines of Action sit below Bulls & Cows, and why the two largest builds, Go and
+Chess, stay at the very end as the boss tier.
+
+| Order | Game               | Plan                                                     | Batch | Tier         | Why it is ranked here                         |
+| ----- | ------------------ | -------------------------------------------------------- | ----- | ------------ | --------------------------------------------- |
+| 1     | Othello            | [12-othello.md](12-othello.md)                           | M     | household    | a household name; flip classic on shelves     |
+| 2     | Pente              | [23-pente.md](23-pente.md)                               | S     | household    | long-lived retail classic (Connect Five)      |
+| 3     | Pentago            | [22-pentago.md](22-pentago.md)                           | S     | household    | popular gift game, big box-shop seller        |
+| 4     | Connect6           | [24-connect6.md](24-connect6.md)                         | S     | household    | Hasbro shelf staple                           |
+| 5     | Mancala (Kalah)    | [14-mancala-kalah.md](14-mancala-kalah.md)               | S     | household    | among the most-played family games ever       |
+| 6     | Mastermind         | [34-mastermind.md](34-mastermind.md)                     | S     | household    | the code-breaker everyone has played          |
+| 7     | Bulls & Cows       | [36-bulls-and-cows.md](36-bulls-and-cows.md)             | XS    | household    | household word/guessing staple                |
+| 8     | Three Men's Morris | [33-three-mens-morris.md](33-three-mens-morris.md)       | XS    | familiar     | ancient and common across the UK/EU           |
+| 9     | Chomp              | [10-chomp.md](10-chomp.md)                               | XS    | familiar     | famous from maths classrooms                  |
+| 10    | Nim                | [09-nim.md](09-nim.md)                                   | XS    | familiar     | ancient, known by name worldwide              |
+| 11    | SOS                | [29-sos.md](29-sos.md)                                   | XS    | familiar     | the school-paper game                         |
+| 12    | Ultimate TTT       | [08-ultimate-tic-tac-toe.md](08-ultimate-tic-tac-toe.md) | S     | familiar     | famous modern take on the ttt shape           |
+| 13    | Blokus Duo         | [20-blokus-duo.md](20-blokus-duo.md)                     | M     | strong brand | famous brand in its 2-player edition          |
+| 14    | Quoridor           | [16-quoridor.md](16-quoridor.md)                         | M     | strong brand | the best-known modern abstract                |
+| 15    | Quarto             | [15-quarto.md](15-quarto.md)                             | M     | strong brand | award winner with real shelf presence         |
+| 16    | Hive               | [17-hive.md](17-hive.md)                                 | M     | hobby known  | acclaimed, but the hobby knows it first       |
+| 17    | Santorini          | [19-santorini.md](19-santorini.md)                       | M     | hobby known  | acclaimed; sibling of Quoridor                |
+| 18    | Abalone            | [21-abalone.md](21-abalone.md)                           | M     | hobby known  | long-running, widely known abstract           |
+| 19    | Ataxx              | [27-ataxx.md](27-ataxx.md)                               | S     | hobby known  | a known infection race                        |
+| 20    | Breakthrough       | [25-breakthrough.md](25-breakthrough.md)                 | S     | hobby known  | familiar clean pawn race                      |
+| 21    | Lines of Action    | [26-lines-of-action.md](26-lines-of-action.md)           | M     | connoisseur  | beloved in the puzzle world, rare in shops    |
+| 22    | Domineering        | [28-domineering.md](28-domineering.md)                   | XS    | connoisseur  | one rule, known mainly to puzzle fans         |
+| 23    | Notakto            | [37-notakto.md](37-notakto.md)                           | XS    | niche        | recent misère variant, low public fame        |
+| 24    | Sim                | [30-sim.md](30-sim.md)                                   | XS    | niche        | paper triangle duel, almost unknown           |
+| 25    | Sprouts            | [31-sprouts.md](31-sprouts.md)                           | S     | niche        | a pencil-game curiosity                       |
+| 26    | Paper Soccer       | [32-paper-soccer.md](32-paper-soccer.md)                 | S     | niche        | regional paper classic, very local fame       |
+| 27    | Go 9x9             | [39-go-9x9.md](39-go-9x9.md)                             | L     | boss         | the deepest build here; last of the abstracts |
+| 28    | Chess              | [40-chess.md](40-chess.md)                               | L     | boss         | the most famous game, and the biggest build   |
+
+**What moved, and why.** The previous order ran roughly famous → abstract →
+paper, which buried household names (Bulls & Cows, Chomp, Nim, Three Men's
+Morris) below acclaimed-but-niche abstracts, and left Connect 6, Pente and
+Pentago far down the list despite being mainstream retail games. This order
+moves every household name to the front regardless of how clever the game is,
+and pushes the modern abstracts into the middle where their audience is real
+but broad. Nothing was dropped: all 28 unbuilt games are still here, and the
+`Batch` column (effort) is unchanged so the schedule is unaffected.
+
+**Go and Chess stay last on purpose.** By fame alone they would be #1 and #2 —
+they are the two most famous games in existence. They also happen to be the two
+largest builds in the whole catalogue (L, full rules, no shared plumbing with
+anything already shipped). Keeping them as the closing boss tier means the
+recognisable catalogue fills in first; say the word and they move to the front.
 
 **The 9-line spec** the owner fills for any new game: Name — One-liner — How to win —
 The board + what a move is — Turn-based? — Solo AI expectations — Duel mode — Rules
