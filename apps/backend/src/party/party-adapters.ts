@@ -91,6 +91,24 @@ import {
   nkPlacement,
   nkValidateMove,
 } from './games/notakto-mp.core';
+import {
+  SnlState,
+  snlApplyMove,
+  snlInitialState,
+  snlIsOver,
+  snlPlacement,
+  snlRoll,
+  snlValidateMove,
+} from './games/snl-mp.core';
+import {
+  MemState,
+  memApplyFlip,
+  memBotFlip,
+  memInitialState,
+  memIsOver,
+  memPlacement,
+  memValidateMove,
+} from './games/memory-mp.core';
 
 /**
  * MP1 party engine — ONE server-authoritative engine for ALL party games
@@ -715,6 +733,126 @@ class NotaktoAdapter implements PartyAdapter {
     return nkPlacement(this.as(state));
   }
 }
+/**
+ * Snakes & Ladders MP: move = {} (the SERVER rolls — approved Pig
+ * precedent). Canonical snakes/ladders layout is a rules constant.
+ * First to land exactly on 100 wins; overshoot bounces back.
+ */
+class SnlAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return snlInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): SnlState {
+    return state as unknown as SnlState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, _move: unknown): string | null {
+    return snlValidateMove(this.as(state), seat, {});
+  }
+
+  apply(state: Record<string, unknown>, seat: number): Record<string, unknown> {
+    return snlApplyMove(this.as(state), seat, snlRoll()) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return snlIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    const s = this.as(state);
+    return s.finished.length > 0 ? s.finished[0] : null;
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(
+    _state: Record<string, unknown>,
+    _seat: number,
+    _tier: 'easy' | 'medium' | 'hard'
+  ): unknown {
+    return {}; // the roll happens in apply()
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return snlPlacement(this.as(state));
+  }
+}
+
+/**
+ * Memory Flip MP: move = {cell}; a match scores +1 and keeps the turn.
+ * Deck + bot memory are SERVER-ONLY (redactFor strips them); the grid is
+ * server-shuffled at creation (approved card-tier precedent).
+ */
+class MemoryAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return memInitialState(playerCount, Math.random) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): MemState {
+    return state as unknown as MemState;
+  }
+
+  validate(state: Record<string, unknown>, _seat: number, move: unknown): string | null {
+    return memValidateMove(this.as(state), (move as { cell: number }).cell);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return memApplyFlip(this.as(state), seat, (move as { cell: number }).cell) as unknown as Record<
+      string,
+      unknown
+    >;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return memIsOver(this.as(state));
+  }
+
+  winner(): number | null {
+    return null;
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return { cell: memBotFlip(this.as(state), seat, tier) };
+  }
+
+  /** CRITICAL: the deck values and bot memory never cross the API. */
+  redactFor(state: Record<string, unknown>, _seat: number | null): Record<string, unknown> {
+    const s = { ...(state as unknown as MemState) };
+    return { ...s, deck: s.claimed.map(() => 0), botMemory: {} };
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // memApplyFlip keeps the turn on a match, passes on a miss.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return memPlacement(this.as(state).scores);
+  }
+}
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -727,6 +865,8 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'ultimate-ttt-mp': new UtttAdapter(),
   'code-race': new CodeRaceAdapter(),
   'notakto-mp': new NotaktoAdapter(),
+  'snakes-ladders-mp': new SnlAdapter(),
+  'memory-flip-mp': new MemoryAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

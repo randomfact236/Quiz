@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Snakes & Ladders MP — 3/4 player classic race | PigZap</title>
+    <meta name="description" content="The classic 1-100 chase — climb ladders, dodge snakes, first to 100 wins. Bots fill empty seats." />
+    <meta name="robots" content="noindex" />
+    <script src="/shared/theme.js?v=1"></script>
+    <style>
+      .game-shell { max-width: 620px; margin: 0 auto; padding: 16px; font-family: system-ui, sans-serif; }
+      h1 { margin: 8px 0 2px; font-size: 1.7rem; }
+      .tagline { margin: 0 0 14px; opacity: .75; font-size: .95rem; }
+      .screen[hidden] { display: none; }
+      .screen { display: flex; flex-direction: column; gap: 12px; }
+      .btn { border: 0; border-radius: 12px; padding: 12px 16px; font-weight: 700; cursor: pointer; font-size: 1rem; }
+      .btn-primary { background: #6d5bd0; color: #fff; }
+      .btn-ghost { background: transparent; color: inherit; border: 1px solid rgba(128,128,128,.4); }
+      .field { display: flex; flex-direction: column; gap: 4px; font-size: .9rem; }
+      .field input, .field select { padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(128,128,128,.4); background: transparent; color: inherit; }
+      .msg.flash { color: #d97706; font-weight: 600; }
+      .table-bar { display: flex; justify-content: space-between; align-items: center; }
+      .code-label { font-family: ui-monospace, monospace; font-weight: 800; letter-spacing: 2px; }
+      .seats-row { display: flex; flex-wrap: wrap; gap: 6px; justify-content: center; }
+      .seat-chip { border-radius: 999px; padding: 4px 10px; font-size: .85rem; font-weight: 700; background: rgba(128,128,128,.12); border: 1px solid transparent; }
+      .seat-chip.active { border-color: #6d5bd0; background: rgba(109,91,208,.2); }
+      .status-line { font-weight: 700; min-height: 1.4em; text-align: center; }
+      
+      .snl-board { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; max-width: 480px; margin: 0 auto; width: 100%; }
+      .snl-cell { aspect-ratio: 1; border-radius: 6px; background: rgba(128,128,128,.1); border: 1px solid rgba(128,128,128,.25); font-size: .6rem; display: flex; align-items: center; justify-content: center; position: relative; color: rgba(128,128,128,.7); }
+      .snl-cell.dark { background: rgba(128,128,128,.18); }
+      .snl-cell.ladder { background: rgba(5,150,105,.3); }
+      .snl-cell.snake { background: rgba(225,29,72,.25); }
+      .snl-cell .pawns { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 1px; font-size: .8rem; }
+      .pc-0 { color: #e11d48; } .pc-1 { color: #2563eb; } .pc-2 { color: #059669; } .pc-3 { color: #d97706; }
+      .die { width: 56px; height: 56px; border-radius: 12px; background: #fff; color: #111; font-size: 1.6rem; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
+
+    </style>
+  </head>
+  <body>
+    <main class="game-shell">
+      <header>
+        <a href="/games/index.html">&larr; Games</a>
+        <h1>Snakes & Ladders MP — 3/4 player classic race</h1>
+        <p class="tagline">The classic 1-100 chase — climb ladders, dodge snakes, first to 100 wins. Bots fill empty seats.</p>
+      </header>
+      <section id="screen-menu" class="screen">
+        <label class="field"><span>Your name</span><input id="player-name" maxlength="32" /></label>
+        <label class="field">
+          <span>Seats</span>
+          <select id="seat-count"><option value="4" selected>4 players</option><option value="3">3 players</option></select>
+        </label>
+        <label class="field">
+          <span>Bot level</span>
+          <select id="bot-tier"><option value="easy">Easy</option><option value="medium" selected>Medium</option><option value="hard">Hard</option></select>
+        </label>
+        <button id="btn-create" class="btn btn-primary">Create table (empty seats = bots)</button>
+        <label class="field"><span>Join code</span><input id="join-code" maxlength="6" autocapitalize="characters" /></label>
+        <button id="btn-join" class="btn btn-primary">Join table</button>
+        <p id="menu-msg" class="msg"></p>
+      </section>
+      <section id="screen-game" class="screen" hidden>
+        <div class="table-bar">
+          <span id="code-label" class="code-label"></span>
+          <button id="btn-copy" class="btn btn-ghost">Copy invite</button>
+        </div>
+        <div id="seats-row" class="seats-row"></div>
+        
+        <div id="board" class="snl-board"></div>
+        <div class="die" id="die">?</div>
+        <button id="btn-roll" class="btn btn-primary" disabled>Roll the die</button>
+        <p id="status" class="status-line"></p>
+        <button id="btn-start" class="btn btn-primary" hidden>Start the table</button>
+        <button id="btn-leave" class="btn btn-ghost">Leave table</button>
+      </section>
+    </main>
+    <script src="/shared/pig-feedback.js?v=2" defer></script>
+    <script src="config.js?v=1"></script>
+    <script src="storage.js?v=1"></script>
+    <script src="core.js?v=1"></script>
+    <script src="game.js?v=1"></script>
+  </body>
+</html>

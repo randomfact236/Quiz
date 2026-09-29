@@ -47,6 +47,10 @@ function previewSvg(slug: string): JSX.Element {
       return <Flip3Preview />;
     case 'quadflip':
       return <Flip4Preview />;
+    case 'snakes-ladders-mp':
+      return <SnlPreview />;
+    case 'memory-flip-mp':
+      return <MemPreview />;
     case 'code-race':
       return <CodeRacePreview />;
     case 'notakto-mp':
@@ -65,6 +69,8 @@ function previewSvg(slug: string): JSX.Element {
       return <Sos4Preview />;
     case 'checkers':
       return <CheckersPreview />;
+    case 'othello':
+      return <OthelloPreview />;
     default:
       return <PlaceholderPreview />;
   }
@@ -683,6 +689,130 @@ function NotaktoPreview(): JSX.Element {
     </BoardFrame>
   );
 }
+/** Board hint: ladder cells green, snake cells red, one pawn mid-race. */
+function SnlPreview(): JSX.Element {
+  const cells: Array<[number, number, string, string]> = [
+    [30, 30, '4', '#059669'],
+    [44, 30, '9', '#059669'],
+    [58, 30, '16', 'currentColor'],
+    [30, 48, '54', '#e11d48'],
+    [44, 48, '62', '#e11d48'],
+    [72, 48, '98', '#e11d48'],
+    [44, 66, '84', '#059669'],
+    [58, 66, '95', '#e11d48'],
+  ];
+  return (
+    <BoardFrame>
+      {cells.map(([cx, cy, label, color], i) => (
+        <g key={i}>
+          <rect x={cx - 9} y={cy - 9} width="18" height="18" rx="3" fill={color} opacity="0.3" />
+          <text x={cx} y={cy + 3} fontSize="7" fill={color} textAnchor="middle" fontWeight="700">
+            {label}
+          </text>
+        </g>
+      ))}
+      <circle cx="88" cy="76" r="5" fill="#e11d48" />
+    </BoardFrame>
+  );
+}
+
+/** Pairs grid: face-down cards with one matched pair face up. */
+function MemPreview(): JSX.Element {
+  const cards: Array<[number, number, string, boolean]> = [
+    [24, 26, '1', true],
+    [40, 26, '1', true],
+    [56, 26, '', false],
+    [72, 26, '', false],
+    [24, 46, '', false],
+    [40, 46, '', false],
+    [56, 46, '', false],
+    [72, 46, '', false],
+    [24, 66, '', false],
+    [40, 66, '', false],
+    [56, 66, '', false],
+    [72, 66, '', false],
+  ];
+  return (
+    <BoardFrame>
+      {cards.map(([cx, cy, sym, up], i) => (
+        <g key={i}>
+          <rect
+            x={cx - 8}
+            y={cy - 8}
+            width="16"
+            height="16"
+            rx="3"
+            fill={up ? '#fbbf24' : 'currentColor'}
+            opacity={up ? 0.9 : 0.25}
+          />
+          {sym && (
+            <text x={cx} y={cy + 5} fontSize="10" textAnchor="middle" fill="#111" fontWeight="800">
+              {sym}
+            </text>
+          )}
+        </g>
+      ))}
+    </BoardFrame>
+  );
+}
+/** Green 8×8 board, mid-game: dark and light discs with a legal-move ghost. */
+function OthelloPreview(): JSX.Element {
+  const grid: Array<[number, number]> = [];
+  for (let row = 0; row < 6; row++) {
+    for (let file = 0; file < 8; file++) {
+      grid.push([14 + file * 11.5, 12 + row * 10]);
+    }
+  }
+  // [row, fill] — a run of dark discs against a wall of light, which is the
+  // whole game in one glance
+  const discs: Array<[number, string]> = [
+    [1, '#1c2430'],
+    [1, '#1c2430'],
+    [1, '#1c2430'],
+    [2, '#f6f7f9'],
+    [2, '#1c2430'],
+    [2, '#1c2430'],
+    [3, '#1c2430'],
+    [3, '#f6f7f9'],
+    [3, '#f6f7f9'],
+    [4, '#f6f7f9'],
+    [4, '#f6f7f9'],
+    [4, '#1c2430'],
+    [5, '#1c2430'],
+  ];
+  const ghost = grid[2];
+  return (
+    <BoardFrame>
+      <rect
+        x="10"
+        y="8"
+        width="100"
+        height="68"
+        rx="6"
+        fill="#3a8a5b"
+        stroke="#2c6b45"
+        strokeWidth="1.5"
+      />
+      {discs.map(([row, fill], i) => {
+        const cell = grid[row];
+        if (!cell) return null;
+        return (
+          <circle
+            key={'d' + i}
+            cx={cell[0]}
+            cy={cell[1]}
+            r="4"
+            fill={fill}
+            stroke={fill === '#f6f7f9' ? 'rgba(0,0,0,0.15)' : 'none'}
+            strokeWidth="0.8"
+          />
+        );
+      })}
+      {ghost && <circle cx={ghost[0]} cy={ghost[1] + 10} r="2" fill="#ffffff" opacity="0.45" />}
+    </BoardFrame>
+  );
+}
+
 /** Neutral fallback so an unknown slug never breaks the hub. */
 function PlaceholderPreview(): JSX.Element {
   return (

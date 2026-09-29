@@ -100,6 +100,15 @@ export const GAMES: GameEntry[] = [
     gradient: 'from-amber-600 to-rose-700',
     cssGradient: 'linear-gradient(135deg, #d97706 0%, #be123c 100%)',
   },
+  {
+    slug: 'othello',
+    emoji: '⚫',
+    title: 'Othello',
+    blurb:
+      'Outflank to flip — the classic flip duel, solo vs the computer or a live match with a friend.',
+    gradient: 'from-emerald-600 to-teal-800',
+    cssGradient: 'linear-gradient(135deg, #059669 0%, #134e4a 100%)',
+  },
 
   {
     slug: 'dots-boxes-4p',
@@ -136,6 +145,24 @@ export const GAMES: GameEntry[] = [
     gradient: 'from-violet-600 to-indigo-800',
     cssGradient: 'linear-gradient(135deg, #7c3aed 0%, #3730a3 100%)',
     players: [4],
+  },
+  {
+    slug: 'snakes-ladders-mp',
+    emoji: '🎲',
+    title: 'Snakes & Ladders MP',
+    blurb: 'The classic 1-100 race: climb ladders, dodge snakes, first to 100.',
+    gradient: 'from-lime-500 to-emerald-800',
+    cssGradient: 'linear-gradient(135deg, #84cc16 0%, #166534 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'memory-flip-mp',
+    emoji: '🃏',
+    title: 'Memory Flip MP',
+    blurb: 'Flip two cards: a match scores and keeps your turn. Most pairs wins.',
+    gradient: 'from-fuchsia-600 to-purple-900',
+    cssGradient: 'linear-gradient(135deg, #c026d3 0%, #581c87 100%)',
+    players: [3, 4],
   },
   {
     slug: 'code-race',

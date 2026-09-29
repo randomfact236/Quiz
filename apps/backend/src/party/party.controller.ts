@@ -30,6 +30,8 @@ class CreatePartyDto {
     'ultimate-ttt-mp',
     'code-race',
     'notakto-mp',
+    'snakes-ladders-mp',
+    'memory-flip-mp',
   ])
   gameSlug: string;
 

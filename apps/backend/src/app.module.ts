@@ -20,6 +20,7 @@ import { BattleshipModule } from './battleship/battleship.module';
 import { PigDiceModule } from './pigdice/pigdice.module';
 import { RpsModule } from './rockpaperscissors/rockpaperscissors.module';
 import { CheckersModule } from './checkers/checkers.module';
+import { OthelloModule } from './othello/othello.module';
 import { PartyModule } from './party/party.module';
 import { ShareCountsModule } from './share-counts/share-counts.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
@@ -147,6 +148,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     PigDiceModule,
     RpsModule,
     CheckersModule,
+    OthelloModule,
     PartyModule,
     HealthModule,
     SettingsModule,
