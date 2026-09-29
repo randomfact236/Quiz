@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Ludo — PigZap Games" />
+    <meta
+      property="og:description"
+      content="Race all four of your pawns home around the board before the others do. The phone-party classic — play the computer or duel a friend live."
+    />
+    <meta property="og:url" content="https://pigzap.com/games/ludo" />
+    <meta property="og:image" content="https://pigzap.com/og/game/ludo.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Ludo — PigZap Games" />
+    <meta
+      name="twitter:description"
+      content="Race all four of your pawns home around the board. The phone-party classic."
+    />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/ludo.png" />
+    <title>Ludo — PigZap Games</title>
+    <meta
+      name="description"
+      content="Race all four of your pawns home around the board before the others do. The phone-party classic — play the computer or duel a friend live."
+    />
+    <meta name="theme-color" content="#f7ece4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1b1410" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='88'%3E%F0%9F%8E%99%3C/text%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Ludo menu">
+        <h1 class="menu-title">Ludo 🎲</h1>
+        <p class="tagline">Race all four of your pawns home before the others do.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">🤖 vs Computer</button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">👥 2 Players</button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">⚔️ Online</button>
+          </div>
+
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you play 🔴)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="difficulty-label" id="difficulty-segmented">
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">Easy</button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">Medium</button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">Hard</button>
+            </div>
+            <p class="rules-note">
+              The die is rolled by the <b>server</b> with a cryptographic RNG, so
+              nobody can rig a race. Only a <b>6</b> brings a pawn out, landing on
+              a lone enemy captures it, two on a square is a blockade, and you
+              need the <b>exact</b> roll to reach your home.
+            </p>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--d"><span class="num" id="series-d">0</span><span class="label">🔴 Red wins</span></div>
+            <div class="score"><span class="num" id="series-draw">0</span><span class="label">Draws</span></div>
+            <div class="score score--l"><span class="num" id="series-l">0</span><span class="label">⚪ White wins</span></div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Ludo board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">🔴 0 · 🤝 0 · ⚪ 0</div>
+        </div>
+
+        <div class="diebar">
+          <button type="button" class="die" id="btn-roll" aria-label="Roll the die">🎲</button>
+          <div class="dieinfo">
+            <div class="turn" id="turn" aria-live="polite">🔴 Red to play</div>
+            <div class="hint-line" id="hint-line" role="status" aria-live="polite"></div>
+          </div>
+        </div>
+
+        <div class="homes">
+          <div class="home home--1"><span class="home-label">🔴</span><span class="home-count" id="home-1">0</span></div>
+          <div class="home home--2"><span class="home-label">🔵</span><span class="home-count" id="home-2">0</span></div>
+          <div class="home home--3"><span class="home-label">🟡</span><span class="home-count" id="home-3">0</span></div>
+          <div class="home home--4"><span class="home-label">🟢</span><span class="home-count" id="home-4">0</span></div>
+        </div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="group" aria-label="Ludo board"></div>
+
+          <div
+            id="overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overlay-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="overlay-title">🔴 Red wins!</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next race</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+                <div class="share-row" id="share-row" hidden>
+                  <a class="share-target" id="share-fb" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a>
+                  <a class="share-target" id="share-x" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+                  <a class="share-target" id="share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a>
+                  <button type="button" class="share-target" id="share-copy" aria-label="Copy result">🔗 Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="legend">
+          <span class="legend-chip legend-chip--safe">safe square</span>
+          <span class="legend-chip legend-chip--legal">can move here</span>
+          <span class="legend-chip legend-chip--home">home column</span>
+        </p>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>
