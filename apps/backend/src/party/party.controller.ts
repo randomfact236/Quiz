@@ -33,6 +33,7 @@ class CreatePartyDto {
     'snakes-ladders-mp',
     'memory-flip-mp',
     'ludo-mp',
+    'ludo-snakes',
     'checkers-hex',
     'checkers-4p',
     'blokus-4p',

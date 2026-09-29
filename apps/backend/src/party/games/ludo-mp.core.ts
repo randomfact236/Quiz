@@ -24,6 +24,32 @@ export function ludoStartCell(seat: number): number {
   return (seat * 13) % LUDO_RING;
 }
 
+/**
+ * Snakes & Ladders jump table for the S&L Ludo variant (ring cell -> ring
+ * cell). Ladders climb, snakes slide. Cells are shared-ring indexes 0..51;
+ * no chain loops (a jump never lands on another jump start), no cell maps
+ * to itself, and no jump starts/ends on a seat start cell (0/13/26/39).
+ * Rules constants — the empty-board rule treats the jump map like dice.
+ */
+export const LUDO_JUMPS: Readonly<Record<number, number>> = {
+  // ladders (climb)
+  1: 22,
+  6: 17,
+  10: 31,
+  27: 45,
+  34: 48,
+  // snakes (slide)
+  24: 5,
+  38: 15,
+  43: 19,
+  50: 33,
+};
+
+/** Resolve a landing ring cell through jumps (single hop by construction). */
+export function ludoJumpTarget(ringCell: number): number | null {
+  return LUDO_JUMPS[ringCell] ?? null;
+}
+
 export interface LudoState {
   /** dist per token, flattened seat-major: [s0t0, s0t1, s1t0, s1t1, ...] */
   dist: number[];
@@ -31,15 +57,24 @@ export interface LudoState {
   seatCount: number;
   lastRoll: number | null;
   finished: number[];
+  /** S&L variant: ring jumps active (ladders + snakes). */
+  jumps: boolean;
+  /** Last jump the mover rode, for the UI: {from, to} ring cells. */
+  lastJump: { from: number; to: number } | null;
 }
 
-export function ludoInitialState(seatCount: number): LudoState {
+export function ludoInitialState(
+  seatCount: number,
+  variant: 'classic' | 'snakes' = 'classic'
+): LudoState {
   return {
     dist: Array<number>(seatCount * LUDO_TOKENS).fill(-1),
     turn: 0,
     seatCount,
     lastRoll: null,
     finished: [],
+    jumps: variant === 'snakes',
+    lastJump: null,
   };
 }
 
@@ -135,7 +170,22 @@ export function ludoApplyMove(
   }
   dist[idx] = d;
 
-  // capture check (only on the shared ring)
+  // S&L variant: the FINAL landing ring cell may ride a ladder/snake.
+  // dist is recomputed from the target ring cell relative to this seat
+  // (bounce rules stay intact since the target is ring-only).
+  let lastJump: { from: number; to: number } | null = null;
+  if (state.jumps && d >= 1 && d <= 51) {
+    const landed = ludoRingCell(seat, d);
+    const target = landed !== null ? ludoJumpTarget(landed) : null;
+    if (landed !== null && target !== null) {
+      lastJump = { from: landed, to: target };
+      const back = (target - ludoStartCell(seat) + LUDO_RING) % LUDO_RING;
+      d = back + 1; // ring cell = start + dist - 1
+      dist[idx] = d;
+    }
+  }
+
+  // capture check (only on the shared ring, at the FINAL cell)
   const ring = ludoRingCell(seat, d);
   if (ring !== null) {
     for (let s = 0; s < state.seatCount; s++) {
@@ -165,6 +215,8 @@ export function ludoApplyMove(
       seatCount: state.seatCount,
       lastRoll: roll,
       finished,
+      jumps: state.jumps,
+      lastJump,
     },
     captured,
     finishedToken,

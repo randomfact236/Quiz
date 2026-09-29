@@ -929,8 +929,9 @@ class MemoryAdapter implements PartyAdapter {
  * capture sends back to the yard; both home = 1st.
  */
 class LudoAdapter implements PartyAdapter {
+  constructor(private readonly variant: 'classic' | 'snakes' = 'classic') {}
   initialState(playerCount: number): Record<string, unknown> {
-    return ludoInitialState(playerCount) as unknown as Record<string, unknown>;
+    return ludoInitialState(playerCount, this.variant) as unknown as Record<string, unknown>;
   }
 
   private as(state: Record<string, unknown>): LudoState {
@@ -1382,7 +1383,8 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'notakto-mp': new NotaktoAdapter(),
   'snakes-ladders-mp': new SnlAdapter(),
   'memory-flip-mp': new MemoryAdapter(),
-  'ludo-mp': new LudoAdapter(),
+  'ludo-mp': new LudoAdapter('classic'),
+  'ludo-snakes': new LudoAdapter('snakes'),
   'checkers-hex': new CheckersMpAdapter('checkers-hex'),
   'checkers-4p': new CheckersMpAdapter('checkers-4p'),
   'blokus-4p': new BlokusAdapter(),
