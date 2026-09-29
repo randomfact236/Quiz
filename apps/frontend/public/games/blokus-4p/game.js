@@ -280,13 +280,13 @@
     return 'Waiting…';
   }
   function clearPreview() {
-    if (!S.sel || !S.view) return;
+    if (S.sel === null || !S.view) return;
     for (var i = 0; i < SIZE * SIZE; i++) {
       cellEls[i].classList.remove('preview', 'illegal');
     }
   }
   function hoverCell(idx) {
-    if (!S.sel || !S.view || !S.view.yourTurn || S.view.status !== 'running') return;
+    if (S.sel === null || !S.view || !S.view.yourTurn || S.view.status !== 'running') return;
     clearPreview();
     var r = Math.floor(idx / SIZE),
       c = idx % SIZE;
@@ -302,7 +302,7 @@
     }
   }
   async function clickCell(idx) {
-    if (!S.sel || !S.view || !S.view.yourTurn || S.view.status !== 'running') return;
+    if (S.sel === null || !S.view || !S.view.yourTurn || S.view.status !== 'running') return;
     var r = Math.floor(idx / SIZE),
       c = idx % SIZE;
     var mv = { piece: S.sel, rot: S.rot, r: r, c: c };
@@ -323,7 +323,7 @@
     }
   }
   $('btn-rotate').addEventListener('click', function () {
-    if (!S.sel) return flash($('status'), 'Pick a piece first.');
+    if (S.sel === null) return flash($('status'), 'Pick a piece first.');
     var n = core.orientations(S.sel).length;
     S.rot = (S.rot + 1) % n;
     render(S.view);
