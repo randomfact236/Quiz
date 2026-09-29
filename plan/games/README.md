@@ -35,6 +35,7 @@ rematch. Solo and social feed each other.
 | Rock Paper Scissors     | `rock-paper-scissors` | easy/medium/hard AI (best of 5)           | ✅       | ✅ (`/rock-paper-scissors` backend, `?rps=CODE` links) |
 | Pig Dice                | `pig-dice`            | easy/medium/hard AI (the server rolls)    | ✅       | ✅ (`/pig-dice` backend, `?pd=CODE` links)             |
 | Checkers                | `checkers`            | easy/medium/hard AI (forced captures)     | ✅       | ✅ (`/checkers` backend, `?ck=CODE` links)             |
+| Othello                 | `othello`             | easy/medium/hard AI (6/8/10 board)        | ✅       | ✅ (`/othello` backend, `?oth=CODE` links)             |
 
 ## 3. Roadmap — build order (owner reorder 2026-09-29: famous/common first, least common last)
 

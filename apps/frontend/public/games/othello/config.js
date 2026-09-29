@@ -24,7 +24,7 @@ const DEFAULT_CONFIG = {
       // {setup} is e.g. "Othello vs the computer (hard)"; {score} the series
       // line; {url} the game URL.
       share1p: '{setup} — {score}. Can you do better? {url}',
-      share2p: 'We played a Othello series — {score}. Settle it: {url}',
+      share2p: 'We played an Othello series — {score}. Settle it: {url}',
     },
   },
 };
