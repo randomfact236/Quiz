@@ -110,6 +110,15 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #57534e 0%, #1c1917 100%)',
   },
   {
+    slug: 'go',
+    emoji: '⛔',
+    title: 'Go 9×9',
+    blurb:
+      'The deepest game ever played, on a board you can finish — surround territory, solo or live.',
+    gradient: 'from-lime-700 to-green-900',
+    cssGradient: 'linear-gradient(135deg, #3f6212 0%, #14532d 100%)',
+  },
+  {
     slug: 'othello',
     emoji: '⚫',
     title: 'Othello',

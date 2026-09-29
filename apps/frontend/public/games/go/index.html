@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Go 9×9 — PigZap Games" />
+    <meta
+      property="og:description"
+      content="Surround territory with stones on a 9×9 board. The deepest game ever played, in a size you can finish — solo vs the computer or a live duel."
+    />
+    <meta property="og:url" content="https://pigzap.com/games/go" />
+    <meta property="og:image" content="https://pigzap.com/og/game/go.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Go 9×9 — PigZap Games" />
+    <meta
+      name="twitter:description"
+      content="Surround territory with stones on a 9×9 board. Solo vs the computer or a live duel."
+    />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/go.png" />
+    <title>Go 9×9 — PigZap Games</title>
+    <meta
+      name="description"
+      content="Surround territory with stones on a 9×9 board. The deepest game ever played, in a size you can finish — solo vs the computer or a live duel."
+    />
+    <meta name="theme-color" content="#f2f0e4" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#141a12" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9B%94%3C/text%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Go menu">
+        <h1 class="menu-title">Go 9×9 ⛔</h1>
+        <p class="tagline">Surround territory. Whoever holds more of the board takes it.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">
+              🤖 vs Computer
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">👥 2 Players</button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">⚔️ Online</button>
+          </div>
+
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you play ⚫)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="difficulty-label" id="difficulty-segmented">
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">Easy</button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">Medium</button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">Hard</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <h2 id="komi-label">Komi</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="komi-label" id="komi-segmented">
+              <button type="button" role="radio" aria-checked="true" data-komi="0">0 — even</button>
+              <button type="button" role="radio" aria-checked="false" data-komi="5.5">5.5 — classic</button>
+            </div>
+          </div>
+
+          <p class="rules-note">
+            A stone's <b>liberties</b> are the empty points touching its group. Fill
+            a group's last liberty and it comes off the board. You may not fill
+            your own last liberty (a suicide) unless the move captures. The
+            simple <b>ko</b> rule bars a move that recreates the position just
+            before yours. Both players pass and the game is scored: your stones
+            plus the empty points only you touch, plus <b>komi</b> to white.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium · komi 5.5</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--d">
+              <span class="num" id="series-d">0</span>
+              <span class="label">⚫ Black wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--l">
+              <span class="num" id="series-l">0</span>
+              <span class="label">⚪ White wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Go board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">⚫ 0 · 🤝 0 · ⚪ 0</div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">⚫ Black to play</div>
+        <div class="hint-line" id="hint-line" role="status" aria-live="polite"></div>
+
+        <div class="scorebar">
+          <div class="scorebar-fill scorebar-fill--dark" id="bar-dark"></div>
+          <div class="scorebar-count" id="bar-count">0 : 0</div>
+        </div>
+
+        <div class="captures">
+          <div class="capture-side">
+            <span class="capture-label">⚫ captured</span>
+            <span class="capture-count" id="cap-dark">0</span>
+          </div>
+          <div class="capture-side">
+            <span class="capture-label">⚪ captured</span>
+            <span class="capture-count" id="cap-light">0</span>
+          </div>
+        </div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="group" aria-label="Go board"></div>
+
+          <div
+            id="overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overlay-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="overlay-title">Black wins</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next game</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+                <div class="share-row" id="share-row" hidden>
+                  <a class="share-target" id="share-fb" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a>
+                  <a class="share-target" id="share-x" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+                  <a class="share-target" id="share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a>
+                  <button type="button" class="share-target" id="share-copy" aria-label="Copy result">🔗 Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="board-actions">
+          <button type="button" class="ghost" id="btn-pass">Pass</button>
+        </div>
+
+        <p class="legend">
+          <span class="legend-chip legend-chip--dark">black</span>
+          <span class="legend-chip legend-chip--light">white</span>
+          <span class="legend-chip legend-chip--legal">legal point</span>
+        </p>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>

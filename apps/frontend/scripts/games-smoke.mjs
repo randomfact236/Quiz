@@ -26,6 +26,7 @@ const GAMES = [
   // othello: one tap per move, on a square the UI itself marks legal
   { slug: 'othello', moves: ['.cell--legal'], board: '.cell' },
   { slug: 'pente', moves: ['.cell--free'], board: '.cell' },
+  { slug: 'go', moves: ['.intersection--legal'], board: '.intersection' },
   {
     slug: 'checkers',
     // two taps per move: pick the piece up, then drop it on a destination

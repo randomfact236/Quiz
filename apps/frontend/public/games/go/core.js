@@ -31,6 +31,8 @@ export const WHITE = 2;
 
 export const DEFAULT_KOMI = 5.5;
 
+export const centre = 40; // the middle of the 9x9 (row 4, file 4)
+
 export function other(side) {
   return side === BLACK ? WHITE : BLACK;
 }

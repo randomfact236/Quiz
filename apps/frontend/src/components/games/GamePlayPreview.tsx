@@ -81,6 +81,8 @@ function previewSvg(slug: string): JSX.Element {
       return <OthelloPreview />;
     case 'pente':
       return <PentePreview />;
+    case 'go':
+      return <GoPreview />;
     default:
       return <PlaceholderPreview />;
   }
@@ -1081,6 +1083,32 @@ function BlokusPreview(): JSX.Element {
     </BoardFrame>
   );
 }
+/** A 9x9 Go board, mid-game: a black group under pressure, white walls. */
+function GoPreview(): JSX.Element {
+  const stones: Array<[number, number, string]> = [
+    [20, 20, '#14180f'], [34, 20, '#14180f'], [20, 34, '#14180f'],
+    [34, 34, '#fbfaf4'], [48, 34, '#fbfaf4'], [48, 48, '#fbfaf4'],
+    [62, 48, '#fbfaf4'], [76, 62, '#fbfaf4'], [62, 76, '#14180f'],
+    [90, 76, '#14180f'], [90, 34, '#fbfaf4'], [34, 90, '#14180f'],
+  ];
+  return (
+    <BoardFrame>
+      <rect x="8" y="8" width="104" height="68" rx="5" fill="#e2b96f" stroke="#b58b45" strokeWidth="1.5" />
+      <g stroke="rgba(60,40,12,0.5)" strokeWidth="0.7">
+        {[20, 34, 48, 62, 76, 90].map((x) => (
+          <path key={'v' + x} d={'M' + x + ' 14v56'} />
+        ))}
+        {[20, 34, 48, 62, 76].map((y) => (
+          <path key={'h' + y} d={'M14 ' + y + 'h92'} />
+        ))}
+      </g>
+      {stones.map(([x, y, fill], i) => (
+        <circle key={'s' + i} cx={x} cy={y} r="5" fill={fill} stroke={fill === '#fbfaf4' ? 'rgba(0,0,0,0.2)' : 'none'} strokeWidth="0.6" />
+      ))}
+    </BoardFrame>
+  );
+}
+
 /** Neutral fallback so an unknown slug never breaks the hub. */
 function PlaceholderPreview(): JSX.Element {
   return (
