@@ -23,6 +23,7 @@ import { CheckersModule } from './checkers/checkers.module';
 import { OthelloModule } from './othello/othello.module';
 import { PenteModule } from './pente/pente.module';
 import { GoModule } from './go/go.module';
+import { ChessModule } from './chess/chess.module';
 import { PartyModule } from './party/party.module';
 import { ShareCountsModule } from './share-counts/share-counts.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
@@ -153,6 +154,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     OthelloModule,
     PenteModule,
     GoModule,
+    ChessModule,
     PartyModule,
     HealthModule,
     SettingsModule,
