@@ -109,6 +109,25 @@ import {
   memPlacement,
   memValidateMove,
 } from './games/memory-mp.core';
+import {
+  LudoState,
+  ludoApplyMove,
+  ludoBotTurn,
+  ludoInitialState,
+  ludoIsOver,
+  ludoLegalTokens,
+  ludoPlacement,
+  ludoWinner,
+} from './games/ludo-mp.core';
+import {
+  CmpState,
+  cmpAiMove,
+  cmpApplyMove,
+  cmpInitialState,
+  cmpIsOver,
+  cmpPlacement,
+  cmpValidateMove,
+} from './games/checkers-mp.core';
 
 /**
  * MP1 party engine — ONE server-authoritative engine for ALL party games
@@ -853,6 +872,144 @@ class MemoryAdapter implements PartyAdapter {
     return memPlacement(this.as(state).scores);
   }
 }
+/**
+ * Ludo MP: move = {token} (the SERVER rolls; extra roll on 6/capture/finish
+ * handled inside ludoApplyMove’s turn computation). 2 tokens per seat;
+ * capture sends back to the yard; both home = 1st.
+ */
+class LudoAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return ludoInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): LudoState {
+    return state as unknown as LudoState;
+  }
+
+  validate(_state: Record<string, unknown>, _seat: number, _move: unknown): string | null {
+    // Ludo moves are dice+token pairs generated server-side in apply(); the
+    // no-legal-token case passes the turn there.
+    return null;
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    const s = this.as(state);
+    // The roll happens here, server-side (approved RNG precedent).
+    const roll = 1 + Math.floor(Math.random() * 6);
+    const legal = ludoLegalTokens(s, seat, roll);
+    if (legal.length === 0) {
+      // no legal token: pass the turn (documented house rule)
+      return { ...s, lastRoll: roll, turn: (seat + 1) % s.seatCount } as unknown as Record<
+        string,
+        unknown
+      >;
+    }
+    let token = (move as { token: number }).token;
+    if (!legal.includes(token)) token = legal[0];
+    return ludoApplyMove(s, seat, roll, token).state as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return ludoIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return ludoWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(): unknown {
+    return {}; // roll + token chosen inside apply for Ludo
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // ludoApplyMove computed extra-roll/skip inside state.turn.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return ludoPlacement(this.as(state));
+  }
+}
+
+/**
+ * Checkers MP: one adapter, two variants — 'checkers-hex' (3P, 8×8) and
+ * 'checkers-4p' (4P, 10×10). Jump chains mandatory; elimination ranks by
+ * survival.
+ */
+class CheckersMpAdapter implements PartyAdapter {
+  constructor(private readonly variant: 'checkers-hex' | 'checkers-4p') {}
+
+  initialState(_playerCount: number): Record<string, unknown> {
+    return cmpInitialState(this.variant) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): CmpState {
+    return state as unknown as CmpState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return cmpValidateMove(this.as(state), seat, move as { from: number; to: number });
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return cmpApplyMove(
+      this.as(state),
+      seat,
+      move as { from: number; to: number }
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return cmpIsOver(this.as(state));
+  }
+
+  winner(): number | null {
+    return null;
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return cmpAiMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // cmpApplyMove computed the next living seat + chain handling.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return cmpPlacement(this.as(state));
+  }
+}
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -867,6 +1024,9 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'notakto-mp': new NotaktoAdapter(),
   'snakes-ladders-mp': new SnlAdapter(),
   'memory-flip-mp': new MemoryAdapter(),
+  'ludo-mp': new LudoAdapter(),
+  'checkers-hex': new CheckersMpAdapter('checkers-hex'),
+  'checkers-4p': new CheckersMpAdapter('checkers-4p'),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

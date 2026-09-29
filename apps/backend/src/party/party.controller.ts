@@ -32,6 +32,9 @@ class CreatePartyDto {
     'notakto-mp',
     'snakes-ladders-mp',
     'memory-flip-mp',
+    'ludo-mp',
+    'checkers-hex',
+    'checkers-4p',
   ])
   gameSlug: string;
 
