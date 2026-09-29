@@ -599,8 +599,37 @@ button:disabled {
   background: var(--accent);
 }
 
+.legend {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin: 12px 0 0;
+  font-size: 12px;
+  color: var(--ink-soft);
+}
+
+.legend-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+/* The chip's own box. Without this rule the dots have no size and the legend
+   renders as bare words — caught by looking at the live game. */
+.legend-chip::before {
+  content: '';
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+
+/* A black disc on a dark background is invisible, so the chip borrows the
+   stone colours and flips in dark mode rather than hardcoding a hex. */
 .legend-chip--dark::before {
   background: #14100a;
+  border: 1px solid rgba(255, 255, 255, 0.45);
 }
 
 .legend-chip--light::before {
