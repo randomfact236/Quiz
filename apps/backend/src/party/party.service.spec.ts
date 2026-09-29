@@ -114,7 +114,7 @@ describe('PartyService (quad-oxo)', () => {
     await service.start(match.code, { guestId: 'g1' });
 
     // A human who never acts correctly stalls the table (bots never act for a
-    // human seat) â€” Bo leaves, his seat converts to a bot, the table finishes.
+
     await service.move(match.code, { guestId: 'g1', move: 12 });
     await service.leave(match.code, 'g2');
     expect(match.seats[1].kind).toBe('bot');

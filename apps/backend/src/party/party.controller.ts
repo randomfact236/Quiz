@@ -28,6 +28,8 @@ class CreatePartyDto {
     'othello-3',
     'quadflip',
     'ultimate-ttt-mp',
+    'code-race',
+    'notakto-mp',
   ])
   gameSlug: string;
 

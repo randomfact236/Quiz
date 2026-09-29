@@ -7,7 +7,7 @@ import { PartyService } from './party.service';
  * pass chains, score-race placement. Same fake-repo pattern as the other
  * party suites.
  */
-describe('PartyService â€” flip games (othello-3 / quadflip)', () => {
+describe('PartyService — flip games (othello-3 / quadflip)', () => {
   let repo: Record<string, jest.Mock>;
   let service: PartyService;
   let match: Record<string, any>;
@@ -88,9 +88,7 @@ describe('PartyService â€” flip games (othello-3 / quadflip)', () => {
         try {
           last = await service.move(match.code, { guestId: 'g1', move: cell });
           played = true;
-        } catch {
-          /* illegal â€” next cell */
-        }
+        } catch {}
       }
       if (!played) break;
     }

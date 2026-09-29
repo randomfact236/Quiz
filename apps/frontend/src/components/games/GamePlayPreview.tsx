@@ -47,6 +47,10 @@ function previewSvg(slug: string): JSX.Element {
       return <Flip3Preview />;
     case 'quadflip':
       return <Flip4Preview />;
+    case 'code-race':
+      return <CodeRacePreview />;
+    case 'notakto-mp':
+      return <NotaktoPreview />;
     case 'ultimate-ttt-mp':
       return <UtttPreview />;
     case 'tri-nim':
@@ -601,6 +605,79 @@ function UtttPreview(): JSX.Element {
           textAnchor="middle"
         >
           {sym}
+        </text>
+      ))}
+    </BoardFrame>
+  );
+}
+/** Hidden code: covered pegs with black/white feedback row. */
+function CodeRacePreview(): JSX.Element {
+  const covered = [24, 40, 56, 72];
+  return (
+    <BoardFrame>
+      {covered.map((cx, i) => (
+        <circle
+          key={i}
+          cx={cx}
+          cy="30"
+          r="8"
+          fill="currentColor"
+          opacity="0.25"
+          stroke="currentColor"
+          strokeDasharray="3 3"
+        />
+      ))}
+      <text
+        x="48"
+        y="56"
+        fontSize="10"
+        fontWeight="800"
+        fill="currentColor"
+        textAnchor="middle"
+        opacity="0.7"
+      >
+        ??
+      </text>
+      <g fontSize="11" fontWeight="800">
+        <text x="36" y="76" fill="currentColor">
+          2● 1○
+        </text>
+      </g>
+    </BoardFrame>
+  );
+}
+
+/** Three mini X-boards, one with a losing line. */
+function NotaktoPreview(): JSX.Element {
+  const xs: Array<[number, number]> = [
+    [26, 26],
+    [36, 36],
+    [26, 46],
+    [62, 26],
+    [62, 46],
+    [82, 46],
+  ];
+  return (
+    <BoardFrame>
+      <g stroke="currentColor" strokeWidth="1" opacity="0.35">
+        {[22, 32, 42, 58, 68, 78].map((v) => (
+          <path key={'v' + v} d={'M' + v + ' 14v56'} />
+        ))}
+        {[26, 36, 46, 62, 72].map((v) => (
+          <path key={'h' + v} d={'M16 ' + v + 'h72'} />
+        ))}
+      </g>
+      {xs.map(([cx, cy], i) => (
+        <text
+          key={i}
+          x={cx}
+          y={cy + 4}
+          fontSize="11"
+          fontWeight="900"
+          fill="#e11d48"
+          textAnchor="middle"
+        >
+          ✕
         </text>
       ))}
     </BoardFrame>

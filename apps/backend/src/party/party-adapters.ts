@@ -72,6 +72,25 @@ import {
   utttValidateMove,
   utttWinner,
 } from './games/uttt-mp.core';
+import {
+  CrState,
+  crApplyMove,
+  crBotCode,
+  crBotGuess,
+  crInitialState,
+  crIsOver,
+  crPlacement,
+  crValidateMove,
+} from './games/coderace-mp.core';
+import {
+  NkState,
+  nkAiMove,
+  nkApplyMove,
+  nkInitialState,
+  nkIsOver,
+  nkPlacement,
+  nkValidateMove,
+} from './games/notakto-mp.core';
 
 /**
  * MP1 party engine — ONE server-authoritative engine for ALL party games
@@ -123,6 +142,8 @@ export interface PartyAdapter {
     state: Record<string, unknown>,
     winnerSeat: number | null
   ): { seat: number; rank: number }[];
+  /** OPTIONAL: strip per-seat secrets from state before it crosses the API. */
+  redactFor?(state: Record<string, unknown>, seat: number | null): Record<string, unknown>;
 }
 
 class QuadAdapter implements PartyAdapter {
@@ -448,8 +469,8 @@ class C4Adapter implements PartyAdapter {
 }
 
 /**
- * Flip MP â€” ONE adapter, two slugs: 'othello-3' (3 seats, 10Ã—10) and
- * 'quadflip' (4 seats, 14Ã—14). Extra-turn never happens; stuck seats pass
+
+
  * (passStreak), and resolveTurn lands on the next seat WITH a move.
  */
 class FlipAdapter implements PartyAdapter {
@@ -479,7 +500,7 @@ class FlipAdapter implements PartyAdapter {
   }
 
   winner(): number | null {
-    return null; // score game â€” placement ranks everyone
+    return null;
   }
 
   seatsInPlay(state: Record<string, unknown>): number[] {
@@ -503,7 +524,7 @@ class FlipAdapter implements PartyAdapter {
     seatCount: number
   ): number {
     // flipApplyMove stored the pass chain in passStreak; the next seat with a
-    // move is seat + passStreak + 1 (mod seatCount). Full board â†’ keep seat
+
     // (isOver already fired).
     const s = this.as(next);
     if (flipIsOver(s)) return seat;
@@ -564,6 +585,136 @@ class UtttAdapter implements PartyAdapter {
     return utttPlacement(this.as(state).seatCount, winnerSeat);
   }
 }
+/**
+ * Code Race MP: one maker invents a hidden 4-peg code (player-created, NOT
+ * served content); the other seats race to crack it. The maker must place
+ * the code BEFORE any breaker can guess. Redaction: the code never crosses
+ * the API until the table finishes.
+ */
+class CodeRaceAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return crInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): CrState {
+    return state as unknown as CrState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return crValidateMove(this.as(state), seat, move as { code?: number[]; guess?: number[] });
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return crApplyMove(
+      this.as(state),
+      seat,
+      move as { code?: number[]; guess?: number[] }
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return crIsOver(this.as(state));
+  }
+
+  winner(): number | null {
+    return null; // rank game — placement() orders everyone
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    const s = this.as(state);
+    if (s.phase === 'setting') return { code: crBotCode() };
+    return { guess: crBotGuess(s, seat, tier) };
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // crApplyMove already computed the correct next breaker seat.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return crPlacement(this.as(state));
+  }
+
+  /** THE critical property: the maker’s code never crosses the API. */
+  redactFor(state: Record<string, unknown>, _seat: number | null): Record<string, unknown> {
+    const s = this.as(state);
+    if (s.phase === 'finished') return state;
+    return { ...state, code: null };
+  }
+}
+
+/**
+ * Notakto MP: three boards, everyone places X, a line ELIMINATES you.
+ * Last survivor 1st; board-full end = survivors share 1st.
+ */
+class NotaktoAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return nkInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): NkState {
+    return state as unknown as NkState;
+  }
+
+  validate(state: Record<string, unknown>, _seat: number, move: unknown): string | null {
+    return nkValidateMove(this.as(state), move as number);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return nkApplyMove(this.as(state), seat, move as number) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return nkIsOver(this.as(state));
+  }
+
+  winner(): number | null {
+    return null;
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seats;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return nkAiMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // nkApplyMove already computed the next LIVING seat (skips eliminated).
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return nkPlacement(this.as(state));
+  }
+}
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -574,6 +725,8 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'othello-3': new FlipAdapter(3),
   quadflip: new FlipAdapter(4),
   'ultimate-ttt-mp': new UtttAdapter(),
+  'code-race': new CodeRaceAdapter(),
+  'notakto-mp': new NotaktoAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

@@ -228,6 +228,16 @@ export class PartyService {
 
   private present(match: PartyMatch, guestId: string) {
     const yourSeat = match.seats.findIndex((s) => s.kind === 'human' && s.guestId === guestId);
+    // Hidden-info games: strip per-seat secrets BEFORE state crosses the API
+    // (Code Race: the maker's code stays server-side until the table ends).
+    let state = match.state;
+    try {
+      const adapter = partyAdapterFor(match.gameSlug);
+      if (adapter.redactFor)
+        state = adapter.redactFor(match.state, yourSeat >= 0 ? yourSeat : null);
+    } catch {
+      /* unknown slug (shouldn't happen) — fall through with raw state */
+    }
     return {
       code: match.code,
       gameSlug: match.gameSlug,
@@ -238,7 +248,7 @@ export class PartyService {
         tier: s.kind === 'bot' ? s.tier : null,
       })),
       turn: match.turn,
-      state: match.state,
+      state,
       placement: match.placement,
       yourSeat: yourSeat >= 0 ? yourSeat : null,
       yourTurn: yourSeat >= 0 && match.status === 'running' && match.turn === yourSeat,
