@@ -21,6 +21,7 @@ import { PigDiceModule } from './pigdice/pigdice.module';
 import { RpsModule } from './rockpaperscissors/rockpaperscissors.module';
 import { CheckersModule } from './checkers/checkers.module';
 import { OthelloModule } from './othello/othello.module';
+import { PenteModule } from './pente/pente.module';
 import { PartyModule } from './party/party.module';
 import { ShareCountsModule } from './share-counts/share-counts.module';
 import { GuestUsersModule } from './guest-users/guest-users.module';
@@ -149,6 +150,7 @@ import { JwtAuthGuard } from './auth/jwt-auth.guard';
     RpsModule,
     CheckersModule,
     OthelloModule,
+    PenteModule,
     PartyModule,
     HealthModule,
     SettingsModule,

@@ -101,6 +101,15 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #d97706 0%, #be123c 100%)',
   },
   {
+    slug: 'pente',
+    emoji: '⚫',
+    title: 'Pente',
+    blurb:
+      'Five in a row — but flanking a pair captures it. The meaner cousin of Gomoku, solo or live.',
+    gradient: 'from-stone-600 to-stone-800',
+    cssGradient: 'linear-gradient(135deg, #57534e 0%, #1c1917 100%)',
+  },
+  {
     slug: 'othello',
     emoji: '⚫',
     title: 'Othello',

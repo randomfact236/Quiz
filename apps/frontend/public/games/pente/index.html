@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="PigZap" />
+    <meta property="og:title" content="Pente — PigZap Games" />
+    <meta
+      property="og:description"
+      content="Five in a row — but flanking a pair captures it. Pente, the meaner cousin of Gomoku: play the computer or duel a friend live."
+    />
+    <meta property="og:url" content="https://pigzap.com/games/pente" />
+    <meta property="og:image" content="https://pigzap.com/og/game/pente.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Pente — PigZap Games" />
+    <meta
+      name="twitter:description"
+      content="Five in a row — but flanking a pair captures it. Play the computer or duel a friend live."
+    />
+    <meta name="twitter:image" content="https://pigzap.com/og/game/pente.png" />
+    <title>Pente — PigZap Games</title>
+    <meta
+      name="description"
+      content="Five in a row — but flanking a pair captures it. Pente, the meaner cousin of Gomoku: play the computer or duel a friend live."
+    />
+    <meta name="theme-color" content="#f3f0e6" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#1a1710" media="(prefers-color-scheme: dark)" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%9A%99%3C/text%3E%3C/svg%3E"
+    />
+    <script src="/shared/theme.js?v=1"></script>
+    <link rel="stylesheet" href="style.css?v=1" />
+    <script type="module" src="game.js?v=1"></script>
+  </head>
+  <body>
+    <main class="app">
+      <a class="back-link" href="/games">← All games</a>
+
+      <!-- ============================== MENU ============================== -->
+      <section id="screen-menu" class="screen screen--active" aria-label="Pente menu">
+        <h1 class="menu-title">Pente ⚫⚪</h1>
+        <p class="tagline">Five in a row — or flank a pair and take it. Captures are the game.</p>
+
+        <div class="card">
+          <h2 id="mode-label">Mode</h2>
+          <div class="segmented" role="radiogroup" aria-labelledby="mode-label" id="mode-segmented">
+            <button type="button" role="radio" aria-checked="true" data-mode="1p">
+              🤖 vs Computer
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="2p">
+              👥 2 Players
+            </button>
+            <button type="button" role="radio" aria-checked="false" data-mode="online">
+              ⚔️ Online
+            </button>
+          </div>
+
+          <!-- live online duel (server-authoritative, 3 s poll) -->
+          <div id="online-row" class="online-row hidden">
+            <label for="online-name">Your name</label>
+            <input type="text" id="online-name" maxlength="24" placeholder="Guest" autocomplete="off" />
+            <button type="button" class="primary" id="btn-online-create">⚔️ Create match (you play ⚫)</button>
+            <label for="online-code">…or join with a code</label>
+            <input type="text" id="online-code" maxlength="6" placeholder="CODE" autocomplete="off" />
+            <button type="button" class="ghost" id="btn-online-join">Join match</button>
+            <p class="online-status" id="online-status" role="status" aria-live="polite"></p>
+          </div>
+
+          <div class="row" id="difficulty-row">
+            <h2 id="difficulty-label">Difficulty</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="difficulty-label" id="difficulty-segmented">
+              <button type="button" role="radio" aria-checked="false" data-difficulty="easy">Easy</button>
+              <button type="button" role="radio" aria-checked="true" data-difficulty="medium">Medium</button>
+              <button type="button" role="radio" aria-checked="false" data-difficulty="hard">Hard</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <h2 id="size-label">Board</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="size-label" id="size-segmented">
+              <button type="button" role="radio" aria-checked="false" data-size="15">15 × 15</button>
+              <button type="button" role="radio" aria-checked="true" data-size="19">19 × 19</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <h2 id="target-label">Capture target</h2>
+            <div class="segmented" role="radiogroup" aria-labelledby="target-label" id="target-segmented">
+              <button type="button" role="radio" aria-checked="false" data-target="3">3 pairs — quick</button>
+              <button type="button" role="radio" aria-checked="true" data-target="5">5 pairs — classic</button>
+            </div>
+          </div>
+
+          <p class="rules-note">
+            Place a stone on any open intersection. Get <b>five in a row</b> to win
+            immediately — or take <b>5 pairs</b> of your opponent's stones first.
+            A capture needs your two stones bracketing <b>exactly two</b> enemy
+            stones: one or three captures nothing. Black opens on the centre
+            stone.
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>
+            Series
+            <span class="scope" id="series-scope">vs computer · medium · 19×19</span>
+          </h2>
+          <div class="scoreboard">
+            <div class="score score--d">
+              <span class="num" id="series-d">0</span>
+              <span class="label">⚫ Black wins</span>
+            </div>
+            <div class="score">
+              <span class="num" id="series-draw">0</span>
+              <span class="label">Draws</span>
+            </div>
+            <div class="score score--l">
+              <span class="num" id="series-l">0</span>
+              <span class="label">⚪ White wins</span>
+            </div>
+          </div>
+          <div class="scoreboard-actions">
+            <button type="button" class="ghost" id="reset-series">Reset series</button>
+          </div>
+        </div>
+
+        <button type="button" class="primary" id="btn-play">▶ Play</button>
+      </section>
+
+      <!-- ============================= PLAYING ============================= -->
+      <section id="screen-playing" class="screen" aria-label="Pente board">
+        <div class="topbar">
+          <button type="button" class="ghost" id="btn-menu">‹ Menu</button>
+          <div class="mini-series" id="mini-series">⚫ 0 · 🤝 0 · ⚪ 0</div>
+        </div>
+
+        <div class="captures" aria-label="Captured pairs">
+          <div class="capture-side">
+            <span class="capture-label">⚫ you</span>
+            <span class="capture-count" id="cap-dark">0 / 5</span>
+            <div class="capture-pips" id="pips-dark"></div>
+          </div>
+          <div class="capture-side">
+            <span class="capture-label">⚪ them</span>
+            <span class="capture-count" id="cap-light">0 / 5</span>
+            <div class="capture-pips" id="pips-light"></div>
+          </div>
+        </div>
+
+        <div class="turn" id="turn" aria-live="polite">⚪ White's turn</div>
+        <div class="hint-line" id="hint-line" role="status" aria-live="polite"></div>
+
+        <div class="board-wrap">
+          <div id="board" class="board" role="group" aria-label="Pente board"></div>
+
+          <div
+            id="overlay"
+            class="overlay hidden"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="overlay-title"
+          >
+            <div class="overlay-card">
+              <div class="overlay-emoji" id="overlay-emoji">🎉</div>
+              <h2 class="overlay-title" id="overlay-title">Black wins!</h2>
+              <p class="overlay-sub" id="overlay-sub"></p>
+              <div class="overlay-actions">
+                <button type="button" class="primary" id="btn-next">Next game</button>
+                <div class="ghost-row">
+                  <button type="button" class="ghost" id="btn-share">📤 Share</button>
+                  <button type="button" class="ghost" id="btn-menu2">Menu</button>
+                </div>
+                <div class="share-row" id="share-row" hidden>
+                  <a class="share-target" id="share-fb" target="_blank" rel="noopener" aria-label="Share on Facebook">Facebook</a>
+                  <a class="share-target" id="share-x" target="_blank" rel="noopener" aria-label="Share on X">𝕏</a>
+                  <a class="share-target" id="share-wa" target="_blank" rel="noopener" aria-label="Share on WhatsApp">WhatsApp</a>
+                  <button type="button" class="share-target" id="share-copy" aria-label="Copy result">🔗 Copy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="legend">
+          <span class="legend-chip legend-chip--dark">black</span>
+          <span class="legend-chip legend-chip--light">white</span>
+          <span class="legend-chip legend-chip--capture">captures a pair</span>
+        </p>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status"></div>
+    <script src="/shared/pig-feedback.js?v=2"></script>
+  </body>
+</html>

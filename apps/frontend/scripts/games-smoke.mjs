@@ -25,6 +25,7 @@ const GAMES = [
   { slug: 'pig-dice', moves: ['#btn-roll'], board: null, extra: playPigDiceToWin },
   // othello: one tap per move, on a square the UI itself marks legal
   { slug: 'othello', moves: ['.cell--legal'], board: '.cell' },
+  { slug: 'pente', moves: ['.cell--free'], board: '.cell' },
   {
     slug: 'checkers',
     // two taps per move: pick the piece up, then drop it on a destination

@@ -71,6 +71,8 @@ function previewSvg(slug: string): JSX.Element {
       return <CheckersPreview />;
     case 'othello':
       return <OthelloPreview />;
+    case 'pente':
+      return <PentePreview />;
     default:
       return <PlaceholderPreview />;
   }
@@ -809,6 +811,38 @@ function OthelloPreview(): JSX.Element {
         );
       })}
       {ghost && <circle cx={ghost[0]} cy={ghost[1] + 10} r="2" fill="#ffffff" opacity="0.45" />}
+    </BoardFrame>
+  );
+}
+
+/** A 19x19 grid fragment, mid-game: a black run and a captured pair. */
+function PentePreview(): JSX.Element {
+  const stones: Array<[number, number, string]> = [
+    [26, 22, '#1c2430'], [40, 22, '#1c2430'], [40, 36, '#1c2430'],
+    [54, 36, '#f6f7f9'], [68, 50, '#1c2430'], [54, 50, '#f6f7f9'],
+    [40, 64, '#f6f7f9'], [26, 64, '#1c2430'], [82, 36, '#f6f7f9'],
+  ];
+  return (
+    <BoardFrame>
+      <g stroke="currentColor" strokeWidth="0.7" opacity="0.45">
+        {[20, 34, 48, 62, 76, 90, 104].map((x) => (
+          <path key={'v' + x} d={`M${x} 12v62`} />
+        ))}
+        {[18, 30, 42, 54, 66, 78].map((y) => (
+          <path key={'h' + y} d={`M14 ${y}h94`} />
+        ))}
+      </g>
+      {stones.map(([x, y, fill], i) => (
+        <circle
+          key={'s' + i}
+          cx={x}
+          cy={y}
+          r="4.6"
+          fill={fill}
+          stroke={fill === '#f6f7f9' ? 'rgba(0,0,0,0.2)' : 'none'}
+          strokeWidth="0.6"
+        />
+      ))}
     </BoardFrame>
   );
 }
