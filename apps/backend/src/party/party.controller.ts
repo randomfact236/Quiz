@@ -35,6 +35,7 @@ class CreatePartyDto {
     'ludo-mp',
     'checkers-hex',
     'checkers-4p',
+    'blokus-4p',
   ])
   gameSlug: string;
 
