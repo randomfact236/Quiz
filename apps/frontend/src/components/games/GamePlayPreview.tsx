@@ -67,6 +67,14 @@ function previewSvg(slug: string): JSX.Element {
       return <Dots4Preview />;
     case 'sos-4p':
       return <Sos4Preview />;
+    case 'ludo-mp':
+      return <LudoMpPreview />;
+    case 'checkers-hex':
+      return <CheckersHexPreview />;
+    case 'checkers-4p':
+      return <Checkers4Preview />;
+    case 'blokus-4p':
+      return <BlokusPreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -818,9 +826,15 @@ function OthelloPreview(): JSX.Element {
 /** A 19x19 grid fragment, mid-game: a black run and a captured pair. */
 function PentePreview(): JSX.Element {
   const stones: Array<[number, number, string]> = [
-    [26, 22, '#1c2430'], [40, 22, '#1c2430'], [40, 36, '#1c2430'],
-    [54, 36, '#f6f7f9'], [68, 50, '#1c2430'], [54, 50, '#f6f7f9'],
-    [40, 64, '#f6f7f9'], [26, 64, '#1c2430'], [82, 36, '#f6f7f9'],
+    [26, 22, '#1c2430'],
+    [40, 22, '#1c2430'],
+    [40, 36, '#1c2430'],
+    [54, 36, '#f6f7f9'],
+    [68, 50, '#1c2430'],
+    [54, 50, '#f6f7f9'],
+    [40, 64, '#f6f7f9'],
+    [26, 64, '#1c2430'],
+    [82, 36, '#f6f7f9'],
   ];
   return (
     <BoardFrame>
@@ -847,6 +861,226 @@ function PentePreview(): JSX.Element {
   );
 }
 
+/** Ludo cross board: 15x15 arms, four yards, pawns on the ring. */
+function LudoMpPreview(): JSX.Element {
+  const cell = 5.6;
+  const px = (c: number): number => 9 + c * cell;
+  const py = (r: number): number => 9 + r * cell;
+  const yard = (r: number, c: number, fill: string): JSX.Element => (
+    <rect
+      x={px(c)}
+      y={py(r)}
+      width={cell * 4}
+      height={cell * 4}
+      rx="3"
+      fill={fill}
+      opacity="0.28"
+    />
+  );
+  const pawn = (r: number, c: number, fill: string): JSX.Element => (
+    <circle
+      cx={px(c) + cell / 2}
+      cy={py(r) + cell / 2}
+      r="2.3"
+      fill={fill}
+      stroke="#fff"
+      strokeWidth="0.7"
+    />
+  );
+  return (
+    <BoardFrame>
+      <rect
+        x={px(4)}
+        y={py(4)}
+        width={cell * 7}
+        height={cell * 7}
+        rx="4"
+        fill="currentColor"
+        opacity="0.1"
+      />
+      {yard(1, 1, '#e11d48')}
+      {yard(1, 10, '#2563eb')}
+      {yard(10, 1, '#059669')}
+      {yard(10, 10, '#d97706')}
+      <rect
+        x={px(6.5)}
+        y={py(6.5)}
+        width={cell * 2}
+        height={cell * 2}
+        rx="2"
+        fill="currentColor"
+        opacity="0.25"
+      />
+      {pawn(6, 0.5, '#e11d48')}
+      {pawn(6, 2.5, '#e11d48')}
+      {pawn(5, 6.5, '#2563eb')}
+      {pawn(8.5, 5, '#059669')}
+      {pawn(7.5, 12.5, '#d97706')}
+      {pawn(12.5, 8, '#d97706')}
+    </BoardFrame>
+  );
+}
+/** Checkers Hex: 8x8 board with three corner triads. */
+function CheckersHexPreview(): JSX.Element {
+  const s = 7.2;
+  const px = (c: number): number => 12 + c * s;
+  const py = (r: number): number => 6 + r * s;
+  const men: Array<[number, number, string]> = [
+    [0, 1, '#e11d48'],
+    [1, 0, '#e11d48'],
+    [1, 2, '#e11d48'],
+    [2, 1, '#e11d48'],
+    [0, 6, '#2563eb'],
+    [1, 5, '#2563eb'],
+    [1, 7, '#2563eb'],
+    [2, 6, '#2563eb'],
+    [6, 2, '#059669'],
+    [7, 3, '#059669'],
+    [6, 4, '#059669'],
+    [7, 5, '#059669'],
+    [3, 3, '#2563eb'],
+    [4, 4, '#059669'],
+    [5, 3, '#e11d48'],
+  ];
+  return (
+    <BoardFrame>
+      <rect x={px(0)} y={py(0)} width={s * 8} height={s * 8} rx="4" fill="#b08968" opacity="0.35" />
+      {Array.from({ length: 64 }, (_, i) => {
+        const r = Math.floor(i / 8);
+        const c = i % 8;
+        return (r + c) % 2 === 1 ? (
+          <rect key={i} x={px(c)} y={py(r)} width={s} height={s} fill="#8a6240" opacity="0.5" />
+        ) : null;
+      })}
+      {men.map(([r, c, fill], i) => (
+        <circle
+          key={'m' + i}
+          cx={px(c) + s / 2}
+          cy={py(r) + s / 2}
+          r={s * 0.36}
+          fill={fill}
+          stroke="rgba(255,255,255,0.75)"
+          strokeWidth="0.8"
+        />
+      ))}
+      <rect
+        x={px(0)}
+        y={py(0)}
+        width={s * 3}
+        height={s * 3}
+        rx="3"
+        fill="none"
+        stroke="#e11d48"
+        strokeWidth="1"
+        opacity="0.5"
+      />
+      <rect
+        x={px(5)}
+        y={py(0)}
+        width={s * 3}
+        height={s * 3}
+        rx="3"
+        fill="none"
+        stroke="#2563eb"
+        strokeWidth="1"
+        opacity="0.5"
+      />
+      <rect
+        x={px(2)}
+        y={py(5)}
+        width={s * 4}
+        height={s * 3}
+        rx="3"
+        fill="none"
+        stroke="#059669"
+        strokeWidth="1"
+        opacity="0.5"
+      />
+    </BoardFrame>
+  );
+}
+
+/** Checkers 4P: 10x10 with four border strips. */
+function Checkers4Preview(): JSX.Element {
+  const s = 6.4;
+  const px = (c: number): number => 10 + c * s;
+  const py = (r: number): number => 5 + r * s;
+  const men: Array<[number, number, string]> = [];
+  for (let c = 1; c < 10; c += 2) men.push([0, c, '#71717a']);
+  for (let r = 1; r < 10; r += 2) men.push([r, 9, '#2dd4bf']);
+  for (let c = 1; c < 10; c += 2) men.push([9, c, '#f472b6']);
+  for (let r = 1; r < 10; r += 2) men.push([r, 0, '#fbbf24']);
+  men.push([3, 3, '#71717a'], [4, 4, '#2dd4bf'], [5, 5, '#f472b6'], [6, 6, '#fbbf24']);
+  return (
+    <BoardFrame>
+      <rect
+        x={px(0)}
+        y={py(0)}
+        width={s * 10}
+        height={s * 10}
+        rx="4"
+        fill="#a78b6f"
+        opacity="0.3"
+      />
+      {men.map(([r, c, fill], i) => (
+        <circle
+          key={'m' + i}
+          cx={px(c) + s / 2}
+          cy={py(r) + s / 2}
+          r={s * 0.34}
+          fill={fill}
+          stroke="rgba(255,255,255,0.7)"
+          strokeWidth="0.7"
+        />
+      ))}
+    </BoardFrame>
+  );
+}
+
+/** Blokus 4P: 20x20 mini grid with corner clusters. */
+function BlokusPreview(): JSX.Element {
+  const s = 3.9;
+  const px = (c: number): number => 13 + c * s;
+  const py = (r: number): number => 8 + r * s;
+  const cluster = (r: number, c: number, fill: string): JSX.Element => (
+    <g fill={fill} stroke="#fff" strokeWidth="0.5">
+      <rect x={px(c)} y={py(r)} width={s} height={s} rx="1" />
+      <rect x={px(c + 1)} y={py(r)} width={s} height={s} rx="1" />
+      <rect x={px(c)} y={py(r + 1)} width={s} height={s} rx="1" />
+    </g>
+  );
+  return (
+    <BoardFrame>
+      <rect
+        x={px(0)}
+        y={py(0)}
+        width={s * 20}
+        height={s * 20}
+        rx="3"
+        fill="currentColor"
+        opacity="0.08"
+      />
+      <g stroke="currentColor" strokeWidth="0.25" opacity="0.25">
+        {Array.from({ length: 20 }, (_, i) => (
+          <path key={'v' + i} d={'M' + px(i) + ' ' + py(0) + 'v' + s * 20} />
+        ))}
+        {Array.from({ length: 20 }, (_, i) => (
+          <path key={'h' + i} d={'M' + px(0) + ' ' + py(i) + 'h' + s * 20} />
+        ))}
+      </g>
+      {cluster(0, 0, '#e11d48')}
+      {cluster(0, 17, '#2563eb')}
+      {cluster(17, 0, '#059669')}
+      {cluster(17, 17, '#d97706')}
+      <g fill="#e11d48" stroke="#fff" strokeWidth="0.5" opacity="0.9">
+        <rect x={px(9)} y={py(3)} width={s} height={s} rx="1" />
+        <rect x={px(10)} y={py(4)} width={s} height={s} rx="1" />
+        <rect x={px(11)} y={py(3)} width={s} height={s} rx="1" />
+        <rect x={px(12)} y={py(4)} width={s} height={s} rx="1" />
+      </g>
+    </BoardFrame>
+  );
+}
 /** Neutral fallback so an unknown slug never breaks the hub. */
 function PlaceholderPreview(): JSX.Element {
   return (

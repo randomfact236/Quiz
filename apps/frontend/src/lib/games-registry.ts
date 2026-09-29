@@ -228,6 +228,44 @@ export const GAMES: GameEntry[] = [
     gradient: 'from-indigo-500 to-purple-700',
     cssGradient: 'linear-gradient(135deg, #6366f1 0%, #7e22ce 100%)',
   },
+  {
+    slug: 'ludo-mp',
+    emoji: '🏁',
+    title: 'Ludo MP',
+    blurb:
+      'The classic cross-board race - roll, deploy, capture, first home wins. Empty seats are bots.',
+    gradient: 'from-rose-500 to-indigo-700',
+    cssGradient: 'linear-gradient(135deg, #f43f5e 0%, #4338ca 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'checkers-hex',
+    emoji: '🔴',
+    title: 'Checkers Hex',
+    blurb: 'Three-corner checkers for three - mandatory jumps, last seat standing wins.',
+    gradient: 'from-red-500 to-stone-800',
+    cssGradient: 'linear-gradient(135deg, #ef4444 0%, #292524 100%)',
+    players: [3],
+  },
+  {
+    slug: 'checkers-4p',
+    emoji: '⚫',
+    title: 'Checkers 4P',
+    blurb: 'Four-sided checkers on the big board - mandatory jumps, last seat standing wins.',
+    gradient: 'from-zinc-500 to-neutral-900',
+    cssGradient: 'linear-gradient(135deg, #71717a 0%, #171717 100%)',
+    players: [4],
+  },
+  {
+    slug: 'blokus-4p',
+    emoji: '🟦',
+    title: 'Blokus 4P',
+    blurb:
+      'The 20x20 corner-touch original - place all 21 pieces, most squares wins. Empty seats are bots.',
+    gradient: 'from-sky-500 to-blue-900',
+    cssGradient: 'linear-gradient(135deg, #0ea5e9 0%, #1e3a8a 100%)',
+    players: [4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {
