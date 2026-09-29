@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Ludo MP — 3/4 player classic race | PigZap</title>
-    <meta name="description" content="The classic cross-board race — roll, deploy, capture, first home wins. Bots fill empty seats." />
+    <title>Ludo Snakes — the race with ladders & snakes | PigZap</title>
+    <meta name="description" content="Ludo with a twist: ladders boost you forward, snakes slide you back. First seat with both tokens home wins. Bots fill empty seats." />
     <meta name="robots" content="noindex" />
     <script src="/shared/theme.js?v=1"></script>
     <style>
@@ -29,27 +29,32 @@
       .ludo-board { position: relative; width: min(92vw, 560px); aspect-ratio: 1; margin: 0 auto;
         display: grid; grid-template-columns: repeat(15, 1fr); grid-template-rows: repeat(15, 1fr); gap: 1px;
         background: rgba(128,128,128,.35); border-radius: 10px; overflow: hidden; }
-      .lc { background: rgba(240,240,240,.06); }
+      .lc { background: rgba(240,240,240,.06); position: relative; }
       .lc.path { background: #fff; }
       .lc.s0 { background: #fde8ec; } .lc.s1 { background: #e3ecfd; } .lc.s2 { background: #e2f6ea; } .lc.s3 { background: #fdf2dd; }
-      .lc.home { background: rgba(109,91,208,.35); }
       .lc.hcol { opacity: .85; }
-      .pc-cell { position: relative; }
+      .ladder-mark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 900; color: #047857; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
+      .snake-mark { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .62rem; font-weight: 900; color: #b91c1c; text-shadow: 0 1px 0 rgba(255,255,255,.7); }
       .pawns { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: 1px; pointer-events: none; }
       .pawn { width: 62%; height: 62%; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 1px 3px rgba(0,0,0,.4); }
       .pawn.yard { width: 34%; height: 34%; }
       .p0 { background: #e11d48; } .p1 { background: #2563eb; } .p2 { background: #059669; } .p3 { background: #d97706; }
       .die { width: 56px; height: 56px; border-radius: 12px; background: #fff; color: #111; font-size: 1.6rem; font-weight: 900; display: flex; align-items: center; justify-content: center; margin: 0 auto; box-shadow: 0 4px 12px rgba(0,0,0,.2); }
       .hint { font-size: .8rem; opacity: .6; text-align: center; }
-      .yard-badge { position: absolute; font-size: .55rem; font-weight: 800; color: #fff; text-shadow: 0 1px 2px rgba(0,0,0,.6); }
+      .jump-toast { position: fixed; left: 50%; bottom: 90px; transform: translateX(-50%);
+        background: #1c1917; color: #fff; border-radius: 999px; padding: 10px 18px; font-weight: 800;
+        box-shadow: 0 6px 18px rgba(0,0,0,.35); z-index: 60; opacity: 0; transition: opacity .25s; }
+      .jump-toast.show { opacity: 1; }
+      .jump-toast.ladder { background: #047857; }
+      .jump-toast.snake { background: #b91c1c; }
     </style>
   </head>
   <body>
     <main class="game-shell">
       <header>
         <a href="/games/index.html">&larr; Games</a>
-        <h1>Ludo MP — 3/4 player classic race</h1>
-        <p class="tagline">Roll, deploy, capture — first seat with both tokens home wins. Bots fill empty seats. Prefer a twist? Try <a href="/games/ludo-snakes/">Ludo Snakes</a>.</p>
+        <h1>Ludo Snakes — the race with a twist</h1>
+        <p class="tagline">Classic Ludo plus 5 ladders (🪜 boost) and 4 snakes (🐍 slide) on the ring. Land on a marked cell and ride it. Bots fill empty seats.</p>
       </header>
       <section id="screen-menu" class="screen">
         <label class="field"><span>Your name</span><input id="player-name" maxlength="32" /></label>
@@ -75,12 +80,13 @@
         <div id="board" class="ludo-board"></div>
         <div class="die" id="die">?</div>
         <button id="btn-roll" class="btn btn-primary" disabled>Roll the die</button>
-        <p class="hint">Server rolls and moves your best legal token — a 6 deploys or rolls again.</p>
+        <p class="hint">Server rolls and moves your best legal token — ladders and snakes ride automatically.</p>
         <p id="status" class="status-line"></p>
         <button id="btn-start" class="btn btn-primary" hidden>Start the table</button>
         <button id="btn-leave" class="btn btn-ghost">Leave table</button>
       </section>
     </main>
+    <div id="jump-toast" class="jump-toast"></div>
     <script src="/shared/pig-feedback.js?v=2" defer></script>
     <script src="/shared/guest.js?v=1"></script>
     <script src="config.js?v=1"></script>

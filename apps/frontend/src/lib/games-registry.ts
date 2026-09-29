@@ -256,6 +256,16 @@ export const GAMES: GameEntry[] = [
     players: [3, 4],
   },
   {
+    slug: 'ludo-snakes',
+    emoji: '🐍',
+    title: 'Ludo Snakes',
+    blurb:
+      'Ludo with 5 ladders and 4 snakes on the ring - ride them to victory. Empty seats are bots.',
+    gradient: 'from-teal-500 to-emerald-900',
+    cssGradient: 'linear-gradient(135deg, #14b8a6 0%, #064e3b 100%)',
+    players: [3, 4],
+  },
+  {
     slug: 'checkers-hex',
     emoji: '🔴',
     title: 'Checkers Hex',

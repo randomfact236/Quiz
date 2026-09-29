@@ -69,6 +69,8 @@ function previewSvg(slug: string): JSX.Element {
       return <Sos4Preview />;
     case 'ludo-mp':
       return <LudoMpPreview />;
+    case 'ludo-snakes':
+      return <LudoSnakesPreview />;
     case 'checkers-hex':
       return <CheckersHexPreview />;
     case 'checkers-4p':
@@ -1316,6 +1318,71 @@ function YatzyPreview(): JSX.Element {
         {' '}
         +37
       </text>
+    </BoardFrame>
+  );
+}
+/** Ludo Snakes: cross board with ladder/snake ring marks. */
+function LudoSnakesPreview(): JSX.Element {
+  const cell = 5.6;
+  const px = (c: number): number => 9 + c * cell;
+  const py = (r: number): number => 9 + r * cell;
+  const yard = (r: number, c: number, fill: string): JSX.Element => (
+    <rect
+      x={px(c)}
+      y={py(r)}
+      width={cell * 4}
+      height={cell * 4}
+      rx="3"
+      fill={fill}
+      opacity="0.28"
+    />
+  );
+  const pawn = (r: number, c: number, fill: string): JSX.Element => (
+    <circle
+      cx={px(c) + cell / 2}
+      cy={py(r) + cell / 2}
+      r="2.3"
+      fill={fill}
+      stroke="#fff"
+      strokeWidth="0.7"
+    />
+  );
+  const mark = (r: number, c: number, glyph: string, color: string): JSX.Element => (
+    <text
+      x={px(c) + cell / 2}
+      y={py(r) + cell}
+      textAnchor="middle"
+      fontSize="4.4"
+      fontWeight="900"
+      fill={color}
+    >
+      {' '}
+      {glyph}
+    </text>
+  );
+  return (
+    <BoardFrame>
+      <rect
+        x={px(4)}
+        y={py(4)}
+        width={cell * 7}
+        height={cell * 7}
+        rx="4"
+        fill="currentColor"
+        opacity="0.1"
+      />
+      {yard(1, 1, '#e11d48')}
+      {yard(1, 10, '#2563eb')}
+      {yard(10, 1, '#059669')}
+      {yard(10, 10, '#d97706')}
+      {mark(6, 0.5, '🧺', '#047857')}
+      {mark(5, 6.5, '🧺', '#047857')}
+      {mark(9, 4, '🐍', '#b91c1c')}
+      {mark(14, 7, '🐍', '#b91c1c')}
+      {pawn(6, 2.5, '#e11d48')}
+      {pawn(5, 6.5, '#2563eb')}
+      {pawn(8.5, 5, '#059669')}
+      {pawn(12.5, 8, '#d97706')}
     </BoardFrame>
   );
 }
