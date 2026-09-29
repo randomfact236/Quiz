@@ -14,14 +14,14 @@ serve every row unchanged.
 
 ## 2. Waves
 
-| Wave                        | Build positions | Notes                                                                              |
-| --------------------------- | --------------- | ---------------------------------------------------------------------------------- |
-| Base                        | 1-3             | F11 Quad-OXO + F1 Dots & Boxes 4P + F3 SOS 4P BUILT on MP1                         |
-| A - famous + gated-holdouts | 4-10            | F47/F15/F46/F44 build now; F9 Ludo, F35 Snakes & Ladders, F33 Memory Flip GATED    |
-| B - official 4P canon       | 11-12           | F45 Chinese Checkers 4P, F26 Halma (L band)                                        |
-| C - known + secret races    | 13-20           | F29/F27 reuse hidden-info redaction; F5 Pig Dice 4P rides the approved server-roll |
-| D - connoisseur bulk        | 21-38           | XS-to-M; F43 Four-Handed Chess needs its geometry note                             |
-| E - RNG tail                | 39-50           | GATED; F40/F41 also need the 2v2 seat layer                                        |
+| Wave                          | Build positions | Notes                                                                                   |
+| ----------------------------- | --------------- | --------------------------------------------------------------------------------------- |
+| Base                          | 1-3             | F11 Quad-OXO + F1 Dots & Boxes 4P + F3 SOS 4P BUILT on MP1                              |
+| A - famous + previously-gated | 4-10            | F47/F15/F46/F44 build now; F9 Ludo, F35 Snakes & Ladders, F33 Memory Flip now unblocked |
+| B - official 4P canon         | 11-12           | F45 Chinese Checkers 4P, F26 Halma (L band)                                             |
+| C - known + secret races      | 13-20           | F29/F27 reuse hidden-info redaction; F5 Pig Dice 4P rides the approved server-roll      |
+| D - connoisseur bulk          | 21-38           | XS-to-M; F43 Four-Handed Chess needs its geometry note                                  |
+| E - RNG tail                  | 39-50           | unblocked 2026-09-29 (server-rolled dice); F40/F41 also need the 2v2 seat layer         |
 
 ## 3. Two MP2-only prerequisites
 

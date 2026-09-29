@@ -21,18 +21,18 @@
 
 ## 2. Party roster (build order)
 
-| §   | Game         | Seats | Turns          | Needs new decision? | Effort |
-| --- | ------------ | ----- | -------------- | ------------------- | ------ |
-| P1  | Dots & Boxes | 3–4   | fixed          | no                  | S+     |
-| P2  | Ultimate TTT | 3–4   | fixed (shared) | no                  | S+     |
-| P3  | SOS          | 3–4   | fixed          | no                  | S+     |
-| P4  | Notakto      | 3–4   | fixed          | no                  | S+     |
-| P5  | Pig Dice     | 3–4   | fixed          | no (RNG precedent)  | S+     |
-| P6  | Two-Dice Pig | 3–4   | fixed          | RNG decision        | XS→S   |
-| P7  | Yatzy Lite   | 3–4   | simultaneous   | RNG decision        | M      |
-| P8  | Liar's Dice  | 3–4+  | simultaneous   | RNG decision        | M      |
-| P9  | Ludo         | 4     | fixed          | RNG decision        | L      |
-| P10 | Crazy Eights | 3–4   | simultaneous   | RNG decision        | M      |
+| §   | Game         | Seats | Turns          | Needs new decision?                     | Effort |
+| --- | ------------ | ----- | -------------- | --------------------------------------- | ------ |
+| P1  | Dots & Boxes | 3–4   | fixed          | no                                      | S+     |
+| P2  | Ultimate TTT | 3–4   | fixed (shared) | no                                      | S+     |
+| P3  | SOS          | 3–4   | fixed          | no                                      | S+     |
+| P4  | Notakto      | 3–4   | fixed          | no                                      | S+     |
+| P5  | Pig Dice     | 3–4   | fixed          | no (RNG precedent)                      | S+     |
+| P6  | Two-Dice Pig | 3–4   | fixed          | RESOLVED 2026-09-29: server-rolled dice | XS→S   |
+| P7  | Yatzy Lite   | 3–4   | simultaneous   | RESOLVED 2026-09-29: server-rolled dice | M      |
+| P8  | Liar's Dice  | 3–4+  | simultaneous   | RESOLVED 2026-09-29: server-rolled dice | M      |
+| P9  | Ludo         | 4     | fixed          | RESOLVED 2026-09-29: server-rolled dice | L      |
+| P10 | Crazy Eights | 3–4   | simultaneous   | RESOLVED 2026-09-29: server-rolled dice | M      |
 
 Fixed-turn board games (P1–P6, P9) are the cheap, natural party fit. Simultaneous
 games (P7–P8, P10) need a round engine instead of a turn ticker — phase 5 of the plan.
@@ -65,7 +65,7 @@ honor system; those games simply skip hot-seat mode online-only, like duel-only 
 - **Now (no new decisions):** P1–P5 ≈ 5 × S+ on top of their duel builds; the shared
   seat engine in [multiplayer-party-plan.md](multiplayer-party-plan.md) is the real
   cost (one engine serves all party games).
-- **After the RNG decision:** P6–P10 join the same engine. Ludo (P9) is its own L
+- **After the RESOLVED 2026-09-29: server-rolled dice:** P6–P10 join the same engine. Ludo (P9) is its own L
   build regardless.
 
 ## 5. Related

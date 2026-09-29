@@ -9,8 +9,7 @@
 > **Owner reorder 2026-09-28 (second pass) — the TOP 10 are the most COMMON games.**
 > The **Build** column is the fame-first build sequence; **F-numbers are stable IDs**
 > (plans reference them; they never renumber). Status column: **BUILT** (live today),
-> **NOW** (build in this order), **GATED** (fame-queued but waits on the owner's
-> dice/cards RNG decision — Ludo, Snakes & Ladders and Memory Flip hold top-10 slots
+> **NOW** (build in this order), **RNG** (was GATED — unblocked 2026-09-29: dice are server-rolled, the Pig Dice precedent) — Ludo, Snakes & Ladders and Memory Flip hold top-10 slots
 > until that decision lands; Pig Dice 4P rides the approved Pig server-roll precedent
 > so it stays buildable NOW).
 >
@@ -25,12 +24,12 @@
 | 1     | F11 | Quad-OXO               | [original]             | XS    | BUILT  | four marks on 5×5 — first four-in-a-row wins                   | line-maker 1st, rest tie  |
 | 2     | F1  | Dots & Boxes 4P        | [native]               | S     | BUILT  | four-way box grab; chain giveaways times four                  | most boxes                |
 | 3     | F3  | SOS 4P                 | [native]               | XS    | BUILT  | score race on 7×7 — any line you close scores                  | most points               |
-| 4     | F9  | Ludo 4P                | [native·RNG]           | L     | GATED  | THE classic four-yard race — the most famous 4P board game     | first home                |
-| 5     | F35 | Snakes & Ladders 4P    | [native·RNG]           | XS    | GATED  | the 1–100 ladder chase, four runners                           | first to 100              |
+| 4     | F9  | Ludo 4P                | [native·RNG]           | L     | RNG    | THE classic four-yard race — the most famous 4P board game     | first home                |
+| 5     | F35 | Snakes & Ladders 4P    | [native·RNG]           | XS    | RNG    | the 1–100 ladder chase, four runners                           | first to 100              |
 | 6     | F47 | Connect Four 4P        | [variant·Connect Four] | S     | NOW    | four colours fall on 10×10                                     | first 4-line              |
 | 7     | F15 | QuadFlip               | [variant·Reversi]      | M     | NOW    | four colours on 14×14 (the classic 4P reversi shape)           | biggest army              |
 | 8     | F46 | Checkers 4P            | [variant·Checkers]     | M     | NOW    | four-way cross-board checkers (reuses the 2P checkers core)    | last pieces standing      |
-| 9     | F33 | Memory Flip 4P         | [native·RNG]           | S     | GATED  | most pairs on a shared grid — the classic pairs game           | most pairs                |
+| 9     | F33 | Memory Flip 4P         | [native·RNG]           | S     | RNG    | most pairs on a shared grid — the classic pairs game           | most pairs                |
 | 10    | F44 | Blokus 4P              | [native·official]      | L     | NOW    | THE four-player original — 20×20, four full piece sets         | highest score             |
 | 11    | F45 | Chinese Checkers 4P    | [native·official]      | L     | NOW    | opposite-pair camps on the star board                          | first camp filled         |
 | 12    | F26 | Halma 4P               | [native]               | L     | NOW    | the 16×16 original — four camps, no dice, pure races           | first camp filled         |
@@ -60,26 +59,24 @@
 | 36    | F16 | Quad-Sow               | [variant·Mancala]      | M     | NOW    | four ranks, four stores, chain turns                           | most seeds                |
 | 37    | F50 | Hive 4P-lite           | [variant·Hive]         | M     | NOW    | two bugs each, four queens; first surround                     | first surround            |
 | 38    | F43 | Four-Handed Chess      | [native·tradition]     | L     | NOW    | four armies (Chaturaji-style); last king standing              | last king                 |
-| 39    | F34 | Dominoes Block 4P      | [native·RNG]           | M     | GATED  | lowest pip count when the chain locks                          | lowest pips               |
-| 40    | F37 | Go Fish 4P             | [native·RNG]           | S     | GATED  | ranks only, no content; collect the books                      | most books                |
-| 41    | F39 | Hearts 4P              | [native·RNG]           | M     | GATED  | the four-player trick classic — dodge every heart              | lowest score              |
-| 42    | F41 | Spades 4P              | [native·RNG]           | M     | GATED  | partnership bidding and tricks (needs the 2v2 seat layer)      | contract points           |
-| 43    | F42 | Durak 4P               | [native·RNG]           | M     | GATED  | attack and defend; first out is 1st, the Durak is 4th          | exit order                |
-| 44    | F7  | Yatzy 4P               | [native·RNG]           | M     | GATED  | four-way scorecard race                                        | highest score             |
-| 45    | F6  | Two-Dice Pig 4P        | [variant·RNG]          | XS    | GATED  | doubles double the pot, four ways                              | first to 100              |
-| 46    | F10 | Crazy Eights 4P        | [native·RNG]           | M     | GATED  | shed your hand first                                           | first out 1st             |
-| 47    | F36 | Streak Race 4P         | [variant·RNG]          | XS    | GATED  | higher-or-lower; broken streak ends your run                   | longest streak            |
-| 48    | F8  | Liar's Dice 4P         | [native·RNG]           | M     | GATED  | four cups; the liar who survives is 1st                        | last dice standing        |
-| 49    | F40 | Partnership Backgammon | [native·RNG]           | L     | GATED  | 2v2 team backgammon (needs the 2v2 seat layer)                 | team finish               |
-| 50    | F38 | Farkle-lite 4P         | [native·RNG]           | XS    | GATED  | six-dice push-your-luck scorecard                              | first to 5,000            |
+| 39    | F34 | Dominoes Block 4P      | [native·RNG]           | M     | RNG    | lowest pip count when the chain locks                          | lowest pips               |
+| 40    | F37 | Go Fish 4P             | [native·RNG]           | S     | RNG    | ranks only, no content; collect the books                      | most books                |
+| 41    | F39 | Hearts 4P              | [native·RNG]           | M     | RNG    | the four-player trick classic — dodge every heart              | lowest score              |
+| 42    | F41 | Spades 4P              | [native·RNG]           | M     | RNG    | partnership bidding and tricks (needs the 2v2 seat layer)      | contract points           |
+| 43    | F42 | Durak 4P               | [native·RNG]           | M     | RNG    | attack and defend; first out is 1st, the Durak is 4th          | exit order                |
+| 44    | F7  | Yatzy 4P               | [native·RNG]           | M     | RNG    | four-way scorecard race                                        | highest score             |
+| 45    | F6  | Two-Dice Pig 4P        | [variant·RNG]          | XS    | RNG    | doubles double the pot, four ways                              | first to 100              |
+| 46    | F10 | Crazy Eights 4P        | [native·RNG]           | M     | RNG    | shed your hand first                                           | first out 1st             |
+| 47    | F36 | Streak Race 4P         | [variant·RNG]          | XS    | RNG    | higher-or-lower; broken streak ends your run                   | longest streak            |
+| 48    | F8  | Liar's Dice 4P         | [native·RNG]           | M     | RNG    | four cups; the liar who survives is 1st                        | last dice standing        |
+| 49    | F40 | Partnership Backgammon | [native·RNG]           | L     | RNG    | 2v2 team backgammon (needs the 2v2 seat layer)                 | team finish               |
+| 50    | F38 | Farkle-lite 4P         | [native·RNG]           | XS    | RNG    | six-dice push-your-luck scorecard                              | first to 5,000            |
 
 ## Composition + gating (second pass)
 
 - **BUILT: 3 games** (Build 1–3) — live on the party engine (Quad-OXO, Dots & Boxes 4P,
   SOS 4P), visible in both the 3P and 4P hub tabs.
-- **Buildable NOW (unbuilt): 32 games** — every non-GATED row from Build 6 down,
-  including famous originals Blokus 4P, Chinese Checkers 4P and Halma.
-- **GATED: 15 games** — Build 4, 5, 9 (the famous Ludo / Snakes & Ladders / Memory Flip,
+- **Buildable NOW (unbuilt): 47 games** — every row; the former gate is cleared (2026-09-29).\*\* — Build 4, 5, 9 (the famous Ludo / Snakes & Ladders / Memory Flip,
   holding top-10 slots) + Build 39–50. One owner "yes" on the dice/cards decision starts
   them in this exact order; F40/F41 additionally need the 2v2 seat layer.
 - **Waves:** [four-player-50-plan.md](four-player-50-plan.md) §2 carries the updated bands.

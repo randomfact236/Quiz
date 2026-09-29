@@ -9,8 +9,7 @@
 > **Owner reorder 2026-09-28 (second pass) — the TOP 10 are the most COMMON games.**
 > The **Build** column is the fame-first build sequence; **T-numbers are stable IDs**
 > (plans reference them; they never renumber). Status column: **BUILT** (live today),
-> **NOW** (build in this order), **GATED** (fame-queued but waits on the owner's
-> dice/cards RNG decision — Ludo, Snakes & Ladders and Memory Flip are the household
+> **NOW** (build in this order), **RNG** (was GATED — unblocked 2026-09-29: dice are server-rolled, the Pig Dice precedent) — Ludo, Snakes & Ladders and Memory Flip are the household
 > names, so they hold top-10 slots until that decision lands).
 >
 > **Tags:** [native] = traditionally/officially supports 3P · [variant] = our adaptation of a
@@ -25,12 +24,12 @@
 | 2     | T11 | Dots & Boxes 3P       | [native]               | S     | BUILT  | every box scores its owner; three-way chain giveaways         | most boxes                              |
 | 3     | T12 | SOS 3P                | [native]               | XS    | BUILT  | score race — any line you close scores for YOU                | most points                             |
 | 4     | T2  | Tri-Nim               | [variant·Nim]          | XS    | NOW    | take sticks; the LAST stick loses (completes TP1 phase 2)     | taker 3rd, predecessor 1st              |
-| 5     | T41 | Ludo 3P               | [native·RNG]           | L     | GATED  | the classic three-yard race, capture or home                  | first home                              |
-| 6     | T42 | Snakes & Ladders 3P   | [native·RNG]           | XS    | GATED  | the 1–100 ladder chase everyone knows                         | first to 100                            |
+| 5     | T41 | Ludo 3P               | [native·RNG]           | L     | RNG    | the classic three-yard race, capture or home                  | first home                              |
+| 6     | T42 | Snakes & Ladders 3P   | [native·RNG]           | XS    | RNG    | the 1–100 ladder chase everyone knows                         | first to 100                            |
 | 7     | T45 | Connect Four 3P       | [variant·Connect Four] | S     | NOW    | three colours fall on 8×8                                     | first 4-line                            |
 | 8     | T18 | Othello-3             | [variant·Reversi]      | M     | NOW    | three colours, 10×10                                          | biggest army                            |
 | 9     | T23 | Checkers Hex          | [variant·Checkers]     | M     | NOW    | three-way hex checkers (reuses the 2P checkers core)          | last pieces standing                    |
-| 10    | T39 | Memory Flip 3P        | [native·RNG]           | S     | GATED  | most pairs on a shared grid — the classic pairs game          | most pairs                              |
+| 10    | T39 | Memory Flip 3P        | [native·RNG]           | S     | RNG    | most pairs on a shared grid — the classic pairs game          | most pairs                              |
 | 11    | T13 | Ultimate TTT 3P       | [variant]              | S     | NOW    | your cell forces the NEXT player clockwise                    | first 3-board line                      |
 | 12    | T27 | Code Race             | [variant·Mastermind]   | S     | NOW    | one maker sets the code; two breakers race rows               | first crack 1st, maker 3rd if both fail |
 | 13    | T30 | Hangman Relay         | [variant, trust-based] | XS    | NOW    | everyone writes a secret word for the NEXT player             | first solve 1st                         |
@@ -65,20 +64,19 @@
 | 42    | T44 | Three-Handed Chess    | [variant·tradition]    | L     | NOW    | three kings, blank corners; last king standing                | last king                               |
 | 43    | T26 | Go-3                  | [variant·Go]           | L     | NOW    | three-colour Go on 13×13                                      | largest area                            |
 | 44    | T10 | TriGo                 | [variant·Go]           | L     | NOW    | three-colour territory Go, 9×9                                | largest area                            |
-| 45    | T38 | Dominoes Block 3P     | [native·RNG]           | M     | GATED  | lowest pip count when the chain locks                         | lowest pips                             |
-| 46    | T37 | Crazy Eights 3P       | [native·RNG]           | M     | GATED  | shed your hand first                                          | first out 1st                           |
-| 47    | T35 | Yatzy 3P              | [native·RNG]           | M     | GATED  | three-way scorecard race                                      | highest score                           |
-| 48    | T34 | Two-Dice Pig 3P       | [variant·RNG]          | XS    | GATED  | doubles double the pot around the triangle                    | first to 100                            |
-| 49    | T40 | Streak Race           | [variant·RNG]          | XS    | GATED  | higher-or-lower around the table; broken streak ends your run | longest streak                          |
-| 50    | T36 | Liar's Dice 3P        | [native·RNG]           | M     | GATED  | three cups, one liar survives                                 | last dice standing                      |
+| 45    | T38 | Dominoes Block 3P     | [native·RNG]           | M     | RNG    | lowest pip count when the chain locks                         | lowest pips                             |
+| 46    | T37 | Crazy Eights 3P       | [native·RNG]           | M     | RNG    | shed your hand first                                          | first out 1st                           |
+| 47    | T35 | Yatzy 3P              | [native·RNG]           | M     | RNG    | three-way scorecard race                                      | highest score                           |
+| 48    | T34 | Two-Dice Pig 3P       | [variant·RNG]          | XS    | RNG    | doubles double the pot around the triangle                    | first to 100                            |
+| 49    | T40 | Streak Race           | [variant·RNG]          | XS    | RNG    | higher-or-lower around the table; broken streak ends your run | longest streak                          |
+| 50    | T36 | Liar's Dice 3P        | [native·RNG]           | M     | RNG    | three cups, one liar survives                                 | last dice standing                      |
 
 ## Composition + gating (second pass)
 
 - **BUILT: 3 games** (Build 1–3) — live on the party engine; Quad-OXO / Dots & Boxes /
   SOS each serve 3 AND 4 seats, so the 3P tab already has real games.
-- **Buildable NOW (unbuilt): 38 games** — every non-GATED row from Build 4 down.
-- **GATED: 9 games** — Build 5, 6, 9 (the famous Ludo / Snakes & Ladders / Memory Flip,
-  holding their deserved top-10 slots) + Build 45–50. One owner "yes" on the dice/cards
+- **Buildable NOW (unbuilt): 47 games** — every row; the former gate is cleared (2026-09-29).
+- **Previously gated, now building:** the 9 former GATED rows (Ludo, Snakes & Ladders, Memory Flip and the RNG tail) unblocked 2026-09-29. + Build 45–50. One owner "yes" on the dice/cards
   decision starts them in this exact order.
 - **Waves:** [three-player-50-plan.md](three-player-50-plan.md) §2 carries the updated bands.
 - Every row rides the same TP1 engine — a new game is an adapter + UI, not new plumbing.

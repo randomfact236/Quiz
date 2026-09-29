@@ -101,9 +101,18 @@ toggles — Never-has (e.g. "no levels, no pre-filled data").
 
 **Decision-required — deliberately NO plans yet** (owner call pending, see
 `50-game-ideas.md` review): #18 Onitama (random opening deal of fixed move-cards),
-#35 Hangman Duel (solo needs a word list), #38 Word Duel (needs a dictionary),
-#41-50 luck tier (dice/deck RNG approval pending; Pig Dice's server-roll already
-sets the precedent). Each gets a plan the day the owner decides.
+#35 Hangman Duel (solo needs a word list), #38 Word Duel (needs a dictionary).
+Each gets a plan the day the owner decides.
+
+**Luck tier — RESOLVED 2026-09-29 (owner).** Dice and cards are **server-rolled**
+with `crypto.randomInt`, exactly as Pig Dice already ships: the server decides
+the outcome and the client only renders it, so no participant can bias a duel.
+This closes the gate that had been holding Ludo, Snakes & Ladders, Memory Flip
+and the rest of the dice/card tier — the `GATED` rows in
+[three-player-50.md](three-player-50.md) and [four-player-50.md](four-player-50.md)
+and P6–P10 in [multiplayer-party.md](multiplayer-party.md) build **now**. Ludo
+itself stays its own **L** build (fixed 4-seat race, no shared party engine) and
+has its own plan: [42-ludo.md](42-ludo.md).
 
 ## 3b. Multiplayer party (3P/4P) — owner decision 2026-09-28
 

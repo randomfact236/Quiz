@@ -19,14 +19,14 @@ game.js + storage.js + style.css`), triangular turn indicator reused as-is.
 
 ## 2. Waves
 
-| Wave                        | Build positions | Notes                                                                                            |
-| --------------------------- | --------------- | ------------------------------------------------------------------------------------------------ |
-| Base                        | 1-4             | T1 + T11 + T12 BUILT; T2 (Tri-Nim) completes TP1 phase 2                                         |
-| A - famous + gated-holdouts | 5-10            | T45/T18/T23 build now; T41 Ludo, T42 Snakes & Ladders, T39 Memory Flip GATED on the RNG decision |
-| B - known + secret races    | 11-24           | Code Race / Hangman Relay / Fleet Royale reuse the redaction pattern                             |
-| C - connoisseur + originals | 25-40           | XS-to-M bulk; Pig Dice 3P (T33) rides the approved server-roll                                   |
-| D - the deep end            | 41-44           | Chinese Checkers 3P, Three-Handed Chess, Go-3, TriGo (needs Go core)                             |
-| E - RNG tail                | 45-50           | GATED; starts the day the dice/cards decision lands                                              |
+| Wave                          | Build positions | Notes                                                                                |
+| ----------------------------- | --------------- | ------------------------------------------------------------------------------------ |
+| Base                          | 1-4             | T1 + T11 + T12 BUILT; T2 (Tri-Nim) completes TP1 phase 2                             |
+| A - famous + previously-gated | 5-10            | T45/T18/T23 build now; T41 Ludo, T42 Snakes & Ladders, T39 Memory Flip now unblocked |
+| B - known + secret races      | 11-24           | Code Race / Hangman Relay / Fleet Royale reuse the redaction pattern                 |
+| C - connoisseur + originals   | 25-40           | XS-to-M bulk; Pig Dice 3P (T33) rides the approved server-roll                       |
+| D - the deep end              | 41-44           | Chinese Checkers 3P, Three-Handed Chess, Go-3, TriGo (needs Go core)                 |
+| E - RNG tail                  | 45-50           | UNBLOCKED 2026-09-29: dice are server-rolled (Pig Dice precedent)                    |
 
 Wave A starts only after TP1 Wave 1 ships; within a wave the order is XS → S → M → L
 (cheap rows first keeps the hub growing every week).
