@@ -128,6 +128,19 @@ import {
   cmpPlacement,
   cmpValidateMove,
 } from './games/checkers-mp.core';
+import {
+  BlkState,
+  blkApplyMove,
+  blkApplyPass,
+  blkApplyTurnWithPassTracking,
+  blkBotMove,
+  blkHasAnyMove,
+  blkInitialState,
+  blkIsOver,
+  blkPlacement,
+  blkScore,
+  blkValidateMove,
+} from './games/blokus-mp.core';
 
 /**
  * MP1 party engine — ONE server-authoritative engine for ALL party games
@@ -1010,6 +1023,87 @@ class CheckersMpAdapter implements PartyAdapter {
     return cmpPlacement(this.as(state));
   }
 }
+/**
+ * Blokus 4P: 20×20, 21 pieces per seat, corner-touch placement. Passes
+ * tracked via passStreak (all pass → game ends); most squares wins.
+ * move = {piece, rot, r, c} — bots pick inside botMove.
+ */
+class BlokusAdapter implements PartyAdapter {
+  initialState(_playerCount: number): Record<string, unknown> {
+    return blkInitialState(4) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): BlkState {
+    return state as unknown as BlkState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    // validate against the ACTING seat — state.turn can lag after resolveTurn.
+    return blkValidateMove(
+      this.as(state),
+      seat,
+      move as { piece: number; rot: number; r: number; c: number }
+    );
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    const next = blkApplyMove(
+      this.as(state),
+      seat,
+      move as { piece: number; rot: number; r: number; c: number }
+    );
+    // pass tracking: a real placement resets the streak.
+    return blkApplyTurnWithPassTracking(next, seat, true) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return blkIsOver(this.as(state));
+  }
+
+  winner(): number | null {
+    return null;
+  }
+
+  seatsInPlay(): number[] {
+    return [0, 1, 2, 3];
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    const mv = blkBotMove(this.as(state), seat, tier);
+    if (!mv) return { pass: true };
+    // belt-and-braces: never surface an illegal bot move
+    const err = blkValidateMove(this.as(state), seat, mv);
+    if (err) return { pass: true };
+    return mv;
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    seat: number,
+    _turn: number,
+    seatCount: number
+  ): number {
+    const s = next as unknown as BlkState;
+    // the next seat with a legal move; passStreak resets on placements.
+    if (blkIsOver(s)) return seat;
+    let probe = (seat + 1) % seatCount;
+    let hops = 0;
+    while (hops < seatCount && !blkHasAnyMove(s, probe)) {
+      hops += 1;
+      probe = (probe + 1) % seatCount;
+    }
+    return probe;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return blkPlacement(this.as(state));
+  }
+}
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -1027,6 +1121,7 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'ludo-mp': new LudoAdapter(),
   'checkers-hex': new CheckersMpAdapter('checkers-hex'),
   'checkers-4p': new CheckersMpAdapter('checkers-4p'),
+  'blokus-4p': new BlokusAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

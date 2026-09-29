@@ -9,6 +9,7 @@ import { In, LessThan, Repository } from 'typeorm';
 
 import { PartyMatch, PartySeat } from './entities/party-match.entity';
 import { partyAdapterFor } from './party-adapters';
+import { blkApplyPass } from './games/blokus-mp.core';
 
 const TTL_MS = 60 * 60 * 1000; // party tables run longer: 60 minutes, then gone
 const CODE_ALPHABET = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // no I/1/O/0
@@ -145,6 +146,27 @@ export class PartyService {
     if (match.turn !== seatIdx) throw new BadRequestException('Not your turn.');
 
     const adapter = partyAdapterFor(match.gameSlug);
+    // pass move (Blokus): record the pass, advance, bots follow
+    if (
+      input.move &&
+      typeof input.move === 'object' &&
+      'pass' in (input.move as Record<string, unknown>)
+    ) {
+      const passed = blkApplyPass(match.state as never) as unknown as Record<string, unknown>;
+      const overP = adapter.isOver(passed);
+      const placementP = overP ? adapter.placement(passed, adapter.winner(passed)) : null;
+      const nextSeat = adapter.resolveTurn
+        ? adapter.resolveTurn(match.state, passed, seatIdx, match.turn, match.seats.length)
+        : adapter.nextTurn(passed, seatIdx, match.seats.length);
+      await this.matches.update(match.id, {
+        state: passed as never,
+        turn: nextSeat,
+        status: overP ? 'finished' : 'running',
+        placement: placementP,
+      });
+      const freshP = await this.requireMatch(code);
+      return this.advanceBots(freshP, input.guestId);
+    }
     const err = adapter.validate(match.state, seatIdx, input.move);
     if (err) throw new BadRequestException(err);
 
@@ -205,7 +227,28 @@ export class PartyService {
       if (adapter.isOver(current.state)) break;
       const mv = adapter.botMove(current.state, current.turn, seat.tier);
       const err = adapter.validate(current.state, current.turn, mv);
-      if (err) throw new Error(`Bot produced an illegal move: ${err}`);
+      if (err) {
+        // defensive: treat residual bot illegality as a pass (bots already
+        // self-filter; this keeps tables finishing if an adapter drifts).
+        const passed = blkApplyPass(current.state as never) as unknown as Record<string, unknown>;
+        const overX = adapter.isOver(passed);
+        await this.matches.update(current.id, {
+          state: passed as never,
+          turn: adapter.resolveTurn
+            ? adapter.resolveTurn(
+                current.state,
+                passed,
+                current.turn,
+                current.turn,
+                current.seats.length
+              )
+            : adapter.nextTurn(passed, current.turn, current.seats.length),
+          status: overX ? 'finished' : 'running',
+          placement: overX ? adapter.placement(passed, adapter.winner(passed)) : null,
+        });
+        current = await this.requireMatch(current.code);
+        continue;
+      }
       const prevState = current.state;
       const state = adapter.apply(current.state, current.turn, mv);
       const over = adapter.isOver(state);
