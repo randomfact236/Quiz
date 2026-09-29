@@ -127,7 +127,7 @@ export class PartyService {
     if (humanSeats < 1) throw new BadRequestException('At least one human is required.');
     await this.matches.update(match.id, { status: 'running' });
     const fresh = await this.requireMatch(code);
-    return this.advanceBots(fresh, input.guestId);
+    return this.present(await this.advanceBots(fresh, input.guestId), input.guestId);
   }
 
   /** Play a move — only the active HUMAN seat may act (server validates). */
@@ -165,7 +165,7 @@ export class PartyService {
         placement: placementP,
       });
       const freshP = await this.requireMatch(code);
-      return this.advanceBots(freshP, input.guestId);
+      return this.present(await this.advanceBots(freshP, input.guestId), input.guestId);
     }
     const err = adapter.validate(match.state, seatIdx, input.move);
     if (err) throw new BadRequestException(err);
@@ -185,7 +185,7 @@ export class PartyService {
     });
 
     const fresh = await this.requireMatch(code);
-    return this.advanceBots(fresh, input.guestId);
+    return this.present(await this.advanceBots(fresh, input.guestId), input.guestId);
   }
 
   /** The poll — every seat syncs the whole authoritative state through it. */
