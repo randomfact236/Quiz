@@ -216,21 +216,25 @@ function renderHint() {
   els.hintLine.textContent = hint;
 }
 
+/** Each side starts with 15 non-king pieces, so what is missing was taken. */
+const START_MATERIAL = 15;
+
 function renderCaptures() {
   const board = state.game.board;
-  let whiteTaken = 0;
-  let blackTaken = 0;
+  let whiteLeft = 0;
+  let blackLeft = 0;
   for (let sq = 0; sq < 64; sq++) {
     const piece = board[sq];
     if (piece === EMPTY) continue;
-    const t = typeOf(piece);
-    if (t === KING) continue;
-    if (isWhite(piece)) whiteTaken++;
-    else blackTaken++;
+    if (typeOf(piece) === KING) continue;
+    if (isWhite(piece)) whiteLeft++;
+    else blackLeft++;
   }
-  // a side has "taken" whatever the opponent is missing
-  els.capWhite.textContent = String(blackTaken);
-  els.capBlack.textContent = String(whiteTaken);
+  // The tally is what each player has TAKEN, i.e. what the opponent is missing.
+  // Counting what is still on the board and labelling it "taken" showed 15 at
+  // the opening (found by looking at the live game).
+  els.capWhite.textContent = String(START_MATERIAL - blackLeft);
+  els.capBlack.textContent = String(START_MATERIAL - whiteLeft);
   els.moveNo.textContent = String(state.game.fullmove);
 }
 
