@@ -141,6 +141,40 @@ import {
   blkScore,
   blkValidateMove,
 } from './games/blokus-mp.core';
+import {
+  DomState,
+  domApplyDraw,
+  domApplyPass,
+  domApplyPlay,
+  domBotMove,
+  domInitialState,
+  domIsOver,
+  domPips,
+  domPlacement,
+  domValidateMove,
+} from './games/dominoes-mp.core';
+import {
+  CeCard,
+  CeState,
+  ceApplyDraw,
+  ceApplyPass,
+  ceApplyPlay,
+  ceBotMove,
+  ceInitialState,
+  ceIsOver,
+  cePlacement,
+  ceValidateMove,
+} from './games/crazy-eights-mp.core';
+import {
+  YzCategory,
+  YzState,
+  yzApplyRoll,
+  yzApplyScore,
+  yzBotDecide,
+  yzInitialState,
+  yzPlacement,
+  yzValidateMove,
+} from './games/yatzy-mp.core';
 
 /**
  * MP1 party engine — ONE server-authoritative engine for ALL party games
@@ -1110,6 +1144,230 @@ class BlokusAdapter implements PartyAdapter {
     return blkPlacement(this.as(state));
   }
 }
+/**
+ * Dominoes Block MP: one adapter, 'dominoes-mp' (3P + 4P). Draw variant:
+ * empty seats draw to play; blocked line ranks by pips.
+ */
+class DominoesAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return domInitialState(playerCount, Math.random) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): DomState {
+    return state as unknown as DomState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return domValidateMove(
+      this.as(state),
+      seat,
+      move as { tile: [number, number]; side?: 'left' | 'right' } | { draw: true } | { pass: true }
+    );
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    const m = move as {
+      tile?: [number, number];
+      side?: 'left' | 'right';
+      draw?: boolean;
+      pass?: boolean;
+    };
+    if (m.draw) return domApplyDraw(this.as(state), seat) as unknown as Record<string, unknown>;
+    if (m.pass) return domApplyPass(this.as(state), seat) as unknown as Record<string, unknown>;
+    return domApplyPlay(
+      this.as(state),
+      seat,
+      m.tile as [number, number],
+      m.side ?? 'right'
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return domIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return this.as(state).domino;
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  nextTurn(state: Record<string, unknown>, turn: number, seatCount: number): number {
+    void state;
+    return (turn + 1) % seatCount;
+  }
+
+  placement(
+    state: Record<string, unknown>,
+    winnerSeat: number | null
+  ): { seat: number; rank: number }[] {
+    void winnerSeat;
+    return domPlacement(this.as(state));
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return domBotMove(this.as(state), seat, tier);
+  }
+
+  redactFor(state: Record<string, unknown>, seat: number | null): Record<string, unknown> {
+    const s = this.as(state);
+    // viewer keeps their own hand; others become counts
+    const hands = s.hands.map((h, i) => (i === seat ? h : []));
+    const counts = s.hands.map((h) => h.length);
+    return {
+      ...s,
+      hands,
+      boneyard: [],
+      handCounts: counts,
+      boneyardCount: s.boneyard.length,
+    };
+  }
+}
+
+/**
+ * Crazy Eights MP: one adapter, 'crazy-eights-mp' (3P + 4P). Suit/value match,
+ * eights wild with a called suit; draw-one house rule.
+ */
+class CrazyEightsAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return ceInitialState(playerCount, Math.random) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): CeState {
+    return state as unknown as CeState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return ceValidateMove(
+      this.as(state),
+      seat,
+      move as { card: CeCard; calledSuit?: number } | { draw: true } | { pass: true }
+    );
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    const m = move as { card?: CeCard; calledSuit?: number; draw?: boolean; pass?: boolean };
+    if (m.draw) return ceApplyDraw(this.as(state), seat) as unknown as Record<string, unknown>;
+    if (m.pass) return ceApplyPass(this.as(state), seat) as unknown as Record<string, unknown>;
+    return ceApplyPlay(
+      this.as(state),
+      seat,
+      m.card as CeCard,
+      m.calledSuit ?? null
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return ceIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return this.as(state).winner;
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  nextTurn(state: Record<string, unknown>, turn: number, seatCount: number): number {
+    void state;
+    return (turn + 1) % seatCount;
+  }
+
+  placement(
+    state: Record<string, unknown>,
+    winnerSeat: number | null
+  ): { seat: number; rank: number }[] {
+    void winnerSeat;
+    return cePlacement(this.as(state));
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return ceBotMove(this.as(state), seat, tier);
+  }
+
+  redactFor(state: Record<string, unknown>, seat: number | null): Record<string, unknown> {
+    const s = this.as(state);
+    const hands = s.hands.map((h, i) => (i === seat ? h : []));
+    const counts = s.hands.map((h) => h.length);
+    return {
+      ...s,
+      hands,
+      stock: [],
+      handCounts: counts,
+      stockCount: s.stock.length,
+    };
+  }
+}
+
+/**
+ * Yatzy MP: one adapter, 'yatzy-mp' (3P + 4P). Server-rolled dice, 3 rolls,
+ * 15 fixed-canonical categories, highest total wins.
+ */
+class YatzyAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return yzInitialState(playerCount, Math.random) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): YzState {
+    return state as unknown as YzState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return yzValidateMove(
+      this.as(state),
+      seat,
+      move as { roll?: boolean; keep?: number[] } | { score: YzCategory }
+    );
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    const m = move as { roll?: boolean; keep?: number[]; score?: YzCategory };
+    if (m.roll) {
+      const { state: next } = yzApplyRoll(this.as(state), seat, m.keep ?? [], Math.random);
+      return next as unknown as Record<string, unknown>;
+    }
+    const { state: next } = yzApplyScore(this.as(state), seat, (m.score ?? 'chance') as YzCategory);
+    return next as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return this.as(state).finished;
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    void state;
+    return null; // ranked by total via placement
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  nextTurn(state: Record<string, unknown>, turn: number, seatCount: number): number {
+    void turn;
+    void seatCount;
+    return this.as(state).turn;
+  }
+
+  placement(
+    state: Record<string, unknown>,
+    winnerSeat: number | null
+  ): { seat: number; rank: number }[] {
+    void winnerSeat;
+    return yzPlacement(this.as(state));
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return yzBotDecide(this.as(state), seat, tier, Math.random);
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -1128,6 +1386,9 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'checkers-hex': new CheckersMpAdapter('checkers-hex'),
   'checkers-4p': new CheckersMpAdapter('checkers-4p'),
   'blokus-4p': new BlokusAdapter(),
+  'dominoes-mp': new DominoesAdapter(),
+  'crazy-eights-mp': new CrazyEightsAdapter(),
+  'yatzy-mp': new YatzyAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

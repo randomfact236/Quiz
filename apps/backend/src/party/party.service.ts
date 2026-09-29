@@ -146,8 +146,10 @@ export class PartyService {
     if (match.turn !== seatIdx) throw new BadRequestException('Not your turn.');
 
     const adapter = partyAdapterFor(match.gameSlug);
-    // pass move (Blokus): record the pass, advance, bots follow
+    // pass move (Blokus): record the pass, advance, bots follow.
+    // Other games (dominoes, crazy eights) pass/draw through adapter.apply.
     if (
+      match.gameSlug === 'blokus-4p' &&
       input.move &&
       typeof input.move === 'object' &&
       'pass' in (input.move as Record<string, unknown>)
