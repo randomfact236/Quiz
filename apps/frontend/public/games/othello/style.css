@@ -387,16 +387,23 @@ button:disabled {
   transition: width 0.35s ease;
 }
 
+/* The count sits over a bar that is half dark-fill and half light-fill, so it
+   needs its own solid chip — a blend mode made it dark-on-dark exactly where
+   the two fills meet, and the number was unreadable (seen in the IDE browser). */
 .scorebar-count {
-  position: relative;
-  width: 100%;
-  text-align: center;
-  font-size: 12.5px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 1px 10px;
+  border-radius: 999px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  color: var(--ink);
+  font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.04em;
-  color: var(--ink);
-  mix-blend-mode: difference;
-  filter: invert(1) grayscale(1);
+  white-space: nowrap;
 }
 
 /* ---- the board ------------------------------------------------------------------ */
