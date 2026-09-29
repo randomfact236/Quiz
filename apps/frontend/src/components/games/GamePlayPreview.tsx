@@ -75,6 +75,12 @@ function previewSvg(slug: string): JSX.Element {
       return <Checkers4Preview />;
     case 'blokus-4p':
       return <BlokusPreview />;
+    case 'dominoes-mp':
+      return <DominoesPreview />;
+    case 'crazy-eights-mp':
+      return <CrazyEightsPreview />;
+    case 'yatzy-mp':
+      return <YatzyPreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1088,14 +1094,31 @@ function BlokusPreview(): JSX.Element {
 /** A 9x9 Go board, mid-game: a black group under pressure, white walls. */
 function GoPreview(): JSX.Element {
   const stones: Array<[number, number, string]> = [
-    [20, 20, '#14180f'], [34, 20, '#14180f'], [20, 34, '#14180f'],
-    [34, 34, '#fbfaf4'], [48, 34, '#fbfaf4'], [48, 48, '#fbfaf4'],
-    [62, 48, '#fbfaf4'], [76, 62, '#fbfaf4'], [62, 76, '#14180f'],
-    [90, 76, '#14180f'], [90, 34, '#fbfaf4'], [34, 90, '#14180f'],
+    [20, 20, '#14180f'],
+    [34, 20, '#14180f'],
+    [20, 34, '#14180f'],
+    [34, 34, '#fbfaf4'],
+    [48, 34, '#fbfaf4'],
+    [48, 48, '#fbfaf4'],
+    [62, 48, '#fbfaf4'],
+    [76, 62, '#fbfaf4'],
+    [62, 76, '#14180f'],
+    [90, 76, '#14180f'],
+    [90, 34, '#fbfaf4'],
+    [34, 90, '#14180f'],
   ];
   return (
     <BoardFrame>
-      <rect x="8" y="8" width="104" height="68" rx="5" fill="#e2b96f" stroke="#b58b45" strokeWidth="1.5" />
+      <rect
+        x="8"
+        y="8"
+        width="104"
+        height="68"
+        rx="5"
+        fill="#e2b96f"
+        stroke="#b58b45"
+        strokeWidth="1.5"
+      />
       <g stroke="rgba(60,40,12,0.5)" strokeWidth="0.7">
         {[20, 34, 48, 62, 76, 90].map((x) => (
           <path key={'v' + x} d={'M' + x + ' 14v56'} />
@@ -1105,7 +1128,15 @@ function GoPreview(): JSX.Element {
         ))}
       </g>
       {stones.map(([x, y, fill], i) => (
-        <circle key={'s' + i} cx={x} cy={y} r="5" fill={fill} stroke={fill === '#fbfaf4' ? 'rgba(0,0,0,0.2)' : 'none'} strokeWidth="0.6" />
+        <circle
+          key={'s' + i}
+          cx={x}
+          cy={y}
+          r="5"
+          fill={fill}
+          stroke={fill === '#fbfaf4' ? 'rgba(0,0,0,0.2)' : 'none'}
+          strokeWidth="0.6"
+        />
       ))}
     </BoardFrame>
   );
@@ -1118,10 +1149,14 @@ function ChessPreview(): JSX.Element {
     for (let file = 0; file < 8; file++) squares.push([row, file, (row + file) % 2 === 1]);
   }
   const pieces: Array<[number, number, string]> = [
-    [0, 4, "♚"], [3, 3, "♔"],
-    [1, 1, "♝"], [2, 2, "♗"],
-    [1, 3, "♟"], [2, 4, "♙"],
-    [2, 6, "♙"], [3, 5, "♟"],
+    [0, 4, '♚'],
+    [3, 3, '♔'],
+    [1, 1, '♝'],
+    [2, 2, '♗'],
+    [1, 3, '♟'],
+    [2, 4, '♙'],
+    [2, 6, '♙'],
+    [3, 5, '♟'],
   ];
   return (
     <BoardFrame>
@@ -1132,7 +1167,7 @@ function ChessPreview(): JSX.Element {
           y={12 + row * 15}
           width={11}
           height={15}
-          fill={dark ? "#7b9a68" : "#eeeed2"}
+          fill={dark ? '#7b9a68' : '#eeeed2'}
         />
       ))}
       {pieces.map(([row, file, glyph], i) => (
@@ -1142,8 +1177,8 @@ function ChessPreview(): JSX.Element {
           y={12 + row * 15 + 11}
           fontSize="11"
           textAnchor="middle"
-          fill={glyph === "♚" || glyph === "♙" ? "#23231f" : "#fbfbf7"}
-          stroke={glyph === "♚" || glyph === "♙" ? "none" : "#23231f"}
+          fill={glyph === '♚' || glyph === '♙' ? '#23231f' : '#fbfbf7'}
+          stroke={glyph === '♚' || glyph === '♙' ? 'none' : '#23231f'}
           strokeWidth="0.4"
         >
           {glyph}
@@ -1153,6 +1188,137 @@ function ChessPreview(): JSX.Element {
   );
 }
 
+/** Dominoes: a laid chain of pip tiles. */
+function DominoesPreview(): JSX.Element {
+  const tile = (x: number, y: number, b: number, key: string): JSX.Element => (
+    <g key={key} transform={'translate(' + x + ' ' + y + ')'}>
+      <rect
+        x="0"
+        y="0"
+        width="18"
+        height="34"
+        rx="4"
+        fill="#faf7f2"
+        stroke="#78716c"
+        strokeWidth="1.5"
+      />
+      <line x1="1" y1="17" x2="17" y2="17" stroke="#78716c" strokeWidth="1" />
+      <circle cx="9" cy="9" r="2.2" fill="#1c1917" />
+      <circle cx="9" cy="25" r="2.2" fill="#1c1917" />
+      {b >= 3 && <circle cx="4.5" cy="25" r="2.2" fill="#1c1917" />}
+      {b >= 3 && <circle cx="13.5" cy="25" r="2.2" fill="#1c1917" />}
+      {b >= 5 && <circle cx="9" cy="21" r="2.2" fill="#1c1917" />}
+    </g>
+  );
+  return (
+    <BoardFrame>
+      <rect x="10" y="14" width="100" height="56" rx="8" fill="currentColor" opacity="0.07" />
+      {tile(14, 25, 6, 't1')}
+      {tile(34, 25, 3, 't2')}
+      {tile(54, 25, 5, 't3')}
+      {tile(74, 25, 2, 't4')}
+      {tile(94, 25, 4, 't5')}
+    </BoardFrame>
+  );
+}
+
+/** Crazy Eights: stock + discard + hand cards. */
+function CrazyEightsPreview(): JSX.Element {
+  const card = (
+    x: number,
+    y: number,
+    rank: string,
+    suit: string,
+    red: boolean,
+    key: string
+  ): JSX.Element => (
+    <g key={key} transform={'translate(' + x + ' ' + y + ')'}>
+      <rect
+        x="0"
+        y="0"
+        width="17"
+        height="24"
+        rx="3"
+        fill="#faf7f2"
+        stroke="#a8a29e"
+        strokeWidth="1.2"
+      />
+      <text
+        x="8.5"
+        y="10"
+        textAnchor="middle"
+        fontSize="8"
+        fontWeight="800"
+        fill={red ? '#dc2626' : '#1c1917'}
+      >
+        {' '}
+        {rank}
+      </text>
+      <text x="8.5" y="19" textAnchor="middle" fontSize="9" fill={red ? '#dc2626' : '#1c1917'}>
+        {' '}
+        {suit}
+      </text>
+    </g>
+  );
+  return (
+    <BoardFrame>
+      <rect
+        x="18"
+        y="22"
+        width="20"
+        height="28"
+        rx="3"
+        fill="#6d5bd0"
+        stroke="#4c3fb0"
+        strokeWidth="1.2"
+      />
+      <circle cx="28" cy="36" r="5" fill="none" stroke="#ffffff" strokeWidth="1.4" opacity="0.7" />
+      {card(46, 24, '8', '♠', false, 'c1')}
+      {card(66, 24, '4', '♥', true, 'c2')}
+      {card(40, 56, '9', '♦', true, 'c3')}
+      {card(60, 56, 'K', '♣', false, 'c4')}
+      {card(80, 56, '2', '♠', false, 'c5')}
+    </BoardFrame>
+  );
+}
+
+/** Yatzy: five dice + scorecard rows. */
+function YatzyPreview(): JSX.Element {
+  const die = (x: number, v: number, key: string): JSX.Element => (
+    <g key={key} transform={'translate(' + x + ' 18)'}>
+      <rect
+        x="0"
+        y="0"
+        width="14"
+        height="14"
+        rx="3"
+        fill="#ffffff"
+        stroke="#a8a29e"
+        strokeWidth="1.2"
+      />
+      <text x="7" y="11" textAnchor="middle" fontSize="9" fontWeight="800" fill="#1c1917">
+        {' '}
+        {v}
+      </text>
+    </g>
+  );
+  return (
+    <BoardFrame>
+      {die(24, 3, 'd1')}
+      {die(41, 5, 'd2')}
+      {die(58, 2, 'd3')}
+      {die(75, 5, 'd4')}
+      {die(92, 6, 'd5')}
+      <rect x="52" y="44" width="34" height="5" rx="2.5" fill="currentColor" opacity="0.3" />
+      <rect x="52" y="53" width="26" height="5" rx="2.5" fill="currentColor" opacity="0.22" />
+      <rect x="52" y="62" width="30" height="5" rx="2.5" fill="currentColor" opacity="0.26" />
+      <text x="96" y="49" fontSize="9" fontWeight="800" fill="currentColor" opacity="0.7">
+        {' '}
+        +37
+      </text>
+    </BoardFrame>
+  );
+}
 /** Neutral fallback so an unknown slug never breaks the hub. */
 function PlaceholderPreview(): JSX.Element {
   return (

@@ -122,8 +122,7 @@ export const GAMES: GameEntry[] = [
     slug: 'chess',
     emoji: '♞',
     title: 'Chess',
-    blurb:
-      'The most famous game in existence, full ruleset — castling, en passant, promotion.',
+    blurb: 'The most famous game in existence, full ruleset — castling, en passant, promotion.',
     gradient: 'from-neutral-600 to-neutral-900',
     cssGradient: 'linear-gradient(135deg, #52525b 0%, #18181b 100%)',
   },
@@ -283,6 +282,35 @@ export const GAMES: GameEntry[] = [
     gradient: 'from-sky-500 to-blue-900',
     cssGradient: 'linear-gradient(135deg, #0ea5e9 0%, #1e3a8a 100%)',
     players: [4],
+  },
+  {
+    slug: 'dominoes-mp',
+    emoji: '🤶',
+    title: 'Dominoes Block MP',
+    blurb:
+      'The classic tile chain - match the open ends, shed your hand, lowest pips wins a block. Empty seats are bots.',
+    gradient: 'from-neutral-400 to-stone-800',
+    cssGradient: 'linear-gradient(135deg, #a3a3a3 0%, #1c1917 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'crazy-eights-mp',
+    emoji: '🃏',
+    title: 'Crazy Eights MP',
+    blurb: 'Match suit or value, eights are wild - shed your hand first. Empty seats are bots.',
+    gradient: 'from-emerald-500 to-cyan-800',
+    cssGradient: 'linear-gradient(135deg, #10b981 0%, #155e75 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'yatzy-mp',
+    emoji: '🎲',
+    title: 'Yatzy MP',
+    blurb:
+      'Five dice, three rolls, fifteen categories - the classic scorecard race. Empty seats are bots.',
+    gradient: 'from-amber-400 to-red-700',
+    cssGradient: 'linear-gradient(135deg, #fbbf24 0%, #b91c1c 100%)',
+    players: [3, 4],
   },
 ];
 
