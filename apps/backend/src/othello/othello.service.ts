@@ -18,9 +18,14 @@ const DARK = 1;
 const LIGHT = 2;
 
 const DIRS: Array<[number, number]> = [
-  [-1, -1], [-1, 0], [-1, 1],
-  [0, -1], [0, 1],
-  [1, -1], [1, 0], [1, 1],
+  [-1, -1],
+  [-1, 0],
+  [-1, 1],
+  [0, -1],
+  [0, 1],
+  [1, -1],
+  [1, 0],
+  [1, 1],
 ];
 
 function other(side: number): number {
@@ -78,9 +83,7 @@ export function legalMoves(cells: number[], side: number, size: number): number[
 }
 
 function isOver(cells: number[], size: number): boolean {
-  return (
-    legalMoves(cells, DARK, size).length === 0 && legalMoves(cells, LIGHT, size).length === 0
-  );
+  return legalMoves(cells, DARK, size).length === 0 && legalMoves(cells, LIGHT, size).length === 0;
 }
 
 export function discCount(cells: number[]) {
@@ -100,7 +103,11 @@ export class OthelloService {
     private readonly matches: Repository<OthelloMatch>
   ) {}
 
-  async create(input: { playerName: string; guestId: string; size?: number }): Promise<{ code: string }> {
+  async create(input: {
+    playerName: string;
+    guestId: string;
+    size?: number;
+  }): Promise<{ code: string }> {
     await this.expireStale();
     const size = SIZES.indexOf(input.size ?? 8) !== -1 ? (input.size as number) : 8;
     const match = await this.matches.save(
@@ -159,11 +166,7 @@ export class OthelloService {
 
     const size = match.size;
     const idx = Number(input.idx);
-    if (
-      !Number.isInteger(idx) ||
-      idx < 0 ||
-      idx >= size * size
-    ) {
+    if (!Number.isInteger(idx) || idx < 0 || idx >= size * size) {
       throw new BadRequestException('Illegal move');
     }
 

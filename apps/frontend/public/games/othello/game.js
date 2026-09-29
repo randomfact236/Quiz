@@ -179,7 +179,9 @@ function renderTurn() {
     const you = state.online.mark;
     const opp = opponentName();
     label =
-      state.turn === you ? "Your turn — you're " + SIDE_LABEL[you] : (opp || 'Opponent') + ' is thinking…';
+      state.turn === you
+        ? "Your turn — you're " + SIDE_LABEL[you]
+        : (opp || 'Opponent') + ' is thinking…';
   } else {
     label = SIDE_LABEL[state.turn] + "'s turn";
   }
@@ -340,7 +342,11 @@ function endGame(result) {
   renderHint();
   renderMiniSeries();
   const youWon =
-    state.mode === '1p' ? winner === DARK : state.mode === 'online' && state.online ? winner === state.online.mark : false;
+    state.mode === '1p'
+      ? winner === DARK
+      : state.mode === 'online' && state.online
+        ? winner === state.online.mark
+        : false;
   if (!isDraw && youWon) vibrate([40, 60, 40]);
   setTimeout(() => showOverlay(isDraw, winner, result), 450);
 }
@@ -530,7 +536,12 @@ function onlineJoin(code) {
 
 function pollOnline() {
   if (!state.online || state.online.busy) return;
-  onlineApi('/othello/' + encodeURIComponent(state.online.code) + '?guestId=' + encodeURIComponent(onlineGuestId()))
+  onlineApi(
+    '/othello/' +
+      encodeURIComponent(state.online.code) +
+      '?guestId=' +
+      encodeURIComponent(onlineGuestId())
+  )
     .then((view) => {
       if (!state.online) return;
       state.online.dName = view.dName;
@@ -580,7 +591,11 @@ function sendOnlineMove(idx) {
     })
     .catch((e) => {
       if (state.online) state.online.busy = false;
-      toast(e.message === 'Illegal move' ? 'The server rejected that square' : 'Move rejected — try again');
+      toast(
+        e.message === 'Illegal move'
+          ? 'The server rejected that square'
+          : 'Move rejected — try again'
+      );
       pollOnline(); // resync rather than sit on a rejected local state
     });
 }
@@ -605,10 +620,12 @@ function finishOnlineGame(view, counts) {
 
 function shareText() {
   const url = 'https://pigzap.com/games/othello/';
-  const score = '⚫ ' + state.series.d + ' · ⚪ ' + state.series.l + ' · draws ' + state.series.draw;
+  const score =
+    '⚫ ' + state.series.d + ' · ⚪ ' + state.series.l + ' · draws ' + state.series.draw;
   if (state.mode === '2p') return t('share2p', { score, url });
   return t('share1p', {
-    setup: 'Othello vs the computer (' + state.difficulty + ', ' + state.size + '×' + state.size + ')',
+    setup:
+      'Othello vs the computer (' + state.difficulty + ', ' + state.size + '×' + state.size + ')',
     score,
     url,
   });
@@ -674,7 +691,10 @@ function bindSegmented(container, attr, onPick) {
 function syncSegmented(container, attr, value) {
   const buttons = container.querySelectorAll('button[' + attr + ']');
   for (let i = 0; i < buttons.length; i++) {
-    buttons[i].setAttribute('aria-checked', buttons[i].getAttribute(attr) === value ? 'true' : 'false');
+    buttons[i].setAttribute(
+      'aria-checked',
+      buttons[i].getAttribute(attr) === value ? 'true' : 'false'
+    );
   }
 }
 
@@ -722,12 +742,16 @@ function init() {
     renderSeriesCard();
     saveMenuPrefs();
   });
-  bindSegmented(document.getElementById('difficulty-segmented'), 'data-difficulty', (difficulty) => {
-    state.difficulty = difficulty;
-    refreshSeriesFromStorage();
-    renderSeriesCard();
-    saveMenuPrefs();
-  });
+  bindSegmented(
+    document.getElementById('difficulty-segmented'),
+    'data-difficulty',
+    (difficulty) => {
+      state.difficulty = difficulty;
+      refreshSeriesFromStorage();
+      renderSeriesCard();
+      saveMenuPrefs();
+    }
+  );
   bindSegmented(document.getElementById('size-segmented'), 'data-size', (raw) => {
     const size = Number(raw);
     if (BOARD_SIZES.indexOf(size) === -1 || size === state.size) return;
@@ -884,13 +908,25 @@ if (typeof document !== 'undefined' && document.getElementById('board')) {
       var a = document.getElementById(pair[0]);
       if (a && !wired.has(a)) {
         wired.add(a);
-        a.addEventListener('click', function () { ping(pair[1]); }, { once: true, capture: true });
+        a.addEventListener(
+          'click',
+          function () {
+            ping(pair[1]);
+          },
+          { once: true, capture: true }
+        );
       }
     });
     var copy = document.getElementById('share-copy');
     if (copy && !wired.has(copy)) {
       wired.add(copy);
-      copy.addEventListener('click', function () { ping('copy'); }, { once: true, capture: true });
+      copy.addEventListener(
+        'click',
+        function () {
+          ping('copy');
+        },
+        { once: true, capture: true }
+      );
     }
   };
   var btn = document.getElementById('btn-share');

@@ -114,15 +114,15 @@ describe('OthelloService', () => {
 
   describe('turn order', () => {
     it('rejects a move from the side that is not to move', async () => {
-      await expect(
-        service.move('ABC234', { guestId: 'guest-Y', idx: 20 })
-      ).rejects.toBeInstanceOf(BadRequestException);
+      await expect(service.move('ABC234', { guestId: 'guest-Y', idx: 20 })).rejects.toBeInstanceOf(
+        BadRequestException
+      );
     });
 
     it('rejects a move from a guest who is not in the match', async () => {
-      await expect(
-        service.move('ABC234', { guestId: 'guest-M', idx: 19 })
-      ).rejects.toBeInstanceOf(ForbiddenException);
+      await expect(service.move('ABC234', { guestId: 'guest-M', idx: 19 })).rejects.toBeInstanceOf(
+        ForbiddenException
+      );
     });
 
     it('rejects an out-of-range square', async () => {

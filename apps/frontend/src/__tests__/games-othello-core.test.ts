@@ -84,18 +84,15 @@ describe('othello core — flip geometry in all 8 directions', () => {
   }
 
   const names = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW'];
-  it.each(DIRS.map((d, i) => [names[i], d[0], d[1]]))(
-    'flips a run to the %s',
-    (_name, dr, df) => {
-      const mid = 2;
-      const { cells, origin } = rayBoard(dr, df, mid);
-      const flipped = flipsFor(cells, origin, DARK);
-      expect(flipped).toHaveLength(mid);
-      for (let i = 1; i <= mid; i++) {
-        expect(flipped).toContain((4 + dr * i) * 8 + (4 + df * i));
-      }
+  it.each(DIRS.map((d, i) => [names[i], d[0], d[1]]))('flips a run to the %s', (_name, dr, df) => {
+    const mid = 2;
+    const { cells, origin } = rayBoard(dr, df, mid);
+    const flipped = flipsFor(cells, origin, DARK);
+    expect(flipped).toHaveLength(mid);
+    for (let i = 1; i <= mid; i++) {
+      expect(flipped).toContain((4 + dr * i) * 8 + (4 + df * i));
     }
-  );
+  });
 
   it('flips every direction at once from a real position', () => {
     // each opening move flips exactly the one centre disc it brackets
@@ -323,7 +320,9 @@ describe('othello core — AI tiers', () => {
   it('every tier returns a legal move from the opening', () => {
     const cells = initialBoard(8);
     for (const difficulty of ['easy', 'medium', 'hard'] as const) {
-      expect(legalMoves(cells, DARK)).toContainEqual(aiMove(cells, DARK, difficulty, { maxNodes: 20000 }));
+      expect(legalMoves(cells, DARK)).toContainEqual(
+        aiMove(cells, DARK, difficulty, { maxNodes: 20000 })
+      );
     }
   });
 

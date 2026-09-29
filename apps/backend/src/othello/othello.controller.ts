@@ -64,7 +64,11 @@ export class OthelloController {
   @_Public()
   @ApiOperation({ summary: 'Create a match as ⚫ → { code }' })
   create(@Body() dto: CreateDto) {
-    return this.othello.create({ playerName: dto.playerName, guestId: dto.guestId, size: dto.size });
+    return this.othello.create({
+      playerName: dto.playerName,
+      guestId: dto.guestId,
+      size: dto.size,
+    });
   }
 
   @Post(':code/join')

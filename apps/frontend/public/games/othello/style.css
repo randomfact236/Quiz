@@ -57,7 +57,14 @@ body {
   background: radial-gradient(120% 90% at 50% 0%, var(--bg-2) 0%, var(--bg) 70%);
   color: var(--ink);
   font-family:
-    ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Helvetica Neue',
+    Arial,
+    sans-serif;
   line-height: 1.45;
   min-height: 100dvh;
   -webkit-text-size-adjust: 100%;
@@ -152,7 +159,10 @@ body {
   font-size: 15px;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    transform 0.1s ease;
 }
 
 .segmented button[aria-checked='true'] {
@@ -217,7 +227,10 @@ button.ghost {
   font-weight: 700;
   cursor: pointer;
   border: 1.5px solid transparent;
-  transition: transform 0.1s ease, background 0.15s ease, opacity 0.15s ease;
+  transition:
+    transform 0.1s ease,
+    background 0.15s ease,
+    opacity 0.15s ease;
 }
 
 button.primary {
