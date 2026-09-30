@@ -139,6 +139,8 @@
       // Deep link (?party=CODE): jump straight to joining.
       ensureGuest();
       el('party-code').value = cfg.partyCode;
+      el('party-create-box').hidden = true;
+      el('party-join-box').hidden = false;
       show('party-lobby');
     }
   }
@@ -426,7 +428,7 @@
 
   // ---------- boot ----------
   document.addEventListener('DOMContentLoaded', () => {
-    initMenu();
     show('menu');
+    initMenu();
   });
 })();
