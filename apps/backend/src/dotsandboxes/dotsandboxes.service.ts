@@ -136,13 +136,10 @@ export class DotsAndBoxesService {
     const score = yourMark === 1 ? match.rScore + claimed : match.bScore + claimed;
     const full = edges.every((e) => e !== 0);
     const finished = full;
-    const winner = finished
-      ? match.rScore + (yourMark === 1 ? claimed : 0) >
-        match.bScore + (yourMark === 2 ? claimed : 0)
-        ? 1
-        : 2
-      : null;
-    const draw = finished && winner === null ? true : false;
+    const rTotal = match.rScore + (yourMark === 1 ? claimed : 0);
+    const bTotal = match.bScore + (yourMark === 2 ? claimed : 0);
+    const winner = finished ? (rTotal > bTotal ? 1 : bTotal > rTotal ? 2 : null) : null;
+    const draw = finished && winner === null;
 
     await this.matches.update(match.id, {
       edges,

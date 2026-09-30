@@ -146,6 +146,25 @@ describe('DotsAndBoxesService', () => {
     expect(view.draw).toBe(false);
   });
 
+  it('a level score on the last line is a DRAW, never a win', async () => {
+    // same construction as above, but the pre-scores end level after the claim
+    const [top] = boxEdges(4, 0);
+    for (let e = 0; e < 40; e++) {
+      if (e !== top) match.edges[e] = e % 3 === 0 ? 2 : 1;
+    }
+    match.owners = Array(16).fill(0);
+    match.rScore = 3;
+    match.bScore = 4;
+    match.turn = 1;
+
+    const view = (await service.move('ABC234', { guestId: 'guest-R', edge: top })) as any;
+
+    expect(view.status).toBe('finished');
+    expect(view.scores).toEqual([4, 4]);
+    expect(view.winner).toBeNull();
+    expect(view.draw).toBe(true);
+  });
+
   it('marks the match abandoned on leave', async () => {
     await service.leave('ABC234', 'guest-R');
     expect(repo.update).toHaveBeenCalledWith('m1', { status: 'abandoned' });
