@@ -322,6 +322,36 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #fbbf24 0%, #b91c1c 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'bulls-race-mp',
+    emoji: '🐂',
+    title: 'Bulls Race',
+    blurb:
+      "First to 4 bulls cracks the maker's code - bulls only, 15 guesses each. Empty seats are bots.",
+    gradient: 'from-orange-500 to-rose-900',
+    cssGradient: 'linear-gradient(135deg, #f97316 0%, #881337 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'hangman-relay-mp',
+    emoji: '✍️',
+    title: 'Hangman Relay',
+    blurb:
+      "Write a secret word for the next seat, then race to solve your own - six strikes and you're out. Empty seats are bots.",
+    gradient: 'from-slate-400 to-slate-800',
+    cssGradient: 'linear-gradient(135deg, #94a3b8 0%, #1e293b 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'pig-dice-mp',
+    emoji: '🐷',
+    title: 'Pig Dice MP',
+    blurb:
+      'Push your luck to 100 - roll for the pot, hold to bank it, a 1 wipes it clean. Empty seats are bots.',
+    gradient: 'from-pink-400 to-rose-800',
+    cssGradient: 'linear-gradient(135deg, #f472b6 0%, #9f1239 100%)',
+    players: [3, 4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

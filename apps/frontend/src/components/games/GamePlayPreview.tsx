@@ -83,6 +83,12 @@ function previewSvg(slug: string): JSX.Element {
       return <CrazyEightsPreview />;
     case 'yatzy-mp':
       return <YatzyPreview />;
+    case 'bulls-race-mp':
+      return <BullsRacePreview />;
+    case 'hangman-relay-mp':
+      return <HangmanRelayPreview />;
+    case 'pig-dice-mp':
+      return <PigDiceMpPreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1387,6 +1393,116 @@ function LudoSnakesPreview(): JSX.Element {
   );
 }
 /** Neutral fallback so an unknown slug never breaks the hub. */
+/** Bulls Race: four digit boxes + a 3-bulls hit. */
+function BullsRacePreview(): JSX.Element {
+  return (
+    <BoardFrame>
+      <g fill="currentColor" opacity="0.9">
+        {[0, 1, 2, 3].map((i) => (
+          <rect key={i} x={12 + i * 25} y="18" width="20" height="26" rx="4" opacity="0.25" />
+        ))}
+      </g>
+      <g
+        fill="currentColor"
+        fontFamily="monospace"
+        fontWeight="700"
+        fontSize="13"
+        textAnchor="middle"
+      >
+        <text x="22" y="36">
+          4
+        </text>
+        <text x="47" y="36">
+          7
+        </text>
+        <text x="72" y="36">
+          4
+        </text>
+        <text x="97" y="36">
+          1
+        </text>
+      </g>
+      <g fill="currentColor" opacity="0.85">
+        <circle cx="24" cy="60" r="4" />
+        <circle cx="40" cy="60" r="4" />
+        <circle cx="56" cy="60" r="4" />
+      </g>
+      <text x="74" y="64" fill="currentColor" fontSize="10" fontFamily="monospace" opacity="0.8">
+        3 bulls
+      </text>
+    </BoardFrame>
+  );
+}
+
+/** Hangman Relay: a gallows, a pattern with two letters, one strike. */
+function HangmanRelayPreview(): JSX.Element {
+  return (
+    <BoardFrame>
+      <g stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" opacity="0.75">
+        <path d="M26 72V12h24" />
+        <path d="M50 12v10" />
+        <path d="M50 46V56M44 62h12" />
+      </g>
+      <g fill="currentColor" fontFamily="monospace" fontWeight="700" fontSize="16">
+        <text x="62" y="40">
+          M
+        </text>
+        <text x="80" y="40">
+          A
+        </text>
+        <text x="98" y="40">
+          P
+        </text>
+      </g>
+      <g stroke="currentColor" strokeWidth="2" opacity="0.6">
+        <path d="M58 46h14M76 46h14M94 46h14" />
+      </g>
+      <text x="62" y="66" fill="currentColor" fontSize="10" fontFamily="monospace" opacity="0.8">
+        2 misses
+      </text>
+    </BoardFrame>
+  );
+}
+
+/** Pig Dice MP: a die showing 5 and a chunky pot total. */
+function PigDiceMpPreview(): JSX.Element {
+  return (
+    <BoardFrame>
+      <rect
+        x="14"
+        y="14"
+        width="42"
+        height="42"
+        rx="9"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        opacity="0.85"
+      />
+      <g fill="currentColor">
+        <circle cx="24" cy="24" r="3.4" />
+        <circle cx="46" cy="24" r="3.4" />
+        <circle cx="35" cy="35" r="3.4" />
+        <circle cx="24" cy="46" r="3.4" />
+        <circle cx="46" cy="46" r="3.4" />
+      </g>
+      <text
+        x="66"
+        y="34"
+        fill="currentColor"
+        fontSize="13"
+        fontFamily="monospace"
+        fontWeight="700"
+        opacity="0.85"
+      >
+        pot 17
+      </text>
+      <text x="66" y="54" fill="currentColor" fontSize="10" fontFamily="monospace" opacity="0.7">
+        84 / 100
+      </text>
+    </BoardFrame>
+  );
+}
+
 function PlaceholderPreview(): JSX.Element {
   return (
     <BoardFrame>

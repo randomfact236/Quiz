@@ -83,6 +83,36 @@ import {
   crValidateMove,
 } from './games/coderace-mp.core';
 import {
+  BrState,
+  brApplyMove,
+  brBotCode,
+  brBotGuess,
+  brInitialState,
+  brIsOver,
+  brPlacement,
+  brValidateMove,
+} from './games/bullsrace-mp.core';
+import {
+  HmState,
+  hmApplyMove,
+  hmBotLetter,
+  hmBotWord,
+  hmInitialState,
+  hmPlacement,
+  hmRedactFor,
+  hmValidateMove,
+} from './games/hangman-mp.core';
+import {
+  PdState,
+  pdApplyMove,
+  pdBotMove,
+  pdInitialState,
+  pdIsOver,
+  pdPlacement,
+  pdValidateMove,
+  pdWinner,
+} from './games/pigdice-mp.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -1369,6 +1399,210 @@ class YatzyAdapter implements PartyAdapter {
   }
 }
 
+/**
+ * Bulls Race MP (T28 3P + F28 4P): bulls-only code race — the maker's code
+ * never crosses the API until the table settles (redactFor).
+ */
+class BullsRaceAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return brInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): BrState {
+    return state as unknown as BrState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return brValidateMove(this.as(state), seat, move as { code?: number[]; guess?: number[] });
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return brApplyMove(
+      this.as(state),
+      seat,
+      move as { code?: number[]; guess?: number[] }
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return brIsOver(this.as(state));
+  }
+
+  winner(): number | null {
+    return null; // rank game — placement() orders everyone
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    const s = this.as(state);
+    if (s.phase === 'setting') return { code: brBotCode() };
+    return { guess: brBotGuess(s, seat, tier) };
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // brApplyMove already computed the correct next breaker seat.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return brPlacement(this.as(state));
+  }
+
+  /** The maker's code never crosses the API while the race runs. */
+  redactFor(state: Record<string, unknown>): Record<string, unknown> {
+    const s = this.as(state);
+    if (s.phase === 'finished') return state;
+    return { ...state, code: null };
+  }
+}
+
+/**
+ * Hangman Relay MP (T30 3P + F30 4P): trust-relayed hangman — write a word
+ * for the next seat, race to solve your own, 6 strikes and you are out.
+ */
+class HangmanAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return hmInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): HmState {
+    return state as unknown as HmState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return hmValidateMove(this.as(state), seat, move as { word?: unknown; letter?: unknown });
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return hmApplyMove(
+      this.as(state),
+      seat,
+      move as { word?: unknown; letter?: unknown }
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return this.as(state).phase === 'finished';
+  }
+
+  winner(): number | null {
+    return null; // rank game — placement() orders everyone
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    const s = this.as(state);
+    if (s.phase === 'writing') return { word: hmBotWord(seat) };
+    return { letter: hmBotLetter(s, seat, tier) };
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return hmPlacement(this.as(state));
+  }
+
+  /** Unsettled words only ever cross the API to the seat that wrote them. */
+  redactFor(state: Record<string, unknown>, seat: number | null): Record<string, unknown> {
+    return hmRedactFor(this.as(state), seat) as unknown as Record<string, unknown>;
+  }
+}
+
+/**
+ * Pig Dice MP (T33 3P + F5 4P): server-rolled push-your-luck to 100.
+ * The die is rolled HERE (approved server-roll precedent) — clients only
+ * send {roll:true} / {hold:true}; every number is public.
+ */
+class PigDiceMpAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return pdInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): PdState {
+    return state as unknown as PdState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return pdValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    const die = 1 + Math.floor(Math.random() * 6);
+    return pdApplyMove(
+      this.as(state),
+      seat,
+      move as { roll?: boolean; hold?: boolean },
+      die
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return pdIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return pdWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return pdBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // A non-1 roll keeps the seat's turn; pdApplyMove already set it.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return pdPlacement(this.as(state));
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -1391,6 +1625,9 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'dominoes-mp': new DominoesAdapter(),
   'crazy-eights-mp': new CrazyEightsAdapter(),
   'yatzy-mp': new YatzyAdapter(),
+  'bulls-race-mp': new BullsRaceAdapter(),
+  'hangman-relay-mp': new HangmanAdapter(),
+  'pig-dice-mp': new PigDiceMpAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

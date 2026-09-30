@@ -40,6 +40,9 @@ class CreatePartyDto {
     'dominoes-mp',
     'crazy-eights-mp',
     'yatzy-mp',
+    'bulls-race-mp',
+    'hangman-relay-mp',
+    'pig-dice-mp',
   ])
   gameSlug: string;
 
