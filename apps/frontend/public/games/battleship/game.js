@@ -640,6 +640,19 @@ function onlineFire(cell) {
     });
 }
 
+/** The server said the online match is over — tally and show the overlay. */
+function finishOnlineRound(view) {
+  state.locked = true;
+  state.winner = view.winner === 0 ? 0 : view.winner;
+  if (view.winner === 1) state.series.r++;
+  else if (view.winner === 2) state.series.b++;
+  saveSeries(currentSetupKey(), state.series);
+  renderBattle();
+  renderMiniSeries();
+  showOverlay(view.winner === view.yourMark, view.winner === 1 ? 1 : 2);
+  stopOnlinePoll();
+}
+
 /* ---- toast / vibrate -------------------------------------------------------------- */
 
 let toastTimer = null;
