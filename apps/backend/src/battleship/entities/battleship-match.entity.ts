@@ -31,7 +31,7 @@ export class BattleshipMatch {
   @Column({ type: 'jsonb', nullable: true })
   bFleet: { cells: number[] }[] | null;
 
-  /** Shots each player FIRED at the enemy (64: 0 none | 1 hit). */
+  /** Shots each player FIRED at the enemy (64: 0 none | 1 hit | 2 miss). */
   @Column({ type: 'jsonb' })
   rShots: number[];
 

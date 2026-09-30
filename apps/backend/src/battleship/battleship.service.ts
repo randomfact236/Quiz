@@ -136,7 +136,7 @@ export class BattleshipService {
     const result = ship ? 'hit' : 'miss';
 
     const nextMyShots = [...myShots];
-    nextMyShots[cell] = result === 'hit' ? 1 : 0;
+    nextMyShots[cell] = result === 'hit' ? 1 : 2; // 1 = hit, 2 = miss — fired cells stay non-zero
     const nextEnemyIncoming = [...enemyIncoming];
     nextEnemyIncoming[cell] = result === 'hit' ? 2 : 1;
     const sunk =

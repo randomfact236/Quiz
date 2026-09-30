@@ -293,8 +293,11 @@ function startBattle() {
 
 function localFire(cell) {
   if (state.phase !== 'battle' || !state.myTurn || state.myShots[cell] !== 0) return;
-  state.myShots = fire(state.myShots, cell);
   const { result, sunk } = resolveShot(state.theirFleet, state.myShots, cell);
+  if (result === 'invalid') return;
+  const nextShots = Uint8Array.from(state.myShots);
+  nextShots[cell] = result === 'hit' ? 1 : 2; // 1 = hit, 2 = miss — the grid + disable guard read this
+  state.myShots = nextShots;
   if (result === 'hit' && sunk) toast('You sank a ' + sunk + '-cell ship!');
   if (allSunk(state.theirFleet, state.myShots)) {
     finishLocal(1);
@@ -555,7 +558,7 @@ function startOnlinePlacement(view) {
 
 function submitOnlineFleet() {
   const fleet = state.myFleet.filter(Boolean);
-  if (!fleetComplete({ fleet: [state.myFleet[0], state.myFleet[1], state.myFleet[2]] })) return;
+  if (!fleetComplete(state.myFleet)) return;
   onlineApi('/battleship/' + encodeURIComponent(state.online.code) + '/fleet', {
     guestId: onlineGuestId(),
     fleet,

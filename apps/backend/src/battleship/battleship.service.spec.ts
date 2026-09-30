@@ -118,6 +118,7 @@ describe('BattleshipService', () => {
     // 🔴 fires at open water
     let res = (await service.fire('ABC234', { guestId: 'guest-R', cell: 40 })) as any;
     expect(res.lastShot).toEqual({ cell: 40, result: 'miss', sunk: null });
+    expect(res.yourShots[40]).toBe(2); // the miss persists as non-zero — re-fire is blocked, the cell renders as a miss
     expect(match.turn).toBe(2);
     await expect(service.fire('ABC234', { guestId: 'guest-R', cell: 41 })).rejects.toThrow(
       BadRequestException
@@ -131,6 +132,10 @@ describe('BattleshipService', () => {
     // the last cell of the sunk ship comes with its length
     res = (await service.fire('ABC234', { guestId: 'guest-B', cell: 1 })) as any;
     expect(res.lastShot).toEqual({ cell: 1, result: 'hit', sunk: null });
+    // a miss stays marked — re-firing a missed cell is rejected even on your turn
+    await expect(service.fire('ABC234', { guestId: 'guest-R', cell: 41 })).rejects.toThrow(
+      BadRequestException
+    );
     await service.fire('ABC234', { guestId: 'guest-R', cell: 42 });
     res = (await service.fire('ABC234', { guestId: 'guest-B', cell: 2 })) as any;
     expect(res.lastShot.result).toBe('hit');
