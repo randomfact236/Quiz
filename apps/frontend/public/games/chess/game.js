@@ -154,7 +154,13 @@ function buildBoard() {
 function pieceHtml(piece) {
   const type = typeOf(piece);
   const white = isWhite(piece);
-  return '<span class="piece piece--' + (white ? 'w' : 'b') + '">' + PIECE_GLYPH[type][white ? 2 : 1] + '</span>';
+  return (
+    '<span class="piece piece--' +
+    (white ? 'w' : 'b') +
+    '">' +
+    PIECE_GLYPH[type][white ? 2 : 1] +
+    '</span>'
+  );
 }
 
 function renderBoard() {
@@ -164,7 +170,9 @@ function renderBoard() {
   const castleDests = new Set(
     moves.filter((m) => m.from === fromSelected && m.castle).map((m) => m.to)
   );
-  const captures = new Set(moves.filter((m) => m.captured !== EMPTY || m.enPassant).map((m) => m.to));
+  const captures = new Set(
+    moves.filter((m) => m.captured !== EMPTY || m.enPassant).map((m) => m.to)
+  );
   const checked = isInCheck(state.game.board, state.game.turn)
     ? findKing(state.game.board, state.game.turn)
     : -1;
@@ -173,7 +181,10 @@ function renderBoard() {
     const sq = Number(cell.dataset.sq);
     const piece = state.game.board[sq];
     cell.innerHTML = piece === EMPTY ? '' : pieceHtml(piece);
-    cell.className = cell.className.replace(/ square--(legal|capture|castle|check|moved|thinking)/g, '');
+    cell.className = cell.className.replace(
+      / square--(legal|capture|castle|check|moved|thinking)/g,
+      ''
+    );
     if (dests.has(sq)) cell.classList.add('square--legal');
     if (dests.has(sq) && captures.has(sq)) cell.classList.add('square--capture');
     if (castleDests.has(sq)) cell.classList.add('square--castle');
@@ -239,7 +250,8 @@ function renderCaptures() {
 }
 
 function renderMiniSeries() {
-  els.miniSeries.textContent = '⚪ ' + state.series.w + ' · 🤝 ' + state.series.draw + ' · ⚫ ' + state.series.b;
+  els.miniSeries.textContent =
+    '⚪ ' + state.series.w + ' · 🤝 ' + state.series.draw + ' · ⚫ ' + state.series.b;
 }
 
 function renderAll() {
@@ -299,7 +311,8 @@ function onSquareTap(sq) {
   if (options.some((m) => m.promotion)) {
     state.pendingPromotion = { from: state.selected, to: sq, side };
     els.promoBar.classList.remove('hidden');
-    for (const b of els.promoBar.querySelectorAll('button')) b.setAttribute('aria-pressed', 'false');
+    for (const b of els.promoBar.querySelectorAll('button'))
+      b.setAttribute('aria-pressed', 'false');
     return;
   }
   playMove(options[0]);
@@ -309,7 +322,8 @@ function choosePromotion(type) {
   const pending = state.pendingPromotion;
   if (!pending) return;
   const move = legalMoves(state.game).find(
-    (m) => m.from === pending.from && m.to === pending.to && m.promotion === make(type, pending.side)
+    (m) =>
+      m.from === pending.from && m.to === pending.to && m.promotion === make(type, pending.side)
   );
   els.promoBar.classList.add('hidden');
   state.pendingPromotion = null;
@@ -327,7 +341,10 @@ function playMove(move) {
   state.lastMove = move;
   state.selected = -1;
   renderAll();
-  if (result.captured !== EMPTY) toast(`${SIDE_LABEL[side]} takes ${SIDE_LABEL[colourOf(result.captured) === WHITE ? BLACK : WHITE].split(' ')[1].toLowerCase()}`);
+  if (result.captured !== EMPTY)
+    toast(
+      `${SIDE_LABEL[side]} takes ${SIDE_LABEL[colourOf(result.captured) === WHITE ? BLACK : WHITE].split(' ')[1].toLowerCase()}`
+    );
   const ending = outcome(state.game);
   if (ending) {
     endGame(ending, side);
@@ -530,7 +547,9 @@ function onlineCreate() {
       const link = 'https://pigzap.com/games/chess/?ch=' + code;
       onlineStatus('Match ' + code + ' — waiting for a challenger. Send: ' + link);
       if (navigator.share) {
-        navigator.share({ title: 'Chess duel', text: 'Duel me — match ' + code, url: link }).catch(() => undefined);
+        navigator
+          .share({ title: 'Chess duel', text: 'Duel me — match ' + code, url: link })
+          .catch(() => undefined);
       }
       state.online.pollTimer = setInterval(pollOnline, 3000);
     })
@@ -547,7 +566,7 @@ function onlineJoin(code) {
     .then((view) => {
       state.online = {
         code: view.code,
-        mark: view.yourMark,
+        mark: view.yourMark === 1 ? WHITE : BLACK, // the client's side encoding is boolean (see SIDE_LABEL)
         pollTimer: null,
         wName: view.wName,
         bName: view.bName,
@@ -565,7 +584,12 @@ function onlineJoin(code) {
 
 function pollOnline() {
   if (!state.online || state.online.busy) return;
-  onlineApi('/chess/' + encodeURIComponent(state.online.code) + '?guestId=' + encodeURIComponent(onlineGuestId()))
+  onlineApi(
+    '/chess/' +
+      encodeURIComponent(state.online.code) +
+      '?guestId=' +
+      encodeURIComponent(onlineGuestId())
+  )
     .then((view) => {
       if (!state.online) return;
       state.online.wName = view.wName;
@@ -629,7 +653,8 @@ function onlineTap(sq) {
   if (options.some((m) => m.promotion)) {
     state.pendingPromotion = { from: state.selected, to: sq, side, online: true };
     els.promoBar.classList.remove('hidden');
-    for (const b of els.promoBar.querySelectorAll('button')) b.setAttribute('aria-pressed', 'false');
+    for (const b of els.promoBar.querySelectorAll('button'))
+      b.setAttribute('aria-pressed', 'false');
     return;
   }
   sendOnlineMove(options[0]);
@@ -650,7 +675,9 @@ function sendOnlineMove(move) {
     })
     .catch((e) => {
       if (state.online) state.online.busy = false;
-      toast(e.message === 'Illegal move' ? 'The server rejected that move' : 'Move rejected — try again');
+      toast(
+        e.message === 'Illegal move' ? 'The server rejected that move' : 'Move rejected — try again'
+      );
       pollOnline();
     });
 }
@@ -659,7 +686,8 @@ function sendOnlineMove(move) {
 
 function shareText() {
   const url = 'https://pigzap.com/games/chess/';
-  const score = '⚪ ' + state.series.w + ' · ⚫ ' + state.series.b + ' · draws ' + state.series.draw;
+  const score =
+    '⚪ ' + state.series.w + ' · ⚫ ' + state.series.b + ' · draws ' + state.series.draw;
   if (state.mode === '2p') return t('share2p', { score, url });
   return t('share1p', { setup: 'Chess vs the computer (' + state.difficulty + ')', score, url });
 }
@@ -669,8 +697,12 @@ function shareUrls() {
   const text = shareText();
   const textNoUrl = text.split(url).join('').replace(/\s+/g, ' ').trim();
   document.getElementById('share-fb').href =
-    'https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(url) + '&quote=' + encodeURIComponent(textNoUrl);
-  document.getElementById('share-x').href = 'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
+    'https://www.facebook.com/sharer/sharer.php?u=' +
+    encodeURIComponent(url) +
+    '&quote=' +
+    encodeURIComponent(textNoUrl);
+  document.getElementById('share-x').href =
+    'https://twitter.com/intent/tweet?text=' + encodeURIComponent(text);
   document.getElementById('share-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
   document.getElementById('share-copy').dataset.copy = text;
 }
@@ -720,7 +752,10 @@ function bindSegmented(container, attr, onPick) {
 function syncSegmented(container, attr, value) {
   const buttons = container.querySelectorAll('button[' + attr + ']');
   for (let i = 0; i < buttons.length; i++) {
-    buttons[i].setAttribute('aria-checked', buttons[i].getAttribute(attr) === value ? 'true' : 'false');
+    buttons[i].setAttribute(
+      'aria-checked',
+      buttons[i].getAttribute(attr) === value ? 'true' : 'false'
+    );
   }
 }
 
@@ -770,12 +805,16 @@ function init() {
     renderSeriesCard();
     saveMenuPrefs();
   });
-  bindSegmented(document.getElementById('difficulty-segmented'), 'data-difficulty', (difficulty) => {
-    state.difficulty = difficulty;
-    refreshSeriesFromStorage();
-    renderSeriesCard();
-    saveMenuPrefs();
-  });
+  bindSegmented(
+    document.getElementById('difficulty-segmented'),
+    'data-difficulty',
+    (difficulty) => {
+      state.difficulty = difficulty;
+      refreshSeriesFromStorage();
+      renderSeriesCard();
+      saveMenuPrefs();
+    }
+  );
 
   document.getElementById('btn-play').addEventListener('click', () => {
     refreshSeriesFromStorage();
@@ -860,7 +899,11 @@ function init() {
     state.difficulty = prefs.difficulty;
     applyModeUi(state.mode);
     syncSegmented(document.getElementById('mode-segmented'), 'data-mode', state.mode);
-    syncSegmented(document.getElementById('difficulty-segmented'), 'data-difficulty', state.difficulty);
+    syncSegmented(
+      document.getElementById('difficulty-segmented'),
+      'data-difficulty',
+      state.difficulty
+    );
   }
 
   refreshSeriesFromStorage();
@@ -916,13 +959,25 @@ if (typeof document !== 'undefined' && document.getElementById('board')) {
       var a = document.getElementById(pair[0]);
       if (a && !wired.has(a)) {
         wired.add(a);
-        a.addEventListener('click', function () { ping(pair[1]); }, { once: true, capture: true });
+        a.addEventListener(
+          'click',
+          function () {
+            ping(pair[1]);
+          },
+          { once: true, capture: true }
+        );
       }
     });
     var copy = document.getElementById('share-copy');
     if (copy && !wired.has(copy)) {
       wired.add(copy);
-      copy.addEventListener('click', function () { ping('copy'); }, { once: true, capture: true });
+      copy.addEventListener(
+        'click',
+        function () {
+          ping('copy');
+        },
+        { once: true, capture: true }
+      );
     }
   };
   var btn = document.getElementById('btn-share');
