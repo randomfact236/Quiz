@@ -134,7 +134,6 @@
     });
     el('party-create').addEventListener('click', createTable);
     el('party-join').addEventListener('click', joinTable);
-    el('party-back').addEventListener('click', () => show('menu'));
     el('party-lobby-back').addEventListener('click', () => show('menu'));
     if (cfg.partyCode) {
       // Deep link (?party=CODE): jump straight to joining.
