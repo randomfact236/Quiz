@@ -57,6 +57,7 @@
       }
     }
     if (pair.guestId) S.party.guestId = pair.guestId;
+    if (body && typeof body === 'object' && body.guestId) body.guestId = S.party.guestId;
     const headers = { ...(body ? { 'Content-Type': 'application/json' } : {}) };
     if (pair.token) headers['X-Guest-Token'] = pair.token;
     const res = await fetch(cfg.apiBase + '/party' + path, {

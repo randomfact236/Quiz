@@ -101,7 +101,7 @@
               ...(body ? { 'Content-Type': 'application/json' } : {}),
               'X-Guest-Token': fresh.token,
             },
-            body: body ? JSON.stringify(body) : undefined,
+            body: body ? JSON.stringify({ ...body, guestId: S.party.guestId }) : undefined,
           }
         );
         if (!retry.ok) throw new Error('Request failed');

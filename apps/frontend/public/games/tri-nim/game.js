@@ -38,6 +38,26 @@
     const headers = {};
     if (body) headers['Content-Type'] = 'application/json';
     if (pair.token) headers['X-Guest-Token'] = pair.token;
+    // Fresh-visitor guest bootstrap: mint the signed pair before any write.
+    let bpair = pair;
+    if (!bpair || !bpair.token) {
+      try {
+        const mint = await fetch(cfg.apiBase + '/guest-users/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ legacyId: (bpair && bpair.guestId) || S.party.guestId || null }),
+        });
+        if (mint.ok) {
+          bpair = await mint.json();
+          try {
+            localStorage.setItem('aiquiz:guest-token', JSON.stringify(bpair));
+          } catch (_) {}
+        }
+      } catch (_) {}
+    }
+    if (bpair && bpair.guestId) S.party.guestId = bpair.guestId;
+    if (bpair && bpair.token) headers['X-Guest-Token'] = bpair.token;
+    if (body && typeof body === 'object' && body.guestId) body.guestId = S.party.guestId;
     const res = await fetch(
       cfg.apiBase +
         '/party' +
@@ -89,6 +109,14 @@
         enterGame();
       } catch (e) {
         flash($('menu-msg'), e.message);
+      }
+    });
+    $('btn-start').addEventListener('click', async function () {
+      try {
+        await api('/' + S.party.code + '/start', { guestId: S.party.guestId });
+        poll();
+      } catch (e) {
+        flash($('status'), e.message);
       }
     });
     $('btn-leave').addEventListener('click', async function () {
@@ -146,6 +174,7 @@
           : view.yourTurn
             ? 'Your turn — pick a row, then Take.'
             : 'Waiting…';
+    $('btn-start').hidden = !(view.yourSeat === 0 && view.status === 'waiting');
     renderBoard(view);
   }
   function placementText(view) {
