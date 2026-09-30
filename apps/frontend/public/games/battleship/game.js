@@ -358,7 +358,7 @@ function finishLocal(iWon) {
 function showOverlay(youWon, winner) {
   els.overlayEmoji.textContent = winner === 0 ? '🤝' : youWon ? '🎉' : '😬';
   els.overlayTitle.textContent =
-    winner === 0 ? 'Draw' : youWon ? 'You win!' : markName(winner === 1 ? 2 : 1) + ' wins';
+    winner === 0 ? 'Draw' : youWon ? 'You win!' : markName(winner) + ' wins';
   els.overlaySub.textContent =
     'Series — 🔴 ' + state.series.r + ' · 🔵 ' + state.series.b + ' · 🤝 ' + state.series.draw;
   els.overlay.classList.remove('hidden');

@@ -230,13 +230,15 @@ function finishLocal(iWon) {
 
 /* ---- round overlay -------------------------------------------------------------- */
 
-function showOverlay(youWon) {
+function showOverlay(youWon, winnerMark) {
   els.overlayEmoji.textContent = youWon ? '🎉' : '😬';
   els.overlayTitle.textContent = youWon
     ? 'You win!'
     : state.mode === '1p'
       ? 'Computer wins'
-      : 'Blue wins';
+      : state.mode === '2p'
+        ? 'Blue wins'
+        : (winnerMark === 1 ? '🔴 Red' : '🔵 Blue') + ' wins!';
   els.overlaySub.textContent =
     'Series — 🔴 ' + state.series.r + ' · 🔵 ' + state.series.b + ' · 🤝 ' + state.series.draw;
   els.overlay.classList.remove('hidden');
@@ -446,7 +448,7 @@ function applyOnlineView(view) {
     else state.series.b++;
     saveSeries(currentSetupKey(), state.series);
     renderMiniSeries();
-    showOverlay(youWon);
+    showOverlay(youWon, view.winner);
     stopOnlinePoll();
   }
 }
