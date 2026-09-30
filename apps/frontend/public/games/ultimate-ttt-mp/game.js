@@ -210,6 +210,7 @@
         } else if (
           view.yourTurn &&
           view.status === 'running' &&
+          !view.state.boardDone[b] &&
           (view.state.activeBoard === -1 || view.state.activeBoard === b)
         ) {
           cellEl.classList.add('open');
