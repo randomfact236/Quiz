@@ -70,7 +70,7 @@ const opponentLabel = () => (state.mode === '1p' ? '💻 Computer' : state.bName
  *  server who is up. */
 function whoseThrow() {
   if (state.mode === 'online') {
-    return state.online && state.online.myTurn ? myMark() : state.pendingBy || 1;
+    return state.online && state.online.myTurn ? myMark() : myMark() === 1 ? 2 : 1;
   }
   return state.pending ? (state.pending.by === 1 ? 2 : 1) : 1;
 }
@@ -381,7 +381,7 @@ function onlineJoin(code) {
         mark: view.yourMark,
         pollTimer: null,
         busy: false,
-        myTurn: view.theirPending === false && view.yourPending === false,
+        myTurn: !view.yourPending,
       };
       refreshSeriesFromStorage();
       showScreen('playing');
@@ -422,16 +422,18 @@ function applyOnlineView(view) {
     lastRound: view.lastRound,
     target: view.target || DEFAULT_TARGET,
   };
-  state.roundNo = view.round;
-  if (state.online) state.online.myTurn = !view.theirPending;
+  if (typeof view.round === 'number') state.roundNo = view.round;
+  if (state.online) state.online.myTurn = !view.yourPending;
   if (view.lastRound) {
     const r = view.lastRound;
     const youWon = r.result === (isRed ? 'R' : 'Y');
     state.notice = describeRound(youWon ? 'you' : 'them', r.you, r.them);
-  } else if (view.theirPending && state.online && !view.yourPending) {
-    state.notice = '🔒 Your throw is in — waiting for the reveal';
+  } else if (view.yourPending && view.theirPending) {
+    state.notice = '🔒 Both in — revealing…';
   } else if (view.yourPending) {
     state.notice = '🔒 Thrown — waiting for your opponent';
+  } else if (view.theirPending) {
+    state.notice = '⚡ Opponent is in — throw to reveal!';
   } else {
     state.notice = '';
   }
