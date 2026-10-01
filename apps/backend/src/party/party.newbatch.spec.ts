@@ -132,6 +132,25 @@ describe('PartyService — bulls-race / hangman-relay / pig-dice bot playthrough
     expect(last.state.words.every((w: unknown) => typeof w === 'string')).toBe(true);
   }, 300000);
 
+  it('hangman-relay-mp: a human writes and the bot seats follow (no stall)', async () => {
+    const { code } = await service.create({
+      gameSlug: 'hangman-relay-mp',
+      playerName: 'Ana',
+      guestId: 'g1',
+      seats: 3,
+    });
+    match.code = code;
+    await service.start(code, { guestId: 'g1' });
+    await service.move(code, { guestId: 'g1', move: { word: 'MAPLE' } });
+    const v = (await service.view(code, 'g1')) as any;
+    expect(v.status).toBe('running');
+    expect(v.state.phase).toBe('solving');
+    expect(v.yourTurn).toBe(true); // seat 0 guesses first
+    expect(v.state.words[0]).toBe('MAPLE'); // the writer sees their own
+    expect(v.state.words[1]).toBeNull(); // others stay hidden
+    expect(v.state.puzzles[1].length).toBe(5); // MAPLE went to seat 1's puzzle
+  });
+
   it('hangman-relay-mp 4P: finished with every puzzle settled (solved or out)', async () => {
     const last = await playOut('hangman-relay-mp', 4, 700);
     expect(last.status).toBe('finished');
@@ -194,6 +213,17 @@ describe('PartyService — bulls-race / hangman-relay / pig-dice bot playthrough
     // bot guess must reproduce its own feedback
     const bot = brBotGuess(st, 2, 'medium');
     expect(bot.length).toBe(4);
+  });
+
+  it('hangman core: writing rotation advances to the next unwritten seat', () => {
+    let st = hmInitialState(3);
+    st = hmApplyMove(st, 0, { word: 'CAT' });
+    expect(st.turn).toBe(1);
+    st = hmApplyMove(st, 2, { word: 'PIG' }); // out-of-order writer
+    expect(st.turn).toBe(1); // seat 1 still owes the last word
+    st = hmApplyMove(st, 1, { word: 'DOG' });
+    expect(st.phase).toBe('solving');
+    expect(st.turn).toBe(0);
   });
 
   it('hangman core: word normalize, double-write rejection, strike-out', () => {

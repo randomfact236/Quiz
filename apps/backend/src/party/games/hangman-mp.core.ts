@@ -119,7 +119,10 @@ export function hmApplyMove(
     if (words.every((w) => w !== null)) {
       return { ...state, words, puzzles, phase: 'solving', turn: 0 };
     }
-    return { ...state, words, puzzles };
+    // Writing is not a turn power — it is a relay: after each word, the
+    // engine moves to the next seat that still owes one (keeps bot seats
+    // advancing without a human turn gate).
+    return { ...state, words, puzzles, turn: hmNextWriter({ ...state, words }, seat) };
   }
   const letter = hmValidLetter(move.letter) as string;
   const puzzles = state.puzzles.slice();
@@ -143,6 +146,14 @@ export function hmApplyMove(
   const nextSeat = hmNextActive(next, seat);
   if (nextSeat < 0) return { ...next, phase: 'finished' };
   return { ...next, turn: nextSeat };
+}
+
+function hmNextWriter(state: HmState, afterSeat: number): number {
+  for (let k = 1; k <= state.seatCount; k++) {
+    const s = (afterSeat + k) % state.seatCount;
+    if (state.words[s] === null) return s;
+  }
+  return afterSeat;
 }
 
 function hmNextActive(state: HmState, afterSeat: number): number {
