@@ -214,7 +214,9 @@
       cell.textContent = txt;
       var clickable = false;
       if (iAmPlacing) clickable = true;
-      else if (battlePhase && view.yourTurn && fired === 0 && !ownSet[k]) clickable = true;
+      // any unfired cell is fireable — own waters included (fleets overlap,
+      // and the server allows it so shared cells can never deadlock)
+      else if (battlePhase && view.yourTurn && fired === 0) clickable = true;
       cell.disabled = !clickable;
     }
     $('phase-hint').textContent = iAmPlacing
@@ -229,7 +231,7 @@
             ')'
           : 'all ships ready \u2014 lay the fleet!')
       : battlePhase
-        ? 'Fire at any cell that has not been hit and is not your own fleet. Hits are public.'
+        ? 'Fire at any cell that has not been fired at. Hits are public \u2014 and your own waters are fair game (careful!).'
         : '';
     $('status').textContent =
       view.status === 'waiting'

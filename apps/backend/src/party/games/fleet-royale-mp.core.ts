@@ -112,10 +112,10 @@ export function frValidateMove(state: FrState, seat: number, move: unknown): str
   const shot = m.shot as number;
   if (shot < 0 || shot >= FR_ROWS * FR_COLS) return 'That shot is off the sea.';
   if (state.fired[shot] !== 0) return 'That cell was already fired at.';
-  const own = state.fleets[seat];
-  if (own && own.some((ship) => ship.cells.includes(shot))) {
-    return 'Those are your own waters — pick an enemy cell.';
-  }
+  // Any unfired cell is fair game — including your own waters. Fleets can
+  // overlap, so a cell can host several captains' segments; forbidding
+  // "own" cells would let a shared cell become unfireable by everyone and
+  // freeze the battle (found in live QA). Bots simply prefer other cells.
   return null;
 }
 

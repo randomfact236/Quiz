@@ -135,9 +135,10 @@ describe('PartyService — chomp-elimination / fleet-royale bot playthroughs', (
     st = ad.apply(st, 0, { shot: 3 });
     expect(st.fired[3]).toBe(2);
     expect(st.hitsBySeat[1]).toEqual([3]);
-    // seat 1's turn now; own waters rejected, fresh cell fine
-    expect(ad.validate(st, 1, { shot: 11 })).toContain('own waters');
-    expect(ad.validate(st, 1, { shot: 23 })).toBeNull(); // wait — cell 23? fired? no. But 23 is seat2's; fine for validation
+    // seat 1's turn now: own waters are legal too (overlap deadlock fix),
+    // repeated cells are not
+    expect(ad.validate(st, 1, { shot: 11 })).toBeNull(); // own waters allowed
+    expect(ad.validate(st, 1, { shot: 23 })).toBeNull();
     expect(ad.validate(st, 1, { shot: 3 })).toContain('already');
   });
 
