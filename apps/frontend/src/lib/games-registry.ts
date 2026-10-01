@@ -372,6 +372,26 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #0891b2 0%, #172554 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'sprouts',
+    emoji: '🌱',
+    title: 'Sprouts',
+    blurb:
+      'Connect the dots until nobody can draw - every line burns a life and plants a new dot. Last line wins. Empty seats are bots.',
+    gradient: 'from-lime-600 to-emerald-950',
+    cssGradient: 'linear-gradient(135deg, #65a30d 0%, #022c22 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'pente-3',
+    emoji: '⚫',
+    title: 'Pente-3',
+    blurb:
+      'Three colours, one board - five in a row or five captured pairs wins, and sandwiches steal stones. Empty seats are bots.',
+    gradient: 'from-rose-700 to-stone-900',
+    cssGradient: 'linear-gradient(135deg, #be123c 0%, #1c1917 100%)',
+    players: [3, 4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

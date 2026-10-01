@@ -93,6 +93,10 @@ function previewSvg(slug: string): JSX.Element {
       return <ChompPreview />;
     case 'fleet-royale':
       return <FleetRoyalePreview />;
+    case 'sprouts':
+      return <SproutsPreview />;
+    case 'pente-3':
+      return <Pente3Preview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1572,6 +1576,81 @@ function FleetRoyalePreview(): JSX.Element {
     }
   }
   return <BoardFrame>{marks}</BoardFrame>;
+}
+
+/** Sprouts: a little doodle web of dots and lines. */
+function SproutsPreview(): JSX.Element {
+  const dots: Array<[number, number]> = [
+    [70, 128],
+    [160, 52],
+    [248, 118],
+    [196, 162],
+    [104, 66],
+  ];
+  const lines = [
+    'M70 128 L160 52',
+    'M160 52 L248 118',
+    'M248 118 L196 162',
+    'M196 162 L70 128',
+    'M104 66 L196 162',
+  ];
+  return (
+    <BoardFrame>
+      {lines.map((d) => (
+        <path key={d} d={d} fill="none" stroke="currentColor" strokeWidth="2.6" opacity="0.45" />
+      ))}
+      <circle
+        cx="248"
+        cy="118"
+        r="30"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        opacity="0.35"
+        strokeDasharray="4 3"
+      />
+      {dots.map(([x, y]) => (
+        <circle key={x + '-' + y} cx={x} cy={y} r="9" fill="currentColor" opacity="0.8" />
+      ))}
+    </BoardFrame>
+  );
+}
+
+/** Pente-3: three-colour stones with a capture sandwich. */
+function Pente3Preview(): JSX.Element {
+  const cells: JSX.Element[] = [];
+  const N = 7;
+  const step = 27;
+  const ox = 44;
+  const oy = 38;
+  // role: 1/2/3 = stone colours, 0 = empty
+  const board = [
+    [0, 0, 1, 0, 0, 0, 0],
+    [0, 2, 0, 0, 3, 0, 0],
+    [0, 0, 1, 2, 2, 1, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 3, 0, 2, 0, 3, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 0],
+  ];
+  const opac: Record<number, number> = { 0: 0.14, 1: 0.9, 2: 0.55, 3: 0.75 };
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      const row = board[r] ?? [];
+      const v = row[c] ?? 0;
+      cells.push(
+        <circle
+          key={r + '-' + c}
+          cx={ox + c * step}
+          cy={oy + r * step}
+          r={v === 0 ? 3.2 : 9}
+          fill="currentColor"
+          opacity={opac[v] ?? 0.14}
+        />
+      );
+    }
+  }
+  return <BoardFrame>{cells}</BoardFrame>;
 }
 
 function PlaceholderPreview(): JSX.Element {

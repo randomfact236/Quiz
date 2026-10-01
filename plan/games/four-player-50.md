@@ -41,7 +41,7 @@
 | 18    | F5  | Pig Dice 4P            | [native·RNG·pre]       | XS    | BUILT  | four banks; triple-1 wipes the bank (approved server-roll)     | first to 100                                      |
 | 19    | F4  | Notakto 4P             | [variant]              | XS    | BUILT  | four X-writers, three boards; a line loses YOU                 | elimination order                                 |
 | 20    | F22 | Chomp Elimination 4P   | [variant·Chomp]        | XS    | BUILT  | poison-taker is out; survivors play on                         | elimination order                                 |
-| 21    | F21 | Sprouts 4P             | [native]               | S     | NOW    | spot-lives run out four-handed                                 | last mover 1st                                    |
+| 21    | F21 | Sprouts 4P             | [native]               | S     | BUILT  | spot-lives run out four-handed                                 | last mover 1st                                    |
 | 22    | F17 | Quadwall               | [native·Quoridor]      | M     | NOW    | official 4P Quoridor: four pawns, five walls each              | first finisher                                    |
 | 23    | F31 | Quarto Circle 4P       | [variant·Quarto]       | S     | NOW    | place what you were handed; hand to the next in the circle     | first quarto                                      |
 | 24    | F32 | Focus 4P               | [native]               | M     | NOW    | officially 2–4 players; stacks and reserves at four            | last with reserves                                |

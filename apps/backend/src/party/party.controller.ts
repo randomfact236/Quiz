@@ -45,6 +45,8 @@ class CreatePartyDto {
     'pig-dice-mp',
     'chomp-elimination',
     'fleet-royale',
+    'sprouts',
+    'pente-3',
   ])
   gameSlug: string;
 

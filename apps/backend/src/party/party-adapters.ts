@@ -135,6 +135,26 @@ import {
   frWinner,
 } from './games/fleet-royale-mp.core';
 import {
+  SprState,
+  sprApplyMove,
+  sprBotMove,
+  sprInitialState,
+  sprIsOver,
+  sprPlacement,
+  sprValidateMove,
+  sprWinner,
+} from './games/sprouts-mp.core';
+import {
+  P3State,
+  p3ApplyMove,
+  p3BotMove,
+  p3InitialState,
+  p3IsOver,
+  p3Placement,
+  p3ValidateMove,
+  p3Winner,
+} from './games/pente3-mp.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -1755,6 +1775,119 @@ class FleetRoyaleAdapter implements PartyAdapter {
   }
 }
 
+/**
+ * Sprouts MP (T16 3P + F21 4P): three line-ends per dot; draw a line
+ * between two live dots (or loop one back to itself) and plant a new dot
+ * on it. When the table can draw no more, the LAST MOVER wins.
+ */
+class SproutsAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return sprInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): SprState {
+    return state as unknown as SprState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return sprValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return sprApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return sprIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return sprWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return sprBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // The game can end on the move itself — apply() already decided the turn.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return sprPlacement(this.as(state));
+  }
+}
+
+/** Pente-3 MP (T19, seats up to 4): five in a row or five captured pairs. */
+class Pente3Adapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return p3InitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): P3State {
+    return state as unknown as P3State;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return p3ValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return p3ApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return p3IsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return p3Winner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return p3BotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return p3Placement(this.as(state));
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -1782,6 +1915,8 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'pig-dice-mp': new PigDiceMpAdapter(),
   'chomp-elimination': new ChompAdapter(),
   'fleet-royale': new FleetRoyaleAdapter(),
+  sprouts: new SproutsAdapter(),
+  'pente-3': new Pente3Adapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

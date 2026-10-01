@@ -38,8 +38,8 @@
 | 16    | T33 | Pig Dice 3P           | [native·RNG·pre]       | XS    | BUILT  | three banks push their luck; triple-1 wipes the bank               | first to 100                                      |
 | 17    | T14 | Notakto 3P            | [variant]              | XS    | BUILT  | all place X on three boards; a line loses YOU                      | elimination order                                 |
 | 18    | T15 | Chomp Elimination     | [variant·Chomp]        | XS    | BUILT  | poison-taker is out; survivors play on                             | elimination order                                 |
-| 19    | T16 | Sprouts 3P            | [native]               | S     | NOW    | spot-lives run out around the table                                | last mover 1st                                    |
-| 20    | T19 | Pente-3               | [variant·Pente]        | S     | NOW    | five-in-row or 5 captured pairs, three-way blocking                | first condition met                               |
+| 19    | T16 | Sprouts 3P            | [native]               | S     | BUILT  | spot-lives run out around the table                                | last mover 1st                                    |
+| 20    | T19 | Pente-3               | [variant·Pente]        | S     | BUILT  | five-in-row or 5 captured pairs, three-way blocking                | first condition met                               |
 | 21    | T20 | Quoridor-3            | [variant·Quoridor]     | M     | NOW    | three pawns, opposite edges, 6 walls each                          | first finisher                                    |
 | 22    | T25 | Connect6 3P           | [variant·Connect6]     | M     | NOW    | two stones per turn, rotating three ways                           | first six-in-row                                  |
 | 23    | T31 | Quarto Pass           | [variant·Quarto]       | S     | NOW    | place what the last player handed you; hand to the next            | first quarto                                      |
