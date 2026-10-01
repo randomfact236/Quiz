@@ -113,6 +113,28 @@ import {
   pdWinner,
 } from './games/pigdice-mp.core';
 import {
+  ChState,
+  chApplyMove,
+  chBotMove,
+  chInitialState,
+  chIsOver,
+  chPlacement,
+  chValidateMove,
+  chWinner,
+} from './games/chomp-mp.core';
+import {
+  FrShip,
+  FrState,
+  frApplyMove,
+  frBotMove,
+  frInitialState,
+  frIsOver,
+  frPlacement,
+  frRedactFor,
+  frValidateMove,
+  frWinner,
+} from './games/fleet-royale-mp.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -1603,6 +1625,136 @@ class PigDiceMpAdapter implements PartyAdapter {
   }
 }
 
+/**
+ * Chomp Elimination MP (T15 3P + F22 4P): the poison bite knocks you out,
+ * survivors get a fresh tray, last seat standing wins. All public.
+ */
+class ChompAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return chInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): ChState {
+    return state as unknown as ChState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return chValidateMove(this.as(state), seat, move as { cell: [number, number] });
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return chApplyMove(
+      this.as(state),
+      seat,
+      move as { cell: [number, number] }
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return chIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return chWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return chBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return chPlacement(this.as(state));
+  }
+}
+
+/**
+ * Fleet Royale MP (T29 3P + F29 4P): one shared sea, overlapping secret
+ * fleets, rotating shots; a live fleet never crosses the API (redactFor).
+ */
+class FleetRoyaleAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return frInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): FrState {
+    return state as unknown as FrState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return frValidateMove(this.as(state), seat, move as { fleet?: unknown; shot?: unknown });
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return frApplyMove(
+      this.as(state),
+      seat,
+      move as { fleet?: FrShip[]; shot?: number }
+    ) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return frIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return frWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return frBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // Placement is a relay and elimination skips seats — frApplyMove already
+    // computed the right next turn for both phases.
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return frPlacement(this.as(state));
+  }
+
+  /** Live fleets stay server-side except for their owner; hits are public
+   *  only as shared-board markers plus the per-seat segments-left count. */
+  redactFor(state: Record<string, unknown>, seat: number | null): Record<string, unknown> {
+    return frRedactFor(this.as(state), seat) as unknown as Record<string, unknown>;
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -1628,6 +1780,8 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'bulls-race-mp': new BullsRaceAdapter(),
   'hangman-relay-mp': new HangmanAdapter(),
   'pig-dice-mp': new PigDiceMpAdapter(),
+  'chomp-elimination': new ChompAdapter(),
+  'fleet-royale': new FleetRoyaleAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

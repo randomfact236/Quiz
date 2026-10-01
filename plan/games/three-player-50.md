@@ -33,11 +33,11 @@
 | 11    | T13 | Ultimate TTT 3P       | [variant]              | S     | BUILT  | your cell forces the NEXT player clockwise                         | first 3-board line                                |
 | 12    | T27 | Code Race             | [variant·Mastermind]   | S     | BUILT  | one maker sets the code; two breakers race rows                    | first crack 1st, maker 3rd if both fail           |
 | 13    | T30 | Hangman Relay         | [variant, trust-based] | XS    | BUILT  | everyone writes a secret word for the NEXT player                  | first solve 1st                                   |
-| 14    | T29 | Fleet Royale          | [variant·Battleship]   | M     | NOW    | three fleets, one shared sea; shots rotate                         | last fleet afloat                                 |
+| 14    | T29 | Fleet Royale          | [variant·Battleship]   | M     | BUILT  | three fleets, one shared sea; shots rotate                         | last fleet afloat                                 |
 | 15    | T28 | Bulls Race            | [variant·Bulls & Cows] | XS    | BUILT  | one setter, two diggers, first to 4 bulls                          | same shape as T27                                 |
 | 16    | T33 | Pig Dice 3P           | [native·RNG·pre]       | XS    | BUILT  | three banks push their luck; triple-1 wipes the bank               | first to 100                                      |
 | 17    | T14 | Notakto 3P            | [variant]              | XS    | BUILT  | all place X on three boards; a line loses YOU                      | elimination order                                 |
-| 18    | T15 | Chomp Elimination     | [variant·Chomp]        | XS    | NOW    | poison-taker is out; survivors play on                             | elimination order                                 |
+| 18    | T15 | Chomp Elimination     | [variant·Chomp]        | XS    | BUILT  | poison-taker is out; survivors play on                             | elimination order                                 |
 | 19    | T16 | Sprouts 3P            | [native]               | S     | NOW    | spot-lives run out around the table                                | last mover 1st                                    |
 | 20    | T19 | Pente-3               | [variant·Pente]        | S     | NOW    | five-in-row or 5 captured pairs, three-way blocking                | first condition met                               |
 | 21    | T20 | Quoridor-3            | [variant·Quoridor]     | M     | NOW    | three pawns, opposite edges, 6 walls each                          | first finisher                                    |

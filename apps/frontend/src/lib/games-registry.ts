@@ -352,6 +352,26 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #f472b6 0%, #9f1239 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'chomp-elimination',
+    emoji: '🍫',
+    title: 'Chomp Elimination',
+    blurb:
+      'Bite a corner off the tray - the poison sends you out, survivors play on. Last seat standing wins. Empty seats are bots.',
+    gradient: 'from-amber-700 to-stone-900',
+    cssGradient: 'linear-gradient(135deg, #b45309 0%, #1c1917 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'fleet-royale',
+    emoji: '🚢',
+    title: 'Fleet Royale',
+    blurb:
+      'Secret fleets share one sea - rotating shots, public hits, last fleet afloat wins. Empty seats are bots.',
+    gradient: 'from-cyan-600 to-blue-950',
+    cssGradient: 'linear-gradient(135deg, #0891b2 0%, #172554 100%)',
+    players: [3, 4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

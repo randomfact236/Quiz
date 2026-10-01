@@ -36,11 +36,11 @@
 | 13    | F2  | Ultimate TTT 4P        | [variant]              | S     | BUILT  | the send-rule rotates four ways                                | first 3-board line                                |
 | 14    | F27 | Code Race 4P           | [variant·Mastermind]   | S     | BUILT  | one maker, three breakers racing rows                          | first crack 1st                                   |
 | 15    | F30 | Hangman Relay 4P       | [variant, trust-based] | XS    | BUILT  | everyone writes a secret word for the NEXT player              | first solve 1st                                   |
-| 16    | F29 | Fleet Royale 4P        | [variant·Battleship]   | M     | NOW    | four fleets on a 12×12 shared sea                              | last fleet afloat                                 |
+| 16    | F29 | Fleet Royale 4P        | [variant·Battleship]   | M     | BUILT  | four fleets on a 12×12 shared sea                              | last fleet afloat                                 |
 | 17    | F28 | Bulls Race 4P          | [variant·Bulls & Cows] | XS    | BUILT  | one setter, three diggers                                      | first to 4 bulls                                  |
 | 18    | F5  | Pig Dice 4P            | [native·RNG·pre]       | XS    | BUILT  | four banks; triple-1 wipes the bank (approved server-roll)     | first to 100                                      |
 | 19    | F4  | Notakto 4P             | [variant]              | XS    | BUILT  | four X-writers, three boards; a line loses YOU                 | elimination order                                 |
-| 20    | F22 | Chomp Elimination 4P   | [variant·Chomp]        | XS    | NOW    | poison-taker is out; survivors play on                         | elimination order                                 |
+| 20    | F22 | Chomp Elimination 4P   | [variant·Chomp]        | XS    | BUILT  | poison-taker is out; survivors play on                         | elimination order                                 |
 | 21    | F21 | Sprouts 4P             | [native]               | S     | NOW    | spot-lives run out four-handed                                 | last mover 1st                                    |
 | 22    | F17 | Quadwall               | [native·Quoridor]      | M     | NOW    | official 4P Quoridor: four pawns, five walls each              | first finisher                                    |
 | 23    | F31 | Quarto Circle 4P       | [variant·Quarto]       | S     | NOW    | place what you were handed; hand to the next in the circle     | first quarto                                      |

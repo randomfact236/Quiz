@@ -89,6 +89,10 @@ function previewSvg(slug: string): JSX.Element {
       return <HangmanRelayPreview />;
     case 'pig-dice-mp':
       return <PigDiceMpPreview />;
+    case 'chomp-elimination':
+      return <ChompPreview />;
+    case 'fleet-royale':
+      return <FleetRoyalePreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1501,6 +1505,73 @@ function PigDiceMpPreview(): JSX.Element {
       </text>
     </BoardFrame>
   );
+}
+
+/** Chomp: a staircase tray with the poison corner. */
+function ChompPreview(): JSX.Element {
+  const cells: JSX.Element[] = [];
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 7; c++) {
+      const gone = r + c > 4;
+      cells.push(
+        <rect
+          key={r + '-' + c}
+          x={9 + c * 15}
+          y={10 + r * 13}
+          width="12"
+          height="10"
+          rx="2"
+          fill="currentColor"
+          opacity={gone ? 0.12 : 0.4}
+        />
+      );
+    }
+  }
+  return (
+    <BoardFrame>
+      {cells}
+      <text x="15" y="19" fill="currentColor" fontSize="9" textAnchor="middle">
+        ☠
+      </text>
+    </BoardFrame>
+  );
+}
+
+/** Fleet Royale: a shared sea with ships, hits and misses. */
+function FleetRoyalePreview(): JSX.Element {
+  const marks: JSX.Element[] = [];
+  const ships = [2, 12, 13, 18, 26, 34, 35, 50, 58, 59];
+  const hits = [13, 34];
+  const misses = [5, 21, 44, 60];
+  for (let i = 0; i < 64; i++) {
+    const r = Math.floor(i / 8);
+    const c = i % 8;
+    const x = 10 + c * 12.5;
+    const y = 10 + r * 8;
+    if (ships.includes(i)) {
+      marks.push(
+        <rect
+          key={i}
+          x={x}
+          y={y}
+          width="9"
+          height="5"
+          rx="1.5"
+          fill="currentColor"
+          opacity={hits.includes(i) ? 0.9 : 0.55}
+        />
+      );
+    } else if (hits.includes(i)) {
+      marks.push(
+        <circle key={i} cx={x + 4.5} cy={y + 2.5} r="2.6" fill="currentColor" opacity="0.9" />
+      );
+    } else if (misses.includes(i)) {
+      marks.push(
+        <circle key={i} cx={x + 4.5} cy={y + 2.5} r="1.1" fill="currentColor" opacity="0.45" />
+      );
+    }
+  }
+  return <BoardFrame>{marks}</BoardFrame>;
 }
 
 function PlaceholderPreview(): JSX.Element {
