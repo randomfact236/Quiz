@@ -185,6 +185,36 @@ import {
   qpWinner,
 } from './games/quarto-pass-mp.core';
 import {
+  BtState,
+  btApplyMove,
+  btBotMove,
+  btInitialState,
+  btIsOver,
+  btPlacement,
+  btValidateMove,
+  btWinner,
+} from './games/breakthrough-mp.core';
+import {
+  SimState,
+  simApplyMove,
+  simBotMove,
+  simInitialState,
+  simIsOver,
+  simPlacement,
+  simValidateMove,
+  simWinner,
+} from './games/sim-mp.core';
+import {
+  FcState,
+  fcApplyMove,
+  fcBotMove,
+  fcInitialState,
+  fcIsOver,
+  fcPlacement,
+  fcValidateMove,
+  fcWinner,
+} from './games/focus-mp.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -2082,6 +2112,170 @@ class QuartoPassAdapter implements PartyAdapter {
   }
 }
 
+/** Breakthrough MP (T24 3P + F25 4P): corner armies race through each other — first to the far block wins. */
+class BreakthroughAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return btInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): BtState {
+    return state as unknown as BtState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return btValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return btApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return btIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return btWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return btBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return btPlacement(this.as(state));
+  }
+}
+
+/** Sim MP (T8 3P + F13 4P): close a triangle of your own colour and you are out. */
+class SimAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return simInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): SimState {
+    return state as unknown as SimState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return simValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return simApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return simIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return simWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return simBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // eliminated seats are skipped inside the core
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return simPlacement(this.as(state));
+  }
+}
+
+/** Focus MP (T32 3P + F32 4P): stack, merge, and capture by height — last with pieces wins. */
+class FocusAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return fcInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): FcState {
+    return state as unknown as FcState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return fcValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return fcApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return fcIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return fcWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return fcBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // stuck seats are skipped inside the core
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return fcPlacement(this.as(state));
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -2114,6 +2308,9 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   quadwall: new QuadwallAdapter(),
   'connect6-mp': new Connect6Adapter(),
   'quarto-pass': new QuartoPassAdapter(),
+  'breakthrough-mp': new BreakthroughAdapter(),
+  'sim-mp': new SimAdapter(),
+  'focus-mp': new FocusAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

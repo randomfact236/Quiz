@@ -422,6 +422,36 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #7c3aed 0%, #111827 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'breakthrough-mp',
+    emoji: '♟',
+    title: 'Breakthrough',
+    blurb:
+      'Corner armies race through each other - step forward, capture on the way, first pawn into the far block wins. Empty seats are bots.',
+    gradient: 'from-orange-600 to-stone-900',
+    cssGradient: 'linear-gradient(135deg, #ea580c 0%, #1c1917 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'sim-mp',
+    emoji: '🔺',
+    title: 'Sim',
+    blurb:
+      'Draw lines between the dots - but close a triangle of your own colour and you are out. Last one standing wins. Empty seats are bots.',
+    gradient: 'from-teal-600 to-slate-950',
+    cssGradient: 'linear-gradient(135deg, #0d9488 0%, #020617 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'focus-mp',
+    emoji: '🎯',
+    title: 'Focus',
+    blurb:
+      'Stack, merge and capture by height: enter from your hand, move the top or the whole stack. Lose every piece and you are out. Empty seats are bots.',
+    gradient: 'from-blue-600 to-indigo-950',
+    cssGradient: 'linear-gradient(135deg, #2563eb 0%, #1e1b4b 100%)',
+    players: [3, 4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

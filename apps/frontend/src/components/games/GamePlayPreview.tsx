@@ -103,6 +103,12 @@ function previewSvg(slug: string): JSX.Element {
       return <Connect6Preview />;
     case 'quarto-pass':
       return <QuartoPassPreview />;
+    case 'breakthrough-mp':
+      return <BreakthroughPreview />;
+    case 'sim-mp':
+      return <SimPreview />;
+    case 'focus-mp':
+      return <FocusPreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1804,6 +1810,133 @@ function QuartoPassPreview(): JSX.Element {
         opacity="0.8"
       />
     );
+  }
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Breakthrough: corner armies running at the far blocks. */
+function BreakthroughPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let r = 0; r < 6; r++) {
+    for (let c = 0; c < 6; c++) {
+      items.push(
+        <rect
+          key={r + '-' + c}
+          x={64 + c * 14}
+          y={44 + r * 12}
+          width="10"
+          height="8"
+          rx="2"
+          fill="currentColor"
+          opacity="0.1"
+        />
+      );
+    }
+  }
+  items.push(
+    <rect key="g1" x={174} y={44} width="28" height="18" rx="3" fill="currentColor" opacity="0.3" />
+  );
+  return (
+    <BoardFrame>
+      {items}
+      <rect x={174} y={44} width="28" height="18" rx="3" fill="currentColor" opacity="0.3" />
+      <rect x={64} y={140} width="28" height="18" rx="3" fill="currentColor" opacity="0.3" />
+      <circle cx={84} cy={132} r="6" fill="currentColor" opacity="0.85" />
+      <circle cx={98} cy={122} r="6" fill="currentColor" opacity="0.85" />
+      <circle cx={112} cy={112} r="6" fill="currentColor" opacity="0.85" />
+      <circle cx={126} cy={100} r="6" fill="currentColor" opacity="0.85" />
+      <circle cx={140} cy={88} r="6" fill="currentColor" opacity="0.5" />
+    </BoardFrame>
+  );
+}
+
+/** Sim: a ring of dots with coloured edges. */
+function SimPreview(): JSX.Element {
+  const cx = 150;
+  const cy = 104;
+  const r = 62;
+  const dots: Array<[number, number]> = [];
+  for (let i = 0; i < 6; i++) {
+    const ang = (-90 + i * 60) * (Math.PI / 180);
+    dots.push([cx + Math.cos(ang) * r, cy + Math.sin(ang) * r]);
+  }
+  const edges: Array<[number, number, number]> = [
+    [0, 1, 0.85],
+    [1, 2, 0.85],
+    [3, 4, 0.5],
+    [2, 3, 0.85],
+    [4, 5, 0.5],
+    [0, 2, 0.9],
+    [0, 5, 0.16],
+    [2, 5, 0.16],
+    [1, 3, 0.16],
+  ];
+  return (
+    <BoardFrame>
+      {edges.map(([a, b, o], i) => {
+        const p1 = dots[a] ?? [0, 0];
+        const p2 = dots[b] ?? [0, 0];
+        return (
+          <line
+            key={i}
+            x1={p1[0]}
+            y1={p1[1]}
+            x2={p2[0]}
+            y2={p2[1]}
+            stroke="currentColor"
+            strokeWidth={o > 0.2 ? 4 : 2}
+            opacity={o}
+            strokeDasharray={o > 0.2 ? undefined : '4 4'}
+          />
+        );
+      })}
+      {dots.map(([x, y], i) => (
+        <circle key={i} cx={x} cy={y} r="11" fill="currentColor" opacity="0.75" />
+      ))}
+    </BoardFrame>
+  );
+}
+
+/** Focus: stacks of pieces on a grid. */
+function FocusPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let r = 0; r < 5; r++) {
+    for (let c = 0; c < 5; c++) {
+      items.push(
+        <rect
+          key={r + '-' + c}
+          x={74 + c * 22}
+          y={44 + r * 17}
+          width="17"
+          height="13"
+          rx="3"
+          fill="currentColor"
+          opacity="0.08"
+        />
+      );
+    }
+  }
+  const stacks: Array<[number, number, number, number]> = [
+    [1, 1, 3, 0.85],
+    [3, 0, 1, 0.5],
+    [0, 3, 2, 0.6],
+    [2, 3, 4, 0.85],
+    [4, 1, 2, 0.5],
+    [2, 0, 1, 0.35],
+  ];
+  for (const [r, c, h, o] of stacks) {
+    for (let k = 0; k < h; k++) {
+      items.push(
+        <circle
+          key={r + '-' + c + '-' + k}
+          cx={82 + c * 22}
+          cy={54 + r * 17 - k * 7}
+          r="5.4"
+          fill="currentColor"
+          opacity={o}
+        />
+      );
+    }
   }
   return <BoardFrame>{items}</BoardFrame>;
 }

@@ -50,6 +50,9 @@ class CreatePartyDto {
     'quadwall',
     'connect6-mp',
     'quarto-pass',
+    'breakthrough-mp',
+    'sim-mp',
+    'focus-mp',
   ])
   gameSlug: string;
 

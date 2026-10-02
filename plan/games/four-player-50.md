@@ -44,11 +44,11 @@
 | 21    | F21 | Sprouts 4P             | [native]               | S     | BUILT  | spot-lives run out four-handed                                 | last mover 1st                                    |
 | 22    | F17 | Quadwall               | [native·Quoridor]      | M     | BUILT  | official 4P Quoridor: four pawns, five walls each              | first finisher                                    |
 | 23    | F31 | Quarto Circle 4P       | [variant·Quarto]       | S     | BUILT  | place what you were handed; hand to the next in the circle     | first quarto                                      |
-| 24    | F32 | Focus 4P               | [native]               | M     | NOW    | officially 2–4 players; stacks and reserves at four            | last with reserves                                |
-| 25    | F25 | Breakthrough 4P        | [variant·Breakthrough] | S     | NOW    | four corner armies race through each other                     | first to the far side                             |
+| 24    | F32 | Focus 4P               | [native]               | M     | BUILT  | officially 2–4 players; stacks and reserves at four            | last with reserves                                |
+| 25    | F25 | Breakthrough 4P        | [variant·Breakthrough] | S     | BUILT  | four corner armies race through each other                     | first to the far side                             |
 | 26    | F24 | Abalone 4P             | [variant·Abalone]      | M     | NOW    | four corners of the ring; first to eject 3                     | first to eject 3                                  |
 | 27    | F12 | Quad-Nim               | [variant·Nim]          | XS    | NOW    | the last stick's taker is 4th; the player who forced it is 1st | forced-order                                      |
-| 28    | F13 | Quad-Sim               | [variant·Sim]          | S     | NOW    | four colours on 7 dots (21 lines); your triangle outs you      | elimination order                                 |
+| 28    | F13 | Quad-Sim               | [variant·Sim]          | S     | BUILT  | four colours on 7 dots (21 lines); your triangle outs you      | elimination order                                 |
 | 29    | F14 | Corners 4P             | [variant·Ataxx]        | S     | NOW    | four corners, natural spread; convert or be converted          | majority                                          |
 | 30    | F19 | Row Prison 4P          | [variant]              | S     | NOW    | the prison ring goes four ways                                 | first 4-line                                      |
 | 31    | F18 | Hex Wheel              | [original]             | S     | NOW    | connect your side to the centre point before anyone else       | first connection                                  |
