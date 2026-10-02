@@ -285,6 +285,46 @@ import {
   fkWinner,
 } from './games/farkle-lite.core';
 import {
+  MlState,
+  mlApplyMove,
+  mlBotMove,
+  mlInitialState,
+  mlIsOver,
+  mlPlacement,
+  mlValidateMove,
+  mlWinner,
+} from './games/morris-mp.core';
+import {
+  AbState,
+  abApplyMove,
+  abBotMove,
+  abInitialState,
+  abIsOver,
+  abPlacement,
+  abValidateMove,
+  abWinner,
+} from './games/abalone-mp.core';
+import {
+  RpState,
+  rpApplyMove,
+  rpBotMove,
+  rpInitialState,
+  rpIsOver,
+  rpPlacement,
+  rpValidateMove,
+  rpWinner,
+} from './games/row-prison.core';
+import {
+  TrState,
+  trApplyMove,
+  trBotMove,
+  trInitialState,
+  trIsOver,
+  trPlacement,
+  trValidateMove,
+  trWinner,
+} from './games/trinity-hex.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -2726,6 +2766,226 @@ class FarkleAdapter implements PartyAdapter {
   }
 }
 
+/** Morris */
+class MorrisAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return mlInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): MlState {
+    return state as unknown as MlState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return mlValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return mlApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return mlIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return mlWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return mlBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // eliminations + skips are handled inside the core
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return mlPlacement(this.as(state));
+  }
+}
+
+/** Abalone */
+class AbaloneAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return abInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): AbState {
+    return state as unknown as AbState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return abValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return abApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return abIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return abWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return abBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // straight rotation
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return abPlacement(this.as(state));
+  }
+}
+
+/** RowPrison */
+class RowPrisonAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return rpInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): RpState {
+    return state as unknown as RpState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return rpValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return rpApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return rpIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return rpWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return rpBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // the prison row travels in the state
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return rpPlacement(this.as(state));
+  }
+}
+
+/** TrinityHex */
+class TrinityHexAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return trInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): TrState {
+    return state as unknown as TrState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return trValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return trApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return trIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return trWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return trBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // straight rotation
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return trPlacement(this.as(state));
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -2768,6 +3028,10 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'streak-race': new StreakRaceAdapter(),
   'quad-nim': new QuadNimAdapter(),
   'farkle-lite': new FarkleAdapter(),
+  'morris-mp': new MorrisAdapter(),
+  'abalone-mp': new AbaloneAdapter(),
+  'row-prison': new RowPrisonAdapter(),
+  'trinity-hex': new TrinityHexAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

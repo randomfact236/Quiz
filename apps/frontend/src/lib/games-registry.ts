@@ -520,7 +520,47 @@ export const GAMES: GameEntry[] = [
       'Six-dice push-your-luck to 5,000 - bank the pot or roll on, but a zero roll burns it all. Empty seats are bots.',
     gradient: 'from-lime-500 to-green-950',
     cssGradient: 'linear-gradient(135deg, #84cc16 0%, #052e16 100%)',
-    players: [4],
+    players: [3, 4],
+  },
+  {
+    slug: 'row-prison',
+    emoji: '⛓',
+    title: 'Row Prison',
+    blurb:
+      'One row at a time: your stone pins the next player, fill the row to break the prison. First to line up four wins. Empty seats are bots.',
+    gradient: 'from-slate-500 to-gray-950',
+    cssGradient: 'linear-gradient(135deg, #64748b 0%, #030712 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'trinity-hex',
+    emoji: '⬡',
+    title: 'Trinity Hex',
+    blurb:
+      'Each player chains two opposite sides of the great hexagon - first connection wins. Bots fill the other seats.',
+    gradient: 'from-cyan-500 to-indigo-950',
+    cssGradient: 'linear-gradient(135deg, #06b6d4 0%, #1e1b4b 100%)',
+    players: [3],
+  },
+  {
+    slug: 'morris-mp',
+    emoji: '🔗',
+    title: "Nine Men's Morris",
+    blurb:
+      'Three colours on a widened four-ring board: mill three in a line to pull enemies off, last colour standing wins. Bots fill empty seats.',
+    gradient: 'from-amber-800 to-stone-950',
+    cssGradient: 'linear-gradient(135deg, #92400e 0%, #0c0a09 100%)',
+    players: [3],
+  },
+  {
+    slug: 'abalone-mp',
+    emoji: '🐚',
+    title: 'Abalone-3',
+    blurb:
+      'Sumo on the hex ring: push smaller enemy groups, throw four marbles off the edge. Empty seats are bots.',
+    gradient: 'from-pink-600 to-purple-950',
+    cssGradient: 'linear-gradient(135deg, #db2777 0%, #3b0764 100%)',
+    players: [3, 4],
   },
 ];
 

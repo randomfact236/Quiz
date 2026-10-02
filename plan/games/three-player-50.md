@@ -44,13 +44,13 @@
 | 22    | T25 | Connect6 3P           | [variant·Connect6]     | M     | BUILT  | two stones per turn, rotating three ways                           | first six-in-row                                  |
 | 23    | T31 | Quarto Pass           | [variant·Quarto]       | S     | BUILT  | place what the last player handed you; hand to the next            | first quarto                                      |
 | 24    | T32 | Focus 3P              | [native]               | M     | BUILT  | stack capture widens to three; capture by height                   | last with reserves                                |
-| 25    | T47 | Nine Men's Morris 3P  | [variant·Morris]       | M     | NOW    | three-colour mills on a widened board                              | last pieces standing                              |
+| 25    | T47 | Nine Men's Morris 3P  | [variant·Morris]       | M     | BUILT  | three-colour mills on a widened board                              | last pieces standing                              |
 | 26    | T24 | Breakthrough 3P       | [variant·Breakthrough] | S     | BUILT  | three corner armies race through each other                        | first to the far side                             |
-| 27    | T22 | Abalone-3             | [variant·Abalone]      | M     | NOW    | three triangle formations on the hex ring                          | first to eject 4                                  |
-| 28    | T3  | Row Prison            | [original]             | S     | NOW    | your row imprisons the next player; first 4-line wins              | winner 1st, rest by moves                         |
+| 27    | T22 | Abalone-3             | [variant·Abalone]      | M     | BUILT  | three triangle formations on the hex ring                          | first to eject 4                                  |
+| 28    | T3  | Row Prison            | [original]             | S     | BUILT  | your row imprisons the next player; first 4-line wins              | winner 1st, rest by moves                         |
 | 29    | T8  | Tri-Sim               | [variant·Sim]          | S     | BUILT  | close a triangle of YOUR colour and you are out                    | elimination order                                 |
 | 30    | T9  | Corners               | [variant·Ataxx]        | S     | BUILT  | clone/convert from three corners                                   | majority                                          |
-| 31    | T4  | Trinity Hex           | [variant·Hex]          | S     | NOW    | connect your two opposite sides of the hexagon                     | first connector                                   |
+| 31    | T4  | Trinity Hex           | [variant·Hex]          | S     | BUILT  | connect your two opposite sides of the hexagon                     | first connector                                   |
 | 32    | T46 | Pentago 3P            | [variant·Pentago]      | S     | BUILT  | place + spin, three-way lane threats                               | first 5-line                                      |
 | 33    | T49 | Quads & Trips         | [variant·Yavalath]     | S     | BUILT  | four-in-row WINS, three-in-row LOSES                               | first win / last standing                         |
 | 34    | T17 | Paper Soccer Triangle | [variant]              | M     | NOW    | three goals on a triangular pitch; bounce chains                   | first goal                                        |

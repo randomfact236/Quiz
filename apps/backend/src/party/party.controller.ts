@@ -60,6 +60,10 @@ class CreatePartyDto {
     'streak-race',
     'quad-nim',
     'farkle-lite',
+    'morris-mp',
+    'abalone-mp',
+    'row-prison',
+    'trinity-hex',
   ])
   gameSlug: string;
 

@@ -123,6 +123,14 @@ function previewSvg(slug: string): JSX.Element {
       return <QuadNimPreview />;
     case 'farkle-lite':
       return <FarklePreview />;
+    case 'row-prison':
+      return <RowPrisonPreview />;
+    case 'trinity-hex':
+      return <TrinityHexPreview />;
+    case 'morris-mp':
+      return <MorrisPreview />;
+    case 'abalone-mp':
+      return <AbalonePreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -2285,6 +2293,168 @@ function FarklePreview(): JSX.Element {
       opacity="0.85"
     />
   );
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Row Prison: one lit row of stones. */
+function RowPrisonPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let i = 0; i < 9; i++) {
+    items.push(
+      <rect
+        key={i}
+        x={54 + i * 22}
+        y={64}
+        width="17"
+        height="17"
+        rx="4"
+        fill="currentColor"
+        opacity="0.12"
+      />
+    );
+  }
+  for (let i = 2; i < 6; i++) {
+    items.push(
+      <circle
+        key={'s' + i}
+        cx={62.5 + i * 22}
+        cy={72.5}
+        r="6.4"
+        fill="currentColor"
+        opacity={i % 2 ? 0.85 : 0.45}
+      />
+    );
+  }
+  items.push(
+    <rect
+      key="row"
+      x={52}
+      y={62}
+      width="199"
+      height="21"
+      rx="5"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.4"
+      opacity="0.55"
+    />
+  );
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Trinity Hex: a small hexagon with two tinted sides chained. */
+function TrinityHexPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  const pts: Array<[number, number]> = [];
+  for (let q = -2; q <= 2; q++) {
+    for (let r = -2; r <= 2; r++) {
+      if (Math.abs(q + r) <= 2) {
+        pts.push([150 + Math.sqrt(3) * 22 * (q + r / 2), 100 + 1.5 * 22 * r]);
+      }
+    }
+  }
+  pts.forEach(([x, y], i) => {
+    const edge = Math.hypot(y - 100) > 55;
+    items.push(
+      <circle
+        key={i}
+        cx={x}
+        cy={y}
+        r={edge ? 8 : 5.5}
+        fill="currentColor"
+        opacity={edge ? 0.5 : 0.14}
+      />
+    );
+  });
+  items.push(
+    <path
+      d="M150 34 L150 56 L166 64"
+      stroke="currentColor"
+      strokeWidth="3"
+      fill="none"
+      opacity="0.8"
+    />
+  );
+  items.push(<circle cx={166} cy={64} r="7" fill="currentColor" opacity="0.85" />);
+  items.push(<circle cx={150} cy={38} r="7" fill="currentColor" opacity="0.85" />);
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Morris: nested squares with stones. */
+function MorrisPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  const lo = 70;
+  const hi = 230;
+  items.push(
+    <rect
+      key="a"
+      x={lo}
+      y={lo}
+      width={hi - lo}
+      height={hi - lo}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      opacity="0.5"
+    />
+  );
+  items.push(
+    <rect
+      key="b"
+      x={110}
+      y={110}
+      width={80}
+      height={80}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      opacity="0.5"
+    />
+  );
+  items.push(
+    <rect
+      key="c"
+      x={145}
+      y={145}
+      width={10}
+      height={10}
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      opacity="0.5"
+    />
+  );
+  const stone = (x: number, y: number, o: number, k: string): JSX.Element => (
+    <circle key={k} cx={x} cy={y} r="7" fill="currentColor" opacity={o} />
+  );
+  items.push(stone(150, lo, 0.85, 's1'));
+  items.push(stone(190, lo, 0.85, 's2'));
+  items.push(stone(230, 150, 0.85, 's3'));
+  items.push(stone(150, 190, 0.5, 's4'));
+  items.push(stone(110, 150, 0.5, 's5'));
+  items.push(stone(150, 110, 0.35, 's6'));
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Abalone: clusters of marbles with a shove arrow. */
+function AbalonePreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  const pts: Array<[number, number]> = [];
+  for (let q = -1; q <= 1; q++) {
+    for (let r = -1; r <= 1; r++) {
+      if (Math.abs(q + r) <= 1)
+        pts.push([150 + Math.sqrt(3) * 34 * (q + r / 2), 100 + 1.5 * 34 * r]);
+    }
+  }
+  pts.forEach(([x, y], i) => {
+    items.push(<circle key={i} cx={x} cy={y} r="16" fill="currentColor" opacity="0.1" />);
+  });
+  items.push(<circle cx={104} cy={82} r="13" fill="currentColor" opacity="0.8" />);
+  items.push(<circle cx={104} cy={134} r="13" fill="currentColor" opacity="0.8" />);
+  items.push(<circle cx={150} cy={172} r="13" fill="currentColor" opacity="0.42" />);
+  items.push(<circle cx={196} cy={82} r="13" fill="currentColor" opacity="0.42" />);
+  items.push(<path d="M126 82 L152 82" stroke="currentColor" strokeWidth="3.5" opacity="0.85" />);
+  items.push(<polygon points="162,82 150,76 150,88" fill="currentColor" opacity="0.85" />);
   return <BoardFrame>{items}</BoardFrame>;
 }
 
