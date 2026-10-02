@@ -56,6 +56,10 @@ class CreatePartyDto {
     'quads-trips',
     'pentago-mp',
     'corners-mp',
+    'two-dice-pig',
+    'streak-race',
+    'quad-nim',
+    'farkle-lite',
   ])
   gameSlug: string;
 

@@ -482,6 +482,46 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #d97706 0%, #18181b 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'two-dice-pig',
+    emoji: '🐖',
+    title: 'Two-Dice Pig',
+    blurb:
+      'Two dice, doubles pay double - a single 1 busts the pot, the pig eats your trough. First to 100. Empty seats are bots.',
+    gradient: 'from-rose-500 to-fuchsia-900',
+    cssGradient: 'linear-gradient(135deg, #f43f5e 0%, #701a75 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'streak-race',
+    emoji: '📈',
+    title: 'Streak Race',
+    blurb:
+      'Higher or lower around the table - one miss ends your run, longest streak wins. Empty seats are bots.',
+    gradient: 'from-emerald-500 to-teal-950',
+    cssGradient: 'linear-gradient(135deg, #10b981 0%, #042f2e 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'quad-nim',
+    emoji: '🥢',
+    title: 'Quad-Nim',
+    blurb:
+      'Twenty-two sticks, take 1-3 - force the next player into the last stick and the forcer takes it. Empty seats are bots.',
+    gradient: 'from-yellow-600 to-amber-950',
+    cssGradient: 'linear-gradient(135deg, #ca8a04 0%, #451a03 100%)',
+    players: [4],
+  },
+  {
+    slug: 'farkle-lite',
+    emoji: '🎲',
+    title: 'Farkle-lite',
+    blurb:
+      'Six-dice push-your-luck to 5,000 - bank the pot or roll on, but a zero roll burns it all. Empty seats are bots.',
+    gradient: 'from-lime-500 to-green-950',
+    cssGradient: 'linear-gradient(135deg, #84cc16 0%, #052e16 100%)',
+    players: [4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

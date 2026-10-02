@@ -115,6 +115,14 @@ function previewSvg(slug: string): JSX.Element {
       return <PentagoPreview />;
     case 'corners-mp':
       return <CornersMPPreview />;
+    case 'two-dice-pig':
+      return <TwoDicePigPreview />;
+    case 'streak-race':
+      return <StreakRacePreview />;
+    case 'quad-nim':
+      return <QuadNimPreview />;
+    case 'farkle-lite':
+      return <FarklePreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -2122,6 +2130,159 @@ function CornersMPPreview(): JSX.Element {
       stroke="currentColor"
       strokeWidth="2"
       opacity="0.7"
+    />
+  );
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Two-Dice Pig: a pair of dice with a red pip on one. */
+function TwoDicePigPreview(): JSX.Element {
+  const die = (x: number, y: number, pips: number, red?: boolean): JSX.Element[] => {
+    const out: JSX.Element[] = [
+      <rect
+        key={'d' + x}
+        x={x}
+        y={y}
+        width="52"
+        height="52"
+        rx="10"
+        fill="currentColor"
+        opacity="0.16"
+      />,
+    ];
+    const faces: Record<number, number[][]> = {
+      1: [[26, 26]],
+      2: [
+        [15, 15],
+        [37, 37],
+      ],
+      3: [
+        [15, 15],
+        [26, 26],
+        [37, 37],
+      ],
+      5: [
+        [15, 15],
+        [37, 15],
+        [26, 26],
+        [15, 37],
+        [37, 37],
+      ],
+      6: [
+        [15, 15],
+        [37, 15],
+        [15, 26],
+        [37, 26],
+        [15, 37],
+        [37, 37],
+      ],
+    };
+    (faces[pips] ?? []).forEach((pt, i) => {
+      const dx = pt[0] ?? 0;
+      const dy = pt[1] ?? 0;
+      out.push(
+        <circle
+          key={'p' + x + i}
+          cx={x + dx}
+          cy={y + dy}
+          r="5"
+          fill="currentColor"
+          opacity={red ? 0.9 : 0.75}
+        />
+      );
+    });
+    return out;
+  };
+  return (
+    <BoardFrame>
+      {die(84, 55, 5)}
+      {die(158, 65, 1, true)}
+    </BoardFrame>
+  );
+}
+
+/** Streak Race: a rising card with up/down arrows. */
+function StreakRacePreview(): JSX.Element {
+  return (
+    <BoardFrame>
+      <rect x={106} y={34} width="88" height="120" rx="12" fill="currentColor" opacity="0.16" />
+      <rect x={118} y={52} width="64" height="84" rx="8" fill="currentColor" opacity="0.3" />
+      <polygon
+        points="150,86 166,104 158,104 158,116 142,116 142,104 134,104"
+        fill="currentColor"
+        opacity="0.85"
+      />
+      <polygon
+        points="240,120 224,102 232,102 232,90 248,90 248,102 256,102"
+        fill="currentColor"
+        opacity="0.45"
+      />
+    </BoardFrame>
+  );
+}
+
+/** Quad-Nim: a row of sticks with one red one left. */
+function QuadNimPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let i = 0; i < 9; i++) {
+    items.push(
+      <rect
+        key={i}
+        x={72 + i * 15}
+        y={54}
+        width="9"
+        height="76"
+        rx="4"
+        fill="currentColor"
+        opacity={i === 8 ? 0.9 : 0.5}
+      />
+    );
+  }
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Farkle: a spread of dice, one ringed. */
+function FarklePreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  const xs = [66, 112, 158, 204];
+  xs.forEach((x, i) => {
+    items.push(
+      <rect
+        key={i}
+        x={x}
+        y={64 + (i % 2) * 12}
+        width="40"
+        height="40"
+        rx="9"
+        fill="currentColor"
+        opacity={i === 1 ? 0.85 : 0.3}
+      />
+    );
+    for (let d = 0; d < 3; d++) {
+      items.push(
+        <circle
+          key={i + '-' + d}
+          cx={x + 12 + d * 8}
+          cy={84 + (i % 2) * 12}
+          r="3.4"
+          fill="currentColor"
+          opacity={i === 1 ? 0.4 : 0.7}
+        />
+      );
+    }
+  });
+  items.push(
+    <rect
+      key="ring"
+      x={108}
+      y={60 + 12}
+      width="48"
+      height="48"
+      rx="11"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="3"
+      opacity="0.85"
     />
   );
   return <BoardFrame>{items}</BoardFrame>;

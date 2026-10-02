@@ -67,8 +67,8 @@
 | 45    | T38 | Dominoes 3P           | [native·RNG]           | S     | BUILT  | the tile-chain classic — match the open ends, shed your hand first | lowest pip count when the chain locks / first out |
 | 46    | T37 | Crazy Eights 3P       | [variant·RNG]          | S     | BUILT  | match suit or value; eights are wild with a called suit            | first to shed the hand                            |
 | 47    | T35 | Yatzy 3P              | [native·RNG]           | S     | BUILT  | five dice, three rolls, fifteen categories — the scorecard race    | highest total                                     |
-| 48    | T34 | Two-Dice Pig 3P       | [variant·RNG]          | XS    | RNG    | doubles double the pot around the triangle                         | first to 100                                      |
-| 49    | T40 | Streak Race           | [variant·RNG]          | XS    | RNG    | higher-or-lower around the table; broken streak ends your run      | longest streak                                    |
+| 48    | T34 | Two-Dice Pig 3P       | [variant·RNG]          | XS    | BUILT  | doubles double the pot around the triangle                         | first to 100                                      |
+| 49    | T40 | Streak Race           | [variant·RNG]          | XS    | BUILT  | higher-or-lower around the table; broken streak ends your run      | longest streak                                    |
 | 50    | T36 | Liar's Dice 3P        | [native·RNG]           | M     | RNG    | three cups, one liar survives                                      | last dice standing                                |
 
 ## Composition + gating (second pass)

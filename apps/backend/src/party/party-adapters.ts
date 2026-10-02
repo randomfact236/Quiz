@@ -245,6 +245,46 @@ import {
   atWinner,
 } from './games/corners-mp.core';
 import {
+  TdpState,
+  tdpApplyMove,
+  tdpBotMove,
+  tdpInitialState,
+  tdpIsOver,
+  tdpPlacement,
+  tdpValidateMove,
+  tdpWinner,
+} from './games/two-dice-pig.core';
+import {
+  SrState,
+  srApplyMove,
+  srBotMove,
+  srInitialState,
+  srIsOver,
+  srPlacement,
+  srValidateMove,
+  srWinner,
+} from './games/streak-race.core';
+import {
+  QnState,
+  qnApplyMove,
+  qnBotMove,
+  qnInitialState,
+  qnIsOver,
+  qnPlacement,
+  qnValidateMove,
+  qnWinner,
+} from './games/quad-nim.core';
+import {
+  FkState,
+  fkApplyMove,
+  fkBotMove,
+  fkInitialState,
+  fkIsOver,
+  fkPlacement,
+  fkValidateMove,
+  fkWinner,
+} from './games/farkle-lite.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -2469,6 +2509,223 @@ class CornersAdapter implements PartyAdapter {
   }
 }
 
+/** Two-Dice Pig MP (T34 3P + F6 4P): two dice, doubles pay double, the pig eats your trough. */
+class TwoDicePigAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return tdpInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): TdpState {
+    return state as unknown as TdpState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return tdpValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return tdpApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return tdpIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return tdpWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return tdpBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return tdpPlacement(this.as(state));
+  }
+}
+
+/** Streak Race MP (T40 3P + F36 4P): higher-or-lower around the table; miss and your run ends. */
+class StreakRaceAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return srInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): SrState {
+    return state as unknown as SrState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return srValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return srApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return srIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return srWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return srBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // ended runs are skipped inside the core
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return srPlacement(this.as(state));
+  }
+}
+
+/** Quad-Nim MP (F12): the last stick's taker finishes last — force them into it. */
+class QuadNimAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return qnInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): QnState {
+    return state as unknown as QnState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return qnValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return qnApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return qnIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return qnWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return qnBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return qnPlacement(this.as(state));
+  }
+}
+
+/** Farkle-lite MP (F38): six-dice push-your-luck to 5,000. */
+class FarkleAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return fkInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): FkState {
+    return state as unknown as FkState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return fkValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return fkApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return fkIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return fkWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return fkBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return fkPlacement(this.as(state));
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -2507,6 +2764,10 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'quads-trips': new QuadsTripsAdapter(),
   'pentago-mp': new PentagoAdapter(),
   'corners-mp': new CornersAdapter(),
+  'two-dice-pig': new TwoDicePigAdapter(),
+  'streak-race': new StreakRaceAdapter(),
+  'quad-nim': new QuadNimAdapter(),
+  'farkle-lite': new FarkleAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

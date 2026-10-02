@@ -47,7 +47,7 @@
 | 24    | F32 | Focus 4P               | [native]               | M     | BUILT  | officially 2–4 players; stacks and reserves at four            | last with reserves                                |
 | 25    | F25 | Breakthrough 4P        | [variant·Breakthrough] | S     | BUILT  | four corner armies race through each other                     | first to the far side                             |
 | 26    | F24 | Abalone 4P             | [variant·Abalone]      | M     | NOW    | four corners of the ring; first to eject 3                     | first to eject 3                                  |
-| 27    | F12 | Quad-Nim               | [variant·Nim]          | XS    | NOW    | the last stick's taker is 4th; the player who forced it is 1st | forced-order                                      |
+| 27    | F12 | Quad-Nim               | [variant·Nim]          | XS    | BUILT  | the last stick's taker is 4th; the player who forced it is 1st | forced-order                                      |
 | 28    | F13 | Quad-Sim               | [variant·Sim]          | S     | BUILT  | four colours on 7 dots (21 lines); your triangle outs you      | elimination order                                 |
 | 29    | F14 | Corners 4P             | [variant·Ataxx]        | S     | BUILT  | four corners, natural spread; convert or be converted          | majority                                          |
 | 30    | F19 | Row Prison 4P          | [variant]              | S     | NOW    | the prison ring goes four ways                                 | first 4-line                                      |
@@ -65,12 +65,12 @@
 | 42    | F41 | Spades 4P              | [native·RNG]           | M     | RNG    | partnership bidding and tricks (needs the 2v2 seat layer)      | contract points                                   |
 | 43    | F42 | Durak 4P               | [native·RNG]           | M     | RNG    | attack and defend; first out is 1st, the Durak is 4th          | exit order                                        |
 | 44    | F7  | Yatzy 4P               | [native·RNG]           | S     | BUILT  | five dice, three rolls, fifteen categories — four scorecards   | highest total                                     |
-| 45    | F6  | Two-Dice Pig 4P        | [variant·RNG]          | XS    | RNG    | doubles double the pot, four ways                              | first to 100                                      |
+| 45    | F6  | Two-Dice Pig 4P        | [variant·RNG]          | XS    | BUILT  | doubles double the pot, four ways                              | first to 100                                      |
 | 46    | F10 | Crazy Eights 4P        | [variant·RNG]          | S     | BUILT  | match suit or value; eights are wild with a called suit        | first to shed the hand                            |
-| 47    | F36 | Streak Race 4P         | [variant·RNG]          | XS    | RNG    | higher-or-lower; broken streak ends your run                   | longest streak                                    |
+| 47    | F36 | Streak Race 4P         | [variant·RNG]          | XS    | BUILT  | higher-or-lower; broken streak ends your run                   | longest streak                                    |
 | 48    | F8  | Liar's Dice 4P         | [native·RNG]           | M     | RNG    | four cups; the liar who survives is 1st                        | last dice standing                                |
 | 49    | F40 | Partnership Backgammon | [native·RNG]           | L     | RNG    | 2v2 team backgammon (needs the 2v2 seat layer)                 | team finish                                       |
-| 50    | F38 | Farkle-lite 4P         | [native·RNG]           | XS    | RNG    | six-dice push-your-luck scorecard                              | first to 5,000                                    |
+| 50    | F38 | Farkle-lite 4P         | [native·RNG]           | XS    | BUILT  | six-dice push-your-luck scorecard                              | first to 5,000                                    |
 
 ## Composition + gating (second pass)
 
