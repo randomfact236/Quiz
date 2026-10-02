@@ -452,6 +452,36 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #2563eb 0%, #1e1b4b 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'quads-trips',
+    emoji: '🔶',
+    title: 'Quads & Trips',
+    blurb:
+      'Four in a row wins - but exactly three knocks you out. Hex dots, three or four colours. Empty seats are bots.',
+    gradient: 'from-purple-600 to-slate-900',
+    cssGradient: 'linear-gradient(135deg, #9333ea 0%, #0f172a 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'pentago-mp',
+    emoji: '🌀',
+    title: 'Pentago',
+    blurb:
+      'Place a marble and twist a quadrant - first to line up five wins. Empty seats are bots.',
+    gradient: 'from-indigo-600 to-gray-900',
+    cssGradient: 'linear-gradient(135deg, #4f46e5 0%, #111827 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'corners-mp',
+    emoji: '🔹',
+    title: 'Corners',
+    blurb:
+      'Clone one step or jump two - landings convert the neighbours. Biggest army takes it. Empty seats are bots.',
+    gradient: 'from-amber-600 to-zinc-900',
+    cssGradient: 'linear-gradient(135deg, #d97706 0%, #18181b 100%)',
+    players: [3, 4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

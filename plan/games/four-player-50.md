@@ -49,11 +49,11 @@
 | 26    | F24 | Abalone 4P             | [variant·Abalone]      | M     | NOW    | four corners of the ring; first to eject 3                     | first to eject 3                                  |
 | 27    | F12 | Quad-Nim               | [variant·Nim]          | XS    | NOW    | the last stick's taker is 4th; the player who forced it is 1st | forced-order                                      |
 | 28    | F13 | Quad-Sim               | [variant·Sim]          | S     | BUILT  | four colours on 7 dots (21 lines); your triangle outs you      | elimination order                                 |
-| 29    | F14 | Corners 4P             | [variant·Ataxx]        | S     | NOW    | four corners, natural spread; convert or be converted          | majority                                          |
+| 29    | F14 | Corners 4P             | [variant·Ataxx]        | S     | BUILT  | four corners, natural spread; convert or be converted          | majority                                          |
 | 30    | F19 | Row Prison 4P          | [variant]              | S     | NOW    | the prison ring goes four ways                                 | first 4-line                                      |
 | 31    | F18 | Hex Wheel              | [original]             | S     | NOW    | connect your side to the centre point before anyone else       | first connection                                  |
-| 32    | F48 | Pentago 4P             | [variant·Pentago]      | S     | NOW    | place + spin, four-way lane threats                            | first 5-line                                      |
-| 33    | F49 | Quads & Trips 4P       | [variant·Yavalath]     | S     | NOW    | four-in-row WINS, three-in-row LOSES                           | first win / last standing                         |
+| 32    | F48 | Pentago 4P             | [variant·Pentago]      | S     | BUILT  | place + spin, four-way lane threats                            | first 5-line                                      |
+| 33    | F49 | Quads & Trips 4P       | [variant·Yavalath]     | S     | BUILT  | four-in-row WINS, three-in-row LOSES                           | first win / last standing                         |
 | 34    | F20 | Paper Soccer Arena     | [variant]              | M     | NOW    | four goals on a cross-shaped pitch                             | first goal                                        |
 | 35    | F23 | LOA 4P                 | [variant·LOA]          | M     | NOW    | connect your 6 checkers from four edges                        | first connection                                  |
 | 36    | F16 | Quad-Sow               | [variant·Mancala]      | M     | NOW    | four ranks, four stores, chain turns                           | most seeds                                        |

@@ -215,6 +215,36 @@ import {
   fcWinner,
 } from './games/focus-mp.core';
 import {
+  QtState,
+  qtApplyMove,
+  qtBotMove,
+  qtInitialState,
+  qtIsOver,
+  qtPlacement,
+  qtValidateMove,
+  qtWinner,
+} from './games/quads-mp.core';
+import {
+  PgState,
+  pgApplyMove,
+  pgBotMove,
+  pgInitialState,
+  pgIsOver,
+  pgPlacement,
+  pgValidateMove,
+  pgWinner,
+} from './games/pentago-mp.core';
+import {
+  AtState,
+  atApplyMove,
+  atBotMove,
+  atInitialState,
+  atIsOver,
+  atPlacement,
+  atValidateMove,
+  atWinner,
+} from './games/corners-mp.core';
+import {
   NkState,
   nkAiMove,
   nkApplyMove,
@@ -2276,6 +2306,169 @@ class FocusAdapter implements PartyAdapter {
   }
 }
 
+/** Quads & Trips MP (T49 3P + F49 4P): four in a row wins — but exactly three loses you the game. */
+class QuadsTripsAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return qtInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): QtState {
+    return state as unknown as QtState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return qtValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return qtApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return qtIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return qtWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return qtBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return qtPlacement(this.as(state));
+  }
+}
+
+/** Pentago MP (T46 3P + F48 4P): place a marble, twist a quadrant, five in a row wins. */
+class PentagoAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return pgInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): PgState {
+    return state as unknown as PgState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return pgValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return pgApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return pgIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return pgWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return pgBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return pgPlacement(this.as(state));
+  }
+}
+
+/** Corners MP (T9 3P + F14 4P): clone, jump, convert — the biggest army takes it. */
+class CornersAdapter implements PartyAdapter {
+  initialState(playerCount: number): Record<string, unknown> {
+    return atInitialState(playerCount) as unknown as Record<string, unknown>;
+  }
+
+  private as(state: Record<string, unknown>): AtState {
+    return state as unknown as AtState;
+  }
+
+  validate(state: Record<string, unknown>, seat: number, move: unknown): string | null {
+    return atValidateMove(this.as(state), seat, move);
+  }
+
+  apply(state: Record<string, unknown>, seat: number, move: unknown): Record<string, unknown> {
+    return atApplyMove(this.as(state), seat, move) as unknown as Record<string, unknown>;
+  }
+
+  isOver(state: Record<string, unknown>): boolean {
+    return atIsOver(this.as(state));
+  }
+
+  winner(state: Record<string, unknown>): number | null {
+    return atWinner(this.as(state));
+  }
+
+  seatsInPlay(state: Record<string, unknown>): number[] {
+    const n = this.as(state).seatCount;
+    return Array.from({ length: n }, (_, i) => i);
+  }
+
+  botMove(state: Record<string, unknown>, seat: number, tier: 'easy' | 'medium' | 'hard'): unknown {
+    return atBotMove(this.as(state), seat, tier);
+  }
+
+  nextTurn(_state: Record<string, unknown>, turn: number, seatCount: number): number {
+    return (turn + 1) % seatCount;
+  }
+
+  resolveTurn(
+    _prev: Record<string, unknown>,
+    next: Record<string, unknown>,
+    _seat: number,
+    _turn: number,
+    _seatCount: number
+  ): number {
+    // stuck seats are skipped inside the core
+    return (next as unknown as { turn: number }).turn;
+  }
+
+  placement(state: Record<string, unknown>): { seat: number; rank: number }[] {
+    return atPlacement(this.as(state));
+  }
+}
+
 /** Registry: every party game plugs in here. */
 const ADAPTERS: Record<string, PartyAdapter> = {
   'quad-oxo': new QuadAdapter(),
@@ -2311,6 +2504,9 @@ const ADAPTERS: Record<string, PartyAdapter> = {
   'breakthrough-mp': new BreakthroughAdapter(),
   'sim-mp': new SimAdapter(),
   'focus-mp': new FocusAdapter(),
+  'quads-trips': new QuadsTripsAdapter(),
+  'pentago-mp': new PentagoAdapter(),
+  'corners-mp': new CornersAdapter(),
 };
 
 export function partyAdapterFor(gameSlug: string): PartyAdapter {

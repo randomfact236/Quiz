@@ -109,6 +109,12 @@ function previewSvg(slug: string): JSX.Element {
       return <SimPreview />;
     case 'focus-mp':
       return <FocusPreview />;
+    case 'quads-trips':
+      return <QuadsTripsPreview />;
+    case 'pentago-mp':
+      return <PentagoPreview />;
+    case 'corners-mp':
+      return <CornersMPPreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1938,6 +1944,186 @@ function FocusPreview(): JSX.Element {
       );
     }
   }
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Quads & Trips: a hex flower with a four-line brewing. */
+function QuadsTripsPreview(): JSX.Element {
+  const dots: JSX.Element[] = [];
+  const R = 2;
+  const size = 21;
+  const pos: Array<[number, number]> = [];
+  for (let q = -R; q <= R; q++) {
+    for (let r = -R; r <= R; r++) {
+      if (Math.abs(q + r) <= R) {
+        pos.push([150 + Math.sqrt(3) * size * (q + r / 2), 100 + 1.5 * size * r]);
+      }
+    }
+  }
+  // a four-line along one direction and a red-ringed "trip" hex
+  const four = new Set(['0,0', '1,0', '2,0', '3,0']);
+  const tripIdx = pos.findIndex(([x]) => Math.abs(x - (150 + Math.sqrt(3) * size * 3)) < 1);
+  pos.forEach(([x, y], i) => {
+    const filled = i % 3 === 0;
+    dots.push(
+      <circle
+        key={i}
+        cx={x}
+        cy={y}
+        r={filled ? 8 : 6.5}
+        fill="currentColor"
+        opacity={filled ? 0.75 : 0.18}
+      />
+    );
+    if (i === tripIdx) {
+      dots.push(
+        <circle
+          key={'t' + i}
+          cx={x}
+          cy={y}
+          r={12}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          opacity="0.5"
+          strokeDasharray="3 3"
+        />
+      );
+    }
+  });
+  void four;
+  return <BoardFrame>{dots}</BoardFrame>;
+}
+
+/** Pentago: a 6x6 grid with a rolling quadrant. */
+function PentagoPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  const step = 17;
+  const ox = 66;
+  const oy = 40;
+  for (let r = 0; r < 6; r++) {
+    for (let c = 0; c < 6; c++) {
+      items.push(
+        <rect
+          key={r + '-' + c}
+          x={ox + c * step}
+          y={oy + r * step}
+          width="13"
+          height="13"
+          rx="3"
+          fill="currentColor"
+          opacity="0.1"
+        />
+      );
+    }
+  }
+  for (let i = 0; i < 5; i++) {
+    items.push(
+      <circle
+        key={'d' + i}
+        cx={ox + (i + 0.5) * step}
+        cy={oy + (i + 0.5) * step}
+        r="5.5"
+        fill="currentColor"
+        opacity="0.85"
+      />
+    );
+  }
+  return (
+    <BoardFrame>
+      {items}
+      <rect
+        x={ox + 3 * step}
+        y={oy}
+        width={3 * step - 3}
+        height={3 * step - 3}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        opacity="0.55"
+        strokeDasharray="5 4"
+      />
+      <path
+        d={'M' + (ox + 4.4 * step) + ' ' + (oy + 0.7 * step) + ' a 8 8 0 0 1 6 6'}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        opacity="0.8"
+      />
+      <polygon
+        points={
+          ox +
+          4.4 * step +
+          ',' +
+          (oy + 0.7 * step) +
+          ' ' +
+          (ox + 4.4 * step + 9) +
+          ',' +
+          (oy + 1.2 * step) +
+          ' ' +
+          (ox + 4.4 * step + 1) +
+          ',' +
+          (oy + 2.6 * step)
+        }
+        fill="currentColor"
+        opacity="0.8"
+      />
+    </BoardFrame>
+  );
+}
+
+/** Corners: clone/jump chevrons between corner armies. */
+function CornersMPPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let r = 0; r < 7; r++) {
+    for (let c = 0; c < 7; c++) {
+      items.push(
+        <circle
+          key={r + '-' + c}
+          cx={64 + c * 29}
+          cy={42 + r * 18}
+          r="3.4"
+          fill="currentColor"
+          opacity="0.12"
+        />
+      );
+    }
+  }
+  const spots: Array<[number, number, number]> = [
+    [64, 42, 0.9],
+    [93, 60, 0.9],
+    [238, 42, 0.5],
+    [209, 60, 0.5],
+    [64, 150, 0.35],
+    [93, 132, 0.35],
+    [151, 78, 0.85],
+    [122, 114, 0.6],
+  ];
+  for (let i = 0; i < spots.length; i++) {
+    const [x, y, o] = spots[i] ?? [0, 0, 0];
+    items.push(<circle key={'s' + i} cx={x} cy={y} r="9" fill="currentColor" opacity={o} />);
+  }
+  items.push(
+    <path
+      d="M103 64 L142 74"
+      stroke="currentColor"
+      strokeWidth="2.5"
+      fill="none"
+      opacity="0.6"
+      strokeDasharray="4 4"
+    />
+  );
+  items.push(
+    <circle
+      cx="151"
+      cy="78"
+      r="13"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      opacity="0.7"
+    />
+  );
   return <BoardFrame>{items}</BoardFrame>;
 }
 

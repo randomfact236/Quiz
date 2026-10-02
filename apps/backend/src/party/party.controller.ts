@@ -53,6 +53,9 @@ class CreatePartyDto {
     'breakthrough-mp',
     'sim-mp',
     'focus-mp',
+    'quads-trips',
+    'pentago-mp',
+    'corners-mp',
   ])
   gameSlug: string;
 

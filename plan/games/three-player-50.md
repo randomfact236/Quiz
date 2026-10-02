@@ -49,10 +49,10 @@
 | 27    | T22 | Abalone-3             | [variant·Abalone]      | M     | NOW    | three triangle formations on the hex ring                          | first to eject 4                                  |
 | 28    | T3  | Row Prison            | [original]             | S     | NOW    | your row imprisons the next player; first 4-line wins              | winner 1st, rest by moves                         |
 | 29    | T8  | Tri-Sim               | [variant·Sim]          | S     | BUILT  | close a triangle of YOUR colour and you are out                    | elimination order                                 |
-| 30    | T9  | Corners               | [variant·Ataxx]        | S     | NOW    | clone/convert from three corners                                   | majority                                          |
+| 30    | T9  | Corners               | [variant·Ataxx]        | S     | BUILT  | clone/convert from three corners                                   | majority                                          |
 | 31    | T4  | Trinity Hex           | [variant·Hex]          | S     | NOW    | connect your two opposite sides of the hexagon                     | first connector                                   |
-| 32    | T46 | Pentago 3P            | [variant·Pentago]      | S     | NOW    | place + spin, three-way lane threats                               | first 5-line                                      |
-| 33    | T49 | Quads & Trips         | [variant·Yavalath]     | S     | NOW    | four-in-row WINS, three-in-row LOSES                               | first win / last standing                         |
+| 32    | T46 | Pentago 3P            | [variant·Pentago]      | S     | BUILT  | place + spin, three-way lane threats                               | first 5-line                                      |
+| 33    | T49 | Quads & Trips         | [variant·Yavalath]     | S     | BUILT  | four-in-row WINS, three-in-row LOSES                               | first win / last standing                         |
 | 34    | T17 | Paper Soccer Triangle | [variant]              | M     | NOW    | three goals on a triangular pitch; bounce chains                   | first goal                                        |
 | 35    | T21 | LOA 3P                | [variant·LOA]          | M     | NOW    | connect your 8 checkers while two rivals do the same               | first connection                                  |
 | 36    | T48 | Domineering Triangle  | [variant·Domineering]  | XS    | NOW    | vertical vs horizontal vs DIAGONAL players                         | last able to move                                 |
