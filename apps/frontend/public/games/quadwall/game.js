@@ -316,7 +316,11 @@
     if (view.status === 'running' && view.yourTurn && S.mode === 'move') {
       myDests = destsFor(st, view.yourSeat);
       myDests.forEach(function (d) {
-        svg.appendChild(el('circle', { cx: cx(d[1]), cy: cx(d[0]), r: 17, class: 'qw-dest' }));
+        var dest = el('circle', { cx: cx(d[1]), cy: cx(d[0]), r: 17, class: 'qw-dest' });
+        dest.addEventListener('click', function () {
+          send({ pawn: [d[0], d[1]] });
+        });
+        svg.appendChild(dest);
       });
     }
     // pawns
