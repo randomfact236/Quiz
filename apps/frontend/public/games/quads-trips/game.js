@@ -262,7 +262,9 @@
       var cx = p[0] + offX;
       var cy = p[1] + offY;
       var cls =
-        'qt-hex' + (hints[i] === 'win' ? ' win-hint' : hints[i] === 'trip' ? ' trip-hint' : '');
+        'qt-hex' +
+        (hints[i] === 'win' ? ' win-hint' : hints[i] === 'trip' ? ' trip-hint' : '') +
+        (myTurn && st.cells[i] === 0 ? ' qt-open' : '');
       var hex = el('polygon', { points: hexPoints(cx, cy), class: cls });
       if (myTurn && st.cells[i] === 0) {
         (function (idx) {
