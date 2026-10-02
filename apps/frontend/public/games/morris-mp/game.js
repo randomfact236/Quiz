@@ -21,8 +21,8 @@
 
   /* geometry: ring squares inset by 100px; canvas 520 */
   function pointPos(ring, i) {
-    var lo = 60 + ring * 100;
-    var hi = 460 - ring * 100;
+    var lo = 40 + ring * 60;
+    var hi = 480 - ring * 60;
     var mid = 260;
     var pairs = [
       [mid, lo],
@@ -186,8 +186,8 @@
     var svg = $('board');
     while (svg.firstChild) svg.removeChild(svg.firstChild);
     for (var ring = 0; ring < RINGS; ring++) {
-      var lo = 60 + ring * 100;
-      var hi = 460 - ring * 100;
+      var lo = 40 + ring * 60;
+      var hi = 480 - ring * 60;
       svg.appendChild(
         el('rect', { x: lo, y: lo, width: hi - lo, height: hi - lo, class: 'ml-ring' })
       );
