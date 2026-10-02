@@ -392,6 +392,36 @@ export const GAMES: GameEntry[] = [
     cssGradient: 'linear-gradient(135deg, #be123c 0%, #1c1917 100%)',
     players: [3, 4],
   },
+  {
+    slug: 'quadwall',
+    emoji: '🧱',
+    title: 'Quadwall',
+    blurb:
+      'Multiplayer Quoridor: race your pawn home while walls slow the rest - and never seal anyone in. Empty seats are bots.',
+    gradient: 'from-stone-600 to-neutral-900',
+    cssGradient: 'linear-gradient(135deg, #57534e 0%, #171717 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'connect6-mp',
+    emoji: '⚪',
+    title: 'Connect6 MP',
+    blurb:
+      'Six in a row - but everyone drops two stones a turn. Rotating three ways, first line of six wins. Empty seats are bots.',
+    gradient: 'from-sky-600 to-slate-900',
+    cssGradient: 'linear-gradient(135deg, #0284c7 0%, #0f172a 100%)',
+    players: [3, 4],
+  },
+  {
+    slug: 'quarto-pass',
+    emoji: '⬛',
+    title: 'Quarto Pass',
+    blurb:
+      'Place the piece you were handed, hand one to the next - first line of four sharing any attribute wins. Empty seats are bots.',
+    gradient: 'from-violet-600 to-gray-900',
+    cssGradient: 'linear-gradient(135deg, #7c3aed 0%, #111827 100%)',
+    players: [3, 4],
+  },
 ];
 
 export function findGame(slug: string): GameEntry | undefined {

@@ -97,6 +97,12 @@ function previewSvg(slug: string): JSX.Element {
       return <SproutsPreview />;
     case 'pente-3':
       return <Pente3Preview />;
+    case 'quadwall':
+      return <QuadwallPreview />;
+    case 'connect6-mp':
+      return <Connect6Preview />;
+    case 'quarto-pass':
+      return <QuartoPassPreview />;
     case 'checkers':
       return <CheckersPreview />;
     case 'othello':
@@ -1651,6 +1657,155 @@ function Pente3Preview(): JSX.Element {
     }
   }
   return <BoardFrame>{cells}</BoardFrame>;
+}
+
+/** Quadwall: a grid with walls and racing pawns. */
+function QuadwallPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let r = 0; r < 7; r++) {
+    for (let c = 0; c < 7; c++) {
+      items.push(
+        <rect
+          key={r + '-' + c}
+          x={64 + c * 13}
+          y={40 + r * 13}
+          width="10"
+          height="10"
+          rx="2"
+          fill="currentColor"
+          opacity="0.12"
+        />
+      );
+    }
+  }
+  items.push(
+    <rect key="w1" x={77} y={65} width="23" height="5" rx="2" fill="currentColor" opacity="0.8" />
+  );
+  items.push(
+    <rect key="w2" x={103} y={53} width="5" height="23" rx="2" fill="currentColor" opacity="0.8" />
+  );
+  items.push(<circle key="p1" cx={70} cy={116} r="7" fill="currentColor" opacity="0.9" />);
+  items.push(<circle key="p2" cx={148} cy={46} r="7" fill="currentColor" opacity="0.55" />);
+  items.push(<circle key="p3" cx={148} cy={116} r="7" fill="currentColor" opacity="0.35" />);
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Connect6: a diagonal of six stones among scattered others. */
+function Connect6Preview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  const N = 8;
+  const step = 14;
+  const ox = 60;
+  const oy = 38;
+  for (let r = 0; r < N; r++) {
+    for (let c = 0; c < N; c++) {
+      items.push(
+        <circle
+          key={r + '-' + c}
+          cx={ox + c * step}
+          cy={oy + r * step}
+          r="3.4"
+          fill="currentColor"
+          opacity="0.14"
+        />
+      );
+    }
+  }
+  for (let i = 0; i < 6; i++) {
+    items.push(
+      <circle
+        key={'d' + i}
+        cx={ox + (i + 1) * step}
+        cy={oy + (i + 1) * step}
+        r="5.6"
+        fill="currentColor"
+        opacity="0.85"
+      />
+    );
+  }
+  items.push(
+    <circle
+      key="s1"
+      cx={ox + 6 * step}
+      cy={oy + 1 * step}
+      r="5.6"
+      fill="currentColor"
+      opacity="0.5"
+    />
+  );
+  items.push(
+    <circle
+      key="s2"
+      cx={ox + 2 * step}
+      cy={oy + 5 * step}
+      r="5.6"
+      fill="currentColor"
+      opacity="0.4"
+    />
+  );
+  items.push(
+    <circle
+      key="s3"
+      cx={ox + 5 * step}
+      cy={oy + 0 * step}
+      r="5.6"
+      fill="currentColor"
+      opacity="0.6"
+    />
+  );
+  return <BoardFrame>{items}</BoardFrame>;
+}
+
+/** Quarto Pass: a parade of unique pieces. */
+function QuartoPassPreview(): JSX.Element {
+  const items: JSX.Element[] = [];
+  for (let i = 0; i < 9; i++) {
+    const x = 62 + (i % 3) * 56;
+    const y = 40 + Math.floor(i / 3) * 48;
+    const round = i % 2 === 0;
+    const tall = Math.floor(i / 3) === 1;
+    const w = round ? 26 : 26;
+    const h = tall ? 34 : 24;
+    if (round) {
+      items.push(
+        <ellipse
+          key={'b' + i}
+          cx={x}
+          cy={y + h / 2}
+          rx={w / 2}
+          ry={h / 2}
+          fill="currentColor"
+          opacity={0.25 + (i % 3) * 0.2}
+        />
+      );
+    } else {
+      items.push(
+        <rect
+          key={'b' + i}
+          x={x - w / 2}
+          y={y}
+          width={w}
+          height={h}
+          rx="5"
+          fill="currentColor"
+          opacity={0.25 + (i % 3) * 0.2}
+        />
+      );
+    }
+    items.push(
+      <circle
+        key={'t' + i}
+        cx={x}
+        cy={y + h / 2}
+        r={i % 3 === 0 ? 6 : 4}
+        fill={i % 3 === 0 ? 'none' : 'currentColor'}
+        stroke="currentColor"
+        strokeWidth="2"
+        opacity="0.8"
+      />
+    );
+  }
+  return <BoardFrame>{items}</BoardFrame>;
 }
 
 function PlaceholderPreview(): JSX.Element {

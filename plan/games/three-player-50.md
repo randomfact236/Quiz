@@ -40,9 +40,9 @@
 | 18    | T15 | Chomp Elimination     | [variant·Chomp]        | XS    | BUILT  | poison-taker is out; survivors play on                             | elimination order                                 |
 | 19    | T16 | Sprouts 3P            | [native]               | S     | BUILT  | spot-lives run out around the table                                | last mover 1st                                    |
 | 20    | T19 | Pente-3               | [variant·Pente]        | S     | BUILT  | five-in-row or 5 captured pairs, three-way blocking                | first condition met                               |
-| 21    | T20 | Quoridor-3            | [variant·Quoridor]     | M     | NOW    | three pawns, opposite edges, 6 walls each                          | first finisher                                    |
-| 22    | T25 | Connect6 3P           | [variant·Connect6]     | M     | NOW    | two stones per turn, rotating three ways                           | first six-in-row                                  |
-| 23    | T31 | Quarto Pass           | [variant·Quarto]       | S     | NOW    | place what the last player handed you; hand to the next            | first quarto                                      |
+| 21    | T20 | Quoridor-3            | [variant·Quoridor]     | M     | BUILT  | three pawns, opposite edges, 6 walls each                          | first finisher                                    |
+| 22    | T25 | Connect6 3P           | [variant·Connect6]     | M     | BUILT  | two stones per turn, rotating three ways                           | first six-in-row                                  |
+| 23    | T31 | Quarto Pass           | [variant·Quarto]       | S     | BUILT  | place what the last player handed you; hand to the next            | first quarto                                      |
 | 24    | T32 | Focus 3P              | [native]               | M     | NOW    | stack capture widens to three; capture by height                   | last with reserves                                |
 | 25    | T47 | Nine Men's Morris 3P  | [variant·Morris]       | M     | NOW    | three-colour mills on a widened board                              | last pieces standing                              |
 | 26    | T24 | Breakthrough 3P       | [variant·Breakthrough] | S     | NOW    | three corner armies race through each other                        | first to the far side                             |

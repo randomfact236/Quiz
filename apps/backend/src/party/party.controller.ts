@@ -47,6 +47,9 @@ class CreatePartyDto {
     'fleet-royale',
     'sprouts',
     'pente-3',
+    'quadwall',
+    'connect6-mp',
+    'quarto-pass',
   ])
   gameSlug: string;
 
